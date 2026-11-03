@@ -54,6 +54,16 @@ La caja 1 sale en cada sesión, la caja 2 cada 2 días y la caja 3 cada 4 días.
 
 La interfaz muestra el porcentaje de aciertos con "dudo". El examen resta entre 1/3 y 1/2 de un acierto por cada fallo. Con un porcentaje sobre el 33 %, una pregunta dudosa se contesta.
 
+Una sesión sin preguntas pendientes muestra la fecha de la próxima pregunta, y ofrece el simulacro. No hay un botón para reiniciar el historial, porque el historial guarda los fallos con "seguro" y el porcentaje de "dudo".
+
+## El simulacro
+
+El simulacro saca 40 preguntas al azar de todo el banco, y no mira las cajas. Es el repaso de los días 18 y 19 de noviembre.
+
+Cada pregunta del simulacro tiene la opción "en blanco". Al final, la interfaz muestra la nota con una penalización de 1/3 y con una de 1/2.
+
+Las respuestas del simulacro entran al historial como las demás, porque son respuestas reales. Una pregunta en blanco cuenta en el historial como un fallo con "dudo".
+
 ## El servidor: `serve.py`
 
 `serve.py` usa solo la stdlib de Python. Sirve la interfaz y el banco, y tiene 2 rutas:
