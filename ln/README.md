@@ -22,7 +22,7 @@ El banco es una lista de preguntas en JSON. El navegador lo lee con `fetch`, sin
 - `id` no cambia nunca, porque el historial lo usa como clave.
 - `concepto` agrupa 2 o 3 preguntas que preguntan el mismo dato desde ángulos distintos. Así, una respuesta mide el dato, y no la forma de la pregunta.
 - `tema` es uno de estos: `rgpd`, `iso27001`, `ens`, `riesgos`, `auditoria`, `lssi`, `software`, `propiedad`, `delitos`, `etica`, `certificaciones`.
-- `fuente` lleva el PDF y la página de la diapositiva. Cada pregunta sale del temario, y no de otra fuente.
+- `fuente` lleva el PDF y la página del PDF. Cada página tiene 2 diapositivas, y `pagina` no es el número de la diapositiva. Cada pregunta sale del temario, y no de otra fuente.
 - `correcta` va aparte de los `distractores`, y la interfaz baraja las 4 opciones. Una opción no dice "todas las anteriores", porque el barajado la rompe.
 - Cada distractor viene de una confusión real del temario, como responsable y encargado.
 - `explicacion` dice el contraste clave en una línea.
@@ -54,19 +54,34 @@ La caja 1 sale en cada sesión, la caja 2 cada 2 días y la caja 3 cada 4 días.
 
 La interfaz muestra el porcentaje de aciertos con "dudo". El examen resta entre 1/3 y 1/2 de un acierto por cada fallo. Con un porcentaje sobre el 33 %, una pregunta dudosa se contesta.
 
+## La pantalla de la pregunta
+
+Cada opción es una fila con 2 zonas. Un toque en el texto responde con "seguro", y un toque en el botón "dudo" de la derecha responde con "dudo". Un solo toque responde.
+
+La solución sube desde abajo, en una hoja. Las opciones quedan detrás, en verde la correcta y en rojo la tuya si fallas. La hoja tiene, en este orden:
+
+1. El aviso de un fallo con "seguro" o de un acierto con "dudo".
+2. La `explicacion`.
+3. El PDF, la página y el concepto.
+4. "Ver la página aquí": la imagen de la página, dentro de la hoja.
+5. "Abrir el PDF en la página N": el PDF entero, con `#page=N` en la URL.
+6. El botón "Siguiente".
+
+Las imágenes están en `ln/paginas/<pdf sin .pdf>-<pagina>.png`. `pdftoppm -png -r 80` las saca de los PDFs una sola vez. Las imágenes y los PDFs no entran en git.
+
 Una sesión sin preguntas pendientes muestra la fecha de la próxima pregunta, y ofrece el simulacro. No hay un botón para reiniciar el historial, porque el historial guarda los fallos con "seguro" y el porcentaje de "dudo".
 
 ## El simulacro
 
 El simulacro saca 40 preguntas al azar de todo el banco, y no mira las cajas. Es el repaso de los días 18 y 19 de noviembre.
 
-Cada pregunta del simulacro tiene la opción "en blanco". Al final, la interfaz muestra la nota con una penalización de 1/3 y con una de 1/2.
+Cada pregunta del simulacro tiene un botón "en blanco" debajo de las opciones. Al final, la interfaz muestra la nota con una penalización de 1/3 y con una de 1/2.
 
 Las respuestas del simulacro entran al historial como las demás, porque son respuestas reales. Una pregunta en blanco cuenta en el historial como un fallo con "dudo".
 
 ## El servidor: `serve.py`
 
-`serve.py` usa solo la stdlib de Python. Sirve la interfaz y el banco, y tiene 2 rutas:
+`serve.py` usa solo la stdlib de Python. Sirve la interfaz, el banco, los PDFs y las imágenes de las páginas, y tiene 2 rutas:
 
 - `GET /api/respuestas` devuelve el historial entero.
 - `POST /api/respuestas` añade una lista de respuestas al historial.
