@@ -89,3 +89,27 @@ Las respuestas del simulacro entran al historial como las demás, porque son res
 La interfaz guarda en `localStorage` cada respuesta sin enviar, y la envía cuando el servidor responde. Así, una sesión en el móvil sin red no pierde respuestas.
 
 El servidor escucha en `127.0.0.1:8601`. `tailscale serve` pone HTTPS delante, en el puerto 8600 de la tailnet.
+
+## Las 2 partes
+
+El test tiene 2 partes independientes: la interfaz y el banco. El formato de `preguntas.json` es el único contrato entre las 2 partes. Una parte no cambia los archivos de la otra.
+
+### La interfaz
+
+La interfaz tiene el servidor, la página web, las cajas, el simulacro y las imágenes de las páginas.
+
+- La página lee `preguntas.json`, y no tiene ninguna pregunta en su código.
+- Los tests de la interfaz usan `ln/preguntas-ejemplo.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
+- Un script saca las imágenes de `ln/paginas/` de los 5 PDFs. El script no repite una imagen que ya existe.
+
+### El banco
+
+El banco tiene `ln/preguntas.json` y `ln/comprobar_banco.py`.
+
+`comprobar_banco.py` usa solo la stdlib de Python, y falla con cada pregunta que rompe el formato:
+
+- un `id` repetido, o un `tema` fuera de la lista;
+- un número de distractores distinto de 3, o un distractor igual a la respuesta correcta;
+- un `pdf` que no existe en `ln/`, o una `pagina` mayor que el número de páginas del PDF.
+
+El banco crece por tandas, con una tanda por tema y un commit por tanda. La primera tanda es la del RGPD. Su revisión va antes de las demás tandas, porque fija el nivel de las preguntas y de los distractores.
