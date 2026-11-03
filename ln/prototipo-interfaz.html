@@ -1,0 +1,177 @@
+<!doctype html>
+<!-- PROTOTIPO, se tira. 3 variantes de la pantalla de pregunta y solución, con ?variant=A|B|C. -->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototipo: test de LN</title>
+<style>
+  :root { --bg:#14161a; --card:#1e2127; --line:#2c3038; --txt:#e8e8ea; --dim:#9aa0aa; --ok:#2e9e5b; --ko:#c94141; --warn:#d9a21b; --acc:#4c7bd9; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:16px/1.45 system-ui, sans-serif; }
+  main { max-width:560px; margin:0 auto; padding:16px 16px 170px; min-height:100vh; display:flex; flex-direction:column; }
+  .meta { color:var(--dim); font-size:13px; display:flex; justify-content:space-between; margin-bottom:10px; }
+  .q { font-size:19px; font-weight:600; margin:6px 0 18px; }
+  button { font:inherit; color:inherit; cursor:pointer; }
+  .opt { display:block; width:100%; text-align:left; background:var(--card); border:2px solid var(--line); border-radius:12px; padding:14px; margin-bottom:10px; }
+  .opt.sel { border-color:var(--acc); }
+  .opt.ok { border-color:var(--ok); background:#1d3326; }
+  .opt.ko { border-color:var(--ko); background:#3a1f1f; }
+  .opt:disabled { cursor:default; }
+  .big { flex:1; padding:16px; border-radius:12px; border:0; font-weight:600; font-size:17px; }
+  .row { display:flex; gap:10px; }
+  .seguro { background:var(--ok); } .dudo { background:var(--warn); color:#222; } .next { background:var(--acc); width:100%; }
+  .bottom { position:fixed; left:0; right:0; bottom:64px; padding:0 16px; }
+  .bottom > div { max-width:560px; margin:0 auto; }
+  .exp { background:var(--card); border-radius:12px; padding:14px; margin:8px 0 12px; }
+  .src { color:var(--dim); font-size:13px; margin-top:6px; }
+  .alarm { background:var(--ko); color:#fff; border-radius:12px; padding:12px 14px; font-weight:700; margin-bottom:10px; }
+  .luck { background:var(--warn); color:#222; border-radius:12px; padding:12px 14px; font-weight:700; margin-bottom:10px; }
+  /* B */
+  .optB { display:flex; margin-bottom:10px; border:2px solid var(--line); border-radius:12px; overflow:hidden; background:var(--card); }
+  .optB .main { flex:1; text-align:left; background:none; border:0; padding:14px; }
+  .optB .d { width:64px; background:#2a2620; border:0; border-left:2px solid var(--line); color:var(--warn); font-size:13px; font-weight:700; }
+  .optB.ok { border-color:var(--ok); background:#1d3326; } .optB.ko { border-color:var(--ko); background:#3a1f1f; }
+  .sheet { position:fixed; left:0; right:0; bottom:0; background:var(--card); border-radius:18px 18px 0 0; padding:18px 16px 80px; max-height:85vh; overflow:auto; box-shadow:0 -8px 30px #0008; }
+  .sheet > div { max-width:560px; margin:0 auto; }
+  /* C */
+  .toggle { display:flex; align-items:center; justify-content:space-between; background:var(--card); border:2px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:10px; }
+  .toggle.on { border-color:var(--warn); }
+  .sw { width:52px; height:30px; border-radius:15px; background:var(--line); position:relative; border:0; }
+  .sw::after { content:""; position:absolute; top:3px; left:3px; width:24px; height:24px; border-radius:50%; background:#fff; transition:left .15s; }
+  .on .sw { background:var(--warn); } .on .sw::after { left:25px; }
+  .optsC { margin-top:auto; }
+  .verdict { font-size:44px; font-weight:800; margin:20px 0 4px; }
+  .answer { font-size:21px; font-weight:600; margin:8px 0 16px; }
+  .yours { color:var(--dim); text-decoration:line-through; margin-bottom:6px; }
+  /* estado y barra del prototipo */
+  #estado { position:fixed; left:8px; top:8px; font:11px/1.3 monospace; color:#7f8; background:#000c; padding:6px 8px; border-radius:6px; max-width:calc(100% - 16px); white-space:pre-wrap; z-index:9; pointer-events:none; }
+  #bar { position:fixed; left:50%; bottom:10px; transform:translateX(-50%); background:#fff; color:#000; border-radius:999px; display:flex; align-items:center; gap:4px; padding:4px; box-shadow:0 4px 16px #000a; z-index:10; font:600 14px system-ui; }
+  #bar button { background:#000; color:#fff; border:0; border-radius:999px; width:36px; height:36px; font-size:18px; }
+  #bar span { padding:0 10px; white-space:nowrap; }
+</style>
+</head>
+<body>
+<main id="app"></main>
+<div id="estado"></div>
+<div id="bar"><button id="prev">←</button><span id="lbl"></span><button id="nextv">→</button></div>
+<script>
+const PREGUNTAS = [
+  { id:"rgpd-001", concepto:"rgpd-brecha-plazo", tema:"rgpd", fuente:{pdf:"1_Legislacion.pdf", pagina:38},
+    pregunta:"¿En qué plazo notifica el responsable una violación de seguridad a la autoridad de control, si es posible?",
+    correcta:"Dentro de las 72 horas desde que tiene constancia de ella",
+    distractores:["Dentro de las 24 horas desde que ocurre","Dentro de un mes desde que tiene constancia","Solo cuando lo pide la autoridad de control"],
+    explicacion:"Art. 33 del RGPD: «sin dilación indebida» y, de ser posible, dentro de las 72 horas desde la constancia, no desde el hecho." },
+  { id:"rgpd-002", concepto:"lopdgdd-edad-consentimiento", tema:"rgpd", fuente:{pdf:"1_Legislacion.pdf", pagina:19},
+    pregunta:"Según la LOPDGDD, ¿desde qué edad da un menor su consentimiento de manera autónoma?",
+    correcta:"14 años", distractores:["13 años","16 años","18 años"],
+    explicacion:"La LOPDGDD fija 14 años. El RGPD fija 16 y permite a cada Estado bajar hasta 13." },
+  { id:"rgpd-003", concepto:"rgpd-sanciones-maximo", tema:"rgpd", fuente:{pdf:"1_Legislacion.pdf", pagina:43},
+    pregunta:"¿Hasta qué porcentaje del volumen de negocio anual llega la sanción de una empresa por una infracción de las más graves?",
+    correcta:"El 4 % del volumen de negocio total anual global", distractores:["El 2 % del volumen de negocio total anual global","El 10 % del volumen de negocio en España","El 4 % del beneficio neto del último ejercicio"],
+    explicacion:"El 2 % es para las infracciones leves y el 4 % para las más graves, sobre el volumen de negocio global del ejercicio anterior." },
+  { id:"rgpd-004", concepto:"rgpd-encargado-definicion", tema:"rgpd", fuente:{pdf:"1_Legislacion.pdf", pagina:26},
+    pregunta:"¿Quién trata los datos personales únicamente por cuenta del responsable del tratamiento?",
+    correcta:"El encargado del tratamiento", distractores:["El delegado de protección de datos","El interesado","La autoridad de control"],
+    explicacion:"El responsable determina la finalidad del tratamiento. El encargado trata los datos por cuenta del responsable, y suele ser un tercero externo." },
+  { id:"rgpd-005", concepto:"lopdgdd-morosos", tema:"rgpd", fuente:{pdf:"1_Legislacion.pdf", pagina:19},
+    pregunta:"¿Cuál es el tiempo máximo de inclusión de una deuda en un fichero de morosos según la LOPDGDD?",
+    correcta:"5 años", distractores:["6 años","3 años","10 años"],
+    explicacion:"La LOPDGDD reduce el plazo de 6 a 5 años, con un importe mínimo de 50 € para incluir la deuda." },
+  { id:"ens-001", concepto:"sgsi-definicion", tema:"ens", fuente:{pdf:"2A _Teoría.pdf", pagina:5},
+    pregunta:"¿Sobre qué base establece un SGSI, lo implementa y lo mejora de manera continua?",
+    correcta:"Sobre los riesgos a los que se enfrenta la organización", distractores:["Sobre los controles del Anexo A","Sobre el presupuesto de seguridad de la organización","Sobre los requisitos de la autoridad de control"],
+    explicacion:"La definición del SGSI toma como base los riesgos de la organización." },
+];
+
+const VARIANTES = { A:"Dos pasos", B:"Un toque por fila", C:"Interruptor de duda" };
+const params = new URLSearchParams(location.search);
+let variante = VARIANTES[params.get("variant")] ? params.get("variant") : "B";
+let i = 0, opciones = [], elegida = null, seguro = null, ultima = null, dudo = false;
+
+function barajar(p) { return [p.correcta, ...p.distractores].map(t => [Math.random(), t]).sort((a,b) => a[0]-b[0]).map(x => x[1]); }
+function nueva() { opciones = barajar(PREGUNTAS[i]); elegida = null; seguro = null; dudo = false; render(); }
+function responder(op, esSeguro) {
+  elegida = op; seguro = esSeguro;
+  ultima = { id:PREGUNTAS[i].id, ts:new Date().toISOString().slice(0,19)+"Z", acierto: op === PREGUNTAS[i].correcta, seguro };
+  render();
+}
+function siguiente() { i = (i + 1) % PREGUNTAS.length; nueva(); }
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const meta = p => `<div class="meta"><span>${i+1} / 25 · ${p.tema}</span><span>caja 1</span></div>`;
+function aviso(p) {
+  const ok = elegida === p.correcta;
+  if (!ok && seguro) return `<div class="alarm">Fallo con «seguro»: una idea falsa. Repásala.</div>`;
+  if (ok && !seguro) return `<div class="luck">Acierto con «dudo»: cuenta como un fallo.</div>`;
+  return "";
+}
+const fuente = p => {
+  const pdf = encodeURI(p.fuente.pdf), img = encodeURI(`paginas/${p.fuente.pdf.replace(/\.pdf$/, "")}-${p.fuente.pagina}.png`);
+  return `<div class="src">${esc(p.fuente.pdf)}, página ${p.fuente.pagina} · ${p.concepto}</div>`
+    + `<details class="src"><summary>Ver la página aquí</summary><img src="${img}" style="width:100%;border-radius:8px;margin-top:6px;background:#fff"></details>`
+    + `<div class="src"><a style="color:var(--acc)" target="_blank" href="${pdf}#page=${p.fuente.pagina}">Abrir el PDF en la página ${p.fuente.pagina}</a></div>`;
+};
+const clase = (op, p) => elegida === null ? "" : op === p.correcta ? "ok" : op === elegida ? "ko" : "";
+
+function A(p) {
+  // Elegir la opción, después «Seguro» o «Dudo», después la solución debajo.
+  let h = meta(p) + `<div class="q">${esc(p.pregunta)}</div>`;
+  const respondida = seguro !== null;
+  opciones.forEach((op, k) => {
+    const c = respondida ? clase(op, p) : (elegida === op ? "sel" : "");
+    h += `<button class="opt ${c}" ${respondida ? "disabled" : ""} onclick="elegida=opciones[${k}];render()">${esc(op)}</button>`;
+  });
+  if (respondida) h += aviso(p) + `<div class="exp">${esc(p.explicacion)}${fuente(p)}</div>`;
+  h += `<div class="bottom"><div>`;
+  if (respondida) h += `<button class="big next" onclick="siguiente()">Siguiente</button>`;
+  else if (elegida !== null) h += `<div class="row"><button class="big dudo" onclick="responder(elegida,false)">Dudo</button><button class="big seguro" onclick="responder(elegida,true)">Seguro</button></div>`;
+  return h + `</div></div>`;
+}
+
+function B(p) {
+  // Cada fila tiene 2 zonas: el texto responde con «seguro», el botón de la derecha con «dudo».
+  let h = meta(p) + `<div class="q">${esc(p.pregunta)}</div>`;
+  const respondida = seguro !== null;
+  opciones.forEach((op, k) => {
+    h += `<div class="optB ${respondida ? clase(op, p) : ""}"><button class="main" ${respondida ? "disabled" : ""} onclick="responder(opciones[${k}],true)">${esc(op)}</button>`
+       + (respondida ? "" : `<button class="d" onclick="responder(opciones[${k}],false)">dudo</button>`) + `</div>`;
+  });
+  if (!respondida) h += `<div class="src">Toca el texto si estás seguro. Toca «dudo» si dudas.</div>`;
+  else h += `<div class="sheet"><div>${aviso(p)}<div>${esc(p.explicacion)}</div>${fuente(p)}<br><button class="big next" onclick="siguiente()">Siguiente</button></div></div>`;
+  return h;
+}
+
+function C(p) {
+  // Un interruptor de «dudo» cerca del pulgar; un toque en la opción responde. La solución ocupa la pantalla.
+  if (seguro !== null) {
+    const ok = elegida === p.correcta;
+    return meta(p) + `<div class="verdict" style="color:var(${ok ? "--ok" : "--ko"})">${ok ? "Bien" : "Mal"}</div>`
+      + aviso(p) + (ok ? "" : `<div class="yours">${esc(elegida)}</div>`)
+      + `<div class="answer">${esc(p.correcta)}</div><div class="exp">${esc(p.explicacion)}${fuente(p)}</div>`
+      + `<div class="src">${esc(p.pregunta)}</div>`
+      + `<div class="bottom"><div><button class="big next" onclick="siguiente()">Siguiente</button></div></div>`;
+  }
+  let h = meta(p) + `<div class="q">${esc(p.pregunta)}</div><div class="optsC">`;
+  opciones.forEach((op, k) => { h += `<button class="opt" onclick="responder(opciones[${k}],!dudo)">${esc(op)}</button>`; });
+  return h + `<div class="toggle ${dudo ? "on" : ""}" onclick="dudo=!dudo;render()"><span>${dudo ? "Dudo" : "Estoy seguro"}</span><button class="sw"></button></div></div>`;
+}
+
+function render() {
+  const p = PREGUNTAS[i];
+  document.getElementById("app").innerHTML = ({A, B, C})[variante](p);
+  document.getElementById("lbl").textContent = `${variante} (${VARIANTES[variante]})`;
+  document.getElementById("estado").textContent = "respuestas.jsonl ← " + (ultima ? JSON.stringify(ultima) : "(sin respuestas)");
+}
+function cambiar(d) {
+  const ks = Object.keys(VARIANTES);
+  variante = ks[(ks.indexOf(variante) + d + ks.length) % ks.length];
+  params.set("variant", variante); history.replaceState(null, "", "?" + params);
+  nueva();
+}
+document.getElementById("prev").onclick = () => cambiar(-1);
+document.getElementById("nextv").onclick = () => cambiar(1);
+addEventListener("keydown", e => { if (e.key === "ArrowLeft") cambiar(-1); if (e.key === "ArrowRight") cambiar(1); });
+nueva();
+</script>
+</body>
+</html>
