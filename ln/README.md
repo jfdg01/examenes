@@ -24,10 +24,30 @@ El banco es una lista de preguntas en JSON. El navegador lo lee con `fetch`, sin
 - `tema` es uno de estos: `rgpd`, `iso27001`, `ens`, `riesgos`, `auditoria`, `lssi`, `software`, `propiedad`, `delitos`, `etica`, `certificaciones`.
 - `fuente` lleva el PDF y la página del PDF. Cada página tiene 2 diapositivas, y `pagina` no es el número de la diapositiva. Cada pregunta sale del temario, y no de otra fuente.
 - `correcta` va aparte de los `distractores`, y la interfaz baraja las 4 opciones. Una opción no dice "todas las anteriores", porque el barajado la rompe.
-- Cada distractor viene de una confusión real del temario, como responsable y encargado.
 - `explicacion` dice el contraste clave en una línea.
 
-El banco tiene unas 250 preguntas: unas 170 de RGPD, ISO 27001, ENS y riesgos, y unas 80 del resto. Las preguntas tienen 4 opciones, aunque el examen sea de verdadero o falso. Una pregunta de 4 opciones entrena la diferencia entre ideas parecidas, y un examen de verdadero o falso pregunta esas mismas diferencias.
+El banco tiene unas 280 preguntas: unas 175 de RGPD, ISO 27001, ENS y riesgos, y unas 105 del resto. Las preguntas tienen 4 opciones, aunque el examen sea de verdadero o falso. Una pregunta de 4 opciones entrena la diferencia entre ideas parecidas, y un examen de verdadero o falso pregunta esas mismas diferencias.
+
+### La calidad de una pregunta
+
+1. **Una sola respuesta defendible.** La correcta es cierta según su página, y cada distractor es falso según el temario. Un distractor "menos correcto" no vale. Un dato que el temario da de 2 formas distintas no tiene pregunta.
+2. **El enunciado se contesta sin las opciones.** Con las opciones tapadas, el enunciado ya pide un dato concreto. Así, la pregunta entrena el recuerdo del dato, y no solo su reconocimiento.
+3. **Ninguna pista fuera del dato.** Las 4 opciones tienen una longitud parecida, y la correcta es la más larga en un 25 % de las preguntas como mucho. Las 4 tienen la forma gramatical que pide el enunciado. Una palabra del enunciado no se repite solo en la correcta, y "siempre", "nunca" o "solo" no van solo en los distractores.
+4. **Cada distractor sale del temario que dio el profesor.** Un distractor es un nombre, una cifra o una idea del temario, fuera de los ejercicios y de las actividades, como responsable y encargado. Un nombre que no sale en el temario se descarta sin saber el dato.
+5. **Ningún enunciado negativo.** Un "¿Cuál NO es…?" se lee mal con prisa, y entrena la búsqueda de la trampa, y no el dato.
+
+### Las preguntas difíciles
+
+Una pregunta de cada 5 es difícil. Su distractor está muy cerca del dato, y falla solo en un detalle. Así, la pregunta obliga a entender el dato entero, y no solo a reconocer una palabra. Una pregunta difícil engaña con el contenido, y nunca con la forma: sigue las 5 reglas de calidad.
+
+Un distractor difícil tiene una de estas formas:
+
+- **Un solo cambio.** Copia la correcta y cambia un término: "responsable" por "encargado", o "desde que tiene constancia" por "desde que ocurre".
+- **Una verdad que no responde.** Es cierto en el temario, pero responde a otra pregunta, como el plazo de otro artículo.
+- **La excepción.** El caso parece seguir la regla general, pero el temario tiene una excepción para ese caso.
+- **La cifra en otra unidad.** El número es el correcto, pero la unidad o la referencia cambian: "72 días", o el 4 % del beneficio.
+
+Una pregunta pasa a ser difícil con otros distractores, y con el mismo dato. Así, su `id` mide el mismo dato en el historial.
 
 ## El historial: `respuestas.jsonl`
 
@@ -116,11 +136,14 @@ El banco tiene `ln/preguntas.json` y `ln/comprobar_banco.py`.
 
 - un `id` repetido, o un `tema` fuera de la lista;
 - un número de distractores distinto de 3, o un distractor igual a la respuesta correcta;
-- un `pdf` que no existe en `ln/`, o una `pagina` mayor que el número de páginas del PDF.
+- un `pdf` que no existe en `ln/`, o una `pagina` mayor que el número de páginas del PDF;
+- un `concepto` con menos de 2 preguntas o con más de 3.
 
 Sin argumento, `comprobar_banco.py` lee `ln/preguntas.json`. Con una ruta, lee ese banco.
 
 El banco crece por tandas, con una tanda por tema y un commit por tanda. La primera tanda es la del RGPD. Su revisión va antes de las demás tandas, porque fija el nivel de las preguntas y de los distractores.
+
+Después de las tandas, una revisión independiente compara cada pregunta con su página y con las reglas de calidad. Quien escribe una pregunta no ve sus propios errores, y por eso la revisión la hacen agentes que no escribieron el banco. Los revisores dan la lista de fallos, y un solo agente cambia `preguntas.json`.
 
 ### Los tests
 
