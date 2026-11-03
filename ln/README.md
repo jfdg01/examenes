@@ -11,7 +11,7 @@ El banco es una lista de preguntas en JSON. El navegador lo lee con `fetch`, sin
   "id": "rgpd-001",
   "concepto": "rgpd-brecha-plazo",
   "tema": "rgpd",
-  "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 34 },
+  "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 38 },
   "pregunta": "¿En qué plazo notifica el responsable una brecha a la autoridad de control?",
   "correcta": "72 horas desde que tiene constancia de la brecha",
   "distractores": ["24 horas desde que ocurre la brecha", "Un mes desde que tiene constancia", "Sin plazo fijo"],
@@ -90,6 +90,12 @@ La interfaz guarda en `localStorage` cada respuesta sin enviar, y la envía cuan
 
 El servidor escucha en `127.0.0.1:8601`. `tailscale serve` pone HTTPS delante, en el puerto 8600 de la tailnet.
 
+`--banco` sirve otro archivo en `/preguntas.json`, y `--historial` guarda las respuestas en otro archivo. Una prueba con `preguntas-ejemplo.json` usa los 2, porque ese banco repite los `id` del banco real:
+
+```bash
+python3 serve.py --banco preguntas-ejemplo.json --historial /tmp/ln-respuestas-ejemplo.jsonl
+```
+
 ## Las 2 partes
 
 El test tiene 2 partes independientes: la interfaz y el banco. El formato de `preguntas.json` es el único contrato entre las 2 partes. Una parte no cambia los archivos de la otra.
@@ -100,7 +106,7 @@ La interfaz tiene el servidor, la página web, las cajas, el simulacro y las im�
 
 - La página lee `preguntas.json`, y no tiene ninguna pregunta en su código.
 - Los tests de la interfaz usan `ln/preguntas-ejemplo.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
-- Un script saca las imágenes de `ln/paginas/` de los 5 PDFs. El script no repite una imagen que ya existe.
+- `sacar_paginas.py` saca las imágenes de `ln/paginas/` de los 5 PDFs. El script no repite una imagen que ya existe.
 
 ### El banco
 
@@ -112,4 +118,17 @@ El banco tiene `ln/preguntas.json` y `ln/comprobar_banco.py`.
 - un número de distractores distinto de 3, o un distractor igual a la respuesta correcta;
 - un `pdf` que no existe en `ln/`, o una `pagina` mayor que el número de páginas del PDF.
 
+Sin argumento, `comprobar_banco.py` lee `ln/preguntas.json`. Con una ruta, lee ese banco.
+
 El banco crece por tandas, con una tanda por tema y un commit por tanda. La primera tanda es la del RGPD. Su revisión va antes de las demás tandas, porque fija el nivel de las preguntas y de los distractores.
+
+### Los tests
+
+Los tests corren en `ln/`, y necesitan los PDFs:
+
+```bash
+node --test
+python3 -m unittest
+```
+
+`node --test` prueba `logica.js`, la lógica de las cajas, de la sesión y del simulacro, sin el DOM. `python3 -m unittest` prueba `serve.py`, `sacar_paginas.py` y `comprobar_banco.py`.

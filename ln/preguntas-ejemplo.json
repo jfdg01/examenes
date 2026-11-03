@@ -1,0 +1,104 @@
+[
+  {
+    "id": "rgpd-001",
+    "concepto": "rgpd-brecha-plazo",
+    "tema": "rgpd",
+    "fuente": {
+      "pdf": "1_Legislacion.pdf",
+      "pagina": 38
+    },
+    "pregunta": "¿En qué plazo notifica el responsable una violación de seguridad a la autoridad de control, si es posible?",
+    "correcta": "Dentro de las 72 horas desde que tiene constancia de ella",
+    "distractores": [
+      "Dentro de las 24 horas desde que ocurre",
+      "Dentro de un mes desde que tiene constancia",
+      "Solo cuando lo pide la autoridad de control"
+    ],
+    "explicacion": "Art. 33 del RGPD: «sin dilación indebida» y, de ser posible, dentro de las 72 horas desde la constancia, no desde el hecho."
+  },
+  {
+    "id": "rgpd-002",
+    "concepto": "lopdgdd-edad-consentimiento",
+    "tema": "rgpd",
+    "fuente": {
+      "pdf": "1_Legislacion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "Según la LOPDGDD, ¿desde qué edad da un menor su consentimiento de manera autónoma?",
+    "correcta": "14 años",
+    "distractores": [
+      "13 años",
+      "16 años",
+      "18 años"
+    ],
+    "explicacion": "La LOPDGDD fija 14 años. El RGPD fija 16 y permite a cada Estado bajar hasta 13."
+  },
+  {
+    "id": "rgpd-003",
+    "concepto": "rgpd-sanciones-maximo",
+    "tema": "rgpd",
+    "fuente": {
+      "pdf": "1_Legislacion.pdf",
+      "pagina": 43
+    },
+    "pregunta": "¿Hasta qué porcentaje del volumen de negocio anual llega la sanción de una empresa por una infracción de las más graves?",
+    "correcta": "El 4 % del volumen de negocio total anual global",
+    "distractores": [
+      "El 2 % del volumen de negocio total anual global",
+      "El 10 % del volumen de negocio en España",
+      "El 4 % del beneficio neto del último ejercicio"
+    ],
+    "explicacion": "El 2 % es para las infracciones leves y el 4 % para las más graves, sobre el volumen de negocio global del ejercicio anterior."
+  },
+  {
+    "id": "rgpd-004",
+    "concepto": "rgpd-encargado-definicion",
+    "tema": "rgpd",
+    "fuente": {
+      "pdf": "1_Legislacion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Quién trata los datos personales únicamente por cuenta del responsable del tratamiento?",
+    "correcta": "El encargado del tratamiento",
+    "distractores": [
+      "El delegado de protección de datos",
+      "El interesado",
+      "La autoridad de control"
+    ],
+    "explicacion": "El responsable determina la finalidad del tratamiento. El encargado trata los datos por cuenta del responsable, y suele ser un tercero externo."
+  },
+  {
+    "id": "rgpd-005",
+    "concepto": "lopdgdd-morosos",
+    "tema": "rgpd",
+    "fuente": {
+      "pdf": "1_Legislacion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Cuál es el tiempo máximo de inclusión de una deuda en un fichero de morosos según la LOPDGDD?",
+    "correcta": "5 años",
+    "distractores": [
+      "6 años",
+      "3 años",
+      "10 años"
+    ],
+    "explicacion": "La LOPDGDD reduce el plazo de 6 a 5 años, con un importe mínimo de 50 € para incluir la deuda."
+  },
+  {
+    "id": "ens-001",
+    "concepto": "sgsi-definicion",
+    "tema": "ens",
+    "fuente": {
+      "pdf": "2A _Teoría.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Sobre qué base establece un SGSI, lo implementa y lo mejora de manera continua?",
+    "correcta": "Sobre los riesgos a los que se enfrenta la organización",
+    "distractores": [
+      "Sobre los controles del Anexo A",
+      "Sobre el presupuesto de seguridad de la organización",
+      "Sobre los requisitos de la autoridad de control"
+    ],
+    "explicacion": "La definición del SGSI toma como base los riesgos de la organización."
+  }
+]

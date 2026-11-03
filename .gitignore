@@ -1,3 +1,4 @@
 *.pdf
 ln/paginas/
 ln/respuestas.jsonl
+__pycache__/

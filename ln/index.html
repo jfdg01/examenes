@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LN: el test</title>
+<style>
+  :root { --bg:#14161a; --card:#1e2127; --line:#2c3038; --txt:#e8e8ea; --dim:#9aa0aa; --ok:#2e9e5b; --ko:#c94141; --warn:#d9a21b; --acc:#4c7bd9; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:16px/1.45 system-ui, sans-serif; }
+  body.con-hoja { padding-bottom:80vh; }
+  main { max-width:560px; margin:0 auto; padding:16px; }
+  h1 { font-size:24px; margin:8px 0 4px; }
+  button { font:inherit; color:inherit; cursor:pointer; }
+  a { color:var(--acc); }
+  .dim { color:var(--dim); font-size:13px; }
+  .meta { color:var(--dim); font-size:13px; margin-bottom:10px; }
+  .tarjeta { background:var(--card); border-radius:12px; padding:14px; margin:12px 0; }
+  .q { font-size:19px; font-weight:600; margin:6px 0 18px; }
+  .grande { display:block; width:100%; padding:16px; margin:12px 0; border-radius:12px; border:0; background:var(--acc); font-weight:600; font-size:17px; }
+  .grande.otro { background:var(--card); border:2px solid var(--line); }
+  .fila { display:flex; margin-bottom:10px; border:2px solid var(--line); border-radius:12px; overflow:hidden; background:var(--card); }
+  .fila .texto { flex:1; text-align:left; background:none; border:0; padding:14px; }
+  .fila .dudo { width:64px; background:#2a2620; border:0; border-left:2px solid var(--line); color:var(--warn); font-size:13px; font-weight:700; }
+  .fila.ok { border-color:var(--ok); background:#1d3326; }
+  .fila.ko { border-color:var(--ko); background:#3a1f1f; }
+  .fila button:disabled { cursor:default; }
+  .blanco { width:100%; padding:12px; border-radius:12px; border:2px dashed var(--line); background:none; color:var(--dim); }
+  .hoja { position:fixed; left:0; right:0; bottom:0; background:var(--card); border-radius:18px 18px 0 0; padding:18px 16px 24px; max-height:75vh; overflow:auto; box-shadow:0 -8px 30px #0008; animation:subir .25s ease-out; }
+  .hoja > div { max-width:560px; margin:0 auto; }
+  .hoja img { width:100%; border-radius:8px; margin-top:6px; background:#fff; }
+  .hoja .fuente { color:var(--dim); font-size:13px; margin:8px 0; }
+  @keyframes subir { from { transform:translateY(100%); } }
+  .alarma { background:var(--ko); color:#fff; border-radius:12px; padding:12px 14px; font-weight:700; margin-bottom:10px; }
+  .suerte { background:var(--warn); color:#222; border-radius:12px; padding:12px 14px; font-weight:700; margin-bottom:10px; }
+  .aviso { color:var(--warn); }
+</style>
+</head>
+<body>
+<main id="app"><p class="dim">Cargando el banco…</p></main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
