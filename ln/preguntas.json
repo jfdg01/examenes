@@ -4,8 +4,8 @@
     "concepto": "rgpd-deroga-directiva",
     "tema": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
-    "pregunta": "¿A qué norma europea deroga y sustituye el RGPD (Reglamento (UE) 2016/679)?",
-    "correcta": "La Directiva europea 95/46/CE",
+    "pregunta": "¿A qué norma deroga y sustituye el RGPD (Reglamento (UE) 2016/679)?",
+    "correcta": "La Directiva 95/46/CE",
     "distractores": ["La Ley Orgánica 15/1999 (LOPD)", "La Ley Orgánica 5/1992 (LORTAD)", "El Real Decreto 1720/2007 (RLOPD)"],
     "explicacion": "El RGPD deroga y sustituye a la Directiva 95/46/CE, la directiva de la que nació la LOPD española."
   },
@@ -15,39 +15,39 @@
     "tema": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
     "pregunta": "¿Qué norma deroga y sustituye la Directiva 95/46/CE?",
-    "correcta": "El Reglamento (UE) 2016/679 (RGPD)",
+    "correcta": "El Reglamento 2016/679 (RGPD)",
     "distractores": ["La Ley Orgánica 3/2018 (LOPDGDD)", "La Ley Orgánica 15/1999 (LOPD)", "El Real Decreto 1720/2007 (RLOPD)"],
     "explicacion": "Un reglamento europeo, el RGPD, deroga y sustituye a la Directiva 95/46/CE; la LOPDGDD es la ley española que adapta el RGPD."
   },
   {
-    "id": "rgpd-003",
-    "concepto": "rgpd-fecha-aplicacion",
-    "tema": "rgpd",
-    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
-    "pregunta": "¿Desde qué fecha se aplica el RGPD?",
-    "correcta": "Desde el 25 de mayo de 2018",
-    "distractores": ["Desde el 6 de diciembre de 2018", "Desde el 25 de mayo de 2016", "Desde el 24 de octubre de 1995"],
-    "explicacion": "El RGPD se aplica desde el 25 de mayo de 2018; el 6 de diciembre de 2018 es la fecha de la LOPDGDD y el 24 de octubre de 1995, la de la Directiva 95/46/CE."
-  },
-  {
-    "id": "rgpd-004",
-    "concepto": "rgpd-fecha-aplicacion",
+    "id": "rgpd-101",
+    "concepto": "rgpd-responsabilidad-infraccion",
     "tema": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 56 },
-    "pregunta": "¿Qué norma está en pleno vigor desde el 25 de mayo de 2018?",
-    "correcta": "El RGPD, Reglamento (UE) 2016/679",
-    "distractores": ["La LOPDGDD, Ley Orgánica 3/2018", "La LOPD, Ley Orgánica 15/1999", "El RLOPD, Real Decreto 1720/2007"],
-    "explicacion": "El 25 de mayo de 2018 es la fecha del RGPD; la LOPDGDD está en vigor desde el 6 de diciembre de 2018."
+    "pregunta": "En caso de infracción, ¿sobre quién recae la responsabilidad?",
+    "correcta": "Sobre el responsable del tratamiento",
+    "distractores": ["Sobre el Delegado de Protección de Datos", "Sobre la autoridad de control", "Sobre el interesado afectado"],
+    "explicacion": "La responsabilidad recae en el responsable del tratamiento; el Delegado de Protección de Datos informa, asesora y supervisa el cumplimiento."
   },
   {
-    "id": "rgpd-005",
+    "id": "rgpd-102",
+    "concepto": "rgpd-responsabilidad-infraccion",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 56 },
+    "pregunta": "¿Cómo son las sanciones de la nueva normativa de protección de datos respecto de las que había?",
+    "correcta": "Más elevadas, ligadas al volumen de facturación de la empresa",
+    "distractores": ["Más elevadas, ligadas al número de interesados afectados", "Iguales, con un importe fijo por cada tipo de infracción", "Más bajas, ligadas al volumen de facturación de la empresa"],
+    "explicacion": "Las sanciones son más elevadas y se ligan al volumen de facturación de la empresa."
+  },
+  {
+    "id": "rgpd-103",
     "concepto": "rgpd-lopdgdd-ley",
     "tema": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 18 },
-    "pregunta": "¿Qué número tiene la LOPDGDD?",
-    "correcta": "Ley Orgánica 3/2018",
-    "distractores": ["Ley Orgánica 15/1999", "Ley Orgánica 5/1992", "Reglamento (UE) 2016/679"],
-    "explicacion": "La LOPDGDD es la LO 3/2018; la LO 15/1999 es la LOPD, la LO 5/1992 es la LORTAD y el Reglamento 2016/679 es el RGPD."
+    "pregunta": "¿Qué hace la LOPDGDD (Ley Orgánica 3/2018) con respecto al RGPD?",
+    "correcta": "Adapta el derecho español al modelo que establece el RGPD",
+    "distractores": ["Sustituye al RGPD como norma principal en España", "Transpone el RGPD, que no se aplica hasta entonces en España", "Deroga la Directiva 95/46/CE en el derecho español"],
+    "explicacion": "La LOPDGDD adapta el derecho español al RGPD; el RGPD es de aplicación directa, y es él quien deroga la Directiva 95/46/CE."
   },
   {
     "id": "rgpd-006",
@@ -60,24 +60,24 @@
     "explicacion": "La LOPDGDD adapta el derecho español al RGPD; la LOPD nació de la Directiva 95/46/CE, que el RGPD deroga."
   },
   {
-    "id": "rgpd-007",
-    "concepto": "rgpd-lopdgdd-fecha",
+    "id": "rgpd-104",
+    "concepto": "rgpd-armonizacion",
     "tema": "rgpd",
-    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 18 },
-    "pregunta": "¿Qué día se publica en el BOE la LOPDGDD?",
-    "correcta": "El 6 de diciembre de 2018",
-    "distractores": ["El 25 de mayo de 2018", "El 6 de diciembre de 2019", "El 29 de octubre de 1992"],
-    "explicacion": "La LOPDGDD sale en el BOE el 6 de diciembre de 2018; el 25 de mayo de 2018 empieza a aplicarse el RGPD y el 29 de octubre de 1992 es la fecha de la LORTAD."
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
+    "pregunta": "¿Qué efecto tiene el RGPD sobre las normas de protección de datos de cada país?",
+    "correcta": "Las armoniza en todos los Estados miembros de la Unión",
+    "distractores": ["Deja que cada país mantenga las suyas sin cambios", "Las sustituye por una directiva que cada país transpone", "Las armoniza en los países que no tienen una ley propia"],
+    "explicacion": "El RGPD armoniza en toda la UE la normativa de protección de datos."
   },
   {
-    "id": "rgpd-008",
-    "concepto": "rgpd-lopdgdd-fecha",
+    "id": "rgpd-105",
+    "concepto": "rgpd-armonizacion",
     "tema": "rgpd",
-    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 56 },
-    "pregunta": "El RGPD está en pleno vigor desde el 25 de mayo de 2018. ¿Desde cuándo lo está la LOPDGDD?",
-    "correcta": "Desde el 6 de diciembre de 2018",
-    "distractores": ["Desde el mismo 25 de mayo de 2018", "Desde el 24 de octubre de 1995", "Desde el 29 de octubre de 1992"],
-    "explicacion": "Son 2 fechas distintas: el RGPD el 25 de mayo de 2018 y la LOPDGDD el 6 de diciembre de 2018."
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
+    "pregunta": "Una empresa trata datos en 3 Estados miembros de la Unión. ¿Qué ventaja le da el RGPD?",
+    "correcta": "Una misma normativa en los 3 Estados, de aplicación directa",
+    "distractores": ["Una misma normativa en los 3 Estados, tras transponerla cada uno", "Una normativa distinta en cada Estado, según su ley nacional", "La normativa del Estado donde la empresa tiene su sede, en los 3"],
+    "explicacion": "El RGPD es de aplicación directa y armoniza la normativa: no hace falta transponerlo en cada Estado."
   },
   {
     "id": "rgpd-009",
@@ -86,7 +86,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
     "pregunta": "¿Necesita el RGPD que cada Estado miembro lo transponga a una norma nacional?",
     "correcta": "No: es de aplicación directa en todos los Estados",
-    "distractores": ["Sí: no se aplica hasta que cada Estado lo transpone", "Sí: en España no se aplica hasta la LOPDGDD", "Solo en los Estados sin una ley de protección propia"],
+    "distractores": ["Sí: no se aplica hasta que cada Estado lo transpone", "Sí: en España no se aplica hasta la LOPDGDD", "En los Estados que no tienen una ley de protección propia"],
     "explicacion": "El RGPD es de aplicación directa; la Directiva 95/46/CE, en cambio, se desarrolló en España con la LOPD."
   },
   {
@@ -226,7 +226,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 26 },
     "pregunta": "Dentro de un grupo de empresas, ¿puede una empresa ser la encargada del tratamiento de otra del mismo grupo?",
     "correcta": "Sí: una de ellas puede actuar como encargada de otra",
-    "distractores": ["No: el encargado es un tercero externo a la empresa", "No: dentro de un grupo todas son responsables", "Solo si la autoridad de control lo autoriza antes"],
+    "distractores": ["No: el encargado es un tercero externo a la empresa", "No: dentro de un grupo todas son responsables", "Si la autoridad de control lo autoriza antes"],
     "explicacion": "El encargado suele ser un tercero externo, pero no siempre: en un grupo de empresas una puede ser encargada de otra."
   },
   {
@@ -285,8 +285,8 @@
     "tema": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 31 },
     "pregunta": "Una empresa sin establecimiento en la UE ofrece un servicio gratuito a residentes en la UE. ¿Se le aplica el RGPD?",
-    "correcta": "Sí, aunque no cobre a los interesados por el servicio",
-    "distractores": ["No, porque no tiene ningún establecimiento en la Unión", "No, porque el RGPD se limita a los servicios de pago", "Solo si trata los datos en servidores de la Unión"],
+    "correcta": "Sí, porque ofrece servicios a interesados que se encuentran en la Unión",
+    "distractores": ["No, porque no tiene ningún establecimiento en la Unión", "No, porque el RGPD se limita a los servicios de pago", "Si trata los datos en servidores de la Unión"],
     "explicacion": "El RGPD alcanza a quien ofrece bienes o servicios a interesados en la Unión, se les requiera su pago o no (art. 3)."
   },
   {
@@ -306,7 +306,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 30 },
     "pregunta": "¿Se aplica el RGPD a los datos de las personas fallecidas?",
     "correcta": "No: el RGPD excluye a las personas fallecidas",
-    "distractores": ["Sí: el RGPD protege igual a las personas fallecidas", "Sí, durante los 5 años siguientes a la muerte", "Solo si los herederos lo solicitan a la AEPD"],
+    "distractores": ["Sí: el RGPD protege igual a las personas fallecidas", "Sí, durante los 5 años siguientes a la muerte", "Si los herederos lo solicitan a la AEPD"],
     "explicacion": "El RGPD excluye a los fallecidos de su ámbito; es la LOPDGDD la que da derechos a sus familiares y herederos."
   },
   {
@@ -386,7 +386,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 35 },
     "pregunta": "Una empresa privada hace de forma masiva el tratamiento de datos de salud como actividad principal. ¿Debe nombrar un DPD?",
     "correcta": "Sí: trata a gran escala categorías especiales de datos",
-    "distractores": ["No: lo nombran las autoridades y organismos públicos", "No, si la empresa tiene menos de 250 trabajadores", "Solo si la AEPD se lo pide tras una inspección"],
+    "distractores": ["No: lo nombran las autoridades y organismos públicos", "No, si la empresa tiene menos de 250 trabajadores", "Si la AEPD se lo pide tras una inspección"],
     "explicacion": "El tratamiento a gran escala de categorías especiales de datos obliga a nombrar un DPD, también en una empresa privada."
   },
   {
@@ -406,7 +406,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 35 },
     "pregunta": "Una empresa cesa a su Delegado de Protección de Datos. ¿Qué plazo tiene para comunicarlo a la autoridad de protección de datos?",
     "correcta": "10 días, como para un nombramiento",
-    "distractores": ["72 horas, como para notificar una brecha", "1 mes, como para responder a un derecho", "Ninguno: solo se comunica el nombramiento"],
+    "distractores": ["72 horas, como para notificar una brecha", "1 mes, como para responder a un derecho", "Ninguno: el cese no se comunica a la autoridad"],
     "explicacion": "Se comunican en 10 días las designaciones, los nombramientos y también los ceses del DPD."
   },
   {
@@ -470,34 +470,44 @@
     "explicacion": "Acceso, rectificación y oposición ya son derechos ARCO; el RGPD añade el olvido, la portabilidad y la limitación, y la desconexión y el testamento digital son de la LOPDGDD."
   },
   {
-    "id": "rgpd-048",
-    "concepto": "rgpd-derechos-articulos",
+    "id": "rgpd-106",
+    "concepto": "rgpd-olvido-alcance",
     "tema": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 40 },
-    "pregunta": "¿En qué artículo del RGPD se regula el derecho al olvido?",
-    "correcta": "Artículo 17",
-    "distractores": ["Artículo 20", "Artículo 18", "Artículo 22"],
-    "explicacion": "Olvido, art. 17; limitación, art. 18; portabilidad, art. 20; perfiles, art. 22 del RGPD."
+    "pregunta": "¿Qué permite el derecho al olvido frente a un buscador de Internet?",
+    "correcta": "Que quite de sus resultados los enlaces de una búsqueda por su nombre",
+    "distractores": ["Que quite de sus resultados los enlaces de una búsqueda por cualquier término", "Que borre de la web de origen la página donde se publicó su nombre", "Que le entregue una copia de sus datos en formato de lectura mecánica"],
+    "explicacion": "El derecho al olvido obliga al buscador a eliminar de sus resultados los enlaces de una búsqueda hecha a partir del nombre."
   },
   {
-    "id": "rgpd-049",
-    "concepto": "rgpd-derechos-articulos",
+    "id": "rgpd-107",
+    "concepto": "rgpd-olvido-alcance",
     "tema": "rgpd",
-    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 41 },
-    "pregunta": "¿En qué artículo del RGPD se regula el derecho a la portabilidad?",
-    "correcta": "Artículo 20",
-    "distractores": ["Artículo 17", "Artículo 18", "Artículo 22"],
-    "explicacion": "Olvido, art. 17; limitación, art. 18; portabilidad, art. 20; perfiles, art. 22 del RGPD."
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 40 },
+    "pregunta": "Un usuario publicó datos propios en una red social y quiere borrarlos. ¿Qué derecho ejerce?",
+    "correcta": "El derecho al olvido o de supresión de los datos",
+    "distractores": ["El derecho a la limitación del tratamiento", "El derecho a la portabilidad de los datos", "El derecho a no ser objeto de perfiles"],
+    "explicacion": "Con el derecho al olvido se suprimen, a simple solicitud, los datos facilitados para su publicación en redes sociales."
   },
   {
-    "id": "rgpd-050",
-    "concepto": "rgpd-derechos-articulos",
+    "id": "rgpd-108",
+    "concepto": "rgpd-limitacion-permitido",
     "tema": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 42 },
-    "pregunta": "¿En qué artículo del RGPD se regula el derecho a la limitación del tratamiento?",
-    "correcta": "Artículo 18",
-    "distractores": ["Artículo 17", "Artículo 20", "Artículo 22"],
-    "explicacion": "Olvido, art. 17; limitación, art. 18; portabilidad, art. 20; perfiles, art. 22 del RGPD."
+    "pregunta": "Con la limitación del tratamiento en vigor, ¿para qué puede tratar el responsable los datos?",
+    "correcta": "Para la formulación o defensa de reclamaciones",
+    "distractores": ["Para elaborar perfiles de comportamiento", "Para enviar comunicaciones comerciales", "Para incluir una deuda en un fichero de morosos"],
+    "explicacion": "Durante la limitación solo se tratan los datos con el consentimiento del interesado, para reclamaciones, para proteger derechos de otra persona o por interés público."
+  },
+  {
+    "id": "rgpd-109",
+    "concepto": "rgpd-limitacion-permitido",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 42 },
+    "pregunta": "¿Qué efecto tiene la limitación sobre los datos del interesado?",
+    "correcta": "Dejan de aplicarse las operaciones de tratamiento previstas",
+    "distractores": ["Se suprimen definitivamente de los sistemas del responsable", "Se entregan al interesado en un formato de lectura mecánica", "Se rectifican de oficio por el responsable"],
+    "explicacion": "La limitación detiene las operaciones de tratamiento que corresponderían, sin borrar los datos."
   },
   {
     "id": "rgpd-051",
@@ -505,7 +515,7 @@
     "tema": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 41 },
     "pregunta": "¿Cuándo puede ejercerse el derecho a la portabilidad?",
-    "correcta": "Si es automatizado y se basa en consentimiento o contrato",
+    "correcta": "Solo si es automatizado y se basa en consentimiento o contrato",
     "distractores": ["Si el tratamiento es automatizado y se basa en un interés legítimo", "En cualquier tratamiento, tanto automatizado como en papel", "Solo si el responsable del tratamiento es una autoridad pública"],
     "explicacion": "La portabilidad exige un tratamiento por medios automatizados y basado en el consentimiento o en un contrato."
   },
@@ -515,7 +525,7 @@
     "tema": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 41 },
     "pregunta": "Una clínica guarda en fichas de papel los datos de sus pacientes. ¿Puede un paciente ejercer la portabilidad sobre ellas?",
-    "correcta": "No: exige un tratamiento automatizado",
+    "correcta": "No: solo cabe en un tratamiento automatizado",
     "distractores": ["Sí: la portabilidad cubre cualquier tratamiento", "Sí, si el paciente dio su consentimiento por escrito", "Solo si la clínica es un organismo público"],
     "explicacion": "Sin tratamiento por medios automatizados no hay portabilidad, aunque el tratamiento se base en el consentimiento."
   },
@@ -596,7 +606,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 43 },
     "pregunta": "Con el RGPD, ¿qué papel tienen las medidas de seguridad de la LOPD?",
     "correcta": "Sirven de orientación para medir el cumplimiento",
-    "distractores": ["Son el listado mínimo obligatorio del RGPD", "Quedan prohibidas desde que se aplica el RGPD", "Solo se aplican ya a la Administración Pública"],
+    "distractores": ["Son el listado mínimo obligatorio del RGPD", "Quedan prohibidas desde que se aplica el RGPD", "Se aplican ya a la Administración Pública y no a las empresas"],
     "explicacion": "El RGPD solo exige medidas apropiadas al riesgo; las de la LOPD quedan como referencia orientativa."
   },
   {
@@ -636,7 +646,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 48 },
     "pregunta": "Una empresa de 100 trabajadores trata datos de salud. ¿Debe llevar el registro de actividades de tratamiento?",
     "correcta": "Sí, porque son categorías especiales de datos",
-    "distractores": ["No, porque tiene menos de 250 trabajadores", "No, porque es una obligación de los organismos públicos", "Solo si la autoridad de control se lo pide"],
+    "distractores": ["No, porque tiene menos de 250 trabajadores", "No, porque es una obligación de los organismos públicos", "Si la autoridad de control se lo pide"],
     "explicacion": "Tener menos de 250 trabajadores no basta: con datos especialmente protegidos hay que llevar el registro."
   },
   {
@@ -760,14 +770,14 @@
     "explicacion": "Los procesos de gestión controlan el propio sistema; los procesos de seguridad se centran en la seguridad de la información."
   },
   {
-    "id": "iso27001-011",
+    "id": "iso27001-101",
     "concepto": "iso27001-sgsi-tipos-procesos",
     "tema": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 5 },
-    "pregunta": "¿Con qué otros sistemas de gestión se recomienda integrar la ISO/IEC 27001?",
-    "correcta": "Con los de UNE-EN ISO 9001 y 14001",
-    "distractores": ["Con los de UNE-ISO 31000 y 27002", "Con los del ENS y la LOPDGDD", "Con los de FIPS 200 y NIST"],
-    "explicacion": "Se recomienda integrar los sistemas de gestión implantados, como los de ISO 9001 y 14001, con la ISO/IEC 27001."
+    "pregunta": "Según el temario, ¿qué dos tipos de procesos tiene un SGSI?",
+    "correcta": "Los procesos de gestión y los de seguridad",
+    "distractores": ["Los procesos de gestión y los de negocio", "Los procesos de seguridad y los de auditoría", "Los procesos de negocio y los de auditoría"],
+    "explicacion": "Los procesos de gestión controlan el propio sistema y su mejora; los de seguridad se centran en la seguridad de la información."
   },
   {
     "id": "iso27001-012",
@@ -830,14 +840,14 @@
     "explicacion": "Las acciones correctivas responden a no conformidades detectadas en las auditorías; las preventivas, a no conformidades potenciales."
   },
   {
-    "id": "iso27001-018",
+    "id": "iso27001-102",
     "concepto": "iso27001-requisitos-apartados",
     "tema": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 2 },
-    "pregunta": "¿Qué apartados de la UNE-ISO/IEC 27001 contienen los requisitos que hay que cumplir?",
-    "correcta": "Los apartados 4 a 10",
-    "distractores": ["Los apartados 1 a 7", "Los apartados 1 a 12", "Los apartados 5 a 11"],
-    "explicacion": "Los requisitos están en los apartados 4 a 10: contexto, liderazgo, planificación, soporte, operación, evaluación y mejora."
+    "pregunta": "Según la introducción de la norma, ¿qué es necesario conocer para un SGSI?",
+    "correcta": "La organización y su contexto (objetivos de negocio)",
+    "distractores": ["El presupuesto de seguridad de la organización", "Los controles que exige la autoridad de control", "Los incidentes ya sufridos por la organización"],
+    "explicacion": "Un SGSI exige conocer la organización y su contexto, con sus objetivos de negocio, antes de aplicar los requisitos de la norma."
   },
   {
     "id": "iso27001-019",
@@ -855,7 +865,7 @@
     "tema": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 2 },
     "pregunta": "En la documentación por niveles de un SGSI, ¿qué demuestran las evidencias o registros?",
-    "correcta": "Que se han llevado a cabo las actividades previstas",
+    "correcta": "La prueba de que lo previsto se ha ejecutado",
     "distractores": ["Las líneas generales de actuación de la organización", "Las actividades que hay que ejecutar", "Los controles que se excluyen de la norma"],
     "explicacion": "Las políticas dan las líneas generales, los procesos describen las actividades y las evidencias demuestran que se hicieron."
   },
@@ -904,9 +914,9 @@
     "concepto": "iso27001-roles",
     "tema": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 5 },
-    "pregunta": "Según la norma, ¿se recomienda que el personal informático ocupe los roles de responsabilidad del SGSI?",
-    "correcta": "No: las áreas de negocio deben fijar los requisitos de seguridad",
-    "distractores": ["Sí: el personal informático es quien conoce los sistemas", "Sí: la norma exige un responsable de seguridad informático", "Depende de la aprobación previa del Comité de Seguridad"],
+    "pregunta": "En los roles de responsabilidad de un SGSI, ¿quién debe determinar los requisitos de seguridad?",
+    "correcta": "Las áreas de negocio",
+    "distractores": ["El personal informático", "El Comité de Seguridad", "El responsable de seguridad"],
     "explicacion": "No se recomienda personal informático en esos roles: el negocio fija los requisitos y el personal informático los implanta."
   },
   {
@@ -925,9 +935,9 @@
     "tema": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 5 },
     "pregunta": "¿Quién designa los roles y responsabilidades de un SGSI?",
-    "correcta": "La dirección, que asigna las responsabilidades de seguridad",
-    "distractores": ["El Comité de Seguridad, que aprueba directrices y normas", "El responsable de seguridad, que coordina las actividades", "El propietario del riesgo, que aprueba el plan de tratamiento"],
-    "explicacion": "La dirección designa y asigna los roles; el Comité aprueba directrices, el responsable coordina y el propietario del riesgo aprueba el plan."
+    "correcta": "La dirección de la organización",
+    "distractores": ["El Comité de Seguridad del SGSI", "El responsable de seguridad del SGSI", "El propietario de los riesgos del SGSI"],
+    "explicacion": "La dirección designa los roles; el Comité aprueba directrices, el responsable coordina y el propietario del riesgo aprueba el plan."
   },
   {
     "id": "iso27001-028",
@@ -1026,18 +1036,18 @@
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 14 },
     "pregunta": "Un incidente grave de seguridad se repite cada mes. ¿Qué pide la norma en el apartado de Mejora?",
     "correcta": "Una acción correctiva que lo solucione desde el origen",
-    "distractores": ["Asumirlo como riesgo residual del SGSI", "Excluirlo en la Declaración de Aplicabilidad", "Esperar a la revisión anual por la dirección"],
+    "distractores": ["Asumirlo como riesgo residual que acepta el propietario", "Excluirlo en la Declaración de Aplicabilidad", "Esperar a la revisión anual por la dirección"],
     "explicacion": "Los incidentes repetitivos o muy graves reciben acciones correctivas, que solucionan el problema desde su origen."
   },
   {
-    "id": "iso27001-038",
+    "id": "iso27001-103",
     "concepto": "iso27001-27002-categorias",
     "tema": "iso27001",
-    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 15 },
-    "pregunta": "¿Cuántas categorías principales de seguridad tiene la UNE-ISO/IEC 27002 según el temario?",
-    "correcta": "12",
-    "distractores": ["7", "15", "6"],
-    "explicacion": "La 27002 tiene 12 categorías; 7 son los requisitos de la 27001, 15 los requisitos mínimos del ENS y 6 sus principios básicos."
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 14 },
+    "pregunta": "En la UNE-ISO/IEC 27002, ¿qué establece el objetivo de control de una categoría?",
+    "correcta": "El resultado que se quiere conseguir con la categoría",
+    "distractores": ["Los controles que se pueden aplicar en la categoría", "La información detallada para implantar un control", "Las evidencias de que la categoría se ha aplicado"],
+    "explicacion": "El objetivo de control dice qué se quiere conseguir; los controles lo consiguen y la guía de implantación detalla cómo."
   },
   {
     "id": "iso27001-039",
@@ -1045,8 +1055,8 @@
     "tema": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 14 },
     "pregunta": "¿Qué es cada categoría de la UNE-ISO/IEC 27002?",
-    "correcta": "Un objetivo de control, sus controles y una guía de implantación",
-    "distractores": ["Un requisito certificable de la ISO/IEC 27001", "Un nivel de la documentación del SGSI", "Una fase del ciclo PDCA del SGSI"],
+    "correcta": "Un objetivo de control, con controles y una guía de apoyo",
+    "distractores": ["Un requisito certificable de los apartados 4 a 10 de la 27001", "Un nivel de la documentación del SGSI, como las políticas", "Una fase del ciclo PDCA, como Planificar o Verificar"],
     "explicacion": "Cada categoría tiene objetivos de control, uno o más controles y una guía de implantación."
   },
   {
@@ -1070,54 +1080,44 @@
     "explicacion": "El puesto despejado, el equipo desatendido y el borrado seguro son controles de 11.2 Seguridad de los equipos."
   },
   {
-    "id": "ens-001",
+    "id": "ens-101",
     "concepto": "ens-real-decreto",
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 10 },
-    "pregunta": "¿Qué norma regula el Esquema Nacional de Seguridad (ENS) en la Administración Electrónica?",
-    "correcta": "El Real Decreto 3/2010, de 8 de enero",
-    "distractores": ["El Real Decreto 951/2015", "La Ley 11/2007, de 22 de junio", "La Ley Orgánica 3/2018"],
-    "explicacion": "El ENS lo regula el RD 3/2010; el RD 951/2015 lo modifica y la Ley 11/2007 es la de acceso electrónico."
+    "pregunta": "¿Qué crea el Real Decreto del ENS para el uso de los medios electrónicos?",
+    "correcta": "Las condiciones necesarias para la confianza en ellos",
+    "distractores": ["El derecho de los ciudadanos a la comunicación telemática", "Las recomendaciones de la Unión Europea sobre seguridad", "Los servicios electrónicos de las diferentes AAPP"],
+    "explicacion": "El ENS crea las condiciones de confianza; el derecho a comunicarse por medios telemáticos lo establece la Ley de Acceso Electrónico."
   },
   {
-    "id": "ens-002",
+    "id": "ens-102",
     "concepto": "ens-real-decreto",
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 10 },
-    "pregunta": "¿Qué Real Decreto modifica el ENS para actualizarlo ante un nuevo escenario de ciberamenazas?",
-    "correcta": "El Real Decreto 951/2015",
-    "distractores": ["El Real Decreto 3/2010", "El Real Decreto 1720/2007", "El Real Decreto 994/1999"],
-    "explicacion": "El RD 3/2010 crea el ENS y el RD 951/2015 lo modifica; los RD 1720/2007 y 994/1999 son de protección de datos."
+    "pregunta": "¿Qué introduce el Real Decreto del ENS en materia de seguridad de la información?",
+    "correcta": "Elementos comunes que han de guiar a las administraciones",
+    "distractores": ["Una estrategia nacional frente a las ciberamenazas", "Las recomendaciones de la Unión Europea", "Los servicios electrónicos de cada administración"],
+    "explicacion": "El ENS introduce los elementos comunes que guían a las AAPP; la Estrategia Nacional de Ciberseguridad es otra pieza del marco."
   },
   {
-    "id": "ens-003",
-    "concepto": "ens-real-decreto",
-    "tema": "ens",
-    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 10 },
-    "pregunta": "¿Cuándo entró en vigor el Real Decreto 3/2010 del ENS?",
-    "correcta": "El 30 de enero de 2010",
-    "distractores": ["El 8 de enero de 2010", "El 30 de enero de 2011", "El 22 de junio de 2010"],
-    "explicacion": "El RD 3/2010 es de 8 de enero y entró en vigor el 30 de enero de 2010."
-  },
-  {
-    "id": "ens-004",
+    "id": "ens-103",
     "concepto": "ens-ley-acceso-electronico",
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 10 },
-    "pregunta": "¿Qué ley establece el derecho de los ciudadanos a comunicarse con las Administraciones Públicas por medios telemáticos?",
-    "correcta": "La Ley 11/2007 de Acceso Electrónico",
-    "distractores": ["El Real Decreto 3/2010 del ENS", "La Ley 37/2007 de reutilización", "La Ley Orgánica 15/1999 (LOPD)"],
-    "explicacion": "La Ley 11/2007 regula el acceso electrónico; el ENS (RD 3/2010) da la confianza que faltaba para implantarlo."
+    "pregunta": "¿Qué derecho de los ciudadanos establece la Ley 11/2007 de Acceso Electrónico?",
+    "correcta": "Comunicarse con las Administraciones Públicas por medios telemáticos",
+    "distractores": ["Reutilizar la información del sector público", "Proteger sus datos personales ante la Administración", "Exigir elementos comunes de seguridad a las AAPP"],
+    "explicacion": "La Ley 11/2007 da el derecho a comunicarse por medios telemáticos; la reutilización de la información es de la Ley 37/2007 y los datos personales, de la protección de datos."
   },
   {
-    "id": "ens-005",
+    "id": "ens-104",
     "concepto": "ens-ley-acceso-electronico",
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 10 },
-    "pregunta": "¿Qué ley deroga la Ley 11/2007 de Acceso Electrónico de los ciudadanos?",
-    "correcta": "La Ley 39/2015",
-    "distractores": ["El Real Decreto 951/2015", "La Ley 37/2007", "La Ley Orgánica 3/2018"],
-    "explicacion": "La Ley 11/2007 está derogada por la Ley 39/2015; el RD 951/2015 modifica el ENS."
+    "pregunta": "¿En qué estado está hoy la Ley 11/2007 de Acceso Electrónico?",
+    "correcta": "Derogada por una ley posterior al ENS",
+    "distractores": ["Vigente, modificada por el RD 951/2015", "Vigente, modificada por el RGPD y la LOPDGDD", "Vigente y desarrollada por el ENS"],
+    "explicacion": "La Ley 11/2007 está derogada por una ley posterior; el RD 951/2015 modifica el ENS, y no esta ley."
   },
   {
     "id": "ens-006",
@@ -1144,9 +1144,9 @@
     "concepto": "ens-ambito",
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 12 },
-    "pregunta": "¿Es obligatorio el ENS en una administración que actúa en régimen de derecho privado?",
-    "correcta": "No: ese tipo de actividad es una excepción del ámbito",
-    "distractores": ["Sí: las AAPP deben aplicarlo en toda su actividad", "Sí, cuando la actividad usa medios electrónicos con los ciudadanos", "Depende de lo que exija el CCN-CERT tras una auditoría"],
+    "pregunta": "¿Qué actividad de una administración queda fuera de la obligación del ENS?",
+    "correcta": "La que realiza en régimen de derecho privado",
+    "distractores": ["La que presta a los ciudadanos por medios electrónicos", "La de sus sedes y registros electrónicos", "La que mantiene con otras administraciones"],
     "explicacion": "El ENS se aplica a las AAPP, pero no es obligatorio en las actividades en régimen de derecho privado."
   },
   {
@@ -1154,9 +1154,9 @@
     "concepto": "ens-ambito",
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 12 },
-    "pregunta": "¿Se aplica el ENS a una universidad pública?",
-    "correcta": "Sí: las universidades están en su ámbito de aplicación",
-    "distractores": ["No: el ENS alcanza a la AGE, las comunidades autónomas y la administración local", "No: las universidades siguen la ISO/IEC 27001 en vez del ENS", "No: las universidades están en la excepción del régimen de derecho privado"],
+    "pregunta": "¿Cuál de estas entidades está en el ámbito de aplicación del ENS?",
+    "correcta": "Una universidad pública, como una fundación pública",
+    "distractores": ["Una empresa privada que contrata con las AAPP", "Una administración que actúa en régimen de derecho privado", "Una empresa privada sin relación con las AAPP"],
     "explicacion": "El ENS alcanza a la AGE, a las comunidades autónomas, a la administración local, a empresas y fundaciones públicas y a las universidades."
   },
   {
@@ -1246,7 +1246,7 @@
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 17 },
     "pregunta": "Según el ENS, ¿qué consigue la gestión de riesgos?",
     "correcta": "Minimizar los riesgos, que no se anulan",
-    "distractores": ["Anular por completo los riesgos del sistema", "Transferir todos los riesgos a la dirección", "Sustituir la auditoría de seguridad"],
+    "distractores": ["Anular los riesgos del sistema", "Transferir los riesgos a la dirección", "Sustituir la auditoría de seguridad"],
     "explicacion": "La gestión de riesgos mantiene el entorno controlado y minimiza los riesgos, pero los riesgos no se anulan."
   },
   {
@@ -1254,9 +1254,9 @@
     "concepto": "ens-riesgos-minimizar",
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 17 },
-    "pregunta": "Según el ENS, además de entre la naturaleza de los datos y su tratamiento, ¿qué otro equilibrio hay que mantener en la gestión de la seguridad?",
+    "pregunta": "Según el ENS, además de entre la naturaleza de los datos y su tratamiento, ¿qué otro equilibrio hay que mantener?",
     "correcta": "Entre los riesgos y las medidas de seguridad",
-    "distractores": ["Entre el presupuesto y el número de controles", "Entre la dirección y el personal informático", "Entre la auditoría interna y la externa"],
+    "distractores": ["Entre el presupuesto y las medidas de seguridad", "Entre la dirección y el personal informático", "Entre la auditoría interna y la externa"],
     "explicacion": "Hay que equilibrar la naturaleza de los datos con su tratamiento, y los riesgos con las medidas de seguridad."
   },
   {
@@ -1286,7 +1286,7 @@
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 18 },
     "pregunta": "¿Qué pide el principio de «líneas de defensa» del ENS?",
     "correcta": "Una protección en múltiples capas",
-    "distractores": ["Una única barrera perimetral muy robusta", "Una reevaluación anual de las medidas", "Un responsable distinto para cada servicio"],
+    "distractores": ["Una barrera perimetral muy robusta", "Una reevaluación anual de las medidas", "Un responsable distinto para cada servicio"],
     "explicacion": "Las líneas de defensa son varias capas que ganan tiempo para reaccionar y reducen la probabilidad de un compromiso total."
   },
   {
@@ -1305,7 +1305,7 @@
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 18 },
     "pregunta": "Según el principio de reevaluación periódica del ENS, ¿con qué frecuencia mínima se evalúan y actualizan las medidas y los riesgos?",
-    "correcta": "Al menos una vez al año",
+    "correcta": "Al menos cada año",
     "distractores": ["Al menos cada 2 años", "Al menos cada 3 años", "Después de cada incidente grave"],
     "explicacion": "La reevaluación es al menos anual; las auditorías de la mejora continua del ENS son cada 2 años."
   },
@@ -1324,7 +1324,7 @@
     "concepto": "ens-responsables",
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 19 },
-    "pregunta": "En el ENS, ¿quién determina los requisitos de la información tratada?",
+    "pregunta": "En el ENS, ¿quién fija los requisitos de seguridad de los datos que maneja la organización?",
     "correcta": "El Responsable de la Información",
     "distractores": ["El Responsable del Servicio", "El Responsable de Seguridad", "El responsable del tratamiento"],
     "explicacion": "Información: requisitos de la información; Servicio: requisitos de los servicios; Seguridad: decisiones para cumplirlos."
@@ -1350,24 +1350,24 @@
     "explicacion": "La función diferenciadora detalla las atribuciones de cada responsable y separa la seguridad de la prestación de servicios."
   },
   {
-    "id": "ens-029",
+    "id": "ens-105",
     "concepto": "ens-requisitos-minimos",
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 20 },
-    "pregunta": "¿Cuántos requisitos mínimos desarrollan los principios básicos del ENS?",
-    "correcta": "15",
-    "distractores": ["6", "12", "7"],
-    "explicacion": "El ENS tiene 6 principios básicos y 15 requisitos mínimos; 12 son las categorías de la ISO/IEC 27002."
+    "pregunta": "¿Qué permite hacer el análisis de riesgos del ENS?",
+    "correcta": "Seleccionar las medidas de seguridad necesarias",
+    "distractores": ["Eliminar por completo los riesgos del sistema", "Dar a conocer la política a todos los miembros", "Clasificar el sistema en categoría alta, media o baja"],
+    "explicacion": "El análisis de riesgos permite seleccionar las medidas necesarias; los riesgos no se anulan y dar a conocer la política es otro requisito."
   },
   {
-    "id": "ens-030",
+    "id": "ens-106",
     "concepto": "ens-requisitos-minimos",
     "tema": "ens",
-    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 16 },
-    "pregunta": "¿Cuántos principios básicos tiene el ENS?",
-    "correcta": "6",
-    "distractores": ["15", "7", "5"],
-    "explicacion": "El ENS tiene 6 principios básicos, que se desarrollan en 15 requisitos mínimos."
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 20 },
+    "pregunta": "Según el requisito de implantación del proceso de seguridad del ENS, ¿a quién hay que involucrar?",
+    "correcta": "A la totalidad del personal de la entidad",
+    "distractores": ["Al Responsable de Seguridad y a su equipo", "Al personal del área de sistemas", "A los responsables de la información y del servicio"],
+    "explicacion": "El proceso de seguridad involucra a toda la plantilla, que además conoce la política y recibe sensibilización y formación."
   },
   {
     "id": "ens-031",
@@ -1375,8 +1375,8 @@
     "tema": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 22 },
     "pregunta": "Según el requisito de «seguridad por defecto» del ENS, ¿qué debe ofrecer el sistema?",
-    "correcta": "La mínima funcionalidad requerida",
-    "distractores": ["Todas las funciones de operación, administración y auditoría", "Las funciones que el fabricante activa por defecto", "La funcionalidad de la categoría alta del ENS"],
+    "correcta": "La funcionalidad mínima que el sistema requiere",
+    "distractores": ["Las funciones de operación y auditoría más amplias", "Las funciones que el fabricante activa por defecto", "La funcionalidad de la categoría alta del ENS"],
     "explicacion": "La seguridad por defecto da la mínima funcionalidad y elimina o desactiva las funciones que no son de interés."
   },
   {
@@ -1406,7 +1406,7 @@
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 25 },
     "pregunta": "¿En función de qué se decide la categoría de un sistema en el ENS?",
     "correcta": "De la criticidad de la información que maneja",
-    "distractores": ["Del estado de la tecnología del sistema", "De los riesgos a los que se expone el sistema", "Del volumen de datos personales que trata"],
+    "distractores": ["Del estado de la tecnología que emplea el sistema", "De los riesgos a los que se expone el sistema", "Del volumen de datos personales que trata el sistema"],
     "explicacion": "La categoría alta, media o baja depende de la criticidad de la información manejada."
   },
   {
@@ -1430,14 +1430,14 @@
     "explicacion": "La evaluación compara con los criterios de aceptación; el análisis calcula consecuencias, probabilidades y niveles."
   },
   {
-    "id": "riesgos-003",
+    "id": "riesgos-101",
     "concepto": "riesgos-analisis-evaluacion",
     "tema": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 6 },
-    "pregunta": "¿Con qué norma están en línea las acciones para tratar los riesgos y oportunidades de la ISO 27001?",
-    "correcta": "Con la UNE-ISO 31000",
-    "distractores": ["Con la ISO/IEC 27002", "Con la UNE-EN ISO 9001", "Con el Anexo I de la ISO/IEC 27001"],
-    "explicacion": "La planificación de riesgos de la ISO 27001 sigue la UNE-ISO 31000; la 27002 es el repositorio de controles."
+    "pregunta": "En la planificación de la ISO 27001, ¿a qué pérdidas se asocian los riesgos que se identifican?",
+    "correcta": "A la pérdida de confidencialidad, integridad y disponibilidad",
+    "distractores": ["A la pérdida de confidencialidad, integridad y autenticidad", "A la pérdida de disponibilidad, integridad y resiliencia", "A la pérdida de confidencialidad, disponibilidad y trazabilidad"],
+    "explicacion": "La identificación de riesgos los asocia a la pérdida de confidencialidad, integridad y disponibilidad de la información."
   },
   {
     "id": "riesgos-004",
@@ -1455,8 +1455,8 @@
     "tema": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 31 },
     "pregunta": "Al calcular el riesgo, ¿qué es importante respecto a los criterios usados?",
-    "correcta": "Que estén bien establecidos y se apliquen siempre de la misma manera",
-    "distractores": ["Que cada departamento elija sus propios criterios", "Que cambien en cada análisis según la amenaza que se estudie", "Que los fije la entidad certificadora"],
+    "correcta": "Que estén bien establecidos y se apliquen siempre igual",
+    "distractores": ["Que cada departamento los elija según su propia experiencia", "Que cambien en cada análisis según la amenaza que se estudie", "Que los fije la entidad certificadora tras la auditoría"],
     "explicacion": "Para comparar activos, los criterios deben estar establecidos correctamente y aplicarse de la misma manera."
   },
   {
@@ -1516,7 +1516,7 @@
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 35 },
     "pregunta": "En el ejemplo de implantación del temario, ¿quién es el único propietario del riesgo?",
     "correcta": "La dirección de la organización",
-    "distractores": ["El responsable de sistemas", "El departamento técnico", "El responsable de seguridad"],
+    "distractores": ["El responsable de sistemas", "El área técnica de sistemas", "El responsable de seguridad"],
     "explicacion": "En el ejemplo, la dirección es el único propietario del riesgo y decide su tratamiento."
   },
   {
@@ -1536,7 +1536,7 @@
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 37 },
     "pregunta": "¿En qué documento se registra la selección de los controles de seguridad?",
     "correcta": "En la Declaración de Aplicabilidad",
-    "distractores": ["En el inventario de activos", "En el mapa de riesgos", "En el informe de auditoría interna"],
+    "distractores": ["En el inventario de activos", "En el mapa de riesgos de los activos", "En el informe de auditoría interna"],
     "explicacion": "La selección de controles se documenta en la Declaración (o documento) de Aplicabilidad."
   },
   {
@@ -1606,7 +1606,7 @@
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 26 },
     "pregunta": "Al identificar y valorar las amenazas, ¿qué 2 valores se asignan en cada dimensión?",
     "correcta": "La probabilidad de ocurrencia y la degradación del activo",
-    "distractores": ["El valor del activo y su coste de reposición", "El impacto y el riesgo residual", "La categoría del sistema y su criticidad"],
+    "distractores": ["El valor del activo y su coste de reposición", "El impacto y el riesgo residual de cada amenaza", "La categoría del sistema y su criticidad para el negocio"],
     "explicacion": "Cada amenaza recibe una probabilidad y una degradación por dimensión; el valor es del activo, y el impacto se calcula después."
   },
   {
@@ -1645,7 +1645,7 @@
     "tema": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 31 },
     "pregunta": "¿En función de qué se calcula el riesgo de cada amenaza?",
-    "correcta": "Del impacto y de la probabilidad de ocurrencia",
+    "correcta": "Del impacto y de la probabilidad",
     "distractores": ["Del valor del activo y de la degradación", "Del impacto y del coste de los controles", "De la degradación y del riesgo residual"],
     "explicacion": "Primero el impacto (valor y degradación) y después el riesgo (impacto y probabilidad)."
   },
@@ -1665,7 +1665,7 @@
     "tema": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 32 },
     "pregunta": "¿Qué se obtiene al aplicar el cálculo de riesgo a todos los activos?",
-    "correcta": "Un mapa de riesgos, que identifica los activos con mayor riesgo",
+    "correcta": "Un mapa de riesgos con los activos de mayor riesgo",
     "distractores": ["La Declaración de Aplicabilidad con los controles seleccionados", "El plan de tratamiento de riesgos aprobado", "El inventario de activos de la organización"],
     "explicacion": "El mapa de riesgos compara los activos; la Declaración de Aplicabilidad y el plan de tratamiento vienen después."
   },
@@ -1690,14 +1690,14 @@
     "explicacion": "MAGERIT y el NIST son catálogos de amenazas; CCN-STIC son guías del CCN y FACILITA y GESTIONA son herramientas de la AEPD."
   },
   {
-    "id": "riesgos-029",
+    "id": "riesgos-102",
     "concepto": "riesgos-catalogos",
     "tema": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 26 },
-    "pregunta": "¿Qué normas sectoriales recogen amenazas específicas, según el temario?",
-    "correcta": "ISO/IEC 27011 e ISO/IEC 27799",
-    "distractores": ["ISO/IEC 27001 e ISO/IEC 27002", "UNE-ISO 31000 y UNE-EN ISO 9001", "UNE-EN ISO 14001 e ISO/IEC 27001"],
-    "explicacion": "Las amenazas sectoriales están en la 27011 y la 27799; la 27001 y la 27002 son el SGSI y sus controles."
+    "pregunta": "Aparte de los catálogos generales, ¿dónde recoge el temario amenazas específicas para un ámbito de actividad concreto?",
+    "correcta": "En las normas sectoriales, como la ISO/IEC 27799",
+    "distractores": ["En el Anexo I de la ISO/IEC 27001, con los controles", "En la Declaración de Aplicabilidad de la organización", "En el plan de tratamiento de riesgos aprobado"],
+    "explicacion": "Las amenazas específicas de un ámbito están en normas sectoriales; el NIST y MAGERIT son catálogos generales."
   },
   {
     "id": "riesgos-030",
@@ -1835,8 +1835,8 @@
     "tema": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 5 },
     "pregunta": "Entre los objetivos de los auditores, ¿cuándo es eficiente el SGSI?",
-    "correcta": "Cuando usa los mínimos recursos para conseguir sus objetivos",
-    "distractores": ["Cuando cumple aquello para lo que fue diseñado", "Cuando sus datos son completos, válidos y veraces", "Cuando todos sus recursos están protegidos por controles internos"],
+    "correcta": "Cuando consigue sus metas con los mínimos recursos",
+    "distractores": ["Cuando cumple aquello para lo que fue diseñado", "Cuando sus datos son completos, válidos y veraces", "Cuando sus recursos están protegidos por controles internos"],
     "explicacion": "Eficiencia: mínimos recursos; eficacia: hace aquello para lo que fue diseñado."
   },
   {
@@ -1844,7 +1844,7 @@
     "concepto": "auditoria-objetivos",
     "tema": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 5 },
-    "pregunta": "¿Qué objetivo del auditor comprueba que los datos son completos, válidos y veraces?",
+    "pregunta": "¿Qué objetivo del auditor comprueba que la información es completa, válida y veraz?",
     "correcta": "La integridad de los datos",
     "distractores": ["La protección de recursos", "La eficacia del SGSI", "La eficiencia del SGSI"],
     "explicacion": "Integridad de los datos: completos, válidos y veraces; protección de recursos: controles sobre todos los recursos."
@@ -1940,21 +1940,21 @@
     "explicacion": "La documentación interna es de uso exclusivo del equipo auditor; la externa la revisa el cliente."
   },
   {
-    "id": "auditoria-021",
-    "concepto": "auditoria-normas",
+    "id": "auditoria-101",
+    "concepto": "auditoria-isaca",
     "tema": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
-    "pregunta": "¿Qué norma da las directrices para la auditoría de sistemas de gestión?",
-    "correcta": "La ISO 19011:2011",
-    "distractores": ["La ISO 19011:2008", "La ISO 9001:2008", "La ISO 27001"],
-    "explicacion": "La ISO 19011 son las directrices de auditoría; la ISO 9001, la gestión de la calidad; la 27001, el SGSI."
+    "pregunta": "¿Qué es CoBIT 5, una de las normativas que aporta ISACA?",
+    "correcta": "Una estructura de negocio para gestionar y gobernar las TIC",
+    "distractores": ["Las directrices para la auditoría de los sistemas de gestión", "Los requisitos de los sistemas de gestión de la calidad", "El código ético del profesional de la auditoría"],
+    "explicacion": "CoBIT 5 es una estructura de negocio para la gestión y gobernanza de las TIC; el código ético es otra aportación de ISACA."
   },
   {
     "id": "auditoria-022",
     "concepto": "auditoria-alcance",
     "tema": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 15 },
-    "pregunta": "Al determinar el alcance de la auditoría, ¿qué dos documentos externos se generan?",
+    "pregunta": "En la fase inicial del plan de auditoría, ¿qué dos documentos externos se generan?",
     "correcta": "La propuesta de alcance y el precontrato de auditoría",
     "distractores": ["El presupuesto y el contrato de auditoría", "El plan de auditoría y el informe final", "La propuesta de alcance y el informe preliminar de auditoría"],
     "explicacion": "La fase de alcance genera la propuesta de alcance y el precontrato."
@@ -1980,24 +1980,24 @@
     "explicacion": "Externa: personas ajenas a la empresa; interna: sus propios recursos. Total o parcial es el alcance del estudio."
   },
   {
-    "id": "auditoria-025",
-    "concepto": "auditoria-normas",
+    "id": "auditoria-102",
+    "concepto": "auditoria-isaca",
     "tema": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
-    "pregunta": "En la auditoría de sistemas, ¿qué norma recoge los requisitos de los sistemas de gestión de la calidad?",
-    "correcta": "La ISO 9001:2008",
-    "distractores": ["La ISO 19011:2011", "La ISO 27001", "La CoBIT 5"],
-    "explicacion": "La ISO 9001 son los requisitos de la calidad; la ISO 19011, las directrices de auditoría."
+    "pregunta": "¿Qué aporta ISACA al profesional de la auditoría, además de CoBIT 5?",
+    "correcta": "Un código ético y un manual de preparación al examen CISA",
+    "distractores": ["Un código ético y unas directrices para auditar sistemas de gestión", "Un manual CISA y unos requisitos de la gestión de la calidad", "Un manual de implantación del SGSI y un código de buenas prácticas"],
+    "explicacion": "ISACA aporta el código ético, el manual de preparación al examen CISA y CoBIT 5; las directrices de auditoría son de la ISO 19011."
   },
   {
-    "id": "lssi-001",
+    "id": "lssi-101",
     "concepto": "lssi-ley",
     "tema": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 58 },
-    "pregunta": "¿Qué ley regula los servicios de la sociedad de la información?",
-    "correcta": "La Ley 34/2002",
-    "distractores": ["La Ley 21/2014", "La Ley Orgánica 1/2015", "El RD 1/1996"],
-    "explicacion": "La LSSI es la Ley 34/2002; la Ley 21/2014 reforma la LPI y la LO 1/2015, el Código Penal."
+    "pregunta": "¿Cuál de estas actividades queda dentro de la Ley 34/2002 por ser una actividad económica?",
+    "correcta": "La organización de subastas por medios electrónicos",
+    "distractores": ["La representación y defensa en juicio por un abogado", "Los servicios de un notario en sus funciones públicas", "Los servicios de un registrador en sus funciones públicas"],
+    "explicacion": "La LSSI engloba, entre otras, las subastas por medios electrónicos; notarios, registradores y abogados en juicio quedan excluidos."
   },
   {
     "id": "lssi-002",
@@ -2016,7 +2016,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 60 },
     "pregunta": "Un buscador gratuito se financia con publicidad. ¿Está incluido en la LSSI?",
     "correcta": "Sí, porque es una actividad económica para su prestador",
-    "distractores": ["No, porque el servicio es gratuito para el usuario", "No, porque los buscadores están excluidos del ámbito de la ley", "Solo si el buscador cobra por registrarse"],
+    "distractores": ["No, porque el servicio es gratuito para el usuario", "No, porque los buscadores están excluidos del ámbito de la ley", "Si el buscador cobra por registrarse"],
     "explicacion": "Los servicios gratuitos que dan ingresos al prestador (publicidad, patrocinio) están incluidos en la LSSI."
   },
   {
@@ -2096,7 +2096,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 61 },
     "pregunta": "Según la LSSI, ¿cuándo debe recabar el prestador el consentimiento para usar cookies?",
     "correcta": "Tras informarle de forma clara y completa de su uso y finalidad",
-    "distractores": ["Antes de informarle de forma clara y completa de su uso y finalidad", "Tras informarle solo de su uso, sin indicar la finalidad", "Antes de informarle, mediante la configuración del navegador"],
+    "distractores": ["Antes de informarle de forma clara y completa de su uso y finalidad", "Tras informarle de su uso, sin indicar la finalidad", "Antes de informarle, mediante la configuración del navegador"],
     "explicacion": "El consentimiento se recaba tras informar de forma clara y completa; puede darse con la configuración del navegador."
   },
   {
@@ -2146,7 +2146,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 64 },
     "pregunta": "¿Qué ventaja tiene proteger el software como obra desde la propiedad intelectual?",
     "correcta": "La protección es automática y su duración es superior",
-    "distractores": ["La protección es automática y su duración es inferior", "La protección exige un registro y su duración es superior", "Regula la transmisión de los derechos y no el simple uso"],
+    "distractores": ["La protección es automática y su duración es inferior", "La protección exige un registro y su duración es superior", "La protección regula la transmisión de los derechos y no el simple uso"],
     "explicacion": "Propiedad intelectual: protección automática y más larga; patentes: regulan la transmisión de derechos."
   },
   {
@@ -2266,7 +2266,7 @@
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 68 },
     "pregunta": "¿Cómo es la inscripción de un programa en el registro de la Propiedad Intelectual?",
     "correcta": "Voluntaria: el derecho surge sin ella",
-    "distractores": ["Obligatoria para que surja el derecho", "Obligatoria para el software propietario y voluntaria para el libre", "Obligatoria antes de su comercialización"],
+    "distractores": ["Obligatoria para que surja el derecho", "Obligatoria para el software propietario y voluntaria para el libre", "Voluntaria, pero necesaria antes de comercializar el programa"],
     "explicacion": "La inscripción es voluntaria: el derecho surge con la creación."
   },
   {
@@ -2285,7 +2285,7 @@
     "tema": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 68 },
     "pregunta": "¿Qué protege la protección <<sui generis>> de las bases de datos?",
-    "correcta": "Las inversiones hechas para elaborar, verificar o presentar la base",
+    "correcta": "Las inversiones para elaborar, verificar o presentar la base",
     "distractores": ["La estructura original de la base de datos, y no su contenido", "El contenido de cada uno de los registros de la base de datos", "El código del gestor que administra la base de datos"],
     "explicacion": "Sui generis: la inversión; derecho de autor: la estructura original, no el contenido."
   },
@@ -2300,14 +2300,14 @@
     "explicacion": "El titular tiene la acción de cesación, la indemnizatoria y las medidas cautelares; las otras son derechos del RGPD."
   },
   {
-    "id": "propiedad-001",
+    "id": "propiedad-101",
     "concepto": "propiedad-reforma",
     "tema": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 69 },
-    "pregunta": "¿Qué ley modifica el texto refundido de la Ley de Propiedad Intelectual y la Ley de Enjuiciamiento Civil?",
-    "correcta": "La Ley 21/2014",
-    "distractores": ["La Ley 34/2002", "La Ley Orgánica 1/2015", "La Ley 2/2011"],
-    "explicacion": "La Ley 21/2014 reforma la LPI; la 34/2002 es la LSSI y la LO 1/2015 reforma el Código Penal."
+    "pregunta": "¿Con qué objetivo modifica la Ley 21/2014 el texto refundido de la Ley de Propiedad Intelectual?",
+    "correcta": "Adaptarla a los cambios sociales, económicos y tecnológicos recientes",
+    "distractores": ["Crear en el Código Penal un delito de piratería de obras en la Red", "Regular el comercio electrónico y los servicios de la sociedad de la información", "Proteger los datos personales de los usuarios de las obras protegidas"],
+    "explicacion": "La reforma adapta la ley a los cambios de los últimos años; el Código Penal lo reforma la LO 1/2015."
   },
   {
     "id": "propiedad-002",
@@ -2400,14 +2400,14 @@
     "explicacion": "Se aplica a prestadores que vulneran derechos o que facilitan describir o localizar las obras."
   },
   {
-    "id": "propiedad-011",
+    "id": "propiedad-102",
     "concepto": "propiedad-reforma",
     "tema": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 69 },
-    "pregunta": "¿Qué directiva, sobre el plazo de protección del derecho de autor, transpone la Ley 21/2014?",
-    "correcta": "La Directiva 2011/77/UE",
-    "distractores": ["La Directiva 2013/40/UE", "La Directiva 2002/96/CE", "La Directiva 2002/95/CE"],
-    "explicacion": "La Ley 21/2014 transpone la 2011/77/UE; la 2013/40/UE trata los ataques contra los sistemas de información."
+    "pregunta": "¿Qué regula la Directiva 2011/77/UE, que transpone la Ley 21/2014?",
+    "correcta": "El plazo de protección del derecho de autor",
+    "distractores": ["Los ataques contra los sistemas de información", "Los residuos de aparatos electrónicos", "Las restricciones de uso de sustancias peligrosas"],
+    "explicacion": "La 2011/77/UE trata el plazo de protección del derecho de autor; la 2013/40/UE, los ataques a los sistemas de información."
   },
   {
     "id": "delitos-001",
@@ -2425,8 +2425,8 @@
     "tema": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 72 },
     "pregunta": "¿Qué impide el principio penal <<Nullum crimen sine lege previa>>?",
-    "correcta": "Sancionar actos que no estaban en las normas al cometerse",
-    "distractores": ["Perseguir delitos que se inician en otro país", "Usar el documento electrónico como prueba", "Sancionar las faltas cometidas por medios informáticos"],
+    "correcta": "Sancionar actos no contemplados en las normas al cometerse",
+    "distractores": ["Perseguir los delitos que se inician en otro país distinto", "Usar el documento electrónico como prueba ante un tribunal", "Sancionar las faltas cometidas por medios informáticos"],
     "explicacion": "Sin ley previa no hay delito: una conducta nueva no se sanciona hasta que la ley la tipifica."
   },
   {
@@ -2435,19 +2435,19 @@
     "tema": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 72 },
     "pregunta": "¿Qué caracteriza a un ciberdelito, según el temario?",
-    "correcta": "El delito se inicia en un país y se produce en otro diferente",
-    "distractores": ["El delito se comete dentro de la Unión Europea", "El delito tiene como víctima a una administración pública", "El delito se comete con un programa malicioso"],
+    "correcta": "El delito se inicia en un país y se produce en otro distinto",
+    "distractores": ["El delito se comete dentro de la Unión Europea, contra un particular", "El delito tiene como víctima a una administración pública y a sus sistemas", "El delito se comete con un programa malicioso diseñado para ese fin"],
     "explicacion": "En el ciberdelito el origen y el resultado están en países distintos, lo que complica su persecución."
   },
   {
-    "id": "delitos-004",
+    "id": "delitos-101",
     "concepto": "delitos-reforma",
     "tema": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 72 },
-    "pregunta": "¿Qué norma crea la categoría de ciberdelitos en el Código Penal español?",
-    "correcta": "La Ley Orgánica 1/2015",
-    "distractores": ["El Código Penal de 1995", "La Directiva 2013/40/UE", "El Convenio sobre la Ciberdelincuencia"],
-    "explicacion": "El Código Penal de 1995 abarca parte de estos delitos; la LO 1/2015 crea la categoría de ciberdelitos."
+    "pregunta": "¿Qué crea la reforma del Código Penal por la Ley Orgánica 1/2015?",
+    "correcta": "Una nueva categoría de ciberdelitos o delitos informáticos",
+    "distractores": ["Un nuevo Código Penal que sustituye al de 1995", "Un convenio europeo para armonizar las legislaciones nacionales", "Una decisión marco sobre los ataques contra los sistemas de información"],
+    "explicacion": "La LO 1/2015 crea la categoría de ciberdelitos; el Código Penal de 1995 abarca parte de estos delitos."
   },
   {
     "id": "delitos-005",
@@ -2460,34 +2460,24 @@
     "explicacion": "La LO 1/2015 recoge intrusión, interceptación de datos y delitos de propiedad intelectual e industrial, entre otros."
   },
   {
-    "id": "delitos-006",
+    "id": "delitos-102",
     "concepto": "delitos-convenio",
     "tema": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 73 },
-    "pregunta": "¿Cuándo se creó en Europa el Convenio sobre la Ciberdelincuencia?",
-    "correcta": "En 2001",
-    "distractores": ["En 2005", "En 2010", "En 2013"],
-    "explicacion": "El Convenio es de 2001 y España lo ratificó en 2010; 2005 y 2013 son la Decisión Marco y la Directiva."
+    "pregunta": "¿Qué pretende el Convenio sobre la Ciberdelincuencia, creado en Europa?",
+    "correcta": "Armonizar las legislaciones de los diferentes países",
+    "distractores": ["Unificar las legislaciones nacionales en un solo código penal", "Sustituir la Decisión Marco sobre los ataques a los sistemas de información", "Reconocer valor probatorio al documento electrónico"],
+    "explicacion": "El Convenio intenta armonizar las legislaciones de los países, no unificarlas."
   },
   {
-    "id": "delitos-007",
+    "id": "delitos-103",
     "concepto": "delitos-convenio",
     "tema": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 73 },
-    "pregunta": "¿Cuándo ratificó España el Convenio sobre la Ciberdelincuencia?",
-    "correcta": "El 17 de septiembre de 2010",
-    "distractores": ["El 17 de septiembre de 2001", "El 30 de marzo de 2015", "El 4 de noviembre de 2014"],
-    "explicacion": "El Convenio se creó en 2001 y España lo ratificó el 17 de septiembre de 2010."
-  },
-  {
-    "id": "delitos-008",
-    "concepto": "delitos-convenio",
-    "tema": "delitos",
-    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 73 },
-    "pregunta": "¿Qué norma sustituye a la Decisión Marco 2005/222/JAI sobre ataques contra los sistemas de información?",
-    "correcta": "La Directiva 2013/40/UE",
-    "distractores": ["La Ley Orgánica 1/2015", "El Convenio sobre la Ciberdelincuencia", "La Directiva 2011/77/UE"],
-    "explicacion": "La Directiva 2013/40/UE sustituye a la Decisión Marco 2005/222/JAI; la 2011/77/UE es de derechos de autor."
+    "pregunta": "¿Sobre qué trata la Decisión Marco 2005/222/JAI, sustituida por la Directiva 2013/40/UE?",
+    "correcta": "Los ataques contra los sistemas de información",
+    "distractores": ["El plazo de protección del derecho de autor", "El valor probatorio del documento electrónico", "Los residuos de aparatos electrónicos"],
+    "explicacion": "La Decisión Marco 2005/222/JAI es relativa a ataques contra los sistemas de información; la Directiva 2013/40/UE la sustituye."
   },
   {
     "id": "delitos-009",
@@ -2500,14 +2490,14 @@
     "explicacion": "El art. 26 reconoce valor probatorio al documento electrónico."
   },
   {
-    "id": "delitos-010",
+    "id": "delitos-104",
     "concepto": "delitos-prueba",
     "tema": "delitos",
-    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 73 },
-    "pregunta": "¿Qué artículo de la normativa española da valor probatorio al documento electrónico?",
-    "correcta": "El art. 26",
-    "distractores": ["El art. 96.1", "El art. 33", "El art. 20"],
-    "explicacion": "El art. 26 da valor probatorio al documento electrónico; el 96.1 de la LPI define el programa de ordenador."
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 72 },
+    "pregunta": "¿Por qué es muy complejo el descubrimiento, la persecución y la prueba de los delitos informáticos?",
+    "correcta": "Por la naturaleza de los sistemas y la especialización de los sujetos",
+    "distractores": ["Porque el Código Penal de 1995 no abarca ninguno de estos delitos", "Porque España no ha ratificado el Convenio sobre la Ciberdelincuencia", "Porque el documento electrónico no tiene valor probatorio ante el tribunal"],
+    "explicacion": "La complejidad viene de la naturaleza de los sistemas y del alto nivel de especialización de los sujetos."
   },
   {
     "id": "etica-001",
@@ -2540,14 +2530,14 @@
     "explicacion": "Therac-25: radiaciones de alta potencia por un fallo de diseño; Sheffield y Patriot: fallos del software de defensa."
   },
   {
-    "id": "etica-004",
+    "id": "etica-101",
     "concepto": "etica-casos",
     "tema": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 76 },
-    "pregunta": "¿Cuántas personas murieron en Dhahran cuando un misil Scud traspasó la defensa Patriot en 1991?",
-    "correcta": "28 personas",
-    "distractores": ["125 personas", "128 personas", "82 personas"],
-    "explicacion": "El fallo del software Patriot causó 28 muertos en Dhahran; 125 son las aerolíneas afectadas por Altea."
+    "pregunta": "¿Cuál fue la causa de que un misil Scud iraquí penetrara en una base estadounidense en Dhahran, en 1991?",
+    "correcta": "Un fallo en el software de defensa",
+    "distractores": ["Un fallo en el software de check-in de los pasajeros", "Un fallo en el diseño de la aplicación del equipo médico", "Unos pilotos atacantes con aviones menos sofisticados"],
+    "explicacion": "El misil traspasó la barrera Patriot por un fallo en el software de defensa."
   },
   {
     "id": "etica-005",
@@ -2565,8 +2555,8 @@
     "tema": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 77 },
     "pregunta": "¿Cuándo obliga la responsabilidad profesional, como principio ético, a responder de la actuación?",
-    "correcta": "Siempre, haya o no lesión a terceros",
-    "distractores": ["Solo cuando hay lesión a terceros", "Solo cuando hay una responsabilidad jurídica exigible", "Solo cuando lo exige el código deontológico del colegio"],
+    "correcta": "Haya o no lesión a terceros",
+    "distractores": ["Cuando hay lesión a terceros", "Cuando hay una responsabilidad jurídica exigible", "Cuando lo exige el código deontológico del colegio"],
     "explicacion": "La responsabilidad profesional obliga a responder haya o no lesión, porque las lagunas jurídicas impiden exigirla siempre."
   },
   {
@@ -2620,14 +2610,14 @@
     "explicacion": "Las tres desarrollan códigos de conducta, pero el de 1999 lo suscriben las dos primeras: ACM e IEEE."
   },
   {
-    "id": "etica-012",
+    "id": "etica-102",
     "concepto": "etica-rsc",
     "tema": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 78 },
-    "pregunta": "¿Qué directiva regula los residuos de aparatos electrónicos?",
-    "correcta": "La Directiva 2002/96/CE",
-    "distractores": ["La Directiva 2002/95/CE", "La Directiva 2013/40/UE", "La Directiva 2011/77/UE"],
-    "explicacion": "La 2002/96/CE trata los residuos; la 2002/95/CE, las restricciones de sustancias peligrosas."
+    "pregunta": "¿Qué finalidad tiene la Responsabilidad Civil Corporativa, según el temario?",
+    "correcta": "Contrarrestar el impacto de las empresas exigiéndoles actitudes responsables",
+    "distractores": ["Sustituir las políticas públicas de promoción y sensibilización social", "Sancionar a las empresas que contaminen o gestionen mal los residuos", "Regular la restricción del uso de sustancias peligrosas en aparatos"],
+    "explicacion": "La responsabilidad corporativa busca contrarrestar el impacto de las empresas; las políticas públicas las dictan los poderes públicos."
   },
   {
     "id": "etica-013",
@@ -2645,8 +2635,8 @@
     "tema": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 2 },
     "pregunta": "¿Cuántos tipos de certificadoras hay, en función del lugar?",
-    "correcta": "Cuatro: universidades, empresas, organizaciones patrocinadas y gubernamentales",
-    "distractores": ["Dos: organizaciones y particulares", "Tres: universidades, empresas y organizaciones gubernamentales", "Cuatro: universidades, empresas, colegios profesionales y gubernamentales"],
+    "correcta": "Cuatro: universidades, empresas, patrocinadas y gubernamentales",
+    "distractores": ["Dos: certificadoras de organizaciones y de particulares", "Tres: universidades, empresas y organizaciones gubernamentales", "Cuatro: universidades, empresas, colegios y gubernamentales"],
     "explicacion": "Los tipos de certificación son dos (organizaciones y personales); las certificadoras por lugar son cuatro."
   },
   {
@@ -2674,7 +2664,7 @@
     "concepto": "certificaciones-beneficios",
     "tema": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 2 },
-    "pregunta": "Según el temario, ¿qué es lo más importante para una organización respecto a la seguridad de la información?",
+    "pregunta": "Según el temario, ¿qué es lo más importante para una organización respecto al SGSI?",
     "correcta": "Gestionar la seguridad de la información",
     "distractores": ["Obtener la certificación del SGSI", "Obtener la certificación ENS de categoría ALTA", "Superar la auditoría de la entidad certificadora"],
     "explicacion": "Lo más importante es gestionar la seguridad; la certificación del SGSI añade beneficios."
@@ -2710,86 +2700,6 @@
     "explicacion": "La CCN-STIC 824 da el marco de referencia para cumplir el ENS; el esquema de acreditación es de ENAC."
   },
   {
-    "id": "certificaciones-008",
-    "concepto": "certificaciones-isaca",
-    "tema": "certificaciones",
-    "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 6 },
-    "pregunta": "¿Qué organización ofrece las certificaciones CISM, CISA, CRISC y CSX-P?",
-    "correcta": "ISACA",
-    "distractores": ["ISC2", "CompTIA", "GIAC"],
-    "explicacion": "CISM, CISA, CRISC y CSX-P son de ISACA; CISSP y SSCP, de ISC2."
-  },
-  {
-    "id": "certificaciones-009",
-    "concepto": "certificaciones-isaca",
-    "tema": "certificaciones",
-    "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 6 },
-    "pregunta": "¿Qué certificación de ISACA está dirigida a auditores de sistemas de información?",
-    "correcta": "La CISA",
-    "distractores": ["La CISM", "La CRISC", "La CIA"],
-    "explicacion": "CISA es el auditor de sistemas de información de ISACA; la CIA es el auditor interno del IIA."
-  },
-  {
-    "id": "certificaciones-010",
-    "concepto": "certificaciones-isc2",
-    "tema": "certificaciones",
-    "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 6 },
-    "pregunta": "¿Qué organización ofrece las certificaciones CISSP y SSCP?",
-    "correcta": "ISC2",
-    "distractores": ["ISACA", "CompTIA", "EC-Council"],
-    "explicacion": "CISSP y SSCP son de ISC2; CISM y CISA, de ISACA."
-  },
-  {
-    "id": "certificaciones-011",
-    "concepto": "certificaciones-ofensivas",
-    "tema": "certificaciones",
-    "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 5 },
-    "pregunta": "¿Qué organización ofrece la certificación Certified Ethical Hacker (CEH)?",
-    "correcta": "EC-Council",
-    "distractores": ["Offensive Security", "Mile 2", "GIAC"],
-    "explicacion": "CEH es de EC-Council; OSCP, de Offensive Security; CPTE y CPTC, de Mile 2."
-  },
-  {
-    "id": "certificaciones-012",
-    "concepto": "certificaciones-ofensivas",
-    "tema": "certificaciones",
-    "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 11 },
-    "pregunta": "¿Qué organización ofrece la certificación OSCP, de seguridad ofensiva?",
-    "correcta": "Offensive Security",
-    "distractores": ["EC-Council", "Mile 2", "CWNP"],
-    "explicacion": "OSCP es de Offensive Security; CEH, de EC-Council; CWSP, de CWNP."
-  },
-  {
-    "id": "certificaciones-013",
-    "concepto": "certificaciones-ofensivas",
-    "tema": "certificaciones",
-    "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 9 },
-    "pregunta": "¿Qué organización ofrece las certificaciones CPTE y CPTC de pruebas de penetración?",
-    "correcta": "Mile 2",
-    "distractores": ["EC-Council", "Offensive Security", "Asis International"],
-    "explicacion": "CPTE y CPTC son de Mile 2; CPP, de Asis International."
-  },
-  {
-    "id": "certificaciones-014",
-    "concepto": "certificaciones-otras",
-    "tema": "certificaciones",
-    "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 10 },
-    "pregunta": "¿Qué certificación ofrece el IIA?",
-    "correcta": "La Certified Internal Auditor (CIA)",
-    "distractores": ["La Certified Information Systems Auditor (CISA)", "La Certified Protection Professional (CPP)", "La GIAC Certified Incident Handler"],
-    "explicacion": "El IIA ofrece la CIA; la CISA es de ISACA y la CPP, de Asis International."
-  },
-  {
-    "id": "certificaciones-015",
-    "concepto": "certificaciones-otras",
-    "tema": "certificaciones",
-    "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 10 },
-    "pregunta": "¿Qué certificación ofrece CWNP?",
-    "correcta": "La de Profesional de la Seguridad Inalámbrica Certificado (CWSP)",
-    "distractores": ["La de Profesional certificado en seguridad ofensiva (OSCP)", "La CCNA Security", "La GIAC Security Essentials Certification"],
-    "explicacion": "CWSP es de CWNP; OSCP, de Offensive Security; CCNA Security, de Cisco."
-  },
-  {
     "id": "certificaciones-016",
     "concepto": "certificaciones-recomendacion",
     "tema": "certificaciones",
@@ -2810,13 +2720,13 @@
     "explicacion": "Avanzadas: las de ISACA (CISM, CSX-P, CISA, CRISC); básicas: GSEC, Security+ y SSCP."
   },
   {
-    "id": "certificaciones-018",
-    "concepto": "certificaciones-isc2",
+    "id": "certificaciones-103",
+    "concepto": "certificaciones-recomendacion",
     "tema": "certificaciones",
-    "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 6 },
-    "pregunta": "¿Qué certificación ofrece ISC2?",
-    "correcta": "La CISSP",
-    "distractores": ["La CISM", "La CEH", "La CISA"],
-    "explicacion": "ISC2 ofrece CISSP y SSCP; CISM y CISA son de ISACA, y CEH de EC-Council."
+    "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 11 },
+    "pregunta": "¿Qué certificación de ISC2 recomienda el temario como básica?",
+    "correcta": "La SSCP",
+    "distractores": ["La CISSP", "La GSEC", "La Security+"],
+    "explicacion": "La SSCP es la básica de ISC2; la CISSP no está entre las recomendadas, y la GSEC y la Security+ son básicas de otras organizaciones."
   }
 ]

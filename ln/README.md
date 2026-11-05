@@ -26,19 +26,22 @@ El banco es una lista de preguntas en JSON. El navegador lo lee con `fetch`, sin
 - `correcta` va aparte de los `distractores`, y la interfaz baraja las 4 opciones. Una opción no dice "todas las anteriores", porque el barajado la rompe.
 - `explicacion` dice el contraste clave en una línea.
 
-El banco tiene unas 280 preguntas: unas 175 de RGPD, ISO 27001, ENS y riesgos, y unas 105 del resto. Las preguntas tienen 4 opciones, aunque el examen sea de verdadero o falso. Una pregunta de 4 opciones entrena la diferencia entre ideas parecidas, y un examen de verdadero o falso pregunta esas mismas diferencias.
+El banco tiene unas 270 preguntas: unas 175 de RGPD, ISO 27001, ENS y riesgos, y unas 100 del resto. Las preguntas tienen 4 opciones, aunque el examen sea de verdadero o falso. Una pregunta de 4 opciones entrena la diferencia entre ideas parecidas, y un examen de verdadero o falso pregunta esas mismas diferencias.
 
 ### La calidad de una pregunta
 
 1. **Una sola respuesta defendible.** La correcta es cierta según su página, y cada distractor es falso según el temario. Un distractor "menos correcto" no vale. Un dato que el temario da de 2 formas distintas no tiene pregunta.
 2. **El enunciado se contesta sin las opciones.** Con las opciones tapadas, el enunciado ya pide un dato concreto. Así, la pregunta entrena el recuerdo del dato, y no solo su reconocimiento.
-3. **Ninguna pista fuera del dato.** Las 4 opciones tienen una longitud parecida, y la correcta es la más larga en un 25 % de las preguntas como mucho. Las 4 tienen la forma gramatical que pide el enunciado. Una palabra del enunciado no se repite solo en la correcta, y "siempre", "nunca" o "solo" no van solo en los distractores.
+3. **Ninguna pista fuera del dato.** Las 4 opciones tienen una longitud parecida, y la correcta es la más larga en un 25 % de las preguntas como mucho. Las 4 tienen la forma gramatical que pide el enunciado. Una palabra del enunciado no se repite solo en la correcta, y "siempre", "nunca" o "solo" no van solo en los distractores. Una sigla o una traducción del enunciado también es una pista: "CWNP" en el enunciado señala "CWSP", y "seguridad ofensiva" señala "Offensive Security".
 4. **Cada distractor sale del temario que dio el profesor.** Un distractor es un nombre, una cifra o una idea del temario, fuera de los ejercicios y de las actividades, como responsable y encargado. Un nombre que no sale en el temario se descarta sin saber el dato.
 5. **Ningún enunciado negativo.** Un "¿Cuál NO es…?" se lee mal con prisa, y entrena la búsqueda de la trampa, y no el dato.
+6. **Una idea, y no un dato suelto.** La pregunta pide una idea del temario: una regla, un plazo, la diferencia entre 2 figuras o lo que hace algo. Una fecha del calendario, el número de una norma o el nombre de la organización que ofrece una certificación no tienen pregunta. Un plazo sí la tiene, porque es una regla, como las 72 horas para notificar una brecha. Una pregunta puede nombrar una norma por su número, pero no pide ese número.
+
+Una pregunta que rompe la regla 6 deja su sitio a una pregunta nueva, sobre otra idea de la misma página. La pregunta nueva lleva un `id` nuevo, porque el historial del `id` viejo mide el dato suelto. Una página sin otra idea pierde la pregunta. Una pregunta que rompe la regla 3 conserva su `id`, porque su dato no cambia.
 
 ### Las preguntas difíciles
 
-Una pregunta de cada 5 es difícil. Su distractor está muy cerca del dato, y falla solo en un detalle. Así, la pregunta obliga a entender el dato entero, y no solo a reconocer una palabra. Una pregunta difícil engaña con el contenido, y nunca con la forma: sigue las 5 reglas de calidad.
+Una pregunta de cada 5 es difícil. Su distractor está muy cerca del dato, y falla solo en un detalle. Así, la pregunta obliga a entender el dato entero, y no solo a reconocer una palabra. Una pregunta difícil engaña con el contenido, y nunca con la forma: sigue las 6 reglas de calidad.
 
 Un distractor difícil tiene una de estas formas:
 
