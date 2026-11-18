@@ -73,7 +73,7 @@ Antes de ver la solución, marcas "seguro" o "dudo". La pregunta va a una de 3 c
 | Fallo, o acierto con "dudo" | Caja 1 |
 | Acierto con "seguro" | Una caja más, hasta la 3 |
 
-La caja 1 sale en cada sesión, la caja 2 cada 2 días y la caja 3 cada 4 días. Una pregunta nueva empieza en la caja 1. Una sesión tiene 25 preguntas de temas mezclados, y las preguntas de la caja 1 van primero. Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
+La caja 1 sale en cada sesión, la caja 2 cada 2 días y la caja 3 cada 4 días. Una pregunta nueva empieza en la caja 1. Una sesión tiene 12 preguntas de temas mezclados, y las preguntas de la caja 1 van primero. Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
 
 La interfaz muestra el porcentaje de aciertos con "dudo". El examen resta entre 1/3 y 1/2 de un acierto por cada fallo. Con un porcentaje sobre el 33 %, una pregunta dudosa se contesta.
 

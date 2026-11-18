@@ -54,16 +54,16 @@ test("la caja 2 sale cada 2 días y la caja 3 cada 4 días, por días de calenda
   assert.deepEqual(ids(sesion([p("a")], caja3, dia(7, 1), semilla(1))), ["a"]);
 });
 
-test("una sesión tiene 25 preguntas, y las de la caja 1 van primero", () => {
+test("una sesión tiene 12 preguntas, y las de la caja 1 van primero", () => {
   const banco = Array.from({ length: 40 }, (_, k) => p("q" + k));
   const hist = [];
-  for (let k = 0; k < 20; k++) hist.push(r("q" + k, iso(dia(1)), true, true));
-  for (let k = 20; k < 25; k++) hist.push(r("q" + k, iso(dia(1)), false, true));
+  for (let k = 0; k < 30; k++) hist.push(r("q" + k, iso(dia(1)), true, true));
+  for (let k = 30; k < 35; k++) hist.push(r("q" + k, iso(dia(1)), false, true));
   const s = sesion(banco, hist, dia(6), semilla(3));
-  assert.equal(s.length, 25);
+  assert.equal(s.length, 12);
   const enCaja1 = (q) => !hist.some((h) => h.id === q.id && h.acierto);
-  assert.ok(s.slice(0, 20).every(enCaja1));
-  assert.ok(s.slice(20).every((q) => !enCaja1(q)));
+  assert.ok(s.slice(0, 10).every(enCaja1));
+  assert.ok(s.slice(10).every((q) => !enCaja1(q)));
 });
 
 test("en la caja 1, una pregunta fallada va antes que una pregunta nueva", () => {

@@ -8,7 +8,7 @@ export function cajas(historial) {
 }
 
 const DIAS = { 2: 2, 3: 4 };
-const TAMANO_SESION = 25;
+const TAMANO_SESION = 12;
 
 export function barajar(lista, azar = Math.random) {
   const copia = [...lista];
