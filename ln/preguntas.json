@@ -2738,5 +2738,505 @@
     "correcta": "La SSCP",
     "distractores": ["La CISSP", "La GSEC", "La Security+"],
     "explicacion": "La SSCP es la básica de ISC2; la CISSP no está entre las recomendadas, y la GSEC y la Security+ son básicas de otras organizaciones."
+  },
+  {
+    "id": "rgpd-110",
+    "concepto": "rgpd-informatica-juridica-documental",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 2 },
+    "pregunta": "¿Qué rama de la informática jurídica permite acceder de forma rápida a la legislación, la jurisprudencia y la doctrina?",
+    "correcta": "La informática jurídica documental",
+    "distractores": ["La informática jurídica decisional", "La informática jurídica de gestión", "El derecho informático"],
+    "explicacion": "La documental trata los sistemas de documentación jurídica; la decisional reproduce actividades del operador jurídico, y la de gestión automatiza oficinas."
+  },
+  {
+    "id": "rgpd-111",
+    "concepto": "rgpd-informatica-juridica-documental",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 2 },
+    "pregunta": "¿Qué objetivos persigue la informática jurídica documental?",
+    "correcta": "Un mejor conocimiento del Derecho y un trabajo jurídico más ágil",
+    "distractores": ["Reproducir o sustituir algunas actividades del operador jurídico", "Automatizar la gestión de juzgados, registros y despachos", "Proteger a las personas del uso abusivo de la tecnología"],
+    "explicacion": "Facilitar el conocimiento del Derecho y agilizar el trabajo es la documental; sustituir al operador es la decisional, y automatizar juzgados, la de gestión."
+  },
+  {
+    "id": "rgpd-112",
+    "concepto": "rgpd-derecho-informatico",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 4 },
+    "pregunta": "¿Qué es el derecho informático según el temario?",
+    "correcta": "Las normas jurídicas que regulan las tecnologías de la información",
+    "distractores": ["La aplicación de las nuevas tecnologías de la información al derecho", "La garantía de acceso y control de los datos personales propios", "El tratamiento automatizado de la documentación jurídica"],
+    "explicacion": "El derecho informático regula la tecnología; la informática jurídica aplica la tecnología al derecho."
+  },
+  {
+    "id": "rgpd-113",
+    "concepto": "rgpd-derecho-informatico",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 2 },
+    "pregunta": "¿Qué es la informática jurídica según el temario?",
+    "correcta": "La aplicación de las tecnologías de la información al derecho",
+    "distractores": ["Las normas jurídicas que regulan las tecnologías de la información", "La garantía de acceso y control de los datos personales propios", "El derecho a sustraer esferas de la vida propia del conocimiento ajeno"],
+    "explicacion": "La informática jurídica aplica la tecnología al derecho; el derecho informático es el conjunto de normas que regula la tecnología."
+  },
+  {
+    "id": "rgpd-114",
+    "concepto": "rgpd-libertad-informatica",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 4 },
+    "pregunta": "¿Qué permite a las personas el derecho a la libertad informática o autodeterminación informativa?",
+    "correcta": "Sustraer del conocimiento ajeno ciertas esferas de su vida",
+    "distractores": ["Proteger su libertad física frente a actuaciones de terceros", "Acceder de forma rápida y eficaz a la información jurídica", "Notificar a la autoridad de control una brecha de sus datos"],
+    "explicacion": "La libertad informática impide el tratamiento sin control de los datos personales; la libertad física la protege el habeas corpus."
+  },
+  {
+    "id": "rgpd-115",
+    "concepto": "rgpd-libertad-informatica",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 4 },
+    "pregunta": "Un ciudadano quiere saber quién es el dueño de un fichero con sus datos y para qué lo usa. ¿Qué derecho del artículo 18 de la Constitución lo ampara?",
+    "correcta": "El derecho a la libertad informática",
+    "distractores": ["El habeas corpus sobre la libertad personal", "El derecho al olvido o de supresión", "El derecho a la limitación del tratamiento"],
+    "explicacion": "La libertad informática (art. 18 CE) otorga saber quién es el dueño del fichero y su fin, corregir los datos y oponerse a su uso comercial."
+  },
+  {
+    "id": "rgpd-116",
+    "concepto": "rgpd-habeas-data",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 5 },
+    "pregunta": "¿Qué permite al sujeto el habeas data?",
+    "correcta": "Acceder a sus datos de archivos públicos o privados y controlarlos",
+    "distractores": ["Proteger su libertad física frente a actuaciones de terceros", "Acceder de forma rápida y eficaz a toda la información jurídica", "Notificar a la autoridad de control una brecha de sus datos"],
+    "explicacion": "El habeas data da acceso y control sobre los datos personales almacenados; el habeas corpus protege la libertad física."
+  },
+  {
+    "id": "rgpd-117",
+    "concepto": "rgpd-habeas-data",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 5 },
+    "pregunta": "¿Qué ámbito de la libertad protege el habeas data, frente al habeas corpus?",
+    "correcta": "El interno: la intimidad, la identidad y la personalidad",
+    "distractores": ["El externo: la libertad física de la persona", "El interno: la libertad física de la persona", "El externo: la intimidad, la identidad y la personalidad"],
+    "explicacion": "El habeas corpus protege el ámbito externo (la libertad física); el habeas data, el interno (intimidad, identidad, personalidad)."
+  },
+  {
+    "id": "rgpd-118",
+    "concepto": "rgpd-lopdgdd-competencia-desleal",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 20 },
+    "pregunta": "¿Cómo frena la LOPDGDD el asesoramiento de mala calidad conocido como «adaptación a coste cero»?",
+    "correcta": "Como práctica agresiva, en la Ley de competencia desleal",
+    "distractores": ["Como delito, en una reforma del Código Penal", "Como comunicación comercial no solicitada, prohibida por la LSSI", "Como infracción del RGPD, sancionada por la AEPD"],
+    "explicacion": "La LOPDGDD modifica la Ley de competencia desleal: la «adaptación a coste cero» pasa a ser una práctica agresiva."
+  },
+  {
+    "id": "rgpd-119",
+    "concepto": "rgpd-lopdgdd-competencia-desleal",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 20 },
+    "pregunta": "Además de la «adaptación a coste cero», ¿qué práctica agresiva regula la LOPDGDD al modificar la Ley de competencia desleal?",
+    "correcta": "Suplantar la identidad de la AEPD o sus funciones",
+    "distractores": ["Enviar comunicaciones comerciales sin consentimiento", "Instalar cookies sin informar antes al usuario", "Incluir a un deudor en un fichero de morosos"],
+    "explicacion": "Las prácticas agresivas de la Ley de competencia desleal son suplantar a la AEPD y el asesoramiento «a coste cero»."
+  },
+  {
+    "id": "rgpd-120",
+    "concepto": "rgpd-dpd-certificacion",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 37 },
+    "pregunta": "¿Es obligatoria la certificación del Esquema de la AEPD para ejercer como Delegado de Protección de Datos?",
+    "correcta": "No: acredita la cualificación, pero no es un requisito",
+    "distractores": ["Sí: la exige la AEPD a todo Delegado de Protección de Datos", "Sí, para el DPD de una autoridad u organismo público", "Sí, para el DPD que trata datos a gran escala"],
+    "explicacion": "El Esquema de Certificación de DPD certifica la cualificación, pero no es obligatorio para ejercer como DPD."
+  },
+  {
+    "id": "rgpd-121",
+    "concepto": "rgpd-dpd-certificacion",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 37 },
+    "pregunta": "¿Qué certifica el Esquema de Certificación de DPD de la AEPD?",
+    "correcta": "Que la persona tiene la cualificación y los conocimientos exigidos",
+    "distractores": ["Que los tratamientos de la organización cumplen el RGPD y la LOPDGDD", "Que el SGSI de la organización cumple la norma ISO/IEC 27001", "Que el sistema de información cumple el ENS"],
+    "explicacion": "El Esquema certifica a la persona (la cualificación del DPD), y no el cumplimiento de la organización."
+  },
+  {
+    "id": "rgpd-124",
+    "concepto": "rgpd-autoridad-control-principal",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 44 },
+    "pregunta": "Un responsable del tratamiento tiene establecimientos en varios Estados miembros. ¿Qué autoridad de control dirige la supervisión de sus tratamientos?",
+    "correcta": "La del Estado de su establecimiento principal",
+    "distractores": ["La del Estado donde reside cada interesado", "El Comité Europeo de Protección de Datos", "La de cada Estado donde tiene un establecimiento"],
+    "explicacion": "La autoridad de control principal es la del territorio del establecimiento principal o único del responsable o del encargado."
+  },
+  {
+    "id": "rgpd-125",
+    "concepto": "rgpd-autoridad-control-principal",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 44 },
+    "pregunta": "Una empresa tiene su único establecimiento en la UE en Francia y trata datos de interesados en España. ¿Qué autoridad de control es la principal?",
+    "correcta": "La francesa, la de su único establecimiento",
+    "distractores": ["La AEPD, porque los interesados se encuentran en España", "El Comité Europeo de Protección de Datos", "La de cada Estado miembro donde residen sus interesados"],
+    "explicacion": "La autoridad principal la fija el establecimiento del responsable, y no la residencia de los interesados."
+  },
+  {
+    "id": "rgpd-126",
+    "concepto": "rgpd-valoracion-riesgo",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 46 },
+    "pregunta": "Según el RGPD, ¿qué valoración del riesgo hace una organización pequeña con tratamientos poco complejos?",
+    "correcta": "Una reflexión documentada sobre sus implicaciones en los derechos",
+    "distractores": ["Un análisis de riesgos formal, como el de una gran organización", "Una evaluación de impacto antes de cada tratamiento", "Ninguna, porque tiene menos de 250 trabajadores"],
+    "explicacion": "Las grandes organizaciones hacen un análisis de riesgos; las pequeñas, una reflexión documentada sobre los derechos de los interesados. Los 250 trabajadores son del registro de actividades."
+  },
+  {
+    "id": "rgpd-127",
+    "concepto": "rgpd-valoracion-riesgo",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 46 },
+    "pregunta": "Un ayuntamiento observa con cámaras, de forma sistemática y a gran escala, una plaza pública. ¿Qué riesgo supone el tratamiento según el RGPD?",
+    "correcta": "Un alto riesgo para los interesados",
+    "distractores": ["Un bajo riesgo, por ser una zona de acceso público", "Un bajo riesgo, por hacerlo una administración pública", "Un riesgo medio, porque no trata datos de salud"],
+    "explicacion": "La observación sistemática a gran escala de una zona de acceso público es uno de los supuestos de alto riesgo."
+  },
+  {
+    "id": "rgpd-128",
+    "concepto": "rgpd-listado-simplificado",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 52 },
+    "pregunta": "Una comunidad de propietarios trata los datos básicos de sus vecinos y proveedores. ¿Cómo valora su situación ante el RGPD?",
+    "correcta": "De forma simplificada, por su bajo nivel de riesgo",
+    "distractores": ["Con un análisis de riesgos formal y completo", "Con una evaluación de impacto previa al tratamiento", "Con la certificación de un DPD acreditado por ENAC"],
+    "explicacion": "Los tratamientos básicos de empleados, clientes, proveedores o comunidades de propietarios tienen bajo riesgo y simplifican la valoración."
+  },
+  {
+    "id": "rgpd-129",
+    "concepto": "rgpd-listado-simplificado",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 52 },
+    "pregunta": "Una pyme que hace tratamientos básicos de sus clientes empieza a elaborar perfiles de ellos. ¿Puede simplificar la valoración de su cumplimiento?",
+    "correcta": "No: la elaboración de perfiles es un tratamiento de riesgo mayor",
+    "distractores": ["Sí: sus datos de clientes son un tratamiento básico de bajo riesgo", "Sí, si tiene menos de 250 trabajadores y no trata datos penales", "Sí, si los perfiles no usan datos sensibles del artículo 9"],
+    "explicacion": "La elaboración de perfiles impide simplificar la valoración, aunque no haya datos sensibles: es un supuesto aparte."
+  },
+  {
+    "id": "rgpd-130",
+    "concepto": "rgpd-facilita",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 53 },
+    "pregunta": "¿Qué tratamientos quedan fuera de la herramienta Facilita RGPD de la AEPD?",
+    "correcta": "Los de alto riesgo, como los de salud o los masivos",
+    "distractores": ["Los de clientes, proveedores y recursos humanos", "Los que hacen los encargados en nombre del responsable", "Los de empresas de menos de 250 trabajadores"],
+    "explicacion": "Facilita es para tratamientos de escaso riesgo (clientes, proveedores, RR. HH.), de responsables o encargados; no vale para el alto riesgo."
+  },
+  {
+    "id": "rgpd-131",
+    "concepto": "rgpd-facilita",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 53 },
+    "pregunta": "Una empresa de escaso riesgo obtiene con Facilita RGPD toda su documentación. ¿Cumple ya el RGPD?",
+    "correcta": "No: tener los documentos no implica cumplir de forma automática",
+    "distractores": ["Sí: la herramienta la ofrece la propia AEPD a las empresas", "Sí, porque sus tratamientos son de escaso riesgo para los derechos", "Sí, si un DPD certificado revisa los documentos"],
+    "explicacion": "La documentación de Facilita debe adaptarse y actualizarse; obtenerla no implica el cumplimiento automático del RGPD."
+  },
+  {
+    "id": "iso27001-104",
+    "concepto": "iso27001-sgsi-beneficios",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 4 },
+    "pregunta": "Según el temario, ¿qué beneficio legal da una correcta seguridad de la información?",
+    "correcta": "Cumplir la ley, sin dolo si infringe una norma sin querer",
+    "distractores": ["Quedar exento de nombrar un Delegado de Protección de Datos", "Obtener la certificación ISO/IEC 27001 de forma automática", "Quedar exento de la evaluación de impacto que exige el RGPD"],
+    "explicacion": "Garantiza el cumplimiento de la legislación, con ausencia de dolo si se infringe alguna norma de forma inadvertida."
+  },
+  {
+    "id": "iso27001-105",
+    "concepto": "iso27001-sgsi-beneficios",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 4 },
+    "pregunta": "Según el temario, ¿cómo reduce costes una correcta seguridad de la información?",
+    "correcta": "Con la prevención y la reducción eficaz del riesgo",
+    "distractores": ["Con la exclusión de controles en la declaración de aplicabilidad", "Con la aceptación de todos los riesgos identificados", "Con la supresión de las auditorías internas del SGSI"],
+    "explicacion": "Reduce costes mediante la prevención, eliminación o reducción eficaz del nivel de riesgo."
+  },
+  {
+    "id": "iso27001-106",
+    "concepto": "iso27001-modelo-ambito",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 6 },
+    "pregunta": "¿En qué organizaciones sirve la ISO/IEC 27001 de modelo para un SGSI?",
+    "correcta": "En cualquier organización, sea cual sea su ámbito",
+    "distractores": ["En el ámbito de la Administración Pública", "En las empresas que tratan datos a gran escala", "En los prestadores de servicios de la LSSI"],
+    "explicacion": "La ISO/IEC 27001 es un modelo de SGSI para cualquier organización; el ENS es el SGSI de la Administración Pública."
+  },
+  {
+    "id": "iso27001-107",
+    "concepto": "iso27001-modelo-ambito",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 6 },
+    "pregunta": "¿Qué es el ENS respecto a un SGSI como el de la ISO 27001?",
+    "correcta": "Un SGSI para el ámbito de la Administración Pública",
+    "distractores": ["Un SGSI para el ámbito de las empresas privadas", "Un repositorio de controles, como la ISO/IEC 27002", "Un código de buenas prácticas, como la ISO/IEC 27002"],
+    "explicacion": "El ENS es el SGSI (ISO 27001) en el ámbito de la Administración Pública, para la administración electrónica."
+  },
+  {
+    "id": "ens-107",
+    "concepto": "ens-accesos-instalaciones",
+    "tema": "ens",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 21 },
+    "pregunta": "Una administración mantiene cerrada la sala de sus sistemas cuando nadie la supervisa, y controla sus llaves. ¿Qué requisito mínimo del ENS cumple?",
+    "correcta": "La protección de las instalaciones",
+    "distractores": ["La autorización y control de los accesos", "La seguridad por defecto", "La gestión del personal"],
+    "explicacion": "Controles de acceso físico, cierre sin supervisión y control de llaves son la protección de las instalaciones; el control de los accesos es el de los usuarios a las funciones."
+  },
+  {
+    "id": "ens-108",
+    "concepto": "ens-accesos-instalaciones",
+    "tema": "ens",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 21 },
+    "pregunta": "Un sistema de una administración deja a cada usuario usar las funciones que le corresponden, y ninguna otra. ¿Qué requisito mínimo del ENS cumple?",
+    "correcta": "La autorización y control de los accesos",
+    "distractores": ["La protección de las instalaciones", "La organización e implantación del proceso de seguridad", "La gestión del personal"],
+    "explicacion": "Solo acceden usuarios autorizados, y solo para las funciones permitidas: es la autorización y control de los accesos."
+  },
+  {
+    "id": "ens-109",
+    "concepto": "ens-registro-actividad",
+    "tema": "ens",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 23 },
+    "pregunta": "Según el requisito de registro de actividad del ENS, ¿qué derechos de los afectados hay que garantizar?",
+    "correcta": "El honor, la intimidad y la propia imagen",
+    "distractores": ["La portabilidad, la supresión y la limitación", "El acceso, la rectificación y la oposición", "La licitud, la lealtad y la transparencia"],
+    "explicacion": "El registro de toda la actividad de los usuarios debe respetar el honor, la intimidad personal y la propia imagen."
+  },
+  {
+    "id": "ens-110",
+    "concepto": "ens-registro-actividad",
+    "tema": "ens",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 23 },
+    "pregunta": "¿Para qué usa el ENS los registros de la actividad de los usuarios?",
+    "correcta": "Para monitorizar e investigar actividades no autorizadas",
+    "distractores": ["Para calcular el impacto y el riesgo de cada activo", "Para clasificar el sistema en categoría alta, media o baja", "Para seleccionar las medidas de seguridad necesarias"],
+    "explicacion": "Los logs sirven para monitorizar, analizar, investigar y documentar actividades no autorizadas; seleccionar medidas es el análisis de riesgos."
+  },
+  {
+    "id": "iso27001-108",
+    "concepto": "iso27001-alcance",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 4 },
+    "pregunta": "Según el temario, ¿cómo se incorporan los recursos al alcance del SGSI?",
+    "correcta": "Con ciclos de mejora continua, según su relevancia",
+    "distractores": ["Todos de una vez, al definir el alcance inicial", "En el orden que fija la declaración de aplicabilidad", "En el orden que marca la auditoría de certificación"],
+    "explicacion": "El alcance se dimensiona bien y crece con ciclos de mejora continua, que incorporan los recursos según su relevancia."
+  },
+  {
+    "id": "iso27001-109",
+    "concepto": "iso27001-alcance",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 18 },
+    "pregunta": "En la implementación de un SGSI, ¿qué determina la definición del alcance?",
+    "correcta": "Los procesos de negocio sobre los que se aplica el sistema",
+    "distractores": ["Los controles que se aplican o se excluyen del sistema", "Las amenazas y vulnerabilidades de cada activo", "Las circunstancias, dependencias y motivaciones de la organización"],
+    "explicacion": "El alcance fija los elementos del SGSI (los procesos de negocio); las circunstancias y motivaciones son el análisis del contexto."
+  },
+  {
+    "id": "iso27001-110",
+    "concepto": "iso27001-liderazgo",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 4 },
+    "pregunta": "Según el requisito de liderazgo de la ISO 27001, ¿quién debe demostrar su compromiso con el SGSI?",
+    "correcta": "La dirección de la organización",
+    "distractores": ["El responsable de seguridad del SGSI", "El Comité de Seguridad", "Las áreas de negocio"],
+    "explicacion": "En el liderazgo, la dirección demuestra su compromiso: fija la política, da los recursos y promueve la mejora continua."
+  },
+  {
+    "id": "iso27001-111",
+    "concepto": "iso27001-liderazgo",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 4 },
+    "pregunta": "Según el requisito de liderazgo de la ISO 27001, ¿qué hace la dirección?",
+    "correcta": "Establecer la política y los objetivos de seguridad",
+    "distractores": ["Realizar la auditoría interna del propio SGSI", "Determinar los requisitos de seguridad de cada área", "Resolver los asuntos interdisciplinarios del SGSI"],
+    "explicacion": "La dirección fija la política y los objetivos; los requisitos los determinan las áreas de negocio, y los asuntos interdisciplinarios, el Comité."
+  },
+  {
+    "id": "iso27001-112",
+    "concepto": "iso27001-contexto-lanzamiento",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 18 },
+    "pregunta": "En el lanzamiento de un SGSI, ¿qué estudia el análisis del contexto de la organización?",
+    "correcta": "Sus circunstancias, dependencias, requisitos y motivaciones",
+    "distractores": ["Sus activos, amenazas, vulnerabilidades e impactos", "Sus políticas, normas, procedimientos e instrucciones técnicas", "Sus controles, objetivos de control y evidencias"],
+    "explicacion": "El contexto estudia circunstancias, funcionamiento, implicaciones, dependencias, requisitos y motivaciones; los activos y amenazas son del análisis de riesgos."
+  },
+  {
+    "id": "iso27001-113",
+    "concepto": "iso27001-contexto-lanzamiento",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 18 },
+    "pregunta": "Antes de implantar un SGSI, una empresa estudia sus requisitos internos y externos y sus motivaciones. ¿Qué paso de la implementación hace?",
+    "correcta": "El análisis del contexto de la organización",
+    "distractores": ["La definición del alcance del sistema de gestión", "La elaboración de la documentación del SGSI", "La implementación de los controles del SGSI"],
+    "explicacion": "Requisitos internos y externos y motivaciones son el análisis del contexto; el alcance determina los procesos de negocio del SGSI."
+  },
+  {
+    "id": "iso27001-114",
+    "concepto": "iso27001-competencia-formacion",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 9 },
+    "pregunta": "Según el requisito de competencia de la ISO 27001, ¿de qué parten las necesidades de formación?",
+    "correcta": "De las competencias definidas para cada perfil o puesto",
+    "distractores": ["De los incidentes de seguridad comunicados al CCN-CERT", "De los resultados de la revisión por la dirección", "De los riesgos calculados para cada activo del inventario"],
+    "explicacion": "La organización define las competencias de cada perfil y, en base a ellos, identifica las necesidades de formación."
+  },
+  {
+    "id": "iso27001-115",
+    "concepto": "iso27001-competencia-formacion",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 9 },
+    "pregunta": "Tras formar al personal, ¿qué hace la organización con las acciones formativas según el requisito de competencia?",
+    "correcta": "Mantiene sus evidencias y valora su eficacia",
+    "distractores": ["Las comunica a la entidad certificadora", "Las aprueba en la revisión por la dirección", "Las incluye en la declaración de aplicabilidad"],
+    "explicacion": "El requisito de competencia pide mantener evidencias de la formación y valorar la eficacia de las acciones formativas."
+  },
+  {
+    "id": "iso27001-116",
+    "concepto": "iso27001-competencia-formacion",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 46 },
+    "pregunta": "En la implementación del SGSI, ¿qué documento recoge las acciones de concienciación del personal, para seguir su eficacia?",
+    "correcta": "Un plan de formación",
+    "distractores": ["La declaración de aplicabilidad", "El informe de la revisión por la dirección", "El acta del comité de seguridad"],
+    "explicacion": "Todas las acciones de formación y concienciación se reflejan en un plan de formación, para seguir su eficacia."
+  },
+  {
+    "id": "iso27001-117",
+    "concepto": "iso27001-operacion",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 11 },
+    "pregunta": "¿Qué pone en práctica la organización en el requisito de operación de la ISO 27001?",
+    "correcta": "El plan de tratamiento de riesgos",
+    "distractores": ["El plan de auditorías internas del SGSI", "La revisión por la dirección", "El análisis del contexto"],
+    "explicacion": "La operación pone en práctica el plan de tratamiento de riesgos y aprovisiona sus recursos; auditoría y revisión son la evaluación del desempeño."
+  },
+  {
+    "id": "iso27001-118",
+    "concepto": "iso27001-operacion",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 11 },
+    "pregunta": "Una organización ejecuta las acciones previstas para tratar sus riesgos, bajo la supervisión del responsable de seguridad. ¿Qué requisito de la ISO 27001 cumple?",
+    "correcta": "La operación",
+    "distractores": ["El soporte", "La planificación", "La mejora"],
+    "explicacion": "Poner en práctica el plan de tratamiento y seguir sus acciones es la operación; la planificación las define antes."
+  },
+  {
+    "id": "iso27001-119",
+    "concepto": "iso27001-evaluacion-desempeno",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 11 },
+    "pregunta": "Además de los indicadores, ¿qué mecanismos de evaluación del desempeño exige la ISO 27001?",
+    "correcta": "La auditoría interna y la revisión por la dirección",
+    "distractores": ["La auditoría de certificación y la revisión por la dirección", "La auditoría interna y el análisis de riesgos", "La declaración de aplicabilidad y el plan de tratamiento"],
+    "explicacion": "La norma exige auditoría interna y revisión por la dirección; la auditoría de certificación la hace la entidad certificadora."
+  },
+  {
+    "id": "iso27001-120",
+    "concepto": "iso27001-evaluacion-desempeno",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 11 },
+    "pregunta": "En la evaluación del desempeño del SGSI, ¿a qué se asocian los indicadores o métricas?",
+    "correcta": "A los objetivos de seguridad de la organización",
+    "distractores": ["A los activos del inventario de la organización", "A las amenazas de cada activo del inventario", "A los controles excluidos de la declaración de aplicabilidad"],
+    "explicacion": "Los indicadores miden el funcionamiento del SGSI frente a los objetivos de seguridad."
+  },
+  {
+    "id": "iso27001-121",
+    "concepto": "iso27001-tipos-documentos",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 44 },
+    "pregunta": "De los 4 tipos de documentos del SGSI, ¿cuál fija las tareas y los responsables de ejecutar un proceso?",
+    "correcta": "Los procedimientos",
+    "distractores": ["Las normas", "Las instrucciones técnicas", "Las políticas"],
+    "explicacion": "Políticas: objetivos y criterios generales; normas: reglas de buen uso; procedimientos: tareas y responsables; instrucciones técnicas: el paso a paso."
+  },
+  {
+    "id": "iso27001-122",
+    "concepto": "iso27001-tipos-documentos",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 45 },
+    "pregunta": "En la documentación del SGSI, ¿qué tipo de documento es «Los datos de acceso son personales e intransferibles, y nadie los comunica a otros»?",
+    "correcta": "Una norma",
+    "distractores": ["Una política", "Un procedimiento", "Una instrucción técnica"],
+    "explicacion": "Es una regla para el buen uso de los medios: una norma."
+  },
+  {
+    "id": "iso27001-123",
+    "concepto": "iso27001-tipos-documentos",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 45 },
+    "pregunta": "En la documentación del SGSI, ¿qué tipo de documento es «Los sistemas piden a cada usuario, cada 90 días y de forma automática, que cambie su contraseña»?",
+    "correcta": "Un procedimiento",
+    "distractores": ["Una norma", "Una instrucción técnica", "Una política"],
+    "explicacion": "Es un procedimiento; la instrucción técnica describe paso a paso cómo configurar ese cambio automático."
+  },
+  {
+    "id": "iso27001-124",
+    "concepto": "iso27001-evidencias-ejemplos",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 47 },
+    "pregunta": "En un SGSI, ¿qué son las actas del comité de seguridad, los informes de auditoría y los compromisos de confidencialidad firmados?",
+    "correcta": "Evidencias de que se ejecutan los procedimientos",
+    "distractores": ["Políticas que fijan los criterios generales", "Normas que regulan el buen uso de los medios", "Instrucciones que detallan los pasos de un proceso"],
+    "explicacion": "Son evidencias: prueban que se han ejecutado los procedimientos planificados."
+  },
+  {
+    "id": "iso27001-125",
+    "concepto": "iso27001-evidencias-ejemplos",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 47 },
+    "pregunta": "Una organización guarda las solicitudes de acceso de sus usuarios y los perfiles profesionales de su plantilla. ¿Qué papel tienen en el SGSI?",
+    "correcta": "Prueban que se han ejecutado los procedimientos planificados",
+    "distractores": ["Fijan los objetivos y criterios generales de la organización", "Describen las tareas y los responsables de cada proceso", "Detallan los pasos para ejecutar un proceso concreto"],
+    "explicacion": "Solicitudes de acceso y perfiles profesionales son evidencias de ejecución, y no políticas, procedimientos ni instrucciones."
+  },
+  {
+    "id": "iso27001-126",
+    "concepto": "iso27001-revision-informe",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 46 },
+    "pregunta": "¿Cómo es el informe que prepara el responsable de seguridad para la revisión por la dirección?",
+    "correcta": "De alto nivel, sin detalles técnicos",
+    "distractores": ["Técnico, con el detalle de cada control", "De alto nivel, con el detalle técnico de cada incidente", "Un informe de auditoría con las no conformidades"],
+    "explicacion": "El responsable de seguridad recopila la información en un informe de alto nivel, sin detalles técnicos."
+  },
+  {
+    "id": "iso27001-127",
+    "concepto": "iso27001-revision-informe",
+    "tema": "iso27001",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 46 },
+    "pregunta": "¿Qué refleja el informe de la revisión del SGSI por la dirección?",
+    "correcta": "La situación actual del sistema y sus planes de mejora",
+    "distractores": ["Las no conformidades de la última auditoría de certificación", "El cálculo del riesgo de cada activo del inventario", "Las tareas y los responsables de cada procedimiento"],
+    "explicacion": "El informe de la revisión refleja la situación actual y los planes de mejora."
+  },
+  {
+    "id": "auditoria-103",
+    "concepto": "auditoria-equipo-convenio",
+    "tema": "auditoria",
+    "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 10 },
+    "pregunta": "¿Qué recoge el plan o convenio que se elabora tras decidir el equipo auditor?",
+    "correcta": "Los objetivos, los miembros y las limitaciones",
+    "distractores": ["Las valoraciones del informe preliminar de auditoría", "Las no conformidades halladas en el sistema auditado", "Las conclusiones y recomendaciones finales de la auditoría"],
+    "explicacion": "Decidido el equipo, el plan o convenio define objetivos, miembros y limitaciones, y lo aceptan ambas partes."
+  },
+  {
+    "id": "auditoria-104",
+    "concepto": "auditoria-equipo-convenio",
+    "tema": "auditoria",
+    "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 10 },
+    "pregunta": "¿Para qué necesita el equipo auditor el apoyo de la alta dirección de la organización auditada?",
+    "correcta": "Para obtener los datos y la colaboración del personal",
+    "distractores": ["Para fijar el riesgo deseado de la auditoría (DAR)", "Para revisar la documentación interna de la auditoría", "Para aprobar las directrices y normas de seguridad"],
+    "explicacion": "El apoyo de la alta dirección da acceso a los datos y a la colaboración de empleados y departamentos."
   }
 ]
