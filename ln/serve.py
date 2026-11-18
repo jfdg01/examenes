@@ -26,9 +26,10 @@ def leer(historial):
 
 
 class Manejador(SimpleHTTPRequestHandler):
-    def __init__(self, *args, banco, historial, **kwargs):
+    def __init__(self, *args, banco, historial, notas, **kwargs):
         self.banco = banco
         self.historial = historial
+        self.notas = notas
         super().__init__(*args, **kwargs)
 
     def end_headers(self):
@@ -49,20 +50,44 @@ class Manejador(SimpleHTTPRequestHandler):
         self.wfile.write(cuerpo)
 
     def do_GET(self):
-        if urlsplit(self.path).path == "/api/respuestas":
+        ruta = urlsplit(self.path).path
+        if ruta == "/api/respuestas":
             with cerrojo:
                 self.responder_json(200, leer(self.historial))
+        elif ruta == "/api/notas":
+            with cerrojo:
+                self.responder_json(200, self.leer_notas())
         else:
             super().do_GET()
 
+    def leer_notas(self):
+        return json.loads(self.notas.read_text(encoding="utf-8")) if self.notas.exists() else {}
+
+    def guardar_nota(self, nota):
+        if not (isinstance(nota, dict) and nota.keys() == {"id", "texto"} and all(type(v) is str for v in nota.values())):
+            self.send_error(400, "Una nota lleva solo id y texto")
+            return
+        with cerrojo:
+            notas = self.leer_notas()
+            if nota["texto"].strip():
+                notas[nota["id"]] = nota["texto"]
+            else:
+                notas.pop(nota["id"], None)
+            self.notas.write_text(json.dumps(notas, ensure_ascii=False, indent=1), encoding="utf-8")
+        self.responder_json(200, {})
+
     def do_POST(self):
-        if urlsplit(self.path).path != "/api/respuestas":
+        ruta = urlsplit(self.path).path
+        if ruta not in ("/api/respuestas", "/api/notas"):
             self.send_error(404)
             return
         try:
             respuestas = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))))
         except ValueError:
             respuestas = None
+        if ruta == "/api/notas":
+            self.guardar_nota(respuestas)
+            return
         if not valida(respuestas):
             self.send_error(400, "Una respuesta lleva solo id, ts, acierto y seguro")
             return
@@ -80,7 +105,7 @@ class Manejador(SimpleHTTPRequestHandler):
 
 
 def crear_servidor(puerto, banco, historial, carpeta=AQUI):
-    manejador = partial(Manejador, banco=banco, historial=Path(carpeta) / historial, directory=str(carpeta))
+    manejador = partial(Manejador, banco=banco, historial=Path(carpeta) / historial, notas=Path(carpeta) / "notas.json", directory=str(carpeta))
     return ThreadingHTTPServer(("127.0.0.1", puerto), manejador)
 
 

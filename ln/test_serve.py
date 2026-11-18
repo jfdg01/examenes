@@ -82,6 +82,22 @@ class TestServe(unittest.TestCase):
             self.assertEqual(error.exception.code, 400)
         self.assertFalse(self.historial.exists())
 
+    def test_una_nota_se_guarda_se_sustituye_y_se_borra_con_el_texto_vacio(self):
+        def poner(cuerpo):
+            peticion = urllib.request.Request(self.url + "/api/notas", data=json.dumps(cuerpo).encode(), method="POST")
+            urllib.request.urlopen(peticion).close()
+
+        self.assertEqual(json.loads(self.get("/api/notas")), {})
+        poner({"id": "a", "texto": "uno"})
+        poner({"id": "b", "texto": "dos"})
+        poner({"id": "a", "texto": "tres"})
+        self.assertEqual(json.loads(self.get("/api/notas")), {"a": "tres", "b": "dos"})
+        poner({"id": "a", "texto": "  "})
+        self.assertEqual(json.loads(self.get("/api/notas")), {"b": "dos"})
+        with self.assertRaises(urllib.error.HTTPError) as e:
+            poner({"id": "a", "texto": 1})
+        self.assertEqual(e.exception.code, 400)
+
 
 if __name__ == "__main__":
     unittest.main()

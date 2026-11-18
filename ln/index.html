@@ -17,6 +17,8 @@
   a { color:var(--acc); }
   .dim { color:var(--dim); font-size:13px; }
   .meta { color:var(--dim); font-size:13px; margin-bottom:10px; }
+  * { scrollbar-width:none; }
+  *::-webkit-scrollbar { display:none; }
   .tarjeta { background:var(--card); border-radius:12px; padding:14px; margin:12px 0; }
   .q { font-size:19px; font-weight:600; margin:6px 0 18px; }
   .grande { display:block; width:100%; padding:16px; margin:12px 0; border-radius:12px; border:0; background:var(--acc); color:var(--sobre-acc); font-weight:600; font-size:16px; }
@@ -26,10 +28,17 @@
   .fila .dudo { width:64px; background:color-mix(in srgb, var(--warn) 15%, var(--bg)); border:0; border-left:2px solid var(--line); color:var(--warn); font-size:13px; font-weight:700; }
   .fila.ok { border-color:var(--ok); background:color-mix(in srgb, var(--ok) 18%, var(--bg)); }
   .fila.ko { border-color:var(--ko); background:color-mix(in srgb, var(--ko) 18%, var(--bg)); }
+  .fila .icono { display:flex; align-items:center; padding:0 14px; }
+  .fila.ok .icono { color:var(--ok); }
+  .fila.ko .icono { color:var(--ko); }
   .fila button:disabled { cursor:default; }
   .blanco { width:100%; padding:12px; border-radius:12px; border:2px dashed var(--line); background:none; color:var(--dim); }
   .hoja img { width:100%; border-radius:8px; margin-top:6px; background:#fff; }
-  .hoja .fuente { color:var(--dim); font-size:13px; margin:8px 0; }
+  .hoja .fuentes { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0; }
+  .hoja .fuente { padding:12px 14px; border:2px solid var(--line); border-radius:12px; background:var(--card); color:var(--txt); font-size:14px; text-align:left; }
+  .hoja .fuente.abierto { border-color:var(--acc); }
+  .hoja .panel { color:var(--dim); font-size:13px; }
+  .hoja .panel > * { margin:8px 0; }
   .aviso-respuesta { font-size:14px; font-weight:600; padding:6px 10px; border-left:3px solid; border-radius:4px; margin:4px 0 0; }
   .alarma { color:var(--ko); background:color-mix(in srgb, var(--ko) 18%, var(--bg)); }
   .suerte { color:var(--warn); background:color-mix(in srgb, var(--warn) 15%, var(--bg)); }
@@ -41,7 +50,10 @@
   .hoja.vacia { color:var(--dim); }
   body:has(.dos) #editar { display:block; padding:2px 10px; border-radius:6px; border:1px solid var(--line); background:var(--card); color:var(--dim); font-size:12px; }
   .acciones { display:flex; gap:6px; }
-  .copiar { display:flex; align-items:center; padding:2px 8px; border-radius:6px; border:1px solid var(--line); background:var(--card); color:var(--dim); }
+  .copiar { font-size:12px; display:flex; align-items:center; padding:2px 8px; border-radius:6px; border:1px solid var(--line); background:var(--card); color:var(--dim); }
+  .copiar.on { color:var(--acc); border-color:var(--acc); }
+  .notas { display:block; width:100%; box-sizing:border-box; margin-top:16px; padding:12px; border:2px solid var(--line); border-radius:12px; background:var(--card); color:var(--txt); font:inherit; font-size:14px; resize:vertical; }
+  .notas[hidden] { display:none; }
   .copiar.hecho { color:var(--ok); border-color:var(--ok); }
   body.editando #editar { background:var(--acc); border-color:var(--acc); color:var(--sobre-acc); }
   body:has(.dos) .tirador { display:block; position:fixed; touch-action:none; z-index:9; }

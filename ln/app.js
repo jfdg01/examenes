@@ -4,15 +4,22 @@ import {
 
 const PENDIENTES = "ln-pendientes";
 const ICONO_COPIAR = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+const circulo = (marca) => `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="${marca}"/></svg>`;
+const ICONO_OK = circulo("M7.5 12.5l3 3 6-6.5");
+const ICONO_KO = circulo("M8.5 8.5l7 7M15.5 8.5l-7 7");
 const app = document.getElementById("app");
 const editar = document.getElementById("editar");
 let banco = [];
 let historial = [];
 let alDia = true;
+let notas = {};
 
 const pendientes = () => JSON.parse(localStorage.getItem(PENDIENTES) ?? "[]");
 const guardar = (lista) => localStorage.setItem(PENDIENTES, JSON.stringify(lista));
 const numero = (n) => n.toLocaleString("es", { maximumFractionDigits: 2 });
+
+const NOTAS_VISIBLES = "ln-notas-visibles";
+const guardarNota = (id, texto) => fetch("api/notas", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, texto }) }).catch(() => {});
 
 const pintar = (...nodos) => app.replaceChildren(...nodos.filter(Boolean));
 
@@ -68,14 +75,27 @@ function pregunta(ronda) {
     copiar.classList.add("hecho");
     setTimeout(() => copiar.classList.remove("hecho"), 1000);
   } });
+  let espera;
+  const campo = el("textarea", { className: "notas", rows: 4, placeholder: "Notas de esta pregunta", value: notas[q.id] ?? "", oninput: () => {
+    notas[q.id] = campo.value;
+    clearTimeout(espera);
+    espera = setTimeout(() => guardarNota(q.id, campo.value), 500);
+  } });
+  campo.hidden = localStorage.getItem(NOTAS_VISIBLES) === "no";
+  const botonNotas = el("button", { className: "copiar", textContent: "Notas", onclick: () => {
+    campo.hidden = !campo.hidden;
+    localStorage.setItem(NOTAS_VISIBLES, campo.hidden ? "no" : "si");
+    botonNotas.classList.toggle("on", !campo.hidden);
+  } });
+  botonNotas.classList.toggle("on", !campo.hidden);
   const blanco = ronda.simulacro ? el("button", { className: "blanco", textContent: "En blanco", onclick: () => contestar(null, false) }) : null;
   const ayuda = el("p", { className: "dim", textContent: "Toca el texto si estás seguro. Toca «dudo» si dudas." });
   const derecha = el("div", { className: "hoja vacia" }, el("div", {}, el("p", { textContent: "Elige una opción. La explicación sale aquí." })));
   pintar(el("div", { className: "dos" },
     el("div", { className: "izq" },
-      el("div", { className: "meta", textContent: [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : `caja ${caja}`].filter(Boolean).join(" · ") }, el("span", { className: "acciones" }, copiar, editar)),
+      el("div", { className: "meta", textContent: [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : `caja ${caja}`].filter(Boolean).join(" · ") }, el("span", { className: "acciones" }, botonNotas, copiar, editar)),
       el("div", { className: "q", textContent: q.pregunta }),
-      ...filas, blanco, ayuda),
+      ...filas, blanco, ayuda, campo),
     derecha));
 
   function contestar(op, seguro) {
@@ -85,8 +105,11 @@ function pregunta(ronda) {
     enviar();
     ronda.resultados.push(resultado(q, op));
     filas.forEach((fila, k) => {
-      if (ops[k] === q.correcta) fila.classList.add("ok");
-      else if (ops[k] === op) fila.classList.add("ko");
+      const ok = ops[k] === q.correcta;
+      if (ok || ops[k] === op) {
+        fila.classList.add(ok ? "ok" : "ko");
+        fila.append(el("span", { className: "icono", innerHTML: ok ? ICONO_OK : ICONO_KO }));
+      }
       fila.querySelector(".dudo").remove();
       fila.querySelector(".texto").disabled = true;
     });
@@ -101,16 +124,31 @@ function pregunta(ronda) {
 }
 
 function hoja(q, siguiente) {
-  const { pdf, pagina } = q.fuente;
   return el("div", { className: "hoja" }, el("div", {},
     el("p", { textContent: q.explicacion }),
     el("button", { className: "grande", textContent: "Siguiente", onclick: siguiente }),
-    el("details", { className: "fuente" }, el("summary", { textContent: "Ver la página aquí" }),
-      el("img", { src: imagenDePagina(q.fuente), alt: `La página ${pagina} de ${pdf}`, loading: "lazy" })),
-    el("details", { className: "fuente" }, el("summary", { textContent: "La fuente" }),
+    fuentes(q)));
+}
+
+function fuentes(q) {
+  const { pdf, pagina } = q.fuente;
+  const paneles = [
+    ["Ver la página aquí", () => el("img", { src: imagenDePagina(q.fuente), alt: `La página ${pagina} de ${pdf}` })],
+    ["La fuente", () => el("div", {},
       el("p", { textContent: `${pdf}, página ${pagina} · ${q.concepto} (dominio: caja ${dominio(banco, historial).get(q.concepto)})` }),
-      el("p", {}, el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: `Abrir el PDF en la página ${pagina}` }))),
-  ));
+      el("p", {}, el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: `Abrir el PDF en la página ${pagina}` })))],
+  ];
+  const panel = el("div", { className: "panel" });
+  const botones = paneles.map(([texto, crear]) => {
+    const boton = el("button", { className: "fuente", textContent: texto, onclick: () => {
+      const abrir = !boton.classList.contains("abierto");
+      botones.forEach((b) => b.classList.remove("abierto"));
+      panel.replaceChildren(...(abrir ? [crear()] : []));
+      boton.classList.toggle("abierto", abrir);
+    } });
+    return boton;
+  });
+  return el("div", {}, el("div", { className: "fuentes" }, ...botones), panel);
 }
 
 function fin(ronda) {
@@ -140,6 +178,7 @@ async function cargar() {
     historial = pendientes();
     alDia = false;
   }
+  try { notas = await (await fetch("api/notas")).json(); } catch {}
   inicio();
 }
 

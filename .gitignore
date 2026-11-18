@@ -2,3 +2,4 @@
 ln/paginas/
 ln/respuestas.jsonl
 __pycache__/
+ln/notas.json

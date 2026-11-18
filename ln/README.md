@@ -81,25 +81,27 @@ La interfaz muestra el porcentaje de aciertos con "dudo". El examen resta entre 
 
 Cada opción es una fila con 2 zonas. Un toque en el texto responde con "seguro", y un toque en el botón "dudo" de la derecha responde con "dudo". Un solo toque responde.
 
-Después de la respuesta, las opciones quedan en verde la correcta y en rojo la tuya si fallas. Debajo de las opciones sale el aviso de un fallo con "seguro" o de un acierto con "dudo".
+Después de la respuesta, las opciones quedan en verde la correcta y en rojo la tuya si fallas. Cada una de las dos lleva al final de la fila un circulito: un tick en la correcta y una cruz en la tuya. Debajo de las opciones sale el aviso de un fallo con "seguro" o de un acierto con "dudo".
 
 La solución tiene, en este orden:
 
 1. La `explicacion`.
 2. El botón "Siguiente".
-3. "Ver la página aquí": un desplegable con la imagen de la página.
-4. "La fuente": un desplegable con el PDF, la página, el concepto y el enlace "Abrir el PDF en la página N", con `#page=N` en la URL.
+3. Una fila con 2 botones fijos: "Ver la página aquí" a la izquierda y "La fuente" a la derecha.
+4. Un panel debajo de la fila. "Ver la página aquí" muestra la imagen de la página. "La fuente" muestra el PDF, la página, el concepto y el enlace "Abrir el PDF en la página N", con `#page=N` en la URL.
 
-Los desplegables van debajo de "Siguiente", y así un desplegable abierto no mueve el botón.
+Un solo panel está abierto a la vez. Un toque en el botón abierto cierra el panel. Los botones no cambian de sitio, y el panel va debajo de "Siguiente", así que un panel abierto no mueve el botón.
 
 La pregunta y la solución van en 2 zonas estáticas, sin animaciones. La zona de la solución dice "Elige una opción" antes de la respuesta.
 
 - En una pantalla de 900 px o más, las zonas son 2 columnas: la pregunta a la izquierda y la solución a la derecha.
-- En una pantalla más estrecha, como el móvil, las zonas son 2 filas: la pregunta arriba y la solución abajo. Cada fila tiene su propio scroll, y así "Siguiente" no baja cuando un desplegable se abre.
+- En una pantalla más estrecha, como el móvil, las zonas son 2 filas: la pregunta arriba y la solución abajo. Cada fila tiene su propio scroll, y así "Siguiente" no baja cuando un panel se abre.
 
 El botón "Ajustar", a la derecha de la línea de arriba, muestra los tiradores: los 2 bordes y el separador. En las filas hay 2 tiradores más, el borde izquierdo y el borde derecho, que fijan el ancho. Cada zona mide como mínimo el 15 % de la pantalla, y el ancho de las filas mide como mínimo el 30 %. Las posiciones quedan en `localStorage`, en `ln-columnas` y en `ln-filas`. Cada dispositivo y cada orientación tienen las suyas.
 
-A la izquierda de "Ajustar" hay un botón con un icono de copiar. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
+Debajo de las opciones hay un campo de texto para las notas de la pregunta. El botón "Notas", a la izquierda de los otros 2, muestra y esconde el campo. El navegador guarda esa elección en `localStorage`, en `ln-notas-visibles`. El campo guarda la nota en el servidor 500 ms después de la última tecla, y la nota vuelve cada vez que sale esa pregunta. Una nota vacía la borra.
+
+Entre "Notas" y "Ajustar" hay un botón con un icono de copiar. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
 
 Las imágenes están en `ln/paginas/<pdf sin .pdf>-<pagina>.png`. `pdftoppm -png -r 80` las saca de los PDFs una sola vez. Las imágenes y los PDFs no entran en git.
 
@@ -115,10 +117,12 @@ Las respuestas del simulacro entran al historial como las demás, porque son res
 
 ## El servidor: `serve.py`
 
-`serve.py` usa solo la stdlib de Python. Sirve la interfaz, el banco, los PDFs y las imágenes de las páginas, y tiene 2 rutas:
+`serve.py` usa solo la stdlib de Python. Sirve la interfaz, el banco, los PDFs y las imágenes de las páginas, y tiene 4 rutas:
 
 - `GET /api/respuestas` devuelve el historial entero.
 - `POST /api/respuestas` añade una lista de respuestas al historial.
+- `GET /api/notas` devuelve las notas, un objeto con el `id` de la pregunta como clave.
+- `POST /api/notas` guarda `{"id", "texto"}`. Un `texto` vacío borra la nota. Las notas viven en `ln/notas.json`, que no entra en git.
 
 La interfaz guarda en `localStorage` cada respuesta sin enviar, y la envía cuando el servidor responde. Así, una sesión en el móvil sin red no pierde respuestas.
 
