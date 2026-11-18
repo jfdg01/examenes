@@ -92,7 +92,9 @@ export const imagenDePagina = ({ pdf, pagina }) => encodeURI(`paginas/${pdf.repl
 
 export const pdfEnPagina = ({ pdf, pagina }) => `${encodeURI(pdf)}#page=${pagina}`;
 
+// L es el borde del inicio, S el separador y R el borde del fin: de izquierda a derecha en las columnas, y de arriba abajo en las filas.
 export const COLUMNAS = { L: 0.08, S: 0.5, R: 0.92 };
+export const FILAS = { L: 0.02, S: 0.55, R: 0.98 };
 const COLUMNA_MINIMA = 0.15;
 
 export function mover(pos, tirador, x) {

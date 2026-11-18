@@ -1,9 +1,8 @@
 import {
-  cajas, dominio, imagenDePagina, mover, COLUMNAS, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, dominio, imagenDePagina, mover, COLUMNAS, FILAS, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
-const POSICIONES = "ln-columnas";
 const app = document.getElementById("app");
 const editar = document.getElementById("editar");
 let banco = [];
@@ -34,7 +33,6 @@ async function enviar() {
 }
 
 function inicio() {
-  document.body.classList.remove("con-hoja");
   const lista = sesion(banco, historial, new Date());
   const dudo = porcentajeDudo(historial);
   const sinEnviar = pendientes().length;
@@ -57,7 +55,6 @@ function inicio() {
 }
 
 function pregunta(ronda) {
-  document.body.classList.remove("con-hoja");
   scrollTo(0, 0);
   const q = ronda.preguntas[ronda.i];
   const ops = opciones(q);
@@ -92,7 +89,6 @@ function pregunta(ronda) {
       ? el("p", { className: "aviso-respuesta alarma", textContent: "Fallo con «seguro»: una idea falsa. Repásala." })
       : r.acierto && !r.seguro ? el("p", { className: "aviso-respuesta suerte", textContent: "Acierto con «dudo»: cuenta como un fallo." }) : null;
     aviso ? ayuda.replaceWith(aviso) : ayuda.remove();
-    document.body.classList.add("con-hoja");
     const siguiente = () => (++ronda.i < ronda.preguntas.length ? pregunta(ronda) : fin(ronda));
     derecha.replaceWith(hoja(q, siguiente));
   }
@@ -112,7 +108,6 @@ function hoja(q, siguiente) {
 }
 
 function fin(ronda) {
-  document.body.classList.remove("con-hoja");
   const cuenta = (tipo) => ronda.resultados.filter((x) => x === tipo).length;
   const resumen = ronda.simulacro
     ? [
@@ -143,29 +138,43 @@ async function cargar() {
 }
 
 function columnas() {
-  let pos = { ...COLUMNAS, ...JSON.parse(localStorage.getItem(POSICIONES) ?? "{}") };
+  const ancha = matchMedia("(min-width:900px)");
+  const raiz = document.documentElement;
+  const medida = () => ancha.matches ? raiz.clientWidth : raiz.clientHeight;
+  let pos;
   const aplicar = () => {
-    const ancho = document.documentElement.clientWidth;
     for (const k in pos) {
-      document.documentElement.style.setProperty(`--${k}`, `${pos[k] * ancho}px`);
-      document.getElementById(`tirador-${k}`).style.left = `${pos[k] * ancho}px`;
+      const px = `${pos[k] * medida()}px`;
+      raiz.style.setProperty(`--${k}`, px);
+      const t = document.getElementById(`tirador-${k}`);
+      t.style.left = ancha.matches ? px : "";
+      t.style.top = ancha.matches ? "" : px;
     }
   };
-  for (const k in pos) {
+  const guardado = () => ancha.matches ? "ln-columnas" : "ln-filas";
+  const leer = () => {
+    pos = { ...(ancha.matches ? COLUMNAS : FILAS), ...JSON.parse(localStorage.getItem(guardado()) ?? "{}") };
+    aplicar();
+    rotular();
+  };
+  const rotular = () => {
+    const editando = document.body.classList.contains("editando");
+    editar.textContent = editando ? "Listo" : ancha.matches ? "Ajustar las columnas" : "Ajustar las filas";
+  };
+  for (const k of ["L", "S", "R"]) {
     const t = document.getElementById(`tirador-${k}`);
     t.onpointerdown = (e) => { t.setPointerCapture(e.pointerId); t.classList.add("activo"); };
     t.onpointermove = (e) => {
       if (!t.hasPointerCapture(e.pointerId)) return;
-      pos = mover(pos, k, e.clientX / document.documentElement.clientWidth);
+      pos = mover(pos, k, (ancha.matches ? e.clientX : e.clientY) / medida());
       aplicar();
     };
-    t.onlostpointercapture = () => { t.classList.remove("activo"); localStorage.setItem(POSICIONES, JSON.stringify(pos)); };
+    t.onlostpointercapture = () => { t.classList.remove("activo"); localStorage.setItem(guardado(), JSON.stringify(pos)); };
   }
-  editar.onclick = () => {
-    editar.textContent = document.body.classList.toggle("editando") ? "Listo" : "Ajustar las columnas";
-  };
+  editar.onclick = () => { document.body.classList.toggle("editando"); rotular(); };
+  ancha.onchange = leer;
   addEventListener("resize", aplicar);
-  aplicar();
+  leer();
 }
 
 columnas();

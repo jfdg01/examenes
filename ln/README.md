@@ -92,9 +92,12 @@ La solución tiene, en este orden:
 
 Los desplegables van debajo de "Siguiente", y así un desplegable abierto no mueve el botón.
 
-En una pantalla de 900 px o más, la pregunta va a la izquierda y la solución a la derecha. Las 2 columnas son estáticas, sin animaciones, y la columna de la derecha dice "Elige una opción" antes de la respuesta. El botón "Ajustar las columnas", a la derecha de la línea de arriba, muestra 3 tiradores: el borde izquierdo, el separador y el borde derecho. Cada columna mide como mínimo el 15 % del ancho. Las posiciones quedan en `localStorage`, en `ln-columnas`, y cada dispositivo tiene las suyas.
+La pregunta y la solución van en 2 zonas estáticas, sin animaciones. La zona de la solución dice "Elige una opción" antes de la respuesta.
 
-En una pantalla más estrecha, como el móvil, la solución sube desde abajo, en una hoja.
+- En una pantalla de 900 px o más, las zonas son 2 columnas: la pregunta a la izquierda y la solución a la derecha.
+- En una pantalla más estrecha, como el móvil, las zonas son 2 filas: la pregunta arriba y la solución abajo. Cada fila tiene su propio scroll, y así "Siguiente" no baja cuando un desplegable se abre.
+
+El botón "Ajustar las columnas" o "Ajustar las filas", a la derecha de la línea de arriba, muestra 3 tiradores: los 2 bordes y el separador. Cada zona mide como mínimo el 15 % de la pantalla. Las posiciones quedan en `localStorage`, en `ln-columnas` y en `ln-filas`. Cada dispositivo y cada orientación tienen las suyas.
 
 Las imágenes están en `ln/paginas/<pdf sin .pdf>-<pagina>.png`. `pdftoppm -png -r 80` las saca de los PDFs una sola vez. Las imágenes y los PDFs no entran en git.
 
