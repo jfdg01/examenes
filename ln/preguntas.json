@@ -1650,14 +1650,24 @@
     "explicacion": "Primero el impacto (valor y degradación) y después el riesgo (impacto y probabilidad)."
   },
   {
-    "id": "riesgos-025",
+    "id": "riesgos-034",
     "concepto": "riesgos-riesgo",
     "tema": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 32 },
-    "pregunta": "En la tabla de cálculo de riesgo del ejemplo, ¿qué riesgo da un impacto 3 con una probabilidad media (3)?",
-    "correcta": "5",
-    "distractores": ["6", "4", "9"],
-    "explicacion": "En la fila de probabilidad media, un impacto 3 da un riesgo 5; la tabla no multiplica los valores."
+    "pregunta": "En la tabla de cálculo de riesgo del ejemplo, ¿cómo se combinan la probabilidad y el impacto?",
+    "correcta": "Se suman los dos valores y se resta 1",
+    "distractores": ["Se multiplican los dos valores", "Se toma el mayor de los dos valores", "Se suman los dos valores sin restar nada"],
+    "explicacion": "Probabilidad 3 e impacto 3 dan riesgo 5, y no 9 ni 6."
+  },
+  {
+    "id": "riesgos-035",
+    "concepto": "riesgos-riesgo",
+    "tema": "riesgos",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 32 },
+    "pregunta": "En la tabla de cálculo de riesgo del ejemplo, ¿qué riesgo da un impacto 0?",
+    "correcta": "Riesgo 0 con cualquier probabilidad",
+    "distractores": ["El mismo valor que la probabilidad", "Riesgo 1, el mínimo de la tabla", "Un riesgo que crece con la probabilidad"],
+    "explicacion": "Sin impacto no hay riesgo: la columna del impacto 0 vale 0 en las 4 filas."
   },
   {
     "id": "riesgos-026",
