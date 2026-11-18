@@ -1,8 +1,9 @@
 import {
-  cajas, dominio, imagenDePagina, mover, COLUMNAS, FILAS, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, dominio, textoParaCopiar, imagenDePagina, mover, COLUMNAS, FILAS, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
+const ICONO_COPIAR = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
 const app = document.getElementById("app");
 const editar = document.getElementById("editar");
 let banco = [];
@@ -62,12 +63,17 @@ function pregunta(ronda) {
   const filas = ops.map((op) => el("div", { className: "fila" },
     el("button", { className: "texto", textContent: op, onclick: () => contestar(op, true) }),
     el("button", { className: "dudo", textContent: "dudo", onclick: () => contestar(op, false) })));
+  const copiar = el("button", { className: "copiar", title: "Copiar la pregunta y las opciones", innerHTML: ICONO_COPIAR, onclick: async () => {
+    await navigator.clipboard.writeText(textoParaCopiar(q, ops));
+    copiar.classList.add("hecho");
+    setTimeout(() => copiar.classList.remove("hecho"), 1000);
+  } });
   const blanco = ronda.simulacro ? el("button", { className: "blanco", textContent: "En blanco", onclick: () => contestar(null, false) }) : null;
   const ayuda = el("p", { className: "dim", textContent: "Toca el texto si estás seguro. Toca «dudo» si dudas." });
   const derecha = el("div", { className: "hoja vacia" }, el("div", {}, el("p", { textContent: "Elige una opción. La explicación sale aquí." })));
   pintar(el("div", { className: "dos" },
     el("div", { className: "izq" },
-      el("div", { className: "meta", textContent: [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : `caja ${caja}`].filter(Boolean).join(" · ") }, editar),
+      el("div", { className: "meta", textContent: [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : `caja ${caja}`].filter(Boolean).join(" · ") }, el("span", { className: "acciones" }, copiar, editar)),
       el("div", { className: "q", textContent: q.pregunta }),
       ...filas, blanco, ayuda),
     derecha));
@@ -160,7 +166,7 @@ function columnas() {
   };
   const rotular = () => {
     const editando = document.body.classList.contains("editando");
-    editar.textContent = editando ? "Listo" : ancha.matches ? "Ajustar las columnas" : "Ajustar las filas y el ancho";
+    editar.textContent = editando ? "Listo" : "Ajustar";
   };
   for (const k of ["L", "S", "R", "I", "F"]) {
     const t = document.getElementById(`tirador-${k}`);

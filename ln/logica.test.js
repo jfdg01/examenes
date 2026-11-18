@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { cajas, sesion, proximaFecha, opciones, respuesta, porcentajeDudo, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS, FILAS } from "./logica.js";
+import { cajas, textoParaCopiar, sesion, proximaFecha, opciones, respuesta, porcentajeDudo, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS, FILAS } from "./logica.js";
 
 const r = (id, ts, acierto, seguro) => ({ id, ts, acierto, seguro });
 
@@ -192,4 +192,10 @@ test("en las filas, el borde izquierdo y el derecho dejan un ancho de al menos e
   assert.equal(mover(FILAS, "I", 0.9).I, 0.95 - 0.3);
   assert.equal(mover(FILAS, "F", 0.1).F, 0.05 + 0.3);
   assert.equal(mover(FILAS, "F", 1.5).F, 1);
+});
+
+test("el texto para copiar lleva el enunciado y una letra por opción, sin la solución", () => {
+  const q = { pregunta: "¿Cuál es?", correcta: "uno", distractores: ["dos", "tres"], explicacion: "porque sí" };
+  const texto = textoParaCopiar(q, ["dos", "uno", "tres"]);
+  assert.equal(texto, "¿Cuál es?\n\nA) dos\nB) uno\nC) tres");
 });

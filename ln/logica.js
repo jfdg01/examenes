@@ -46,6 +46,8 @@ export function proximaFecha(banco, historial) {
 
 export const opciones = (pregunta, azar = Math.random) => barajar([pregunta.correcta, ...pregunta.distractores], azar);
 
+export const textoParaCopiar = (pregunta, ops) => `${pregunta.pregunta}\n\n${ops.map((op, k) => `${String.fromCharCode(65 + k)}) ${op}`).join("\n")}`;
+
 export function respuesta(pregunta, eleccion, seguro, ahora) {
   const ts = ahora.toISOString().slice(0, 19) + "Z";
   if (eleccion === null) return { id: pregunta.id, ts, acierto: false, seguro: false };

@@ -97,7 +97,9 @@ La pregunta y la solución van en 2 zonas estáticas, sin animaciones. La zona d
 - En una pantalla de 900 px o más, las zonas son 2 columnas: la pregunta a la izquierda y la solución a la derecha.
 - En una pantalla más estrecha, como el móvil, las zonas son 2 filas: la pregunta arriba y la solución abajo. Cada fila tiene su propio scroll, y así "Siguiente" no baja cuando un desplegable se abre.
 
-El botón "Ajustar las columnas" o "Ajustar las filas y el ancho", a la derecha de la línea de arriba, muestra los tiradores: los 2 bordes y el separador. En las filas hay 2 tiradores más, el borde izquierdo y el borde derecho, que fijan el ancho. Cada zona mide como mínimo el 15 % de la pantalla, y el ancho de las filas mide como mínimo el 30 %. Las posiciones quedan en `localStorage`, en `ln-columnas` y en `ln-filas`. Cada dispositivo y cada orientación tienen las suyas.
+El botón "Ajustar", a la derecha de la línea de arriba, muestra los tiradores: los 2 bordes y el separador. En las filas hay 2 tiradores más, el borde izquierdo y el borde derecho, que fijan el ancho. Cada zona mide como mínimo el 15 % de la pantalla, y el ancho de las filas mide como mínimo el 30 %. Las posiciones quedan en `localStorage`, en `ln-columnas` y en `ln-filas`. Cada dispositivo y cada orientación tienen las suyas.
+
+A la izquierda de "Ajustar" hay un botón con un icono de copiar. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
 
 Las imágenes están en `ln/paginas/<pdf sin .pdf>-<pagina>.png`. `pdftoppm -png -r 80` las saca de los PDFs una sola vez. Las imágenes y los PDFs no entran en git.
 

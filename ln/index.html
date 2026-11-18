@@ -40,6 +40,9 @@
   .dos .meta { display:flex; justify-content:space-between; align-items:center; gap:12px; }
   .hoja.vacia { color:var(--dim); }
   body:has(.dos) #editar { display:block; padding:2px 10px; border-radius:6px; border:1px solid var(--line); background:var(--card); color:var(--dim); font-size:12px; }
+  .acciones { display:flex; gap:6px; }
+  .copiar { display:flex; align-items:center; padding:2px 8px; border-radius:6px; border:1px solid var(--line); background:var(--card); color:var(--dim); }
+  .copiar.hecho { color:var(--ok); border-color:var(--ok); }
   body.editando #editar { background:var(--acc); border-color:var(--acc); color:var(--sobre-acc); }
   body:has(.dos) .tirador { display:block; position:fixed; touch-action:none; z-index:9; }
   .tirador.h { display:none !important; }
@@ -75,7 +78,7 @@
 <body>
 <main id="app"><p class="dim">Cargando el banco…</p></main>
 <div class="tirador" id="tirador-L"></div><div class="tirador" id="tirador-S"></div><div class="tirador" id="tirador-R"></div><div class="tirador h" id="tirador-I"></div><div class="tirador h" id="tirador-F"></div>
-<button id="editar">Ajustar las columnas</button>
+<button id="editar">Ajustar</button>
 <script type="module" src="app.js"></script>
 </body>
 </html>
