@@ -1,11 +1,12 @@
 import {
-  cajas, dominio, textoParaCopiar, imagenDePagina, mover, COLUMNAS, FILAS, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, dominio, textoParaCopiar, imagenDePagina, mover, COLUMNAS, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
 const ICONO_COPIAR = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
 const circulo = (marca) => `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="${marca}"/></svg>`;
 const ICONO_NOTAS = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+const ICONO_DOC = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg>';
 const ICONO_OK = circulo("M7.5 12.5l3 3 6-6.5");
 const ICONO_KO = circulo("M8.5 8.5l7 7M15.5 8.5l-7 7");
 const app = document.getElementById("app");
@@ -66,6 +67,7 @@ function inicio() {
 function pregunta(ronda) {
   scrollTo(0, 0);
   const q = ronda.preguntas[ronda.i];
+  const movil = !matchMedia("(min-width:900px)").matches;
   const ops = opciones(q);
   const caja = cajas(historial).get(q.id)?.caja ?? 1;
   const filas = ops.map((op) => el("div", { className: "fila" },
@@ -77,12 +79,12 @@ function pregunta(ronda) {
     setTimeout(() => copiar.classList.remove("hecho"), 1000);
   } });
   let espera;
-  const campo = el("textarea", { className: "notas", rows: 4, placeholder: "Notas de esta pregunta", value: notas[q.id] ?? "", oninput: () => {
+  const campo = el("textarea", { className: "notas", rows: movil ? 3 : 4, placeholder: "Notas de esta pregunta", value: notas[q.id] ?? "", oninput: () => {
     notas[q.id] = campo.value;
     clearTimeout(espera);
     espera = setTimeout(() => guardarNota(q.id, campo.value), 500);
   } });
-  campo.hidden = localStorage.getItem(NOTAS_VISIBLES) === "no";
+  campo.hidden = (localStorage.getItem(NOTAS_VISIBLES) ?? (movil ? "no" : "si")) === "no";
   const botonNotas = el("button", { className: "copiar", title: "Mostrar u ocultar las notas", innerHTML: ICONO_NOTAS, onclick: () => {
     campo.hidden = !campo.hidden;
     localStorage.setItem(NOTAS_VISIBLES, campo.hidden ? "no" : "si");
@@ -90,14 +92,22 @@ function pregunta(ronda) {
   } });
   botonNotas.classList.toggle("on", !campo.hidden);
   const blanco = ronda.simulacro ? el("button", { className: "blanco", textContent: "En blanco", onclick: () => contestar(null, false) }) : null;
-  const ayuda = el("p", { className: "dim", textContent: "Toca el texto si estás seguro. Toca «dudo» si dudas." });
+  const ayuda = el("p", { className: "dim ayuda", textContent: "Toca el texto si estás seguro. Toca «dudo» si dudas." });
   const derecha = el("div", { className: "hoja vacia" }, el("div", {}, el("p", { textContent: "Elige una opción. La explicación sale aquí." })));
-  pintar(el("div", { className: "dos" },
-    el("div", { className: "izq" },
-      el("div", { className: "meta", textContent: [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : `caja ${caja}`].filter(Boolean).join(" · ") }, el("span", { className: "acciones" }, botonNotas, copiar, editar)),
-      el("div", { className: "q", textContent: q.pregunta }),
-      ...filas, blanco, ayuda, campo),
-    derecha));
+  const titulo = [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : `caja ${caja}`].filter(Boolean).join(" · ");
+  const enunciado = el("div", { className: "q", textContent: q.pregunta });
+  const cuerpo = el("div", { className: "cuerpo" }, enunciado, ...filas, campo);
+  const pie = el("div", { className: "pie" }, blanco, ayuda);
+  pintar(movil
+    ? el("div", { className: "pant" },
+      el("div", { className: "meta" }, el("span", { className: "t", textContent: titulo }), botonNotas, copiar),
+      el("div", { className: "barra" }, el("i", { style: `width:${((ronda.i + 1) / ronda.preguntas.length) * 100}%` })),
+      cuerpo, pie)
+    : el("div", { className: "dos" },
+      el("div", { className: "izq" },
+        el("div", { className: "meta", textContent: titulo }, el("span", { className: "acciones" }, botonNotas, copiar, editar)),
+        enunciado, ...filas, blanco, ayuda, campo),
+      derecha));
 
   function contestar(op, seguro) {
     const r = respuesta(q, op, seguro, new Date());
@@ -118,10 +128,48 @@ function pregunta(ronda) {
     const aviso = op !== null && !r.acierto && r.seguro
       ? el("p", { className: "aviso-respuesta alarma", textContent: "Fallo con «seguro»: una idea falsa. Repásala." })
       : r.acierto && !r.seguro ? el("p", { className: "aviso-respuesta suerte", textContent: "Acierto con «dudo»: cuenta como un fallo." }) : null;
-    aviso ? ayuda.replaceWith(aviso) : ayuda.remove();
     const siguiente = () => (++ronda.i < ronda.preguntas.length ? pregunta(ronda) : fin(ronda));
+    if (movil) return solucionMovil(aviso, siguiente);
+    aviso ? ayuda.replaceWith(aviso) : ayuda.remove();
     derecha.replaceWith(hoja(q, siguiente));
   }
+
+  // Las otras opciones se atenúan, y se pliegan solo si el cuerpo no cabe en la pantalla.
+  function solucionMovil(aviso, siguiente) {
+    const otras = filas.filter((f) => !f.classList.contains("ok") && !f.classList.contains("ko"));
+    otras.forEach((f) => f.classList.add("resto"));
+    campo.before(...[aviso, el("p", { className: "expl", textContent: q.explicacion })].filter(Boolean));
+    if (cuerpo.scrollHeight > cuerpo.clientHeight) {
+      otras.forEach((f) => f.classList.add("plegada"));
+      const mas = el("button", { className: "chip", textContent: `ver las otras ${otras.length} opciones`, onclick: () => {
+        const abrir = otras[0].classList.contains("plegada");
+        otras.forEach((f) => f.classList.toggle("plegada", !abrir));
+        mas.textContent = abrir ? "ocultar las otras" : `ver las otras ${otras.length} opciones`;
+      } });
+      filas.at(-1).after(mas);
+    }
+    pie.className = "pie acciones";
+    pie.replaceChildren(
+      el("button", { className: "fuente-b", innerHTML: `${ICONO_DOC} pág. ${q.fuente.pagina}`, onclick: () => verFuente(q) }),
+      el("button", { className: "grande", textContent: "Siguiente", onclick: siguiente }));
+    cuerpo.scrollTo({ top: 0 });
+  }
+}
+
+// La fuente es una entrada del historial: la ✕ y el botón de atrás del móvil la cierran igual.
+function verFuente(q) {
+  const { pdf, pagina } = q.fuente;
+  const img = el("img", { src: imagenDePagina(q.fuente), alt: `La página ${pagina} de ${pdf}`, onclick: () => img.classList.toggle("zoom") });
+  const ov = el("div", { className: "overlay" },
+    el("div", { className: "ov-cab" }, el("span", { className: "t", textContent: `${pdf} · pág. ${pagina}` }),
+      el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: "PDF" }),
+      el("button", { textContent: "✕", onclick: () => history.back() })),
+    el("div", { className: "ov-cuerpo" }, img),
+    el("div", { className: "ov-pie", textContent: "Toca la página para ampliarla" }));
+  history.pushState({ fuente: true }, "");
+  const alAtras = () => { ov.remove(); removeEventListener("popstate", alAtras); };
+  addEventListener("popstate", alAtras);
+  document.body.append(ov);
 }
 
 function hoja(q, siguiente) {
@@ -183,40 +231,31 @@ async function cargar() {
   inicio();
 }
 
+// Los tiradores son de la pantalla ancha: mueven los bordes y el separador de las 2 columnas.
 function columnas() {
-  const ancha = matchMedia("(min-width:900px)");
   const raiz = document.documentElement;
-  const horizontal = (k) => ancha.matches || "IF".includes(k);
-  const medida = (k) => horizontal(k) ? raiz.clientWidth : raiz.clientHeight;
   let pos;
   const aplicar = () => {
     for (const k in pos) {
-      const px = `${pos[k] * medida(k)}px`;
+      const px = `${pos[k] * raiz.clientWidth}px`;
       raiz.style.setProperty(`--${k}`, px);
-      const t = document.getElementById(`tirador-${k}`);
-      t.style.left = horizontal(k) ? px : "";
-      t.style.top = horizontal(k) ? "" : px;
+      document.getElementById(`tirador-${k}`).style.left = px;
     }
   };
-  const guardado = () => ancha.matches ? "ln-columnas" : "ln-filas";
-  const leer = () => {
-    pos = { ...(ancha.matches ? COLUMNAS : FILAS), ...JSON.parse(localStorage.getItem(guardado()) ?? "{}") };
-    aplicar();
-  };
-  for (const k of ["L", "S", "R", "I", "F"]) {
+  pos = { ...COLUMNAS, ...JSON.parse(localStorage.getItem("ln-columnas") ?? "{}") };
+  aplicar();
+  for (const k of ["L", "S", "R"]) {
     const t = document.getElementById(`tirador-${k}`);
     t.onpointerdown = (e) => { t.setPointerCapture(e.pointerId); t.classList.add("activo"); };
     t.onpointermove = (e) => {
       if (!t.hasPointerCapture(e.pointerId)) return;
-      pos = mover(pos, k, (horizontal(k) ? e.clientX : e.clientY) / medida(k));
+      pos = mover(pos, k, e.clientX / raiz.clientWidth);
       aplicar();
     };
-    t.onlostpointercapture = () => { t.classList.remove("activo"); localStorage.setItem(guardado(), JSON.stringify(pos)); };
+    t.onlostpointercapture = () => { t.classList.remove("activo"); localStorage.setItem("ln-columnas", JSON.stringify(pos)); };
   }
   editar.onclick = () => document.body.classList.toggle("editando");
-  ancha.onchange = leer;
   addEventListener("resize", aplicar);
-  leer();
 }
 
 columnas();

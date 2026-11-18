@@ -83,6 +83,10 @@ Cada opción es una fila con 2 zonas. Un toque en el texto responde con "seguro"
 
 Después de la respuesta, las opciones quedan en verde la correcta y en rojo la tuya si fallas. Cada una de las dos lleva al final de la fila un circulito: un tick en la correcta y una cruz en la tuya. Debajo de las opciones sale el aviso de un fallo con "seguro" o de un acierto con "dudo".
 
+### La pantalla ancha
+
+Una pantalla de 900 px o más tiene 2 columnas estáticas, sin animaciones: la pregunta a la izquierda y la solución a la derecha. La columna de la solución dice "Elige una opción" antes de la respuesta.
+
 La solución tiene, en este orden:
 
 1. La `explicacion`.
@@ -92,16 +96,21 @@ La solución tiene, en este orden:
 
 Un solo panel está abierto a la vez. Un toque en el botón abierto cierra el panel. Los botones no cambian de sitio, y el panel va debajo de "Siguiente", así que un panel abierto no mueve el botón.
 
-La pregunta y la solución van en 2 zonas estáticas, sin animaciones. La zona de la solución dice "Elige una opción" antes de la respuesta.
+El botón con un icono de engranaje, a la derecha de la línea de arriba, muestra los tiradores: los 2 bordes y el separador. Cada zona mide como mínimo el 15 % de la pantalla. Las posiciones quedan en `localStorage`, en `ln-columnas`, y cada dispositivo tiene las suyas.
 
-- En una pantalla de 900 px o más, las zonas son 2 columnas: la pregunta a la izquierda y la solución a la derecha.
-- En una pantalla más estrecha, como el móvil, las zonas son 2 filas: la pregunta arriba y la solución abajo. Cada fila tiene su propio scroll, y así "Siguiente" no baja cuando un panel se abre.
+### La pantalla del móvil
 
-El botón con un icono de engranaje, a la derecha de la línea de arriba, muestra los tiradores: los 2 bordes y el separador. En las filas hay 2 tiradores más, el borde izquierdo y el borde derecho, que fijan el ancho. Cada zona mide como mínimo el 15 % de la pantalla, y el ancho de las filas mide como mínimo el 30 %. Las posiciones quedan en `localStorage`, en `ln-columnas` y en `ln-filas`. Cada dispositivo y cada orientación tienen las suyas.
+Una pantalla de menos de 900 px es una columna con 4 partes: la línea de arriba, la barra de progreso, el cuerpo con su scroll y el pie fijo. No tiene zonas, ni tiradores, ni engranaje.
 
-Debajo de las opciones hay un campo de texto para las notas de la pregunta. El botón con un icono de libreta y lápiz, a la izquierda de los otros 2, muestra y esconde el campo. El navegador guarda esa elección en `localStorage`, en `ln-notas-visibles`. El campo guarda la nota en el servidor 500 ms después de la última tecla, y la nota vuelve cada vez que sale esa pregunta. Una nota vacía la borra.
+- La línea de arriba lleva el progreso, el botón de las notas y el botón de copiar.
+- El cuerpo lleva la pregunta y las opciones. Tras responder, lleva también el aviso, la explicación y el campo de notas. El campo de notas empieza escondido hasta que lo muestras con el botón de las notas.
+- Antes de responder, el pie dice "Toca el texto si estás seguro. Toca «dudo» si dudas." En el simulacro, el pie lleva también el botón "En blanco".
+- Tras responder, las opciones que no son la correcta ni la tuya se atenúan. Si el cuerpo no cabe en la pantalla, esas opciones se pliegan tras el botón "ver las otras N opciones".
+- Tras responder, el pie tiene 2 botones: "pág. N" a la izquierda y "Siguiente". "pág. N" abre la fuente a pantalla completa: la imagen de la página, que un toque amplía al 200 %, y el enlace "PDF". La ✕ y el botón de atrás del móvil cierran la fuente.
 
-Entre el botón de las notas y el del engranaje hay un botón con un icono de copiar. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
+Debajo de las opciones hay un campo de texto para las notas de la pregunta. El botón con un icono de libreta y lápiz, a la izquierda del botón de copiar, muestra y esconde el campo. El navegador guarda esa elección en `localStorage`, en `ln-notas-visibles`. El campo guarda la nota en el servidor 500 ms después de la última tecla, y la nota vuelve cada vez que sale esa pregunta. Una nota vacía la borra.
+
+El botón con un icono de copiar está a la derecha del botón de las notas. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
 
 Las imágenes están en `ln/paginas/<pdf sin .pdf>-<pagina>.png`. `pdftoppm -png -r 80` las saca de los PDFs una sola vez. Las imágenes y los PDFs no entran en git.
 
