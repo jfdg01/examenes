@@ -2444,10 +2444,10 @@
     "concepto": "delitos-definicion",
     "tema": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 72 },
-    "pregunta": "¿Qué caracteriza a un ciberdelito, según el temario?",
+    "pregunta": "Según el temario, ¿qué dificultad plantean los ciberdelitos al Código Penal de 1995?",
     "correcta": "El delito se inicia en un país y se produce en otro distinto",
     "distractores": ["El delito se comete dentro de la Unión Europea, contra un particular", "El delito tiene como víctima a una administración pública y a sus sistemas", "El delito se comete con un programa malicioso diseñado para ese fin"],
-    "explicacion": "En el ciberdelito el origen y el resultado están en países distintos, lo que complica su persecución."
+    "explicacion": "El Código Penal de 1995 abarca solo parte de los ciberdelitos: el delito se inicia en un país y se produce en otro, y eso complica su persecución."
   },
   {
     "id": "delitos-101",
