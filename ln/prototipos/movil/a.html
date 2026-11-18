@@ -1,0 +1,9 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>A: dudo en cada fila</title><link rel="stylesheet" href="comun.css"></head><body><div id="app"></div><script type="module">
+import { el, cargar, montar } from "./comun.js";
+montar(await cargar(), (q, ops, contestar) => {
+  const filas = ops.map((op) => el("div", { className: "fila" },
+    el("button", { className: "texto", textContent: op, onclick: () => contestar(op, true) }),
+    el("button", { className: "dudo", textContent: "dudo", onclick: () => contestar(op, false) })));
+  return { filas, pie: el("p", { className: "ayuda", textContent: "Toca el texto si estás seguro, «dudo» si dudas." }) };
+});
+</script></body></html>
