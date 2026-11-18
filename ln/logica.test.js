@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { cajas, textoParaCopiar, sesion, proximaFecha, opciones, respuesta, porcentajeDudo, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS } from "./logica.js";
+import { cajas, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS } from "./logica.js";
 
 const r = (id, ts, acierto, seguro) => ({ id, ts, acierto, seguro });
 
@@ -41,36 +41,57 @@ const iso = (d) => d.toISOString().slice(0, 19) + "Z";
 const dia = (d, h = 12) => new Date(2026, 10, d, h);
 const ids = (s) => s.map((q) => q.id).sort();
 
-test("una pregunta nueva está en la caja 1 y sale en la sesión", () => {
+test("una pregunta nueva sale en la sesión", () => {
   assert.deepEqual(ids(sesion([p("a")], [], dia(6), semilla(1))), ["a"]);
 });
 
-test("la caja 2 sale cada 2 días y la caja 3 cada 4 días, por días de calendario", () => {
-  const caja2 = [r("a", iso(dia(1, 23)), true, true)];
-  assert.deepEqual(ids(sesion([p("a")], caja2, dia(2, 20), semilla(1))), []);
-  assert.deepEqual(ids(sesion([p("a")], caja2, dia(3, 8), semilla(1))), ["a"]);
-  const caja3 = [r("a", iso(dia(1)), true, true), r("a", iso(dia(3)), true, true)];
-  assert.deepEqual(ids(sesion([p("a")], caja3, dia(6, 23), semilla(1))), []);
-  assert.deepEqual(ids(sesion([p("a")], caja3, dia(7, 1), semilla(1))), ["a"]);
+test("una pregunta de la caja 2 o de la caja 3 no sale en su bloque, y sale después de una pausa de 3 horas", () => {
+  const caja2 = [r("a", iso(dia(6, 10)), true, true)];
+  assert.deepEqual(ids(sesion([p("a")], caja2, dia(6, 12), semilla(1))), []);
+  assert.deepEqual(ids(sesion([p("a")], caja2, dia(6, 13), semilla(1))), ["a"]);
+  const caja3 = [r("a", iso(dia(5)), true, true), r("a", iso(dia(6, 10)), true, true)];
+  assert.deepEqual(ids(sesion([p("a")], caja3, dia(6, 12), semilla(1))), []);
+  assert.deepEqual(ids(sesion([p("a")], caja3, dia(6, 13), semilla(1))), ["a"]);
 });
 
-test("una sesión tiene 12 preguntas, y las de la caja 1 van primero", () => {
+test("un bloque sigue mientras las pausas entre respuestas no llegan a 3 horas", () => {
+  const hist = [r("a", iso(dia(6, 10)), true, true), r("b", iso(dia(6, 12)), false, true), r("b", iso(dia(6, 14)), false, true)];
+  assert.deepEqual(ids(sesion([p("a"), p("b")], hist, dia(6, 15), semilla(1))), ["b"]);
+  assert.deepEqual(ids(sesion([p("a"), p("b")], hist, dia(6, 17), semilla(1))), ["a", "b"]);
+});
+
+test("una sesión tiene 12 preguntas, y la caja 1 entra entera antes que cualquier otra pregunta", () => {
   const banco = Array.from({ length: 40 }, (_, k) => p("q" + k));
   const hist = [];
   for (let k = 0; k < 30; k++) hist.push(r("q" + k, iso(dia(1)), true, true));
-  for (let k = 30; k < 35; k++) hist.push(r("q" + k, iso(dia(1)), false, true));
+  for (let k = 30; k < 35; k++) hist.push(r("q" + k, iso(dia(1)), k % 2 === 0, false));
   const s = sesion(banco, hist, dia(6), semilla(3));
   assert.equal(s.length, 12);
-  const enCaja1 = (q) => !hist.some((h) => h.id === q.id && h.acierto);
-  assert.ok(s.slice(0, 10).every(enCaja1));
-  assert.ok(s.slice(10).every((q) => !enCaja1(q)));
+  for (let k = 30; k < 35; k++) assert.ok(s.some((q) => q.id === "q" + k));
+  for (let k = 20; k < 40; k++) hist.push(r("q" + k, iso(dia(2)), false, true));
+  assert.ok(sesion(banco, hist, dia(6), semilla(3)).every((q) => Number(q.id.slice(1)) >= 20));
 });
 
-test("en la caja 1, una pregunta fallada va antes que una pregunta nueva", () => {
-  const banco = Array.from({ length: 40 }, (_, k) => p("q" + k));
-  const hist = [r("q39", iso(dia(5)), false, true), r("q38", iso(dia(5)), true, false)];
-  const s = sesion(banco, hist, dia(6), semilla(5));
-  assert.deepEqual(ids(s.slice(0, 2)), ["q38", "q39"]);
+const cuenta = (banco, hist, prefijo) => {
+  let n = 0;
+  for (let k = 0; k < 300; k++) n += sesion(banco, hist, dia(6), semilla(k)).filter((q) => q.id.startsWith(prefijo)).length;
+  return n;
+};
+
+test("con 200 nuevas y 80 de la caja 2, las 2 clases salen en una proporción cercana a sus tamaños", () => {
+  const banco = [...Array.from({ length: 200 }, (_, k) => p("n" + k)), ...Array.from({ length: 80 }, (_, k) => p("d" + k))];
+  const hist = Array.from({ length: 80 }, (_, k) => r("d" + k, iso(dia(1)), true, true));
+  const nuevas = cuenta(banco, hist, "n") / (300 * 12);
+  assert.ok(Math.abs(nuevas - 200 / 280) < 0.03, String(nuevas));
+});
+
+test("una pregunta de la caja 3 sale la mitad de veces que una de la caja 2", () => {
+  const banco = [...Array.from({ length: 100 }, (_, k) => p("d" + k)), ...Array.from({ length: 100 }, (_, k) => p("t" + k))];
+  const hist = [];
+  for (let k = 0; k < 100; k++) hist.push(r("d" + k, iso(dia(1)), true, true));
+  for (let k = 0; k < 100; k++) hist.push(r("t" + k, iso(dia(1)), true, true), r("t" + k, iso(dia(2)), true, true));
+  const razon = cuenta(banco, hist, "t") / cuenta(banco, hist, "d");
+  assert.ok(razon > 0.45 && razon < 0.6, String(razon));
 });
 
 test("la sesión mezcla los temas", () => {
@@ -79,10 +100,9 @@ test("la sesión mezcla los temas", () => {
   assert.deepEqual([...temas].sort(), ["ens", "rgpd"]);
 });
 
-test("sin preguntas pendientes, la próxima fecha es la de la pregunta que antes vuelve", () => {
-  const hist = [r("a", iso(dia(5)), true, true), r("b", iso(dia(1)), true, true), r("b", iso(dia(3)), true, true)];
-  assert.deepEqual(sesion([p("a"), p("b")], hist, dia(6), semilla(1)), []);
-  assert.deepEqual(proximaFecha([p("a"), p("b")], hist), new Date(2026, 10, 7));
+test("una sesión sin preguntas pendientes está vacía", () => {
+  const hist = [r("a", iso(dia(6, 10)), true, true), r("b", iso(dia(6, 11)), true, true)];
+  assert.deepEqual(sesion([p("a"), p("b")], hist, dia(6, 12), semilla(1)), []);
 });
 
 test("la interfaz baraja las 4 opciones", () => {

@@ -7,8 +7,9 @@ export function cajas(historial) {
   return estado;
 }
 
-const DIAS = { 2: 2, 3: 4 };
 const TAMANO_SESION = 12;
+const PAUSA = 3 * 3600 * 1000;
+const PESO = { 2: 1, 3: 0.5 };
 
 export function barajar(lista, azar = Math.random) {
   const copia = [...lista];
@@ -19,29 +20,27 @@ export function barajar(lista, azar = Math.random) {
   return copia;
 }
 
-function vuelve({ caja, ts }) {
-  const fecha = new Date(ts);
-  fecha.setHours(0, 0, 0, 0);
-  fecha.setDate(fecha.getDate() + DIAS[caja]);
-  return fecha;
+function principioDelBloque(historial, ahora) {
+  let principio = ahora.getTime();
+  for (const t of historial.map((r) => Date.parse(r.ts)).sort((a, b) => b - a)) {
+    if (t > principio) continue;
+    if (principio - t >= PAUSA) break;
+    principio = t;
+  }
+  return principio;
 }
 
 export function sesion(banco, historial, ahora, azar = Math.random) {
   const estado = cajas(historial);
-  const falladas = [], nuevas = [], repaso = [];
+  const bloque = principioDelBloque(historial, ahora);
+  const caja1 = [], sorteo = [];
   for (const q of banco) {
     const e = estado.get(q.id);
-    if (!e) nuevas.push(q);
-    else if (e.caja === 1) falladas.push(q);
-    else if (vuelve(e) <= ahora) repaso.push(q);
+    if (e?.caja === 1) caja1.push(q);
+    else if (!e || Date.parse(e.ts) < bloque) sorteo.push({ q, clave: -Math.log(azar()) / (e ? PESO[e.caja] : 1) });
   }
-  return [falladas, nuevas, repaso].flatMap((grupo) => barajar(grupo, azar)).slice(0, TAMANO_SESION);
-}
-
-export function proximaFecha(banco, historial) {
-  const estado = cajas(historial);
-  const fechas = banco.map((q) => estado.get(q.id)).filter((e) => e && e.caja > 1).map(vuelve);
-  return fechas.length ? new Date(Math.min(...fechas)) : null;
+  const elegidas = sorteo.sort((a, b) => a.clave - b.clave).map((x) => x.q);
+  return barajar([...barajar(caja1, azar), ...elegidas].slice(0, TAMANO_SESION), azar);
 }
 
 export const opciones = (pregunta, azar = Math.random) => barajar([pregunta.correcta, ...pregunta.distractores], azar);

@@ -75,7 +75,11 @@ Antes de ver la solución, marcas "seguro" o "dudo". La pregunta va a una de 3 c
 | Fallo, o acierto con "dudo" | Caja 1 |
 | Acierto con "seguro" | Una caja más, hasta la 3 |
 
-La caja 1 sale en cada sesión, la caja 2 cada 2 días y la caja 3 cada 4 días. Una pregunta nueva empieza en la caja 1. Una sesión tiene 12 preguntas de temas mezclados, y las preguntas de la caja 1 van primero. Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
+Una sesión tiene 12 preguntas. Las preguntas de la caja 1 entran primero. Un sorteo sin repetición llena los huecos que quedan: una pregunta nueva y una pregunta de la caja 2 pesan 1, y una pregunta de la caja 3 pesa 0,5. Así, un grupo grande sale más, y todo el banco avanza a la vez. Las 12 preguntas salen en un orden al azar, con los temas y las cajas mezclados.
+
+Un bloque de estudio termina con una pausa de 3 horas sin respuestas. Una pregunta de la caja 2 o de la caja 3 no sale en el bloque de su última respuesta. La caja 1 sale en cada sesión. Una sesión sin preguntas dice que el repaso vuelve después de una pausa de 3 horas.
+
+Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
 
 La interfaz muestra el porcentaje de aciertos con "dudo". El examen resta 1/4 de un acierto por cada fallo. Con un porcentaje sobre el 20 %, una pregunta dudosa se contesta: a ese porcentaje, los aciertos esperados compensan los fallos.
 

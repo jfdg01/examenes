@@ -1,5 +1,5 @@
 import {
-  cajas, dominio, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, dominio, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, porcentajeDudo, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
@@ -46,7 +46,6 @@ function inicio() {
   const lista = sesion(banco, historial, new Date());
   const dudo = porcentajeDudo(historial);
   const sinEnviar = pendientes().length;
-  const proxima = proximaFecha(banco, historial);
   pintar(
     el("h1", { textContent: "LN: el test" }),
     el("p", { className: "dim", textContent: `${banco.length} preguntas en el banco · ${historial.length} respuestas en el historial` }),
@@ -57,8 +56,8 @@ function inicio() {
       (dudo.contestar ? "Una pregunta dudosa se contesta." : "Una pregunta dudosa se deja en blanco.") }),
     lista.length
       ? el("button", { className: "grande", textContent: `Empezar la sesión (${lista.length} preguntas)`, onclick: () => pregunta({ preguntas: lista, simulacro: false, i: 0, resultados: [] }) })
-      : el("p", { className: "tarjeta", textContent: proxima
-        ? `No hay preguntas pendientes. La próxima vuelve el ${proxima.toLocaleDateString("es", { weekday: "long", day: "numeric", month: "long" })}.`
+      : el("p", { className: "tarjeta", textContent: banco.length
+        ? "No hay preguntas pendientes. El repaso vuelve después de una pausa de 3 horas."
         : "El banco no tiene preguntas." }),
     el("button", { className: "grande otro", textContent: `Simulacro (${simulacro(banco).length} preguntas)`, onclick: () => pregunta({ preguntas: simulacro(banco), simulacro: true, i: 0, resultados: [], limite: Date.now() + MINUTOS_SIMULACRO * 60000 }) }),
   );
