@@ -97,11 +97,11 @@ La pregunta y la solución van en 2 zonas estáticas, sin animaciones. La zona d
 - En una pantalla de 900 px o más, las zonas son 2 columnas: la pregunta a la izquierda y la solución a la derecha.
 - En una pantalla más estrecha, como el móvil, las zonas son 2 filas: la pregunta arriba y la solución abajo. Cada fila tiene su propio scroll, y así "Siguiente" no baja cuando un panel se abre.
 
-El botón "Ajustar", a la derecha de la línea de arriba, muestra los tiradores: los 2 bordes y el separador. En las filas hay 2 tiradores más, el borde izquierdo y el borde derecho, que fijan el ancho. Cada zona mide como mínimo el 15 % de la pantalla, y el ancho de las filas mide como mínimo el 30 %. Las posiciones quedan en `localStorage`, en `ln-columnas` y en `ln-filas`. Cada dispositivo y cada orientación tienen las suyas.
+El botón con un icono de engranaje, a la derecha de la línea de arriba, muestra los tiradores: los 2 bordes y el separador. En las filas hay 2 tiradores más, el borde izquierdo y el borde derecho, que fijan el ancho. Cada zona mide como mínimo el 15 % de la pantalla, y el ancho de las filas mide como mínimo el 30 %. Las posiciones quedan en `localStorage`, en `ln-columnas` y en `ln-filas`. Cada dispositivo y cada orientación tienen las suyas.
 
-Debajo de las opciones hay un campo de texto para las notas de la pregunta. El botón "Notas", a la izquierda de los otros 2, muestra y esconde el campo. El navegador guarda esa elección en `localStorage`, en `ln-notas-visibles`. El campo guarda la nota en el servidor 500 ms después de la última tecla, y la nota vuelve cada vez que sale esa pregunta. Una nota vacía la borra.
+Debajo de las opciones hay un campo de texto para las notas de la pregunta. El botón con un icono de libreta y lápiz, a la izquierda de los otros 2, muestra y esconde el campo. El navegador guarda esa elección en `localStorage`, en `ln-notas-visibles`. El campo guarda la nota en el servidor 500 ms después de la última tecla, y la nota vuelve cada vez que sale esa pregunta. Una nota vacía la borra.
 
-Entre "Notas" y "Ajustar" hay un botón con un icono de copiar. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
+Entre el botón de las notas y el del engranaje hay un botón con un icono de copiar. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
 
 Las imágenes están en `ln/paginas/<pdf sin .pdf>-<pagina>.png`. `pdftoppm -png -r 80` las saca de los PDFs una sola vez. Las imágenes y los PDFs no entran en git.
 

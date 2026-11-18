@@ -5,6 +5,7 @@ import {
 const PENDIENTES = "ln-pendientes";
 const ICONO_COPIAR = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
 const circulo = (marca) => `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="${marca}"/></svg>`;
+const ICONO_NOTAS = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
 const ICONO_OK = circulo("M7.5 12.5l3 3 6-6.5");
 const ICONO_KO = circulo("M8.5 8.5l7 7M15.5 8.5l-7 7");
 const app = document.getElementById("app");
@@ -82,7 +83,7 @@ function pregunta(ronda) {
     espera = setTimeout(() => guardarNota(q.id, campo.value), 500);
   } });
   campo.hidden = localStorage.getItem(NOTAS_VISIBLES) === "no";
-  const botonNotas = el("button", { className: "copiar", textContent: "Notas", onclick: () => {
+  const botonNotas = el("button", { className: "copiar", title: "Mostrar u ocultar las notas", innerHTML: ICONO_NOTAS, onclick: () => {
     campo.hidden = !campo.hidden;
     localStorage.setItem(NOTAS_VISIBLES, campo.hidden ? "no" : "si");
     botonNotas.classList.toggle("on", !campo.hidden);
@@ -201,11 +202,6 @@ function columnas() {
   const leer = () => {
     pos = { ...(ancha.matches ? COLUMNAS : FILAS), ...JSON.parse(localStorage.getItem(guardado()) ?? "{}") };
     aplicar();
-    rotular();
-  };
-  const rotular = () => {
-    const editando = document.body.classList.contains("editando");
-    editar.textContent = editando ? "Listo" : "Ajustar";
   };
   for (const k of ["L", "S", "R", "I", "F"]) {
     const t = document.getElementById(`tirador-${k}`);
@@ -217,7 +213,7 @@ function columnas() {
     };
     t.onlostpointercapture = () => { t.classList.remove("activo"); localStorage.setItem(guardado(), JSON.stringify(pos)); };
   }
-  editar.onclick = () => { document.body.classList.toggle("editando"); rotular(); };
+  editar.onclick = () => document.body.classList.toggle("editando");
   ancha.onchange = leer;
   addEventListener("resize", aplicar);
   leer();
