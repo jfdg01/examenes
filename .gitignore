@@ -3,3 +3,5 @@ ln/paginas/
 ln/respuestas.jsonl
 __pycache__/
 ln/notas.json
+ln/ronda.json
+ln/preguntas-mal.md

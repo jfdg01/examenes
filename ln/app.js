@@ -1,5 +1,5 @@
 import {
-  cajas, conceptos, dominio, PENALIZACION, tarjetaDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, conceptos, dominio, guardado, masNueva, restaurar, PENALIZACION, tarjetaDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
@@ -22,6 +22,19 @@ const numero = (n) => n.toLocaleString("es", { maximumFractionDigits: 2 });
 
 const NOTAS_VISIBLES = "ln-notas-visibles";
 const guardarNota = (id, texto) => fetch("api/notas", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, texto }) }).catch(() => {});
+
+const RONDA = "ln-ronda";
+const SIN_RONDA = { guardada: 0, ronda: null };
+const enviarRonda = (g) => fetch("api/ronda", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(g) }).catch(() => {});
+function guardarRonda(ronda) {
+  const g = guardado(ronda, Date.now());
+  localStorage.setItem(RONDA, JSON.stringify(g));
+  enviarRonda(g);
+}
+function empezar(ronda) {
+  guardarRonda(ronda);
+  pregunta(ronda);
+}
 
 const pintar = (...nodos) => app.replaceChildren(...nodos.filter(Boolean));
 
@@ -102,11 +115,11 @@ function inicio() {
     alDia ? null : el("p", { className: "aviso", textContent: "Sin conexión con el servidor: el historial no está al día." }),
     sinEnviar ? el("p", { className: "aviso", textContent: `${sinEnviar} respuestas sin enviar al servidor.` }) : null,
     lista.length
-      ? el("button", { className: "grande", textContent: `Empezar la sesión (${lista.length} preguntas)`, onclick: () => pregunta({ preguntas: lista, simulacro: false, i: 0, resultados: [] }) })
+      ? el("button", { className: "grande", textContent: `Empezar la sesión (${lista.length} preguntas)`, onclick: () => empezar({ preguntas: lista, simulacro: false, i: 0, resultados: [] }) })
       : el("p", { className: "tarjeta", textContent: banco.length
         ? "No hay preguntas pendientes. El repaso vuelve después de una pausa de 3 horas."
         : "El banco no tiene preguntas." }),
-    el("button", { className: "grande otro", textContent: `Simulacro (${simulacro(banco).length} preguntas)`, onclick: () => pregunta({ preguntas: simulacro(banco), simulacro: true, i: 0, resultados: [], limite: Date.now() + MINUTOS_SIMULACRO * 60000 }) }),
+    el("button", { className: "grande otro", textContent: `Simulacro (${simulacro(banco).length} preguntas)`, onclick: () => empezar({ preguntas: simulacro(banco), simulacro: true, i: 0, resultados: [], limite: Date.now() + MINUTOS_SIMULACRO * 60000 }) }),
   );
 }
 
@@ -149,6 +162,12 @@ function pregunta(ronda) {
     botonNotas.classList.toggle("on", !campo.hidden);
   } });
   botonNotas.classList.toggle("on", !campo.hidden);
+  const salir = el("button", { className: "copiar", title: "Abandonar", textContent: "✕", onclick: () => {
+    if (!confirm(`¿Abandonar ${ronda.simulacro ? "el simulacro" : "la sesión"}? Las respuestas quedan en el historial.`)) return;
+    clearInterval(reloj);
+    guardarRonda(null);
+    inicio();
+  } });
   const blanco = ronda.simulacro ? el("button", { className: "blanco", textContent: "En blanco", onclick: () => contestar(null, false) }) : null;
   const ayuda = el("p", { className: "dim ayuda", textContent: "Toca el texto si estás seguro. Toca «dudo» si dudas." });
   const derecha = el("div", { className: "hoja vacia" }, el("div", {}, el("p", { textContent: "Elige una opción. La explicación sale aquí." })));
@@ -159,12 +178,12 @@ function pregunta(ronda) {
   const tiempo = ronda.simulacro ? el("span", { className: "reloj" }) : null;
   pintar(movil
     ? el("div", { className: "pant" },
-      el("div", { className: "meta" }, el("span", { className: "t", textContent: titulo }), tiempo, botonNotas, copiar),
+      el("div", { className: "meta" }, el("span", { className: "t", textContent: titulo }), tiempo, salir, botonNotas, copiar),
       el("div", { className: "barra" }, el("i", { style: `width:${((ronda.i + 1) / ronda.preguntas.length) * 100}%` })),
       cuerpo, pie)
     : el("div", { className: "dos" },
       el("div", { className: "izq" },
-        el("div", { className: "meta", textContent: titulo }, el("span", { className: "acciones" }, tiempo, botonNotas, copiar, editar)),
+        el("div", { className: "meta", textContent: titulo }, el("span", { className: "acciones" }, tiempo, salir, botonNotas, copiar, editar)),
         enunciado, ...filas, blanco, ayuda, campo),
       derecha));
   if (tiempo) correr(ronda, tiempo);
@@ -175,6 +194,7 @@ function pregunta(ronda) {
     guardar([...pendientes(), r]);
     enviar();
     ronda.resultados.push(resultado(q, op));
+    guardarRonda(ronda);
     filas.forEach((fila, k) => {
       const ok = ops[k] === q.correcta;
       if (ok || ops[k] === op) {
@@ -262,6 +282,7 @@ function fuentes(q) {
 
 function fin(ronda) {
   clearInterval(reloj);
+  guardarRonda(null);
   while (ronda.resultados.length < ronda.preguntas.length) ronda.resultados.push("blanco");
   const cuenta = (tipo) => ronda.resultados.filter((x) => x === tipo).length;
   const resumen = ronda.simulacro
@@ -291,7 +312,17 @@ async function cargar() {
   const ids = new Set(banco.map((q) => q.id));
   historial = historial.filter((r) => ids.has(r.id));
   try { notas = await (await fetch("api/notas")).json(); } catch {}
-  inicio();
+  let servidor = SIN_RONDA;
+  try {
+    const r = await fetch("api/ronda");
+    if (r.ok) servidor = await r.json();
+  } catch {}
+  const local = JSON.parse(localStorage.getItem(RONDA) ?? "null") ?? SIN_RONDA;
+  if (local.guardada > servidor.guardada) enviarRonda(local);
+  const ronda = restaurar(masNueva(servidor, local), banco);
+  if (!ronda) return inicio();
+  const terminada = ronda.i >= ronda.preguntas.length || (ronda.simulacro && ronda.limite <= Date.now());
+  terminada ? fin(ronda) : pregunta(ronda);
 }
 
 // Los tiradores son de la pantalla ancha: mueven los bordes y el separador de las 2 columnas.

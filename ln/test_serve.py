@@ -98,6 +98,40 @@ class TestServe(unittest.TestCase):
             poner({"id": "a", "texto": 1})
         self.assertEqual(e.exception.code, 400)
 
+    def test_la_ronda_empieza_sin_guardado_y_se_guarda_y_se_cierra(self):
+        def poner(cuerpo):
+            peticion = urllib.request.Request(self.url + "/api/ronda", data=json.dumps(cuerpo).encode(), method="POST")
+            urllib.request.urlopen(peticion).close()
+
+        self.assertEqual(json.loads(self.get("/api/ronda")), {"guardada": 0, "ronda": None})
+        media = {"guardada": 5, "ronda": {"ids": ["a", "b"], "resultados": ["acierto"], "simulacro": True, "limite": 99}}
+        poner(media)
+        self.assertEqual(json.loads(self.get("/api/ronda")), media)
+        poner({"guardada": 6, "ronda": None})
+        self.assertEqual(json.loads(self.get("/api/ronda")), {"guardada": 6, "ronda": None})
+
+    def test_rechaza_un_guardado_de_la_ronda_sin_el_formato(self):
+        ronda = {"ids": ["a"], "resultados": [], "simulacro": False, "limite": None}
+        malos = [
+            {"guardada": 1},
+            {"guardada": "1", "ronda": None},
+            {"guardada": True, "ronda": None},
+            {"guardada": 1, "ronda": None, "otro": 1},
+            {"guardada": 1, "ronda": {**ronda, "ids": [1]}},
+            {"guardada": 1, "ronda": {**ronda, "resultados": ["quizá"]}},
+            {"guardada": 1, "ronda": {**ronda, "resultados": [[1]]}},
+            {"guardada": 1, "ronda": {**ronda, "simulacro": 1}},
+            {"guardada": 1, "ronda": {**ronda, "limite": "x"}},
+            {"guardada": 1, "ronda": {"ids": ["a"]}},
+            [],
+        ]
+        for malo in malos:
+            peticion = urllib.request.Request(self.url + "/api/ronda", data=json.dumps(malo).encode(), method="POST")
+            with self.assertRaises(urllib.error.HTTPError) as e:
+                urllib.request.urlopen(peticion)
+            self.assertEqual(e.exception.code, 400, malo)
+        self.assertFalse((self.carpeta / "ronda.json").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

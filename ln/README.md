@@ -169,7 +169,7 @@ El botón con un icono de engranaje, a la derecha de la línea de arriba, muestr
 
 Una pantalla de menos de 900 px es una columna con 4 partes: la línea de arriba, la barra de progreso, el cuerpo con su scroll y el pie fijo. No tiene zonas, ni tiradores, ni engranaje.
 
-- La línea de arriba lleva el progreso, el botón de las notas y el botón de copiar.
+- La línea de arriba lleva el progreso, el botón ✕, el botón de las notas y el botón de copiar.
 - El cuerpo lleva la pregunta y las opciones. Tras responder, lleva también el aviso, la explicación y el campo de notas. El campo de notas empieza escondido hasta que lo muestras con el botón de las notas.
 - Antes de responder, el pie dice "Toca el texto si estás seguro. Toca «dudo» si dudas." En el simulacro, el pie lleva también el botón "En blanco".
 - Tras responder, las opciones que no son la correcta ni la tuya se atenúan. Si el cuerpo no cabe en la pantalla, esas opciones se pliegan tras el botón "ver las otras N opciones".
@@ -193,14 +193,41 @@ Cada pregunta del simulacro tiene un botón "en blanco" debajo de las opciones. 
 
 Las respuestas del simulacro entran al historial como las demás, porque son respuestas reales. Una pregunta en blanco cuenta en el historial como un fallo con "dudo".
 
+## La ronda a medias
+
+Una ronda es una sesión o un simulacro, desde la primera pregunta hasta la pantalla del final. Una ronda a medias sobrevive a una recarga de la página y a un cambio de dispositivo.
+
+Un guardado tiene 2 campos: `guardada`, la hora del guardado en milisegundos, y `ronda`. Sin ronda a medias, `ronda` es `null`. Una ronda tiene 4 campos:
+
+- `ids`: los `id` de sus preguntas, en orden.
+- `resultados`: "acierto", "fallo" o "blanco", uno por pregunta contestada.
+- `simulacro`: `true` en un simulacro.
+- `limite`: la hora del final del simulacro en milisegundos, o `null` en una sesión.
+
+La interfaz guarda la ronda al empezar y después de cada respuesta. La pantalla del final guarda `"ronda": null`. Cada guardado va al servidor y a `localStorage`, en `ln-ronda`.
+
+Al cargar, la interfaz lee las 2 copias, y gana la copia con la `guardada` más nueva. Si gana la copia de `localStorage`, la interfaz la envía al servidor. Así, una ronda del móvil sin red llega al servidor con la red, y un final sin red no resucita la ronda del servidor.
+
+Con una ronda a medias, la app abre su pregunta, sin pasar por el inicio. La pregunta actual es la primera sin resultado: una recarga después de una respuesta, y antes de "Siguiente", abre la pregunta siguiente. Las opciones se barajan otra vez en cada carga.
+
+Una ronda con un `id` que no está en el banco se descarta, y la app abre el inicio.
+
+El reloj del simulacro cuenta hasta `limite`, una hora fija, así que sigue con la página cerrada. Un simulacro con el `limite` pasado abre la pantalla del final, y cada pregunta sin contestar cuenta en blanco.
+
+La línea de arriba de la pregunta lleva un botón ✕, a la izquierda del botón de las notas. El botón pregunta "¿Abandonar la sesión? Las respuestas quedan en el historial." con el diálogo del navegador, `confirm`. En un simulacro, la pregunta dice "el simulacro". Un "sí" guarda `"ronda": null` y abre el inicio.
+
+Con 2 dispositivos abiertos a la vez, gana el último guardado. Un dispositivo no ve el guardado del otro hasta que recarga la página.
+
 ## El servidor: `serve.py`
 
-`serve.py` usa solo la stdlib de Python. Sirve la interfaz, el banco, los PDFs y las imágenes de las páginas, y tiene 4 rutas:
+`serve.py` usa solo la stdlib de Python. Sirve la interfaz, el banco, los PDFs y las imágenes de las páginas, y tiene 6 rutas:
 
 - `GET /api/respuestas` devuelve el historial entero.
 - `POST /api/respuestas` añade una lista de respuestas al historial.
 - `GET /api/notas` devuelve las notas, un objeto con el `id` de la pregunta como clave.
 - `POST /api/notas` guarda `{"id", "texto"}`. Un `texto` vacío borra la nota. Las notas viven en `ln/notas.json`, que no entra en git.
+- `GET /api/ronda` devuelve el guardado de la ronda, o `{"guardada": 0, "ronda": null}` sin guardado.
+- `POST /api/ronda` guarda un guardado de la ronda. Un guardado con otros campos o con otros tipos recibe un 400. El guardado vive en `ln/ronda.json`, que no entra en git.
 
 La interfaz guarda en `localStorage` cada respuesta sin enviar, y la envía cuando el servidor responde. Así, una sesión en el móvil sin red no pierde respuestas.
 
@@ -252,4 +279,4 @@ node --test
 python3 -m unittest
 ```
 
-`node --test` prueba `logica.js`, la lógica de las cajas, de la sesión y del simulacro, sin el DOM. `python3 -m unittest` prueba `serve.py`, `sacar_paginas.py` y `comprobar_banco.py`.
+`node --test` prueba `logica.js`, la lógica de las cajas, de la sesión, del simulacro y del guardado de la ronda, sin el DOM. `python3 -m unittest` prueba `serve.py`, `sacar_paginas.py` y `comprobar_banco.py`.

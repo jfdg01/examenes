@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { cajas, conceptos, probabilidadDeLaNota, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, tarjetaDeLaNota, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS } from "./logica.js";
+import { cajas, conceptos, probabilidadDeLaNota, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, tarjetaDeLaNota, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS, guardado, masNueva, restaurar } from "./logica.js";
 
 const r = (id, ts, acierto, seguro) => ({ id, ts, acierto, seguro });
 
@@ -326,4 +326,36 @@ test("con un banco vacío no faltan conceptos", () => {
   const t = tarjetaDeLaNota([], [], 5);
   assert.equal(t.faltan, 0);
   assert.equal(t.sesiones, 0);
+});
+
+const rondaDe = (preguntas, resultados, simulacro = false, limite = null) => ({ preguntas, resultados, simulacro, limite, i: resultados.length });
+
+test("un guardado lleva los id de la ronda, sus resultados, el simulacro y el límite, con la hora del guardado", () => {
+  const banco = JSON.parse(readFileSync("./preguntas-ejemplo.json", "utf8"));
+  const g = guardado(rondaDe(banco.slice(0, 2), ["acierto"], true, 500), 123);
+  assert.deepEqual(g, { guardada: 123, ronda: { ids: [banco[0].id, banco[1].id], resultados: ["acierto"], simulacro: true, limite: 500 } });
+  assert.deepEqual(guardado(null, 124), { guardada: 124, ronda: null });
+});
+
+test("de 2 copias gana la guardada más nueva", () => {
+  const vieja = { guardada: 1, ronda: null }, nueva = { guardada: 2, ronda: { ids: [], resultados: [], simulacro: false, limite: null } };
+  assert.equal(masNueva(vieja, nueva), nueva);
+  assert.equal(masNueva(nueva, vieja), nueva);
+});
+
+test("restaurar abre la primera pregunta sin resultado, en el orden guardado", () => {
+  const banco = JSON.parse(readFileSync("./preguntas-ejemplo.json", "utf8"));
+  const orden = [banco[3], banco[1], banco[2]];
+  const ronda = restaurar(guardado(rondaDe(orden, ["fallo", "blanco"], true, 500), 1), banco);
+  assert.deepEqual(ronda.preguntas.map((q) => q.id), orden.map((q) => q.id));
+  assert.equal(ronda.i, 2);
+  assert.deepEqual(ronda.resultados, ["fallo", "blanco"]);
+  assert.equal(ronda.simulacro, true);
+  assert.equal(ronda.limite, 500);
+});
+
+test("sin ronda a medias, o con un id que no está en el banco, restaurar devuelve null", () => {
+  const banco = JSON.parse(readFileSync("./preguntas-ejemplo.json", "utf8"));
+  assert.equal(restaurar({ guardada: 1, ronda: null }, banco), null);
+  assert.equal(restaurar({ guardada: 1, ronda: { ids: [banco[0].id, "no-existe"], resultados: [], simulacro: false, limite: null } }, banco), null);
 });

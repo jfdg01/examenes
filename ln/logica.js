@@ -160,3 +160,19 @@ export function mover(pos, tirador, x) {
   const [min, max] = { L: [0, pos.S - COLUMNA_MINIMA], S: [pos.L + COLUMNA_MINIMA, pos.R - COLUMNA_MINIMA], R: [pos.S + COLUMNA_MINIMA, 1] }[tirador];
   return { ...pos, [tirador]: Math.min(max, Math.max(min, x)) };
 }
+
+// Un guardado es la ronda a medias en 4 campos y la hora del guardado. Sin ronda, ronda es null.
+export const guardado = (ronda, ahora) => ({
+  guardada: ahora,
+  ronda: ronda && { ids: ronda.preguntas.map((q) => q.id), resultados: ronda.resultados, simulacro: ronda.simulacro, limite: ronda.limite ?? null },
+});
+
+export const masNueva = (a, b) => (b.guardada > a.guardada ? b : a);
+
+// Una ronda con un id que no está en el banco se descarta. La pregunta actual es la primera sin resultado.
+export function restaurar({ ronda }, banco) {
+  if (!ronda) return null;
+  const porId = new Map(banco.map((q) => [q.id, q]));
+  if (!ronda.ids.every((id) => porId.has(id))) return null;
+  return { preguntas: ronda.ids.map((id) => porId.get(id)), simulacro: ronda.simulacro, limite: ronda.limite, resultados: [...ronda.resultados], i: ronda.resultados.length };
+}
