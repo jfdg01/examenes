@@ -1,9 +1,11 @@
 import {
-  cajas, dominio, imagenDePagina, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, dominio, imagenDePagina, mover, COLUMNAS, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
+const POSICIONES = "ln-columnas";
 const app = document.getElementById("app");
+const editar = document.getElementById("editar");
 let banco = [];
 let historial = [];
 let alDia = true;
@@ -65,11 +67,13 @@ function pregunta(ronda) {
     el("button", { className: "dudo", textContent: "dudo", onclick: () => contestar(op, false) })));
   const blanco = ronda.simulacro ? el("button", { className: "blanco", textContent: "En blanco", onclick: () => contestar(null, false) }) : null;
   const ayuda = el("p", { className: "dim", textContent: "Toca el texto si estás seguro. Toca «dudo» si dudas." });
-  pintar(
-    el("div", { className: "meta", textContent: [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : `caja ${caja}`].filter(Boolean).join(" · ") }),
-    el("div", { className: "q", textContent: q.pregunta }),
-    ...filas, blanco, ayuda,
-  );
+  const derecha = el("div", { className: "hoja vacia" }, el("div", {}, el("p", { textContent: "Elige una opción. La explicación sale aquí." })));
+  pintar(el("div", { className: "dos" },
+    el("div", { className: "izq" },
+      el("div", { className: "meta", textContent: [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : `caja ${caja}`].filter(Boolean).join(" · ") }, editar),
+      el("div", { className: "q", textContent: q.pregunta }),
+      ...filas, blanco, ayuda),
+    derecha));
 
   function contestar(op, seguro) {
     const r = respuesta(q, op, seguro, new Date());
@@ -84,26 +88,26 @@ function pregunta(ronda) {
       fila.querySelector(".texto").disabled = true;
     });
     blanco?.remove();
-    ayuda.remove();
+    const aviso = op !== null && !r.acierto && r.seguro
+      ? el("p", { className: "aviso-respuesta alarma", textContent: "Fallo con «seguro»: una idea falsa. Repásala." })
+      : r.acierto && !r.seguro ? el("p", { className: "aviso-respuesta suerte", textContent: "Acierto con «dudo»: cuenta como un fallo." }) : null;
+    aviso ? ayuda.replaceWith(aviso) : ayuda.remove();
     document.body.classList.add("con-hoja");
     const siguiente = () => (++ronda.i < ronda.preguntas.length ? pregunta(ronda) : fin(ronda));
-    app.append(hoja(q, op, r, siguiente));
+    derecha.replaceWith(hoja(q, siguiente));
   }
 }
 
-function hoja(q, op, r, siguiente) {
-  const aviso = op !== null && !r.acierto && r.seguro
-    ? el("div", { className: "alarma", textContent: "Fallo con «seguro»: una idea falsa. Repásala." })
-    : r.acierto && !r.seguro ? el("div", { className: "suerte", textContent: "Acierto con «dudo»: cuenta como un fallo." }) : null;
+function hoja(q, siguiente) {
   const { pdf, pagina } = q.fuente;
   return el("div", { className: "hoja" }, el("div", {},
-    aviso,
     el("p", { textContent: q.explicacion }),
-    el("p", { className: "fuente", textContent: `${pdf}, página ${pagina} · ${q.concepto} (dominio: caja ${dominio(banco, historial).get(q.concepto)})` }),
+    el("button", { className: "grande", textContent: "Siguiente", onclick: siguiente }),
     el("details", { className: "fuente" }, el("summary", { textContent: "Ver la página aquí" }),
       el("img", { src: imagenDePagina(q.fuente), alt: `La página ${pagina} de ${pdf}`, loading: "lazy" })),
-    el("p", { className: "fuente" }, el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: `Abrir el PDF en la página ${pagina}` })),
-    el("button", { className: "grande", textContent: "Siguiente", onclick: siguiente }),
+    el("details", { className: "fuente" }, el("summary", { textContent: "La fuente" }),
+      el("p", { textContent: `${pdf}, página ${pagina} · ${q.concepto} (dominio: caja ${dominio(banco, historial).get(q.concepto)})` }),
+      el("p", {}, el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: `Abrir el PDF en la página ${pagina}` }))),
   ));
 }
 
@@ -138,6 +142,33 @@ async function cargar() {
   inicio();
 }
 
+function columnas() {
+  let pos = { ...COLUMNAS, ...JSON.parse(localStorage.getItem(POSICIONES) ?? "{}") };
+  const aplicar = () => {
+    const ancho = document.documentElement.clientWidth;
+    for (const k in pos) {
+      document.documentElement.style.setProperty(`--${k}`, `${pos[k] * ancho}px`);
+      document.getElementById(`tirador-${k}`).style.left = `${pos[k] * ancho}px`;
+    }
+  };
+  for (const k in pos) {
+    const t = document.getElementById(`tirador-${k}`);
+    t.onpointerdown = (e) => { t.setPointerCapture(e.pointerId); t.classList.add("activo"); };
+    t.onpointermove = (e) => {
+      if (!t.hasPointerCapture(e.pointerId)) return;
+      pos = mover(pos, k, e.clientX / document.documentElement.clientWidth);
+      aplicar();
+    };
+    t.onlostpointercapture = () => { t.classList.remove("activo"); localStorage.setItem(POSICIONES, JSON.stringify(pos)); };
+  }
+  editar.onclick = () => {
+    editar.textContent = document.body.classList.toggle("editando") ? "Listo" : "Ajustar las columnas";
+  };
+  addEventListener("resize", aplicar);
+  aplicar();
+}
+
+columnas();
 addEventListener("online", enviar);
 setInterval(enviar, 30000);
 cargar();

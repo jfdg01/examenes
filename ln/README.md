@@ -81,14 +81,20 @@ La interfaz muestra el porcentaje de aciertos con "dudo". El examen resta entre 
 
 Cada opción es una fila con 2 zonas. Un toque en el texto responde con "seguro", y un toque en el botón "dudo" de la derecha responde con "dudo". Un solo toque responde.
 
-La solución sube desde abajo, en una hoja. Las opciones quedan detrás, en verde la correcta y en rojo la tuya si fallas. La hoja tiene, en este orden:
+Después de la respuesta, las opciones quedan en verde la correcta y en rojo la tuya si fallas. Debajo de las opciones sale el aviso de un fallo con "seguro" o de un acierto con "dudo".
 
-1. El aviso de un fallo con "seguro" o de un acierto con "dudo".
-2. La `explicacion`.
-3. El PDF, la página y el concepto.
-4. "Ver la página aquí": la imagen de la página, dentro de la hoja.
-5. "Abrir el PDF en la página N": el PDF entero, con `#page=N` en la URL.
-6. El botón "Siguiente".
+La solución tiene, en este orden:
+
+1. La `explicacion`.
+2. El botón "Siguiente".
+3. "Ver la página aquí": un desplegable con la imagen de la página.
+4. "La fuente": un desplegable con el PDF, la página, el concepto y el enlace "Abrir el PDF en la página N", con `#page=N` en la URL.
+
+Los desplegables van debajo de "Siguiente", y así un desplegable abierto no mueve el botón.
+
+En una pantalla de 900 px o más, la pregunta va a la izquierda y la solución a la derecha. Las 2 columnas son estáticas, sin animaciones, y la columna de la derecha dice "Elige una opción" antes de la respuesta. El botón "Ajustar las columnas", a la derecha de la línea de arriba, muestra 3 tiradores: el borde izquierdo, el separador y el borde derecho. Cada columna mide como mínimo el 15 % del ancho. Las posiciones quedan en `localStorage`, en `ln-columnas`, y cada dispositivo tiene las suyas.
+
+En una pantalla más estrecha, como el móvil, la solución sube desde abajo, en una hoja.
 
 Las imágenes están en `ln/paginas/<pdf sin .pdf>-<pagina>.png`. `pdftoppm -png -r 80` las saca de los PDFs una sola vez. Las imágenes y los PDFs no entran en git.
 

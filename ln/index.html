@@ -31,13 +31,38 @@
   .hoja img { width:100%; border-radius:8px; margin-top:6px; background:#fff; }
   .hoja .fuente { color:var(--dim); font-size:13px; margin:8px 0; }
   @keyframes subir { from { transform:translateY(100%); } }
-  .alarma { background:var(--ko); color:#fff; border-radius:12px; padding:12px 14px; font-weight:700; margin-bottom:10px; }
-  .suerte { background:var(--warn); color:#222; border-radius:12px; padding:12px 14px; font-weight:700; margin-bottom:10px; }
+  .aviso-respuesta { font-size:14px; font-weight:600; padding:6px 10px; border-left:3px solid; border-radius:4px; margin:4px 0 0; }
+  .alarma { color:#f08a8a; background:#3a1f1f; }
+  .suerte { color:var(--warn); background:#2a2620; }
   .aviso { color:var(--warn); }
+  .tirador, #editar { display:none; }
+  @media (max-width:899px) { .hoja.vacia { display:none; } }
+  /* En una pantalla ancha, la pregunta va a la izquierda y la solución a la derecha. --L, --S y --R son el borde izquierdo, el separador y el borde derecho. */
+  @media (min-width:900px) {
+    body.con-hoja { padding-bottom:0; }
+    main:has(.dos) { max-width:none; margin:0; padding:16px 0; }
+    .dos { display:grid; grid-template-columns:calc(var(--S) - var(--L) - 48px) 1fr; gap:48px; align-items:start; margin-left:var(--L); width:calc(var(--R) - var(--L)); padding:0 24px; }
+    .dos .meta { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .dos .hoja { position:sticky; top:16px; max-height:calc(100vh - 32px); padding:0; background:none; border-radius:0; box-shadow:none; animation:none; }
+    .dos .hoja > div { max-width:none; }
+    .hoja.vacia { color:var(--dim); }
+    body:has(.dos) #editar { display:block; padding:2px 10px; border-radius:6px; border:1px solid var(--line); background:var(--card); color:var(--dim); font-size:12px; }
+    body.editando #editar { background:var(--acc); border-color:var(--acc); color:var(--txt); }
+    body:has(.dos) .tirador { display:block; position:fixed; top:0; bottom:0; width:24px; margin-left:-12px; cursor:col-resize; touch-action:none; z-index:9; }
+    .tirador::after { content:""; position:absolute; top:16px; bottom:16px; left:11px; width:2px; background:var(--line); }
+    .tirador::before { content:""; position:absolute; top:50%; left:5px; width:14px; height:40px; margin-top:-20px; border-radius:7px; border:2px solid var(--line); z-index:1;
+      background:radial-gradient(circle, var(--dim) 1.5px, transparent 2px) center / 6px 8px repeat-y, var(--card); }
+    .tirador:hover::after, .tirador.activo::after { background:var(--acc); }
+    .tirador:hover::before, .tirador.activo::before { border-color:var(--acc); }
+    body:not(.editando) .tirador { pointer-events:none; }
+    body:not(.editando) .tirador::before, body:not(.editando) #tirador-L::after, body:not(.editando) #tirador-R::after { display:none; }
+  }
 </style>
 </head>
 <body>
 <main id="app"><p class="dim">Cargando el banco…</p></main>
+<div class="tirador" id="tirador-L"></div><div class="tirador" id="tirador-S"></div><div class="tirador" id="tirador-R"></div>
+<button id="editar">Ajustar las columnas</button>
 <script type="module" src="app.js"></script>
 </body>
 </html>

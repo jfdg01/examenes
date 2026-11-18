@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { cajas, sesion, proximaFecha, opciones, respuesta, porcentajeDudo, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado } from "./logica.js";
+import { cajas, sesion, proximaFecha, opciones, respuesta, porcentajeDudo, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS } from "./logica.js";
 
 const r = (id, ts, acierto, seguro) => ({ id, ts, acierto, seguro });
 
@@ -174,4 +174,15 @@ test("una respuesta del simulacro es un acierto, un fallo o una pregunta en blan
   assert.equal(resultado(p("a"), "c"), "acierto");
   assert.equal(resultado(p("a"), "x"), "fallo");
   assert.equal(resultado(p("a"), null), "blanco");
+});
+
+test("un tirador se mueve, y cada columna mide al menos el 15 % del ancho", () => {
+  const cerca = (real, esperado) => assert.ok(Math.abs(real - esperado) < 1e-9, `${real} no es ${esperado}`);
+  assert.deepEqual(mover(COLUMNAS, "L", 0.2), { L: 0.2, S: 0.5, R: 0.92 });
+  cerca(mover(COLUMNAS, "L", 0.9).L, 0.35);
+  cerca(mover(COLUMNAS, "L", -0.1).L, 0);
+  cerca(mover(COLUMNAS, "S", 0.99).S, 0.77);
+  cerca(mover(COLUMNAS, "S", 0).S, 0.23);
+  cerca(mover(COLUMNAS, "R", 0.1).R, 0.65);
+  cerca(mover(COLUMNAS, "R", 1.5).R, 1);
 });

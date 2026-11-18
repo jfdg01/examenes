@@ -91,3 +91,11 @@ export function nota(resultados, penalizacion) {
 export const imagenDePagina = ({ pdf, pagina }) => encodeURI(`paginas/${pdf.replace(/\.pdf$/, "")}-${pagina}.png`);
 
 export const pdfEnPagina = ({ pdf, pagina }) => `${encodeURI(pdf)}#page=${pagina}`;
+
+export const COLUMNAS = { L: 0.08, S: 0.5, R: 0.92 };
+const COLUMNA_MINIMA = 0.15;
+
+export function mover(pos, tirador, x) {
+  const [min, max] = { L: [0, pos.S - COLUMNA_MINIMA], S: [pos.L + COLUMNA_MINIMA, pos.R - COLUMNA_MINIMA], R: [pos.S + COLUMNA_MINIMA, 1] }[tirador];
+  return { ...pos, [tirador]: Math.min(max, Math.max(min, x)) };
+}
