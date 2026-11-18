@@ -68,8 +68,8 @@ export function respuesta(pregunta, eleccion, seguro, ahora) {
 export function porcentajeDudo(historial) {
   const dudas = historial.filter((r) => !r.seguro);
   if (!dudas.length) return null;
-  const porcentaje = (100 * dudas.filter((r) => r.acierto).length) / dudas.length;
-  return { porcentaje, total: dudas.length, contestar: porcentaje > 20 };
+  const aciertos = dudas.filter((r) => r.acierto).length;
+  return { porcentaje: (100 * aciertos) / dudas.length, total: dudas.length, aciertos };
 }
 
 export function dominio(banco, historial) {
@@ -114,6 +114,31 @@ export function probabilidadDeLaNota(sabes, acierto, objetivo, n = TAMANO_SIMULA
     for (let a = 0; a <= resto; a++) if (k + a - PENALIZACION * (resto - a) >= netos) total += binomial(n, k, sabes) * binomial(resto, a, acierto);
   }
   return total;
+}
+
+const META = 0.95;
+const VENTANA = 60;
+const A_CIEGAS = 1 / 4;
+
+// La tarjeta de la nota: la probabilidad de hoy y de la forma con más probabilidad, los conceptos y las sesiones que faltan para un 95 %.
+export function tarjetaDeLaNota(banco, historial, objetivo) {
+  const c = conceptos(banco, historial);
+  const n = c.sabes + c.noSabes + c.sinVer, total = n || 1;
+  const dudo = porcentajeDudo(historial);
+  const tasaDudo = dudo ? dudo.porcentaje / 100 : A_CIEGAS;
+  const tasa = (c.noSabes * tasaDudo + c.sinVer * A_CIEGAS) / (c.noSabes + c.sinVer || 1);
+  const probabilidad = (s, acierto) => probabilidadDeLaNota(s / total, acierto, objetivo);
+  const mejor = (s) => Math.max(probabilidad(s, null), probabilidad(s, tasa));
+  let meta = c.sabes;
+  while (meta < n && mejor(meta) < META) meta++;
+  const faltan = meta - c.sabes;
+  const ordenado = [...historial].sort((a, b) => a.ts.localeCompare(b.ts));
+  const sesionesDeLaVentana = Math.min(VENTANA, historial.length) / TAMANO_SESION || 1;
+  const ritmo = (c.sabes - conceptos(banco, ordenado.slice(0, -VENTANA)).sabes) / sesionesDeLaVentana;
+  const blanco = probabilidad(c.sabes, null), contesta = probabilidad(c.sabes, tasa);
+  return { ...c, total, dudo, tasaDudo, tasa, blanco, contesta, contestar: contesta > blanco,
+    puntos: Math.round(100 * Math.abs(contesta - blanco)), hoy: Math.max(blanco, contesta),
+    meta, faltan, ritmo, sesiones: faltan <= 0 ? 0 : ritmo > 0 ? Math.ceil(faltan / ritmo) : null };
 }
 
 export const resultado =(pregunta, eleccion) => (eleccion === null ? "blanco" : eleccion === pregunta.correcta ? "acierto" : "fallo");

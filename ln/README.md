@@ -101,7 +101,7 @@ Un bloque de estudio termina con una pausa de 3 horas sin respuestas. Una pregun
 
 Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
 
-La interfaz muestra el porcentaje de aciertos con "dudo". El examen resta 1/4 de un acierto por cada fallo. Con un porcentaje sobre el 20 %, una pregunta dudosa se contesta: a ese porcentaje, los aciertos esperados compensan los fallos.
+El examen resta 1/4 de un acierto por cada fallo. La tarjeta de la nota, en la pantalla de inicio, dice si una pregunta dudosa se contesta, y muestra el porcentaje de aciertos con "dudo".
 
 ## La pantalla de inicio
 
@@ -109,17 +109,40 @@ Debajo del título, la pantalla de inicio tiene una barra con 3 tramos, uno por 
 
 El tramo gris baja con cada sesión, hasta que la vuelta a todo el banco termina.
 
-Debajo de las cifras, una tarjeta da la probabilidad de sacar una nota o más en el examen, como "Probabilidad de un 5". Un slider elige la nota, de 0,5 a 10, con pasos de 0,5. La nota empieza en 5, y queda en `localStorage`, en `ln-objetivo`. La tarjeta da 2 cifras grandes, una al lado de la otra: "con las dudas en blanco" y "si las contestas". Cada cifra lleva una barra con su porcentaje.
+Debajo de las cifras va la tarjeta de la nota, la única tarjeta de la pantalla. Arriba dice "Sacar más de 5", con un slider que elige la nota, de 0,5 a 10, con pasos de 0,5. La nota empieza en 5, y queda en `localStorage`, en `ln-objetivo`. El cálculo cuenta la nota elegida o más.
+
+La tarjeta tiene 3 partes, de arriba abajo:
+
+1. **La flecha**: a la izquierda, la probabilidad de hoy, "80 %", con "con 81 conceptos" debajo. A la derecha, "95 %", con "con 98 conceptos" debajo. En el medio, una flecha con "≈4 sesiones". La palabra "probabilidad" no sale.
+2. **La barra del camino**: un tramo verde para los conceptos que sabes, un tramo amarillo para los conceptos que faltan, y una marca en el 95 %. El largo de cada tramo es su parte de los conceptos del banco. La barra no tiene bloques.
+3. **El consejo**: "Contesta las dudas · +9 puntos", o "Deja las dudas en blanco · +N puntos". Los puntos son la diferencia entre la probabilidad de las 2 formas, en puntos de porcentaje. Un botón "?" abre el desglose, un `<details>` que empieza cerrado. El desglose sigue abierto cuando el slider se mueve.
+
+El desglose da los aciertos en una duda, con una fila por grupo de conceptos:
+
+| Fila | Conceptos | Aciertos en una duda | Detalle |
+|---|---|---|---|
+| en lo que viste | no lo sabes | el porcentaje de aciertos con "dudo" | "32 de 68 «dudo»" |
+| en lo que no viste | sin ver | 25 % | "a ciegas, 1 de 4" |
+| de media | los 2 grupos | la media de las 2 filas | |
+
+La media pesa cada porcentaje con los conceptos de su fila. Sin respuestas con "dudo", la primera fila usa el 25 % y el detalle "a ciegas, 1 de 4". Una pregunta de un concepto sin ver da menos pistas que una pregunta de un concepto visto, y por eso cada grupo tiene su porcentaje.
 
 El cálculo supone que cada pregunta del examen cae en un concepto al azar del banco:
 
 - Una pregunta de un concepto que sabes es un acierto.
 - Con las dudas en blanco, una pregunta de otro concepto no cuenta.
-- Con las dudas contestadas, una pregunta de otro concepto acierta 1 de cada 4 veces, como una respuesta a ciegas entre 4 opciones.
+- Con las dudas contestadas, una pregunta de otro concepto acierta con la media del desglose, y un fallo resta 1/4 de un acierto.
 
-El porcentaje de aciertos con "dudo" no entra en el cálculo, porque sale de conceptos que ya viste. Una pregunta de un concepto sin ver da menos pistas.
+La tarjeta sigue la forma con la probabilidad más alta para la nota elegida: el consejo, la cifra de hoy y el camino. Con otra nota, la mejor forma puede cambiar.
 
-Las 2 cifras son un límite optimista. El examen pregunta con otras palabras, y no elige sus preguntas al azar del temario.
+El camino busca el número más pequeño de conceptos con una probabilidad del 95 % o más, con la mejor forma en cada número. El 95 % es fijo. Los conceptos que faltan son ese número menos los conceptos que sabes.
+
+El ritmo sale de las 60 últimas respuestas, 5 sesiones de 12. El ritmo es la diferencia entre los conceptos que sabes hoy y los conceptos que sabías sin esas respuestas, dividida entre esas sesiones. Con menos de 60 respuestas, cuentan todas. Las sesiones son los conceptos que faltan divididos entre el ritmo, redondeadas hacia arriba.
+
+- Con un 95 % o más hoy, la flecha muestra "✓", sin la cifra de la derecha ni el tramo amarillo.
+- Con un ritmo de 0 o menos, la flecha muestra "? sesiones".
+
+Las cifras son un límite optimista. El examen pregunta con otras palabras, y no elige sus preguntas al azar del temario. Un fallo con "seguro" en el examen no entra en el cálculo. El ritmo sale sobre todo de conceptos nuevos, y baja cuando la vuelta a todo el banco termina. Así, las sesiones para una nota alta son más que la cifra de la flecha.
 
 ## La pantalla de la pregunta
 

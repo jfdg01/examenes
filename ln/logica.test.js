@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { cajas, conceptos, probabilidadDeLaNota, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS } from "./logica.js";
+import { cajas, conceptos, probabilidadDeLaNota, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, tarjetaDeLaNota, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS } from "./logica.js";
 
 const r = (id, ts, acierto, seguro) => ({ id, ts, acierto, seguro });
 
@@ -171,7 +171,7 @@ test("una pregunta en blanco cuenta como un fallo con dudo", () => {
 
 test("el porcentaje de aciertos con dudo solo cuenta las respuestas con dudo", () => {
   const h = [r("a", "1", true, false), r("b", "2", false, false), r("c", "3", true, false), r("d", "4", true, true), r("e", "5", false, true)];
-  assert.deepEqual(porcentajeDudo(h), { porcentaje: 200 / 3, total: 3, contestar: true });
+  assert.deepEqual(porcentajeDudo(h), { porcentaje: 200 / 3, total: 3, aciertos: 2 });
   assert.equal(porcentajeDudo([r("d", "4", true, true)]), null);
 });
 
@@ -227,12 +227,6 @@ test("la página no tiene ninguna pregunta en su código", () => {
   }
 });
 
-test("con un porcentaje de dudo sobre el 20 %, una pregunta dudosa se contesta", () => {
-  const h = (aciertos, fallos) => [...Array(aciertos).fill(r("a", "1", true, false)), ...Array(fallos).fill(r("b", "2", false, false))];
-  assert.equal(porcentajeDudo(h(21, 79)).contestar, true);
-  assert.equal(porcentajeDudo(h(20, 80)).contestar, false);
-});
-
 test("una respuesta del simulacro es un acierto, un fallo o una pregunta en blanco", () => {
   assert.equal(resultado(p("a"), "c"), "acierto");
   assert.equal(resultado(p("a"), "x"), "fallo");
@@ -254,4 +248,82 @@ test("el texto para copiar lleva el enunciado y una letra por opción, sin la so
   const q = { pregunta: "¿Cuál es?", correcta: "uno", distractores: ["dos", "tres"], explicacion: "porque sí" };
   const texto = textoParaCopiar(q, ["dos", "uno", "tres"]);
   assert.equal(texto, "¿Cuál es?\n\nA) dos\nB) uno\nC) tres");
+});
+
+// Un banco de n conceptos con una pregunta cada uno, y un historial que da a cada respuesta una hora creciente.
+const bancoDe = (n) => Array.from({ length: n }, (_, i) => ({ id: `q${i}`, concepto: `c${i}` }));
+const historialDe = (...respuestas) => respuestas.map(([i, acierto, seguro], k) => r(`q${i}`, new Date(k * 60000).toISOString(), acierto, seguro));
+const cerca = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} ≠ ${b}`);
+
+test("la tarjeta sin historial acierta una duda a ciegas, 1 de 4, y no tiene ritmo", () => {
+  const t = tarjetaDeLaNota(bancoDe(20), [], 5);
+  assert.equal(t.dudo, null);
+  cerca(t.tasaDudo, 1 / 4);
+  cerca(t.tasa, 1 / 4);
+  assert.equal(t.sinVer, 20);
+  cerca(t.hoy, 0.000935391579332645);
+  assert.equal(t.contestar, true);
+  assert.equal(t.puntos, 0);
+  assert.equal(t.sesiones, null);
+});
+
+test("una duda acierta con el porcentaje de dudo en lo que viste, y 1 de 4 en lo que no viste, ponderado por conceptos", () => {
+  const h = historialDe([0, true, true], [1, false, false], [2, true, false]);
+  const t = tarjetaDeLaNota(bancoDe(10), h, 5);
+  assert.deepEqual(t.dudo, { porcentaje: 50, total: 2, aciertos: 1 });
+  assert.equal(t.noSabes, 2);
+  assert.equal(t.sinVer, 7);
+  cerca(t.tasaDudo, 1 / 2);
+  cerca(t.tasa, 11 / 36);
+});
+
+test("la tarjeta sigue la forma con la probabilidad más alta, y el consejo da la diferencia en puntos", () => {
+  // 10 conceptos que sabes y 10 con un fallo con dudo: contestar solo resta, y una duda acierta 0 %.
+  const h = historialDe(...Array.from({ length: 10 }, (_, i) => [i, true, true]), ...Array.from({ length: 10 }, (_, i) => [10 + i, false, false]));
+  const t = tarjetaDeLaNota(bancoDe(20), h, 5);
+  cerca(t.hoy, 0.5880985260009766);
+  assert.equal(t.contestar, false);
+  assert.equal(t.puntos, 34);
+});
+
+test("el camino cuenta los conceptos que faltan para un 95 %, y las sesiones salen del ritmo, redondeadas hacia arriba", () => {
+  // Para un 10 con 20 preguntas, solo 20 aciertos valen, así que el 95 % pide todos los conceptos.
+  const h = historialDe(...[0, 1, 2, 3].map((i) => [i, true, true]));
+  const t = tarjetaDeLaNota(bancoDe(20), h, 10);
+  assert.equal(t.sabes, 4);
+  assert.equal(t.meta, 20);
+  assert.equal(t.faltan, 16);
+  cerca(t.ritmo, 12);
+  assert.equal(t.sesiones, 2);
+});
+
+test("el ritmo cuenta solo las 60 últimas respuestas, 5 sesiones de 12", () => {
+  const h = historialDe(
+    ...Array.from({ length: 40 }, (_, i) => [i, true, true]),
+    ...Array.from({ length: 10 }, (_, i) => [40 + i, true, true]),
+    ...Array.from({ length: 50 }, () => [0, true, true]));
+  const t = tarjetaDeLaNota(bancoDe(100), h, 10);
+  assert.equal(t.sabes, 50);
+  cerca(t.ritmo, 2);
+  assert.equal(t.faltan, 50);
+  assert.equal(t.sesiones, 25);
+});
+
+test("con un 95 % o más hoy no faltan conceptos ni sesiones", () => {
+  const t = tarjetaDeLaNota(bancoDe(20), historialDe(...Array.from({ length: 20 }, (_, i) => [i, true, true])), 5);
+  assert.equal(t.faltan, 0);
+  assert.equal(t.meta, 20);
+  assert.equal(t.sesiones, 0);
+});
+
+test("con un ritmo de 0 o menos, las sesiones no se pueden calcular", () => {
+  const t = tarjetaDeLaNota(bancoDe(20), historialDe([0, false, true]), 10);
+  assert.equal(t.faltan, 20);
+  assert.equal(t.sesiones, null);
+});
+
+test("con un banco vacío no faltan conceptos", () => {
+  const t = tarjetaDeLaNota([], [], 5);
+  assert.equal(t.faltan, 0);
+  assert.equal(t.sesiones, 0);
 });

@@ -1,5 +1,5 @@
 import {
-  cajas, conceptos, dominio, PENALIZACION, probabilidadDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, porcentajeDudo, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, conceptos, dominio, PENALIZACION, tarjetaDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
@@ -45,37 +45,55 @@ async function enviar() {
 const pc = (x) => `${Math.round(100 * x)} %`;
 
 function barra({ sabes, noSabes, sinVer }) {
-  const parte = sabes / (sabes + noSabes + sinVer || 1);
   const tramo = (n, color) => el("i", { style: `flex:${n};background:var(${color})` });
   return el("div", { className: "conceptos" },
     el("div", { className: "tramos" }, tramo(sabes, "--ok"), tramo(noSabes, "--ko"), tramo(sinVer, "--line")),
     el("p", { className: "dim", textContent: `Sabes ${sabes} · No sabes ${noSabes} · Sin ver ${sinVer}, de ${sabes + noSabes + sinVer} conceptos` }),
-    probabilidad(parte));
+    tarjetaNota());
 }
 
 const OBJETIVO = "ln-objetivo";
+// El slider pinta la tarjeta otra vez, y esta variable guarda si el desglose sigue abierto.
+let desgloseAbierto = false;
 
-function probabilidad(parte) {
-  const titulo = el("h3"), cifras = el("div", { className: "cifras" });
-  const cifra = (x, texto) => el("div", {},
-    el("b", { textContent: pc(x) }),
-    el("div", { className: "medidor" }, el("i", { style: `width:${100 * x}%` })),
-    el("span", { className: "dim", textContent: texto }));
-  const pintarCifras = (objetivo) => {
-    titulo.textContent = `Probabilidad de un ${numero(objetivo)}`;
-    cifras.replaceChildren(
-      cifra(probabilidadDeLaNota(parte, null, objetivo), "con las dudas en blanco"),
-      cifra(probabilidadDeLaNota(parte, PENALIZACION, objetivo), "si las contestas"));
+function tarjetaNota() {
+  const titulo = el("b"), cuerpo = el("div");
+  const punta = (cifra, n) => el("div", {}, el("b", { textContent: cifra }), el("span", { textContent: `con ${n} conceptos` }));
+  const fila = (texto, n, p, detalle, media) => el("div", { className: "porque" + (media ? " media" : "") },
+    el("span", { textContent: texto }), el("span", { className: "n", textContent: `${n} conceptos` }), el("b", { textContent: pc(p) }),
+    detalle && el("em", { textContent: detalle }));
+  const pintarTarjeta = (objetivo) => {
+    titulo.textContent = `Sacar más de ${numero(objetivo)}`;
+    const t = tarjetaDeLaNota(banco, historial, objetivo);
+    const parte = (n) => `${(100 * n) / t.total}%`;
+    const ciegas = "a ciegas, 1 de 4";
+    cuerpo.replaceChildren(
+      el("div", { className: "flecha" },
+        punta(pc(t.hoy), t.sabes),
+        el("div", { className: "medio" }, el("span", { textContent: t.faltan <= 0 ? "✓" : t.sesiones === null ? "? sesiones" : `≈${t.sesiones} sesiones` }), el("i")),
+        t.faltan > 0 ? punta("95 %", t.meta) : el("div")),
+      el("div", { className: "camino" },
+        el("i", { className: "hecho", style: `width:${parte(t.sabes)}` }),
+        t.faltan > 0 && el("i", { className: "falta", style: `left:${parte(t.sabes)};width:${parte(t.faltan)}` }),
+        el("i", { className: "marca", style: `left:${parte(t.meta)}` })),
+      el("details", { className: "desglose", open: desgloseAbierto, ontoggle: (e) => { desgloseAbierto = e.target.open; } },
+        el("summary", { className: "consejo" },
+          el("b", { textContent: t.contestar ? "Contesta las dudas" : "Deja las dudas en blanco" }),
+          el("span", { textContent: `+${t.puntos} puntos` }),
+          el("i", { className: "info", textContent: "?" })),
+        el("small", { textContent: "aciertos en una duda" }),
+        fila("en lo que viste", t.noSabes, t.tasaDudo, t.dudo ? `${t.dudo.aciertos} de ${t.dudo.total} «dudo»` : ciegas),
+        fila("en lo que no viste", t.sinVer, 1 / 4, ciegas),
+        fila("de media", t.noSabes + t.sinVer, t.tasa, null, true)));
   };
   const slider = el("input", { type: "range", min: 0.5, max: 10, step: 0.5, value: localStorage.getItem(OBJETIVO) ?? 5,
-    oninput: () => { localStorage.setItem(OBJETIVO, slider.value); pintarCifras(+slider.value); } });
-  pintarCifras(+slider.value);
-  return el("div", { className: "tarjeta probabilidad" }, titulo, slider, cifras);
+    oninput: () => { localStorage.setItem(OBJETIVO, slider.value); pintarTarjeta(+slider.value); } });
+  pintarTarjeta(+slider.value);
+  return el("div", { className: "tarjeta nota" }, el("div", { className: "cabecera" }, titulo, slider), cuerpo);
 }
 
 function inicio() {
   const lista = sesion(banco, historial, new Date());
-  const dudo = porcentajeDudo(historial);
   const sinEnviar = pendientes().length;
   pintar(
     el("h1", { textContent: "LN: el test" }),
@@ -83,9 +101,6 @@ function inicio() {
     barra(conceptos(banco, historial)),
     alDia ? null : el("p", { className: "aviso", textContent: "Sin conexión con el servidor: el historial no está al día." }),
     sinEnviar ? el("p", { className: "aviso", textContent: `${sinEnviar} respuestas sin enviar al servidor.` }) : null,
-    dudo && el("div", { className: "tarjeta", textContent:
-      `Aciertos con «dudo»: ${numero(dudo.porcentaje)} % de ${dudo.total}. ` +
-      (dudo.contestar ? "Una pregunta dudosa se contesta." : "Una pregunta dudosa se deja en blanco.") }),
     lista.length
       ? el("button", { className: "grande", textContent: `Empezar la sesión (${lista.length} preguntas)`, onclick: () => pregunta({ preguntas: lista, simulacro: false, i: 0, resultados: [] }) })
       : el("p", { className: "tarjeta", textContent: banco.length
