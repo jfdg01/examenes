@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from comprobar_banco import comprobar
+from comprobar_banco import comprobar, huerfanas
 
 LN = Path(__file__).parent
 
@@ -84,6 +84,15 @@ class ComprobarBanco(unittest.TestCase):
                 banco.write_text(json.dumps(preguntas))
                 r = subprocess.run([sys.executable, LN / "comprobar_banco.py", banco], capture_output=True)
                 self.assertEqual(r.returncode, codigo)
+
+
+    def test_un_id_del_historial_fuera_del_banco_es_huerfano(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            historial = Path(tmp) / "respuestas.jsonl"
+            lineas = [{"id": i, "ts": "2026-11-18T10:00:00Z", "acierto": True, "seguro": True} for i in ("rgpd-001", "viejo-1", "viejo-1")]
+            historial.write_text("".join(json.dumps(r) + "\n" for r in lineas))
+            self.assertEqual(huerfanas([pregunta()], historial), ["viejo-1"])
+            self.assertEqual(huerfanas([pregunta()], Path(tmp) / "no-existe.jsonl"), [])
 
 
 if __name__ == "__main__":

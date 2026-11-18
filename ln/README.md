@@ -64,6 +64,8 @@ La interfaz calcula todo el estado con esta lista: la caja de cada pregunta y el
 
 El historial no entra en git. El servidor lo guarda en `ln/respuestas.jsonl`.
 
+Una respuesta huérfana tiene un `id` que no está en el banco. Una pregunta que la regla 6 cambia deja sus respuestas huérfanas. La interfaz no usa las respuestas huérfanas en ninguna cuenta, y el archivo las conserva, porque una línea borrada no tiene vuelta atrás.
+
 ## La confianza y las cajas
 
 Antes de ver la solución, marcas "seguro" o "dudo". La pregunta va a una de 3 cajas:
@@ -169,6 +171,8 @@ El banco tiene `ln/preguntas.json` y `ln/comprobar_banco.py`.
 - un `concepto` con menos de 2 preguntas o con más de 3.
 
 Sin argumento, `comprobar_banco.py` lee `ln/preguntas.json`. Con una ruta, lee ese banco.
+
+El script también lista los `id` de las respuestas huérfanas de `ln/respuestas.jsonl`, como un aviso que no falla. El aviso muestra un `id` cambiado por error, porque un `id` no cambia nunca.
 
 El banco crece por tandas, con una tanda por tema y un commit por tanda. La primera tanda es la del RGPD. Su revisión va antes de las demás tandas, porque fija el nivel de las preguntas y de los distractores.
 

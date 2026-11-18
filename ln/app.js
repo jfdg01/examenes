@@ -242,6 +242,8 @@ async function cargar() {
     historial = pendientes();
     alDia = false;
   }
+  const ids = new Set(banco.map((q) => q.id));
+  historial = historial.filter((r) => ids.has(r.id));
   try { notas = await (await fetch("api/notas")).json(); } catch {}
   inicio();
 }

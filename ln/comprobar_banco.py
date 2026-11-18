@@ -37,6 +37,14 @@ def comprobar(preguntas, carpeta):
     return errores
 
 
+def huerfanas(preguntas, historial):
+    if not Path(historial).is_file():
+        return []
+    ids = {p.get("id") for p in preguntas}
+    lineas = Path(historial).read_text(encoding="utf-8").splitlines()
+    return sorted({json.loads(l)["id"] for l in lineas if l.strip()} - ids)
+
+
 @functools.cache
 def paginas(pdf):
     info = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True, check=True).stdout
@@ -46,6 +54,10 @@ def paginas(pdf):
 if __name__ == "__main__":
     ln = Path(__file__).parent
     banco = Path(sys.argv[1]) if len(sys.argv) > 1 else ln / "preguntas.json"
-    errores = comprobar(json.loads(banco.read_text()), ln)
+    preguntas = json.loads(banco.read_text())
+    errores = comprobar(preguntas, ln)
     print("\n".join(errores) or "El banco no tiene errores.")
+    sin_banco = huerfanas(preguntas, ln / "respuestas.jsonl")
+    if sin_banco:
+        print(f"Aviso: {len(sin_banco)} id del historial no están en el banco: {', '.join(sin_banco)}")
     sys.exit(1 if errores else 0)
