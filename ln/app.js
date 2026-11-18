@@ -1,5 +1,5 @@
 import {
-  cajas, dominio, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, porcentajeDudo, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, conceptos, dominio, PENALIZACION, probabilidadDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, porcentajeDudo, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
@@ -42,6 +42,37 @@ async function enviar() {
   } catch {}
 }
 
+const pc = (x) => `${Math.round(100 * x)} %`;
+
+function barra({ sabes, noSabes, sinVer }) {
+  const parte = sabes / (sabes + noSabes + sinVer || 1);
+  const tramo = (n, color) => el("i", { style: `flex:${n};background:var(${color})` });
+  return el("div", { className: "conceptos" },
+    el("div", { className: "tramos" }, tramo(sabes, "--ok"), tramo(noSabes, "--ko"), tramo(sinVer, "--line")),
+    el("p", { className: "dim", textContent: `Sabes ${sabes} · No sabes ${noSabes} · Sin ver ${sinVer}, de ${sabes + noSabes + sinVer} conceptos` }),
+    probabilidad(parte));
+}
+
+const OBJETIVO = "ln-objetivo";
+
+function probabilidad(parte) {
+  const titulo = el("h3"), cifras = el("div", { className: "cifras" });
+  const cifra = (x, texto) => el("div", {},
+    el("b", { textContent: pc(x) }),
+    el("div", { className: "medidor" }, el("i", { style: `width:${100 * x}%` })),
+    el("span", { className: "dim", textContent: texto }));
+  const pintarCifras = (objetivo) => {
+    titulo.textContent = `Probabilidad de un ${numero(objetivo)}`;
+    cifras.replaceChildren(
+      cifra(probabilidadDeLaNota(parte, null, objetivo), "con las dudas en blanco"),
+      cifra(probabilidadDeLaNota(parte, PENALIZACION, objetivo), "si las contestas"));
+  };
+  const slider = el("input", { type: "range", min: 0.5, max: 10, step: 0.5, value: localStorage.getItem(OBJETIVO) ?? 5,
+    oninput: () => { localStorage.setItem(OBJETIVO, slider.value); pintarCifras(+slider.value); } });
+  pintarCifras(+slider.value);
+  return el("div", { className: "tarjeta probabilidad" }, titulo, slider, cifras);
+}
+
 function inicio() {
   const lista = sesion(banco, historial, new Date());
   const dudo = porcentajeDudo(historial);
@@ -49,6 +80,7 @@ function inicio() {
   pintar(
     el("h1", { textContent: "LN: el test" }),
     el("p", { className: "dim", textContent: `${banco.length} preguntas en el banco · ${historial.length} respuestas en el historial` }),
+    barra(conceptos(banco, historial)),
     alDia ? null : el("p", { className: "aviso", textContent: "Sin conexión con el servidor: el historial no está al día." }),
     sinEnviar ? el("p", { className: "aviso", textContent: `${sinEnviar} respuestas sin enviar al servidor.` }) : null,
     dudo && el("div", { className: "tarjeta", textContent:
@@ -220,7 +252,7 @@ function fin(ronda) {
   const resumen = ronda.simulacro
     ? [
       el("p", { className: "tarjeta", textContent: `Aciertos: ${cuenta("acierto")} · Fallos: ${cuenta("fallo")} · En blanco: ${cuenta("blanco")}` }),
-      el("p", { className: "tarjeta", textContent: `Nota: ${numero(nota(ronda.resultados, 1 / 4))} sobre 10.` }),
+      el("p", { className: "tarjeta", textContent: `Nota: ${numero(nota(ronda.resultados, PENALIZACION))} sobre 10.` }),
     ]
     : [el("p", { className: "tarjeta", textContent: `Aciertos: ${cuenta("acierto")} de ${ronda.resultados.length}` })];
   pintar(

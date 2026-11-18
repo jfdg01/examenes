@@ -43,6 +43,15 @@
   .alarma { color:var(--ko); background:color-mix(in srgb, var(--ko) 18%, var(--bg)); }
   .suerte { color:var(--warn); background:color-mix(in srgb, var(--warn) 15%, var(--bg)); }
   .aviso { color:var(--warn); }
+  .tramos { display:flex; gap:2px; height:14px; border-radius:7px; overflow:hidden; margin-top:14px; }
+  .conceptos p { margin:6px 0 0; }
+  .probabilidad h3 { margin:0 0 8px; font-size:15px; }
+  .probabilidad input { width:100%; accent-color:var(--acc); }
+  .cifras { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+  .cifras b { display:block; font-size:32px; line-height:1.1; color:var(--acc); }
+  .medidor { height:6px; border-radius:3px; background:var(--line); margin:6px 0 4px; overflow:hidden; }
+  .cifras span { display:block; line-height:1.3; }
+  .medidor i { display:block; height:100%; background:var(--acc); }
   .tirador, #editar { display:none; }
   /* La pantalla ancha tiene 2 columnas. --L, --S y --R son el borde izquierdo, el separador y el borde derecho, en px. */
   main:has(.dos) { max-width:none; margin:0; padding:0; }

@@ -77,13 +77,49 @@ Antes de ver la solución, marcas "seguro" o "dudo". La pregunta va a una de 3 c
 | Fallo, o acierto con "dudo" | Caja 1 |
 | Acierto con "seguro" | Una caja más, hasta la 3 |
 
-Una sesión tiene 12 preguntas. Las preguntas de la caja 1 entran primero. Un sorteo sin repetición llena los huecos que quedan: una pregunta nueva y una pregunta de la caja 2 pesan 1, y una pregunta de la caja 3 pesa 0,5. Así, un grupo grande sale más, y todo el banco avanza a la vez. Las 12 preguntas salen en un orden al azar, con los temas y las cajas mezclados.
+Cada concepto tiene uno de 3 estados. La última respuesta a una pregunta del concepto decide el estado:
+
+| Estado | La regla |
+|---|---|
+| Lo sabes | La última respuesta es un acierto con "seguro" |
+| No lo sabes | La última respuesta es un fallo, o un acierto con "dudo" |
+| Sin ver | Ninguna pregunta del concepto tiene una respuesta |
+
+Un acierto con "seguro" en una pregunta basta para saber el concepto, porque sus preguntas preguntan el mismo dato. Un fallo posterior en otra pregunta del concepto muestra una idea falsa, y el concepto pasa a "no lo sabes".
+
+Una sesión tiene 12 preguntas, y llena sus huecos en este orden:
+
+1. Las preguntas de la caja 1.
+2. Una pregunta al azar de cada concepto sin ver.
+3. Un sorteo sin repetición, para los huecos que quedan.
+
+El paso 2 da la vuelta a todo el banco antes del repaso, porque un concepto nuevo enseña un dato, y una pregunta hermana solo lo confirma. El sorteo no saca otra pregunta de un concepto sin ver, así que un concepto sale una sola vez en su vuelta. Con todos los conceptos vistos, el paso 2 queda vacío.
+
+En el sorteo, una pregunta nueva y una pregunta de la caja 2 pesan 1, y una pregunta de la caja 3 pesa 0,5. Así, un grupo grande sale más, y todo el banco avanza a la vez. Las 12 preguntas salen en un orden al azar, con los temas y las cajas mezclados.
 
 Un bloque de estudio termina con una pausa de 3 horas sin respuestas. Una pregunta de la caja 2 o de la caja 3 no sale en el bloque de su última respuesta. La caja 1 sale en cada sesión. Una sesión sin preguntas dice que el repaso vuelve después de una pausa de 3 horas.
 
 Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
 
 La interfaz muestra el porcentaje de aciertos con "dudo". El examen resta 1/4 de un acierto por cada fallo. Con un porcentaje sobre el 20 %, una pregunta dudosa se contesta: a ese porcentaje, los aciertos esperados compensan los fallos.
+
+## La pantalla de inicio
+
+Debajo del título, la pantalla de inicio tiene una barra con 3 tramos, uno por cada estado de un concepto: verde para "lo sabes", rojo para "no lo sabes" y gris para "sin ver". El largo de cada tramo es su parte de los conceptos del banco. Debajo de la barra van las 3 cifras: "Sabes 79 · No sabes 6 · Sin ver 66, de 151 conceptos".
+
+El tramo gris baja con cada sesión, hasta que la vuelta a todo el banco termina.
+
+Debajo de las cifras, una tarjeta da la probabilidad de sacar una nota o más en el examen, como "Probabilidad de un 5". Un slider elige la nota, de 0,5 a 10, con pasos de 0,5. La nota empieza en 5, y queda en `localStorage`, en `ln-objetivo`. La tarjeta da 2 cifras grandes, una al lado de la otra: "con las dudas en blanco" y "si las contestas". Cada cifra lleva una barra con su porcentaje.
+
+El cálculo supone que cada pregunta del examen cae en un concepto al azar del banco:
+
+- Una pregunta de un concepto que sabes es un acierto.
+- Con las dudas en blanco, una pregunta de otro concepto no cuenta.
+- Con las dudas contestadas, una pregunta de otro concepto acierta 1 de cada 4 veces, como una respuesta a ciegas entre 4 opciones.
+
+El porcentaje de aciertos con "dudo" no entra en el cálculo, porque sale de conceptos que ya viste. Una pregunta de un concepto sin ver da menos pistas.
+
+Las 2 cifras son un límite optimista. El examen pregunta con otras palabras, y no elige sus preguntas al azar del temario.
 
 ## La pantalla de la pregunta
 

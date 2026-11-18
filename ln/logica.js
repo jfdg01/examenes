@@ -33,14 +33,26 @@ function principioDelBloque(historial, ahora) {
 export function sesion(banco, historial, ahora, azar = Math.random) {
   const estado = cajas(historial);
   const bloque = principioDelBloque(historial, ahora);
-  const caja1 = [], sorteo = [];
-  for (const q of banco) {
+  const vistos = new Set(banco.filter((q) => estado.has(q.id)).map((q) => q.concepto));
+  const caja1 = [], sinVer = new Map(), sorteo = [];
+  for (const q of barajar(banco, azar)) {
     const e = estado.get(q.id);
     if (e?.caja === 1) caja1.push(q);
+    else if (!vistos.has(q.concepto)) { if (!sinVer.has(q.concepto)) sinVer.set(q.concepto, q); }
     else if (!e || Date.parse(e.ts) < bloque) sorteo.push({ q, clave: -Math.log(azar()) / (e ? PESO[e.caja] : 1) });
   }
   const elegidas = sorteo.sort((a, b) => a.clave - b.clave).map((x) => x.q);
-  return barajar([...barajar(caja1, azar), ...elegidas].slice(0, TAMANO_SESION), azar);
+  return barajar([...caja1, ...sinVer.values(), ...elegidas].slice(0, TAMANO_SESION), azar);
+}
+
+export function conceptos(banco, historial) {
+  const concepto = new Map(banco.map((q) => [q.id, q.concepto]));
+  const estado = new Map(banco.map((q) => [q.concepto, "sinVer"]));
+  for (const r of [...historial].sort((a, b) => a.ts.localeCompare(b.ts)))
+    if (concepto.has(r.id)) estado.set(concepto.get(r.id), r.acierto && r.seguro ? "sabes" : "noSabes");
+  const cuenta = { sabes: 0, noSabes: 0, sinVer: 0 };
+  for (const e of estado.values()) cuenta[e]++;
+  return cuenta;
 }
 
 export const opciones = (pregunta, azar = Math.random) => barajar([pregunta.correcta, ...pregunta.distractores], azar);
@@ -83,7 +95,28 @@ export const MINUTOS_SIMULACRO = 25;
 
 export const simulacro = (banco, azar = Math.random) => barajar(banco, azar).slice(0, TAMANO_SIMULACRO);
 
-export const resultado = (pregunta, eleccion) => (eleccion === null ? "blanco" : eleccion === pregunta.correcta ? "acierto" : "fallo");
+export const PENALIZACION = 1 / 4;
+
+const binomial = (n, k, p) => {
+  let c = 1;
+  for (let i = 0; i < k; i++) c = (c * (n - i)) / (i + 1);
+  return c * p ** k * (1 - p) ** (n - k);
+};
+
+// acierto es la probabilidad de acertar una pregunta de un concepto que no sabes; null la deja en blanco.
+// objetivo es la nota sobre 10, y pide objetivo * n / 10 aciertos netos.
+export function probabilidadDeLaNota(sabes, acierto, objetivo, n = TAMANO_SIMULACRO) {
+  const netos = (objetivo * n) / 10;
+  let total = 0;
+  for (let k = 0; k <= n; k++) {
+    const resto = n - k;
+    if (acierto === null) { if (k >= netos) total += binomial(n, k, sabes); continue; }
+    for (let a = 0; a <= resto; a++) if (k + a - PENALIZACION * (resto - a) >= netos) total += binomial(n, k, sabes) * binomial(resto, a, acierto);
+  }
+  return total;
+}
+
+export const resultado =(pregunta, eleccion) => (eleccion === null ? "blanco" : eleccion === pregunta.correcta ? "acierto" : "fallo");
 
 export function nota(resultados, penalizacion) {
   const cuenta = (tipo) => resultados.filter((x) => x === tipo).length;

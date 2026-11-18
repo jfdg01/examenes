@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { cajas, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS } from "./logica.js";
+import { cajas, conceptos, probabilidadDeLaNota, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS } from "./logica.js";
 
 const r = (id, ts, acierto, seguro) => ({ id, ts, acierto, seguro });
 
@@ -78,8 +78,8 @@ const cuenta = (banco, hist, prefijo) => {
   return n;
 };
 
-test("con 200 nuevas y 80 de la caja 2, las 2 clases salen en una proporción cercana a sus tamaños", () => {
-  const banco = [...Array.from({ length: 200 }, (_, k) => p("n" + k)), ...Array.from({ length: 80 }, (_, k) => p("d" + k))];
+test("con 200 nuevas de conceptos vistos y 80 de la caja 2, las 2 clases salen en una proporción cercana a sus tamaños", () => {
+  const banco = [...Array.from({ length: 200 }, (_, k) => ({ ...p("n" + k), concepto: "d" + (k % 80) })), ...Array.from({ length: 80 }, (_, k) => p("d" + k))];
   const hist = Array.from({ length: 80 }, (_, k) => r("d" + k, iso(dia(1)), true, true));
   const nuevas = cuenta(banco, hist, "n") / (300 * 12);
   assert.ok(Math.abs(nuevas - 200 / 280) < 0.03, String(nuevas));
@@ -92,6 +92,49 @@ test("una pregunta de la caja 3 sale la mitad de veces que una de la caja 2", ()
   for (let k = 0; k < 100; k++) hist.push(r("t" + k, iso(dia(1)), true, true), r("t" + k, iso(dia(2)), true, true));
   const razon = cuenta(banco, hist, "t") / cuenta(banco, hist, "d");
   assert.ok(razon > 0.45 && razon < 0.6, String(razon));
+});
+
+const hermanas = (c, n) => Array.from({ length: n }, (_, k) => ({ ...p(c + k), concepto: c }));
+
+test("la sesión da una sola pregunta de cada concepto sin ver", () => {
+  const banco = Array.from({ length: 20 }, (_, k) => hermanas("c" + k, 3)).flat();
+  for (let k = 0; k < 20; k++) {
+    const s = sesion(banco, [], dia(6), semilla(k));
+    assert.equal(s.length, 12);
+    assert.equal(new Set(s.map((q) => q.concepto)).size, 12);
+  }
+});
+
+test("un concepto sin ver entra después de la caja 1 y antes del sorteo", () => {
+  const vistas = Array.from({ length: 30 }, (_, k) => p("v" + k));
+  const banco = [...vistas, ...hermanas("a", 2), ...hermanas("b", 2), p("f")];
+  const hist = [...vistas.map((q) => r(q.id, iso(dia(1)), true, true)), r("f", iso(dia(1)), false, true)];
+  for (let k = 0; k < 20; k++) {
+    const s = sesion(banco, hist, dia(6), semilla(k));
+    assert.deepEqual(s.filter((q) => !q.id.startsWith("v")).map((q) => q.concepto).sort(), ["a", "b", "f"]);
+  }
+});
+
+test("el estado de un concepto sale de la última respuesta a una de sus preguntas", () => {
+  const banco = [...hermanas("a", 2), ...hermanas("b", 2), ...hermanas("c", 2), ...hermanas("d", 2)];
+  const hist = [
+    r("a0", iso(dia(1)), true, true),
+    r("b0", iso(dia(1)), true, true), r("b1", iso(dia(2)), false, true),
+    r("c1", iso(dia(2)), true, false),
+  ];
+  assert.deepEqual(conceptos(banco, hist), { sabes: 1, noSabes: 2, sinVer: 1 });
+});
+
+test("la probabilidad de una nota cuenta los aciertos menos 1/4 de los fallos, sobre 20 preguntas", () => {
+  const cerca = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} ≠ ${b}`);
+  cerca(probabilidadDeLaNota(1, null, 5), 1);
+  cerca(probabilidadDeLaNota(0, null, 5), 0);
+  cerca(probabilidadDeLaNota(0.5, null, 5), 0.5880985260009766);
+  cerca(probabilidadDeLaNota(0.5, 0.25, 5), 0.6828711582842681);
+  cerca(probabilidadDeLaNota(0, 0.25, 5), 0.000935391579332645);
+  cerca(probabilidadDeLaNota(0.5, null, 7.5), 0.020694732666015625);
+  cerca(probabilidadDeLaNota(0.5, 0.25, 7.5), 0.07904140886862707);
+  cerca(probabilidadDeLaNota(0.9, 0.25, 10), 0.21029776386659405);
 });
 
 test("la sesión mezcla los temas", () => {
