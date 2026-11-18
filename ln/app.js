@@ -140,15 +140,16 @@ async function cargar() {
 function columnas() {
   const ancha = matchMedia("(min-width:900px)");
   const raiz = document.documentElement;
-  const medida = () => ancha.matches ? raiz.clientWidth : raiz.clientHeight;
+  const horizontal = (k) => ancha.matches || "IF".includes(k);
+  const medida = (k) => horizontal(k) ? raiz.clientWidth : raiz.clientHeight;
   let pos;
   const aplicar = () => {
     for (const k in pos) {
-      const px = `${pos[k] * medida()}px`;
+      const px = `${pos[k] * medida(k)}px`;
       raiz.style.setProperty(`--${k}`, px);
       const t = document.getElementById(`tirador-${k}`);
-      t.style.left = ancha.matches ? px : "";
-      t.style.top = ancha.matches ? "" : px;
+      t.style.left = horizontal(k) ? px : "";
+      t.style.top = horizontal(k) ? "" : px;
     }
   };
   const guardado = () => ancha.matches ? "ln-columnas" : "ln-filas";
@@ -159,14 +160,14 @@ function columnas() {
   };
   const rotular = () => {
     const editando = document.body.classList.contains("editando");
-    editar.textContent = editando ? "Listo" : ancha.matches ? "Ajustar las columnas" : "Ajustar las filas";
+    editar.textContent = editando ? "Listo" : ancha.matches ? "Ajustar las columnas" : "Ajustar las filas y el ancho";
   };
-  for (const k of ["L", "S", "R"]) {
+  for (const k of ["L", "S", "R", "I", "F"]) {
     const t = document.getElementById(`tirador-${k}`);
     t.onpointerdown = (e) => { t.setPointerCapture(e.pointerId); t.classList.add("activo"); };
     t.onpointermove = (e) => {
       if (!t.hasPointerCapture(e.pointerId)) return;
-      pos = mover(pos, k, (ancha.matches ? e.clientX : e.clientY) / medida());
+      pos = mover(pos, k, (horizontal(k) ? e.clientX : e.clientY) / medida(k));
       aplicar();
     };
     t.onlostpointercapture = () => { t.classList.remove("activo"); localStorage.setItem(guardado(), JSON.stringify(pos)); };

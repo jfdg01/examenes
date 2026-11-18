@@ -94,10 +94,12 @@ export const pdfEnPagina = ({ pdf, pagina }) => `${encodeURI(pdf)}#page=${pagina
 
 // L es el borde del inicio, S el separador y R el borde del fin: de izquierda a derecha en las columnas, y de arriba abajo en las filas.
 export const COLUMNAS = { L: 0.08, S: 0.5, R: 0.92 };
-export const FILAS = { L: 0.02, S: 0.55, R: 0.98 };
+// En las filas, I y F son el borde izquierdo y el borde derecho: de izquierda a derecha.
+export const FILAS = { L: 0.02, S: 0.55, R: 0.98, I: 0.05, F: 0.95 };
 const COLUMNA_MINIMA = 0.15;
+const ANCHO_MINIMO = 0.3;
 
 export function mover(pos, tirador, x) {
-  const [min, max] = { L: [0, pos.S - COLUMNA_MINIMA], S: [pos.L + COLUMNA_MINIMA, pos.R - COLUMNA_MINIMA], R: [pos.S + COLUMNA_MINIMA, 1] }[tirador];
+  const [min, max] = { L: [0, pos.S - COLUMNA_MINIMA], S: [pos.L + COLUMNA_MINIMA, pos.R - COLUMNA_MINIMA], R: [pos.S + COLUMNA_MINIMA, 1], I: [0, pos.F - ANCHO_MINIMO], F: [pos.I + ANCHO_MINIMO, 1] }[tirador];
   return { ...pos, [tirador]: Math.min(max, Math.max(min, x)) };
 }
