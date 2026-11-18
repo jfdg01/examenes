@@ -58,7 +58,7 @@ export function porcentajeDudo(historial) {
   const dudas = historial.filter((r) => !r.seguro);
   if (!dudas.length) return null;
   const porcentaje = (100 * dudas.filter((r) => r.acierto).length) / dudas.length;
-  return { porcentaje, total: dudas.length, contestar: porcentaje > 33 };
+  return { porcentaje, total: dudas.length, contestar: porcentaje > 20 };
 }
 
 export function dominio(banco, historial) {
@@ -79,7 +79,8 @@ export function unir(servidor, locales) {
   return [...vistas.values()];
 }
 
-const TAMANO_SIMULACRO = 40;
+const TAMANO_SIMULACRO = 20;
+export const MINUTOS_SIMULACRO = 25;
 
 export const simulacro = (banco, azar = Math.random) => barajar(banco, azar).slice(0, TAMANO_SIMULACRO);
 

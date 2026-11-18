@@ -1,6 +1,6 @@
 # LN: el test de práctica
 
-Un banco de preguntas tipo test del temario de LN, con una interfaz web y un servidor que sincroniza el historial entre el móvil y el PC. El examen es el 20 de noviembre de 2026.
+Un banco de preguntas tipo test del temario de LN, con una interfaz web y un servidor que sincroniza el historial entre el móvil y el PC. El examen es el 20 de noviembre de 2026, a las 16:30. Dura 25 minutos y tiene 20 preguntas tipo test, con 4 opciones como máximo. Un acierto suma 0,5 puntos, un fallo resta 0,125 y una pregunta en blanco no cuenta.
 
 ## El banco: `preguntas.json`
 
@@ -26,7 +26,7 @@ El banco es una lista de preguntas en JSON. El navegador lo lee con `fetch`, sin
 - `correcta` va aparte de los `distractores`, y la interfaz baraja las 4 opciones. Una opción no dice "todas las anteriores", porque el barajado la rompe.
 - `explicacion` dice el contraste clave en una línea.
 
-El banco tiene unas 270 preguntas: unas 175 de RGPD, ISO 27001, ENS y riesgos, y unas 100 del resto. Las preguntas tienen 4 opciones, aunque el examen sea de verdadero o falso. Una pregunta de 4 opciones entrena la diferencia entre ideas parecidas, y un examen de verdadero o falso pregunta esas mismas diferencias.
+El banco tiene unas 270 preguntas: unas 175 de RGPD, ISO 27001, ENS y riesgos, y unas 100 del resto. Las preguntas tienen 4 opciones, el máximo del examen. Una pregunta de 4 opciones entrena la diferencia entre ideas parecidas.
 
 ### La calidad de una pregunta
 
@@ -75,7 +75,7 @@ Antes de ver la solución, marcas "seguro" o "dudo". La pregunta va a una de 3 c
 
 La caja 1 sale en cada sesión, la caja 2 cada 2 días y la caja 3 cada 4 días. Una pregunta nueva empieza en la caja 1. Una sesión tiene 12 preguntas de temas mezclados, y las preguntas de la caja 1 van primero. Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
 
-La interfaz muestra el porcentaje de aciertos con "dudo". El examen resta entre 1/3 y 1/2 de un acierto por cada fallo. Con un porcentaje sobre el 33 %, una pregunta dudosa se contesta.
+La interfaz muestra el porcentaje de aciertos con "dudo". El examen resta 1/4 de un acierto por cada fallo. Con un porcentaje sobre el 20 %, una pregunta dudosa se contesta: a ese porcentaje, los aciertos esperados compensan los fallos.
 
 ## La pantalla de la pregunta
 
@@ -118,9 +118,11 @@ Una sesión sin preguntas pendientes muestra la fecha de la próxima pregunta, y
 
 ## El simulacro
 
-El simulacro saca 40 preguntas al azar de todo el banco, y no mira las cajas. Es el repaso de los días 18 y 19 de noviembre.
+El simulacro copia los parámetros del examen: 20 preguntas al azar de todo el banco, sin mirar las cajas, y 25 minutos. Es el repaso de los días 18 y 19 de noviembre.
 
-Cada pregunta del simulacro tiene un botón "en blanco" debajo de las opciones. Al final, la interfaz muestra la nota con una penalización de 1/3 y con una de 1/2.
+Un reloj en la cabecera cuenta atrás desde 25:00. Con el reloj en 0:00, el simulacro termina y cada pregunta sin contestar cuenta en blanco.
+
+Cada pregunta del simulacro tiene un botón "en blanco" debajo de las opciones. Un acierto suma 0,5 puntos, un fallo resta 0,125 y un blanco no cuenta. Al final, la interfaz muestra la nota sobre 10.
 
 Las respuestas del simulacro entran al historial como las demás, porque son respuestas reales. Una pregunta en blanco cuenta en el historial como un fallo con "dudo".
 

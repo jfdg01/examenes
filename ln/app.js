@@ -1,5 +1,5 @@
 import {
-  cajas, dominio, textoParaCopiar, imagenDePagina, mover, COLUMNAS, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, dominio, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, porcentajeDudo, proximaFecha, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
@@ -60,8 +60,20 @@ function inicio() {
       : el("p", { className: "tarjeta", textContent: proxima
         ? `No hay preguntas pendientes. La próxima vuelve el ${proxima.toLocaleDateString("es", { weekday: "long", day: "numeric", month: "long" })}.`
         : "El banco no tiene preguntas." }),
-    el("button", { className: "grande otro", textContent: `Simulacro (${simulacro(banco).length} preguntas)`, onclick: () => pregunta({ preguntas: simulacro(banco), simulacro: true, i: 0, resultados: [] }) }),
+    el("button", { className: "grande otro", textContent: `Simulacro (${simulacro(banco).length} preguntas)`, onclick: () => pregunta({ preguntas: simulacro(banco), simulacro: true, i: 0, resultados: [], limite: Date.now() + MINUTOS_SIMULACRO * 60000 }) }),
   );
+}
+
+let reloj;
+function correr(ronda, nodo) {
+  clearInterval(reloj);
+  const pinta = () => {
+    const s = Math.max(0, Math.round((ronda.limite - Date.now()) / 1000));
+    nodo.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+    if (!s) fin(ronda);
+  };
+  pinta();
+  reloj = setInterval(pinta, 1000);
 }
 
 function pregunta(ronda) {
@@ -98,16 +110,18 @@ function pregunta(ronda) {
   const enunciado = el("div", { className: "q", textContent: q.pregunta });
   const cuerpo = el("div", { className: "cuerpo" }, enunciado, ...filas, campo);
   const pie = el("div", { className: "pie" }, blanco, ayuda);
+  const tiempo = ronda.simulacro ? el("span", { className: "reloj" }) : null;
   pintar(movil
     ? el("div", { className: "pant" },
-      el("div", { className: "meta" }, el("span", { className: "t", textContent: titulo }), botonNotas, copiar),
+      el("div", { className: "meta" }, el("span", { className: "t", textContent: titulo }), tiempo, botonNotas, copiar),
       el("div", { className: "barra" }, el("i", { style: `width:${((ronda.i + 1) / ronda.preguntas.length) * 100}%` })),
       cuerpo, pie)
     : el("div", { className: "dos" },
       el("div", { className: "izq" },
-        el("div", { className: "meta", textContent: titulo }, el("span", { className: "acciones" }, botonNotas, copiar, editar)),
+        el("div", { className: "meta", textContent: titulo }, el("span", { className: "acciones" }, tiempo, botonNotas, copiar, editar)),
         enunciado, ...filas, blanco, ayuda, campo),
       derecha));
+  if (tiempo) correr(ronda, tiempo);
 
   function contestar(op, seguro) {
     const r = respuesta(q, op, seguro, new Date());
@@ -201,12 +215,13 @@ function fuentes(q) {
 }
 
 function fin(ronda) {
+  clearInterval(reloj);
+  while (ronda.resultados.length < ronda.preguntas.length) ronda.resultados.push("blanco");
   const cuenta = (tipo) => ronda.resultados.filter((x) => x === tipo).length;
   const resumen = ronda.simulacro
     ? [
       el("p", { className: "tarjeta", textContent: `Aciertos: ${cuenta("acierto")} · Fallos: ${cuenta("fallo")} · En blanco: ${cuenta("blanco")}` }),
-      el("p", { className: "tarjeta", textContent: `Nota con una penalización de 1/3: ${numero(nota(ronda.resultados, 1 / 3))} sobre 10.` }),
-      el("p", { className: "tarjeta", textContent: `Nota con una penalización de 1/2: ${numero(nota(ronda.resultados, 1 / 2))} sobre 10.` }),
+      el("p", { className: "tarjeta", textContent: `Nota: ${numero(nota(ronda.resultados, 1 / 4))} sobre 10.` }),
     ]
     : [el("p", { className: "tarjeta", textContent: `Aciertos: ${cuenta("acierto")} de ${ronda.resultados.length}` })];
   pintar(

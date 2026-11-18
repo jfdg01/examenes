@@ -127,19 +127,19 @@ test("unir 2 historiales quita las respuestas repetidas", () => {
   assert.deepEqual(unir([a, b], [{ ...a }]), [a, b]);
 });
 
-test("el simulacro saca 40 preguntas distintas al azar de todo el banco, sin mirar las cajas", () => {
+test("el simulacro saca 20 preguntas distintas al azar de todo el banco, sin mirar las cajas", () => {
   const banco = Array.from({ length: 100 }, (_, k) => p("q" + k));
   const s = simulacro(banco, semilla(2));
-  assert.equal(s.length, 40);
-  assert.equal(new Set(s.map((q) => q.id)).size, 40);
+  assert.equal(s.length, 20);
+  assert.equal(new Set(s.map((q) => q.id)).size, 20);
   assert.notDeepEqual(ids(s), ids(simulacro(banco, semilla(9))));
   assert.equal(simulacro(banco.slice(0, 6), semilla(2)).length, 6);
 });
 
-test("la nota del simulacro es sobre 10, con la penalización de cada fallo", () => {
-  const res = [...Array(28).fill("acierto"), ...Array(6).fill("fallo"), ...Array(6).fill("blanco")];
-  assert.equal(nota(res, 1 / 3), 6.5);
-  assert.equal(nota(res, 1 / 2), 6.25);
+test("la nota del simulacro es sobre 10: un acierto suma 0,5, un fallo resta 0,125 y un blanco no cuenta", () => {
+  const res = [...Array(14).fill("acierto"), ...Array(3).fill("fallo"), ...Array(3).fill("blanco")];
+  assert.equal(nota(res, 1 / 4), 6.625);
+  assert.equal(nota(Array(20).fill("acierto"), 1 / 4), 10);
 });
 
 const ejemplo = JSON.parse(readFileSync(new URL("preguntas-ejemplo.json", import.meta.url)));
@@ -164,10 +164,10 @@ test("la página no tiene ninguna pregunta en su código", () => {
   }
 });
 
-test("con un porcentaje de dudo sobre el 33 %, una pregunta dudosa se contesta", () => {
+test("con un porcentaje de dudo sobre el 20 %, una pregunta dudosa se contesta", () => {
   const h = (aciertos, fallos) => [...Array(aciertos).fill(r("a", "1", true, false)), ...Array(fallos).fill(r("b", "2", false, false))];
-  assert.equal(porcentajeDudo(h(34, 66)).contestar, true);
-  assert.equal(porcentajeDudo(h(33, 67)).contestar, false);
+  assert.equal(porcentajeDudo(h(21, 79)).contestar, true);
+  assert.equal(porcentajeDudo(h(20, 80)).contestar, false);
 });
 
 test("una respuesta del simulacro es un acierto, un fallo o una pregunta en blanco", () => {
