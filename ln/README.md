@@ -179,7 +179,7 @@ Debajo de las opciones hay un campo de texto para las notas de la pregunta. El b
 
 El botón con un icono de copiar está a la derecha del botón de las notas. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
 
-Las imágenes están en `ln/paginas/<pdf sin .pdf>-<pagina>.png`. `pdftoppm -png -r 80` las saca de los PDFs una sola vez. Las imágenes y los PDFs no entran en git.
+Los PDFs están en `ln/pdfs/`, y `fuente.pdf` lleva solo el nombre del archivo. Las imágenes están en `ln/paginas/<pdf sin .pdf>-<pagina>.png`. `pdftoppm -png -r 80` las saca de los PDFs una sola vez. Las imágenes y los PDFs no entran en git.
 
 Una sesión sin preguntas pendientes muestra la fecha de la próxima pregunta, y ofrece el simulacro. No hay un botón para reiniciar el historial, porque el historial guarda los fallos con "seguro" y el porcentaje de "dudo".
 
@@ -249,7 +249,7 @@ La interfaz tiene el servidor, la página web, las cajas, el simulacro y las im�
 
 - La página lee `preguntas.json`, y no tiene ninguna pregunta en su código.
 - Los tests de la interfaz usan `ln/preguntas-ejemplo.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
-- `sacar_paginas.py` saca las imágenes de `ln/paginas/` de los 5 PDFs. El script no repite una imagen que ya existe.
+- `sacar_paginas.py` saca las imágenes de `ln/paginas/` de los 5 PDFs de `ln/pdfs/`. El script no repite una imagen que ya existe.
 
 ### El banco
 
@@ -259,7 +259,7 @@ El banco tiene `ln/preguntas.json` y `ln/comprobar_banco.py`.
 
 - un `id` repetido, o un `tema` fuera de la lista;
 - un número de distractores distinto de 3, o un distractor igual a la respuesta correcta;
-- un `pdf` que no existe en `ln/`, o una `pagina` mayor que el número de páginas del PDF;
+- un `pdf` que no existe en `ln/pdfs/`, o una `pagina` mayor que el número de páginas del PDF;
 - un `concepto` con menos de 2 preguntas o con más de 3.
 
 Sin argumento, `comprobar_banco.py` lee `ln/preguntas.json`. Con una ruta, lee ese banco.
@@ -272,7 +272,7 @@ Después de las tandas, una revisión independiente compara cada pregunta con su
 
 ### Los tests
 
-Los tests corren en `ln/`, y necesitan los PDFs:
+Los tests corren en `ln/`, y necesitan los PDFs de `ln/pdfs/`:
 
 ```bash
 node --test
