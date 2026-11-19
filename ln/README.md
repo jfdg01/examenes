@@ -127,17 +127,31 @@ La tarjeta tiene 3 partes, de arriba abajo:
 2. **La barra del camino**: un tramo verde para los conceptos que sabes, un tramo amarillo para los conceptos que faltan, y una marca en el 95 %. El largo de cada tramo es su parte de los conceptos del banco. La barra no tiene bloques.
 3. **El consejo**: "Contesta las dudas · +9 puntos", o "Deja las dudas en blanco · +N puntos". Los puntos son la diferencia entre la probabilidad de las 2 formas, en puntos de porcentaje. Un botón "?" abre el desglose, un `<details>` que empieza cerrado. El desglose sigue abierto cuando el slider se mueve.
 
-El desglose da los aciertos en una duda, con una fila por grupo de conceptos:
+El desglose tiene una fila por estado de un concepto: "lo sabes", "no lo sabes" y "sin ver". Cada fila da sus conceptos, su porcentaje de aciertos y su detalle, "17 de 28 pruebas".
 
-| Fila | Conceptos | Aciertos en una duda | Detalle |
-|---|---|---|---|
-| en lo que viste | no lo sabes | el porcentaje de aciertos con "dudo" | "32 de 68 «dudo»" |
-| en lo que no viste | sin ver | 25 % | "a ciegas, 1 de 4" |
-| de media | los 2 grupos | la media de las 2 filas | |
+### El cálculo de la tarjeta
 
-La media pesa cada porcentaje con los conceptos de su fila. Sin respuestas con "dudo", la primera fila usa el 25 % y el detalle "a ciegas, 1 de 4". Una pregunta de un concepto sin ver da menos pistas que una pregunta de un concepto visto, y por eso cada grupo tiene su porcentaje.
+Las tasas del cálculo salen del historial. El cálculo repite el historial en orden. Antes de cada respuesta, anota el estado del concepto y la pregunta anterior del concepto. Una prueba es una respuesta a una pregunta distinta de la anterior de su concepto. Una respuesta a la misma pregunta otra vez no es una prueba, porque mide el recuerdo de esa pregunta. Una prueba tiene uno de 5 resultados:
 
-El cálculo supone que cada pregunta del examen cae en un concepto al azar del banco:
+| Resultado | Contesta las dudas | Deja las dudas en blanco |
+|---|---|---|
+| Acierto con "seguro" | +1 | +1 |
+| Fallo con "seguro" | −1/4 | −1/4 |
+| Acierto con "dudo" | +1 | 0 |
+| Fallo con "dudo" | −1/4 | 0 |
+| Blanco | 0 | 0 |
+
+Un blanco cuenta como un resultado más. Así, la tasa de "dudo" no sube con la salida de los casos más difíciles.
+
+Cada estado tiene sus cuentas de los 5 resultados. Con pocas pruebas, una tasa medida es incierta: 28 pruebas con un 71 % de aciertos caben con una tasa real entre el 54 % y el 85 %. El cálculo lleva esa incertidumbre con una distribución de Dirichlet, la versión de la distribución Beta para más de 2 resultados. Cada estado parte de un prior con el peso de 2 pruebas:
+
+| Estado | El prior |
+|---|---|
+| Lo sabes | 2 aciertos con "seguro" |
+| No lo sabes | 1/2 acierto y 3/2 fallos con "dudo": 1 de 4 a ciegas |
+| Sin ver | 1/2 acierto y 3/2 fallos con "dudo": 1 de 4 a ciegas |
+
+Sin historial, el cálculo da el modelo a ciegas. Con cada prueba, las tasas se acercan a lo que mide el historial.
 
 - Una pregunta de un concepto que sabes es un acierto.
 - Con las dudas en blanco, una pregunta de otro concepto no cuenta.
