@@ -62,3 +62,41 @@ Cada sección separa **La fuente** (lo que dice, con enlace) de **La conclusión
 - Contestar vale la pena si `p − (1−p)/4 > 0`, es decir, si p > 0.2. Con G ≥ 0.25, el modelo nunca recomienda un blanco. El blanco sale solo de lo que el estudiante sabe en el examen.
 - Una simulación de Monte Carlo cubre las tres fuentes de incertidumbre. Sortea 20 conceptos, sortea unos parámetros de su posterior o de un bootstrap, y sortea los aciertos.
 
+## Las conclusiones para LN
+
+**El modelo.** BKT por concepto con parámetros globales y una emisión de cuatro salidas. Para un concepto c con `P(L_c)`:
+
+```
+salidas o ∈ {AS, AD, FD, FS}     (acierto/fallo × seguro/dudo; blanco = FD)
+e1(o) = P(o | sabe),  e0(o) = P(o | no sabe)
+S = e1(FD) + e1(FS)               G = e0(AS) + e0(AD)
+
+actualización:  P(L|o) = P(L)·e1(o) / [P(L)·e1(o) + (1−P(L))·e0(o)]
+transición:     P(L') = P(L|o) + (1 − P(L|o))·T
+olvido (fase 2): P(L) ← P(L)·(1−F)^días
+predicción:     P(acierto_c) = P(L_c)·(1−S) + (1−P(L_c))·G
+```
+
+Solo actualiza una prueba: una respuesta a una pregunta distinta de la anterior del concepto.
+
+**El axioma.** Con `P(L_c) = 1` para todo c, la nota esperada es `10·(1 − 1.25·S)`, y `P(10) = (1−S)^20`. Con S = 0.02, la nota esperada es 9.75. El 73 % de hoy no es un techo. Tras un solo acierto-seguro, `P(L)` queda lejos de 1, porque G es alto con 4 opciones.
+
+**El ajuste.** Hay 8 parámetros globales: L0, T y las 6 libres de e0 y e1. El ajuste usa EM (Baum-Welch con dos estados), unas 60 líneas de JS, con varios arranques. El M-step suma pseudo-counts como prior:
+
+- e1 empieza en (0.90, 0.07, 0.02, 0.01), así que S empieza en 0.03.
+- e0 empieza con G cerca de 0.3.
+- Las cotas son G < 0.5, S < 0.5 y `G + S < 1`. Si el ajuste choca con una cota, lo dice.
+
+Un ajuste por concepto queda fuera, por falta de datos.
+
+**El olvido.** Hoy, F = 0. Antes de añadirlo, la calibración se mira aparte en las respuestas de un día nuevo y en las del mismo día, como hace Qiu. Si el modelo sobreestima las de un día nuevo, entra un F global por día. FSRS y HLR esperan a tener más de 512 repasos.
+
+**La nota.** La nota sale de una simulación de Monte Carlo con 10 000 exámenes: 20 conceptos al azar, unos parámetros de un bootstrap del historial, y los aciertos. La tarjeta muestra la media, un intervalo del 80 % y `P(nota ≥ x)`.
+
+**La calibración.**
+
+- La predicción de cada prueba se hace antes de su actualización, como en `predict_onestep`.
+- El ajuste usa el primer 80 % del historial por fecha, y la prueba usa el último 20 %.
+- La medida es el Brier y el log loss frente a una tasa constante, más una curva de 5 bins por cuantiles con un intervalo binomial por bin. Con unas 280 respuestas, más bins quedan vacíos o con ruido.
+- La comprobación del axioma es aparte. Los conceptos con `P(L) > 0.9` deben acertar sus hermanas por encima del 90 %.
+
