@@ -26,7 +26,7 @@ El banco es una lista de preguntas en JSON. El navegador lo lee con `fetch`, sin
 - `correcta` va aparte de los `distractores`, y la interfaz baraja las 4 opciones. Una opción no dice "todas las anteriores", porque el barajado la rompe.
 - `explicacion` dice el contraste clave en una línea.
 
-El banco tiene unas 320 preguntas: unas 225 de RGPD, ISO 27001, ENS y riesgos, y unas 100 del resto. Las preguntas tienen 4 opciones, el máximo del examen. Una pregunta de 4 opciones entrena la diferencia entre ideas parecidas.
+El banco tiene unas 355 preguntas: unas 245 de RGPD, ISO 27001, ENS y riesgos, y unas 110 del resto. Las preguntas tienen 4 opciones, el máximo del examen. Una pregunta de 4 opciones entrena la diferencia entre ideas parecidas.
 
 ### La calidad de una pregunta
 

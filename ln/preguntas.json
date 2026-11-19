@@ -3238,5 +3238,315 @@
     "correcta": "Para obtener los datos y la colaboración del personal",
     "distractores": ["Para fijar el riesgo deseado de la auditoría (DAR)", "Para revisar la documentación interna de la auditoría", "Para aprobar las directrices y normas de seguridad"],
     "explicacion": "El apoyo de la alta dirección da acceso a los datos y a la colaboración de empleados y departamentos."
+  },
+  {
+    "id": "rgpd-140",
+    "concepto": "rgpd-informatica-juridica-decisional",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 3 },
+    "pregunta": "¿Qué rama de la informática jurídica pone un programa en el lugar del operador jurídico para resolver un asunto?",
+    "correcta": "La informática jurídica decisional",
+    "distractores": ["La informática jurídica documental", "La informática jurídica de gestión", "El derecho informático"],
+    "explicacion": "La decisional reproduce actividades del operador jurídico; la documental da acceso a la información y la de gestión automatiza la administración."
+  },
+  {
+    "id": "rgpd-141",
+    "concepto": "rgpd-informatica-juridica-decisional",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 3 },
+    "pregunta": "¿En qué procesos excluye el temario los sistemas expertos de la informática jurídica decisional?",
+    "correcta": "En los procesos penales, por su complejidad",
+    "distractores": ["En los cálculos de tributación, por su complejidad", "En las indemnizaciones, por su complejidad", "En el reparto de asuntos, por su volumen"],
+    "explicacion": "Los sistemas expertos se excluyen en procesos penales por su complejidad, y son útiles en sistemas cuantitativos como la tributación."
+  },
+  {
+    "id": "rgpd-142",
+    "concepto": "rgpd-informatica-juridica-decisional",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 3 },
+    "pregunta": "Un programa calcula la indemnización de un accidente. ¿Qué rama de la informática jurídica aplica?",
+    "correcta": "La informática jurídica decisional",
+    "distractores": ["La informática jurídica documental", "La informática jurídica de gestión", "El derecho informático"],
+    "explicacion": "Calcular una indemnización sustituye una actividad del operador jurídico: es informática jurídica decisional."
+  },
+  {
+    "id": "rgpd-143",
+    "concepto": "rgpd-informatica-juridica-gestion",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 3 },
+    "pregunta": "¿Qué automatiza la informática jurídica de gestión?",
+    "correcta": "Las tareas de administración de juzgados, registros y despachos",
+    "distractores": ["El acceso a la legislación, la jurisprudencia y la doctrina", "Las actividades de decisión del operador jurídico", "La regulación de las tecnologías de la información"],
+    "explicacion": "La de gestión automatiza la administración de juzgados, registros y despachos; la documental da acceso a las fuentes."
+  },
+  {
+    "id": "rgpd-144",
+    "concepto": "rgpd-informatica-juridica-gestion",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 3 },
+    "pregunta": "Un juzgado usa un programa para controlar los plazos procesales y repartir los asuntos. ¿Qué rama de la informática jurídica aplica?",
+    "correcta": "La informática jurídica de gestión",
+    "distractores": ["La informática jurídica decisional", "La informática jurídica documental", "El derecho informático"],
+    "explicacion": "El control de plazos y el reparto de asuntos son tareas de gestión, y no decisiones del operador jurídico."
+  },
+  {
+    "id": "delitos-110",
+    "concepto": "delitos-apoderamiento",
+    "tema": "delitos",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 11 },
+    "pregunta": "¿Qué conducta castiga el artículo 197 del Código Penal?",
+    "correcta": "Usar o modificar sin consentimiento datos personales de un fichero, en perjuicio de un tercero",
+    "distractores": ["Tratar datos personales de un fichero sin llevar el registro de actividades de tratamiento", "No notificar a la autoridad de control una brecha de los datos personales en 72 horas", "Instalar cookies en el equipo del usuario sin su consentimiento informado y explícito"],
+    "explicacion": "El art. 197 castiga el apoderamiento de datos personales; el registro y la notificación de brechas son obligaciones del RGPD."
+  },
+  {
+    "id": "delitos-111",
+    "concepto": "delitos-apoderamiento",
+    "tema": "delitos",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 11 },
+    "pregunta": "¿Qué pena de prisión fija el artículo 197 del Código Penal para el delito de apoderamiento de datos personales?",
+    "correcta": "De 1 a 4 años",
+    "distractores": ["De 12 a 24 meses", "De 1 a 4 meses", "De 12 a 24 años"],
+    "explicacion": "Prisión de 1 a 4 años y multa de 12 a 24 meses."
+  },
+  {
+    "id": "delitos-112",
+    "concepto": "delitos-agravantes",
+    "tema": "delitos",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 12 },
+    "pregunta": "Según el Código Penal, ¿qué ocurre con la pena del acceso ilícito a datos personales cuando los datos son de salud?",
+    "correcta": "La pena es mayor",
+    "distractores": ["La pena es la misma", "La pena es menor", "La pena pasa a ser una multa"],
+    "explicacion": "Los datos de ideología, religión, creencias, salud, origen racial o vida sexual son una circunstancia especial con pena mayor."
+  },
+  {
+    "id": "delitos-113",
+    "concepto": "delitos-agravantes",
+    "tema": "delitos",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 12 },
+    "pregunta": "Un funcionario público revela datos personales que obtuvo al acceder a un sistema informático. ¿Qué pena le aplica el Código Penal?",
+    "correcta": "Una pena superior, y puede ser inhabilitado",
+    "distractores": ["La misma pena que a un particular", "Una sanción de la AEPD en lugar de la pena", "La inhabilitación en lugar de la pena de prisión"],
+    "explicacion": "A funcionarios y autoridades les corresponden penas superiores, y pueden ser inhabilitados."
+  },
+  {
+    "id": "rgpd-145",
+    "concepto": "rgpd-lopdgdd-educacion-digital",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
+    "pregunta": "¿Qué norma recoge el derecho a la educación digital?",
+    "correcta": "La LOPDGDD (Ley Orgánica 3/2018)",
+    "distractores": ["El RGPD (Reglamento UE 2016/679)", "La LOPD (Ley Orgánica 15/1999)", "La LSSI (Ley 34/2002)"],
+    "explicacion": "La educación digital es un derecho digital de la LOPDGDD, la ley española, y no del RGPD."
+  },
+  {
+    "id": "rgpd-146",
+    "concepto": "rgpd-lopdgdd-educacion-digital",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
+    "pregunta": "Un colegio enseña a sus alumnos a usar Internet de forma segura. ¿Qué derecho de la LOPDGDD atiende?",
+    "correcta": "El derecho a la educación digital",
+    "distractores": ["El derecho a la desconexión de la vida laboral", "El derecho al olvido en redes sociales", "El derecho a la portabilidad de los datos"],
+    "explicacion": "La LOPDGDD recoge el derecho a la educación digital junto a la desconexión y el olvido en redes sociales."
+  },
+  {
+    "id": "rgpd-147",
+    "concepto": "rgpd-lopdgdd-medios-gratuitos",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
+    "pregunta": "Según la LOPDGDD, ¿cómo son los medios que ofrece una empresa para que los ciudadanos ejerzan sus derechos?",
+    "correcta": "De fácil acceso y gratuitos",
+    "distractores": ["De fácil acceso y con un coste razonable", "Gratuitos para los menores de 14 años", "De fácil acceso para familiares y herederos"],
+    "explicacion": "La LOPDGDD exige medios de fácil acceso y gratuitos para ejercer los derechos."
+  },
+  {
+    "id": "rgpd-148",
+    "concepto": "rgpd-lopdgdd-medios-gratuitos",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
+    "pregunta": "Una empresa cobra 10 € a cada cliente que pide el acceso a sus datos. ¿Qué obligación de la LOPDGDD incumple?",
+    "correcta": "Facilitar medios gratuitos para ejercer los derechos",
+    "distractores": ["Responder a la solicitud de acceso en el plazo de 1 mes", "Informar de la identidad del responsable", "Comunicar cada solicitud a la AEPD"],
+    "explicacion": "El ejercicio de los derechos es gratuito; el plazo de 1 mes es otra obligación, y la empresa no la incumple con el cobro."
+  },
+  {
+    "id": "rgpd-149",
+    "concepto": "rgpd-lopdgdd-denuncias-anonimas",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 20 },
+    "pregunta": "Respecto a la administración pública, ¿qué mecanismo para comunicar infracciones regula la LOPDGDD?",
+    "correcta": "Un sistema de denuncias internas anónimas",
+    "distractores": ["Un registro de actividades de tratamiento", "Una notificación a la AEPD en 72 horas", "Un código de conducta del sector"],
+    "explicacion": "La LOPDGDD regula un mecanismo de denuncias internas anónimas; las 72 horas son el plazo de una brecha."
+  },
+  {
+    "id": "rgpd-150",
+    "concepto": "rgpd-lopdgdd-denuncias-anonimas",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 20 },
+    "pregunta": "Un empleado quiere avisar de una infracción de su empresa sin dar su nombre. ¿Qué mecanismo de la LOPDGDD usa?",
+    "correcta": "Las denuncias internas anónimas",
+    "distractores": ["El derecho de oposición al tratamiento", "El derecho a la limitación del tratamiento", "La reclamación al Delegado de Protección de Datos"],
+    "explicacion": "La LOPDGDD regula un mecanismo de denuncias internas anónimas."
+  },
+  {
+    "id": "rgpd-151",
+    "concepto": "rgpd-ambito-material-excepciones",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 30 },
+    "pregunta": "¿Se aplica el RGPD al tratamiento de datos de una actividad personal o doméstica?",
+    "correcta": "No: queda fuera del ámbito material del RGPD",
+    "distractores": ["Sí: el RGPD protege igual cualquier tratamiento", "No, salvo que los datos formen parte de un fichero", "Sí, si el tratamiento es automatizado"],
+    "explicacion": "El ámbito material excluye las actividades personales o domésticas, aunque los datos estén en un fichero."
+  },
+  {
+    "id": "rgpd-152",
+    "concepto": "rgpd-ambito-material-excepciones",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 30 },
+    "pregunta": "Una autoridad competente trata datos personales para investigar infracciones penales. ¿Se aplica el RGPD?",
+    "correcta": "No: el ámbito material del RGPD lo excluye",
+    "distractores": ["Sí, porque los datos forman parte de un fichero", "Sí, porque la autoridad está en un Estado miembro", "No, salvo que los datos formen parte de un fichero"],
+    "explicacion": "El RGPD excluye la prevención, investigación o enjuiciamiento de infracciones penales por autoridades competentes."
+  },
+  {
+    "id": "rgpd-153",
+    "concepto": "rgpd-ambito-material-excepciones",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 30 },
+    "pregunta": "Un Estado miembro trata datos personales para sus controles de fronteras, asilo e inmigración. ¿Se aplica el RGPD?",
+    "correcta": "No: el ámbito material del RGPD lo excluye",
+    "distractores": ["Sí, porque el Estado está en la Unión", "Sí, si los datos son de residentes en la Unión", "No, salvo que el tratamiento sea automatizado"],
+    "explicacion": "Las políticas de fronteras, asilo e inmigración (capítulo 2 del título V del TUE) quedan fuera del RGPD."
+  },
+  {
+    "id": "rgpd-154",
+    "concepto": "rgpd-deber-informacion",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 33 },
+    "pregunta": "Según el deber de información del artículo 11 de la LOPDGDD, ¿cómo detallan las empresas la información?",
+    "correcta": "De forma explícita y con un lenguaje comprensible",
+    "distractores": ["De forma explícita y con un lenguaje jurídico preciso", "En el plazo de 1 mes y por escrito", "A petición del interesado y por escrito"],
+    "explicacion": "El art. 11 pide detallar la información de forma explícita y con un lenguaje comprensible."
+  },
+  {
+    "id": "rgpd-155",
+    "concepto": "rgpd-deber-informacion",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 33 },
+    "pregunta": "Según el deber de información de la LOPDGDD, ¿qué informa la empresa sobre las transferencias internacionales?",
+    "correcta": "Su intención de realizarlas",
+    "distractores": ["La autorización previa de la AEPD", "La lista de los encargados que las harán", "Nada: el deber de información no las cubre"],
+    "explicacion": "El deber de información incluye la intención de realizar transferencias internacionales y el uso para elaborar perfiles."
+  },
+  {
+    "id": "rgpd-156",
+    "concepto": "rgpd-codigos-conducta",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 45 },
+    "pregunta": "Según la LOPDGDD, ¿qué buscan los códigos de conducta?",
+    "correcta": "Unos marcos específicos de tratamiento para determinados sectores",
+    "distractores": ["Un listado cerrado de medidas de seguridad para cada uno de los tratamientos", "Unas sanciones propias para cada sector de actividad", "Una certificación de los Delegados de Protección de Datos"],
+    "explicacion": "Los códigos de conducta (art. 38 LO 3/2018) dan marcos y guías prácticas por sector de actividad."
+  },
+  {
+    "id": "rgpd-157",
+    "concepto": "rgpd-codigos-conducta",
+    "tema": "rgpd",
+    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 45 },
+    "pregunta": "¿Quién participa en la elaboración de los códigos de conducta de la LOPDGDD?",
+    "correcta": "Los organismos profesionales, en concertación directa",
+    "distractores": ["La Comisión Europea, para toda la Unión", "Cada responsable, para sus propios encargados", "ENAC, como entidad de acreditación"],
+    "explicacion": "Los códigos de conducta se elaboran en concertación directa con los organismos profesionales del sector."
+  },
+  {
+    "id": "ens-111",
+    "concepto": "ens-productos-certificados",
+    "tema": "ens",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 21 },
+    "pregunta": "Según el requisito de adquisición de productos de seguridad del ENS, ¿qué productos se valoran?",
+    "correcta": "Los productos certificados con normas de reconocimiento mundial",
+    "distractores": ["Los productos que elige el Comité de Seguridad", "Los productos que autoriza la AEPD", "Los productos con la mínima funcionalidad requerida"],
+    "explicacion": "El ENS valora los productos certificados; la mínima funcionalidad es del requisito de seguridad por defecto."
+  },
+  {
+    "id": "ens-112",
+    "concepto": "ens-productos-certificados",
+    "tema": "ens",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 21 },
+    "pregunta": "Una administración compra un cortafuegos para su red. Según el ENS, ¿qué valora en el producto?",
+    "correcta": "Que esté certificado con normas de reconocimiento mundial",
+    "distractores": ["Que ofrezca la mínima funcionalidad requerida", "Que lo apruebe antes el Comité de Seguridad", "Que lo autorice la AEPD antes de la compra"],
+    "explicacion": "El requisito de adquisición de productos de seguridad valora los productos certificados; la mínima funcionalidad es de la seguridad por defecto."
+  },
+  {
+    "id": "ens-113",
+    "concepto": "ens-integridad-actualizacion",
+    "tema": "ens",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 22 },
+    "pregunta": "Según el requisito de integridad y actualización del ENS, ¿qué necesita la instalación de un nuevo elemento de seguridad?",
+    "correcta": "Una autorización formal",
+    "distractores": ["Una auditoría previa", "Un producto certificado por ENAC", "Una evaluación de impacto previa"],
+    "explicacion": "Un nuevo elemento de seguridad necesita autorización formal, y se instala con las debidas medidas de seguridad."
+  },
+  {
+    "id": "ens-114",
+    "concepto": "ens-integridad-actualizacion",
+    "tema": "ens",
+    "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 22 },
+    "pregunta": "Según el requisito de integridad y actualización del ENS, ¿con qué frecuencia se actualiza el sistema?",
+    "correcta": "De forma permanente",
+    "distractores": ["Cada 2 años, con la auditoría", "Una vez al año, con la reevaluación", "Tras una autorización formal de cada cambio"],
+    "explicacion": "La actualización es permanente, por seguridad y por integridad, y sigue las especificaciones de los fabricantes."
+  },
+  {
+    "id": "riesgos-110",
+    "concepto": "riesgos-residual",
+    "tema": "riesgos",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 38 },
+    "pregunta": "Tras implantar los controles, ¿puede el riesgo residual llegar a cero?",
+    "correcta": "No, aunque los controles cubran todas las amenazas",
+    "distractores": ["Sí, si los controles cubren todas las amenazas", "Sí, si el propietario acepta el riesgo", "No, salvo con la estrategia de eliminar el riesgo"],
+    "explicacion": "El riesgo residual se calcula tras implantar los controles, y nunca será cero."
+  },
+  {
+    "id": "riesgos-111",
+    "concepto": "riesgos-residual",
+    "tema": "riesgos",
+    "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 38 },
+    "pregunta": "¿Con qué metodología se calcula el riesgo residual?",
+    "correcta": "Con la misma metodología del análisis de riesgos",
+    "distractores": ["Con la metodología de la auditoría del SGSI", "Con una metodología nueva, adaptada a los controles", "Con la escala de la Declaración de Aplicabilidad"],
+    "explicacion": "El riesgo residual se calcula con la misma metodología, y el propietario lo conoce y lo acepta."
+  },
+  {
+    "id": "auditoria-110",
+    "concepto": "auditoria-normas",
+    "tema": "auditoria",
+    "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
+    "pregunta": "En la auditoría de sistemas, ¿qué regula la ISO 9001?",
+    "correcta": "Los requisitos de los sistemas de gestión de la calidad",
+    "distractores": ["Las directrices para la auditoría de sistemas de gestión", "Los requisitos de los sistemas de gestión de la seguridad", "La gestión y la gobernanza de las TIC en la empresa"],
+    "explicacion": "ISO 9001: gestión de la calidad; ISO 19011: directrices de auditoría; ISO 27001: SGSI; CoBIT 5: gobernanza de las TIC."
+  },
+  {
+    "id": "auditoria-111",
+    "concepto": "auditoria-normas",
+    "tema": "auditoria",
+    "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
+    "pregunta": "¿Qué da la ISO 19011 a la auditoría de sistemas?",
+    "correcta": "Las directrices para la auditoría de sistemas de gestión",
+    "distractores": ["Los requisitos de los sistemas de gestión de la calidad total", "El código ético del profesional de la auditoría", "El manual de preparación al examen CISA"],
+    "explicacion": "La ISO 19011 da las directrices de auditoría; el código ético y el manual CISA son de ISACA."
+  },
+  {
+    "id": "auditoria-112",
+    "concepto": "auditoria-normas",
+    "tema": "auditoria",
+    "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
+    "pregunta": "¿Por qué la auditoría de sistemas involucra la ISO 9001?",
+    "correcta": "Porque abarca la gestión de calidad total",
+    "distractores": ["Porque abarca la certificación CISA de los auditores", "Porque abarca la reducción del riesgo de la auditoría", "Porque abarca los controles del SGSI"],
+    "explicacion": "La auditoría de sistemas involucra la gestión de calidad total y la seguridad de la información, y por eso las normas ISO 9001 y 27001."
   }
 ]
