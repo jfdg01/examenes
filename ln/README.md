@@ -62,42 +62,39 @@ El historial es una lista de respuestas que solo crece, con una respuesta por l�
 {"id": "rgpd-001", "ts": "2026-11-06T18:02:11Z", "acierto": true, "seguro": false}
 ```
 
-La interfaz calcula todo el estado con esta lista: la caja de cada pregunta y el dominio de cada concepto. Dos dispositivos no tienen conflictos, porque cada uno solo añade líneas.
+La interfaz calcula todo el estado con esta lista: la probabilidad de saber cada concepto. Dos dispositivos no tienen conflictos, porque cada uno solo añade líneas.
 
 El historial no entra en git. El servidor lo guarda en `ln/respuestas.jsonl`.
 
 Una respuesta huérfana tiene un `id` que no está en el banco. Una pregunta que la regla 6 cambia deja sus respuestas huérfanas. La interfaz no usa las respuestas huérfanas en ninguna cuenta, y el archivo las conserva, porque una línea borrada no tiene vuelta atrás.
 
-## La confianza y las cajas
+## La confianza y el modelo
 
-Antes de ver la solución, marcas "seguro" o "dudo". La pregunta va a una de 3 cajas:
+Antes de ver la solución, marcas "seguro" o "dudo". El blanco cuenta como un fallo con "dudo". Una respuesta tiene 3 salidas:
 
-| Respuesta | Caja siguiente |
+| Salida | La respuesta |
 |---|---|
-| Fallo, o acierto con "dudo" | Caja 1 |
-| Acierto con "seguro" | Una caja más, hasta la 3 |
+| Lo sé y acierto | Acierto con "seguro" |
+| Creo que lo sé y fallo | Fallo con "seguro" |
+| No lo sé | "Dudo" o blanco |
 
-Cada concepto tiene uno de 3 estados. La última respuesta a una pregunta del concepto decide el estado:
+Un acierto con "dudo" es una adivinanza, y no sube la probabilidad de saber el concepto.
+
+El modelo es un BKT (Bayesian Knowledge Tracing) de 2 estados por concepto: lo sabes o no lo sabes. Una prueba es una respuesta a una pregunta distinta de la anterior del concepto. Cada prueba actualiza la probabilidad de saber el concepto, y la probabilidad sube un poco tras la prueba, porque una prueba también enseña. Una pregunta repetida justo después no es una prueba, porque la respuesta sale de la memoria de la solución.
+
+Los parámetros son globales para todos los conceptos, porque cada concepto tiene muy pocas respuestas. Un EM (Baum-Welch) los ajusta con el historial entero, con una prior que entra como pseudo-counts. Sin historial, la probabilidad de partida es del 50 %. [`docs/research/bkt-y-olvido.md`](docs/research/bkt-y-olvido.md) explica el modelo y sus fuentes.
+
+Cada concepto tiene uno de 3 estados:
 
 | Estado | La regla |
 |---|---|
-| Lo sabes | La última respuesta es un acierto con "seguro" |
-| No lo sabes | La última respuesta es un fallo, o un acierto con "dudo" |
+| Lo sabes | La probabilidad de saber el concepto es del 90 % o más |
+| No lo sabes | La probabilidad es menor del 90 % |
 | Sin ver | Ninguna pregunta del concepto tiene una respuesta |
 
-Un acierto con "seguro" en una pregunta basta para saber el concepto, porque sus preguntas preguntan el mismo dato. Un fallo posterior en otra pregunta del concepto muestra una idea falsa, y el concepto pasa a "no lo sabes".
+Llegar al 90 % pide unas 3 pruebas seguidas con "lo sé y acierto".
 
-Una sesión tiene 12 preguntas, y llena sus huecos en este orden:
-
-1. Las preguntas de la caja 1.
-2. Una pregunta al azar de cada concepto sin ver.
-3. Un sorteo sin repetición, para los huecos que quedan.
-
-El paso 2 da la vuelta a todo el banco antes del repaso, porque un concepto nuevo enseña un dato, y una pregunta hermana solo lo confirma. El sorteo no saca otra pregunta de un concepto sin ver, así que un concepto sale una sola vez en su vuelta. Con todos los conceptos vistos, el paso 2 queda vacío.
-
-En el sorteo, una pregunta nueva y una pregunta de la caja 2 pesan 1, y una pregunta de la caja 3 pesa 0,5. Así, un grupo grande sale más, y todo el banco avanza a la vez. Las 12 preguntas salen en un orden al azar, con los temas y las cajas mezclados.
-
-Un bloque de estudio termina con una pausa de 3 horas sin respuestas. Una pregunta de la caja 2 o de la caja 3 no sale en el bloque de su última respuesta. La caja 1 sale en cada sesión. Una sesión sin preguntas dice que el repaso vuelve después de una pausa de 3 horas.
+Una sesión tiene 12 conceptos distintos: los 12 con la probabilidad más baja. Los empates salen al azar, y así un concepto sin ver sale antes que un concepto visto con más probabilidad. Cada concepto da una pregunta distinta de su última pregunta contestada. Las 12 preguntas salen en un orden al azar.
 
 Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
 
