@@ -74,8 +74,15 @@ class TestServe(unittest.TestCase):
         self.assertEqual(self.post([a]), {"anadidas": 0})
         self.assertEqual(json.loads(self.get("/api/respuestas")), [a])
 
+    def test_un_blanco_lleva_la_clave_blanco(self):
+        b = {"id": "rgpd-001", "ts": "2026-11-06T18:02:11Z", "acierto": False, "seguro": False, "blanco": True}
+        self.assertEqual(self.post([b]), {"anadidas": 1})
+        self.assertEqual(json.loads(self.get("/api/respuestas")), [b])
+
     def test_rechaza_una_respuesta_sin_el_formato(self):
-        malas = [b"no es json", {"id": "x"}, [{"id": "x", "ts": "t", "acierto": "si", "seguro": True}], [{"id": "x"}]]
+        blanco = {"id": "x", "ts": "t", "acierto": False, "seguro": False}
+        malas = [b"no es json", {"id": "x"}, [{"id": "x", "ts": "t", "acierto": "si", "seguro": True}], [{"id": "x"}],
+                 [{**blanco, "blanco": False}], [{**blanco, "acierto": True, "blanco": True}], [{**blanco, "otra": 1}]]
         for mala in malas:
             with self.assertRaises(urllib.error.HTTPError) as error:
                 self.post(mala)

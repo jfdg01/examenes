@@ -1,5 +1,5 @@
 import {
-  cajas, conceptos, dominio, guardado, masNueva, restaurar, PENALIZACION, tarjetaDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, conceptos, guardado, masNueva, restaurar, PENALIZACION, tarjetaDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
@@ -72,19 +72,22 @@ let desgloseAbierto = false;
 function tarjetaNota() {
   const titulo = el("b"), cuerpo = el("div");
   const punta = (cifra, n) => el("div", {}, el("b", { textContent: cifra }), el("span", { textContent: `con ${n} conceptos` }));
-  const fila = (texto, n, p, detalle, media) => el("div", { className: "porque" + (media ? " media" : "") },
+  const fila = (texto, n, p, detalle) => el("div", { className: "porque" },
     el("span", { textContent: texto }), el("span", { className: "n", textContent: `${n} conceptos` }), el("b", { textContent: pc(p) }),
-    detalle && el("em", { textContent: detalle }));
+    el("em", { textContent: detalle }));
   const pintarTarjeta = (objetivo) => {
     titulo.textContent = `Sacar más de ${numero(objetivo)}`;
     const t = tarjetaDeLaNota(banco, historial, objetivo);
     const parte = (n) => `${(100 * n) / t.total}%`;
-    const ciegas = "a ciegas, 1 de 4";
+    const pruebas = (f) => `${f.vistos} de ${f.pruebas} pruebas`;
+    const derecha = !t.alcanza ? el("div", {}, el("b", { textContent: "95 %" }), el("span", { textContent: `ni con ${t.meta} conceptos` }))
+      : t.faltan > 0 ? punta("95 %", t.meta) : el("div");
+    const medio = !t.alcanza ? "—" : t.faltan <= 0 ? "✓" : t.sesiones === null ? "? sesiones" : `≈${t.sesiones} sesiones`;
     cuerpo.replaceChildren(
       el("div", { className: "flecha" },
         punta(pc(t.hoy), t.sabes),
-        el("div", { className: "medio" }, el("span", { textContent: t.faltan <= 0 ? "✓" : t.sesiones === null ? "? sesiones" : `≈${t.sesiones} sesiones` }), el("i")),
-        t.faltan > 0 ? punta("95 %", t.meta) : el("div")),
+        el("div", { className: "medio" }, el("span", { textContent: medio }), el("i")),
+        derecha),
       el("div", { className: "camino" },
         el("i", { className: "hecho", style: `width:${parte(t.sabes)}` }),
         t.faltan > 0 && el("i", { className: "falta", style: `left:${parte(t.sabes)};width:${parte(t.faltan)}` }),
@@ -94,10 +97,10 @@ function tarjetaNota() {
           el("b", { textContent: t.contestar ? "Contesta las dudas" : "Deja las dudas en blanco" }),
           el("span", { textContent: `+${t.puntos} puntos` }),
           el("i", { className: "info", textContent: "?" })),
-        el("small", { textContent: "aciertos en una duda" }),
-        fila("en lo que viste", t.noSabes, t.tasaDudo, t.dudo ? `${t.dudo.aciertos} de ${t.dudo.total} «dudo»` : ciegas),
-        fila("en lo que no viste", t.sinVer, 1 / 4, ciegas),
-        fila("de media", t.noSabes + t.sinVer, t.tasa, null, true)));
+        el("small", { textContent: "aciertos en una prueba" }),
+        fila("lo sabes", t.sabes, t.filas.sabes.aciertos, pruebas(t.filas.sabes)),
+        fila("no lo sabes", t.noSabes, t.filas.noSabes.aciertos, pruebas(t.filas.noSabes)),
+        fila("sin ver", t.sinVer, t.filas.sinVer.aciertos, pruebas(t.filas.sinVer))));
   };
   const slider = el("input", { type: "range", min: 0.5, max: 10, step: 0.5, value: localStorage.getItem(OBJETIVO) ?? 5,
     oninput: () => { localStorage.setItem(OBJETIVO, slider.value); pintarTarjeta(+slider.value); } });
@@ -140,7 +143,7 @@ function pregunta(ronda) {
   const q = ronda.preguntas[ronda.i];
   const movil = !matchMedia("(min-width:900px)").matches;
   const ops = opciones(q);
-  const caja = cajas(historial).get(q.id)?.caja ?? 1;
+  const caja = cajas(banco, historial).get(q.concepto)?.caja ?? 1;
   const filas = ops.map((op) => el("div", { className: "fila" },
     el("button", { className: "texto", textContent: op, onclick: () => contestar(op, true) }),
     el("button", { className: "dudo", textContent: "dudo", onclick: () => contestar(op, false) })));
@@ -168,7 +171,7 @@ function pregunta(ronda) {
     guardarRonda(null);
     inicio();
   } });
-  const blanco = ronda.simulacro ? el("button", { className: "blanco", textContent: "En blanco", onclick: () => contestar(null, false) }) : null;
+  const blanco = el("button", { className: "blanco", textContent: "En blanco", onclick: () => contestar(null, false) });
   const ayuda = el("p", { className: "dim ayuda", textContent: "Toca el texto si estás seguro. Toca «dudo» si dudas." });
   const derecha = el("div", { className: "hoja vacia" }, el("div", {}, el("p", { textContent: "Elige una opción. La explicación sale aquí." })));
   const titulo = [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : `caja ${caja}`].filter(Boolean).join(" · ");
@@ -264,7 +267,7 @@ function fuentes(q) {
   const paneles = [
     ["Ver la página aquí", () => el("img", { src: imagenDePagina(q.fuente), alt: `La página ${pagina} de ${pdf}` })],
     ["La fuente", () => el("div", {},
-      el("p", { textContent: `${pdf}, página ${pagina} · ${q.concepto} (dominio: caja ${dominio(banco, historial).get(q.concepto)})` }),
+      el("p", { textContent: `${pdf}, página ${pagina} · ${q.concepto} (caja ${cajas(banco, historial).get(q.concepto)?.caja ?? 1})` }),
       el("p", {}, el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: `Abrir el PDF en la página ${pagina}` })))],
   ];
   const panel = el("div", { className: "panel" });

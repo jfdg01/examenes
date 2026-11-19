@@ -1,9 +1,10 @@
 import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { cajas, conceptos, probabilidadDeLaNota, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, tarjetaDeLaNota, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS, guardado, masNueva, restaurar } from "./logica.js";
+import { cajas, conceptos, probabilidadDeLaNota, pruebas, semilla, textoParaCopiar, sesion, opciones, respuesta, tarjetaDeLaNota, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS, guardado, masNueva, restaurar } from "./logica.js";
 
 const r = (id, ts, acierto, seguro) => ({ id, ts, acierto, seguro });
+const p = (id, tema = "rgpd") => ({ id, tema, concepto: id, correcta: "c", distractores: ["x", "y", "z"] });
 
 test("un acierto con seguro sube una caja, hasta la 3", () => {
   const h = [
@@ -11,32 +12,22 @@ test("un acierto con seguro sube una caja, hasta la 3", () => {
     r("a", "2026-11-03T10:00:00Z", true, true),
     r("a", "2026-11-07T10:00:00Z", true, true),
   ];
-  assert.equal(cajas(h).get("a").caja, 3);
-  assert.equal(cajas(h.slice(0, 1)).get("a").caja, 2);
+  assert.equal(cajas([p("a")], h).get("a").caja, 3);
+  assert.equal(cajas([p("a")], h.slice(0, 1)).get("a").caja, 2);
 });
 
 test("un fallo o un acierto con dudo vuelve a la caja 1", () => {
   const sube = [r("a", "2026-11-01T10:00:00Z", true, true), r("a", "2026-11-03T10:00:00Z", true, true)];
-  assert.equal(cajas([...sube, r("a", "2026-11-07T10:00:00Z", false, true)]).get("a").caja, 1);
-  assert.equal(cajas([...sube, r("a", "2026-11-07T10:00:00Z", true, false)]).get("a").caja, 1);
-  assert.equal(cajas([...sube, r("a", "2026-11-07T10:00:00Z", false, false)]).get("a").caja, 1);
+  for (const final of [r("a", "2026-11-07T10:00:00Z", false, true), r("a", "2026-11-07T10:00:00Z", true, false), r("a", "2026-11-07T10:00:00Z", false, false)])
+    assert.equal(cajas([p("a")], [...sube, final]).get("a").caja, 1);
 });
 
 test("el historial se ordena por fecha, venga de donde venga", () => {
   const h = [r("a", "2026-11-03T10:00:00Z", false, true), r("a", "2026-11-01T10:00:00Z", true, true)];
-  assert.equal(cajas(h).get("a").caja, 1);
-  assert.equal(cajas(h).get("a").ts, "2026-11-03T10:00:00Z");
+  assert.equal(cajas([p("a")], h).get("a").caja, 1);
+  assert.equal(cajas([p("a")], h).get("a").ts, "2026-11-03T10:00:00Z");
 });
 
-function semilla(n) {
-  return () => {
-    n = (n + 0x6d2b79f5) | 0;
-    let t = Math.imul(n ^ (n >>> 15), 1 | n);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-const p = (id, tema = "rgpd") => ({ id, tema, concepto: id, correcta: "c", distractores: ["x", "y", "z"] });
 const iso = (d) => d.toISOString().slice(0, 19) + "Z";
 const dia = (d, h = 12) => new Date(2026, 10, d, h);
 const ids = (s) => s.map((q) => q.id).sort();
@@ -77,13 +68,6 @@ const cuenta = (banco, hist, prefijo) => {
   for (let k = 0; k < 300; k++) n += sesion(banco, hist, dia(6), semilla(k)).filter((q) => q.id.startsWith(prefijo)).length;
   return n;
 };
-
-test("con 200 nuevas de conceptos vistos y 80 de la caja 2, las 2 clases salen en una proporción cercana a sus tamaños", () => {
-  const banco = [...Array.from({ length: 200 }, (_, k) => ({ ...p("n" + k), concepto: "d" + (k % 80) })), ...Array.from({ length: 80 }, (_, k) => p("d" + k))];
-  const hist = Array.from({ length: 80 }, (_, k) => r("d" + k, iso(dia(1)), true, true));
-  const nuevas = cuenta(banco, hist, "n") / (300 * 12);
-  assert.ok(Math.abs(nuevas - 200 / 280) < 0.03, String(nuevas));
-});
 
 test("una pregunta de la caja 3 sale la mitad de veces que una de la caja 2", () => {
   const banco = [...Array.from({ length: 100 }, (_, k) => p("d" + k)), ...Array.from({ length: 100 }, (_, k) => p("t" + k))];
@@ -127,14 +111,14 @@ test("el estado de un concepto sale de la última respuesta a una de sus pregunt
 
 test("la probabilidad de una nota cuenta los aciertos menos 1/4 de los fallos, sobre 20 preguntas", () => {
   const cerca = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} ≠ ${b}`);
-  cerca(probabilidadDeLaNota(1, null, 5), 1);
-  cerca(probabilidadDeLaNota(0, null, 5), 0);
-  cerca(probabilidadDeLaNota(0.5, null, 5), 0.5880985260009766);
-  cerca(probabilidadDeLaNota(0.5, 0.25, 5), 0.6828711582842681);
-  cerca(probabilidadDeLaNota(0, 0.25, 5), 0.000935391579332645);
-  cerca(probabilidadDeLaNota(0.5, null, 7.5), 0.020694732666015625);
-  cerca(probabilidadDeLaNota(0.5, 0.25, 7.5), 0.07904140886862707);
-  cerca(probabilidadDeLaNota(0.9, 0.25, 10), 0.21029776386659405);
+  cerca(probabilidadDeLaNota(1, 0, 5), 1);
+  cerca(probabilidadDeLaNota(0, 0, 5), 0);
+  cerca(probabilidadDeLaNota(0.5, 0, 5), 0.5880985260009766);
+  cerca(probabilidadDeLaNota(0.625, 0.375, 5), 0.6828711582842681);
+  cerca(probabilidadDeLaNota(0.25, 0.75, 5), 0.000935391579332645);
+  cerca(probabilidadDeLaNota(0.5, 0, 7.5), 0.020694732666015625);
+  cerca(probabilidadDeLaNota(0.625, 0.375, 7.5), 0.07904140886862707);
+  cerca(probabilidadDeLaNota(0.925, 0.075, 10), 0.21029776386659405);
 });
 
 test("la sesión mezcla los temas", () => {
@@ -165,23 +149,38 @@ test("una respuesta lleva el id, la hora, el acierto y la confianza", () => {
   assert.deepEqual(respuesta(p("a"), "x", false, ahora), { id: "a", ts: "2026-11-06T18:02:11Z", acierto: false, seguro: false });
 });
 
-test("una pregunta en blanco cuenta como un fallo con dudo", () => {
-  assert.deepEqual(respuesta(p("a"), null, true, dia(6)), { id: "a", ts: iso(dia(6)), acierto: false, seguro: false });
+test("una pregunta en blanco lleva blanco, con acierto y seguro en false", () => {
+  assert.deepEqual(respuesta(p("a"), null, true, dia(6)), { id: "a", ts: iso(dia(6)), acierto: false, seguro: false, blanco: true });
 });
 
-test("el porcentaje de aciertos con dudo solo cuenta las respuestas con dudo", () => {
-  const h = [r("a", "1", true, false), r("b", "2", false, false), r("c", "3", true, false), r("d", "4", true, true), r("e", "5", false, true)];
-  assert.deepEqual(porcentajeDudo(h), { porcentaje: 200 / 3, total: 3, aciertos: 2 });
-  assert.equal(porcentajeDudo([r("d", "4", true, true)]), null);
+test("una prueba es una respuesta a una pregunta distinta de la anterior del concepto, en el estado de antes", () => {
+  const banco = [...hermanas("a", 2), ...hermanas("b", 2)];
+  const hist = [
+    r("a0", iso(dia(1, 10)), true, true), // sin ver: acierto con seguro
+    r("a0", iso(dia(1, 11)), false, true), // la misma pregunta: no es una prueba, y el concepto pasa a "no lo sabes"
+    r("a1", iso(dia(1, 12)), true, false), // no lo sabes: acierto con dudo
+    { ...r("b0", iso(dia(1, 13)), false, false), blanco: true }, // sin ver: blanco
+    r("a0", iso(dia(1, 14)), true, true), // no lo sabes: acierto con seguro
+    r("a1", iso(dia(1, 15)), false, true), // lo sabes: fallo con seguro
+    r("huerfana", iso(dia(1, 16)), true, true),
+  ];
+  assert.deepEqual(pruebas(banco, hist), { sabes: [0, 1, 0, 0, 0], noSabes: [1, 0, 1, 0, 0], sinVer: [1, 0, 0, 0, 1] });
 });
 
-test("el dominio de un concepto es la caja más baja de sus preguntas", () => {
-  const banco = [{ ...p("a1"), concepto: "A" }, { ...p("a2"), concepto: "A" }, { ...p("b1"), concepto: "B" }];
-  const h = [r("a1", iso(dia(1)), true, true), r("a1", iso(dia(3)), true, true), r("a2", iso(dia(1)), true, true), r("b1", iso(dia(1)), true, true)];
-  const d = dominio(banco, h);
-  assert.equal(d.get("A"), 2);
-  assert.equal(d.get("B"), 2);
-  assert.equal(dominio(banco, []).get("A"), 1);
+test("la caja es del concepto: un fallo en una pregunta hermana devuelve el concepto a la caja 1", () => {
+  const banco = hermanas("a", 2);
+  const sube = [r("a0", iso(dia(1)), true, true), r("a1", iso(dia(2)), true, true)];
+  assert.equal(cajas(banco, sube).get("a").caja, 3);
+  assert.equal(cajas(banco, [...sube, r("a0", iso(dia(3)), false, true)]).get("a").caja, 1);
+  assert.equal(cajas(banco, [r("otra", iso(dia(1)), true, true)]).size, 0);
+});
+
+test("un concepto sale con la pregunta que lleva más tiempo sin salir", () => {
+  const banco = hermanas("a", 3);
+  const hist = [r("a1", iso(dia(1, 10)), false, true), r("a0", iso(dia(1, 11)), false, true)];
+  for (let k = 0; k < 10; k++) assert.deepEqual(ids(sesion(banco, hist, dia(6), semilla(k))), ["a2"]);
+  const todas = [...hist, r("a2", iso(dia(1, 12)), false, true)];
+  assert.deepEqual(ids(sesion(banco, todas, dia(6), semilla(1))), ["a1"]);
 });
 
 test("unir 2 historiales quita las respuestas repetidas", () => {
@@ -255,35 +254,38 @@ const bancoDe = (n) => Array.from({ length: n }, (_, i) => ({ id: `q${i}`, conce
 const historialDe = (...respuestas) => respuestas.map(([i, acierto, seguro], k) => r(`q${i}`, new Date(k * 60000).toISOString(), acierto, seguro));
 const cerca = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} ≠ ${b}`);
 
-test("la tarjeta sin historial acierta una duda a ciegas, 1 de 4, y no tiene ritmo", () => {
+test("la tarjeta sin historial usa el prior: 1 de 4 a ciegas, y no tiene ritmo", () => {
   const t = tarjetaDeLaNota(bancoDe(20), [], 5);
-  assert.equal(t.dudo, null);
-  cerca(t.tasaDudo, 1 / 4);
-  cerca(t.tasa, 1 / 4);
   assert.equal(t.sinVer, 20);
-  cerca(t.hoy, 0.000935391579332645);
+  cerca(t.filas.sinVer.aciertos, 1 / 4);
+  cerca(t.filas.sabes.aciertos, 1);
+  assert.equal(t.filas.sinVer.pruebas, 0);
+  assert.equal(t.blanco, 0);
+  // El prior pesa 2 pruebas: la incertidumbre sube la cifra por encima de probabilidadDeLaNota(0.25, 0.75, 5), un 0,1 %.
+  assert.ok(t.hoy > 0.01 && t.hoy < 0.2, String(t.hoy));
   assert.equal(t.contestar, true);
-  assert.equal(t.puntos, 0);
   assert.equal(t.sesiones, null);
 });
 
-test("una duda acierta con el porcentaje de dudo en lo que viste, y 1 de 4 en lo que no viste, ponderado por conceptos", () => {
-  const h = historialDe([0, true, true], [1, false, false], [2, true, false]);
-  const t = tarjetaDeLaNota(bancoDe(10), h, 5);
-  assert.deepEqual(t.dudo, { porcentaje: 50, total: 2, aciertos: 1 });
-  assert.equal(t.noSabes, 2);
-  assert.equal(t.sinVer, 7);
-  cerca(t.tasaDudo, 1 / 2);
-  cerca(t.tasa, 11 / 36);
+test("las tasas de la tarjeta salen de las pruebas, y la cifra no cambia entre 2 cálculos", () => {
+  // 40 conceptos sin ver: 30 aciertos con seguro y 10 fallos con dudo.
+  const h = historialDe(...Array.from({ length: 40 }, (_, i) => [i, i < 30, i < 30]));
+  const t = tarjetaDeLaNota(bancoDe(60), h, 5);
+  cerca(t.filas.sinVer.aciertos, 30.5 / 42);
+  assert.deepEqual([t.filas.sinVer.vistos, t.filas.sinVer.pruebas], [30, 40]);
+  assert.equal(tarjetaDeLaNota(bancoDe(60), h, 5).hoy, t.hoy);
 });
 
 test("la tarjeta sigue la forma con la probabilidad más alta, y el consejo da la diferencia en puntos", () => {
-  // 10 conceptos que sabes y 10 con un fallo con dudo: contestar solo resta, y una duda acierta 0 %.
-  const h = historialDe(...Array.from({ length: 10 }, (_, i) => [i, true, true]), ...Array.from({ length: 10 }, (_, i) => [10 + i, false, false]));
-  const t = tarjetaDeLaNota(bancoDe(20), h, 5);
+  // 10 conceptos que sabes, y 10 conceptos con 2 fallos con dudo, uno en cada pregunta: una duda casi nunca acierta.
+  const banco = [...bancoDe(10), ...Array.from({ length: 10 }, (_, i) => hermanas("d" + i, 2)).flat()];
+  const h = [...historialDe(...Array.from({ length: 10 }, (_, i) => [i, true, true])),
+    ...Array.from({ length: 10 }, (_, i) => [r(`d${i}0`, iso(dia(2, 10)), false, false), r(`d${i}1`, iso(dia(2, 11)), false, false)]).flat()];
+  const t = tarjetaDeLaNota(banco, h, 5);
   cerca(t.hoy, 0.5880985260009766);
   assert.equal(t.contestar, false);
-  assert.equal(t.puntos, 34);
+  assert.equal(t.puntos, Math.round(100 * (t.blanco - t.contesta)));
+  assert.ok(t.puntos > 0);
 });
 
 test("el camino cuenta los conceptos que faltan para un 95 %, y las sesiones salen del ritmo, redondeadas hacia arriba", () => {
@@ -305,8 +307,17 @@ test("el ritmo cuenta solo las 60 últimas respuestas, 5 sesiones de 12", () => 
   const t = tarjetaDeLaNota(bancoDe(100), h, 10);
   assert.equal(t.sabes, 50);
   cerca(t.ritmo, 2);
-  assert.equal(t.faltan, 50);
-  assert.equal(t.sesiones, 25);
+  assert.equal(t.sesiones, Math.ceil(t.faltan / 2));
+});
+
+test("sin un 95 % ni con todos los conceptos, el camino no alcanza y no tiene sesiones", () => {
+  // Un fallo con seguro en una pregunta hermana de cada concepto que sabes: "lo sabes" acierta poco.
+  const banco = Array.from({ length: 20 }, (_, i) => hermanas("c" + i, 2)).flat();
+  const h = Array.from({ length: 20 }, (_, i) => [r(`c${i}0`, iso(dia(1, 10)), true, true), r(`c${i}1`, iso(dia(1, 11)), false, true), r(`c${i}0`, iso(dia(1, 12)), true, true)]).flat();
+  const t = tarjetaDeLaNota(banco, h.slice(0, -3), 5);
+  assert.equal(t.alcanza, false);
+  assert.equal(t.meta, 20);
+  assert.equal(t.sesiones, null);
 });
 
 test("con un 95 % o más hoy no faltan conceptos ni sesiones", () => {

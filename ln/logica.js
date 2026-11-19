@@ -1,8 +1,15 @@
-export function cajas(historial) {
+const enOrden = (historial) => [...historial].sort((a, b) => a.ts.localeCompare(b.ts));
+const sabeTras = (r) => r.acierto && r.seguro;
+
+// La caja es del concepto. Una respuesta huérfana no cuenta.
+export function cajas(banco, historial) {
+  const concepto = new Map(banco.map((q) => [q.id, q.concepto]));
   const estado = new Map();
-  for (const r of [...historial].sort((a, b) => a.ts.localeCompare(b.ts))) {
-    const caja = estado.get(r.id)?.caja ?? 1;
-    estado.set(r.id, { caja: r.acierto && r.seguro ? Math.min(caja + 1, 3) : 1, ts: r.ts });
+  for (const r of enOrden(historial)) {
+    const k = concepto.get(r.id);
+    if (k === undefined) continue;
+    const caja = estado.get(k)?.caja ?? 1;
+    estado.set(k, { caja: sabeTras(r) ? Math.min(caja + 1, 3) : 1, ts: r.ts });
   }
   return estado;
 }
@@ -30,26 +37,33 @@ function principioDelBloque(historial, ahora) {
   return principio;
 }
 
+// Cada concepto sale con la pregunta que lleva más tiempo sin salir. Entre las preguntas que nunca salieron, gana una al azar.
 export function sesion(banco, historial, ahora, azar = Math.random) {
-  const estado = cajas(historial);
+  const estado = cajas(banco, historial);
   const bloque = principioDelBloque(historial, ahora);
-  const vistos = new Set(banco.filter((q) => estado.has(q.id)).map((q) => q.concepto));
-  const caja1 = [], sinVer = new Map(), sorteo = [];
+  const ultima = new Map();
+  for (const r of historial) if (!(ultima.get(r.id) >= r.ts)) ultima.set(r.id, r.ts);
+  const pregunta = new Map();
   for (const q of barajar(banco, azar)) {
-    const e = estado.get(q.id);
-    if (e?.caja === 1) caja1.push(q);
-    else if (!vistos.has(q.concepto)) { if (!sinVer.has(q.concepto)) sinVer.set(q.concepto, q); }
-    else if (!e || Date.parse(e.ts) < bloque) sorteo.push({ q, clave: -Math.log(azar()) / (e ? PESO[e.caja] : 1) });
+    const otra = pregunta.get(q.concepto);
+    if (!otra || (ultima.get(q.id) ?? "") < (ultima.get(otra.id) ?? "")) pregunta.set(q.concepto, q);
+  }
+  const caja1 = [], sinVer = [], sorteo = [];
+  for (const [k, q] of pregunta) {
+    const e = estado.get(k);
+    if (!e) sinVer.push(q);
+    else if (e.caja === 1) caja1.push(q);
+    else if (Date.parse(e.ts) < bloque) sorteo.push({ q, clave: -Math.log(azar()) / PESO[e.caja] });
   }
   const elegidas = sorteo.sort((a, b) => a.clave - b.clave).map((x) => x.q);
-  return barajar([...caja1, ...sinVer.values(), ...elegidas].slice(0, TAMANO_SESION), azar);
+  return barajar([...caja1, ...sinVer, ...elegidas].slice(0, TAMANO_SESION), azar);
 }
 
 export function conceptos(banco, historial) {
   const concepto = new Map(banco.map((q) => [q.id, q.concepto]));
   const estado = new Map(banco.map((q) => [q.concepto, "sinVer"]));
-  for (const r of [...historial].sort((a, b) => a.ts.localeCompare(b.ts)))
-    if (concepto.has(r.id)) estado.set(concepto.get(r.id), r.acierto && r.seguro ? "sabes" : "noSabes");
+  for (const r of enOrden(historial))
+    if (concepto.has(r.id)) estado.set(concepto.get(r.id), sabeTras(r) ? "sabes" : "noSabes");
   const cuenta = { sabes: 0, noSabes: 0, sinVer: 0 };
   for (const e of estado.values()) cuenta[e]++;
   return cuenta;
@@ -61,25 +75,8 @@ export const textoParaCopiar = (pregunta, ops) => `${pregunta.pregunta}\n\n${ops
 
 export function respuesta(pregunta, eleccion, seguro, ahora) {
   const ts = ahora.toISOString().slice(0, 19) + "Z";
-  if (eleccion === null) return { id: pregunta.id, ts, acierto: false, seguro: false };
+  if (eleccion === null) return { id: pregunta.id, ts, acierto: false, seguro: false, blanco: true };
   return { id: pregunta.id, ts, acierto: eleccion === pregunta.correcta, seguro };
-}
-
-export function porcentajeDudo(historial) {
-  const dudas = historial.filter((r) => !r.seguro);
-  if (!dudas.length) return null;
-  const aciertos = dudas.filter((r) => r.acierto).length;
-  return { porcentaje: (100 * aciertos) / dudas.length, total: dudas.length, aciertos };
-}
-
-export function dominio(banco, historial) {
-  const estado = cajas(historial);
-  const minimo = new Map();
-  for (const q of banco) {
-    const caja = estado.get(q.id)?.caja ?? 1;
-    minimo.set(q.concepto, Math.min(caja, minimo.get(q.concepto) ?? 3));
-  }
-  return minimo;
 }
 
 export const clave = (r) => r.id + "|" + r.ts;
@@ -97,48 +94,115 @@ export const simulacro = (banco, azar = Math.random) => barajar(banco, azar).sli
 
 export const PENALIZACION = 1 / 4;
 
-const binomial = (n, k, p) => {
+const comb = (n, k) => {
   let c = 1;
   for (let i = 0; i < k; i++) c = (c * (n - i)) / (i + 1);
-  return c * p ** k * (1 - p) ** (n - k);
+  return c;
 };
 
-// acierto es la probabilidad de acertar una pregunta de un concepto que no sabes; null la deja en blanco.
+// acierto y fallo son las probabilidades de +1 y de −1/4 en una pregunta. El resto de cada pregunta vale 0.
 // objetivo es la nota sobre 10, y pide objetivo * n / 10 aciertos netos.
-export function probabilidadDeLaNota(sabes, acierto, objetivo, n = TAMANO_SIMULACRO) {
-  const netos = (objetivo * n) / 10;
+export function probabilidadDeLaNota(acierto, fallo, objetivo, n = TAMANO_SIMULACRO) {
+  const netos = (objetivo * n) / 10, cero = Math.max(0, 1 - acierto - fallo);
   let total = 0;
-  for (let k = 0; k <= n; k++) {
-    const resto = n - k;
-    if (acierto === null) { if (k >= netos) total += binomial(n, k, sabes); continue; }
-    for (let a = 0; a <= resto; a++) if (k + a - PENALIZACION * (resto - a) >= netos) total += binomial(n, k, sabes) * binomial(resto, a, acierto);
-  }
+  for (let a = 0; a <= n; a++)
+    for (let f = 0; f <= n - a && a - PENALIZACION * f >= netos; f++)
+      total += comb(n, a) * comb(n - a, f) * acierto ** a * fallo ** f * cero ** (n - a - f);
   return total;
 }
 
+// Los 5 resultados de una prueba, en este orden: acierto y fallo con "seguro", acierto y fallo con "dudo", y blanco.
+const resultadoDe = (r) => (r.blanco ? 4 : r.seguro ? (r.acierto ? 0 : 1) : r.acierto ? 2 : 3);
+const PUNTOS = { contesta: [1, -PENALIZACION, 1, -PENALIZACION, 0], blanco: [1, -PENALIZACION, 0, 0, 0] };
+const ESTADOS = ["sabes", "noSabes", "sinVer"];
+const PRIOR = { sabes: [2, 0, 0, 0, 0], noSabes: [0, 0, 0.5, 1.5, 0], sinVer: [0, 0, 0.5, 1.5, 0] };
+
+// Una prueba es una respuesta a una pregunta distinta de la anterior de su concepto, contada en el estado del concepto antes de la respuesta.
+export function pruebas(banco, historial) {
+  const concepto = new Map(banco.map((q) => [q.id, q.concepto]));
+  const estado = new Map(), anterior = new Map();
+  const cuenta = Object.fromEntries(ESTADOS.map((e) => [e, [0, 0, 0, 0, 0]]));
+  for (const r of enOrden(historial)) {
+    const k = concepto.get(r.id);
+    if (k === undefined) continue;
+    if (anterior.get(k) !== r.id) cuenta[estado.get(k) ?? "sinVer"][resultadoDe(r)]++;
+    estado.set(k, sabeTras(r) ? "sabes" : "noSabes");
+    anterior.set(k, r.id);
+  }
+  return cuenta;
+}
+
+export function semilla(n) {
+  return () => {
+    n = (n + 0x6d2b79f5) | 0;
+    let t = Math.imul(n ^ (n >>> 15), 1 | n);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const normal = (azar) => Math.sqrt(-2 * Math.log(1 - azar())) * Math.cos(2 * Math.PI * azar());
+
+// Marsaglia y Tsang. Una forma menor que 1 usa gamma(a + 1) · U^(1/a).
+function gamma(a, azar) {
+  if (a <= 0) return 0;
+  if (a < 1) return gamma(a + 1, azar) * azar() ** (1 / a);
+  const d = a - 1 / 3, c = 1 / Math.sqrt(9 * d);
+  for (;;) {
+    let x, v;
+    do { x = normal(azar); v = 1 + c * x; } while (v <= 0);
+    v = v ** 3;
+    if (Math.log(azar()) < 0.5 * x * x + d - d * v + d * Math.log(v)) return d * v;
+  }
+}
+
+const dirichlet = (alfa, azar) => {
+  const g = alfa.map((a) => gamma(a, azar));
+  const s = g.reduce((x, y) => x + y);
+  return g.map((x) => x / s);
+};
+
 const META = 0.95;
 const VENTANA = 60;
-const A_CIEGAS = 1 / 4;
+const MUESTRAS = 500;
 
 // La tarjeta de la nota: la probabilidad de hoy y de la forma con más probabilidad, los conceptos y las sesiones que faltan para un 95 %.
 export function tarjetaDeLaNota(banco, historial, objetivo) {
   const c = conceptos(banco, historial);
-  const n = c.sabes + c.noSabes + c.sinVer, total = n || 1;
-  const dudo = porcentajeDudo(historial);
-  const tasaDudo = dudo ? dudo.porcentaje / 100 : A_CIEGAS;
-  const tasa = (c.noSabes * tasaDudo + c.sinVer * A_CIEGAS) / (c.noSabes + c.sinVer || 1);
-  const probabilidad = (s, acierto) => probabilidadDeLaNota(s / total, acierto, objetivo);
-  const mejor = (s) => Math.max(probabilidad(s, null), probabilidad(s, tasa));
+  const n = c.sabes + c.noSabes + c.sinVer, total = n || 1, resto = c.noSabes + c.sinVer || 1;
+  const cuenta = pruebas(banco, historial);
+  const alfa = Object.fromEntries(ESTADOS.map((e) => [e, PRIOR[e].map((x, i) => x + cuenta[e][i])]));
+  const azar = semilla(1);
+  const muestras = Array.from({ length: MUESTRAS }, () => ESTADOS.map((e) => dirichlet(alfa[e], azar)));
+  // Con s conceptos en "lo sabes", los demás quedan en "no lo sabes" y "sin ver" con la proporción de hoy.
+  const probabilidad = (s, forma) => {
+    const peso = [s / total, ((total - s) / total) * (c.noSabes / resto), ((total - s) / total) * (c.sinVer / resto)];
+    let suma = 0;
+    for (const m of muestras) {
+      let acierto = 0, fallo = 0;
+      m.forEach((theta, e) => theta.forEach((p, i) => {
+        if (PUNTOS[forma][i] === 1) acierto += peso[e] * p;
+        else if (PUNTOS[forma][i] < 0) fallo += peso[e] * p;
+      }));
+      suma += probabilidadDeLaNota(acierto, fallo, objetivo);
+    }
+    return suma / MUESTRAS;
+  };
+  const mejor = (s) => Math.max(probabilidad(s, "blanco"), probabilidad(s, "contesta"));
   let meta = c.sabes;
   while (meta < n && mejor(meta) < META) meta++;
+  const alcanza = n === 0 || mejor(meta) >= META;
   const faltan = meta - c.sabes;
-  const ordenado = [...historial].sort((a, b) => a.ts.localeCompare(b.ts));
   const sesionesDeLaVentana = Math.min(VENTANA, historial.length) / TAMANO_SESION || 1;
-  const ritmo = (c.sabes - conceptos(banco, ordenado.slice(0, -VENTANA)).sabes) / sesionesDeLaVentana;
-  const blanco = probabilidad(c.sabes, null), contesta = probabilidad(c.sabes, tasa);
-  return { ...c, total, dudo, tasaDudo, tasa, blanco, contesta, contestar: contesta > blanco,
+  const ritmo = (c.sabes - conceptos(banco, enOrden(historial).slice(0, -VENTANA)).sabes) / sesionesDeLaVentana;
+  const blanco = probabilidad(c.sabes, "blanco"), contesta = probabilidad(c.sabes, "contesta");
+  const suma = (xs) => xs.reduce((x, y) => x + y, 0);
+  // aciertos es la media de la Dirichlet: el prior y las pruebas juntos.
+  const filas = Object.fromEntries(ESTADOS.map((e) => [e, {
+    aciertos: (alfa[e][0] + alfa[e][2]) / suma(alfa[e]), vistos: cuenta[e][0] + cuenta[e][2], pruebas: suma(cuenta[e]) }]));
+  return { ...c, total, filas, blanco, contesta, contestar: contesta > blanco,
     puntos: Math.round(100 * Math.abs(contesta - blanco)), hoy: Math.max(blanco, contesta),
-    meta, faltan, ritmo, sesiones: faltan <= 0 ? 0 : ritmo > 0 ? Math.ceil(faltan / ritmo) : null };
+    meta, alcanza, faltan, ritmo, sesiones: !alcanza ? null : faltan <= 0 ? 0 : ritmo > 0 ? Math.ceil(faltan / ritmo) : null };
 }
 
 export const resultado =(pregunta, eleccion) => (eleccion === null ? "blanco" : eleccion === pregunta.correcta ? "acierto" : "fallo");

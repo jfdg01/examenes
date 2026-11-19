@@ -62,7 +62,15 @@ El historial es una lista de respuestas que solo crece, con una respuesta por l�
 {"id": "rgpd-001", "ts": "2026-11-06T18:02:11Z", "acierto": true, "seguro": false}
 ```
 
-La interfaz calcula todo el estado con esta lista: la caja de cada pregunta y el dominio de cada concepto. Dos dispositivos no tienen conflictos, porque cada uno solo añade líneas.
+Una pregunta en blanco lleva además `"blanco": true`, con `acierto` y `seguro` en `false`. La clave `blanco` solo sale en un blanco. La razón está en [el ADR 0001](docs/adr/0001-el-blanco-lleva-su-propia-clave.md).
+
+```json
+{"id": "rgpd-001", "ts": "2026-11-06T18:02:11Z", "acierto": false, "seguro": false, "blanco": true}
+```
+
+Un blanco anterior a esa clave tiene la forma de un fallo con "dudo", y queda así.
+
+La interfaz calcula todo el estado con esta lista: la caja de cada concepto, su estado y las tasas de la tarjeta de la nota. Dos dispositivos no tienen conflictos, porque cada uno solo añade líneas.
 
 El historial no entra en git. El servidor lo guarda en `ln/respuestas.jsonl`.
 
@@ -171,7 +179,7 @@ Una pantalla de menos de 900 px es una columna con 4 partes: la línea de arriba
 
 - La línea de arriba lleva el progreso, el botón ✕, el botón de las notas y el botón de copiar.
 - El cuerpo lleva la pregunta y las opciones. Tras responder, lleva también el aviso, la explicación y el campo de notas. El campo de notas empieza escondido hasta que lo muestras con el botón de las notas.
-- Antes de responder, el pie dice "Toca el texto si estás seguro. Toca «dudo» si dudas." En el simulacro, el pie lleva también el botón "En blanco".
+- Antes de responder, el pie dice "Toca el texto si estás seguro. Toca «dudo» si dudas." El pie lleva también el botón "En blanco", en la sesión y en el simulacro.
 - Tras responder, las opciones que no son la correcta ni la tuya se atenúan. Si el cuerpo no cabe en la pantalla, esas opciones se pliegan tras el botón "ver las otras N opciones".
 - Tras responder, el pie tiene 2 botones: "pág. N" a la izquierda y "Siguiente". "pág. N" abre la fuente a pantalla completa: la imagen de la página, que un toque amplía al 200 %, y el enlace "PDF". La ✕ y el botón de atrás del móvil cierran la fuente.
 
@@ -191,7 +199,7 @@ Un reloj en la cabecera cuenta atrás desde 25:00. Con el reloj en 0:00, el simu
 
 Cada pregunta del simulacro tiene un botón "en blanco" debajo de las opciones. Un acierto suma 0,5 puntos, un fallo resta 0,125 y un blanco no cuenta. Al final, la interfaz muestra la nota sobre 10.
 
-Las respuestas del simulacro entran al historial como las demás, porque son respuestas reales. Una pregunta en blanco cuenta en el historial como un fallo con "dudo".
+Las respuestas del simulacro entran al historial como las demás, porque son respuestas reales. Una pregunta en blanco entra al historial con `"blanco": true`. Una pregunta sin contestar al final del reloj no entra al historial.
 
 ## La ronda a medias
 

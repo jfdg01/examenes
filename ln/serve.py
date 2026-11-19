@@ -36,7 +36,8 @@ def valida_ronda(g):
 
 def valida(respuestas):
     return isinstance(respuestas, list) and all(
-        isinstance(r, dict) and r.keys() == CAMPOS.keys() and all(type(r[k]) is t for k, t in CAMPOS.items())
+        isinstance(r, dict) and r.keys() - {"blanco"} == CAMPOS.keys() and all(type(r[k]) is t for k, t in CAMPOS.items())
+        and ("blanco" not in r or (r["blanco"] is True and r["acierto"] is False and r["seguro"] is False))
         for r in respuestas
     )
 
@@ -123,7 +124,7 @@ class Manejador(SimpleHTTPRequestHandler):
             self.responder_json(200, {})
             return
         if not valida(respuestas):
-            self.send_error(400, "Una respuesta lleva solo id, ts, acierto y seguro")
+            self.send_error(400, "Una respuesta lleva solo id, ts, acierto y seguro, y un blanco lleva además blanco")
             return
         with cerrojo:
             vistas = {(r["id"], r["ts"]) for r in leer(self.historial)}
