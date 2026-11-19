@@ -102,7 +102,7 @@ El examen resta 1/4 de un acierto por cada fallo. La tarjeta de la nota, en la p
 
 ## La pantalla de inicio
 
-Debajo del título, la pantalla de inicio tiene una barra con 3 tramos, uno por cada estado de un concepto: verde para "lo sabes", rojo para "no lo sabes" y gris para "sin ver". El largo de cada tramo es su parte de los conceptos del banco. Debajo de la barra van las 3 cifras: "Sabes 79 · No sabes 6 · Sin ver 66, de 151 conceptos".
+Debajo del título, la pantalla de inicio tiene una barra con 3 tramos, uno por cada estado de un concepto: verde para "lo sabes", rojo para "no lo sabes" y gris para "sin ver". El largo de cada tramo es su parte de los conceptos del banco. Debajo de la barra van las 3 cifras: "Sabes 1 · No sabes 130 · Sin ver 34, de 165 conceptos".
 
 El tramo gris baja con cada sesión, hasta que la vuelta a todo el banco termina.
 
@@ -110,31 +110,24 @@ Debajo de las cifras va la tarjeta de la nota, la única tarjeta de la pantalla.
 
 La tarjeta tiene 3 partes, de arriba abajo:
 
-1. **La flecha**: a la izquierda, la probabilidad de hoy, "80 %", con "con 81 conceptos" debajo. A la derecha, "95 %", con "con 98 conceptos" debajo. En el medio, una flecha con "≈4 sesiones". La palabra "probabilidad" no sale.
+1. **La flecha**: a la izquierda, la probabilidad de hoy, "80 %", con "con 81 conceptos" debajo. A la derecha, la probabilidad en la meta, "95 %", con "con 98 conceptos" debajo. En el medio, una flecha con "≈4 sesiones". La palabra "probabilidad" no sale.
 2. **La barra del camino**: un tramo verde para los conceptos que sabes, un tramo amarillo para los conceptos que faltan, y una marca en el 95 %. El largo de cada tramo es su parte de los conceptos del banco. La barra no tiene bloques.
 3. **El consejo**: "Contesta las dudas · +9 puntos", o "Deja las dudas en blanco · +N puntos". Los puntos son la diferencia entre la probabilidad de las 2 formas, en puntos de porcentaje. Un botón "?" abre el desglose, un `<details>` que empieza cerrado. El desglose sigue abierto cuando el slider se mueve.
 
-El desglose da los aciertos en una duda, con una fila por grupo de conceptos:
-
-| Fila | Conceptos | Aciertos en una duda | Detalle |
-|---|---|---|---|
-| en lo que viste | no lo sabes | el porcentaje de aciertos con "dudo" | "32 de 68 «dudo»" |
-| en lo que no viste | sin ver | 25 % | "a ciegas, 1 de 4" |
-| de media | los 2 grupos | la media de las 2 filas | |
-
-La media pesa cada porcentaje con los conceptos de su fila. Sin respuestas con "dudo", la primera fila usa el 25 % y el detalle "a ciegas, 1 de 4". Una pregunta de un concepto sin ver da menos pistas que una pregunta de un concepto visto, y por eso cada grupo tiene su porcentaje.
+El desglose tiene una fila, "en lo que no sabes": los conceptos que no sabes y los conceptos sin ver, con el porcentaje de aciertos con "dudo" y el detalle "32 de 68 «dudo»". Sin respuestas con "dudo", la fila usa el 25 % y el detalle "a ciegas, 1 de 4".
 
 El cálculo supone que cada pregunta del examen cae en un concepto al azar del banco:
 
-- Una pregunta de un concepto que sabes es un acierto.
-- Con las dudas en blanco, una pregunta de otro concepto no cuenta.
-- Con las dudas contestadas, una pregunta de otro concepto acierta con la media del desglose, y un fallo resta 1/4 de un acierto.
+- El modelo da, para cada concepto, la probabilidad de "lo sé y acierto", de "creo que lo sé y fallo" y de "no lo sé".
+- Con las dudas en blanco, un "no lo sé" no cuenta.
+- Con las dudas contestadas, un "no lo sé" acierta con el porcentaje del desglose, y un fallo resta 1/4 de un acierto.
+- La probabilidad de la nota sale exacta de esas 3 salidas, con la media de 30 remuestras de un bootstrap del historial. Las remuestras cubren la duda de los parámetros.
 
 La tarjeta sigue la forma con la probabilidad más alta para la nota elegida: el consejo, la cifra de hoy y el camino. Con otra nota, la mejor forma puede cambiar.
 
-El camino busca el número más pequeño de conceptos con una probabilidad del 95 % o más, con la mejor forma en cada número. El 95 % es fijo. Los conceptos que faltan son ese número menos los conceptos que sabes.
+El camino busca el número más pequeño de conceptos sabidos con una probabilidad del 95 % o más, con la mejor forma en cada número. Ese número sube los conceptos con la probabilidad más alta al 100 %. El 95 % es fijo. Los conceptos que faltan son ese número menos los conceptos que sabes. Con todo el banco sabido sin llegar al 95 %, la cifra de la derecha es la probabilidad con todo sabido.
 
-El ritmo sale de las 60 últimas respuestas, 5 sesiones de 12. El ritmo es la diferencia entre los conceptos que sabes hoy y los conceptos que sabías sin esas respuestas, dividida entre esas sesiones. Con menos de 60 respuestas, cuentan todas. Las sesiones son los conceptos que faltan divididos entre el ritmo, redondeadas hacia arriba.
+El ritmo sale de las 60 últimas respuestas, 5 sesiones de 12. El ritmo cuenta los conceptos sabidos esperados, la suma de las probabilidades de saber cada concepto. El ritmo es la ganancia de esa suma con esas respuestas, con los parámetros de hoy, dividida entre esas sesiones. Con menos de 60 respuestas, cuentan todas. Las sesiones son lo que le falta a la suma en los conceptos del camino, dividido entre el ritmo y redondeado hacia arriba.
 
 - Con un 95 % o más hoy, la flecha muestra "✓", sin la cifra de la derecha ni el tramo amarillo.
 - Con un ritmo de 0 o menos, la flecha muestra "? sesiones".
@@ -182,7 +175,7 @@ Una sesión sin preguntas pendientes muestra la fecha de la próxima pregunta, y
 
 ## El simulacro
 
-El simulacro copia los parámetros del examen: 20 preguntas al azar de todo el banco, sin mirar las cajas, y 25 minutos. Es el repaso de los días 18 y 19 de noviembre.
+El simulacro copia los parámetros del examen: 20 preguntas al azar de todo el banco, sin mirar el modelo, y 25 minutos. Es el repaso de los días 18 y 19 de noviembre.
 
 Un reloj en la cabecera cuenta atrás desde 25:00. Con el reloj en 0:00, el simulacro termina y cada pregunta sin contestar cuenta en blanco.
 
@@ -242,7 +235,7 @@ El test tiene 2 partes independientes: la interfaz y el banco. El formato de `pr
 
 ### La interfaz
 
-La interfaz tiene el servidor, la página web, las cajas, el simulacro y las imágenes de las páginas.
+La interfaz tiene el servidor, la página web, el modelo, el simulacro y las imágenes de las páginas.
 
 - La página lee `preguntas.json`, y no tiene ninguna pregunta en su código.
 - Los tests de la interfaz usan `ln/preguntas-ejemplo.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
@@ -276,4 +269,4 @@ node --test
 python3 -m unittest
 ```
 
-`node --test` prueba `logica.js`, la lógica de las cajas, de la sesión, del simulacro y del guardado de la ronda, sin el DOM. `python3 -m unittest` prueba `serve.py`, `sacar_paginas.py` y `comprobar_banco.py`.
+`node --test` prueba `logica.js`, la lógica del modelo, de la sesión, del simulacro y del guardado de la ronda, sin el DOM. `python3 -m unittest` prueba `serve.py`, `sacar_paginas.py` y `comprobar_banco.py`.
