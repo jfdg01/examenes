@@ -17,7 +17,7 @@ Cada sección separa **La fuente** (lo que dice, con enlace) de **La conclusión
 - La degeneración: un modelo es degenerado en teoría si G > 0.5 o S > 0.5. Los tutores acotan G a [0, 0.3] y S a [0, 0.1]. Las priors de Dirichlet de Beck dan un 23 % de skills que fallan una prueba empírica de degeneración (Baker 2008). van de Sande exige `G + S < 1` y `T < 1 − S/(1−G)`.
 - El ajuste por fuerza bruta busca en una rejilla de dos decimales ([Ritter et al. 2009](https://www.educationaldatamining.org/EDM2009/uploads/proceedings/ritter.pdf); el [código de Baker](https://ryanbaker.c3l.ai/ryanbaker/edmtools.html)). Ritter reduce 2400 skills a 23 grupos de parámetros sin perder comportamiento. Con pocos alumnos, los grupos predicen mejor que el ajuste por skill: el ajuste por skill sobreajusta.
 
-**La conclusión.** LN tiene unas 1.7 respuestas por concepto. Un ajuste por concepto no se puede hacer. Unos parámetros globales para los 165 conceptos son el caso extremo de los grupos de Ritter, y es el único que los datos sostienen. La prior de Beck entra como pseudo-counts en el M-step. Las cotas de Baker y de van de Sande impiden la degeneración.
+**La conclusión.** LN tiene unas 1.7 respuestas por concepto. Un ajuste por concepto no se puede hacer. Unos parámetros globales para los 165 conceptos son el caso extremo de los grupos de Ritter, y es el único que los datos sostienen. La prior de Beck entra como pseudo-counts en el M-step. Con el historial de hoy, la prior basta contra la degeneración. Las cotas de Baker y de van de Sande entran si un ajuste degenera.
 
 ## 2. El olvido y los modelos de memoria
 
@@ -81,17 +81,17 @@ Solo actualiza una prueba: una respuesta a una pregunta distinta de la anterior 
 
 **El axioma.** Con `P(L_c) = 1` para todo c, la nota esperada es `10·(1 − 1.25·S)`, y `P(10) = (1−S)^20`. Con S = 0.02, la nota esperada es 9.75. El 73 % de hoy no es un techo. Tras un solo acierto-seguro, `P(L)` queda lejos de 1, porque G es alto con 4 opciones.
 
-**El ajuste.** Hay 8 parámetros globales: L0, T y las 6 libres de e0 y e1. El ajuste usa EM (Baum-Welch con dos estados), unas 60 líneas de JS, con varios arranques. El M-step suma pseudo-counts como prior:
+**El ajuste.** Hay 6 parámetros globales: L0, T y las 4 libres de e0 y e1, con las 3 salidas de abajo. El ajuste usa EM (Baum-Welch con dos estados). El M-step suma pseudo-counts como prior:
 
-- e1 empieza en (0.90, 0.07, 0.02, 0.01), así que S empieza en 0.03.
-- e0 empieza con G cerca de 0.3.
-- Las cotas son G < 0.5, S < 0.5 y `G + S < 1`. Si el ajuste choca con una cota, lo dice.
+- e1 suma (9.5, 0.2, 0.3) a "lo sé y acierto", "creo que lo sé y fallo" y "no lo sé".
+- e0 suma (1.5, 1, 2.5).
+- L0 suma 1 de 2, y T suma 1 de 10. Sin datos, L0 es 0.5.
 
 Un ajuste por concepto queda fuera, por falta de datos.
 
 **El olvido.** Hoy, F = 0. Antes de añadirlo, la calibración se mira aparte en las respuestas de un día nuevo y en las del mismo día, como hace Qiu. Si el modelo sobreestima las de un día nuevo, entra un F global por día. FSRS y HLR esperan a tener más de 512 repasos.
 
-**La nota.** La nota sale de una simulación de Monte Carlo con 10 000 exámenes: 20 conceptos al azar, unos parámetros de un bootstrap del historial, y los aciertos. La tarjeta muestra la media, un intervalo del 80 % y `P(nota ≥ x)`.
+**La nota.** La nota sale de 30 remuestras de un bootstrap del historial, como dice la decisión de abajo. La tarjeta muestra `P(nota ≥ x)`.
 
 **La calibración.**
 
@@ -115,22 +115,22 @@ Un ajuste por concepto queda fuera, por falta de datos.
 - El lapsus sale de los datos.
 - "Lo sabes" es una probabilidad de saber el concepto del 90 % o más.
 - La sesión elige los 12 conceptos con la probabilidad más baja de saberlos. Los pesos de un sorteo quedan fuera, por la simulación de abajo.
-- La nota sale de una simulación con un bootstrap de los parámetros.
+- La nota sale de 30 remuestras de un bootstrap de los parámetros. Cada remuestra da el reparto de las salidas de una pregunta, y la probabilidad de la nota sale exacta de ese reparto, sin sorteo de exámenes.
 
 ## El ajuste y la simulación con el historial del 19 de noviembre de 2026
 
-[`bkt/bkt.mjs`](bkt/bkt.mjs) ajusta el BKT de 3 resultados con EM, sobre 285 respuestas. Da L0 = 0,18 y T = 0,29. Un concepto sabido da "lo sé y acierto" un 94 %, "creo que lo sé y fallo" un 1 % y "no lo sé" un 5 %. Un concepto no sabido da "lo sé y acierto" un 28 %. Un concepto sin ver llega al 90 % con 3 aciertos con seguro seguidos, en preguntas hermanas.
+[`bkt.mjs`](https://github.com/jfdg01/examenes/blob/29de3690a2cc4fca12c9b20953ea5c204f3277e2/ln/docs/research/bkt/bkt.mjs) ajusta el BKT de 3 resultados con EM, sobre 285 respuestas. Da L0 = 0,18 y T = 0,29. Un concepto sabido da "lo sé y acierto" un 94 %, "creo que lo sé y fallo" un 1 % y "no lo sé" un 5 %. Un concepto no sabido da "lo sé y acierto" un 28 %. Un concepto sin ver llega al 90 % con 3 aciertos con seguro seguidos, en preguntas hermanas.
 
-[`bkt/sim.mjs`](bkt/sim.mjs) compara 7 formas de elegir las 12 preguntas, con 400 estudiantes simulados desde el estado de ese día. Con 8 sesiones:
+[`sim.mjs`](https://github.com/jfdg01/examenes/blob/29de3690a2cc4fca12c9b20953ea5c204f3277e2/ln/docs/research/bkt/sim.mjs) compara 7 formas de elegir las 12 preguntas, con 400 estudiantes simulados desde el estado de ese día. Con 8 sesiones:
 
 | La forma de elegir | P(≥ 5) | P(≥ 7) | Conceptos sabidos |
 |---|---|---|---|
 | Los 12 con la probabilidad más baja | 98,0 % | 54,5 % | 87,0 |
-| Caja 1, sin ver, sorteo por caja (el modelo de `main`) | 97,9 % | 53,8 % | 86,3 |
+| Caja 1, sin ver, sorteo por caja (el modelo de las cajas) | 97,9 % | 53,8 % | 86,3 |
 | Sorteo con un peso de (1 − P)⁴, mínimo 0,02 | 97,9 % | 53,7 % | 86,2 |
 | Fallados primero, peso de 1 − P, mínimo 0,1 | 97,7 % | 51,8 % | 84,3 |
 | Al azar | 97,2 % | 49,2 % | 81,7 |
 
 La ganancia de una prueba es T · (1 − P), y es más alta en el concepto menos sabido. Las diferencias entre las formas son de 1 a 5 puntos en el 7. El número de sesiones pesa más. La simulación usa el mismo modelo para elegir y para juzgar, y no tiene olvido. Con un olvido, un concepto sabido vuelve a necesitar repasos, y un peso mínimo vuelve a importar.
 
-La app sigue con el modelo de `main` hasta después del examen. El BKT no está implementado.
+Los 2 prototipos corren con el `logica.js` del modelo de las cajas. `ajustar` y `sesion`, en `logica.js`, implementan el ajuste y la forma de elegir de la primera fila.
