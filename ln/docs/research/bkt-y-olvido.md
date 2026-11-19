@@ -38,3 +38,27 @@ Cada sección separa **La fuente** (lo que dice, con enlace) de **La conclusión
 
 **La conclusión.** LN tiene menos de 1 dato por pregunta, así que la dificultad por pregunta queda fuera. Dos clases sí caben: "pregunta nueva para el concepto" y "pregunta repetida". Así la memoria de una pregunta concreta entra en un G propio y no ensucia el G de las hermanas. La regla ya decidida (una prueba es una pregunta distinta de la anterior) es la versión más simple, y basta para empezar.
 
+## 4. El seguro/dudo y el blanco
+
+**La fuente.**
+
+- No encontré un trabajo que meta la confianza declarada en BKT.
+- Lo más cercano es FSRS. Sus notas Again, Hard, Good y Easy son una autoevaluación: un Hard es un acierto cuyo aumento de stability se multiplica por un `hard_penalty` (`scheduler.py`).
+- KT con crédito parcial cambia el nodo binario de la respuesta por uno continuo, y mejora la predicción ([Wang y Heffernan 2013](https://doi.org/10.1007/978-3-642-39112-5_19); leí solo el resumen).
+- Para el blanco hay dos convenciones. En pyBKT, una respuesta vacía no actualiza (`EM_fit.py`). En los Cognitive Tutors, pedir ayuda cuenta como no saber (Baker 2008).
+
+**La conclusión.** El seguro/dudo cabe en BKT como una emisión de cuatro salidas por estado: acierto-seguro, acierto-dudo, fallo-dudo y fallo-seguro. Son 6 parámetros globales de emisión, y el historial tiene 49 o más casos en tres de las salidas. Un blanco es una renuncia, igual que pedir ayuda, y cuenta como fallo-dudo. Así coincide con el [ADR del blanco](../adr/0001-el-blanco-lleva-su-propia-clave.md).
+
+## 5. De las probabilidades a la nota, y la calibración
+
+**La fuente.**
+
+- El número de aciertos de 20 preguntas con p distintas sigue una Poisson-binomial ([Hong 2013](https://doi.org/10.1016/j.csda.2012.10.006)).
+- Un modelo está calibrado si, entre sus predicciones cercanas a 0.8, acierta un 80 %. La curva de calibración agrupa las predicciones en bins. El Brier score y el log loss mezclan calibración y discriminación, así que un Brier menor no prueba una calibración mejor ([scikit-learn](https://scikit-learn.org/stable/modules/calibration.html), que cita la descomposición de Murphy 1973).
+
+**La conclusión.**
+
+- Con A aciertos y 20 contestadas, los puntos son `A − (20−A)/4 = 1.25·A − 5`, y la nota es la mitad.
+- Contestar vale la pena si `p − (1−p)/4 > 0`, es decir, si p > 0.2. Con G ≥ 0.25, el modelo nunca recomienda un blanco. El blanco sale solo de lo que el estudiante sabe en el examen.
+- Una simulación de Monte Carlo cubre las tres fuentes de incertidumbre. Sortea 20 conceptos, sortea unos parámetros de su posterior o de un bootstrap, y sortea los aciertos.
+
