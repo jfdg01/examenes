@@ -100,3 +100,20 @@ Un ajuste por concepto queda fuera, por falta de datos.
 - La medida es el Brier y el log loss frente a una tasa constante, más una curva de 5 bins por cuantiles con un intervalo binomial por bin. Con unas 280 respuestas, más bins quedan vacíos o con ruido.
 - La comprobación del axioma es aparte. Los conceptos con `P(L) > 0.9` deben acertar sus hermanas por encima del 90 %.
 
+## Lo que no encontré
+
+- Un trabajo que meta la confianza declarada (seguro/dudo) en BKT o en un modelo de memoria.
+- Un trabajo que mida, en knowledge tracing, el efecto de repetir la misma pregunta frente a una hermana.
+- El texto completo de Corbett y Anderson 1994 y de Beck y Chang 2007, que están tras un muro de pago. Sus afirmaciones vienen de Baker 2008, de van de Sande 2013 y del código de pyBKT.
+- El texto de Pavlik y Anderson 2005. Usé su artículo de ICCM 2003, que tiene el mismo modelo de activación.
+- Un número mínimo de respuestas para BKT con priors. El 512 es una regla del optimizador de FSRS, no de BKT.
+
+## Las decisiones de LN
+
+- La unidad es el concepto. El examen pregunta los mismos conceptos del banco con otras preguntas.
+- Una respuesta tiene 3 resultados: "lo sé y acierto" (acierto con seguro), "creo que lo sé y fallo" (fallo con seguro) y "no lo sé" (dudo o blanco). Un acierto con dudo es una adivinanza, y no sube la probabilidad de saber el concepto. La tasa de acierto de una duda contestada da solo el consejo del examen.
+- El lapsus sale de los datos.
+- "Lo sabes" es una probabilidad de saber el concepto del 90 % o más.
+- La sesión elige los 12 conceptos con la probabilidad más baja de saberlos. Los pesos de un sorteo quedan fuera, por la simulación de abajo.
+- La nota sale de una simulación con un bootstrap de los parámetros.
+
