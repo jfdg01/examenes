@@ -117,3 +117,20 @@ Un ajuste por concepto queda fuera, por falta de datos.
 - La sesión elige los 12 conceptos con la probabilidad más baja de saberlos. Los pesos de un sorteo quedan fuera, por la simulación de abajo.
 - La nota sale de una simulación con un bootstrap de los parámetros.
 
+## El ajuste y la simulación con el historial del 19 de noviembre de 2026
+
+[`bkt/bkt.mjs`](bkt/bkt.mjs) ajusta el BKT de 3 resultados con EM, sobre 285 respuestas. Da L0 = 0,18 y T = 0,29. Un concepto sabido da "lo sé y acierto" un 94 %, "creo que lo sé y fallo" un 1 % y "no lo sé" un 5 %. Un concepto no sabido da "lo sé y acierto" un 28 %. Un concepto sin ver llega al 90 % con 3 aciertos con seguro seguidos, en preguntas hermanas.
+
+[`bkt/sim.mjs`](bkt/sim.mjs) compara 7 formas de elegir las 12 preguntas, con 400 estudiantes simulados desde el estado de ese día. Con 8 sesiones:
+
+| La forma de elegir | P(≥ 5) | P(≥ 7) | Conceptos sabidos |
+|---|---|---|---|
+| Los 12 con la probabilidad más baja | 98,0 % | 54,5 % | 87,0 |
+| Caja 1, sin ver, sorteo por caja (el modelo de `main`) | 97,9 % | 53,8 % | 86,3 |
+| Sorteo con un peso de (1 − P)⁴, mínimo 0,02 | 97,9 % | 53,7 % | 86,2 |
+| Fallados primero, peso de 1 − P, mínimo 0,1 | 97,7 % | 51,8 % | 84,3 |
+| Al azar | 97,2 % | 49,2 % | 81,7 |
+
+La ganancia de una prueba es T · (1 − P), y es más alta en el concepto menos sabido. Las diferencias entre las formas son de 1 a 5 puntos en el 7. El número de sesiones pesa más. La simulación usa el mismo modelo para elegir y para juzgar, y no tiene olvido. Con un olvido, un concepto sabido vuelve a necesitar repasos, y un peso mínimo vuelve a importar.
+
+La app sigue con el modelo de `main` hasta después del examen. El BKT no está implementado.
