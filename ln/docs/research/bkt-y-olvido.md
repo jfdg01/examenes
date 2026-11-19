@@ -19,3 +19,22 @@ Cada sección separa **La fuente** (lo que dice, con enlace) de **La conclusión
 
 **La conclusión.** LN tiene unas 1.7 respuestas por concepto. Un ajuste por concepto no se puede hacer. Unos parámetros globales para los 165 conceptos son el caso extremo de los grupos de Ritter, y es el único que los datos sostienen. La prior de Beck entra como pseudo-counts en el M-step. Las cotas de Baker y de van de Sande impiden la degeneración.
 
+## 2. El olvido y los modelos de memoria
+
+**La fuente.**
+
+- BKT+F añade F = P(olvidar). Entre dos pruebas de un skill, F se aplica una vez por cada prueba intermedia: `1 − (1−F)^n`. En Assistments, el AUC sube de 0.73 a 0.83 ([Khajah, Lindsey y Mozer 2016](https://arxiv.org/abs/1604.02416)).
+- KT-Forget aplica el olvido solo en una respuesta de un día nuevo. El error de KT en un día nuevo es mucho mayor que en el mismo día. KT-Forget mejora la predicción de forma significativa ([Qiu et al. 2011](https://educationaldatamining.org/EDM2011/wp-content/uploads/proc/edm11_proceedings.pdf), pp. 139-148).
+- La half-life regression (HLR) predice `p = 2^(−Δ/h)` y `h = 2^(Θ·x)`, donde x cuenta los aciertos y los fallos. Leitner es HLR con pesos fijos: `Θ = {aciertos: +1, fallos: −1}` ([Settles y Meeder 2016](https://aclanthology.org/P16-1174.pdf), apéndice). HLR necesita millones de datos para sus pesos.
+- DASH es `logistic(a_alumno − d_item + Σ_w φ_w·log(1+c_w) − ψ_w·log(1+n_w))`, con conteos por ventanas de tiempo ([Lindsey et al. 2014](https://doi.org/10.1177/0956797613504302)). Su fuerza viene de los datos de una población de alumnos.
+- En ACT-R, cada práctica deja una huella que decae como potencia del tiempo. El decaimiento de una práctica sube con la activación del momento ([Pavlik y Anderson 2003](https://www.gwern.net/docs/www/act-r.psy.cmu.edu/f4b85d71f1bd93309c094119607097a071bb09e3.pdf); la versión de revista es [Pavlik y Anderson 2005](https://doi.org/10.1207/s15516709cog0000_14)).
+- En FSRS, la retrievability es `R = (1 + FACTOR·t/S)^(−w20)`, con R(S) = 0.9. El modelo tiene 21 parámetros. Con menos de 512 repasos de días distintos, el optimizador devuelve los parámetros por defecto ([`scheduler.py`](https://github.com/open-spaced-repetition/py-fsrs/blob/main/fsrs/scheduler.py), [`optimizer.py`](https://github.com/open-spaced-repetition/py-fsrs/blob/main/fsrs/optimizer.py)).
+
+**La conclusión.** HLR, DASH, ACT-R y FSRS modelan el recuerdo sin guess. Con 4 opciones, combinarlos con BKT es así: la retención da P(L), y G y S dan el acierto. Con unas 280 respuestas en 15 días, FSRS usaría sus valores de Anki, y HLR y DASH no tienen datos para sus pesos. El modelo más simple que funciona es KT-Forget: un F global por día de calendario, `P(L) ← P(L)·(1−F)^días`. Un solo parámetro.
+
+## 3. Varias preguntas por concepto
+
+**La fuente.** KT-IDEM da a cada pregunta su G y su S. En los datos de Cognitive Tutor, mejora a KT solo en los conjuntos con más de 6 datos por pregunta. El artículo atribuye el resto al exceso de parámetros ([Pardos y Heffernan 2011](https://web.cs.wpi.edu/~nth/pubs_and_grants/papers/2011/UMAP/Pardos%20Introducing%20Item%20Difficulty.pdf)). pyBKT implementa la idea con `multigs`: G y S por clase de pregunta ([README de pyBKT](https://github.com/CAHLR/pyBKT)).
+
+**La conclusión.** LN tiene menos de 1 dato por pregunta, así que la dificultad por pregunta queda fuera. Dos clases sí caben: "pregunta nueva para el concepto" y "pregunta repetida". Así la memoria de una pregunta concreta entra en un G propio y no ensucia el G de las hermanas. La regla ya decidida (una prueba es una pregunta distinta de la anterior) es la versión más simple, y basta para empezar.
+
