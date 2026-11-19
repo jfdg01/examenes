@@ -153,20 +153,19 @@ Cada estado tiene sus cuentas de los 5 resultados. Con pocas pruebas, una tasa m
 
 Sin historial, el cálculo da el modelo a ciegas. Con cada prueba, las tasas se acercan a lo que mide el historial.
 
-- Una pregunta de un concepto que sabes es un acierto.
-- Con las dudas en blanco, una pregunta de otro concepto no cuenta.
-- Con las dudas contestadas, una pregunta de otro concepto acierta con la media del desglose, y un fallo resta 1/4 de un acierto.
+El cálculo supone que cada pregunta del examen cae en un concepto al azar del banco. La pregunta cae en cada estado con la parte de los conceptos de ese estado. El cálculo saca 500 muestras de las tasas de cada estado de su Dirichlet, con una semilla fija, así que la cifra no cambia entre 2 cargas. Cada muestra da una cuenta exacta de la nota sobre 20 preguntas. La probabilidad es la media de las 500 cuentas.
 
 La tarjeta sigue la forma con la probabilidad más alta para la nota elegida: el consejo, la cifra de hoy y el camino. Con otra nota, la mejor forma puede cambiar.
 
-El camino busca el número más pequeño de conceptos con una probabilidad del 95 % o más, con la mejor forma en cada número. El 95 % es fijo. Los conceptos que faltan son ese número menos los conceptos que sabes.
+El camino busca el número más pequeño de conceptos con una probabilidad del 95 % o más, con la mejor forma en cada número. Cada concepto más en "lo sabes" sale de "no lo sabes" y de "sin ver", en la proporción de hoy. Las tasas de cada estado no cambian. El 95 % es fijo. Los conceptos que faltan son ese número menos los conceptos que sabes.
 
 El ritmo sale de las 60 últimas respuestas, 5 sesiones de 12. El ritmo es la diferencia entre los conceptos que sabes hoy y los conceptos que sabías sin esas respuestas, dividida entre esas sesiones. Con menos de 60 respuestas, cuentan todas. Las sesiones son los conceptos que faltan divididos entre el ritmo, redondeadas hacia arriba.
 
 - Con un 95 % o más hoy, la flecha muestra "✓", sin la cifra de la derecha ni el tramo amarillo.
 - Con un ritmo de 0 o menos, la flecha muestra "? sesiones".
+- Sin un 95 % con todos los conceptos en "lo sabes", la derecha muestra "ni con N conceptos", con N el total del banco, y la flecha muestra "—". La tasa de "lo sabes" pone ese techo: un concepto que sabes también falla.
 
-Las cifras son un límite optimista. El examen pregunta con otras palabras, y no elige sus preguntas al azar del temario. Un fallo con "seguro" en el examen no entra en el cálculo. El ritmo sale sobre todo de conceptos nuevos, y baja cuando la vuelta a todo el banco termina. Así, las sesiones para una nota alta son más que la cifra de la flecha.
+Las cifras son un límite optimista. El examen pregunta con otras palabras, y no elige sus preguntas al azar del temario. Las tasas no cuentan el olvido: una prueba de hoy y una prueba de hace 2 semanas pesan igual. El ritmo sale sobre todo de conceptos nuevos, y baja cuando la vuelta a todo el banco termina. Así, las sesiones para una nota alta son más que la cifra de la flecha.
 
 ## La pantalla de la pregunta
 
