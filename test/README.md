@@ -71,7 +71,7 @@ Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002), "A revie
 
 1. **Una sola respuesta defendible.** La correcta es cierta según su página, y cada distractor es falso según el temario. Un distractor "menos correcto" no vale. Un dato que el temario da de 2 formas distintas no tiene pregunta.
 2. **El enunciado se contesta sin las opciones.** El enunciado nombra el concepto del temario y pide una sola cosa de ese concepto. Con las opciones tapadas, quien sabe el dato da una sola respuesta corta. Así, la pregunta entrena el recuerdo del dato, y no solo su reconocimiento. Un caso práctico pide un solo salto: del caso al concepto, o del concepto a lo que hace, y no los 2. El enunciado no lleva un detalle que la respuesta no necesita. El enunciado dice la idea con otras palabras, y no copia la frase del temario, pero usa el término del temario para el concepto.
-3. **Ninguna pista fuera del dato.** Las 4 opciones tienen una longitud parecida, y la correcta es la más larga en un 25 % de las preguntas como mucho. Las 4 tienen la forma gramatical que pide el enunciado. Una palabra del enunciado no se repite solo en la correcta, y "siempre", "nunca" o "solo" no van solo en los distractores. Una sigla o una traducción del enunciado también es una pista: "CWNP" en el enunciado señala "CWSP", y "seguridad ofensiva" señala "Offensive Security". Ninguna opción es "todas las anteriores" ni "ninguna de las anteriores", porque la interfaz baraja las opciones.
+3. **Ninguna pista fuera del dato.** Las opciones tienen una longitud parecida, y la correcta es la más larga en 1 de cada `opciones` preguntas como mucho: un 25 % con 4 opciones, y un 33 % con 3. Todas tienen la forma gramatical que pide el enunciado. Una palabra del enunciado no se repite solo en la correcta, y "siempre", "nunca" o "solo" no van solo en los distractores. Una sigla o una traducción del enunciado también es una pista: "CWNP" en el enunciado señala "CWSP", y "seguridad ofensiva" señala "Offensive Security". Ninguna opción es "todas las anteriores" ni "ninguna de las anteriores", porque la interfaz baraja las opciones.
 4. **Cada distractor sale del temario que dio el profesor.** Un distractor es un nombre, una cifra o una idea del temario, fuera de los ejercicios y de las actividades. El mejor distractor es la confusión más probable de quien estudia, como responsable y encargado. Un nombre que no sale en el temario se descarta sin saber el dato.
 5. **Ningún enunciado negativo.** Un "¿Cuál NO es…?" se lee mal con prisa, y entrena la búsqueda de la trampa, y no el dato.
 6. **Una idea, y no un dato suelto.** La pregunta pide una idea del temario: una regla, un plazo, la diferencia entre 2 figuras o lo que hace algo. Una fecha del calendario, el número de una norma o el nombre de la organización que ofrece una certificación no tienen pregunta. Un plazo sí la tiene, porque es una regla, como las 72 horas para notificar una brecha. Una pregunta puede nombrar una norma por su número, pero no pide ese número.
@@ -101,7 +101,7 @@ El historial es una lista de respuestas que solo crece, con una respuesta por l�
 
 La interfaz calcula todo el estado con esta lista: la caja de cada pregunta y el dominio de cada concepto. Dos dispositivos no tienen conflictos, porque cada uno solo añade líneas.
 
-El historial no entra en git. El servidor lo guarda en `ln/respuestas.jsonl`.
+El historial no entra en git. El servidor lo guarda en `respuestas.jsonl`, en la carpeta del examen.
 
 Una respuesta huérfana tiene un `id` que no está en el banco. Una pregunta que la regla 6 cambia deja sus respuestas huérfanas. La interfaz no usa las respuestas huérfanas en ninguna cuenta, y el archivo las conserva, porque una línea borrada no tiene vuelta atrás.
 
@@ -138,7 +138,7 @@ Un bloque de estudio termina con una pausa de 3 horas sin respuestas. Una pregun
 
 Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
 
-El examen resta 1/4 de un acierto por cada fallo. La tarjeta de la nota, en la pantalla de inicio, dice si una pregunta dudosa se contesta, y muestra el porcentaje de aciertos con "dudo".
+Un fallo resta la `penalizacion` de un acierto. La tarjeta de la nota, en la pantalla de inicio, dice si una pregunta dudosa se contesta, y muestra el porcentaje de aciertos con "dudo".
 
 ## La pantalla de inicio
 
@@ -159,16 +159,16 @@ El desglose da los aciertos en una duda, con una fila por grupo de conceptos:
 | Fila | Conceptos | Aciertos en una duda | Detalle |
 |---|---|---|---|
 | en lo que viste | no lo sabes | el porcentaje de aciertos con "dudo" | "32 de 68 «dudo»" |
-| en lo que no viste | sin ver | 25 % | "a ciegas, 1 de 4" |
+| en lo que no viste | sin ver | 1 de `opciones` | "a ciegas, 1 de 3" |
 | de media | los 2 grupos | la media de las 2 filas | |
 
-La media pesa cada porcentaje con los conceptos de su fila. Sin respuestas con "dudo", la primera fila usa el 25 % y el detalle "a ciegas, 1 de 4". Una pregunta de un concepto sin ver da menos pistas que una pregunta de un concepto visto, y por eso cada grupo tiene su porcentaje.
+La media pesa cada porcentaje con los conceptos de su fila. Sin respuestas con "dudo", la primera fila usa 1 de `opciones` y el detalle "a ciegas, 1 de 3". Una pregunta de un concepto sin ver da menos pistas que una pregunta de un concepto visto, y por eso cada grupo tiene su porcentaje.
 
 El cálculo supone que cada pregunta del examen cae en un concepto al azar del banco:
 
 - Una pregunta de un concepto que sabes es un acierto.
 - Con las dudas en blanco, una pregunta de otro concepto no cuenta.
-- Con las dudas contestadas, una pregunta de otro concepto acierta con la media del desglose, y un fallo resta 1/4 de un acierto.
+- Con las dudas contestadas, una pregunta de otro concepto acierta con la media del desglose, y un fallo resta la `penalizacion` de un acierto.
 
 La tarjeta sigue la forma con la probabilidad más alta para la nota elegida: el consejo, la cifra de hoy y el camino. Con otra nota, la mejor forma puede cambiar.
 
@@ -216,17 +216,17 @@ Debajo de las opciones hay un campo de texto para las notas de la pregunta. El b
 
 El botón con un icono de copiar está a la derecha del botón de las notas. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
 
-Las imágenes están en `ln/paginas/<pdf sin .pdf>-<pagina>.png`. `pdftoppm -png -r 80` las saca de los PDFs una sola vez. Las imágenes y los PDFs no entran en git.
+Las imágenes están en `paginas/<pdf sin .pdf>-<pagina>.png`, en la carpeta del examen. `pdftoppm -png -r 80` las saca de los PDFs una sola vez.
 
 Una sesión sin preguntas pendientes muestra la fecha de la próxima pregunta, y ofrece el simulacro. No hay un botón para reiniciar el historial, porque el historial guarda los fallos con "seguro" y el porcentaje de "dudo".
 
 ## El simulacro
 
-El simulacro copia los parámetros del examen: 20 preguntas al azar de todo el banco, sin mirar las cajas, y 25 minutos. Es el repaso de los días 18 y 19 de noviembre.
+El simulacro copia los parámetros del examen: `preguntas` preguntas al azar de todo el banco, sin mirar las cajas, y `minutos` minutos. Es el repaso de los últimos días.
 
-Un reloj en la cabecera cuenta atrás desde 25:00. Con el reloj en 0:00, el simulacro termina y cada pregunta sin contestar cuenta en blanco.
+Un reloj en la cabecera cuenta atrás desde los `minutos` del examen. Con el reloj en 0:00, el simulacro termina y cada pregunta sin contestar cuenta en blanco.
 
-Cada pregunta del simulacro tiene un botón "en blanco" debajo de las opciones. Un acierto suma 0,5 puntos, un fallo resta 0,125 y un blanco no cuenta. Al final, la interfaz muestra la nota sobre 10.
+Cada pregunta del simulacro tiene un botón "en blanco" debajo de las opciones. Al final, la interfaz muestra la nota sobre 10. Un acierto suma 10 / `preguntas` puntos, un fallo resta la `penalizacion` de un acierto y un blanco no cuenta.
 
 Las respuestas del simulacro entran al historial como las demás, porque son respuestas reales. Una pregunta en blanco cuenta en el historial como un fallo con "dudo".
 
@@ -262,9 +262,9 @@ Con 2 dispositivos abiertos a la vez, gana el último guardado. Un dispositivo n
 - `GET /api/respuestas` devuelve el historial entero.
 - `POST /api/respuestas` añade una lista de respuestas al historial.
 - `GET /api/notas` devuelve las notas, un objeto con el `id` de la pregunta como clave.
-- `POST /api/notas` guarda `{"id", "texto"}`. Un `texto` vacío borra la nota. Las notas viven en `ln/notas.json`, que no entra en git.
+- `POST /api/notas` guarda `{"id", "texto"}`. Un `texto` vacío borra la nota. Las notas viven en `notas.json`.
 - `GET /api/ronda` devuelve el guardado de la ronda, o `{"guardada": 0, "ronda": null}` sin guardado.
-- `POST /api/ronda` guarda un guardado de la ronda. Un guardado con otros campos o con otros tipos recibe un 400. El guardado vive en `ln/ronda.json`, que no entra en git.
+- `POST /api/ronda` guarda un guardado de la ronda. Un guardado con otros campos o con otros tipos recibe un 400. El guardado vive en `ronda.json`.
 
 La interfaz guarda en `localStorage` cada respuesta sin enviar, y la envía cuando el servidor responde. Así, una sesión en el móvil sin red no pierde respuestas.
 
