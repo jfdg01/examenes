@@ -1,0 +1,8 @@
+{
+  "titulo": "LN",
+  "preguntas": 20,
+  "opciones": 4,
+  "minutos": 25,
+  "penalizacion": 0.25,
+  "temas": ["rgpd", "iso27001", "ens", "riesgos", "auditoria", "lssi", "software", "propiedad", "delitos", "etica", "certificaciones"]
+}

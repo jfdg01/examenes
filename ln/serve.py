@@ -62,7 +62,9 @@ class Manejador(SimpleHTTPRequestHandler):
     def translate_path(self, path):
         if urlsplit(path).path == "/preguntas.json":
             return str(Path(self.directory) / self.banco)
-        return super().translate_path(path)
+        # La carpeta del examen tiene sus datos, y la interfaz sale de la carpeta del código.
+        propia = Path(super().translate_path(path))
+        return str(propia if propia.is_file() else AQUI / propia.relative_to(self.directory))
 
     def responder_json(self, codigo, datos):
         cuerpo = json.dumps(datos, ensure_ascii=False).encode()
@@ -144,10 +146,12 @@ def crear_servidor(puerto, banco, historial, carpeta=AQUI):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="El servidor del test de LN")
+    parser = argparse.ArgumentParser(description="El servidor del test de un examen")
+    parser.add_argument("--carpeta", type=Path, default=AQUI, help="la carpeta del examen, con examen.json")
+    parser.add_argument("--puerto", type=int, default=PUERTO)
     parser.add_argument("--banco", default="preguntas.json", help="el archivo que sirve en /preguntas.json")
     parser.add_argument("--historial", default="respuestas.jsonl")
     argumentos = parser.parse_args()
-    servidor = crear_servidor(PUERTO, argumentos.banco, argumentos.historial)
-    print(f"LN en http://127.0.0.1:{PUERTO}")
+    servidor = crear_servidor(argumentos.puerto, argumentos.banco, argumentos.historial, argumentos.carpeta.resolve())
+    print(f"{argumentos.carpeta.resolve().name} en http://127.0.0.1:{argumentos.puerto}")
     servidor.serve_forever()

@@ -2,6 +2,7 @@ import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { cajas, conceptos, probabilidadDeLaNota, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, tarjetaDeLaNota, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS, guardado, masNueva, restaurar } from "./logica.js";
+const LN = JSON.parse(readFileSync(new URL("./examen.json", import.meta.url)));
 
 const r = (id, ts, acierto, seguro) => ({ id, ts, acierto, seguro });
 
@@ -127,14 +128,14 @@ test("el estado de un concepto sale de la última respuesta a una de sus pregunt
 
 test("la probabilidad de una nota cuenta los aciertos menos 1/4 de los fallos, sobre 20 preguntas", () => {
   const cerca = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} ≠ ${b}`);
-  cerca(probabilidadDeLaNota(1, null, 5), 1);
-  cerca(probabilidadDeLaNota(0, null, 5), 0);
-  cerca(probabilidadDeLaNota(0.5, null, 5), 0.5880985260009766);
-  cerca(probabilidadDeLaNota(0.5, 0.25, 5), 0.6828711582842681);
-  cerca(probabilidadDeLaNota(0, 0.25, 5), 0.000935391579332645);
-  cerca(probabilidadDeLaNota(0.5, null, 7.5), 0.020694732666015625);
-  cerca(probabilidadDeLaNota(0.5, 0.25, 7.5), 0.07904140886862707);
-  cerca(probabilidadDeLaNota(0.9, 0.25, 10), 0.21029776386659405);
+  cerca(probabilidadDeLaNota(1, null, 5, LN), 1);
+  cerca(probabilidadDeLaNota(0, null, 5, LN), 0);
+  cerca(probabilidadDeLaNota(0.5, null, 5, LN), 0.5880985260009766);
+  cerca(probabilidadDeLaNota(0.5, 0.25, 5, LN), 0.6828711582842681);
+  cerca(probabilidadDeLaNota(0, 0.25, 5, LN), 0.000935391579332645);
+  cerca(probabilidadDeLaNota(0.5, null, 7.5, LN), 0.020694732666015625);
+  cerca(probabilidadDeLaNota(0.5, 0.25, 7.5, LN), 0.07904140886862707);
+  cerca(probabilidadDeLaNota(0.9, 0.25, 10, LN), 0.21029776386659405);
 });
 
 test("la sesión mezcla los temas", () => {
@@ -192,11 +193,11 @@ test("unir 2 historiales quita las respuestas repetidas", () => {
 
 test("el simulacro saca 20 preguntas distintas al azar de todo el banco, sin mirar las cajas", () => {
   const banco = Array.from({ length: 100 }, (_, k) => p("q" + k));
-  const s = simulacro(banco, semilla(2));
+  const s = simulacro(banco, LN.preguntas, semilla(2));
   assert.equal(s.length, 20);
   assert.equal(new Set(s.map((q) => q.id)).size, 20);
-  assert.notDeepEqual(ids(s), ids(simulacro(banco, semilla(9))));
-  assert.equal(simulacro(banco.slice(0, 6), semilla(2)).length, 6);
+  assert.notDeepEqual(ids(s), ids(simulacro(banco, LN.preguntas, semilla(9))));
+  assert.equal(simulacro(banco.slice(0, 6), LN.preguntas, semilla(2)).length, 6);
 });
 
 test("la nota del simulacro es sobre 10: un acierto suma 0,5, un fallo resta 0,125 y un blanco no cuenta", () => {
@@ -216,7 +217,7 @@ test("la hoja enlaza la imagen de la página y el PDF en esa página", () => {
 test("el banco de ejemplo tiene 6 preguntas, y una sesión nueva las saca todas", () => {
   assert.equal(ejemplo.length, 6);
   assert.deepEqual(ids(sesion(ejemplo, [], dia(6), semilla(1))), ids(ejemplo));
-  assert.equal(simulacro(ejemplo, semilla(1)).length, 6);
+  assert.equal(simulacro(ejemplo, LN.preguntas, semilla(1)).length, 6);
 });
 
 test("la página no tiene ninguna pregunta en su código", () => {
@@ -256,7 +257,7 @@ const historialDe = (...respuestas) => respuestas.map(([i, acierto, seguro], k) 
 const cerca = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} ≠ ${b}`);
 
 test("la tarjeta sin historial acierta una duda a ciegas, 1 de 4, y no tiene ritmo", () => {
-  const t = tarjetaDeLaNota(bancoDe(20), [], 5);
+  const t = tarjetaDeLaNota(bancoDe(20), [], 5, LN);
   assert.equal(t.dudo, null);
   cerca(t.tasaDudo, 1 / 4);
   cerca(t.tasa, 1 / 4);
@@ -269,7 +270,7 @@ test("la tarjeta sin historial acierta una duda a ciegas, 1 de 4, y no tiene rit
 
 test("una duda acierta con el porcentaje de dudo en lo que viste, y 1 de 4 en lo que no viste, ponderado por conceptos", () => {
   const h = historialDe([0, true, true], [1, false, false], [2, true, false]);
-  const t = tarjetaDeLaNota(bancoDe(10), h, 5);
+  const t = tarjetaDeLaNota(bancoDe(10), h, 5, LN);
   assert.deepEqual(t.dudo, { porcentaje: 50, total: 2, aciertos: 1 });
   assert.equal(t.noSabes, 2);
   assert.equal(t.sinVer, 7);
@@ -280,7 +281,7 @@ test("una duda acierta con el porcentaje de dudo en lo que viste, y 1 de 4 en lo
 test("la tarjeta sigue la forma con la probabilidad más alta, y el consejo da la diferencia en puntos", () => {
   // 10 conceptos que sabes y 10 con un fallo con dudo: contestar solo resta, y una duda acierta 0 %.
   const h = historialDe(...Array.from({ length: 10 }, (_, i) => [i, true, true]), ...Array.from({ length: 10 }, (_, i) => [10 + i, false, false]));
-  const t = tarjetaDeLaNota(bancoDe(20), h, 5);
+  const t = tarjetaDeLaNota(bancoDe(20), h, 5, LN);
   cerca(t.hoy, 0.5880985260009766);
   assert.equal(t.contestar, false);
   assert.equal(t.puntos, 34);
@@ -289,7 +290,7 @@ test("la tarjeta sigue la forma con la probabilidad más alta, y el consejo da l
 test("el camino cuenta los conceptos que faltan para un 95 %, y las sesiones salen del ritmo, redondeadas hacia arriba", () => {
   // Para un 10 con 20 preguntas, solo 20 aciertos valen, así que el 95 % pide todos los conceptos.
   const h = historialDe(...[0, 1, 2, 3].map((i) => [i, true, true]));
-  const t = tarjetaDeLaNota(bancoDe(20), h, 10);
+  const t = tarjetaDeLaNota(bancoDe(20), h, 10, LN);
   assert.equal(t.sabes, 4);
   assert.equal(t.meta, 20);
   assert.equal(t.faltan, 16);
@@ -302,7 +303,7 @@ test("el ritmo cuenta solo las 60 últimas respuestas, 5 sesiones de 12", () => 
     ...Array.from({ length: 40 }, (_, i) => [i, true, true]),
     ...Array.from({ length: 10 }, (_, i) => [40 + i, true, true]),
     ...Array.from({ length: 50 }, () => [0, true, true]));
-  const t = tarjetaDeLaNota(bancoDe(100), h, 10);
+  const t = tarjetaDeLaNota(bancoDe(100), h, 10, LN);
   assert.equal(t.sabes, 50);
   cerca(t.ritmo, 2);
   assert.equal(t.faltan, 50);
@@ -310,20 +311,20 @@ test("el ritmo cuenta solo las 60 últimas respuestas, 5 sesiones de 12", () => 
 });
 
 test("con un 95 % o más hoy no faltan conceptos ni sesiones", () => {
-  const t = tarjetaDeLaNota(bancoDe(20), historialDe(...Array.from({ length: 20 }, (_, i) => [i, true, true])), 5);
+  const t = tarjetaDeLaNota(bancoDe(20), historialDe(...Array.from({ length: 20 }, (_, i) => [i, true, true])), 5, LN);
   assert.equal(t.faltan, 0);
   assert.equal(t.meta, 20);
   assert.equal(t.sesiones, 0);
 });
 
 test("con un ritmo de 0 o menos, las sesiones no se pueden calcular", () => {
-  const t = tarjetaDeLaNota(bancoDe(20), historialDe([0, false, true]), 10);
+  const t = tarjetaDeLaNota(bancoDe(20), historialDe([0, false, true]), 10, LN);
   assert.equal(t.faltan, 20);
   assert.equal(t.sesiones, null);
 });
 
 test("con un banco vacío no faltan conceptos", () => {
-  const t = tarjetaDeLaNota([], [], 5);
+  const t = tarjetaDeLaNota([], [], 5, LN);
   assert.equal(t.faltan, 0);
   assert.equal(t.sesiones, 0);
 });
@@ -358,4 +359,10 @@ test("sin ronda a medias, o con un id que no está en el banco, restaurar devuel
   const banco = JSON.parse(readFileSync("./preguntas-ejemplo.json", "utf8"));
   assert.equal(restaurar({ guardada: 1, ronda: null }, banco), null);
   assert.equal(restaurar({ guardada: 1, ronda: { ids: [banco[0].id, "no-existe"], resultados: [], simulacro: false, limite: null } }, banco), null);
+});
+
+test("un examen de 3 opciones sin penalización acierta una duda a ciegas 1 de 3, y aconseja contestar", () => {
+  const t = tarjetaDeLaNota(bancoDe(20), [], 5, { preguntas: 35, opciones: 3, penalizacion: 0 });
+  assert.ok(Math.abs(t.tasa - 1 / 3) < 1e-9);
+  assert.ok(t.contestar);
 });

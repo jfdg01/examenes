@@ -90,12 +90,9 @@ export function unir(servidor, locales) {
   return [...vistas.values()];
 }
 
-const TAMANO_SIMULACRO = 20;
-export const MINUTOS_SIMULACRO = 25;
-
-export const simulacro = (banco, azar = Math.random) => barajar(banco, azar).slice(0, TAMANO_SIMULACRO);
-
-export const PENALIZACION = 1 / 4;
+// Un examen es el examen.json de su carpeta: titulo, preguntas, opciones, minutos, penalizacion y temas.
+// penalizacion es la parte de un acierto que resta un fallo.
+export const simulacro = (banco, n, azar = Math.random) => barajar(banco, azar).slice(0, n);
 
 const binomial = (n, k, p) => {
   let c = 1;
@@ -105,29 +102,29 @@ const binomial = (n, k, p) => {
 
 // acierto es la probabilidad de acertar una pregunta de un concepto que no sabes; null la deja en blanco.
 // objetivo es la nota sobre 10, y pide objetivo * n / 10 aciertos netos.
-export function probabilidadDeLaNota(sabes, acierto, objetivo, n = TAMANO_SIMULACRO) {
+export function probabilidadDeLaNota(sabes, acierto, objetivo, { preguntas: n, penalizacion }) {
   const netos = (objetivo * n) / 10;
   let total = 0;
   for (let k = 0; k <= n; k++) {
     const resto = n - k;
     if (acierto === null) { if (k >= netos) total += binomial(n, k, sabes); continue; }
-    for (let a = 0; a <= resto; a++) if (k + a - PENALIZACION * (resto - a) >= netos) total += binomial(n, k, sabes) * binomial(resto, a, acierto);
+    for (let a = 0; a <= resto; a++) if (k + a - penalizacion * (resto - a) >= netos) total += binomial(n, k, sabes) * binomial(resto, a, acierto);
   }
   return total;
 }
 
 const META = 0.95;
 const VENTANA = 60;
-const A_CIEGAS = 1 / 4;
 
 // La tarjeta de la nota: la probabilidad de hoy y de la forma con más probabilidad, los conceptos y las sesiones que faltan para un 95 %.
-export function tarjetaDeLaNota(banco, historial, objetivo) {
+export function tarjetaDeLaNota(banco, historial, objetivo, examen) {
+  const aCiegas = 1 / examen.opciones;
   const c = conceptos(banco, historial);
   const n = c.sabes + c.noSabes + c.sinVer, total = n || 1;
   const dudo = porcentajeDudo(historial);
-  const tasaDudo = dudo ? dudo.porcentaje / 100 : A_CIEGAS;
-  const tasa = (c.noSabes * tasaDudo + c.sinVer * A_CIEGAS) / (c.noSabes + c.sinVer || 1);
-  const probabilidad = (s, acierto) => probabilidadDeLaNota(s / total, acierto, objetivo);
+  const tasaDudo = dudo ? dudo.porcentaje / 100 : aCiegas;
+  const tasa = (c.noSabes * tasaDudo + c.sinVer * aCiegas) / (c.noSabes + c.sinVer || 1);
+  const probabilidad = (s, acierto) => probabilidadDeLaNota(s / total, acierto, objetivo, examen);
   const mejor = (s) => Math.max(probabilidad(s, null), probabilidad(s, tasa));
   let meta = c.sabes;
   while (meta < n && mejor(meta) < META) meta++;

@@ -80,6 +80,8 @@ class ComprobarBanco(unittest.TestCase):
     def test_el_script_falla_con_un_banco_con_errores(self):
         with tempfile.TemporaryDirectory() as tmp:
             banco = Path(tmp) / "preguntas.json"
+            (Path(tmp) / "examen.json").write_bytes((LN / "examen.json").read_bytes())
+            (Path(tmp) / "1_Legislacion.pdf").symlink_to(LN / "1_Legislacion.pdf")
             for preguntas, codigo in ((con_pareja(pregunta()), 0), (con_pareja(pregunta(), pregunta()), 1)):
                 banco.write_text(json.dumps(preguntas))
                 r = subprocess.run([sys.executable, LN / "comprobar_banco.py", banco], capture_output=True)

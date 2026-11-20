@@ -19,7 +19,7 @@ class TestServe(unittest.TestCase):
         (self.carpeta / "2A _Teoría.pdf").write_bytes(b"%PDF-falso")
         (self.carpeta / "paginas").mkdir()
         (self.carpeta / "paginas" / "2A _Teoría-5.png").write_bytes(b"png")
-        (self.carpeta / "index.html").write_text("<title>LN</title>")
+        (self.carpeta / "examen.json").write_text('{"titulo": "Otro"}')
         self.historial = self.carpeta / "respuestas.jsonl"
         self.arrancar("preguntas.json")
 
@@ -45,8 +45,10 @@ class TestServe(unittest.TestCase):
     def test_escucha_solo_en_localhost(self):
         self.assertEqual(self.servidor.server_address[0], "127.0.0.1")
 
-    def test_sirve_la_interfaz_el_banco_los_pdfs_y_las_paginas(self):
-        self.assertIn(b"<title>LN</title>", self.get("/"))
+    def test_sirve_la_interfaz_de_su_carpeta_y_los_datos_de_la_carpeta_del_examen(self):
+        self.assertIn(b'src="app.js"', self.get("/"))
+        self.assertIn(b"export function", self.get("/logica.js"))
+        self.assertEqual(json.loads(self.get("/examen.json")), {"titulo": "Otro"})
         self.assertEqual(json.loads(self.get("/preguntas.json")), [{"id": "real"}])
         self.assertEqual(self.get("/2A%20_Teor%C3%ADa.pdf"), b"%PDF-falso")
         self.assertEqual(self.get("/paginas/2A%20_Teor%C3%ADa-5.png"), b"png")

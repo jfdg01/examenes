@@ -1,5 +1,5 @@
 import {
-  cajas, conceptos, dominio, guardado, masNueva, restaurar, PENALIZACION, tarjetaDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, MINUTOS_SIMULACRO, nota, opciones, pdfEnPagina, respuesta, resultado, sesion, simulacro, unir, clave,
+  cajas, conceptos, dominio, guardado, masNueva, restaurar, tarjetaDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, nota, opciones, pdfEnPagina, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
@@ -11,6 +11,7 @@ const ICONO_OK = circulo("M7.5 12.5l3 3 6-6.5");
 const ICONO_KO = circulo("M8.5 8.5l7 7M15.5 8.5l-7 7");
 const app = document.getElementById("app");
 const editar = document.getElementById("editar");
+let examen;
 let banco = [];
 let historial = [];
 let alDia = true;
@@ -77,9 +78,9 @@ function tarjetaNota() {
     detalle && el("em", { textContent: detalle }));
   const pintarTarjeta = (objetivo) => {
     titulo.textContent = `Sacar más de ${numero(objetivo)}`;
-    const t = tarjetaDeLaNota(banco, historial, objetivo);
+    const t = tarjetaDeLaNota(banco, historial, objetivo, examen);
     const parte = (n) => `${(100 * n) / t.total}%`;
-    const ciegas = "a ciegas, 1 de 4";
+    const ciegas = `a ciegas, 1 de ${examen.opciones}`;
     cuerpo.replaceChildren(
       el("div", { className: "flecha" },
         punta(pc(t.hoy), t.sabes),
@@ -96,7 +97,7 @@ function tarjetaNota() {
           el("i", { className: "info", textContent: "?" })),
         el("small", { textContent: "aciertos en una duda" }),
         fila("en lo que viste", t.noSabes, t.tasaDudo, t.dudo ? `${t.dudo.aciertos} de ${t.dudo.total} «dudo»` : ciegas),
-        fila("en lo que no viste", t.sinVer, 1 / 4, ciegas),
+        fila("en lo que no viste", t.sinVer, 1 / examen.opciones, ciegas),
         fila("de media", t.noSabes + t.sinVer, t.tasa, null, true)));
   };
   const slider = el("input", { type: "range", min: 0.5, max: 10, step: 0.5, value: localStorage.getItem(OBJETIVO) ?? 5,
@@ -109,7 +110,7 @@ function inicio() {
   const lista = sesion(banco, historial, new Date());
   const sinEnviar = pendientes().length;
   pintar(
-    el("h1", { textContent: "LN: el test" }),
+    el("h1", { textContent: `${examen.titulo}: el test` }),
     el("p", { className: "dim", textContent: `${banco.length} preguntas en el banco · ${historial.length} respuestas en el historial` }),
     barra(conceptos(banco, historial)),
     alDia ? null : el("p", { className: "aviso", textContent: "Sin conexión con el servidor: el historial no está al día." }),
@@ -119,7 +120,7 @@ function inicio() {
       : el("p", { className: "tarjeta", textContent: banco.length
         ? "No hay preguntas pendientes. El repaso vuelve después de una pausa de 3 horas."
         : "El banco no tiene preguntas." }),
-    el("button", { className: "grande otro", textContent: `Simulacro (${simulacro(banco).length} preguntas)`, onclick: () => empezar({ preguntas: simulacro(banco), simulacro: true, i: 0, resultados: [], limite: Date.now() + MINUTOS_SIMULACRO * 60000 }) }),
+    el("button", { className: "grande otro", textContent: `Simulacro (${simulacro(banco, examen.preguntas).length} preguntas)`, onclick: () => empezar({ preguntas: simulacro(banco, examen.preguntas), simulacro: true, i: 0, resultados: [], limite: Date.now() + examen.minutos * 60000 }) }),
   );
 }
 
@@ -288,7 +289,7 @@ function fin(ronda) {
   const resumen = ronda.simulacro
     ? [
       el("p", { className: "tarjeta", textContent: `Aciertos: ${cuenta("acierto")} · Fallos: ${cuenta("fallo")} · En blanco: ${cuenta("blanco")}` }),
-      el("p", { className: "tarjeta", textContent: `Nota: ${numero(nota(ronda.resultados, PENALIZACION))} sobre 10.` }),
+      el("p", { className: "tarjeta", textContent: `Nota: ${numero(nota(ronda.resultados, examen.penalizacion))} sobre 10.` }),
     ]
     : [el("p", { className: "tarjeta", textContent: `Aciertos: ${cuenta("acierto")} de ${ronda.resultados.length}` })];
   pintar(
@@ -299,6 +300,8 @@ function fin(ronda) {
 }
 
 async function cargar() {
+  examen = await (await fetch("examen.json")).json();
+  document.title = `${examen.titulo}: el test`;
   banco = await (await fetch("preguntas.json")).json();
   await enviar();
   try {
