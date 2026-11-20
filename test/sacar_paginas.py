@@ -7,7 +7,7 @@ from pathlib import Path
 def sacar(carpeta):
     destino = carpeta / "paginas"
     destino.mkdir(exist_ok=True)
-    for pdf in sorted(carpeta.glob("*.pdf")):
+    for pdf in sorted((carpeta / "pdfs").glob("*.pdf")):
         info = subprocess.run(["pdfinfo", pdf], capture_output=True, text=True, check=True).stdout
         for pagina in range(1, int(re.search(r"^Pages:\s+(\d+)", info, re.M).group(1)) + 1):
             nombre = destino / f"{pdf.stem}-{pagina}"
@@ -17,4 +17,4 @@ def sacar(carpeta):
 
 
 if __name__ == "__main__":
-    sacar(Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().parent)
+    sacar(Path(sys.argv[1]))

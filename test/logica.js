@@ -147,7 +147,7 @@ export function nota(resultados, penalizacion) {
 
 export const imagenDePagina = ({ pdf, pagina }) => encodeURI(`paginas/${pdf.replace(/\.pdf$/, "")}-${pagina}.png`);
 
-export const pdfEnPagina = ({ pdf, pagina }) => `${encodeURI(pdf)}#page=${pagina}`;
+export const pdfEnPagina = ({ pdf, pagina }) => `pdfs/${encodeURI(pdf)}#page=${pagina}`;
 
 // L es el borde izquierdo, S el separador y R el borde derecho de las 2 columnas: de izquierda a derecha.
 export const COLUMNAS = { L: 0.08, S: 0.5, R: 0.92 };

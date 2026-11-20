@@ -7,7 +7,6 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 AQUI = Path(__file__).resolve().parent
-PUERTO = 8601
 CAMPOS = {"id": str, "ts": str, "acierto": bool, "seguro": bool}
 RESULTADOS = {"acierto", "fallo", "blanco"}
 SIN_RONDA = {"guardada": 0, "ronda": None}
@@ -140,18 +139,19 @@ class Manejador(SimpleHTTPRequestHandler):
         self.responder_json(200, {"anadidas": len(nuevas)})
 
 
-def crear_servidor(puerto, banco, historial, carpeta=AQUI):
+def crear_servidor(puerto, banco, historial, carpeta):
     manejador = partial(Manejador, banco=banco, historial=Path(carpeta) / historial, notas=Path(carpeta) / "notas.json", ronda=Path(carpeta) / "ronda.json", directory=str(carpeta))
     return ThreadingHTTPServer(("127.0.0.1", puerto), manejador)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="El servidor del test de un examen")
-    parser.add_argument("--carpeta", type=Path, default=AQUI, help="la carpeta del examen, con examen.json")
-    parser.add_argument("--puerto", type=int, default=PUERTO)
+    parser.add_argument("carpeta", type=Path, help="la carpeta del examen, con examen.json")
     parser.add_argument("--banco", default="preguntas.json", help="el archivo que sirve en /preguntas.json")
     parser.add_argument("--historial", default="respuestas.jsonl")
     argumentos = parser.parse_args()
-    servidor = crear_servidor(argumentos.puerto, argumentos.banco, argumentos.historial, argumentos.carpeta.resolve())
-    print(f"{argumentos.carpeta.resolve().name} en http://127.0.0.1:{argumentos.puerto}")
+    carpeta = argumentos.carpeta.resolve()
+    puerto = json.loads((carpeta / "examen.json").read_text(encoding="utf-8"))["puerto"]
+    servidor = crear_servidor(puerto, argumentos.banco, argumentos.historial, carpeta)
+    print(f"{carpeta.name} en http://127.0.0.1:{puerto}")
     servidor.serve_forever()

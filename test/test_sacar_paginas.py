@@ -23,8 +23,9 @@ def pdf_de_paginas(n):
 class TestSacarPaginas(unittest.TestCase):
     def setUp(self):
         self.carpeta = Path(tempfile.mkdtemp())
-        (self.carpeta / "2A _Teoría.pdf").write_bytes(pdf_de_paginas(2))
-        (self.carpeta / "3 _Teoría.pdf").write_bytes(pdf_de_paginas(1))
+        (self.carpeta / "pdfs").mkdir()
+        (self.carpeta / "pdfs" / "2A _Teoría.pdf").write_bytes(pdf_de_paginas(2))
+        (self.carpeta / "pdfs" / "3 _Teoría.pdf").write_bytes(pdf_de_paginas(1))
 
     def test_saca_una_imagen_por_pagina_de_cada_pdf(self):
         sacar(self.carpeta)

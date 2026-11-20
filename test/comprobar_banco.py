@@ -25,9 +25,9 @@ def comprobar(preguntas, carpeta):
         if p.get("correcta") in distractores:
             errores.append(f"{id_}: un distractor es la respuesta correcta: {p.get('correcta')}")
         fuente = p.get("fuente", {})
-        pdf = Path(carpeta) / fuente.get("pdf", "")
+        pdf = Path(carpeta) / "pdfs" / fuente.get("pdf", "")
         if not fuente.get("pdf") or not pdf.is_file():
-            errores.append(f"{id_}: el pdf no existe en la carpeta: {fuente.get('pdf')}")
+            errores.append(f"{id_}: el pdf no existe en pdfs/: {fuente.get('pdf')}")
         elif fuente.get("pagina", 0) > paginas(pdf):
             errores.append(f"{id_}: la página {fuente.get('pagina')} pasa de las {paginas(pdf)} de {pdf.name}")
     for concepto, n in collections.Counter(p.get("concepto") for p in preguntas).items():
@@ -51,7 +51,7 @@ def paginas(pdf):
 
 
 if __name__ == "__main__":
-    banco = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).parent / "preguntas.json"
+    banco = Path(sys.argv[1])
     carpeta = banco.resolve().parent
     preguntas = json.loads(banco.read_text())
     errores = comprobar(preguntas, carpeta)

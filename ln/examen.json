@@ -1,5 +1,6 @@
 {
   "titulo": "LN",
+  "puerto": 8601,
   "preguntas": 20,
   "opciones": 4,
   "minutos": 25,

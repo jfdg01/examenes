@@ -16,7 +16,8 @@ class TestServe(unittest.TestCase):
         self.carpeta = Path(tempfile.mkdtemp())
         (self.carpeta / "preguntas.json").write_text('[{"id": "real"}]')
         (self.carpeta / "preguntas-ejemplo.json").write_text('[{"id": "ejemplo"}]')
-        (self.carpeta / "2A _Teoría.pdf").write_bytes(b"%PDF-falso")
+        (self.carpeta / "pdfs").mkdir()
+        (self.carpeta / "pdfs" / "2A _Teoría.pdf").write_bytes(b"%PDF-falso")
         (self.carpeta / "paginas").mkdir()
         (self.carpeta / "paginas" / "2A _Teoría-5.png").write_bytes(b"png")
         (self.carpeta / "examen.json").write_text('{"titulo": "Otro"}')
@@ -50,7 +51,7 @@ class TestServe(unittest.TestCase):
         self.assertIn(b"export function", self.get("/logica.js"))
         self.assertEqual(json.loads(self.get("/examen.json")), {"titulo": "Otro"})
         self.assertEqual(json.loads(self.get("/preguntas.json")), [{"id": "real"}])
-        self.assertEqual(self.get("/2A%20_Teor%C3%ADa.pdf"), b"%PDF-falso")
+        self.assertEqual(self.get("/pdfs/2A%20_Teor%C3%ADa.pdf"), b"%PDF-falso")
         self.assertEqual(self.get("/paginas/2A%20_Teor%C3%ADa-5.png"), b"png")
 
     def test_sirve_otro_banco_en_la_ruta_del_banco(self):

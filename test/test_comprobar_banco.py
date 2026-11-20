@@ -7,7 +7,8 @@ from pathlib import Path
 
 from comprobar_banco import comprobar, huerfanas
 
-LN = Path(__file__).parent
+AQUI = Path(__file__).parent
+LN = AQUI.parent / "ln"
 
 
 def pregunta(**cambios):
@@ -81,10 +82,10 @@ class ComprobarBanco(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             banco = Path(tmp) / "preguntas.json"
             (Path(tmp) / "examen.json").write_bytes((LN / "examen.json").read_bytes())
-            (Path(tmp) / "1_Legislacion.pdf").symlink_to(LN / "1_Legislacion.pdf")
+            (Path(tmp) / "pdfs").symlink_to(LN / "pdfs")
             for preguntas, codigo in ((con_pareja(pregunta()), 0), (con_pareja(pregunta(), pregunta()), 1)):
                 banco.write_text(json.dumps(preguntas))
-                r = subprocess.run([sys.executable, LN / "comprobar_banco.py", banco], capture_output=True)
+                r = subprocess.run([sys.executable, AQUI / "comprobar_banco.py", banco], capture_output=True)
                 self.assertEqual(r.returncode, codigo)
 
 
