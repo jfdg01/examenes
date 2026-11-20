@@ -268,12 +268,17 @@ Con 2 dispositivos abiertos a la vez, gana el último guardado. Un dispositivo n
 
 La interfaz guarda en `localStorage` cada respuesta sin enviar, y la envía cuando el servidor responde. Así, una sesión en el móvil sin red no pierde respuestas.
 
-El servidor escucha en `127.0.0.1:8601`. `tailscale serve` pone HTTPS delante, en el puerto 8600 de la tailnet.
+El servidor recibe la carpeta del examen, y escucha en `127.0.0.1`, en el `puerto` de su `examen.json`. Un archivo de la carpeta del examen gana a un archivo de `test/` con la misma ruta. Así, la carpeta del examen sirve sus datos, y `test/` sirve la interfaz:
+
+```bash
+python3 test/serve.py asn
+tailscale serve --bg --https=8604 http://127.0.0.1:8605
+```
 
 `--banco` sirve otro archivo en `/preguntas.json`, y `--historial` guarda las respuestas en otro archivo. Una prueba con `preguntas-ejemplo.json` usa los 2, porque ese banco repite los `id` del banco real:
 
 ```bash
-python3 serve.py --banco preguntas-ejemplo.json --historial /tmp/ln-respuestas-ejemplo.jsonl
+python3 test/serve.py ln --banco preguntas-ejemplo.json --historial /tmp/ln-respuestas-ejemplo.jsonl
 ```
 
 ## Las 2 partes
@@ -286,30 +291,34 @@ La interfaz tiene el servidor, la página web, las cajas, el simulacro y las im�
 
 - La página lee `preguntas.json`, y no tiene ninguna pregunta en su código.
 - Los tests de la interfaz usan `ln/preguntas-ejemplo.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
-- `sacar_paginas.py` saca las imágenes de `ln/paginas/` de los 5 PDFs. El script no repite una imagen que ya existe.
+- `python3 test/sacar_paginas.py asn` saca las imágenes de `asn/paginas/` de los PDFs de `asn/pdfs/`. El script no repite una imagen que ya existe.
 
 ### El banco
 
-El banco tiene `ln/preguntas.json` y `ln/comprobar_banco.py`.
+El banco tiene el `preguntas.json` de cada examen y `test/comprobar_banco.py`.
 
 `comprobar_banco.py` usa solo la stdlib de Python, y falla con cada pregunta que rompe el formato:
 
 - un `id` repetido, o un `tema` fuera de la lista;
-- un número de distractores distinto de 3, o un distractor igual a la respuesta correcta;
-- un `pdf` que no existe en `ln/`, o una `pagina` mayor que el número de páginas del PDF;
+- un número de distractores distinto de `opciones` − 1, o un distractor igual a la respuesta correcta;
+- un `pdf` que no existe en `pdfs/`, o una `pagina` mayor que el número de páginas del PDF;
 - un `concepto` con menos de 2 preguntas o con más de 3.
 
-Sin argumento, `comprobar_banco.py` lee `ln/preguntas.json`. Con una ruta, lee ese banco.
+`comprobar_banco.py` lee el banco de su argumento, y lee `examen.json` y `pdfs/` de la carpeta del banco:
 
-El script también lista los `id` de las respuestas huérfanas de `ln/respuestas.jsonl`, como un aviso que no falla. El aviso muestra un `id` cambiado por error, porque un `id` no cambia nunca.
+```bash
+python3 test/comprobar_banco.py asn/preguntas.json
+```
 
-El banco crece por tandas, con una tanda por tema y un commit por tanda. La primera tanda es la del RGPD. Su revisión va antes de las demás tandas, porque fija el nivel de las preguntas y de los distractores.
+El script también lista los `id` de las respuestas huérfanas del `respuestas.jsonl` de esa carpeta, como un aviso que no falla. El aviso muestra un `id` cambiado por error, porque un `id` no cambia nunca.
+
+El banco crece por tandas, con una tanda por tema y un commit por tanda. La revisión de la primera tanda va antes de las demás tandas, porque fija el nivel de las preguntas y de los distractores.
 
 Después de las tandas, una revisión independiente compara cada pregunta con su página y con las reglas de calidad. Quien escribe una pregunta no ve sus propios errores, y por eso la revisión la hacen agentes que no escribieron el banco. Los revisores dan la lista de fallos, y un solo agente cambia `preguntas.json`.
 
 ### Los tests
 
-Los tests corren en `ln/`, y necesitan los PDFs:
+Los tests corren en `test/`, y necesitan los PDFs de `ln/pdfs/`:
 
 ```bash
 node --test
