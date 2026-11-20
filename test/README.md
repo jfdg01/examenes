@@ -1,6 +1,43 @@
-# LN: el test de práctica
+# El test de práctica
 
-Un banco de preguntas tipo test del temario de LN, con una interfaz web y un servidor que sincroniza el historial entre el móvil y el PC. El examen es el 20 de noviembre de 2026, a las 16:30. Dura 25 minutos y tiene 20 preguntas tipo test, con 4 opciones como máximo. Un acierto suma 0,5 puntos, un fallo resta 0,125 y una pregunta en blanco no cuenta.
+Un banco de preguntas tipo test del temario de un examen, con una interfaz web y un servidor que sincroniza el historial entre el móvil y el PC. Esta carpeta tiene el código, y cada examen tiene una carpeta de datos al lado: `ln/` y `asn/`.
+
+## Los exámenes
+
+La carpeta de un examen tiene estos archivos:
+
+- `examen.json`: las cifras del examen.
+- `preguntas.json`: el banco.
+- `pdfs/`: los PDFs del temario. `fuente.pdf` lleva solo el nombre del archivo.
+- `paginas/`: las imágenes de las páginas de los PDFs.
+- `README.md`: la fecha, el formato y el estado del banco de ese examen.
+
+El historial, las notas y la ronda a medias también viven en la carpeta del examen. Los PDFs, las imágenes, el historial, las notas y la ronda no entran en git.
+
+`examen.json` tiene estos campos:
+
+```json
+{
+  "titulo": "ASN",
+  "puerto": 8605,
+  "preguntas": 35,
+  "opciones": 3,
+  "minutos": 45,
+  "penalizacion": 0,
+  "temas": ["introduccion", "ciclo-de-vida"]
+}
+```
+
+- `titulo` sale en el título de la página.
+- `puerto` es el puerto local del servidor. `tailscale serve` pone HTTPS delante, en el puerto anterior: 8604 para 8605.
+- `preguntas` y `minutos` son las cifras del simulacro.
+- `opciones` es el número de opciones de una pregunta del examen. Una pregunta del banco tiene `opciones` − 1 distractores.
+- `penalizacion` es la parte de un acierto que un fallo resta: 0,25 resta 1/4 de un acierto, y 0 no resta.
+- `temas` es la lista de los valores de `tema`.
+
+Cada examen tiene su puerto, y el navegador separa el `localStorage` de cada puerto. Así, las claves `ln-*` de un examen no pisan las claves de otro examen.
+
+Un examen nuevo es una carpeta nueva con su `examen.json`, un `preguntas.json` con `[]` y sus PDFs en `pdfs/`. Elige un `puerto` libre: `tailscale serve status` lista los puertos ocupados.
 
 ## El banco: `preguntas.json`
 
@@ -21,12 +58,12 @@ El banco es una lista de preguntas en JSON. El navegador lo lee con `fetch`, sin
 
 - `id` no cambia nunca, porque el historial lo usa como clave.
 - `concepto` agrupa 2 o 3 preguntas que preguntan el mismo dato desde ángulos distintos. Así, una respuesta mide el dato, y no la forma de la pregunta.
-- `tema` es uno de estos: `rgpd`, `iso27001`, `ens`, `riesgos`, `auditoria`, `lssi`, `software`, `propiedad`, `delitos`, `etica`, `certificaciones`.
-- `fuente` lleva el PDF y la página del PDF. Cada página tiene 2 diapositivas, y `pagina` no es el número de la diapositiva. Cada pregunta sale del temario, y no de otra fuente.
-- `correcta` va aparte de los `distractores`, y la interfaz baraja las 4 opciones. Una opción no dice "todas las anteriores", porque el barajado la rompe.
+- `tema` es uno de los `temas` de `examen.json`.
+- `fuente` lleva el PDF y la página del PDF. `pagina` es la página del PDF, y no el número de la diapositiva. Cada pregunta sale del temario, y no de otra fuente.
+- `correcta` va aparte de los `distractores`, y la interfaz baraja las opciones. Una opción no dice "todas las anteriores", porque el barajado la rompe.
 - `explicacion` dice el contraste clave en una línea.
 
-El banco tiene unas 355 preguntas: unas 245 de RGPD, ISO 27001, ENS y riesgos, y unas 110 del resto. Las preguntas tienen 4 opciones, el máximo del examen. Una pregunta de 4 opciones entrena la diferencia entre ideas parecidas.
+Una pregunta tiene las `opciones` del examen, para que el test entrene la misma elección que el examen.
 
 ### La calidad de una pregunta
 
