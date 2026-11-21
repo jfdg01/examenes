@@ -11,7 +11,7 @@ El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.
   "pregunta": "En SSH, ¿cómo acuerdan el cliente y el servidor la clave de sesión?",
   "correcta": "Con un intercambio Diffie-Hellman, firmado por la clave del servidor",
   "distractores": ["El cliente la cifra con la clave pública del servidor", "El servidor la envía firmada con su clave privada"],
-  "explicacion": "SSH acuerda la clave con Diffie-Hellman, y el servidor firma el intercambio. Cifrar la clave con la clave pública del servidor es el intercambio RSA de TLS 1.2, y no el de SSH. Una firma da autenticidad, y no confidencialidad: la clave viajaría a la vista."
+  "explicacion": "✓ SSH acuerda la clave con Diffie-Hellman, y el servidor firma el intercambio.\n✗ «La cifra con la clave pública del servidor»: es el intercambio RSA de TLS 1.2, y no el de SSH.\n✗ «La envía firmada»: una firma da autenticidad, y no confidencialidad. La clave viajaría a la vista."
 }
 ```
 
@@ -32,7 +32,7 @@ Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002) y la guí
 5. **Cada distractor es un error plausible**, la confusión más probable de quien estudia: responsable y encargado, firma y cifrado. Sale del temario, o es una idea plausible fuera de él. Cada distractor falla por un _matiz_ que la explicación nombra.
 6. **Ninguna pista fuera de la idea.** Las opciones tienen una longitud y una forma gramatical parecidas. La correcta es la más larga en 1 de cada 3 preguntas como mucho. Una palabra, una sigla o una traducción del enunciado sale en todas las opciones o en ninguna. Un "siempre", un "nunca" o un "solo" que hace falso un distractor por exclusión lo delata, y sale también en la correcta. "Un solo" y "una sola" dan un número, y no son un absoluto. Cada opción se lee sola, porque la interfaz las baraja.
 7. **El enunciado es afirmativo**, y pregunta qué es, qué hace o por qué.
-8. **La explicación nombra cada matiz:** una frase para la correcta y una frase por distractor.
+8. **La explicación nombra cada matiz, con una línea por opción.** La primera línea empieza por `✓` y explica la correcta. Cada distractor tiene después su línea, en el orden de `distractores`. La línea empieza por `✗` y por las palabras clave del distractor entre comillas, y sigue con su matiz. Una letra no sirve, porque la interfaz baraja las opciones.
 9. **Una sigla de seguridad es un concepto propio, con una sola pregunta:** el enunciado da la sigla y pide su significado, con 2 desarrollos plausibles como distractores. Las siglas generales de informática, como TCP, IP o ASCII, quedan fuera. Su `fuente` es la primera página que la explica.
 
 Una pregunta de cada 5 es difícil: un distractor copia la correcta y cambia un solo término, responde a otra pregunta del temario, o aplica la regla general a su excepción. Una pregunta difícil sigue las 9 reglas.
