@@ -28,7 +28,6 @@ El historial, las notas y la ronda a medias también viven en la carpeta del exa
 }
 ```
 
-- `titulo` sale en el título de la página.
 - `puerto` es el puerto local del servidor. `tailscale serve` pone HTTPS delante, en el puerto anterior: 8604 para 8605.
 - `preguntas` y `minutos` son las cifras del simulacro.
 - `opciones` es el número de opciones de una pregunta del examen. Una pregunta del banco tiene `opciones` − 1 distractores.
@@ -52,8 +51,6 @@ El historial es una lista de respuestas que solo crece, con una respuesta por l�
 ```
 
 La interfaz calcula todo el estado con esta lista: el paso de cada concepto y su fecha de repaso. Dos dispositivos no tienen conflictos, porque cada uno solo añade líneas.
-
-El historial no entra en git. El servidor lo guarda en `respuestas.jsonl`, en la carpeta del examen.
 
 Una respuesta huérfana tiene un `id` que no está en el banco. Una pregunta que pasa a preguntar otra idea lleva un `id` nuevo, y deja sus respuestas huérfanas. La interfaz no usa las respuestas huérfanas en ninguna cuenta, y el archivo las conserva, porque una línea borrada no tiene vuelta atrás.
 
@@ -99,15 +96,13 @@ Un fallo resta la `penalizacion` de un acierto. La tarjeta de la nota, en la pan
 
 Debajo del título, la pantalla de inicio tiene una barra con 3 tramos, uno por cada estado de un concepto: verde para "lo sabes", rojo para "no lo sabes" y gris para "sin ver". El largo de cada tramo es su parte de los conceptos del banco. Debajo de la barra van las 3 cifras: "Sabes 79 · No sabes 6 · Sin ver 66, de 151 conceptos".
 
-El tramo gris baja con cada sesión, hasta que la vuelta a todo el banco termina.
-
-Debajo de las cifras va la tarjeta de la nota, la única tarjeta de la pantalla. Arriba dice "Sacar más de 5", con un slider que elige la nota, de 0,5 a 10, con pasos de 0,5. La nota empieza en 5, y queda en `localStorage`, en `ln-objetivo`. El cálculo cuenta la nota elegida o más.
+Debajo va la tarjeta de la nota, con un slider que elige la nota, de 0,5 a 10. La nota empieza en 5, y queda en `localStorage`, en `ln-objetivo`. El cálculo cuenta la nota elegida o más.
 
 La tarjeta tiene 3 partes, de arriba abajo:
 
-1. **La flecha**: a la izquierda, la probabilidad de hoy, "80 %", con "con 81 conceptos" debajo. A la derecha, "95 %", con "con 98 conceptos" debajo. En el medio, una flecha con "≈4 sesiones". La palabra "probabilidad" no sale.
-2. **La barra del camino**: un tramo verde para los conceptos que sabes, un tramo amarillo para los conceptos que faltan, y una marca en el 95 %. El largo de cada tramo es su parte de los conceptos del banco. La barra no tiene bloques.
-3. **El consejo**: "Contesta las dudas · +9 puntos", o "Deja las dudas en blanco · +N puntos". Los puntos son la diferencia entre la probabilidad de las 2 formas, en puntos de porcentaje. Un botón "?" abre el desglose, un `<details>` que empieza cerrado. El desglose sigue abierto cuando el slider se mueve.
+1. **La flecha**: a la izquierda, la probabilidad de hoy, "80 %", con "con 81 conceptos" debajo. A la derecha, "95 %", con "con 98 conceptos" debajo. En el medio, una flecha con "≈4 sesiones".
+2. **La barra del camino**: un tramo verde para los conceptos que sabes, un tramo amarillo para los conceptos que faltan, y una marca en el 95 %. El largo de cada tramo es su parte de los conceptos del banco.
+3. **El consejo**: "Contesta las dudas · +9 puntos", o "Deja las dudas en blanco · +N puntos". Los puntos son la diferencia entre la probabilidad de las 2 formas, en puntos de porcentaje. Un botón "?" abre el desglose.
 
 El desglose da los aciertos en una duda, con una fila por grupo de conceptos:
 
@@ -140,11 +135,11 @@ Las cifras son un límite optimista. El examen pregunta con otras palabras, y no
 
 Cada opción es una fila con 2 zonas. Un toque en el texto responde con "seguro", y un toque en el botón "dudo" de la derecha responde con "dudo". Un solo toque responde.
 
-Después de la respuesta, las opciones quedan en verde la correcta y en rojo la tuya si fallas. Cada una de las dos lleva al final de la fila un circulito: un tick en la correcta y una cruz en la tuya. Debajo de las opciones sale el aviso de un fallo con "seguro" o de un acierto con "dudo".
+Después de la respuesta, las opciones quedan en verde la correcta y en rojo la tuya si fallas. Debajo de las opciones sale el aviso de un fallo con "seguro" o de un acierto con "dudo".
 
 ### La pantalla ancha
 
-Una pantalla de 900 px o más tiene 2 columnas estáticas, sin animaciones: la pregunta a la izquierda y la solución a la derecha. La columna de la solución dice "Elige una opción" antes de la respuesta.
+Una pantalla de 900 px o más tiene 2 columnas estáticas: la pregunta a la izquierda y la solución a la derecha.
 
 La solución tiene, en este orden:
 
@@ -153,25 +148,22 @@ La solución tiene, en este orden:
 3. Una fila con 2 botones fijos: "Ver la página aquí" a la izquierda y "La fuente" a la derecha.
 4. Un panel debajo de la fila. "Ver la página aquí" muestra la imagen de la página. "La fuente" muestra el PDF, la página, el concepto y el enlace "Abrir el PDF en la página N", con `#page=N` en la URL.
 
-Un solo panel está abierto a la vez. Un toque en el botón abierto cierra el panel. Los botones no cambian de sitio, y el panel va debajo de "Siguiente", así que un panel abierto no mueve el botón.
+Un solo panel está abierto a la vez. El panel va debajo de "Siguiente", así que un panel abierto no mueve el botón.
 
-El botón con un icono de engranaje, a la derecha de la línea de arriba, muestra los tiradores: los 2 bordes y el separador. Cada zona mide como mínimo el 15 % de la pantalla. Las posiciones quedan en `localStorage`, en `ln-columnas`, y cada dispositivo tiene las suyas.
+El engranaje muestra los tiradores de las columnas. Sus posiciones quedan en `localStorage`, en `ln-columnas`, y cada dispositivo tiene las suyas.
 
 ### La pantalla del móvil
 
-Una pantalla de menos de 900 px es una columna con 4 partes: la línea de arriba, la barra de progreso, el cuerpo con su scroll y el pie fijo. No tiene zonas, ni tiradores, ni engranaje.
+Una pantalla de menos de 900 px es una columna: la línea de arriba, la barra de progreso, el cuerpo con su scroll y el pie fijo.
 
-- La línea de arriba lleva el progreso, el botón ✕, el botón de las notas y el botón de copiar.
-- El cuerpo lleva la pregunta y las opciones. Tras responder, lleva también el aviso, la explicación y el campo de notas. El campo de notas empieza escondido hasta que lo muestras con el botón de las notas.
+- El cuerpo lleva la pregunta y las opciones. Tras responder, lleva también el aviso, la explicación y el campo de notas.
 - Antes de responder, el pie dice "Toca el texto si estás seguro. Toca «dudo» si dudas." En el simulacro, el pie lleva también el botón "En blanco".
 - Tras responder, las opciones que no son la correcta ni la tuya se atenúan. Si el cuerpo no cabe en la pantalla, esas opciones se pliegan tras el botón "ver las otras N opciones".
 - Tras responder, el pie tiene 2 botones: "pág. N" a la izquierda y "Siguiente". "pág. N" abre la fuente a pantalla completa: la imagen de la página, que un toque amplía al 200 %, y el enlace "PDF". La ✕ y el botón de atrás del móvil cierran la fuente.
 
-Debajo de las opciones hay un campo de texto para las notas de la pregunta. El botón con un icono de libreta y lápiz, a la izquierda del botón de copiar, muestra y esconde el campo. El navegador guarda esa elección en `localStorage`, en `ln-notas-visibles`. El campo guarda la nota en el servidor 500 ms después de la última tecla, y la nota vuelve cada vez que sale esa pregunta. Una nota vacía la borra.
+Debajo de las opciones va el campo de las notas de la pregunta. El botón de las notas lo muestra y lo esconde, y `ln-notas-visibles` guarda esa elección. El campo guarda la nota en el servidor 500 ms después de la última tecla, y la nota vuelve cada vez que sale esa pregunta.
 
-El botón con un icono de copiar está a la derecha del botón de las notas. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
-
-Las imágenes están en `paginas/<pdf sin .pdf>-<pagina>.png`, en la carpeta del examen. `pdftoppm -png -r 80` las saca de los PDFs una sola vez.
+El botón de copiar copia el enunciado y las opciones, con una letra por opción, sin la correcta ni la explicación.
 
 Con un banco no vacío, una sesión siempre tiene preguntas, porque los conceptos que vencen antes llenan los huecos. No hay un botón para reiniciar el historial, porque el historial guarda los fallos con "seguro" y el porcentaje de "dudo".
 
@@ -206,20 +198,13 @@ Una ronda con un `id` que no está en el banco se descarta, y la app abre el ini
 
 El reloj del simulacro cuenta hasta `limite`, una hora fija, así que sigue con la página cerrada. Un simulacro con el `limite` pasado abre la pantalla del final, y cada pregunta sin contestar cuenta en blanco.
 
-La línea de arriba de la pregunta lleva un botón ✕, a la izquierda del botón de las notas. El botón pregunta "¿Abandonar la sesión? Las respuestas quedan en el historial." con el diálogo del navegador, `confirm`. En un simulacro, la pregunta dice "el simulacro". Un "sí" guarda `"ronda": null` y abre el inicio.
+El botón ✕ abandona la ronda, con un `confirm`: guarda `"ronda": null` y abre el inicio. Las respuestas quedan en el historial.
 
 Con 2 dispositivos abiertos a la vez, gana el último guardado. Un dispositivo no ve el guardado del otro hasta que recarga la página.
 
 ## El servidor: `serve.py`
 
-`serve.py` usa solo la stdlib de Python. Sirve la interfaz, el banco, los PDFs y las imágenes de las páginas, y tiene 6 rutas:
-
-- `GET /api/respuestas` devuelve el historial entero.
-- `POST /api/respuestas` añade una lista de respuestas al historial.
-- `GET /api/notas` devuelve las notas, un objeto con el `id` de la pregunta como clave.
-- `POST /api/notas` guarda `{"id", "texto"}`. Un `texto` vacío borra la nota. Las notas viven en `notas.json`.
-- `GET /api/ronda` devuelve el guardado de la ronda, o `{"guardada": 0, "ronda": null}` sin guardado.
-- `POST /api/ronda` guarda un guardado de la ronda. Un guardado con otros campos o con otros tipos recibe un 400. El guardado vive en `ronda.json`.
+`serve.py` usa solo la stdlib de Python. Sirve los archivos, y las rutas `/api/respuestas`, `/api/notas` y `/api/ronda` leen con `GET` y guardan con `POST` el historial, `notas.json` y `ronda.json`.
 
 La interfaz guarda en `localStorage` cada respuesta sin enviar, y la envía cuando el servidor responde. Así, una sesión en el móvil sin red no pierde respuestas.
 
@@ -242,11 +227,8 @@ El test tiene 2 partes independientes: la interfaz y el banco. El formato de `pr
 
 ### La interfaz
 
-La interfaz tiene el servidor, la página web, los pasos, el simulacro y las imágenes de las páginas.
-
-- La página lee `preguntas.json`, y no tiene ninguna pregunta en su código.
 - Los tests de la interfaz usan `ln/preguntas-ejemplo.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
-- `python3 test/sacar_paginas.py asn` saca las imágenes de `asn/paginas/` de los PDFs de `asn/pdfs/`. El script no repite una imagen que ya existe.
+- `python3 test/sacar_paginas.py asn` saca las imágenes de `asn/paginas/`, como `<pdf sin .pdf>-<pagina>.png`, de los PDFs de `asn/pdfs/`.
 
 ### El banco
 
