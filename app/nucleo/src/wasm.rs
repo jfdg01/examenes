@@ -6,7 +6,7 @@ use serde::de::DeserializeOwned;
 use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
 
-use crate::{Cierre, Datos, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Simulacro};
+use crate::{Cierre, Datos, Guardado, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta, RondaAMedias, Simulacro};
 
 type Js<T> = Result<Ts<T>, JsError>;
 
@@ -54,11 +54,22 @@ pub fn corregir(pregunta: Ts<PreguntaDeSesion>, opcion: Option<u32>, seguro: boo
 }
 
 #[wasm_bindgen]
-pub fn restante(empieza: f64, segundos: u32, ahora: f64) -> u32 {
-    crate::restante(empieza, segundos, ahora)
+pub fn restante(limite: f64, ahora: f64) -> u32 {
+    crate::restante(limite, ahora)
 }
 
 #[wasm_bindgen]
 pub fn nota(cierre: Ts<Cierre>, penalizacion: f64) -> Js<NotaDelSimulacro> {
     dar(crate::nota_del_simulacro(&leer(cierre)?, penalizacion))
+}
+
+#[wasm_bindgen]
+pub fn gana(a: Ts<Guardado>, b: Ts<Guardado>) -> Js<Guardado> {
+    dar(crate::gana(leer(a)?, leer(b)?))
+}
+
+#[wasm_bindgen]
+pub fn restaurar(datos: Ts<Datos>, guardado: Ts<Guardado>, ahora: f64) -> Result<Option<Ts<RondaAMedias>>, JsError> {
+    let d = leer(datos)?;
+    crate::restaurar(&d.banco, &d.historial, &leer(guardado)?, &mut azar(ahora)).map(dar).transpose()
 }

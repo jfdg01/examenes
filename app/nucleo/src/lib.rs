@@ -131,9 +131,9 @@ pub fn corregir(q: &PreguntaDeSesion, opcion: Option<u32>, seguro: bool, ahora: 
     Respuesta { id: q.id.clone(), ts: hora(ahora), resultado, seguro: seguro && opcion.is_some() }
 }
 
-/// Los segundos que quedan de un simulacro de `segundos` que empezó en `empieza`. Las horas van en milisegundos.
-pub fn restante(empieza: f64, segundos: u32, ahora: f64) -> u32 {
-    ((empieza + segundos as f64 * 1000.0 - ahora) / 1000.0).round().max(0.0) as u32
+/// Los segundos que quedan de un simulacro que termina en `limite`. Las horas van en milisegundos.
+pub fn restante(limite: f64, ahora: f64) -> u32 {
+    ((limite - ahora) / 1000.0).round().max(0.0) as u32
 }
 
 /// El paso de cada concepto visto, y la hora en que vence.
@@ -314,6 +314,48 @@ pub fn simulacro(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], a
         segundos: examen.minutos.saturating_mul(60),
         preguntas: barajado.into_iter().map(|q| de_la_ronda(q, &estado, azar)).collect(),
     }
+}
+
+/// `ronda.json`, y la ronda de `localStorage`: la ronda a medias y la hora del guardado, en milisegundos.
+/// Sin ronda a medias, `ronda` es `None`.
+#[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct Guardado {
+    pub guardada: u64,
+    pub ronda: Option<RondaGuardada>,
+}
+
+/// Una ronda a medias: sus preguntas, el resultado de las contestadas y el límite del simulacro, en milisegundos.
+#[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct RondaGuardada {
+    pub ids: Vec<String>,
+    pub resultados: Vec<Resultado>,
+    pub simulacro: bool,
+    pub limite: Option<u64>,
+}
+
+/// El guardado más nuevo. Con la misma hora gana `a`.
+pub fn gana(a: Guardado, b: Guardado) -> Guardado {
+    if b.guardada > a.guardada { b } else { a }
+}
+
+/// La ronda a medias de un guardado, con las preguntas del banco. La pregunta actual es la primera sin resultado.
+#[derive(Serialize, Tsify)]
+pub struct RondaAMedias {
+    pub preguntas: Vec<PreguntaDeSesion>,
+    pub resultados: Vec<Resultado>,
+    pub simulacro: bool,
+    pub limite: Option<u64>,
+}
+
+/// Una ronda con un id que no está en el banco no se restaura.
+pub fn restaurar(banco: &[Pregunta], historial: &[Respuesta], guardado: &Guardado, azar: &mut Azar) -> Option<RondaAMedias> {
+    let r = guardado.ronda.as_ref()?;
+    let estado = estados(banco, historial);
+    let preguntas =
+        r.ids.iter().map(|id| Some(de_la_ronda(banco.iter().find(|q| q.id == *id)?, &estado, azar))).collect::<Option<_>>()?;
+    Some(RondaAMedias { preguntas, resultados: r.resultados.clone(), simulacro: r.simulacro, limite: r.limite })
 }
 
 /// Lo que pasó en una pregunta: un acierto, un fallo o una pregunta en blanco.
@@ -869,9 +911,9 @@ mod tests {
 
     #[test]
     fn el_reloj_cuenta_los_segundos_que_quedan_hasta_0() {
-        assert_eq!(restante(1_000_000.0, 60, 1_000_000.0), 60);
-        assert_eq!(restante(1_000_000.0, 60, 1_030_400.0), 30);
-        assert_eq!(restante(1_000_000.0, 60, 2_000_000.0), 0);
+        assert_eq!(restante(1_060_000.0, 1_000_000.0), 60);
+        assert_eq!(restante(1_060_000.0, 1_030_400.0), 30);
+        assert_eq!(restante(1_060_000.0, 2_000_000.0), 0);
     }
 
     #[test]
@@ -881,5 +923,36 @@ mod tests {
         let t = tarjeta(&LN, &banco_de(2), &h, 5.0);
         assert_eq!((t.sabes, t.no_sabes), (0, 2));
         assert_eq!(t.dudas[0].detalle.as_deref(), Some("1 de 1 «dudo»"));
+    }
+
+    fn guardado(guardada: u64, ids: &[&str], resultados: &[Resultado]) -> Guardado {
+        let ids = ids.iter().map(|&i| i.into()).collect();
+        Guardado { guardada, ronda: Some(RondaGuardada { ids, resultados: resultados.to_vec(), simulacro: false, limite: None }) }
+    }
+
+    #[test]
+    fn gana_el_guardado_mas_nuevo() {
+        let viejo = guardado(1, &["a1"], &[]);
+        let nuevo = Guardado { guardada: 2, ronda: None };
+        assert_eq!(gana(viejo.clone(), nuevo.clone()), nuevo);
+        assert_eq!(gana(nuevo.clone(), viejo.clone()), nuevo);
+        assert_eq!(gana(viejo.clone(), guardado(1, &["b1"], &[])), viejo);
+    }
+
+    #[test]
+    fn la_ronda_restaurada_sigue_en_la_primera_pregunta_sin_resultado() {
+        let banco = [pregunta("a1", "a"), pregunta("b1", "b"), pregunta("c1", "c")];
+        let g = guardado(1, &["c1", "a1", "b1"], &[Resultado::Fallo]);
+        let r = restaurar(&banco, &[], &g, &mut Azar::new(1)).unwrap();
+        assert_eq!(r.preguntas.iter().map(|q| q.id.as_str()).collect::<Vec<_>>(), ["c1", "a1", "b1"]);
+        assert_eq!(r.resultados, [Resultado::Fallo]);
+        assert_eq!((r.simulacro, r.limite), (false, None));
+    }
+
+    #[test]
+    fn una_ronda_con_una_pregunta_que_no_esta_en_el_banco_no_se_restaura() {
+        let banco = [pregunta("a1", "a")];
+        assert!(restaurar(&banco, &[], &guardado(1, &["a1", "x9"], &[]), &mut Azar::new(1)).is_none());
+        assert!(restaurar(&banco, &[], &Guardado { guardada: 1, ronda: None }, &mut Azar::new(1)).is_none());
     }
 }

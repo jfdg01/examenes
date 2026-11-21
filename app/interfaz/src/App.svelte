@@ -1,9 +1,11 @@
 <script lang="ts">
   import * as nucleo from "./nucleo/nucleo.js";
-  import type { Datos, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
+  import type { Datos, Guardado, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
 
-  // Todos los exámenes comparten un origen, así que la clave lleva la carpeta del examen.
-  const claveObjetivo = `${location.pathname.split("/")[1]}-objetivo`;
+  // Todos los exámenes comparten un origen, así que cada clave lleva la carpeta del examen.
+  const carpeta = location.pathname.split("/")[1];
+  const claveObjetivo = `${carpeta}-objetivo`;
+  const claveRonda = `${carpeta}-ronda`;
   let objetivo = $state(Number(localStorage.getItem(claveObjetivo) ?? 5));
   let datos = $state.raw<Datos | null>(null);
   const inicio = $derived(datos && nucleo.inicio(datos, objetivo));
@@ -19,7 +21,38 @@
       error = (e as Error).message;
     }
   }
-  cargarInicio();
+
+  // Al cargar, gana el guardado más nuevo de `localStorage` y del servidor, y los 2 quedan con él.
+  async function arrancar() {
+    await cargarInicio();
+    if (!datos) return;
+    const sinRonda: Guardado = { guardada: 0, ronda: undefined };
+    const servidor: Guardado = await fetch("api/ronda")
+      .then((r) => (r.ok ? r.json() : sinRonda))
+      .catch(() => sinRonda);
+    // Un clic en "Empezar" antes de la respuesta ya empezó una ronda nueva, que gana.
+    if (ronda.estado !== "Inicio") return;
+    const g = nucleo.gana(servidor, JSON.parse(localStorage.getItem(claveRonda) ?? "null") ?? sinRonda);
+    enviar(g);
+    const r = nucleo.restaurar(datos, g, Date.now());
+    if (!r) return;
+    ({ preguntas, resultados, simulacro } = r);
+    limite = r.limite ?? 0;
+    seguir();
+  }
+  arrancar();
+
+  function enviar(g: Guardado) {
+    localStorage.setItem(claveRonda, JSON.stringify(g));
+    fetch("api/ronda", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(g) }).catch(() => {});
+  }
+
+  // La ronda a medias, o ninguna en el inicio y el final.
+  function guardar() {
+    const aMedias = ronda.estado === "Pregunta";
+    const ids = preguntas.map((q) => q.id);
+    enviar({ guardada: Date.now(), ronda: aMedias ? { ids, resultados, simulacro, limite: simulacro ? limite : undefined } : undefined });
+  }
 
   let ronda = $state<Ronda>({ estado: "Inicio" });
   let preguntas = $state.raw<PreguntaDeSesion[]>([]);
@@ -30,8 +63,7 @@
   let simulacro = $state(false);
   let resultados: Resultado[] = [];
   let nota = $state<NotaDelSimulacro | null>(null);
-  let empieza = 0;
-  let segundos = 0;
+  let limite = 0;
   let reloj: ReturnType<typeof setInterval> | undefined;
   let restante = $state(0);
 
@@ -40,24 +72,35 @@
 
   function empezar(comoSimulacro: boolean) {
     if (!datos) return;
-    empieza = Date.now();
-    if (comoSimulacro) ({ preguntas, segundos } = nucleo.simulacro(datos, empieza));
-    else preguntas = nucleo.sesion(datos, empieza);
+    const ahora = Date.now();
+    if (comoSimulacro) {
+      const s = nucleo.simulacro(datos, ahora);
+      preguntas = s.preguntas;
+      limite = ahora + s.segundos * 1000;
+    } else preguntas = nucleo.sesion(datos, ahora);
     simulacro = comoSimulacro;
-    i = 0;
     resultados = [];
+    seguir();
+    guardar();
+  }
+
+  // La ronda sigue en la primera pregunta sin resultado.
+  function seguir() {
+    i = resultados.length;
     nota = null;
     eleccion = null;
     error = "";
+    if (i >= preguntas.length) return terminar();
     ronda = { estado: "Pregunta", contestada: false };
     if (simulacro) {
-      contar();
+      // El intervalo va antes, porque contar() con el límite pasado llama a terminar(), que lo para.
       reloj = setInterval(contar, 1000);
+      contar();
     }
   }
 
   function contar() {
-    restante = nucleo.restante(empieza, segundos, Date.now());
+    restante = nucleo.restante(limite, Date.now());
     if (!restante) terminar();
   }
 
@@ -67,6 +110,7 @@
     if (ronda.estado === "Final") return;
     clearInterval(reloj);
     ronda = { estado: "Final" };
+    guardar();
     nota = nucleo.nota({ preguntas: preguntas.length, resultados }, datos!.examen.penalizacion);
   }
 
@@ -75,6 +119,7 @@
     eleccion = { opcion, respuesta };
     ronda = { estado: "Pregunta", contestada: true };
     resultados.push(respuesta.resultado);
+    guardar();
     const r = await fetch("api/respuestas", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -93,6 +138,7 @@
     clearInterval(reloj);
     cargarInicio();
     ronda = { estado: "Inicio" };
+    guardar();
   }
 
   function abandonar() {

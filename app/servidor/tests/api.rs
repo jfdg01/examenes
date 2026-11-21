@@ -141,3 +141,54 @@ async fn una_respuesta_mal_formada_no_entra_en_el_historial() {
     }
     assert!(!raiz.path().join("ln/respuestas.jsonl").exists());
 }
+
+async fn ronda(url: &str) -> Value {
+    reqwest::get(format!("{url}/ln/api/ronda")).await.unwrap().error_for_status().unwrap().json().await.unwrap()
+}
+
+async fn guardar_ronda(url: &str, cuerpo: &Value) -> reqwest::StatusCode {
+    reqwest::Client::new().put(format!("{url}/ln/api/ronda")).json(cuerpo).send().await.unwrap().status()
+}
+
+#[tokio::test]
+async fn la_ronda_guardada_vuelve_igual() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+    assert_eq!(ronda(&url).await, json!({ "guardada": 0, "ronda": null }));
+
+    let g = json!({ "guardada": 1_795_183_876_012_u64, "ronda": {
+        "ids": ["rgpd-001", "rgpd-002"], "resultados": ["Blanco"], "simulacro": true, "limite": 1_795_185_376_012_u64 } });
+    assert_eq!(guardar_ronda(&url, &g).await, 204);
+    assert_eq!(ronda(&url).await, g);
+    assert_eq!(serde_json::from_str::<Value>(&fs::read_to_string(raiz.path().join("ln/ronda.json")).unwrap()).unwrap(), g);
+}
+
+#[tokio::test]
+async fn una_ronda_mal_formada_no_se_guarda() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    for mala in [
+        json!({ "guardada": 1.5, "ronda": null }),
+        json!({ "guardada": 1, "ronda": null, "extra": 1 }),
+        json!({ "guardada": 1, "ronda": { "ids": [], "resultados": ["acierto"], "simulacro": false, "limite": null } }),
+    ] {
+        assert!(guardar_ronda(&url, &mala).await.is_client_error(), "{mala}");
+    }
+    assert!(!raiz.path().join("ln/ronda.json").exists());
+}
+
+#[tokio::test]
+async fn un_guardado_mas_viejo_no_pisa_la_ronda() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+    let nuevo = json!({ "guardada": 2, "ronda": null });
+
+    assert_eq!(guardar_ronda(&url, &nuevo).await, 204);
+    let viejo = json!({ "guardada": 1, "ronda": { "ids": ["rgpd-001"], "resultados": [], "simulacro": false, "limite": null } });
+    assert_eq!(guardar_ronda(&url, &viejo).await, 204);
+    assert_eq!(ronda(&url).await, nuevo);
+}

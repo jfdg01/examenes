@@ -12,7 +12,7 @@ use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
-use nucleo::{Datos, Examen, Pregunta, Respuesta};
+use nucleo::{Datos, Examen, Guardado, Pregunta, Respuesta};
 use tower_http::compression::CompressionLayer;
 use tower_http::services::ServeDir;
 
@@ -21,8 +21,9 @@ struct Carpetas {
     raiz: PathBuf,
     /// La build de la interfaz, con `index.html` y `assets/`.
     interfaz: PathBuf,
-    /// ponytail: un cerrojo para el historial de todos los exámenes, uno por examen si un día hay muchos usuarios.
-    historial: tokio::sync::Mutex<()>,
+    /// El cerrojo del historial y de la ronda de todos los exámenes.
+    /// ponytail: un solo cerrojo, uno por examen si un día hay muchos usuarios.
+    cerrojo: tokio::sync::Mutex<()>,
 }
 
 type Estado = State<Arc<Carpetas>>;
@@ -34,8 +35,9 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
         .route("/{examen}/", get(pagina))
         .route("/{examen}/api/inicio", get(inicio))
         .route("/{examen}/api/respuestas", axum::routing::post(responder))
+        .route("/{examen}/api/ronda", get(leer_ronda).put(guardar_ronda))
         .nest_service("/assets", assets)
-        .with_state(Arc::new(Carpetas { raiz, interfaz, historial: Default::default() }))
+        .with_state(Arc::new(Carpetas { raiz, interfaz, cerrojo: Default::default() }))
         .layer(CompressionLayer::new().gzip(true))
 }
 
@@ -76,7 +78,7 @@ async fn leer_banco(carpetas: &Carpetas, examen: &str) -> Result<Vec<Pregunta>, 
     serde_json::from_slice(&texto).map_err(error_interno)
 }
 
-/// `respuestas.jsonl` tiene una respuesta por línea. Quien llama tiene el cerrojo del historial.
+/// `respuestas.jsonl` tiene una respuesta por línea. Quien llama tiene el cerrojo.
 async fn leer_historial(carpetas: &Carpetas, examen: &str) -> Result<Vec<Respuesta>, Response> {
     let texto = leer_si_existe(carpetas.raiz.join(examen).join("respuestas.jsonl")).await?;
     texto
@@ -90,7 +92,7 @@ async fn leer_historial(carpetas: &Carpetas, examen: &str) -> Result<Vec<Respues
 async fn inicio(State(carpetas): Estado, Path(examen): Path<String>) -> Result<axum::Json<Datos>, Response> {
     let datos = leer_examen(&carpetas, &examen).await?;
     let banco = leer_banco(&carpetas, &examen).await?;
-    let _cerrojo = carpetas.historial.lock().await;
+    let _cerrojo = carpetas.cerrojo.lock().await;
     let historial = leer_historial(&carpetas, &examen).await?;
     Ok(axum::Json(Datos { examen: datos, banco, historial }))
 }
@@ -105,7 +107,7 @@ async fn responder(
     if respuestas.iter().any(|r| nucleo::segundos(&r.ts).is_none()) {
         return Err((StatusCode::BAD_REQUEST, "La hora de una respuesta va como AAAA-MM-DDTHH:MM:SSZ").into_response());
     }
-    let _cerrojo = carpetas.historial.lock().await;
+    let _cerrojo = carpetas.cerrojo.lock().await;
     let mut vistas: std::collections::HashSet<(String, String)> =
         leer_historial(&carpetas, &examen).await?.into_iter().map(|r| (r.id, r.ts)).collect();
     let mut nuevas = String::new();
@@ -121,6 +123,36 @@ async fn responder(
         let mut archivo = tokio::fs::OpenOptions::new().create(true).append(true).open(ruta).await.map_err(error_interno)?;
         archivo.write_all(nuevas.as_bytes()).await.map_err(error_interno)?;
     }
+    Ok(StatusCode::NO_CONTENT)
+}
+
+/// Sin `ronda.json`, no hay ronda a medias.
+async fn leer_guardado(ruta: PathBuf) -> Result<Guardado, Response> {
+    let texto = leer_si_existe(ruta).await?;
+    if texto.is_empty() {
+        return Ok(Guardado { guardada: 0, ronda: None });
+    }
+    serde_json::from_slice(&texto).map_err(error_interno)
+}
+
+async fn leer_ronda(State(carpetas): Estado, Path(examen): Path<String>) -> Result<axum::Json<Guardado>, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    let _cerrojo = carpetas.cerrojo.lock().await;
+    leer_guardado(carpetas.raiz.join(&examen).join("ronda.json")).await.map(axum::Json)
+}
+
+/// Guarda el guardado más nuevo entre `ronda.json` y el que llega, porque dos `PUT` pueden llegar en desorden.
+async fn guardar_ronda(
+    State(carpetas): Estado,
+    Path(examen): Path<String>,
+    axum::Json(guardado): axum::Json<Guardado>,
+) -> Result<StatusCode, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    let ruta = carpetas.raiz.join(&examen).join("ronda.json");
+    let _cerrojo = carpetas.cerrojo.lock().await;
+    let gana = nucleo::gana(leer_guardado(ruta.clone()).await?, guardado);
+    let texto = serde_json::to_vec(&gana).map_err(error_interno)?;
+    tokio::fs::write(ruta, texto).await.map_err(error_interno)?;
     Ok(StatusCode::NO_CONTENT)
 }
 
