@@ -24,7 +24,7 @@ Una función que nadie usa no pasa a Rust, y su código se va. Una función que 
 - **Los tiradores de las columnas se quedan en el PC.** Mueven los bordes y el separador de las 2 columnas. Cada tirador muestra su asa cuando el ratón pasa por encima, y se arrastra siempre. El PC no tiene un modo de edición ni el botón del engranaje.
 - **Un banco vacío no muestra la sesión ni el simulacro.** El inicio dice "El banco no tiene preguntas".
 - **El API envía solo lo que la pantalla muestra.** Un valor intermedio de un cálculo se queda en Rust.
-- **El servidor no tiene los flags `--banco` ni `--historial`.** Cada test de Rust crea una carpeta de examen temporal con sus archivos. `ln/preguntas-ejemplo.json` pasa a la carpeta de los tests de Rust.
+- **El servidor no tiene los flags `--banco` ni `--historial`.** Cada test de Rust crea una carpeta de examen temporal con sus archivos. El banco de ejemplo de LN vive en `app/servidor/tests/datos/ln-preguntas.json`.
 
 ## El flujo de trabajo
 

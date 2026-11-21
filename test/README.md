@@ -216,10 +216,10 @@ python3 test/serve.py asn
 tailscale serve --bg --https=8604 http://127.0.0.1:8605
 ```
 
-`--banco` sirve otro archivo en `/preguntas.json`, y `--historial` guarda las respuestas en otro archivo. Una prueba con `preguntas-ejemplo.json` usa los 2, porque ese banco repite los `id` del banco real:
+`--banco` sirve otro archivo en `/preguntas.json`, y `--historial` guarda las respuestas en otro archivo. Una prueba con el banco de ejemplo de LN usa los 2, porque ese banco repite los `id` del banco real:
 
 ```bash
-python3 test/serve.py ln --banco preguntas-ejemplo.json --historial /tmp/ln-respuestas-ejemplo.jsonl
+python3 test/serve.py ln --banco ../app/servidor/tests/datos/ln-preguntas.json --historial /tmp/ln-respuestas-ejemplo.jsonl
 ```
 
 ## Las 2 partes
@@ -228,7 +228,7 @@ El test tiene 2 partes independientes: la interfaz y el banco. El formato de `pr
 
 ### La interfaz
 
-- Los tests de la interfaz usan `ln/preguntas-ejemplo.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
+- Los tests de la interfaz usan `app/servidor/tests/datos/ln-preguntas.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
 - `python3 test/sacar_paginas.py asn` saca las imágenes de `asn/paginas/`, como `<pdf sin .pdf>-<pagina>.png`, de los PDFs de `asn/pdfs/`.
 
 ### El banco
