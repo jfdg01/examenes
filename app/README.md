@@ -1,12 +1,19 @@
 # La app de práctica
 
-Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están en [el ADR 0001](../docs/adr/0001-la-app-en-rust-y-svelte.md). Los diagramas de las clases, la ronda y una sesión están en PlantUML, en [el diagrama](../docs/el-diagrama.puml).
+Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están en [el ADR 0001](../docs/adr/0001-la-app-en-rust-y-svelte.md), y dónde corre la lógica está en [el ADR 0002](../docs/adr/0002-el-nucleo-en-wasm.md). Los diagramas de las clases, la ronda y una sesión están en PlantUML, en [el diagrama](../docs/el-diagrama.puml).
 
-- `nucleo/`: toda la lógica, sin leer archivos ni la red.
-- `servidor/`: el servidor de `axum`. Lee la carpeta de cada examen y llama a `nucleo`.
-- `interfaz/`: la interfaz de Svelte 5, con Vite y TypeScript.
+- `nucleo/`: toda la lógica, sin leer archivos ni la red. Corre en el navegador como WASM, y el servidor usa sus tipos para validar.
+- `servidor/`: el servidor de `axum`. Guarda y sirve los archivos de cada examen, con gzip.
+- `interfaz/`: la interfaz de Svelte 5, con Vite y TypeScript. Llama a `nucleo` para cada cálculo.
 
 ## Arrancar
+
+La build de la interfaz necesita el target `wasm32-unknown-unknown` y `wasm-bindgen-cli`, con la versión de `wasm-bindgen` de `nucleo/Cargo.toml`.
+
+```bash
+rustup target add wasm32-unknown-unknown
+cargo install wasm-bindgen-cli --version 0.2.130
+```
 
 ```bash
 cd app/interfaz && npm install && npm run build
@@ -15,9 +22,12 @@ cd .. && cargo run -p servidor -- .. 127.0.0.1:8601
 
 El servidor recibe la raíz de los exámenes y su dirección. Sirve cada carpeta de la raíz con `examen.json` en `/<carpeta>/`, y lee la carpeta en cada petición. Un examen nuevo aparece al crear su carpeta, sin reiniciar el servidor.
 
-## Los tipos del API
+- `GET api/inicio` da el examen, el banco y el historial.
+- `POST api/respuestas` añade al historial cada respuesta que no está. Una línea de `respuestas.jsonl` lleva `id`, `ts`, `resultado` (`Acierto`, `Fallo` o `Blanco`) y `seguro`.
 
-Los tipos del API salen de `nucleo` con `ts-rs`, en `interfaz/src/tipos/`, que no entra en git. `npm run build` genera los tipos antes de `svelte-check`, así que un cambio de un tipo en Rust rompe la build de la interfaz. `cargo test` también los genera.
+## La WASM
+
+`npm run wasm` compila `nucleo` a WASM, y `wasm-bindgen` deja el módulo y sus tipos de TypeScript en `interfaz/src/nucleo/`, que no entra en git. Los tipos salen de `tsify`. `npm run build` y `npm run dev` corren antes `npm run wasm`, así que un cambio de un tipo en Rust rompe la build de la interfaz.
 
 ## Los tests
 
