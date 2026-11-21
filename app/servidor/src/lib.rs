@@ -32,7 +32,10 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
 
 /// Un examen es una carpeta de la raíz con `examen.json`, y se lee en cada petición.
 async fn leer_examen(carpetas: &Carpetas, examen: &str) -> Result<Examen, Response> {
-    if examen.starts_with('.') {
+    // El nombre es una sola carpeta de la raíz: sin `/`, sin `..` y sin las carpetas ocultas.
+    let mut partes = std::path::Path::new(examen).components();
+    let una_carpeta = matches!((partes.next(), partes.next()), (Some(std::path::Component::Normal(_)), None));
+    if !una_carpeta || examen.starts_with('.') {
         return Err(StatusCode::NOT_FOUND.into_response());
     }
     let texto = tokio::fs::read(carpetas.raiz.join(examen).join("examen.json"))

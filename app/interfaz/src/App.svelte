@@ -3,7 +3,7 @@
 
   // La página vive en /<carpeta>/, así que la ruta relativa llega al API de su examen.
   const inicio: Promise<Inicio> = fetch("api/inicio")
-    .then((r) => r.json())
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`El servidor responde ${r.status}`))))
     .then((datos: Inicio) => {
       document.title = datos.titulo;
       return datos;
@@ -15,4 +15,6 @@
   {#if banco_vacio}
     <p>El banco no tiene preguntas</p>
   {/if}
+{:catch error}
+  <p>{error.message}</p>
 {/await}

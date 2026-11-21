@@ -76,7 +76,8 @@ async fn una_carpeta_sin_examen_json_no_es_un_examen() {
     fs::create_dir(raiz.path().join("docs")).unwrap();
     let url = arrancar(raiz.path()).await;
 
-    for ruta in ["docs/api/inicio", "docs/", "../api/inicio"] {
+    crear_examen(raiz.path(), "ln", "LN", None);
+    for ruta in ["docs/api/inicio", "docs/", "../api/inicio", "docs%2F..%2Fln/api/inicio"] {
         assert_eq!(reqwest::get(format!("{url}/{ruta}")).await.unwrap().status(), 404, "{ruta}");
     }
 }

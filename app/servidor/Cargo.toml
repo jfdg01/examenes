@@ -13,4 +13,3 @@ serde_json = "1"
 [dev-dependencies]
 reqwest = { version = "0.13", default-features = false, features = ["json"] }
 tempfile = "3"
-serde_json = "1"
