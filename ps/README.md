@@ -6,13 +6,15 @@ El número de preguntas y la duración faltan. El simulacro usa 20 preguntas y 2
 
 ## El temario
 
-| `pdf` | El tema | `tema` |
-|---|---|---|
-| `1_Introduccion.pdf` | Tema 1. Introducción | `introduccion` |
-| `2_Claves.pdf` | Tema 2. Administración y distribución de claves | `claves` |
-| `3_Transporte.pdf` | Tema 3. Capa de transporte | `transporte` |
-| `4_Aplicacion.pdf` | Tema 4. Capa de aplicación | `aplicacion` |
-| `E_SSL_TLS.pdf` | Seguridad en SSL/TLS: historia de un protocolo, un documento externo | `ssl-tls` |
+| `pdf` | El tema | `tema` | Lo que trae |
+|---|---|---|---|
+| `1_Introduccion.pdf` | Tema 1. Introducción | `introduccion` | Las capas, los servicios y los ataques de X.800, el canal seguro, los oráculos, la degradación y PFS |
+| `2_Claves.pdf` | Tema 2. Administración y distribución de claves | `claves` | La distribución de claves, el KDC, los certificados X.509, la revocación (CRL y OCSP) y la PKI |
+| `3_Transporte.pdf` | Tema 3. Capa de transporte | `transporte` | TLS 1.2, TLS 1.3 y OpenSSL |
+| `4_Aplicacion.pdf` | Tema 4. Capa de aplicación | `aplicacion` | La web y HTTPS, HSTS y HPKP, SSH, el correo, DNSSEC, DANE, SPF, DKIM, DMARC y S/MIME |
+| `E_SSL_TLS.pdf` | Seguridad en SSL/TLS: historia de un protocolo, un documento externo | `ssl-tls` | Los ataques históricos (sslstrip, BEAST, CRIME, POODLE, Heartbleed…), TLS 1.3 y ECH |
+
+SSH está en el tema 4, y no en el tema 3 de la capa de transporte.
 
 ## Lo que marcó el profesor
 

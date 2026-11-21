@@ -24,7 +24,10 @@ El historial, las notas y la ronda a medias también viven en la carpeta del exa
   "opciones": 3,
   "minutos": 45,
   "penalizacion": 0,
-  "temas": ["introduccion", "ciclo-de-vida"]
+  "pdfs": {
+    "1_Introduccion.pdf": ["introduccion"],
+    "2_Ciclo_de_vida.pdf": ["ciclo-de-vida"]
+  }
 }
 ```
 
@@ -32,7 +35,7 @@ El historial, las notas y la ronda a medias también viven en la carpeta del exa
 - `preguntas` y `minutos` son las cifras del simulacro.
 - `opciones` es el número de opciones de una pregunta del examen. Una pregunta del banco tiene `opciones` − 1 distractores.
 - `penalizacion` es la parte de un acierto que un fallo resta: 0,25 resta 1/4 de un acierto, y 0 no resta.
-- `temas` es la lista de los valores de `tema`.
+- `pdfs` da los temas de cada PDF de `pdfs/`. Un PDF de LN tiene varios temas.
 
 Cada examen tiene su puerto, y el navegador separa el `localStorage` de cada puerto. Así, las claves `ln-*` de un examen no pisan las claves de otro examen.
 
