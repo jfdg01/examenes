@@ -7,6 +7,8 @@ La app tiene 3 máquinas de estados: la caja de una pregunta, el estado de un co
 - Una pregunta sin respuestas es **nueva**. El dominio la cuenta como caja 1.
 - Un acierto con "seguro" sube una caja: de nueva a 2, de 1 a 2 y de 2 a 3. La caja 3 es el tope.
 - Un fallo, un acierto con "dudo" o una pregunta en blanco bajan la pregunta a la **caja 1**.
+- Cada respuesta mueve la caja, la de una sesión y la de un simulacro.
+- Rust tiene un `enum Caja { Nueva, Una, Dos, Tres }`, y una función que da la caja siguiente según la respuesta.
 
 ## El estado de un concepto
 
@@ -30,6 +32,8 @@ La sesión junta las preguntas en este orden:
 
 1. Todas las preguntas de la caja 1.
 2. Una pregunta de cada concepto sin ver: la vuelta al banco.
-3. Un sorteo entre las demás preguntas de los conceptos vistos. Una pregunta nueva o de la caja 2 pesa 1, y una de la caja 3 pesa 0,5.
+3. Un sorteo entre las demás preguntas de los conceptos vistos. Cada caja tiene un peso en el sorteo.
 
 La lista se corta en 12 preguntas, y sale en un orden al azar. Con todos los conceptos vistos, el sorteo siempre tiene candidatas. Así, una sesión de un banco de 12 preguntas o más tiene 12 preguntas. Una pregunta de la caja 3 puede salir en la sesión siguiente a su acierto.
+
+Los pesos del sorteo salen del prototipo de la sesión. El prototipo simula muchas sesiones, y cuenta las preguntas nuevas y las de cada caja en cada sesión de 12. Los pesos dan un reparto sensato en cada sesión.

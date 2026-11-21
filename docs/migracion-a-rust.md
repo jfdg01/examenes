@@ -33,14 +33,16 @@ Una función que nadie usa no pasa a Rust, y su código se va. Una función que 
 2. `/to-spec` convierte las decisiones en un spec, y `/to-tickets` lo corta en tickets con sus dependencias.
 3. Cada ticket se construye con un `/implement`, con `/clear` entre ticket y ticket.
 
+Al final del grilling, cada doc que no hace falta se borra, y cada línea que no hace falta sale de los docs. Al final de la implementación, un doc que el código ya explica se resume a lo que el código no dice.
+
 La rama `feat/bkt` y su modelo BKT quedan fuera de la migración, congelados hasta que el dueño los nombre. La migración pasa a Rust el modelo de cajas.
 
 ## Las preguntas abiertas
 
-- **El modelo que pasa a Rust.** Falta confirmar las 3 máquinas de [el modelo](el-modelo.md).
+- **El modelo que pasa a Rust.** La caja está confirmada. Falta confirmar el concepto y la ronda de [el modelo](el-modelo.md).
 - **El estado y el dominio del concepto.** El dueño quiere revisar la lógica antes de decidir si el concepto tiene una sola medida.
-- **Las máquinas de estados explícitas.** La propuesta: el spec define cada estado y cada transición, y Rust tiene un `enum` por máquina, como `enum Caja { Nueva, Una, Dos, Tres }`.
-- **Un prototipo de la sesión.** La propuesta: un script en una rama `prototype/` simula un mes de sesiones sin el bloque de estudio, y mide cuándo vuelve cada pregunta.
+- **Las máquinas de estados explícitas.** El spec define cada estado y cada transición. La caja es un `enum` de Rust, y falta confirmar el `enum` de las otras 2 máquinas.
+- **El prototipo de la sesión.** Un script en una rama `prototype/` simula muchas sesiones sin el bloque de estudio. Falta decidir qué reparto es sensato.
 
 ## El final de este doc
 
