@@ -1,6 +1,6 @@
 # El test de práctica
 
-Un banco de preguntas tipo test del temario de un examen, con una interfaz web y un servidor que sincroniza el historial entre el móvil y el PC. Esta carpeta tiene el código, y cada examen tiene una carpeta de datos al lado: `ln/` y `asn/`.
+Un banco de preguntas tipo test del temario de un examen, con una interfaz web y un servidor que sincroniza el historial entre el móvil y el PC. Esta carpeta tiene el código, y cada examen tiene una carpeta de datos al lado: `ln/`, `asn/` y `ps/`.
 
 ## Los exámenes
 
@@ -90,6 +90,17 @@ Un distractor difícil tiene una de estas formas:
 - **La cifra en otra unidad.** El número es el correcto, pero la unidad o la referencia cambian: "72 días", o el 4 % del beneficio.
 
 Una pregunta pasa a ser difícil con otros distractores, y con el mismo dato. Así, su `id` mide el mismo dato en el historial.
+
+### Las reglas de un banco nuevo
+
+Un banco nuevo, como el de PS o el de ASN, sigue también estas 4 reglas. El banco de LN no las sigue, porque su examen ya pasó.
+
+1. **La explicación de cada opción.** La `explicacion` es un texto, con una frase para la correcta y una frase por distractor. Cada frase de un distractor nombra el matiz que lo hace incorrecto. Así, una ronda enseña también lo que separa cada distractor de la correcta. Un buen distractor es una idea plausible que una persona puede pensar con lo que sabe, y que es incorrecta por un matiz. Un distractor sin un matiz que explicar no vale.
+2. **La regla 4.** Un distractor sale del temario, o es una idea plausible fuera del temario, con su matiz en la explicación.
+3. **3 preguntas por concepto.** Un concepto agrupa 3 preguntas que preguntan el mismo dato desde ángulos distintos.
+4. **Las siglas.** Cada sigla de seguridad del temario es un concepto propio, con una sola pregunta. El enunciado da la sigla y pide su significado, con 2 desarrollos plausibles como distractores. Las siglas muy generales de informática, como TCP, IP o ASCII, no entran. La sigla es una excepción a la regla 6. Su `tema` es el tema del PDF que la explica, y su `fuente` es la primera página que la explica.
+
+`comprobar_banco.py` no comprueba que la explicación nombra cada distractor.
 
 ## El historial: `respuestas.jsonl`
 
