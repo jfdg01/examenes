@@ -27,7 +27,7 @@
     "correcta": "Baja por las capas de A, cruza la red y sube por las de B",
     "distractores": [
       "Pasa directo de la capa 3 de A a la capa 3 de B por su protocolo",
-      "Cruza la red por la capa 3 y solo después baja de nivel"
+      "Baja por las capas de A, cruza la red por la capa 3 y sube por las de B"
     ],
     "explicacion": "La comunicación real baja por la pila de A, cruza la red por la capa 1 y sube por la pila de B. Pasar directo es la comunicación virtual, que solo es una vista lógica. La red se cruza por la capa 1, y no por la 3."
   },
@@ -106,8 +106,8 @@
     "pregunta": "¿Qué es una PDU?",
     "correcta": "Un mensaje del protocolo: los datos a enviar más la cabecera de control",
     "distractores": [
-      "Solo los datos que se entregan al protocolo para enviarlos, sin cabecera",
-      "Solo la cabecera con la información de control del protocolo"
+      "Los datos que se entregan al protocolo para enviarlos, sin la cabecera",
+      "La cabecera con la información de control que añade el protocolo"
     ],
     "explicacion": "Una PDU lleva los datos más la cabecera de control. Los datos solos son la SDU. La cabecera sola es una parte de la PDU, y no la PDU entera."
   },
@@ -136,10 +136,10 @@
       "pagina": 6
     },
     "pregunta": "¿Qué nombre recibe la PDU de la capa de transporte?",
-    "correcta": "TPDU, Transport PDU",
+    "correcta": "La TPDU",
     "distractores": [
-      "NPDU, Network PDU",
-      "SDU, Service Data Unit"
+      "La NPDU",
+      "La SDU"
     ],
     "explicacion": "La PDU de la capa de transporte es la TPDU. La NPDU es la PDU de la capa de red. La SDU son los datos que se envían, sin cabecera, y no una PDU de ninguna capa."
   },
@@ -215,7 +215,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 8
     },
-    "pregunta": "¿Cuál de estas es una funcionalidad que define un protocolo de seguridad?",
+    "pregunta": "Además de la autenticación y la distribución de claves, ¿qué otra funcionalidad define un protocolo de seguridad?",
     "correcta": "La definición de un canal seguro entre dos partes",
     "distractores": [
       "El encaminamiento de los paquetes por la ruta más corta",
@@ -247,7 +247,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 9
     },
-    "pregunta": "¿En qué capa se sitúa SSL/TLS, que se apoya en TCP?",
+    "pregunta": "¿En qué capa se sitúa SSL/TLS?",
     "correcta": "En la capa de transporte",
     "distractores": [
       "En la capa de red",
@@ -311,7 +311,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 10
     },
-    "pregunta": "¿Cuál de estas es una pareja de roles de un protocolo?",
+    "pregunta": "Además de iniciador y respondedor, ¿qué otra pareja de roles suele identificarse en un protocolo?",
     "correcta": "Cliente y servidor",
     "distractores": [
       "Cifrador y firmante",
@@ -426,8 +426,8 @@
     "pregunta": "En la propiedad de autenticación de una comunicación segura, ¿quién confirma la identidad de quién?",
     "correcta": "Cada uno confirma la identidad del otro",
     "distractores": [
-      "Solo el receptor confirma la identidad del emisor",
-      "Solo el cliente confirma la identidad del servidor"
+      "El receptor confirma la identidad del emisor",
+      "El cliente confirma la identidad del servidor"
     ],
     "explicacion": "La autenticación es mutua: cada extremo confirma la identidad del otro. No es solo el receptor al emisor. Tampoco es solo el cliente al servidor, porque el servidor también puede verificar al cliente."
   },
@@ -442,8 +442,8 @@
     "pregunta": "¿Qué exige la propiedad de disponibilidad?",
     "correcta": "Que los servicios sean accesibles, incluso ante denegación de servicio",
     "distractores": [
-      "Que los datos solo los lea el destinatario previsto, aunque se intercepten",
-      "Que los servicios solo sean accesibles tras autenticarse"
+      "Que los datos los lea el destinatario previsto, aunque se intercepten",
+      "Que los servicios sean accesibles para quien se autentica antes"
     ],
     "explicacion": "La disponibilidad exige servicios accesibles y preparados para la denegación de servicio. Que solo el destinatario lea es confidencialidad. Exigir autenticación para acceder es control de acceso, y no disponibilidad."
   },
@@ -477,7 +477,7 @@
       "El análisis de tráfico",
       "La captura pasiva de mensajes"
     ],
-    "explicacion": "La disponibilidad se protege ante la denegación de servicio. El análisis de tráfico y la captura pasiva son ataques pasivos que no impiden usar el servicio."
+    "explicacion": "La disponibilidad se protege ante la denegación de servicio. El análisis de tráfico es un ataque pasivo que no impide usar el servicio. La captura pasiva de mensajes también es pasiva y no impide usar el servicio."
   },
   {
     "id": "introduccion-031",
@@ -519,7 +519,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 12
     },
-    "pregunta": "¿Qué pareja contiene solo algoritmos de clave simétrica?",
+    "pregunta": "¿Qué dos algoritmos de clave simétrica cita el temario?",
     "correcta": "DES y AES",
     "distractores": [
       "RSA y DSA",
@@ -583,7 +583,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 15
     },
-    "pregunta": "¿Cómo calcula el emisor un MAC en el esquema de la diapositiva?",
+    "pregunta": "¿Cómo calcula el emisor un MAC?",
     "correcta": "Aplica un hash al mensaje junto con un secreto compartido",
     "distractores": [
       "Cifra el mensaje con la clave pública del receptor y lo envía",
@@ -903,7 +903,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 33
     },
-    "pregunta": "¿Por qué cifrar la contraseña no impide un ataque de repetición?",
+    "pregunta": "¿Por qué un ataque de repetición funciona aunque la contraseña vaya cifrada?",
     "correcta": "Porque no necesita descifrarla: le basta reenviar el paquete grabado",
     "distractores": [
       "Porque el cifrado no oculta la contraseña del paquete",
@@ -1079,13 +1079,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 22
     },
-    "pregunta": "¿Cuál de estos es un mecanismo de seguridad específico?",
+    "pregunta": "¿Qué mecanismo específico de X.800 añade datos a una unidad de datos para probar su origen e integridad y proteger frente a falsificación?",
     "correcta": "La firma digital",
     "distractores": [
       "La detección de eventos",
       "La recuperación de seguridad"
     ],
-    "explicacion": "La firma digital es específica. La detección de eventos y la recuperación de seguridad son mecanismos generalizados."
+    "explicacion": "La firma digital es un mecanismo específico: añade datos a la unidad para probar origen e integridad. La detección de eventos es generalizada, y no va en una capa de protocolo concreta. La recuperación de seguridad también es generalizada, y responde a peticiones de otros mecanismos."
   },
   {
     "id": "introduccion-069",
@@ -1095,13 +1095,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 22
     },
-    "pregunta": "¿Cuál de estos es un mecanismo de seguridad generalizado?",
+    "pregunta": "¿Qué mecanismo generalizado de X.800 reúne datos para que una revisión independiente examine los registros y actividades del sistema?",
     "correcta": "El registro de auditoría de los eventos",
     "distractores": [
       "El control de acceso a un recurso",
       "El intercambio de autenticación entre las partes"
     ],
-    "explicacion": "El registro de auditoría es generalizado. El control de acceso y el intercambio de autenticación son específicos."
+    "explicacion": "El registro de auditoría es un mecanismo generalizado. El control de acceso es específico, y se incorpora a una capa de protocolo. El intercambio de autenticación también es específico."
   },
   {
     "id": "introduccion-070",
@@ -1223,13 +1223,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 23
     },
-    "pregunta": "¿Qué servicio de integridad protege un único bloque de datos, sin conexión?",
+    "pregunta": "¿Qué servicio de integridad protege un único bloque de datos suelto y puede detectar de forma limitada la repetición?",
     "correcta": "La integridad sin conexión",
     "distractores": [
       "La integridad de conexión con recuperación",
       "La integridad de conexión sin recuperación"
     ],
-    "explicacion": "La integridad sin conexión protege un solo bloque. Las otras dos protegen todos los datos de una conexión."
+    "explicacion": "La integridad sin conexión protege un solo bloque y puede detectar de forma limitada la repetición. La integridad de conexión con recuperación protege todos los datos de una conexión e intenta recuperarlos. La integridad de conexión sin recuperación protege también toda la conexión y solo detecta."
   },
   {
     "id": "introduccion-078",
@@ -1415,13 +1415,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 26
     },
-    "pregunta": "¿Por qué TCP no basta para proteger una comunicación frente a un atacante?",
-    "correcta": "Porque no resiste ataques activos que cambien, inserten o borren paquetes",
+    "pregunta": "¿Qué deja sin cubrir TCP en una comunicación frente a un atacante?",
+    "correcta": "Los ataques activos que cambian, insertan o borran paquetes",
     "distractores": [
-      "Porque pierde paquetes con frecuencia en redes normales",
-      "Porque no permite enviar flujos de longitud indeterminada en una conexión"
+      "Las pérdidas de paquetes en redes normales",
+      "Los flujos de longitud indeterminada en una conexión"
     ],
-    "explicacion": "TCP no resiste a un atacante activo que cambie, inserte o borre paquetes. Perder paquetes lo resuelve con reenvíos. Sí admite flujos de longitud indeterminada."
+    "explicacion": "TCP no está preparado para un atacante activo que cambie, inserte o borre paquetes. Las pérdidas de paquetes las resuelve con reenvíos. Sí admite flujos de longitud indeterminada."
   },
   {
     "id": "introduccion-090",
@@ -1611,7 +1611,7 @@
     "correcta": "Nada del tráfico pasado, porque sus claves eran temporales",
     "distractores": [
       "Todo el tráfico pasado, porque la clave privada genera las sesiones",
-      "Solo el tráfico de la última sesión grabada"
+      "El tráfico de la última sesión grabada"
     ],
     "explicacion": "Con PFS el tráfico pasado sigue protegido, porque las claves de sesión eran temporales. Sin PFS, el atacante podría descifrarlo. No hay ninguna sesión que quede expuesta."
   },
@@ -1643,7 +1643,7 @@
     "correcta": "Integridad, luego encriptar",
     "distractores": [
       "Encriptar, luego integridad",
-      "Hacerlo en paralelo"
+      "Cifrar y calcular el MAC a la vez, en paralelo"
     ],
     "explicacion": "En «integridad, luego encriptar» el MAC se añade al texto en claro y todo se cifra. En «encriptar, luego integridad» el MAC se calcula sobre el cifrado y queda fuera. En paralelo el MAC también queda fuera."
   },
@@ -1656,7 +1656,7 @@
       "pagina": 30
     },
     "pregunta": "¿En qué orden se calculan el cifrado y el MAC a partir del texto en claro, de forma independiente?",
-    "correcta": "Hacerlo en paralelo",
+    "correcta": "Cifrar y calcular el MAC en paralelo",
     "distractores": [
       "Encriptar, luego integridad",
       "Integridad, luego encriptar"
@@ -1850,8 +1850,8 @@
     "pregunta": "¿Por qué es complicado distinguir una reproducción de un reenvío?",
     "correcta": "Porque en ambos casos llega de nuevo el mismo paquete",
     "distractores": [
-      "Porque la reproducción siempre llega por un canal distinto",
-      "Porque el reenvío siempre lleva un número de secuencia nuevo"
+      "Porque la reproducción llega por un canal distinto",
+      "Porque el reenvío lleva un número de secuencia nuevo"
     ],
     "explicacion": "En los dos casos llega otra vez el mismo paquete, y no se sabe quién lo manda. La reproducción no llega por otro canal necesariamente. Un reenvío reenvía el original, con el mismo número."
   },
@@ -1931,9 +1931,9 @@
     "correcta": "Cifrado y autenticación, para enviar y para recibir",
     "distractores": [
       "Cifrado, firma, verificación y sesión",
-      "Una nueva por cada mensaje, derivada del contador de mensajes"
+      "Dos de cifrado y dos de firma, una pareja para Alice y otra para Bob"
     ],
-    "explicacion": "Son una clave de cifrado y una de autenticación para cada sentido. El ejemplo no usa clave de firma ni de verificación. Las claves no son una por mensaje."
+    "explicacion": "Son una clave de cifrado y una de autenticación para cada sentido. El ejemplo no usa clave de firma ni de verificación. Tampoco hay una pareja por cada parte: cada sentido tiene la suya, y Bob solo las intercambia."
   },
   {
     "id": "introduccion-126",
@@ -1962,8 +1962,8 @@
     "pregunta": "En el envío del protocolo de ejemplo, ¿qué cubre el MAC?",
     "correcta": "El número, la longitud y los datos adicionales, y el mensaje",
     "distractores": [
-      "Solo el mensaje, una vez que ya está cifrado con AES en el envío",
-      "Solo el mensaje y su número"
+      "El mensaje, una vez que ya está cifrado con AES en el envío",
+      "El mensaje y su número de secuencia"
     ],
     "explicacion": "El HMAC cubre el número, la longitud de x, x y m. No se calcula sobre el mensaje cifrado. No cubre solo el mensaje y su número, porque incluye los datos adicionales."
   },
@@ -2087,7 +2087,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 5
     },
-    "pregunta": "Un cliente abre una conexión nueva con un servidor con el que ya comparte una clave maestra. ¿Qué cifra los datos de esa conexión?",
+    "pregunta": "Un cliente abre una conexión con un servidor con el que ya comparte una clave maestra. ¿Qué cifra los datos de esa conexión?",
     "correcta": "Una clave de sesión nueva, distinta de la maestra",
     "distractores": [
       "La clave maestra que ya comparten los dos",
@@ -2151,13 +2151,13 @@
       "pdf": "2_Claves.pdf",
       "pagina": 6
     },
-    "pregunta": "A y B ya comparten una clave simétrica. ¿Cómo hace llegar A una clave nueva a B?",
-    "correcta": "La genera y se la envía cifrada con la clave compartida",
+    "pregunta": "A y B ya tienen una clave simétrica común. ¿Cómo reparte A una clave nueva a B?",
+    "correcta": "La genera y se la envía cifrada con la clave común",
     "distractores": [
-      "Se la entrega físicamente a B en una reunión entre los dos",
-      "La cifra con la clave pública de B"
+      "La genera y la cifra con la clave pública de B",
+      "La genera y se la envía a B sin cifrar, porque ya se conocen"
     ],
-    "explicacion": "Con una clave compartida, A genera la nueva y la envía cifrada con ella. La entrega física es otra opción, que no usa la clave compartida. Cifrar con la clave pública de B es criptografía asimétrica, y no usa la clave compartida."
+    "explicacion": "Con una clave común, A genera la nueva y la envía cifrada con ella. Cifrar con la clave pública de B es criptografía asimétrica, y no usa la clave común. Enviarla sin cifrar la dejaría a la vista de cualquiera."
   },
   {
     "id": "claves-008",
@@ -2168,12 +2168,12 @@
       "pagina": 6
     },
     "pregunta": "A y B tienen cada uno una conexión cifrada con un tercero C. ¿Cómo obtienen una clave común?",
-    "correcta": "C genera la clave y la envía por esas conexiones a A y a B",
+    "correcta": "C genera la clave y se la envía a A y a B",
     "distractores": [
-      "A genera la clave y se la pasa a B a través de C como mensajero",
+      "A genera la clave y la cifra con la clave pública de C, que se la pasa a B",
       "C cifra con su clave privada la clave que genera B"
     ],
-    "explicacion": "En esta opción C genera la clave y la envía a los dos. Que A la genere y use a C de mensajero no aprovecha el papel de C. Cifrar con su clave privada es una firma, y no hay claves públicas aquí."
+    "explicacion": "En esta opción C genera la clave y la envía a los dos. Que A la genere y la cifre con la clave pública de C no es el esquema, porque aquí no hay claves públicas. Cifrar con su clave privada es una firma, y no da confidencialidad."
   },
   {
     "id": "claves-009",
@@ -2183,11 +2183,11 @@
       "pdf": "2_Claves.pdf",
       "pagina": 6
     },
-    "pregunta": "¿Por qué A o un tercero que entregue la clave físicamente no sirve como solución general en Internet?",
-    "correcta": "Porque se genera una clave entre casi cualquier pareja de interlocutores",
+    "pregunta": "¿Por qué la entrega física de claves no sirve como solución general en Internet?",
+    "correcta": "Porque se genera una clave de sesión entre casi cualquier pareja de interlocutores",
     "distractores": [
       "Porque una clave entregada así no se puede usar para cifrar",
-      "Porque la entrega física solo funciona con un único interlocutor a la vez"
+      "Porque la entrega física exige un único interlocutor a la vez"
     ],
     "explicacion": "Hoy se genera una clave de sesión entre casi cualquier pareja de interlocutores, y entregarlas en mano no escala. Una clave entregada así sí cifra. El límite no es un único interlocutor, sino el número de parejas."
   },
@@ -2199,7 +2199,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 8
     },
-    "pregunta": "¿En qué contexto se usa la distribución de claves descentralizada?",
+    "pregunta": "¿Cuándo se usa la distribución de claves descentralizada?",
     "correcta": "En contextos locales donde dos equipos ya comparten una clave maestra",
     "distractores": [
       "En Internet, entre cualquier pareja de equipos desconocidos",
@@ -2234,8 +2234,8 @@
     "pregunta": "¿Qué requisito impide usar la distribución descentralizada entre cualquier pareja de equipos de Internet?",
     "correcta": "Cada pareja de equipos necesita ya una clave maestra común",
     "distractores": [
-      "Cada equipo necesita un certificado firmado por una autoridad de certificación",
-      "Cada equipo necesita una conexión cifrada con un KDC"
+      "Cada pareja de equipos necesita un certificado firmado por una autoridad de certificación",
+      "Cada pareja de equipos necesita una conexión cifrada con un KDC"
     ],
     "explicacion": "Hace falta una clave maestra previa por pareja, y no escala. El certificado de una CA es del esquema de claves públicas. La conexión con un KDC es el esquema centralizado, que no es este."
   },
@@ -2261,7 +2261,7 @@
     "tema": "claves",
     "fuente": {
       "pdf": "2_Claves.pdf",
-      "pagina": 8
+      "pagina": 11
     },
     "pregunta": "¿Qué puede servir como identificador único de una transacción?",
     "correcta": "Un sello de tiempo, un contador o un número aleatorio",
@@ -2378,7 +2378,7 @@
     "pregunta": "Tras recibir la clave de sesión, A y B se mandan E(Ks, N2) y E(Ks, f(N2)). ¿Para qué?",
     "correcta": "Para autenticarse: comprobar que los dos tienen la clave de sesión",
     "distractores": [
-      "Para distribuir la clave: así el KDC genera Ks y se la envía a los dos",
+      "Para que el KDC genere Ks y se la envíe a los dos",
       "Para renovar la clave maestra de B con el KDC en esa sesión"
     ],
     "explicacion": "Son pasos de autenticación: quien responde bien tiene Ks. La distribución ya terminó antes. La clave maestra de B no se renueva en esos mensajes."
@@ -2410,7 +2410,7 @@
     "pregunta": "En un protocolo orientado a conexión, ¿cuánto suele mantenerse la clave de sesión?",
     "correcta": "Durante toda la conexión, salvo que sea muy larga",
     "distractores": [
-      "Para un solo mensaje, que se cifra y la clave se descarta después",
+      "Para cada mensaje, que se cifra y la clave se descarta después",
       "Hasta que caduca el certificado del servidor en esa conexión"
     ],
     "explicacion": "Lo habitual es toda la conexión, salvo que sea muy larga. Una clave por mensaje no es lo habitual. El certificado del servidor no fija la vida de la clave de sesión."
@@ -2458,7 +2458,7 @@
     "pregunta": "En ese primer ejemplo, ¿cómo envía B la clave de sesión a A?",
     "correcta": "Cifrada con la clave pública que A le mandó",
     "distractores": [
-      "Cifrada con su propia clave privada, para que solo A la descifre",
+      "Cifrada con su propia clave privada, para que A la descifre",
       "Firmada con la clave pública de A"
     ],
     "explicacion": "B cifra la clave de sesión con la clave pública de A, y solo A la descifra. Cifrar con la clave privada de B no da confidencialidad: cualquiera la descifra. La clave pública no firma."
@@ -2487,7 +2487,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 14
     },
-    "pregunta": "En el intercambio sin autenticar, ¿qué hace el atacante con la clave pública que A manda a B?",
+    "pregunta": "En el intercambio sin autenticar, ¿qué hace el atacante con la clave pública que A envía a B?",
     "correcta": "La intercepta y manda a B la suya propia en su lugar",
     "distractores": [
       "La descifra con la clave privada de A para leer su contenido",
@@ -2506,7 +2506,7 @@
     "pregunta": "¿Qué consigue el atacante con ese ataque de hombre en el medio?",
     "correcta": "Conoce la clave de sesión que usan A y B",
     "distractores": [
-      "Solo observa tráfico cifrado que no puede descifrar",
+      "Observa tráfico cifrado que no puede descifrar",
       "Impide que B reciba la clave de sesión"
     ],
     "explicacion": "El atacante comparte la clave de sesión con A y con B. Observar sin descifrar es lo que ocurriría sin sustituir la clave. B sí recibe la clave, que le llega por el atacante."
@@ -2571,9 +2571,9 @@
     "correcta": "Que las de A y B se han distribuido con seguridad",
     "distractores": [
       "Que las dos partes comparten una clave maestra",
-      "Que las dos partes comparten una clave maestra desde antes"
+      "Que cada parte tiene una conexión cifrada con un KDC"
     ],
-    "explicacion": "El esquema supone claves públicas distribuidas con seguridad. Una clave maestra compartida es del esquema simétrico. El KDC es el esquema centralizado simétrico."
+    "explicacion": "El esquema supone claves públicas distribuidas con seguridad. Una clave maestra compartida es del esquema simétrico descentralizado. Una conexión cifrada con un KDC es el esquema centralizado."
   },
   {
     "id": "claves-034",
@@ -2602,10 +2602,10 @@
     "pregunta": "¿Qué consigue A al cifrar la clave de sesión ya firmada con la clave pública de B?",
     "correcta": "Que solo B pueda descifrarla",
     "distractores": [
-      "Que B sepa que la envía A",
+      "Que la clave de sesión quede firmada con la clave privada de B",
       "Que cualquiera pueda comprobar quién la envía"
     ],
-    "explicacion": "Cifrar con la clave pública de B da confidencialidad. Que B sepa quién la envía lo da la firma. Cifrada, solo B accede a ella, y no cualquiera."
+    "explicacion": "Cifrar con la clave pública de B da confidencialidad. La firma de la clave de sesión es la capa interior, con la clave privada de A, y no de B. Cifrada, solo B accede a ella, y no cualquiera."
   },
   {
     "id": "claves-036",
@@ -2632,7 +2632,7 @@
       "pagina": 17
     },
     "pregunta": "¿Cómo funciona la distribución de claves públicas por anuncio público?",
-    "correcta": "El propietario la hace pública sin ningún control",
+    "correcta": "El propietario la difunde sin ningún control",
     "distractores": [
       "Una autoridad la firma con su clave privada",
       "Se pide a una autoridad cada vez que se necesita la clave"
@@ -2762,10 +2762,10 @@
     "pregunta": "¿Cómo comprueba A que la respuesta viene de la autoridad?",
     "correcta": "La descifra con la clave pública de la autoridad",
     "distractores": [
-      "La descifra con su propia clave privada y compara el resultado",
+      "La descifra con la clave privada de la autoridad",
       "Comprueba que la firma de B coincide con la de la autoridad"
     ],
-    "explicacion": "La firma de la autoridad se verifica con su clave pública. La clave privada de A sirve para mensajes cifrados para A. B no firma la respuesta."
+    "explicacion": "La firma de la autoridad se verifica con su clave pública. La clave privada de la autoridad no la tiene A. B no firma la respuesta."
   },
   {
     "id": "claves-046",
@@ -2858,10 +2858,10 @@
     "pregunta": "¿En qué protocolos se usa el formato de certificado X.509?",
     "correcta": "SSL/TLS, S/MIME e IP Security",
     "distractores": [
-      "SSL/TLS, S/MIME y Kerberos, en todas sus versiones",
-      "SSH, S/MIME e IP Security"
+      "SSL/TLS, S/MIME y PGP",
+      "SSL/TLS, PGP e IP Security"
     ],
-    "explicacion": "El PDF cita SSL/TLS, S/MIME e IP Security. Kerberos no lo usa como formato de certificado. SSH no usa X.509 en su esquema habitual."
+    "explicacion": "El PDF cita SSL/TLS, S/MIME e IP Security. PGP tiene su propio formato de certificado, y no usa X.509. La otra opción mezcla un protocolo de la lista con PGP."
   },
   {
     "id": "claves-052",
@@ -2922,8 +2922,8 @@
     "pregunta": "¿Cómo verifica un destinatario la firma de un certificado?",
     "correcta": "Descifra la firma con la clave pública de la CA y compara el hash",
     "distractores": [
-      "La descifra con su propia clave privada y compara el hash resultante",
-      "La descifra con la clave pública del titular y compara el hash"
+      "Descifra la firma con su propia clave privada y compara el hash resultante",
+      "Descifra la firma con la clave pública del titular y compara el hash"
     ],
     "explicacion": "Se descifra con la clave pública de la CA y se compara con el hash calculado. Su clave privada no descifra firmas de la CA. La clave pública del titular no firmó el certificado."
   },
@@ -2933,15 +2933,15 @@
     "tema": "claves",
     "fuente": {
       "pdf": "2_Claves.pdf",
-      "pagina": 22
+      "pagina": 24
     },
     "pregunta": "¿Quién puede verificar a un usuario y su clave pública con un certificado?",
     "correcta": "Cualquier usuario con la clave pública de la CA",
     "distractores": [
-      "Quien tenga la clave privada del usuario",
+      "Quien tenga la clave pública del usuario",
       "Los usuarios registrados en el directorio de la CA"
     ],
-    "explicacion": "Basta tener la clave pública de la CA. La clave privada del usuario no hace falta. El registro en un directorio no interviene."
+    "explicacion": "Basta tener la clave pública de la CA. Con la clave pública del usuario no se verifica la firma de la CA. El registro en un directorio no interviene."
   },
   {
     "id": "claves-057",
@@ -3045,15 +3045,15 @@
     "tema": "claves",
     "fuente": {
       "pdf": "2_Claves.pdf",
-      "pagina": 24
+      "pagina": 33
     },
-    "pregunta": "¿Cómo se llama que una CA certifique a otra CA?",
+    "pregunta": "¿Cómo se llama la relación entre dos CA cuando una emite el certificado de la otra?",
     "correcta": "Certificación cruzada",
     "distractores": [
-      "Revocación en cadena automática",
-      "Registro delegado"
+      "Certificado autofirmado",
+      "Certificado raíz"
     ],
-    "explicacion": "El modelo PKI muestra la certificación cruzada entre CA. La revocación es otro proceso. Un registro delegado lo hace una registration authority, que no certifica."
+    "explicacion": "El modelo PKI muestra la certificación cruzada entre CA. Un certificado autofirmado lo firma su propio titular, y no otra CA. Un certificado raíz es el de la CA en lo alto de la cadena."
   },
   {
     "id": "claves-064",
@@ -3147,9 +3147,9 @@
     "correcta": "Revocarlo, porque deja de ser fiable",
     "distractores": [
       "Mantenerlo hasta que cada certificado caduque",
-      "Renovarlo solo con la clave nueva de la CA"
+      "Renovarlos con la clave nueva de la CA, sin revocarlos"
     ],
-    "explicacion": "El compromiso del certificado de la CA es motivo de revocación. Dejarlos caducar mantendría certificados no fiables. Renovarlos solos no es automático."
+    "explicacion": "El compromiso del certificado de la CA es motivo de revocación. Dejarlos caducar mantendría certificados no fiables. Renovarlos sin revocar deja vigentes los emitidos antes."
   },
   {
     "id": "claves-070",
@@ -3159,13 +3159,13 @@
       "pdf": "2_Claves.pdf",
       "pagina": 25
     },
-    "pregunta": "¿Qué contiene la lista de revocación que mantiene cada CA?",
-    "correcta": "Los certificados revocados que todavía no han expirado",
+    "pregunta": "¿Qué certificados incluye una CRL?",
+    "correcta": "Los revocados que todavía no han expirado",
     "distractores": [
-      "Todos los certificados emitidos por la CA, vigentes y expirados",
-      "Los certificados que ya han expirado"
+      "Los revocados, incluidos los que ya han expirado",
+      "Todos los emitidos por la CA, vigentes y expirados"
     ],
-    "explicacion": "La lista tiene revocados no expirados. No lista todos los emitidos. Los expirados ya los invalida su fecha."
+    "explicacion": "Una CRL lista los revocados que aún no han expirado. Los expirados ya los invalida su fecha, así que no hace falta listarlos. Una lista con todos los emitidos no distingue el estado."
   },
   {
     "id": "claves-071",
@@ -3207,11 +3207,11 @@
       "pdf": "2_Claves.pdf",
       "pagina": 25
     },
-    "pregunta": "¿Qué hace un protocolo de estado de certificados en línea (OCSP)?",
-    "correcta": "Comprueba en línea el estado de un certificado",
+    "pregunta": "¿Para qué sirve OCSP?",
+    "correcta": "Para consultar a un servidor si un certificado sigue siendo válido",
     "distractores": [
-      "Descarga la lista completa de certificados revocados de la CA",
-      "Firma el certificado con una validez corta"
+      "Para descargar la lista completa de certificados revocados de la CA",
+      "Para firmar el certificado con una validez corta"
     ],
     "explicacion": "OCSP consulta el estado en línea. Descargar una lista es una CRL. Una validez corta es de la respuesta del stapling."
   },
@@ -3255,7 +3255,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 26
     },
-    "pregunta": "Un navegador descarga la lista de revocación de una CA grande. ¿Qué problema aparece?",
+    "pregunta": "Un navegador usa la lista de revocación de una CA grande. ¿Qué problema aparece?",
     "correcta": "La lista es demasiado larga para mantenerla y descargarla",
     "distractores": [
       "La lista revela a la CA el sitio concreto que visita el navegador",
@@ -3293,7 +3293,7 @@
       "La latencia de la consulta al servidor",
       "La filtración del sitio al que se accede"
     ],
-    "explicacion": "El tamaño es propio de la lista. La latencia y la privacidad son problemas de OCSP."
+    "explicacion": "El tamaño es propio de la lista. La latencia es un problema de OCSP. La filtración del sitio también lo es."
   },
   {
     "id": "claves-079",
@@ -3815,13 +3815,13 @@
       "pdf": "2_Claves.pdf",
       "pagina": 35
     },
-    "pregunta": "¿Qué ofrece Vault al cifrar datos sin almacenarlos?",
-    "correcta": "Cifrar datos sin que Vault los guarde",
+    "pregunta": "¿Cómo trata Vault los datos que una aplicación le pide cifrar?",
+    "correcta": "Los cifra y los devuelve, y Vault no se queda con ellos",
     "distractores": [
-      "Guardar datos sin cifrar para consultarlos",
-      "Guardar la clave sin cifrarla"
+      "Los guarda cifrados en su almacén para devolverlos después",
+      "Los guarda y los reparte sin cifrar a las aplicaciones autorizadas"
     ],
-    "explicacion": "Cifra datos sin guardarlos. Guardarlos sin cifrar es lo contrario. No se trata de guardar la clave."
+    "explicacion": "Vault cifra los datos sin almacenarlos. Guardarlos cifrados es el almacenamiento de secretos, y no el cifrado de datos. Repartirlos sin cifrar no es una función suya."
   },
   {
     "id": "claves-112",
@@ -3863,11 +3863,11 @@
       "pdf": "2_Claves.pdf",
       "pagina": 2
     },
-    "pregunta": "¿Por qué los protocolos de seguridad necesitan administrar las claves?",
-    "correcta": "Porque las sesiones y conexiones de datos necesitan claves distribuidas",
+    "pregunta": "¿Por qué hace falta una administración adecuada de claves en los protocolos de seguridad?",
+    "correcta": "Porque las sesiones y conexiones de datos exigen distribuir claves entre las partes",
     "distractores": [
-      "Porque los algoritmos de cifrado no funcionan sin certificados que los respalden",
-      "Porque cada mensaje debe llevar su propia firma"
+      "Porque los algoritmos de cifrado exigen un certificado que los respalde",
+      "Porque cada mensaje exige su propia firma"
     ],
     "explicacion": "Hay que distribuir claves para sesiones y conexiones. Un algoritmo no exige certificados. La firma por mensaje no es el motivo."
   },
@@ -4154,10 +4154,10 @@
     "pregunta": "¿Qué IV se usa para cifrar el registro siguiente?",
     "correcta": "El último bloque de texto cifrado del registro anterior",
     "distractores": [
-      "Un valor aleatorio nuevo, enviado en claro con cada registro",
+      "El IV de la sesión, el mismo para todos los registros de la conexión",
       "El primer bloque de texto plano del registro anterior"
     ],
-    "explicacion": "El último bloque cifrado de cada registro se conserva como IV del siguiente. TLS no genera un IV nuevo por registro en este esquema. El IV sale del texto cifrado, y no del texto plano."
+    "explicacion": "El último bloque cifrado de cada registro se conserva como IV del siguiente. Un IV fijo para toda la conexión no se usa: cada registro toma el último bloque cifrado del anterior. El IV sale del texto cifrado, y no del texto plano."
   },
   {
     "id": "transporte-019",
@@ -4237,7 +4237,7 @@
       "Se cifran en un solo bloque",
       "Se les añade la cabecera"
     ],
-    "explicacion": "El primer paso es fragmentar. Cifrar el bloque entero no es el primer paso, y los datos se fragmentan antes. La cabecera se añade al final."
+    "explicacion": "El primer paso es fragmentar los datos largos. Cifrar el bloque entero no es el primer paso, porque antes se fragmenta, se comprime y se añade el MAC. La cabecera se añade en el último paso, y no en el primero."
   },
   {
     "id": "transporte-024",
@@ -4247,13 +4247,13 @@
       "pdf": "3_Transporte.pdf",
       "pagina": 9
     },
-    "pregunta": "¿Por qué el MAC de un registro viaja cifrado?",
-    "correcta": "Porque se añade antes de cifrar, y el paso de cifrar cubre el fragmento y el MAC",
+    "pregunta": "¿Qué pasa con el MAC de un registro TLS al cifrar el registro?",
+    "correcta": "Queda dentro del cifrado, porque se añade antes de cifrar y el cifrado cubre fragmento y MAC",
     "distractores": [
-      "Porque se añade tras cifrar y viaja a la vista al final del registro",
-      "Porque se calcula sobre la cabecera, que es lo último que se cifra"
+      "Queda a la vista al final, porque se añade después de cifrar",
+      "Se cifra solo con la cabecera, porque se calcula sobre ella"
     ],
-    "explicacion": "El MAC se añade antes del paso de cifrado, así que el cifrado lo incluye. El MAC no se añade tras cifrar. El MAC se calcula sobre los datos, y la cabecera nunca se cifra."
+    "explicacion": "El MAC se añade antes del paso de cifrado, así que el cifrado lo incluye. El MAC no se añade tras cifrar, y por eso no queda a la vista. El MAC se calcula sobre los datos, y la cabecera nunca se cifra."
   },
   {
     "id": "transporte-025",
@@ -4283,9 +4283,9 @@
     "correcta": "change_cipher_spec, alert, handshake y application_data",
     "distractores": [
       "client_hello, server_hello, certificate y finished",
-      "heartbeat, alert, handshake y key_exchange"
+      "alert, handshake, application_data y certificate"
     ],
-    "explicacion": "Esos son los cuatro valores de ContentType. Esos son mensajes del Handshake, y no tipos de contenido. Heartbeat y key_exchange no son valores de ContentType en el esquema."
+    "explicacion": "Esos son los cuatro valores de ContentType. client_hello, server_hello, certificate y finished son mensajes del Handshake, y no tipos de contenido. Certificate es un mensaje del Handshake, y no un valor de ContentType."
   },
   {
     "id": "transporte-027",
@@ -4330,10 +4330,10 @@
     "pregunta": "¿Cómo divide TLS la información con un cifrado de bloque?",
     "correcta": "En bloques de tamaño fijo",
     "distractores": [
-      "En bytes sueltos que se cifran de uno en uno",
-      "En fragmentos de tamaño variable sin relleno"
+      "En bloques de tamaño variable, sin relleno",
+      "Byte a byte, cada uno con su propio MAC"
     ],
-    "explicacion": "El cifrado de bloque trabaja con bloques de tamaño fijo. Cifrar byte a byte es el cifrado de flujo. El tamaño fijo del bloque obliga a rellenar cuando faltan datos."
+    "explicacion": "El cifrado de bloque trabaja con bloques de tamaño fijo. Los bloques de tamaño variable no existen: el tamaño fijo obliga a rellenar cuando faltan datos. Cifrar byte a byte es el cifrado de flujo."
   },
   {
     "id": "transporte-030",
@@ -4437,7 +4437,7 @@
     "tema": "transporte",
     "fuente": {
       "pdf": "3_Transporte.pdf",
-      "pagina": 15
+      "pagina": 19
     },
     "pregunta": "En la fase 4 del Handshake de TLS 1.2, ¿qué mensaje precede al finished de cada parte?",
     "correcta": "change_cipher_spec",
@@ -4570,7 +4570,7 @@
     "pregunta": "¿Qué negocia el Handshake como parte de la suite de cifrado?",
     "correcta": "Los algoritmos y las claves de cifrado, y los algoritmos y las claves MAC",
     "distractores": [
-      "Solo el algoritmo de cifrado, y el MAC lo fija el Record Protocol",
+      "El algoritmo de cifrado, mientras el Record Protocol fija el MAC",
       "Los certificados X.509 y las autoridades que se aceptan"
     ],
     "explicacion": "La suite incluye algoritmos y claves de cifrado y de MAC. También se negocia el algoritmo MAC. Los certificados se envían en el Handshake, pero no son la suite."
@@ -4605,7 +4605,7 @@
       "El servidor envía su certificado y pide el del cliente",
       "Se cambia la suite de cifrado y se termina el Handshake"
     ],
-    "explicacion": "La fase 1 intercambia client_hello y server_hello. Eso es la fase 2. Eso es la fase 4."
+    "explicacion": "La fase 1 intercambia client_hello y server_hello, con versión, suite, compresión y randoms. Enviar el certificado del servidor y pedir el del cliente es la fase 2. Cambiar la suite y cerrar el Handshake con los finished es la fase 4."
   },
   {
     "id": "transporte-047",
@@ -4631,13 +4631,13 @@
       "pdf": "3_Transporte.pdf",
       "pagina": 19
     },
-    "pregunta": "¿Cuál de estos mensajes no se envía siempre en el Handshake de TLS 1.2?",
+    "pregunta": "¿Qué mensaje del Handshake de TLS 1.2 es opcional y solo se envía en ciertos casos?",
     "correcta": "certificate_request",
     "distractores": [
       "client_key_exchange",
       "finished"
     ],
-    "explicacion": "El certificate_request es opcional. El client_key_exchange va siempre en la fase 3. El finished cierra la fase 4 en ambos sentidos."
+    "explicacion": "El certificate_request es opcional: solo lo envía un servidor que quiere certificado de cliente. El client_key_exchange va siempre en la fase 3. El finished cierra la fase 4 en ambos sentidos."
   },
   {
     "id": "transporte-049",
@@ -4669,7 +4669,7 @@
       "En orden creciente de longitud de clave",
       "En orden alfabético del nombre de la suite"
     ],
-    "explicacion": "La lista va de la suite más preferida a la menos. La longitud de clave no ordena la lista. El nombre no ordena la lista."
+    "explicacion": "La lista va de la suite más preferida a la menos preferida. La longitud de clave no es el criterio: el cliente ordena por su preferencia. El nombre tampoco: la lista expresa una preferencia, y no un orden alfabético."
   },
   {
     "id": "transporte-051",
@@ -4821,7 +4821,7 @@
     "tema": "transporte",
     "fuente": {
       "pdf": "3_Transporte.pdf",
-      "pagina": 22
+      "pagina": 25
     },
     "pregunta": "Con el intercambio RSA, ¿quién genera la clave pre-master?",
     "correcta": "El cliente",
@@ -4845,7 +4845,7 @@
       "El servidor los manda en un mensaje server_key_exchange firmado",
       "El servidor los manda en el server_hello, junto al random"
     ],
-    "explicacion": "El certificado del servidor contiene sus parámetros DH públicos. El server_key_exchange no se usa con DH fijo. El client_hello lo manda el cliente."
+    "explicacion": "El certificado del servidor contiene sus parámetros DH públicos. El server_key_exchange no se usa con DH fijo, porque el certificado ya los trae. El server_hello lleva versión, random, SessionID, suite y compresión, y no parámetros DH."
   },
   {
     "id": "transporte-062",
@@ -4858,7 +4858,7 @@
     "pregunta": "En Fixed Diffie-Hellman, ¿cómo envía el cliente sus parámetros DH?",
     "correcta": "En su certificado o en el mensaje client_key_exchange",
     "distractores": [
-      "Solo en el mensaje certificate_verify",
+      "En el mensaje certificate_verify",
       "Cifrados con la clave pública RSA del servidor"
     ],
     "explicacion": "El cliente usa su certificado o el client_key_exchange. El certificate_verify no se envía con DH fijo. Los parámetros públicos no necesitan cifrarse."
@@ -5050,7 +5050,7 @@
     "pregunta": "¿Qué contiene server_key_exchange con DH efímero?",
     "correcta": "El primo, la raíz primitiva, la clave pública DH del servidor y una firma",
     "distractores": [
-      "Solo la clave pública DH del servidor, sin valores globales ni firma",
+      "La clave pública DH del servidor, sin valores globales ni firma",
       "Los parámetros del certificado DH fijo y un hash de los mensajes"
     ],
     "explicacion": "Incluye los tres valores DH más la firma de esos parámetros. Eso es DH anónimo si faltan valores globales y firma. El certificado DH fijo no se usa con efímero."
@@ -5082,8 +5082,8 @@
     "pregunta": "¿Qué servidor puede pedir un certificado al cliente?",
     "correcta": "Uno que no usa Diffie-Hellman anónimo",
     "distractores": [
-      "Cualquiera, incluso con DH anónimo",
-      "Solo uno que usa Diffie-Hellman fijo"
+      "Cualquiera, también uno con DH anónimo",
+      "Uno que usa Diffie-Hellman fijo, y ningún otro"
     ],
     "explicacion": "Un servidor no anónimo puede pedirlo. Con DH anónimo no hay autenticación y no pide certificado. No se limita a DH fijo."
   },
@@ -5143,13 +5143,13 @@
       "pdf": "3_Transporte.pdf",
       "pagina": 24
     },
-    "pregunta": "¿Qué carácter tiene el mensaje server_done?",
+    "pregunta": "¿Es obligatorio u opcional el mensaje server_done en el Handshake de TLS 1.2?",
     "correcta": "Es obligatorio",
     "distractores": [
       "Es opcional si el servidor usa RSA",
-      "Solo se envía si el servidor pidió certificado"
+      "Es opcional, y va cuando el servidor pidió certificado"
     ],
-    "explicacion": "Se envía siempre. No depende del intercambio de claves. No depende de que se pida certificado."
+    "explicacion": "El server_done es obligatorio, porque marca el final del saludo del servidor. No es opcional con RSA: se envía con cualquier intercambio de claves. Se envía tanto si el servidor pidió certificado como si no, porque cierra sus mensajes."
   },
   {
     "id": "transporte-081",
@@ -5325,7 +5325,7 @@
       "48 bytes, distinta para cada conexión",
       "32 bytes, única para la sesión"
     ],
-    "explicacion": "La clave maestra tiene 48 bytes y es única para la sesión. No cambia por conexión. El tamaño es 48 bytes."
+    "explicacion": "La clave maestra tiene 48 bytes y es única para la sesión. No es distinta por conexión: las conexiones de una sesión la comparten. No tiene 32 bytes: su tamaño es de 48 bytes."
   },
   {
     "id": "transporte-092",
@@ -5341,7 +5341,7 @@
       "En una: se genera directamente la clave maestra al enviar el hello",
       "En tres: random, pre-master y clave maestra"
     ],
-    "explicacion": "Primero la pre-master, y después la maestra. No se genera de una vez. El key_block sale de la maestra."
+    "explicacion": "Se crea en dos fases: primero se intercambia el pre-master y después ambas partes generan la clave maestra. No se genera de una vez, porque la maestra parte del pre-master intercambiado. No son tres fases: el random viaja en los hello y no es una fase de la clave maestra."
   },
   {
     "id": "transporte-093",
@@ -5357,7 +5357,7 @@
       "El cliente la genera y la cifra con la pública del servidor",
       "El servidor la genera y la firma con su clave privada"
     ],
-    "explicacion": "Ambos hacen el cálculo DH. Eso es RSA. Una firma no oculta la clave."
+    "explicacion": "Con DH, cada parte calcula el pre-master con la pública del otro. Generarlo el cliente y cifrarlo con la pública del servidor es el método RSA. Firmar con la clave privada autentica, pero no acuerda ni oculta la clave."
   },
   {
     "id": "transporte-094",
@@ -5437,7 +5437,7 @@
       "Pide al servidor un random de mayor longitud",
       "Repite el último bloque hasta alcanzar la longitud, con relleno"
     ],
-    "explicacion": "Se itera hasta la longitud buscada. No pide nada al servidor. No usa relleno."
+    "explicacion": "Se itera hasta alcanzar la longitud buscada. No pide un random mayor al servidor, porque la PRF genera los bloques por sí sola al iterar. Repetir el último bloque con relleno no da números pseudoaleatorios nuevos, y la PRF no usa relleno."
   },
   {
     "id": "transporte-099",
@@ -5453,7 +5453,7 @@
       "server_hello",
       "certificate_request"
     ],
-    "explicacion": "finished se calcula con la PRF. El server_hello no se calcula. El certificate_request lleva tipo y autoridades."
+    "explicacion": "El finished se calcula con la PRF sobre el master_secret. El server_hello lleva versión, random, SessionID, suite y compresión, y no usa la PRF en su contenido. El certificate_request lleva tipo de certificado y autoridades, y tampoco usa la PRF."
   },
   {
     "id": "transporte-100",
@@ -5834,7 +5834,7 @@
     "pregunta": "¿Qué mensajes se cifran en TLS 1.3 desde el server_hello?",
     "correcta": "Todos los enviados después de server_hello",
     "distractores": [
-      "Solo el finished de cada parte, y el resto va en claro tras el server_hello",
+      "El finished de cada parte, y el resto va en claro",
       "Todos, incluido el client_hello que precede al server_hello"
     ],
     "explicacion": "Cada mensaje enviado después de server_hello se cifra. No se cifra solo el finished: también el certificado y las extensiones. El client_hello va antes que server_hello, y viaja sin cifrar."
@@ -5893,7 +5893,7 @@
     "tema": "transporte",
     "fuente": {
       "pdf": "3_Transporte.pdf",
-      "pagina": 39
+      "pagina": 44
     },
     "pregunta": "¿Qué algoritmos básicos elimina TLS 1.3?",
     "correcta": "RC4, SHA-1 y MD5",
@@ -5927,13 +5927,13 @@
       "pdf": "3_Transporte.pdf",
       "pagina": 44
     },
-    "pregunta": "¿Qué nonces elimina TLS 1.3?",
+    "pregunta": "¿Qué tipo de nonce cita el temario como eliminado en TLS 1.3?",
     "correcta": "Los que incluyen una marca de tiempo de 32 bits",
     "distractores": [
-      "Los de 28 bytes generados con un generador aleatorio seguro",
-      "Los del servidor en el server_hello, por ser independientes"
+      "Los formados solo por bytes de un generador aleatorio seguro",
+      "Todos los nonces, porque los hello ya no llevan random"
     ],
-    "explicacion": "TLS 1.3 elimina nonces como los que incluyen una marca de tiempo de 32 bits. Los bytes aleatorios de un generador seguro no se eliminan. El random del servidor tampoco se elimina: solo el que incluye marca de tiempo."
+    "explicacion": "TLS 1.3 elimina nonces como los que incluyen una marca de tiempo de 32 bits. Los nonces de bytes aleatorios de un generador seguro no se citan como eliminados. Los hello siguen llevando random, así que no se eliminan todos."
   },
   {
     "id": "transporte-132",
@@ -5963,9 +5963,9 @@
     "correcta": "Enviar datos desde el primer paquete al reanudar una sesión",
     "distractores": [
       "Omitir el certificado del servidor en cualquier conexión nueva",
-      "Evitar el cálculo de la clave maestra al reanudar una sesión"
+      "Cambiar de suite durante la conexión sin repetir el Handshake"
     ],
-    "explicacion": "0-RTT permite enviar datos desde el primer paquete al reanudar una sesión. No omite el certificado en conexiones nuevas: solo actúa en la reanudación. La clave sigue calculándose, y 0-RTT usa una clave precompartida antigua."
+    "explicacion": "0-RTT permite enviar datos desde el primer paquete al reanudar una sesión, con una clave precompartida antigua. No omite el certificado en conexiones nuevas: solo actúa en la reanudación. Cambiar de suite con la conexión abierta es renegociar, y TLS 1.3 elimina la renegociación."
   },
   {
     "id": "transporte-134",
@@ -6119,13 +6119,13 @@
       "pdf": "3_Transporte.pdf",
       "pagina": 46
     },
-    "pregunta": "TLS 1.3 propone GCM. ¿Por qué encaja con lo que propone?",
+    "pregunta": "¿Qué rasgo hace de GCM uno de los algoritmos que propone TLS 1.3?",
     "correcta": "Porque es AEAD: combina cifrado y autenticación",
     "distractores": [
       "Porque autentica primero y cifra después, como TLS 1.2",
       "Porque solo cifra y deja la integridad al Record Protocol"
     ],
-    "explicacion": "GCM es AEAD: combina cifrado y autenticación, como proponen las dos últimas opciones. Autenticar primero y cifrar después es el esquema de TLS 1.2. GCM no deja la integridad al Record Protocol: la calcula con GHASH."
+    "explicacion": "GCM es AEAD: combina cifrado y autenticación, como los esquemas de cifrar y autenticar que TLS 1.3 propone. Autenticar primero y cifrar después es el esquema de TLS 1.2, y no el que propone TLS 1.3. GCM no deja la integridad al Record Protocol: la calcula él mismo con GHASH."
   },
   {
     "id": "transporte-145",
@@ -6149,7 +6149,7 @@
     "tema": "transporte",
     "fuente": {
       "pdf": "3_Transporte.pdf",
-      "pagina": 48
+      "pagina": 52
     },
     "pregunta": "¿Qué subcomando de openssl lista las suites de cifrado?",
     "correcta": "openssl ciphers -v",
@@ -6165,7 +6165,7 @@
     "tema": "transporte",
     "fuente": {
       "pdf": "3_Transporte.pdf",
-      "pagina": 48
+      "pagina": 52
     },
     "pregunta": "¿Qué muestra openssl ciphers -v por cada suite?",
     "correcta": "Nombre, versión mínima, intercambio, autenticación, cifrado y MAC",
@@ -6205,7 +6205,7 @@
       "Firmar, con la clave privada del servidor",
       "Las dos tardan lo mismo, porque usan el mismo algoritmo"
     ],
-    "explicacion": "Verificar con la clave pública es mucho más rápido: 18029 operaciones por segundo frente a 544.9 con 2048 bits. Firmar con la clave privada es la operación lenta. No tardan lo mismo, y la diferencia es de dos órdenes de magnitud."
+    "explicacion": "Verificar con la clave pública es mucho más rápido: 18029 operaciones por segundo frente a 544.9 con 2048 bits. Firmar con la clave privada es la operación lenta. No tardan lo mismo, y la diferencia es de unas 33 veces."
   },
   {
     "id": "transporte-150",
@@ -6341,13 +6341,13 @@
     "tema": "transporte",
     "fuente": {
       "pdf": "3_Transporte.pdf",
-      "pagina": 41
+      "pagina": 42
     },
     "pregunta": "¿Cuántos RTT necesita el Handshake de TLS 1.3?",
     "correcta": "1",
     "distractores": [
       "2, igual que TLS 1.2",
-      "0 siempre, también en una conexión nueva"
+      "0, también en una conexión nueva"
     ],
     "explicacion": "TLS 1.3 necesita 1 RTT en una conexión nueva. 2 RTT son los de TLS 1.2. 0-RTT solo ocurre al reanudar con una clave precompartida."
   },
@@ -6357,7 +6357,7 @@
     "tema": "transporte",
     "fuente": {
       "pdf": "3_Transporte.pdf",
-      "pagina": 41
+      "pagina": 42
     },
     "pregunta": "¿Por qué TLS 1.3 acorta el Handshake?",
     "correcta": "El servidor responde con hello, certificado y finished en un vuelo",
@@ -6378,7 +6378,7 @@
     "pregunta": "¿Por qué la web pide herramientas de seguridad a medida en cuanto a las aplicaciones que corren en un servidor?",
     "correcta": "Poner en marcha un servidor es fácil, pero se controlan poco las aplicaciones que ejecuta",
     "distractores": [
-      "Poner en marcha un servidor es difícil, y solo los expertos controlan sus aplicaciones",
+      "Poner en marcha un servidor es difícil, y los expertos controlan sus aplicaciones",
       "Las aplicaciones web se ejecutan en el navegador, fuera del control del servidor"
     ],
     "explicacion": "Un servidor es fácil de montar, pero sus aplicaciones se controlan poco. Montar un servidor no exige experiencia, y por eso hay muchos. Las aplicaciones web corren en el servidor, y no en el navegador."
@@ -6394,7 +6394,7 @@
     "pregunta": "Si un atacante compromete un servidor web de una empresa, ¿qué riesgo añade además de los datos de la propia web?",
     "correcta": "Sirve de puerta de entrada a la subred y a todos sus equipos",
     "distractores": [
-      "Solo expone los documentos que publica, porque la subred queda aislada",
+      "Expone los documentos que publica, porque la subred queda aislada",
       "Reenvía tráfico a otras redes, pero no alcanza los equipos internos"
     ],
     "explicacion": "Un servidor web comprometido permite entrar en la subred y en sus equipos. La subred no queda aislada por el hecho de que el servidor sea de cara al público. El servidor sí alcanza a los equipos de su subred."
@@ -6471,13 +6471,13 @@
       "pdf": "4_Aplicacion.pdf",
       "pagina": 6
     },
-    "pregunta": "¿Qué es HTTPS y qué puerto estándar usa?",
-    "correcta": "HTTP sobre SSL/TLS, en el puerto 443",
+    "pregunta": "¿Qué es HTTPS?",
+    "correcta": "HTTP sobre SSL/TLS",
     "distractores": [
-      "HTTP con un cifrado propio de la capa de aplicación, en el puerto 443",
-      "HTTP sobre SSH, en el puerto 22"
+      "HTTP con un cifrado propio de la capa de aplicación",
+      "HTTP sobre SSH"
     ],
-    "explicacion": "HTTPS es HTTP sobre SSL/TLS, con URL https:// y puerto 443. HTTPS no define un cifrado propio: usa el de TLS. SSH es otro protocolo, con otro puerto, y HTTPS no se apoya en él."
+    "explicacion": "HTTPS es HTTP sobre SSL/TLS. HTTPS no define un cifrado propio: usa el de TLS. SSH es otro protocolo, y HTTPS no se apoya en él."
   },
   {
     "id": "aplicacion-008",
@@ -6490,8 +6490,8 @@
     "pregunta": "Al usar HTTPS, ¿qué parte de una petición va cifrada?",
     "correcta": "La URL solicitada, las cookies y la cabecera HTTP, además del contenido",
     "distractores": [
-      "Solo el contenido de los formularios, porque la URL va en claro",
-      "Solo el contenido del documento, con la cabecera HTTP en claro"
+      "Los contenidos de los formularios, pero la URL va en claro",
+      "El contenido del documento, pero la cabecera HTTP va en claro"
     ],
     "explicacion": "HTTPS cifra la URL, el contenido, los formularios, las cookies y la cabecera HTTP. La URL también va cifrada, y no solo los formularios. La cabecera HTTP forma parte de lo cifrado, y no queda en claro."
   },
@@ -6522,7 +6522,7 @@
     "pregunta": "En HTTPS, ¿qué papel tiene el agente que hace de cliente HTTP al abrir la conexión?",
     "correcta": "También actúa como cliente TLS, y empieza con el ClientHello",
     "distractores": [
-      "Actúa solo como cliente HTTP, y espera el ServerHello del servidor",
+      "Actúa como cliente HTTP, y espera el ServerHello del servidor para empezar",
       "Envía la petición HTTP y negocia TLS después, si el servidor lo pide"
     ],
     "explicacion": "El cliente HTTP es también cliente TLS, y es él quien manda el ClientHello. El servidor no inicia el handshake: responde al cliente. La petición HTTP espera a que el handshake haya terminado."
@@ -6661,7 +6661,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 11
+      "pagina": 12
     },
     "pregunta": "¿Qué tres propiedades de seguridad ofrece SSH?",
     "correcta": "Autenticación, cifrado e integridad",
@@ -6677,7 +6677,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 11
+      "pagina": 13
     },
     "pregunta": "¿Qué usos tiene SSH además de abrir una sesión remota?",
     "correcta": "Ejecutar comandos remotos, copiar archivos y crear túneles seguros",
@@ -6698,7 +6698,7 @@
     "pregunta": "En la pila de SSH, ¿qué dos protocolos se apoyan directamente en el Transport Layer Protocol?",
     "correcta": "User Authentication Protocol y Connection Protocol",
     "distractores": [
-      "TCP e IP, que quedan por debajo del Transport Layer Protocol",
+      "TCP e IP",
       "User Authentication Protocol y TLS"
     ],
     "explicacion": "Sobre el Transport Layer Protocol van los protocolos de autenticación y de conexión. TCP e IP van por debajo de él. SSH no usa TLS: el Transport Layer Protocol hace ese papel."
@@ -6711,7 +6711,7 @@
       "pdf": "4_Aplicacion.pdf",
       "pagina": 15
     },
-    "pregunta": "¿Qué protocolo ofrece el Transport Layer Protocol de SSH por debajo?",
+    "pregunta": "¿Sobre qué protocolo se apoya directamente el Transport Layer Protocol de SSH?",
     "correcta": "TCP, que da una entrega fiable orientada a conexión",
     "distractores": [
       "UDP, que da una entrega de datagramas sin conexión",
@@ -6875,7 +6875,7 @@
     "correcta": "Una petición de servicio, que pide el protocolo de autenticación o el de conexión",
     "distractores": [
       "Un SSH_MSG_KEXINIT con los algoritmos que soporta, para empezar",
-      "Un SSH_MSG_USERAUTH_REQUEST con su nombre de usuario, directamente, sin pedir antes servicio alguno"
+      "Un SSH_MSG_USERAUTH_REQUEST con su nombre de usuario"
     ],
     "explicacion": "El cliente pide primero un servicio, el de autenticación o el de conexión. KEXINIT abre la negociación de algoritmos, y ya se hizo antes. USERAUTH_REQUEST es un mensaje del protocolo de autenticación, que llega tras pedir ese servicio."
   },
@@ -7013,7 +7013,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 21
+      "pagina": 22
     },
     "pregunta": "¿De qué se generan las claves de cifrado y de integridad de una sesión SSH?",
     "correcta": "De la clave compartida K, el hash H y el identificador de sesión",
@@ -7307,7 +7307,7 @@
     "correcta": "Usar allow lists de usuarios y restringir también por IP",
     "distractores": [
       "Usar block lists de usuarios y permitir cualquier IP",
-      "Permitir al usuario root solo desde la red local"
+      "Permitir al usuario root desde la red local"
     ],
     "explicacion": "Se recomiendan allow lists, y restringir por IP. Una block list deja pasar a cualquier otro usuario. El temario recomienda no permitir la conexión del usuario root."
   },
@@ -7333,7 +7333,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 31
+      "pagina": 32
     },
     "pregunta": "¿Qué contiene un servidor de correo (MTA) para cada usuario?",
     "correcta": "El buzón de entrada y la cola de mensajes de salida",
@@ -7349,15 +7349,15 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 31
+      "pagina": 32
     },
     "pregunta": "¿Qué protocolos permiten a un MUA descargar el correo del servidor?",
     "correcta": "POP3 o IMAP",
     "distractores": [
       "SMTP o MIME",
-      "SMTP"
+      "SMTP o LDAP"
     ],
-    "explicacion": "Para descargar correo se usan POP3 o IMAP. SMTP envía el correo, y MIME es un formato. SMTP sirve a un MUA para enviar, y no para descargar."
+    "explicacion": "Para descargar correo se usan POP3 o IMAP. SMTP envía el correo, y MIME es un formato. LDAP es un acceso a directorios, y no descarga correo."
   },
   {
     "id": "aplicacion-067",
@@ -7447,13 +7447,13 @@
       "pdf": "4_Aplicacion.pdf",
       "pagina": 35
     },
-    "pregunta": "¿Qué campo de cabecera identifica un mensaje, y cuál indica que responde a otro?",
-    "correcta": "Message-Id lo identifica, e In-Reply-To indica que responde a otro",
+    "pregunta": "¿Qué campo de cabecera de un mensaje de correo indica que responde a otro mensaje?",
+    "correcta": "In-Reply-To",
     "distractores": [
-      "In-Reply-To lo identifica, y Message-Id indica que responde a otro",
-      "Message-Id lo identifica, y Return-path indica que responde a otro"
+      "Message-Id",
+      "Return-path"
     ],
-    "explicacion": "Message-Id identifica el mensaje e In-Reply-To enlaza con el mensaje respondido. Cambiar los campos de sitio es un error. Return-path es la ruta de regreso, y no una respuesta."
+    "explicacion": "In-Reply-To enlaza con el mensaje respondido. Message-Id solo identifica al propio mensaje. Return-path es la ruta de regreso, y no una respuesta."
   },
   {
     "id": "aplicacion-073",
@@ -7477,7 +7477,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 36
+      "pagina": 37
     },
     "pregunta": "¿Qué campo MIME indica el formato de los datos del mensaje, como imagen o audio?",
     "correcta": "Content-Type",
@@ -7493,7 +7493,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 36
+      "pagina": 37
     },
     "pregunta": "Un cliente recibe un mensaje con el campo Content-Transfer-Encoding. ¿Qué debe hacer primero con él?",
     "correcta": "Decodificar los datos a sus caracteres originales según ese valor",
@@ -7672,7 +7672,7 @@
       "pagina": 44
     },
     "pregunta": "Un atacante falsifica una respuesta DNS. ¿Qué permite a un resolvedor detectarlo con DNSSEC?",
-    "correcta": "La firma de los registros, que DNSSEC añade con registros especiales",
+    "correcta": "La firma de los registros, que se añade con registros especiales",
     "distractores": [
       "El cifrado de las consultas entre cliente y servidor DNS, que impide leerlas en la red",
       "La lista de IPs autorizadas de los emisores del dominio"
@@ -7685,7 +7685,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 44
+      "pagina": 45
     },
     "pregunta": "En el esquema del correo seguro, ¿para qué se protege con DNSSEC el DNS del emisor y el del receptor?",
     "correcta": "Para que los registros de SPF, DKIM y DANE lleguen autenticados",
@@ -7733,7 +7733,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 44
+      "pagina": 45
     },
     "pregunta": "En el esquema del correo seguro, ¿qué publica el DNS del receptor en un registro TLSA?",
     "correcta": "El certificado TLS del servidor SMTP receptor",
@@ -7781,7 +7781,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 44
+      "pagina": 45
     },
     "pregunta": "¿Dónde publica un dominio las IPs que autoriza con SPF?",
     "correcta": "En un registro TXT de su DNS",
@@ -7813,7 +7813,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 44
+      "pagina": 45
     },
     "pregunta": "¿Cómo comprueba el MTA receptor una firma DKIM?",
     "correcta": "Con la clave pública del MTA emisor, que obtiene de un registro del DNS",
@@ -7829,7 +7829,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 44
+      "pagina": 45
     },
     "pregunta": "Un correo lleva una firma DKIM y otra S/MIME. ¿Quién produce cada una?",
     "correcta": "DKIM la produce el MTA emisor, y S/MIME el MUA del usuario",
@@ -7861,7 +7861,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 44
+      "pagina": 45
     },
     "pregunta": "En el esquema del correo seguro, ¿qué indica un registro TXT de DMARC al MTA receptor?",
     "correcta": "Que el emisor usa DKIM y SPF",
@@ -7975,13 +7975,13 @@
       "pdf": "4_Aplicacion.pdf",
       "pagina": 48
     },
-    "pregunta": "Un atacante intercepta un mensaje S/MIME firmado y cifrado, y no tiene la clave privada del receptor. ¿Qué no puede hacer?",
-    "correcta": "Recuperar la clave de sesión y, por tanto, leer el mensaje",
+    "pregunta": "Un atacante intercepta un mensaje S/MIME firmado y cifrado, y no tiene la clave privada del receptor. ¿Qué parte del esquema le impide leer el mensaje?",
+    "correcta": "La clave de sesión, que solo recupera quien tiene la clave privada del receptor",
     "distractores": [
-      "Comprobar la firma, que exige la clave privada del emisor",
-      "Calcular el hash del mensaje, que se cifra con la clave privada"
+      "La firma con la clave privada del emisor, que oculta el contenido",
+      "El hash del mensaje, que se cifra con la clave pública del receptor"
     ],
-    "explicacion": "Sin la clave privada del receptor no se recupera la clave de sesión, y el mensaje sigue cifrado. Comprobar la firma exige la clave pública del emisor, que es pública. El hash se calcula con el mensaje, y no con una clave."
+    "explicacion": "La clave de sesión solo se recupera con la clave privada del receptor, y sin ella el mensaje sigue cifrado. La firma del emisor da autenticidad, y no oculta el contenido. El hash es el resumen que se firma con la clave privada del emisor, y no se cifra con la clave pública del receptor."
   },
   {
     "id": "aplicacion-106",
@@ -8138,7 +8138,7 @@
     "pregunta": "¿Qué se añade a una entidad MIME firmada o cifrada para producir un objeto PKCS?",
     "correcta": "Datos de seguridad, identificación de algoritmos y certificados",
     "distractores": [
-      "Solo la firma digital o la clave de sesión cifrada",
+      "La firma digital o la clave de sesión cifrada, sin datos de algoritmos ni certificados",
       "Una cabecera multipart/signed y la clave pública del receptor"
     ],
     "explicacion": "El objeto PKCS lleva datos de seguridad, algoritmos y certificados. No lleva solo la firma o la clave. La cabecera multipart/signed es del clear signing."
@@ -8170,7 +8170,7 @@
     "pregunta": "¿De qué formas se puede asegurar una entidad MIME?",
     "correcta": "Firmándola, encriptándola o de ambas formas",
     "distractores": [
-      "Solo firmándola o solo encriptándola, no de ambas formas",
+      "Firmándola o encriptándola, pero no de ambas formas a la vez",
       "Firmándola y comprimiéndola, pero no encriptándola"
     ],
     "explicacion": "Una entidad MIME se puede firmar, encriptar o ambas. S/MIME admite firmar y encriptar a la vez. La compresión es otro tipo, y se puede encriptar."
@@ -8213,7 +8213,7 @@
     "tema": "aplicacion",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
-      "pagina": 52
+      "pagina": 53
     },
     "pregunta": "¿En qué fichero adjunto se introduce el objeto S/MIME de un SignedData?",
     "correcta": "smime.p7m",
@@ -8394,8 +8394,8 @@
     "pregunta": "¿Qué ve una víctima de sslstrip cuando el atacante le muestra un dominio parecido al del sitio?",
     "correcta": "Una página idéntica a la real, servida por HTTP desde un dominio casi igual",
     "distractores": [
-      "Un aviso de certificado no válido, que debe aceptar manualmente para poder continuar",
-      "Una página con el candado de HTTPS, pero con el contenido preparado por el atacante"
+      "Un aviso de certificado no válido sobre el dominio parecido, que debe aceptar manualmente para poder continuar",
+      "Una página con el candado de HTTPS en el dominio parecido, pero con el contenido preparado por el atacante"
     ],
     "explicacion": "El proxy devuelve el contenido auténtico por HTTP, así que la página es idéntica. No hay aviso de certificado, porque no se presenta ningún certificado falso. Tampoco hay candado: la conexión de la víctima no es HTTPS, y el contenido no es del atacante, sino del sitio real."
   },
@@ -8426,8 +8426,8 @@
     "pregunta": "¿Por qué HSTS frena un ataque sslstrip?",
     "correcta": "El navegador cambia el enlace HTTP por HTTPS y no deja continuar si el certificado falla",
     "distractores": [
-      "El servidor detecta que el atacante está en medio de la conexión y la corta antes de responder",
-      "El navegador cifra el tráfico HTTP con una clave que el atacante no conoce y nunca ha visto"
+      "El servidor detecta que el atacante está en medio de la conexión y la corta",
+      "El navegador cifra el tráfico HTTP con una clave que el atacante no conoce"
     ],
     "explicacion": "Con HSTS el navegador nunca habla HTTP con ese sitio, así que no hay tráfico que degradar. El servidor no puede detectar al atacante: la política la aplica el navegador. El tráfico HTTP no se cifra: se sustituye por HTTPS."
   },
@@ -8440,12 +8440,12 @@
       "pagina": 56
     },
     "pregunta": "¿Qué limitación tiene HSTS en el primer acceso de un usuario a un sitio?",
-    "correcta": "Necesita una conexión previa por SSL/TLS, o estar en la lista precargada",
+    "correcta": "Necesita haber tenido antes una conexión por SSL/TLS con el sitio",
     "distractores": [
       "Necesita que el usuario instale antes un certificado raíz propio del sitio",
       "Necesita que el servidor use claves de 2048 bits o más en su certificado"
     ],
-    "explicacion": "El navegador solo conoce la política HSTS tras una conexión previa por SSL/TLS, o si el sitio viene precargado en una lista. No se instala ningún certificado raíz del sitio. El tamaño de clave del servidor no condiciona HSTS."
+    "explicacion": "El navegador solo conoce la política HSTS tras una conexión previa por SSL/TLS con el sitio. No se instala ningún certificado raíz del sitio. El tamaño de clave del servidor no condiciona HSTS."
   },
   {
     "id": "ssl-tls-010",
@@ -8485,7 +8485,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 20
+      "pagina": 11
     },
     "pregunta": "¿Cómo se corrige la renegociación insegura de SSL?",
     "correcta": "Con Secure Renegotiation, o deshabilitando la renegociación",
@@ -8549,7 +8549,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 26
+      "pagina": 25
     },
     "pregunta": "¿Qué debilidad usa el ataque del byte NUL contra los certificados?",
     "correcta": "Las CAs leen el nombre con su longitud, y los navegadores lo leen hasta el primer NUL",
@@ -8677,7 +8677,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 35
+      "pagina": 44
     },
     "pregunta": "¿Qué hace el mecanismo 1/n-1 split que incluyeron los navegadores tras BEAST?",
     "correcta": "Divide cada bloque en 2, con 1 byte en el primero, y simula IVs aleatorios",
@@ -8712,12 +8712,12 @@
       "pagina": 9
     },
     "pregunta": "¿Qué ataque a CBC cierra el IV explícito de TLS 1.1?",
-    "correcta": "BEAST, que necesita IVs predecibles",
+    "correcta": "BEAST, que inyecta bloques de texto conocido en la conexión",
     "distractores": [
       "CRIME, que necesita compresión en TLS",
       "Heartbleed, que necesita la extensión Heartbeat"
     ],
-    "explicacion": "Con IV explícito, el atacante de BEAST ya no predice el siguiente IV. CRIME depende de la compresión, y no del IV. Heartbleed es un bug de una implementación de OpenSSL."
+    "explicacion": "Con IV explícito, el atacante de BEAST ya no predice el siguiente IV, y sus bloques conocidos dejan de servir. CRIME depende de la compresión, y no del IV. Heartbleed es un bug de una implementación de OpenSSL."
   },
   {
     "id": "ssl-tls-027",
@@ -8733,7 +8733,7 @@
       "Para permitir la interoperabilidad de TLS 1.1 con servidores que solo hablan SSLv3",
       "Para reducir el coste de procesamiento del handshake en servidores muy cargados"
     ],
-    "explicacion": "Las respuestas de error por relleno dan información a un padding oracle contra CBC. TLS 1.0 no permitía interoperar con SSLv3, y TLS 1.1 tampoco cambia eso. El coste del handshake no cambia con los errores de relleno."
+    "explicacion": "Las respuestas de error por relleno dan información a un padding oracle contra CBC. La interoperabilidad con servidores de SSLv3 no figura entre las mejoras de TLS 1.1. El coste del handshake no cambia con los errores de relleno."
   },
   {
     "id": "ssl-tls-029",
@@ -8845,7 +8845,7 @@
       "Usaba un CRC como código de comprobación",
       "No incluía ninguna comprobación de integridad"
     ],
-    "explicacion": "SSL v2 verificaba la integridad con MD5. El CRC se añadió a SSL v1 después de que este no tuviera integridad: ambos son errores de versión."
+    "explicacion": "SSL v2 verificaba la integridad con MD5. El CRC se añadió a SSL v1 después, y no es de SSL v2. No tener ninguna comprobación de integridad era el fallo de SSL v1, y no el de SSL v2."
   },
   {
     "id": "ssl-tls-037",
@@ -8869,7 +8869,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 52
+      "pagina": 55
     },
     "pregunta": "¿Qué debe poder hacer el atacante de CRIME?",
     "correcta": "Inyectar texto claro en la petición y medir el tamaño de los paquetes enviados",
@@ -8885,7 +8885,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 52
+      "pagina": 55
     },
     "pregunta": "¿Cómo respondieron los fabricantes de navegadores a CRIME?",
     "correcta": "Eliminando la compresión de TLS",
@@ -8933,7 +8933,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 66
+      "pagina": 71
     },
     "pregunta": "¿Qué medida frena BREACH a nivel de servidor, según el PDF?",
     "correcta": "Limitar las peticiones por minuto con un WAF, pues requiere muchas",
@@ -8987,9 +8987,9 @@
     "correcta": "Solo se puede explotar en redes locales",
     "distractores": [
       "Solo funciona con SSLv3",
-      "Solo funciona si el atacante controla el navegador de la víctima"
+      "Solo funciona si el servidor tiene activada la compresión de TLS"
     ],
-    "explicacion": "Lucky 13 solo es explotable en redes locales. Afecta a suites CBC de TLS, y no solo a SSLv3. No exige controlar el navegador: es un ataque por medidas de tiempo."
+    "explicacion": "Lucky 13 solo es explotable en redes locales. Afecta a suites CBC de TLS, y no solo a SSLv3. No necesita la compresión de TLS: es un ataque por medidas de tiempo, y la compresión es el requisito de CRIME."
   },
   {
     "id": "ssl-tls-046",
@@ -9013,7 +9013,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 86
+      "pagina": 91
     },
     "pregunta": "En el ejemplo del padding oracle, ¿cómo averigua el atacante el primer byte del valor intermedio?",
     "correcta": "Prueba valores del último byte del IV hasta que el servidor responde 200, no 500",
@@ -9050,7 +9050,7 @@
     "pregunta": "¿Qué consecuencia tuvo POODLE para SSLv3?",
     "correcta": "Dejó de ser usable, porque CBC no es seguro en él y RC4 tampoco",
     "distractores": [
-      "Pasó a usarse solo con RC4, que seguía siendo seguro frente a este ataque",
+      "Pasó a usarse con RC4, que seguía siendo seguro frente a este ataque",
       "Se corrigió con un IV explícito y siguió en uso en los servidores"
     ],
     "explicacion": "Con CBC roto por POODLE y RC4 roto por BIAS, SSLv3 se quedó sin cifrado seguro. RC4 no era seguro tras BIAS. El IV explícito es un cambio de TLS 1.1, no de SSLv3."
@@ -9061,7 +9061,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 78
+      "pagina": 80
     },
     "pregunta": "¿Por qué POODLE TLS afecta a TLS 1.0, si este mejora el relleno de SSLv3?",
     "correcta": "Por implementaciones de fabricantes que permiten repetir el ataque al pasar de SSLv3 a TLS 1.0",
@@ -9093,7 +9093,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 61
+      "pagina": 63
     },
     "pregunta": "¿Qué solución tiene BIAS, según el PDF?",
     "correcta": "Dejar de utilizar RC4",
@@ -9109,7 +9109,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 61
+      "pagina": 63
     },
     "pregunta": "¿Qué diferencia a BIAS de BEAST en las versiones afectadas?",
     "correcta": "BIAS afecta a toda versión que use RC4, y BEAST solo a SSLv3 y TLS 1.0",
@@ -9290,10 +9290,10 @@
     "pregunta": "¿Qué puede recuperar el atacante con Heartbleed?",
     "correcta": "Claves privadas, cookies de sesión de otros usuarios y contraseñas",
     "distractores": [
-      "Solo la clave de sesión de su propia conexión con el servidor",
-      "Solo las cabeceras HTTP cifradas de su propia conexión con el servidor"
+      "La clave privada de la CA que firmó el certificado del servidor",
+      "Las contraseñas de la base de datos del servidor que no pasaron por su memoria"
     ],
-    "explicacion": "La memoria leída contiene datos de otros usuarios y claves privadas. Lo de la propia conexión no necesita ningún bug."
+    "explicacion": "La memoria leída contiene datos de otros usuarios y claves privadas del servidor. La clave de una CA no está en la memoria del servidor. Lo que nunca pasó por la memoria no se filtra."
   },
   {
     "id": "ssl-tls-069",
@@ -9304,10 +9304,10 @@
       "pagina": 73
     },
     "pregunta": "¿Por qué Heartbleed no exigió cambiar el protocolo TLS?",
-    "correcta": "Es un fallo de una implementación, OpenSSL, y no del diseño del protocolo",
+    "correcta": "Porque es un fallo de una implementación, OpenSSL, y no del diseño del protocolo",
     "distractores": [
-      "Solo afecta a las conexiones TLS 1.0, que ya estaban prohibidas cuando se descubrió",
-      "Solo afecta a los clientes que usan OpenSSL, y no a los servidores"
+      "Porque afecta a las conexiones TLS 1.0, que ya estaban prohibidas cuando se descubrió",
+      "Porque afecta a los clientes que usan OpenSSL, y no a los servidores"
     ],
     "explicacion": "El fallo estaba en OpenSSL 1.0.1 a 1.0.1f, y se corrige actualizando. No depende de la versión de TLS. Afecta a clientes y a servidores."
   },
@@ -9434,8 +9434,8 @@
     "pregunta": "¿Qué hace especial a DROWN frente a otros ataques a SSLv2?",
     "correcta": "Puede descifrar tráfico TLS de clientes y servidores que ni siquiera soportan SSLv2",
     "distractores": [
-      "Solo afecta a conexiones SSLv2 establecidas, sin alcanzar nunca al tráfico de TLS",
-      "Descifra tráfico de otros protocolos, pero solo cuando se usa TLS 1.0 en la sesión"
+      "Afecta a conexiones SSLv2 establecidas, pero no alcanza al tráfico de TLS",
+      "Descifra tráfico de otros protocolos, pero cuando la sesión usa TLS 1.0"
     ],
     "explicacion": "DROWN llega a tráfico TLS. No se limita a SSLv2 ni a TLS 1.0."
   },
@@ -9451,9 +9451,9 @@
     "correcta": "Un bug de SSLv2 en ciertas versiones de OpenSSL que recupera la clave privada en tiempo real",
     "distractores": [
       "Una variante de DROWN que necesita claves RSA de exportación de 40 bits en el servidor",
-      "Una variante de DROWN que afecta a servidores configurados solo con TLS 1.3"
+      "Una variante de DROWN que afecta a los navegadores y no a los servidores"
     ],
-    "explicacion": "Special DROWN es un bug de implementación de OpenSSL. No tiene que ver con claves de exportación. TLS 1.3 no incluye SSLv2."
+    "explicacion": "Special DROWN es un bug de implementación de OpenSSL. No tiene que ver con claves de exportación. DROWN afecta a servidores, y no solo a navegadores."
   },
   {
     "id": "ssl-tls-079",
@@ -9499,7 +9499,7 @@
     "correcta": "Reduce el número de peticiones del handshake",
     "distractores": [
       "Elimina el cifrado de los mensajes pequeños",
-      "Reutiliza siempre la clave de la sesión anterior"
+      "Reutiliza la clave de la sesión anterior en cada conexión nueva"
     ],
     "explicacion": "Menos peticiones en el handshake hacen la conexión más rápida. No elimina el cifrado. Reutilizar la clave anterior rompería el Forward Secrecy."
   },
@@ -9511,11 +9511,11 @@
       "pdf": "E_SSL_TLS.pdf",
       "pagina": 114
     },
-    "pregunta": "¿Para qué sirve DNS over HTTPS?",
-    "correcta": "Para resolver las peticiones DNS por HTTPS, evitando escuchas y manipulaciones",
+    "pregunta": "¿Para qué sirve DoH?",
+    "correcta": "Para resolver los nombres de dominio por un canal HTTPS, evitando escuchas y manipulaciones",
     "distractores": [
-      "Para cifrar el SNI del ClientHello con la clave pública que el servidor publica",
-      "Para publicar en el DNS la clave pública que el navegador fija"
+      "Para cifrar el SNI del ClientHello con la clave pública que el servidor publica en el DNS",
+      "Para publicar en el DNS la clave pública que el navegador fija, por HTTPS"
     ],
     "explicacion": "DoH envía las consultas DNS por HTTPS. Cifrar el SNI es ESNI o ECH. Fijar claves es pinning."
   },
@@ -9527,7 +9527,7 @@
       "pdf": "E_SSL_TLS.pdf",
       "pagina": 114
     },
-    "pregunta": "¿Qué ataque de un MitM evita DNS over HTTPS?",
+    "pregunta": "¿Qué ataque de un MitM evita DoH?",
     "correcta": "El DNS Spoofing, la manipulación de la resolución DNS",
     "distractores": [
       "El HTTPS stripping, la degradación de HTTPS a HTTP por un MitM",
@@ -9546,7 +9546,7 @@
     "pregunta": "¿Por qué DoH pierde sentido mientras el SNI viaje en claro?",
     "correcta": "El primer paquete de TLS revela igualmente el sitio al que se conecta el usuario",
     "distractores": [
-      "DoH solo cifra la respuesta DNS que recibe el cliente y no la consulta que envía",
+      "DoH cifra la respuesta DNS que recibe el cliente, pero no la consulta que envía",
       "El SNI sirve a un atacante para descifrar las consultas DNS que viajan por HTTPS"
     ],
     "explicacion": "El SNI en claro delata el destino aunque el DNS esté cifrado. DoH cifra consulta y respuesta. El SNI no sirve para descifrar nada."
@@ -9562,7 +9562,7 @@
     "pregunta": "¿Qué limitación tenía ESNI?",
     "correcta": "Solo cifraba el nombre del host, y el resto del ClientHello viajaba en claro",
     "distractores": [
-      "Cifraba todo el ClientHello, pero con una clave que el servidor no renovaba nunca",
+      "Cifraba todo el ClientHello, pero con una clave que el servidor no renovaba",
       "Cifraba solo el certificado del servidor, y no el nombre del host"
     ],
     "explicacion": "ESNI cifraba solo el nombre. No cifraba el ClientHello entero. Tampoco cifraba el certificado."
@@ -9578,8 +9578,8 @@
     "pregunta": "¿Cómo protege ECH el ClientHello?",
     "correcta": "Lo encapsula: un ClientHelloOuter visible y un ClientHelloInner cifrado para el servidor",
     "distractores": [
-      "Cifra solo el nombre del host dentro de una extensión aislada del ClientHello",
-      "Envía dos handshakes completos, uno con cada una de las claves del servidor"
+      "Cifra el nombre del host dentro de una extensión aislada del ClientHello",
+      "Envía dos handshakes completos, uno con cada clave del servidor"
     ],
     "explicacion": "ECH usa Outer visible e Inner cifrado. Cifrar solo el nombre es ESNI. No son dos handshakes completos."
   },
@@ -9626,8 +9626,8 @@
     "pregunta": "¿Qué versiones de TLS afecta Raccoon?",
     "correcta": "TLS 1.2 y todas las anteriores",
     "distractores": [
-      "Solo TLS 1.3 y las versiones posteriores",
-      "Solo TLS 1.0 y TLS 1.1, ya prohibidas"
+      "TLS 1.3 y las versiones posteriores",
+      "TLS 1.0 y TLS 1.1, ya prohibidas"
     ],
     "explicacion": "Afecta a TLS 1.2 y anteriores. No a TLS 1.3. No se limita a TLS 1.0 y 1.1."
   },
@@ -9709,7 +9709,7 @@
       "Dos mecanismos post-cuánticos, ML-KEM para el intercambio y ML-DSA para la firma",
       "Un algoritmo RSA clásico y un Diffie-Hellman clásico de 2048 bits de clave"
     ],
-    "explicacion": "El híbrido une X25519 y ML-KEM. ML-DSA es de firma. RSA y Diffie-Hellman son clásicos."
+    "explicacion": "El híbrido une X25519 y ML-KEM. Dos mecanismos post-cuánticos no forman un híbrido, porque falta el algoritmo clásico, y ML-DSA es de firma. RSA y Diffie-Hellman son los dos clásicos, y falta el post-cuántico."
   },
   {
     "id": "ssl-tls-095",
@@ -9723,7 +9723,7 @@
     "correcta": "Por redundancia: si ML-KEM resulta débil, el clásico sigue protegiendo la sesión",
     "distractores": [
       "Por compatibilidad: ML-KEM no puede usarse en el handshake sin un algoritmo clásico",
-      "Porque ML-KEM solo firma el intercambio, y el clásico lo cifra"
+      "Porque ML-KEM firma el intercambio de claves, y el clásico lo cifra"
     ],
     "explicacion": "La razón es la redundancia. ML-KEM funciona solo. ML-KEM es de intercambio de claves, y no de firma."
   },
@@ -9741,7 +9741,7 @@
       "Downgrade: forzar el uso de una versión antigua de TLS en el handshake",
       "MitM: situarse entre cliente y servidor para modificar el tráfico que pasa"
     ],
-    "explicacion": "El híbrido protege el tráfico capturado hoy. Downgrade y MitM son otros ataques."
+    "explicacion": "El híbrido protege el tráfico capturado hoy. El downgrade fuerza una versión antigua de TLS, y el híbrido no lo evita. El MitM modifica el tráfico en vivo, y el híbrido protege la confidencialidad futura de lo ya capturado."
   },
   {
     "id": "introduccion-s01",
@@ -9922,18 +9922,18 @@
   {
     "id": "claves-s05",
     "concepto": "sigla-dos",
-    "tema": "claves",
+    "tema": "introduccion",
     "fuente": {
-      "pdf": "2_Claves.pdf",
-      "pagina": 26
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
     },
     "pregunta": "¿Qué significa la sigla DoS?",
     "correcta": "Denial of Service",
     "distractores": [
-      "Delay of Signature",
-      "Distribution of Secrets"
+      "Denial of Session",
+      "Disruption of Server"
     ],
-    "explicacion": "DoS significa Denial of Service: un ataque DoS busca que un servidor deje de estar disponible. Delay of Signature no es un ataque conocido. Distribution of Secrets suena a reparto de claves, y un DoS no reparte nada."
+    "explicacion": "DoS significa Denial of Service: un ataque DoS busca que un servidor deje de estar disponible. Denial of Session lo limita a las sesiones, y un DoS tumba el servicio entero. Disruption of Server nombra al servidor, y la S de DoS es de service, el servicio que se niega."
   },
   {
     "id": "claves-s06",
@@ -9979,9 +9979,9 @@
     "correcta": "Transport Layer Security",
     "distractores": [
       "Trusted Link Service",
-      "Transmission Line Standard"
+      "Transport Link Security"
     ],
-    "explicacion": "TLS significa Transport Layer Security: TLS es la evolución de SSL que asegura la web, el correo y más. Trusted Link Service suena a servicio de confianza, y TLS es un protocolo. Transmission Line Standard lo confunde con un estándar físico de cableado, y TLS va sobre TCP."
+    "explicacion": "TLS significa Transport Layer Security: TLS es la evolución de SSL que asegura la web, el correo y más. Trusted Link Service suena a servicio de confianza, y TLS es un protocolo. Transport Link Security cambia la capa por un enlace, y TLS va en la capa de transporte."
   },
   {
     "id": "transporte-s03",
@@ -10269,7 +10269,7 @@
       "Signed/Multilayer Internet Message Encryption",
       "Secure/Managed Internet Mail Exchange"
     ],
-    "explicacion": "S/MIME significa Secure/Multipurpose Internet Mail Extensions: S/MIME es la mejora de seguridad de MIME que firma y cifra los mensajes de correo. Signed/Multilayer Internet Message Encryption cambia las palabras, y S/MIME es de seguridad en MIME. Secure/Managed Internet Mail Exchange lo confunde con un intercambio de correo, y S/MIME es una extensión."
+    "explicacion": "S/MIME significa Secure/Multipurpose Internet Mail Extensions: S/MIME es la mejora de seguridad de MIME que firma y cifra los mensajes de correo. Signed/Multilayer Internet Message Encryption lo hace un cifrado de mensajes por capas, y S/MIME amplía MIME. Secure/Managed Internet Mail Exchange lo confunde con un intercambio de correo, y S/MIME es una extensión."
   },
   {
     "id": "aplicacion-s10",
@@ -10315,9 +10315,9 @@
     "correcta": "Hash-based Message Authentication Code",
     "distractores": [
       "Hidden Message Access Control",
-      "Hardware Module Authentication Certificate"
+      "Hardware-based Message Authentication Code"
     ],
-    "explicacion": "HMAC significa Hash-based Message Authentication Code: un HMAC es un código de autenticación calculado con una función hash y una clave. Hidden Message Access Control lo confunde con el MAC de red, y un HMAC no controla accesos. Hardware Module Authentication Certificate lo liga a hardware y certificados, y un HMAC usa un hash."
+    "explicacion": "HMAC significa Hash-based Message Authentication Code: un HMAC es un código de autenticación calculado con una función hash y una clave. Hidden Message Access Control lo confunde con el MAC de red, y un HMAC no controla accesos. Hardware-based Message Authentication Code lo liga al hardware, y un HMAC usa un hash."
   },
   {
     "id": "ssl-tls-s02",
@@ -10330,10 +10330,10 @@
     "pregunta": "¿Qué significa la sigla MitM?",
     "correcta": "Man-in-the-Middle",
     "distractores": [
-      "Machine-in-the-Mirror",
-      "Message-in-Transit Monitor"
+      "Message-in-the-Middle",
+      "Man-in-the-Machine"
     ],
-    "explicacion": "MitM significa Man-in-the-Middle: un MitM es el atacante que se coloca entre las 2 partes e intercepta o altera su comunicación. Machine-in-the-Mirror no existe como ataque. Message-in-Transit Monitor lo toma por una herramienta de monitorización, y un MitM es un ataque."
+    "explicacion": "MitM significa Man-in-the-Middle: un MitM es el atacante que se coloca entre las 2 partes e intercepta o altera su comunicación. Message-in-the-Middle cambia el hombre por el mensaje, y el MitM es un atacante, no un mensaje. Man-in-the-Machine lo sitúa dentro de un equipo, y el MitM actúa entre las 2 partes."
   },
   {
     "id": "ssl-tls-s03",
@@ -10349,7 +10349,7 @@
       "Block Encryption Attack on Secure Transport",
       "Buffer Exploit Against Session Tokens"
     ],
-    "explicacion": "BEAST significa Browser Exploit Against SSL/TLS Tool: BEAST es el ataque que explota los IV predecibles de CBC en SSLv3 y TLSv1. Block Encryption Attack on Secure Transport es plausible pero no es el nombre. Buffer Exploit Against Session Tokens lo toma por un desbordamiento de memoria, y BEAST ataca el cifrado."
+    "explicacion": "BEAST significa Browser Exploit Against SSL/TLS Tool: BEAST es el ataque que explota los IV predecibles de CBC en SSLv3 y TLSv1. Block Encryption Attack on Secure Transport cambia el navegador por el cifrado de bloques, y BEAST se llama Browser Exploit. Buffer Exploit Against Session Tokens lo toma por un desbordamiento de memoria, y BEAST ataca el cifrado."
   },
   {
     "id": "ssl-tls-s04",
@@ -10363,9 +10363,9 @@
     "correcta": "Electronic Code Book",
     "distractores": [
       "Encrypted Chained Block",
-      "Elliptic Curve Binding"
+      "Encrypted Code Block"
     ],
-    "explicacion": "ECB significa Electronic Code Book: ECB es el modo de cifrado por bloques que cifra cada bloque por separado, sin encadenar. Encrypted Chained Block lo encadena, y ECB no encadena los bloques. Elliptic Curve Binding lo toma por curvas elípticas, y ECB es un modo de cifrado de bloques."
+    "explicacion": "ECB significa Electronic Code Book: ECB es el modo de cifrado por bloques que cifra cada bloque por separado, sin encadenar. Encrypted Chained Block lo encadena, y ECB no encadena los bloques. Encrypted Code Block cambia la palabra Electronic, y la E de ECB es de Electronic."
   },
   {
     "id": "ssl-tls-s05",
@@ -10378,10 +10378,10 @@
     "pregunta": "¿Qué significa la sigla CRIME?",
     "correcta": "Compression Ratio Info-leak Made Easy",
     "distractores": [
-      "Cipher Replay Injection for Man-in-the-Echo",
+      "Cipher Replay Injection Made Easy",
       "Certificate Revocation Information Made Easy"
     ],
-    "explicacion": "CRIME significa Compression Ratio Info-leak Made Easy: CRIME es el ataque que usa la compresión de TLS para descifrar partes de peticiones HTTPS. Cipher Replay Injection for Man-in-the-Echo inventa una repetición de mensajes cifrados. Certificate Revocation Information Made Easy lo confunde con la revocación, y CRIME ataca la compresión."
+    "explicacion": "CRIME significa Compression Ratio Info-leak Made Easy: CRIME es el ataque que usa la compresión de TLS para descifrar partes de peticiones HTTPS. Cipher Replay Injection Made Easy lo hace una repetición de mensajes, y CRIME ataca la compresión. Certificate Revocation Information Made Easy lo confunde con la revocación, y CRIME ataca la compresión."
   },
   {
     "id": "ssl-tls-s06",
@@ -10397,7 +10397,7 @@
       "Block Ratio Encryption Attack on Compressed Hypertext",
       "Browser Replay Exploit Against Certificate Handshakes"
     ],
-    "explicacion": "BREACH significa Browser Reconnaissance and Exfiltration via Adaptive Compression of Hypertext: BREACH es el ataque que aprovecha la compresión HTTP de las respuestas para descifrar secretos del cuerpo. Block Ratio Encryption Attack on Compressed Hypertext no es el nombre, aunque cite la compresión. Browser Replay Exploit Against Certificate Handshakes lo toma por un ataque al handshake, y BREACH ataca la compresión."
+    "explicacion": "BREACH significa Browser Reconnaissance and Exfiltration via Adaptive Compression of Hypertext: BREACH es el ataque que aprovecha la compresión HTTP de las respuestas para descifrar secretos del cuerpo. Block Ratio Encryption Attack on Compressed Hypertext lo hace un ataque al cifrado de bloques, y BREACH ataca la compresión HTTP. Browser Replay Exploit Against Certificate Handshakes lo toma por un ataque al handshake, y BREACH ataca la compresión."
   },
   {
     "id": "ssl-tls-s07",
@@ -10445,7 +10445,7 @@
       "Enhanced Verification",
       "Encrypted Verification"
     ],
-    "explicacion": "EV significa Extended Validation: un certificado EV es el que exige una validación ampliada de la identidad de la organización. Enhanced Verification cambia las palabras, y la sigla es de validación. Encrypted Verification lo hace un cifrado, y un certificado EV no cifra más que otro."
+    "explicacion": "EV significa Extended Validation: un certificado EV es el que exige una validación ampliada de la identidad de la organización. Enhanced Verification habla de verificar, y el EV exige una validación ampliada de la organización. Encrypted Verification lo hace un cifrado, y un certificado EV no cifra más que otro."
   },
   {
     "id": "ssl-tls-s10",
@@ -10459,9 +10459,9 @@
     "correcta": "Certificate Transparency",
     "distractores": [
       "Certificate Trust",
-      "Certified Transport"
+      "Certificate Tracking"
     ],
-    "explicacion": "CT significa Certificate Transparency: CT es el sistema de registros públicos donde se buscan los certificados emitidos. Certificate Trust lo confunde con la confianza, y CT publica certificados. Certified Transport lo toma por un transporte, y CT es sobre certificados."
+    "explicacion": "CT significa Certificate Transparency: CT es el sistema de registros públicos donde se buscan los certificados emitidos. Certificate Trust lo confunde con la confianza, y CT publica certificados. Certificate Tracking lo toma por un seguimiento privado, y CT es un registro público."
   },
   {
     "id": "ssl-tls-s11",
@@ -10490,10 +10490,10 @@
     "pregunta": "¿Qué significa la sigla DoH?",
     "correcta": "DNS over HTTPS",
     "distractores": [
-      "DNS over Hardware",
-      "Domain over Host"
+      "DNS over TLS",
+      "Domain over HTTPS"
     ],
-    "explicacion": "DoH significa DNS over HTTPS: DoH resuelve las peticiones DNS a través de HTTPS para evitar escuchas y manipulación. DNS over Hardware no existe como estándar. Domain over Host no existe como estándar, y DoH usa HTTPS."
+    "explicacion": "DoH significa DNS over HTTPS: DoH resuelve las peticiones DNS a través de HTTPS para evitar escuchas y manipulación. DNS over TLS es otro estándar, DoT, que cifra el DNS con TLS sin pasar por HTTP. Domain over HTTPS cambia DNS por Domain, y DoH lleva el protocolo DNS, no el dominio."
   },
   {
     "id": "ssl-tls-s13",
