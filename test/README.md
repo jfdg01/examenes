@@ -39,31 +39,9 @@ Cada examen tiene su puerto, y el navegador separa el `localStorage` de cada pue
 
 Un examen nuevo es una carpeta nueva con su `examen.json`, un `preguntas.json` con `[]` y sus PDFs en `pdfs/`. Elige un `puerto` libre: `tailscale serve status` lista los puertos ocupados.
 
-## El banco: `preguntas.json`
+## El banco
 
-El banco es una lista de preguntas en JSON. El navegador lo lee con `fetch`, sin dependencias.
-
-```json
-{
-  "id": "rgpd-001",
-  "concepto": "rgpd-brecha-plazo",
-  "tema": "rgpd",
-  "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 38 },
-  "pregunta": "¿En qué plazo notifica el responsable una brecha a la autoridad de control?",
-  "correcta": "72 horas desde que tiene constancia de la brecha",
-  "distractores": ["24 horas desde que ocurre la brecha", "Un mes desde que tiene constancia", "Sin plazo fijo"],
-  "explicacion": "Art. 33 del RGPD."
-}
-```
-
-- `id` no cambia nunca, porque el historial lo usa como clave.
-- `concepto` agrupa 2 o 3 preguntas que preguntan el mismo dato desde ángulos distintos. Así, una respuesta mide el dato, y no la forma de la pregunta.
-- `tema` es uno de los `temas` de `examen.json`.
-- `fuente` lleva el PDF y la página del PDF. `pagina` es la página del PDF, y no el número de la diapositiva. Cada pregunta sale del temario, y no de otra fuente.
-- `correcta` va aparte de los `distractores`, y la interfaz baraja las opciones. Una opción no dice "todas las anteriores", porque el barajado la rompe.
-- `explicacion` dice el contraste clave en una línea.
-
-Una pregunta tiene las `opciones` del examen, para que el test entrene la misma elección que el examen.
+El formato de `preguntas.json`, las reglas de una pregunta y el comprobador están en `BANCO.md`.
 
 ### La calidad de una pregunta
 
@@ -114,7 +92,7 @@ La interfaz calcula todo el estado con esta lista: el paso de cada concepto y su
 
 El historial no entra en git. El servidor lo guarda en `respuestas.jsonl`, en la carpeta del examen.
 
-Una respuesta huérfana tiene un `id` que no está en el banco. Una pregunta que la regla 6 cambia deja sus respuestas huérfanas. La interfaz no usa las respuestas huérfanas en ninguna cuenta, y el archivo las conserva, porque una línea borrada no tiene vuelta atrás.
+Una respuesta huérfana tiene un `id` que no está en el banco. Una pregunta que pasa a preguntar otra idea lleva un `id` nuevo, y deja sus respuestas huérfanas. La interfaz no usa las respuestas huérfanas en ninguna cuenta, y el archivo las conserva, porque una línea borrada no tiene vuelta atrás.
 
 ## La confianza y el paso del concepto
 
@@ -309,26 +287,7 @@ La interfaz tiene el servidor, la página web, los pasos, el simulacro y las im�
 
 ### El banco
 
-El banco tiene el `preguntas.json` de cada examen y `test/comprobar_banco.py`.
-
-`comprobar_banco.py` usa solo la stdlib de Python, y falla con cada pregunta que rompe el formato:
-
-- un `id` repetido, o un `tema` fuera de la lista;
-- un número de distractores distinto de `opciones` − 1, o un distractor igual a la respuesta correcta;
-- un `pdf` que no existe en `pdfs/`, o una `pagina` mayor que el número de páginas del PDF;
-- un `concepto` con menos de 2 preguntas o con más de 3.
-
-`comprobar_banco.py` lee el banco de su argumento, y lee `examen.json` y `pdfs/` de la carpeta del banco:
-
-```bash
-python3 test/comprobar_banco.py asn/preguntas.json
-```
-
-El script también lista los `id` de las respuestas huérfanas del `respuestas.jsonl` de esa carpeta, como un aviso que no falla. El aviso muestra un `id` cambiado por error, porque un `id` no cambia nunca.
-
-El banco crece por tandas, con una tanda por tema y un commit por tanda. La revisión de la primera tanda va antes de las demás tandas, porque fija el nivel de las preguntas y de los distractores.
-
-Después de las tandas, una revisión independiente compara cada pregunta con su página y con las reglas de calidad. Quien escribe una pregunta no ve sus propios errores, y por eso la revisión la hacen agentes que no escribieron el banco. Los revisores dan la lista de fallos, y un solo agente cambia `preguntas.json`.
+El banco es el `preguntas.json` de cada examen, y `test/comprobar_banco.py` lo comprueba. `BANCO.md` lo describe.
 
 ### Los tests
 

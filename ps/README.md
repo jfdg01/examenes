@@ -23,4 +23,4 @@ python3 test/serve.py ps
 tailscale serve --bg --https=8606 http://127.0.0.1:8607
 ```
 
-El código, el formato del banco y las reglas de calidad están en `test/README.md`.
+El código está en `test/README.md`, y el formato y las reglas del banco están en `test/BANCO.md`.
