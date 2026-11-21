@@ -6368,6 +6368,1926 @@
     "explicacion": "El servidor responde con hello, certificado y finished en un solo vuelo. El cliente no espera: ya mandó su key_share en el primer mensaje. El finished se mantiene en ambos sentidos."
   },
   {
+    "id": "aplicacion-001",
+    "concepto": "aplicacion-web-seguridad",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "¿Por qué la web pide herramientas de seguridad a medida en cuanto a las aplicaciones que corren en un servidor?",
+    "correcta": "Poner en marcha un servidor es fácil, pero se controlan poco las aplicaciones que ejecuta",
+    "distractores": [
+      "Poner en marcha un servidor es difícil, y solo los expertos controlan sus aplicaciones",
+      "Las aplicaciones web se ejecutan en el navegador, fuera del control del servidor"
+    ],
+    "explicacion": "Un servidor es fácil de montar, pero sus aplicaciones se controlan poco. Montar un servidor no exige experiencia, y por eso hay muchos. Las aplicaciones web corren en el servidor, y no en el navegador."
+  },
+  {
+    "id": "aplicacion-002",
+    "concepto": "aplicacion-web-seguridad",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "Si un atacante compromete un servidor web de una empresa, ¿qué riesgo añade además de los datos de la propia web?",
+    "correcta": "Sirve de puerta de entrada a la subred y a todos sus equipos",
+    "distractores": [
+      "Solo expone los documentos que publica, porque la subred queda aislada",
+      "Reenvía tráfico a otras redes, pero no alcanza los equipos internos"
+    ],
+    "explicacion": "Un servidor web comprometido permite entrar en la subred y en sus equipos. La subred no queda aislada por el hecho de que el servidor sea de cara al público. El servidor sí alcanza a los equipos de su subred."
+  },
+  {
+    "id": "aplicacion-003",
+    "concepto": "aplicacion-web-seguridad",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "¿Qué rasgo de los usuarios de un servidor web complica protegerlo?",
+    "correcta": "No tienen por qué tener formación en seguridad",
+    "distractores": [
+      "Son administradores con permisos de root en el servidor",
+      "Todos son anónimos y no se pueden autenticar ante el servidor"
+    ],
+    "explicacion": "Los usuarios de un servidor web no tienen por qué saber de seguridad. Los usuarios no son administradores del servidor. Un servidor web puede autenticar usuarios, y su anonimato no es un rasgo de la web."
+  },
+  {
+    "id": "aplicacion-004",
+    "concepto": "aplicacion-web-amenazas",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "En la tabla de amenazas de la web, ¿qué contramedida corresponde a las amenazas de integridad, como la modificación de datos de usuario?",
+    "correcta": "Sumas de comprobación criptográficas",
+    "distractores": [
+      "Cifrado y proxies web",
+      "Técnicas criptográficas de autenticación"
+    ],
+    "explicacion": "Para la integridad la tabla pone las sumas de comprobación criptográficas. El cifrado y los proxies web son la contramedida de la confidencialidad. Las técnicas de autenticación responden a la suplantación de usuarios."
+  },
+  {
+    "id": "aplicacion-005",
+    "concepto": "aplicacion-web-amenazas",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué contramedida da la tabla de amenazas de la web contra la denegación de servicio?",
+    "correcta": "Ninguna eficaz, porque son difíciles de prevenir",
+    "distractores": [
+      "Sumas de comprobación criptográficas",
+      "Cifrado de las comunicaciones y proxies web"
+    ],
+    "explicacion": "La tabla dice que la denegación de servicio es difícil de prevenir. Una suma de comprobación detecta modificaciones, pero no impide inundar el servidor. El cifrado protege la confidencialidad, y no frena las peticiones falsas."
+  },
+  {
+    "id": "aplicacion-006",
+    "concepto": "aplicacion-web-amenazas",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "Un atacante espía el tráfico de la red entre un cliente y un servidor web. ¿Qué propiedad ataca, y qué consecuencia tiene?",
+    "correcta": "La confidencialidad, con pérdida de información y de privacidad",
+    "distractores": [
+      "La integridad, con pérdida de información y compromiso de la máquina",
+      "La autenticación, con la creencia de que una información falsa es válida"
+    ],
+    "explicacion": "Espiar la red es una amenaza de confidencialidad, y causa pérdida de información y de privacidad. El compromiso de la máquina viene de las amenazas de integridad, como el navegador troyano. La información falsa tomada por válida viene de la suplantación, que es de autenticación."
+  },
+  {
+    "id": "aplicacion-007",
+    "concepto": "aplicacion-https",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué es HTTPS y qué puerto estándar usa?",
+    "correcta": "HTTP sobre SSL/TLS, en el puerto 443",
+    "distractores": [
+      "HTTP con un cifrado propio de la capa de aplicación, en el puerto 443",
+      "HTTP sobre SSH, en el puerto 22"
+    ],
+    "explicacion": "HTTPS es HTTP sobre SSL/TLS, con URL https:// y puerto 443. HTTPS no define un cifrado propio: usa el de TLS. SSH es otro protocolo, con otro puerto, y HTTPS no se apoya en él."
+  },
+  {
+    "id": "aplicacion-008",
+    "concepto": "aplicacion-https",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "Al usar HTTPS, ¿qué parte de una petición va cifrada?",
+    "correcta": "La URL solicitada, las cookies y la cabecera HTTP, además del contenido",
+    "distractores": [
+      "Solo el contenido de los formularios, porque la URL va en claro",
+      "Solo el contenido del documento, con la cabecera HTTP en claro"
+    ],
+    "explicacion": "HTTPS cifra la URL, el contenido, los formularios, las cookies y la cabecera HTTP. La URL también va cifrada, y no solo los formularios. La cabecera HTTP forma parte de lo cifrado, y no queda en claro."
+  },
+  {
+    "id": "aplicacion-009",
+    "concepto": "aplicacion-https",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "Un atacante captura el tráfico de una visita a un sitio con HTTPS. ¿Qué ve de la petición HTTP?",
+    "correcta": "Ni la URL pedida ni las cookies, porque viajan cifradas",
+    "distractores": [
+      "La URL pedida, aunque no las cookies ni el contenido",
+      "Las cookies de sesión, aunque no el contenido del documento"
+    ],
+    "explicacion": "Con HTTPS, la URL y las cookies van cifradas, y el atacante no las ve. La URL va cifrada con el resto de la petición. Las cookies también van cifradas, y su robo exige otro ataque."
+  },
+  {
+    "id": "aplicacion-010",
+    "concepto": "aplicacion-https-inicio",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "En HTTPS, ¿qué papel tiene el agente que hace de cliente HTTP al abrir la conexión?",
+    "correcta": "También actúa como cliente TLS, y empieza con el ClientHello",
+    "distractores": [
+      "Actúa solo como cliente HTTP, y espera el ServerHello del servidor",
+      "Envía la petición HTTP y negocia TLS después, si el servidor lo pide"
+    ],
+    "explicacion": "El cliente HTTP es también cliente TLS, y es él quien manda el ClientHello. El servidor no inicia el handshake: responde al cliente. La petición HTTP espera a que el handshake haya terminado."
+  },
+  {
+    "id": "aplicacion-011",
+    "concepto": "aplicacion-https-inicio",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Cuándo puede el cliente HTTPS enviar su primera petición HTTP?",
+    "correcta": "Cuando el handshake TLS ha terminado",
+    "distractores": [
+      "En cuanto abre la conexión, antes del handshake",
+      "Tras enviar el ClientHello, sin esperar al resto del handshake"
+    ],
+    "explicacion": "La primera petición sale cuando el handshake TLS ha terminado. Antes del handshake no hay canal seguro. El ClientHello solo empieza el handshake, y no lo completa."
+  },
+  {
+    "id": "aplicacion-012",
+    "concepto": "aplicacion-https-inicio",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Cómo viajan los datos HTTP dentro de una conexión HTTPS?",
+    "correcta": "Como datos de aplicación de TLS",
+    "distractores": [
+      "Como mensajes del propio protocolo de handshake de TLS",
+      "Como datos en claro, protegidos con una firma de TLS"
+    ],
+    "explicacion": "Todo el HTTP viaja como datos de aplicación TLS. El handshake solo negocia claves y parámetros, y no lleva HTTP. En HTTPS los datos van cifrados, y no en claro con firma."
+  },
+  {
+    "id": "aplicacion-013",
+    "concepto": "aplicacion-https-cierre",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Cómo indica un cliente o un servidor HTTP que va a cerrar la conexión?",
+    "correcta": "Con la línea Connection: close en la cabecera del mensaje actual",
+    "distractores": [
+      "Con la línea Strict-Transport-Security: max-age=0 en la respuesta",
+      "Cerrando directamente la conexión TCP sin avisar"
+    ],
+    "explicacion": "El cierre se indica con Connection: close en la cabecera. Strict-Transport-Security es la cabecera de HSTS, y no cierra conexiones. Un cierre directo de TCP no es una indicación, y HTTPS lo trata como un posible ataque."
+  },
+  {
+    "id": "aplicacion-014",
+    "concepto": "aplicacion-https-cierre",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué provoca en TLS un Connection: close de HTTP?",
+    "correcta": "El mecanismo de cierre seguro de la conexión TLS",
+    "distractores": [
+      "Un nuevo handshake TLS para reanudar la sesión",
+      "Un cierre abrupto de TCP, sin aviso a TLS"
+    ],
+    "explicacion": "Connection: close pone en marcha el cierre seguro de TLS. Un handshake nuevo abriría una sesión, y no la cierra. Un cierre abrupto es justo lo que el cierre seguro evita."
+  },
+  {
+    "id": "aplicacion-015",
+    "concepto": "aplicacion-https-cierre",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Cómo trata HTTPS un cierre de la conexión que no sigue el cierre seguro de TLS?",
+    "correcta": "Como un posible ataque",
+    "distractores": [
+      "Como un cierre normal, porque TCP ya ha cerrado",
+      "Como un error de red, y reintenta con otra sesión"
+    ],
+    "explicacion": "Un cierre que no es el seguro puede ser un ataque. Que TCP cierre no valida el cierre de TLS. No se trata como un error de red, y un atacante puede provocar el corte."
+  },
+  {
+    "id": "aplicacion-022",
+    "concepto": "aplicacion-ssh-funcion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Para qué se concibió SSH inicialmente?",
+    "correcta": "Para sustituir a utilidades inseguras como telnet y rlogin",
+    "distractores": [
+      "Para sustituir a SMTP en el envío de correo entre servidores",
+      "Para sustituir a HTTP en el acceso seguro a servidores web"
+    ],
+    "explicacion": "SSH nació para sustituir a telnet y rlogin, que ejecutaban comandos sin protección. SMTP es de correo y SSH no lo sustituye. El acceso web seguro es HTTPS, y no SSH."
+  },
+  {
+    "id": "aplicacion-023",
+    "concepto": "aplicacion-ssh-funcion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué tres propiedades de seguridad ofrece SSH?",
+    "correcta": "Autenticación, cifrado e integridad",
+    "distractores": [
+      "Autenticación, cifrado y no repudio",
+      "Confidencialidad, disponibilidad e integridad"
+    ],
+    "explicacion": "SSH da autenticación, cifrado e integridad. El no repudio no es una propiedad de SSH. La disponibilidad tampoco la ofrece."
+  },
+  {
+    "id": "aplicacion-024",
+    "concepto": "aplicacion-ssh-funcion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué usos tiene SSH además de abrir una sesión remota?",
+    "correcta": "Ejecutar comandos remotos, copiar archivos y crear túneles seguros",
+    "distractores": [
+      "Cifrar el correo de cada usuario y firmar sus mensajes",
+      "Resolver nombres de dominio y firmar las respuestas DNS"
+    ],
+    "explicacion": "SSH ejecuta comandos, copia archivos y crea túneles, también para X11. Cifrar y firmar correo es S/MIME. Firmar respuestas DNS es DNSSEC."
+  },
+  {
+    "id": "aplicacion-025",
+    "concepto": "aplicacion-ssh-pila",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "En la pila de SSH, ¿qué dos protocolos se apoyan directamente en el Transport Layer Protocol?",
+    "correcta": "User Authentication Protocol y Connection Protocol",
+    "distractores": [
+      "TCP e IP, que quedan por debajo del Transport Layer Protocol",
+      "User Authentication Protocol y TLS"
+    ],
+    "explicacion": "Sobre el Transport Layer Protocol van los protocolos de autenticación y de conexión. TCP e IP van por debajo de él. SSH no usa TLS: el Transport Layer Protocol hace ese papel."
+  },
+  {
+    "id": "aplicacion-026",
+    "concepto": "aplicacion-ssh-pila",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué protocolo ofrece el Transport Layer Protocol de SSH por debajo?",
+    "correcta": "TCP, que da una entrega fiable orientada a conexión",
+    "distractores": [
+      "UDP, que da una entrega de datagramas sin conexión",
+      "TLS, que da el cifrado de la conexión"
+    ],
+    "explicacion": "El Transport Layer Protocol de SSH va sobre TCP. UDP no es el protocolo de la pila de SSH. TLS no está en la pila: el cifrado lo pone el propio Transport Layer Protocol."
+  },
+  {
+    "id": "aplicacion-027",
+    "concepto": "aplicacion-ssh-pila",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué protocolo de la pila de SSH multiplexa el túnel cifrado en varios canales lógicos?",
+    "correcta": "Connection Protocol",
+    "distractores": [
+      "User Authentication Protocol",
+      "Transport Layer Protocol"
+    ],
+    "explicacion": "El Connection Protocol reparte el túnel en canales lógicos. El User Authentication Protocol autentica al usuario. El Transport Layer Protocol crea el túnel cifrado, y no lo multiplexa."
+  },
+  {
+    "id": "aplicacion-028",
+    "concepto": "aplicacion-ssh-transporte-funcion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué ofrece el Transport Layer Protocol de SSH?",
+    "correcta": "Autenticación del servidor, confidencialidad e integridad, y compresión opcional",
+    "distractores": [
+      "Autenticación del cliente, confidencialidad e integridad, y compresión obligatoria",
+      "Autenticación del servidor y multiplexación de canales lógicos"
+    ],
+    "explicacion": "El Transport Layer Protocol autentica al servidor, cifra y protege la integridad, y puede comprimir. La autenticación del cliente es del protocolo de usuario, y la compresión es opcional. Multiplexar canales es del Connection Protocol."
+  },
+  {
+    "id": "aplicacion-029",
+    "concepto": "aplicacion-ssh-transporte-funcion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué protocolo de la pila de SSH autentica al usuario del cliente ante el servidor?",
+    "correcta": "User Authentication Protocol",
+    "distractores": [
+      "Transport Layer Protocol",
+      "Connection Protocol"
+    ],
+    "explicacion": "Autenticar al usuario es la función del User Authentication Protocol. El Transport Layer Protocol autentica al servidor, y no al usuario. El Connection Protocol multiplexa canales."
+  },
+  {
+    "id": "aplicacion-030",
+    "concepto": "aplicacion-ssh-transporte-funcion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "Un cliente SSH pide el User Authentication Protocol. ¿Qué existe ya por debajo?",
+    "correcta": "Una conexión de transporte que ya autenticó al servidor y cifra el tráfico",
+    "distractores": [
+      "Una sesión que ya autenticó al usuario ante el servidor y abrió su primer canal",
+      "Un canal lógico, con su número de canal ya asignado"
+    ],
+    "explicacion": "Antes de autenticar al usuario, el Transport Layer Protocol ya ha autenticado al servidor y cifra. Autenticar al usuario es justo lo que se pide ahora. Los canales se abren después, con el Connection Protocol."
+  },
+  {
+    "id": "aplicacion-031",
+    "concepto": "aplicacion-ssh-autenticacion-servidor",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "En el Transport Layer Protocol de SSH, ¿con qué clave se autentica el servidor ante el cliente?",
+    "correcta": "Con su par de claves de host (host keys)",
+    "distractores": [
+      "Con la clave pública del usuario del cliente",
+      "Con una clave de sesión compartida de antemano"
+    ],
+    "explicacion": "El servidor se autentica con su par de claves de host. La clave pública del usuario sirve para autenticar al cliente. La clave de sesión sale del intercambio de claves, y no está compartida de antemano."
+  },
+  {
+    "id": "aplicacion-032",
+    "concepto": "aplicacion-ssh-autenticacion-servidor",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿De dónde obtiene el cliente SSH la clave pública de un servidor para autenticarlo?",
+    "correcta": "De su fichero known_hosts, o de un certificado asociado al servidor",
+    "distractores": [
+      "Del fichero AuthorizedKeys del servidor, donde guarda las claves públicas de sus usuarios",
+      "De un nonce que el servidor firma al conectarse"
+    ],
+    "explicacion": "El cliente usa known_hosts o un certificado con una CA. AuthorizedKeys guarda las claves de los usuarios, en el servidor. El nonce firmado es de la autenticación publickey del usuario."
+  },
+  {
+    "id": "aplicacion-033",
+    "concepto": "aplicacion-ssh-autenticacion-servidor",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "Un servidor SSH ofrece claves de varios algoritmos asimétricos. ¿Qué lo permite?",
+    "correcta": "Puede tener varias claves de host, cada una con un algoritmo distinto",
+    "distractores": [
+      "Cada cliente genera una clave de host propia con el algoritmo que pide",
+      "La clave de host se regenera en cada sesión con otro algoritmo"
+    ],
+    "explicacion": "Un servidor puede tener varias claves de host con distintos algoritmos. Las claves de host son del servidor, y no del cliente. La clave de host no cambia en cada sesión."
+  },
+  {
+    "id": "aplicacion-034",
+    "concepto": "aplicacion-ssh-fases-transporte",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Cuál es el orden de las fases del Transport Layer Protocol de SSH?",
+    "correcta": "Identificación, negociación de algoritmos, intercambio de claves, fin del intercambio y petición de servicio",
+    "distractores": [
+      "Negociación de algoritmos, identificación, intercambio de claves, fin del intercambio y petición de servicio",
+      "Identificación, intercambio de claves, negociación de algoritmos, fin del intercambio y petición de servicio"
+    ],
+    "explicacion": "Primero se intercambian identificaciones, luego se negocian los algoritmos y después se acuerdan las claves. Negociar antes de identificarse invierte las 2 primeras fases. El intercambio de claves usa los algoritmos ya negociados, y no puede ir antes."
+  },
+  {
+    "id": "aplicacion-035",
+    "concepto": "aplicacion-ssh-fases-transporte",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué mensaje marca en SSH el fin del intercambio de claves, a partir del cual ambos usan las claves generadas?",
+    "correcta": "SSH_MSG_NEWKEYS",
+    "distractores": [
+      "SSH_MSG_KEXINIT",
+      "SSH_MSG_SERVICE_REQUEST"
+    ],
+    "explicacion": "SSH_MSG_NEWKEYS cierra el intercambio y activa las claves nuevas. SSH_MSG_KEXINIT abre la negociación de algoritmos. SSH_MSG_SERVICE_REQUEST llega después, para pedir un protocolo."
+  },
+  {
+    "id": "aplicacion-036",
+    "concepto": "aplicacion-ssh-fases-transporte",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "Tras el intercambio de claves, ¿qué envía el cliente SSH para seguir adelante?",
+    "correcta": "Una petición de servicio, que pide el protocolo de autenticación o el de conexión",
+    "distractores": [
+      "Un SSH_MSG_KEXINIT con los algoritmos que soporta, para empezar",
+      "Un SSH_MSG_USERAUTH_REQUEST con su nombre de usuario, directamente, sin pedir antes servicio alguno"
+    ],
+    "explicacion": "El cliente pide primero un servicio, el de autenticación o el de conexión. KEXINIT abre la negociación de algoritmos, y ya se hizo antes. USERAUTH_REQUEST es un mensaje del protocolo de autenticación, que llega tras pedir ese servicio."
+  },
+  {
+    "id": "aplicacion-037",
+    "concepto": "aplicacion-ssh-identificacion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué envía cada parte de SSH tras abrir la conexión TCP, antes de negociar algoritmos?",
+    "correcta": "Su cadena de identificación, con la versión del protocolo y la del software",
+    "distractores": [
+      "Su mensaje SSH_MSG_KEXINIT, con la lista de algoritmos que soporta",
+      "Su clave pública de host, para autenticarse ante la otra parte"
+    ],
+    "explicacion": "Lo primero es la cadena SSH-protoversion-softwareversion. KEXINIT es la negociación, y viene después. La clave de host se usa en el intercambio de claves."
+  },
+  {
+    "id": "aplicacion-038",
+    "concepto": "aplicacion-ssh-identificacion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué indica el 2.0 en la cadena de identificación SSH-2.0-billsSSH_3.6.3q3?",
+    "correcta": "La versión del protocolo SSH",
+    "distractores": [
+      "La versión del software del cliente",
+      "El número de algoritmos soportados"
+    ],
+    "explicacion": "El 2.0 es la versión del protocolo (protoversion). La versión del software es 3.6.3q3 (softwareversion). La cadena no cuenta algoritmos."
+  },
+  {
+    "id": "aplicacion-039",
+    "concepto": "aplicacion-ssh-identificacion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Para qué se usan las cadenas de identificación después de intercambiarse?",
+    "correcta": "Entran en el cálculo del intercambio de claves Diffie-Hellman",
+    "distractores": [
+      "Se firman para autenticar al cliente ante el servidor",
+      "Sirven para elegir el cifrado entre las listas de algoritmos"
+    ],
+    "explicacion": "Las cadenas se usan en el intercambio Diffie-Hellman. La autenticación del cliente es de otro protocolo, y no firma estas cadenas. Los algoritmos salen de las listas de KEXINIT."
+  },
+  {
+    "id": "aplicacion-040",
+    "concepto": "aplicacion-ssh-negociacion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué contiene el mensaje SSH_MSG_KEXINIT?",
+    "correcta": "Listas de algoritmos soportados, en orden de preferencia",
+    "distractores": [
+      "La clave pública de host y la firma de su mitad de Diffie-Hellman",
+      "La cadena de identificación, con la versión del protocolo"
+    ],
+    "explicacion": "KEXINIT lleva listas de algoritmos por orden de preferencia. La clave de host y la firma son del intercambio de claves. La cadena de identificación se manda antes."
+  },
+  {
+    "id": "aplicacion-041",
+    "concepto": "aplicacion-ssh-negociacion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "En la negociación de algoritmos de SSH, ¿qué algoritmo se elige?",
+    "correcta": "El primero de la lista del cliente que el servidor también soporta",
+    "distractores": [
+      "El primero de la lista del servidor que el cliente también soporta",
+      "El más robusto de los que soportan ambos, sin mirar el orden"
+    ],
+    "explicacion": "Manda el orden del cliente, y el servidor solo debe soportar el algoritmo. Si mandara la lista del servidor, la regla se invertiría. La elección sigue el orden de preferencia, y no una medida de robustez."
+  },
+  {
+    "id": "aplicacion-042",
+    "concepto": "aplicacion-ssh-negociacion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "Un cliente SSH lista aes256-cbc, aes128-cbc y 3des-cbc, y el servidor soporta 3des-cbc y aes128-cbc. ¿Qué cifrado se usa?",
+    "correcta": "aes128-cbc",
+    "distractores": [
+      "3des-cbc",
+      "aes256-cbc"
+    ],
+    "explicacion": "Se toma el primero de la lista del cliente que el servidor soporta: aes128-cbc. 3des-cbc va después en la lista del cliente. El servidor no soporta aes256-cbc."
+  },
+  {
+    "id": "aplicacion-043",
+    "concepto": "aplicacion-ssh-intercambio-claves",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué algoritmo usa SSH para que cliente y servidor acuerden la clave maestra?",
+    "correcta": "Diffie-Hellman",
+    "distractores": [
+      "Cifrado RSA con la clave pública del servidor",
+      "Un secreto precompartido, guardado en known_hosts"
+    ],
+    "explicacion": "SSH acuerda la clave con Diffie-Hellman. Cifrar la clave con la pública del servidor es el intercambio RSA de TLS. known_hosts guarda claves públicas de servidores, y no un secreto."
+  },
+  {
+    "id": "aplicacion-044",
+    "concepto": "aplicacion-ssh-intercambio-claves",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 21
+    },
+    "pregunta": "En el intercambio Diffie-Hellman de SSH, ¿cómo queda autenticado el servidor?",
+    "correcta": "Firma su mitad del intercambio con su clave privada",
+    "distractores": [
+      "Cifra su mitad del intercambio con la clave pública del cliente",
+      "Firma su mitad del intercambio con la clave de sesión"
+    ],
+    "explicacion": "El servidor firma su mitad con su clave privada, y el cliente comprueba la firma. Cifrar con la clave del cliente daría confidencialidad, y no autenticidad. La clave de sesión aún no existe en ese momento."
+  },
+  {
+    "id": "aplicacion-045",
+    "concepto": "aplicacion-ssh-intercambio-claves",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿De qué se generan las claves de cifrado y de integridad de una sesión SSH?",
+    "correcta": "De la clave compartida K, el hash H y el identificador de sesión",
+    "distractores": [
+      "De la clave de host del servidor y la clave pública del cliente",
+      "De la contraseña del usuario y el hash H de la sesión"
+    ],
+    "explicacion": "Las claves salen de K, H y el identificador de sesión. Las claves de host autentican, y no entran en la derivación. La contraseña se usa en la autenticación del usuario, ya con el canal seguro."
+  },
+  {
+    "id": "aplicacion-046",
+    "concepto": "aplicacion-ssh-userauth",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Cuál es la función del User Authentication Protocol de SSH?",
+    "correcta": "Que el servidor autentique al cliente",
+    "distractores": [
+      "Que el cliente autentique al servidor",
+      "Que ambos acuerden la clave de sesión"
+    ],
+    "explicacion": "Este protocolo autentica al cliente ante el servidor. Al servidor lo autentica el Transport Layer Protocol. La clave de sesión se acuerda también en el Transport Layer Protocol."
+  },
+  {
+    "id": "aplicacion-047",
+    "concepto": "aplicacion-ssh-userauth",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 24
+    },
+    "pregunta": "Un cliente envía un SSH_MSG_USERAUTH_REQUEST con un nombre de usuario que no existe. ¿Qué responde el servidor?",
+    "correcta": "Un USERAUTH_FAILURE con Partial Success a False, y detiene el proceso",
+    "distractores": [
+      "Un USERAUTH_FAILURE con la lista de métodos de autenticación aceptables",
+      "Un USERAUTH_FAILURE con Partial Success a True, y pide otro método"
+    ],
+    "explicacion": "Con un usuario inválido hay un fallo con Partial Success a False, y se detiene. La lista de métodos se envía solo si el nombre es válido. Partial Success a True indica un método superado, y falta otro."
+  },
+  {
+    "id": "aplicacion-048",
+    "concepto": "aplicacion-ssh-userauth",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 24
+    },
+    "pregunta": "En SSH, un método de autenticación tiene éxito, pero se requieren más. ¿Qué envía el servidor?",
+    "correcta": "Un USERAUTH_FAILURE con Partial Success a True, y la lista de métodos",
+    "distractores": [
+      "Un USERAUTH_SUCCESS, y el cliente pide después el siguiente método",
+      "Un USERAUTH_FAILURE con Partial Success a False"
+    ],
+    "explicacion": "Si faltan métodos, el servidor manda FAILURE con Partial Success a True. USERAUTH_SUCCESS se envía solo cuando todos los métodos han tenido éxito. Partial Success a False señala un fallo del método."
+  },
+  {
+    "id": "aplicacion-049",
+    "concepto": "aplicacion-ssh-metodos-autenticacion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 25
+    },
+    "pregunta": "En la autenticación publickey de SSH, ¿qué hace el cliente para probar su identidad?",
+    "correcta": "Firma con su clave privada un nonce que le envía el servidor",
+    "distractores": [
+      "Cifra con su clave pública un nonce que le envía el servidor",
+      "Envía su clave pública cifrada con la del servidor"
+    ],
+    "explicacion": "El cliente firma el nonce con su clave privada, y el servidor lo comprueba con la pública guardada. Cifrar con la clave pública no prueba nada, porque cualquiera la tiene. Enviar la clave pública no autentica a nadie."
+  },
+  {
+    "id": "aplicacion-050",
+    "concepto": "aplicacion-ssh-metodos-autenticacion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Cómo protege SSH una contraseña de usuario al autenticar con el método password?",
+    "correcta": "Se envía cifrada por el Transport Layer Protocol",
+    "distractores": [
+      "Se envía como un hash firmado con la clave del equipo",
+      "El servidor la cifra con la clave pública del usuario"
+    ],
+    "explicacion": "La contraseña viaja cifrada por el protocolo de transporte. No se firma con la clave del equipo: eso es hostbased. El servidor no cifra la contraseña, y es el cliente quien la manda."
+  },
+  {
+    "id": "aplicacion-051",
+    "concepto": "aplicacion-ssh-metodos-autenticacion",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 25
+    },
+    "pregunta": "En la autenticación hostbased de SSH, ¿qué se envía al servidor?",
+    "correcta": "Una firma creada con la clave privada del equipo cliente",
+    "distractores": [
+      "Una firma creada con la clave privada del usuario",
+      "Una contraseña cifrada por el Transport Layer Protocol"
+    ],
+    "explicacion": "En hostbased autentica el equipo, y firma con su clave privada. La firma con la clave del usuario es de publickey. La contraseña cifrada es el método password."
+  },
+  {
+    "id": "aplicacion-052",
+    "concepto": "aplicacion-ssh-canales",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué hace el Connection Protocol de SSH con el túnel seguro?",
+    "correcta": "Multiplexa varios canales lógicos sobre él",
+    "distractores": [
+      "Lo establece con un intercambio Diffie-Hellman",
+      "Lo autentica con los métodos publickey o password"
+    ],
+    "explicacion": "El Connection Protocol reparte el túnel en canales lógicos. El túnel lo establece el Transport Layer Protocol. Los métodos publickey y password son del protocolo de autenticación."
+  },
+  {
+    "id": "aplicacion-053",
+    "concepto": "aplicacion-ssh-canales",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Cómo se identifica cada canal del Connection Protocol?",
+    "correcta": "Cada parte asigna un número único de canal",
+    "distractores": [
+      "El servidor asigna un identificador único a todos los canales",
+      "Cada canal usa su propio puerto TCP"
+    ],
+    "explicacion": "Cada parte da un número único a cada canal. El servidor no numera todos los canales por las dos partes. Todos los canales comparten la misma conexión TCP, y no usan un puerto cada uno."
+  },
+  {
+    "id": "aplicacion-054",
+    "concepto": "aplicacion-ssh-canales",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Cuáles son las tres etapas del ciclo de vida de un canal SSH?",
+    "correcta": "Apertura, envío de datos y cierre",
+    "distractores": [
+      "Autenticación, envío de datos y cierre",
+      "Apertura, control de flujo y cierre"
+    ],
+    "explicacion": "Un canal se abre, envía datos y se cierra. La autenticación es previa y no es una etapa del canal. El control de flujo, con ventanas, se hace durante el envío de datos."
+  },
+  {
+    "id": "aplicacion-055",
+    "concepto": "aplicacion-ssh-tipos-canal",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué tipo de canal SSH sirve para ejecutar un programa remoto, como una shell o un comando del sistema?",
+    "correcta": "session",
+    "distractores": [
+      "x11",
+      "direct-tcpip"
+    ],
+    "explicacion": "El canal session ejecuta un programa remoto. El canal x11 transporta un flujo gráfico. El canal direct-tcpip hace port forwarding local."
+  },
+  {
+    "id": "aplicacion-056",
+    "concepto": "aplicacion-ssh-tipos-canal",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "Un usuario ejecuta una aplicación gráfica remota por SSH. ¿Qué tipo de canal transporta su flujo gráfico?",
+    "correcta": "x11",
+    "distractores": [
+      "session",
+      "forwarded-tcpip"
+    ],
+    "explicacion": "El canal x11 lleva el flujo gráfico. El canal session ejecuta el programa, pero no transporta el flujo gráfico. El canal forwarded-tcpip es del port forwarding."
+  },
+  {
+    "id": "aplicacion-057",
+    "concepto": "aplicacion-ssh-tipos-canal",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué tipos de canal SSH implementan el port forwarding?",
+    "correcta": "forwarded-tcpip y direct-tcpip",
+    "distractores": [
+      "session y x11",
+      "session y direct-tcpip"
+    ],
+    "explicacion": "El port forwarding usa forwarded-tcpip y direct-tcpip. Session y x11 son los canales del programa remoto y del flujo gráfico. Session no hace port forwarding."
+  },
+  {
+    "id": "aplicacion-058",
+    "concepto": "aplicacion-ssh-port-forwarding",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Qué permite el port forwarding de SSH?",
+    "correcta": "Convertir una conexión insegura en segura, redirigiendo su tráfico por la conexión SSH",
+    "distractores": [
+      "Abrir varios puertos de escucha en el servidor para cada usuario que se conecta con su clave",
+      "Autenticar cada puerto del servidor con una clave de host distinta"
+    ],
+    "explicacion": "El port forwarding (ssh tunneling) lleva el tráfico de una conexión insegura por SSH. No sirve para abrir puertos de escucha por usuario. Las claves de host autentican al servidor, y no a puertos."
+  },
+  {
+    "id": "aplicacion-059",
+    "concepto": "aplicacion-ssh-port-forwarding",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Qué dos tipos de port forwarding describe el temario?",
+    "correcta": "Local y remoto",
+    "distractores": [
+      "Estático y dinámico",
+      "Directo y X11"
+    ],
+    "explicacion": "Los dos tipos son local y remoto. Estático y dinámico no son los tipos del temario. X11 es un tipo de canal, y no un tipo de port forwarding."
+  },
+  {
+    "id": "aplicacion-060",
+    "concepto": "aplicacion-ssh-port-forwarding",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 28
+    },
+    "pregunta": "Un servicio sin cifrar escucha en un puerto x. ¿Qué consigue el ssh tunneling con su tráfico?",
+    "correcta": "Se redirige a un puerto de la conexión SSH y viaja cifrado",
+    "distractores": [
+      "Se mueve al puerto 22, y el servicio pasa a cifrar por sí mismo",
+      "Se autentica con la clave de host del servidor SSH, sin cifrarlo"
+    ],
+    "explicacion": "El túnel redirige el tráfico por la conexión SSH, y lo cifra. El servicio no cambia de puerto ni cifra por sí mismo. La clave de host autentica, pero el cifrado lo da el túnel."
+  },
+  {
+    "id": "aplicacion-061",
+    "concepto": "aplicacion-ssh-recomendaciones",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué método de autenticación recomienda el temario para SSH?",
+    "correcta": "Solo clave pública, sin contraseña",
+    "distractores": [
+      "Contraseña robusta, con la clave pública como respaldo",
+      "Hostbased, porque autentica el equipo"
+    ],
+    "explicacion": "Se recomienda no permitir la contraseña, solo clave pública. Mantener la contraseña como respaldo deja el ataque de fuerza bruta abierto. Hostbased no está entre las recomendaciones."
+  },
+  {
+    "id": "aplicacion-062",
+    "concepto": "aplicacion-ssh-recomendaciones",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué herramienta recomienda el temario contra los ataques de fuerza bruta en SSH?",
+    "correcta": "fail2ban o sshGuard",
+    "distractores": [
+      "Listas de revocación de las claves públicas",
+      "Un proxy que oculte el puerto del servidor"
+    ],
+    "explicacion": "fail2ban y sshGuard bloquean a quien falla muchos intentos. Revocar claves públicas no frena adivinar contraseñas. Un proxy no figura en las recomendaciones."
+  },
+  {
+    "id": "aplicacion-063",
+    "concepto": "aplicacion-ssh-recomendaciones",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué restricción de acceso recomienda el temario para limitar quién se conecta por SSH?",
+    "correcta": "Usar allow lists de usuarios y restringir también por IP",
+    "distractores": [
+      "Usar block lists de usuarios y permitir cualquier IP",
+      "Permitir al usuario root solo desde la red local"
+    ],
+    "explicacion": "Se recomiendan allow lists, y restringir por IP. Una block list deja pasar a cualquier otro usuario. El temario recomienda no permitir la conexión del usuario root."
+  },
+  {
+    "id": "aplicacion-064",
+    "concepto": "aplicacion-correo-componentes",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué función tiene un agente de usuario (MUA) de correo?",
+    "correcta": "Componer, editar y leer mensajes, y enviarlos o pedirlos al servidor",
+    "distractores": [
+      "Reenviar los mensajes entre servidores de correo mediante SMTP, sin intervención del usuario",
+      "Guardar el buzón de entrada y la cola de salida del usuario"
+    ],
+    "explicacion": "El MUA es el programa del usuario: compone, lee y habla con el servidor. Reenviar entre servidores es de los MTA. El buzón y la cola están en el servidor de correo."
+  },
+  {
+    "id": "aplicacion-065",
+    "concepto": "aplicacion-correo-componentes",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué contiene un servidor de correo (MTA) para cada usuario?",
+    "correcta": "El buzón de entrada y la cola de mensajes de salida",
+    "distractores": [
+      "El programa con el que el usuario compone y lee mensajes",
+      "La clave privada con la que se firma cada mensaje"
+    ],
+    "explicacion": "El MTA guarda el buzón y la cola de salida. El programa de composición es el MUA. La firma del mensaje se hace con S/MIME en el MUA, y no se guarda en el servidor."
+  },
+  {
+    "id": "aplicacion-066",
+    "concepto": "aplicacion-correo-componentes",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué protocolos permiten a un MUA descargar el correo del servidor?",
+    "correcta": "POP3 o IMAP",
+    "distractores": [
+      "SMTP o MIME",
+      "SMTP"
+    ],
+    "explicacion": "Para descargar correo se usan POP3 o IMAP. SMTP envía el correo, y MIME es un formato. SMTP sirve a un MUA para enviar, y no para descargar."
+  },
+  {
+    "id": "aplicacion-067",
+    "concepto": "aplicacion-smtp",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Qué hace SMTP con un mensaje de correo?",
+    "correcta": "Lo encapsula en un envoltorio y lo reenvía del origen al destino a través de MTAs",
+    "distractores": [
+      "Lo descarga del buzón del servidor al agente de usuario del destinatario, bajo petición suya",
+      "Lo cifra y lo firma entre el agente de usuario y el servidor"
+    ],
+    "explicacion": "SMTP envuelve el mensaje y lo reenvía entre MTAs. Descargar del buzón es de POP3 o IMAP. SMTP no cifra ni firma: eso lo añaden otros mecanismos."
+  },
+  {
+    "id": "aplicacion-068",
+    "concepto": "aplicacion-smtp",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Cuáles son las tres fases de una transferencia SMTP?",
+    "correcta": "Acuerdo, transferencia de mensajes y cierre",
+    "distractores": [
+      "Autenticación, transferencia de mensajes y cierre",
+      "Acuerdo, transferencia de mensajes y confirmación de lectura"
+    ],
+    "explicacion": "SMTP hace un saludo, transfiere y cierra. SMTP no tiene una fase de autenticación entre sus tres fases. La confirmación de lectura no es una fase del protocolo."
+  },
+  {
+    "id": "aplicacion-069",
+    "concepto": "aplicacion-smtp",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Qué codificación exige SMTP original a la cabecera y al cuerpo de un mensaje, por su antigüedad?",
+    "correcta": "ASCII de 7 bits",
+    "distractores": [
+      "ASCII de 8 bits",
+      "UTF-8"
+    ],
+    "explicacion": "El SMTP original exige ASCII de 7 bits. El ASCII de 8 bits permitiría bytes que SMTP no admite. UTF-8 es posterior, y MIME lo permite al codificarlo."
+  },
+  {
+    "id": "aplicacion-070",
+    "concepto": "aplicacion-correo-formato",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué dos partes tiene un mensaje de correo?",
+    "correcta": "Cabecera, con los datos administrativos de envío, y cuerpo, con los datos del usuario",
+    "distractores": [
+      "Cabecera, con los datos del usuario, y cuerpo, con los datos administrativos",
+      "Cabecera, con el asunto, y cuerpo, con la firma digital del mensaje"
+    ],
+    "explicacion": "La cabecera lleva datos administrativos y el cuerpo, el mensaje del usuario. Intercambiar ambos contenidos es un error. La firma digital no es una parte obligatoria del formato."
+  },
+  {
+    "id": "aplicacion-071",
+    "concepto": "aplicacion-correo-formato",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué campo de cabecera de un mensaje lista a otros destinatarios, además del principal?",
+    "correcta": "Cc",
+    "distractores": [
+      "To",
+      "In-Reply-To"
+    ],
+    "explicacion": "Cc lista otros destinatarios. To es el destinatario principal. In-Reply-To indica a qué mensaje responde."
+  },
+  {
+    "id": "aplicacion-072",
+    "concepto": "aplicacion-correo-formato",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué campo de cabecera identifica un mensaje, y cuál indica que responde a otro?",
+    "correcta": "Message-Id lo identifica, e In-Reply-To indica que responde a otro",
+    "distractores": [
+      "In-Reply-To lo identifica, y Message-Id indica que responde a otro",
+      "Message-Id lo identifica, y Return-path indica que responde a otro"
+    ],
+    "explicacion": "Message-Id identifica el mensaje e In-Reply-To enlaza con el mensaje respondido. Cambiar los campos de sitio es un error. Return-path es la ruta de regreso, y no una respuesta."
+  },
+  {
+    "id": "aplicacion-073",
+    "concepto": "aplicacion-mime",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 36
+    },
+    "pregunta": "¿Qué limitación del SMTP original resuelve MIME?",
+    "correcta": "El ASCII de 7 bits, que impide enviar imágenes y ejecutables",
+    "distractores": [
+      "La falta de cifrado, que impide enviar mensajes confidenciales",
+      "La falta de firma, que impide autenticar al remitente"
+    ],
+    "explicacion": "MIME amplía el formato para sacarse de encima el ASCII de 7 bits. Cifrar mensajes es cosa de S/MIME. La firma tampoco la aporta MIME, sino S/MIME."
+  },
+  {
+    "id": "aplicacion-074",
+    "concepto": "aplicacion-mime",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 36
+    },
+    "pregunta": "¿Qué campo MIME indica el formato de los datos del mensaje, como imagen o audio?",
+    "correcta": "Content-Type",
+    "distractores": [
+      "Content-Transfer-Encoding",
+      "MIME-Version"
+    ],
+    "explicacion": "Content-Type dice si los datos son imagen, audio u otro. Content-Transfer-Encoding da la codificación a ASCII. MIME-Version da la versión de MIME."
+  },
+  {
+    "id": "aplicacion-075",
+    "concepto": "aplicacion-mime",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 36
+    },
+    "pregunta": "Un cliente recibe un mensaje con el campo Content-Transfer-Encoding. ¿Qué debe hacer primero con él?",
+    "correcta": "Decodificar los datos a sus caracteres originales según ese valor",
+    "distractores": [
+      "Mostrarlos en pantalla según su Content-Type",
+      "Comprobar la firma digital del mensaje con la clave del emisor"
+    ],
+    "explicacion": "Primero se decodifica según Content-Transfer-Encoding. Mostrar según Content-Type es el paso siguiente. MIME no firma: la firma es cosa de S/MIME."
+  },
+  {
+    "id": "aplicacion-076",
+    "concepto": "aplicacion-correo-amenazas",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 40
+    },
+    "pregunta": "¿En qué cuatro categorías clasifica el NIST las amenazas al correo electrónico?",
+    "correcta": "Autenticación, integridad, confidencialidad y disponibilidad",
+    "distractores": [
+      "Autenticación, integridad, confidencialidad y no repudio",
+      "Autenticación, cifrado, integridad y disponibilidad"
+    ],
+    "explicacion": "El NIST usa autenticación, integridad, confidencialidad y disponibilidad. El no repudio no es una de las cuatro. El cifrado es una contramedida, y no una categoría de amenaza."
+  },
+  {
+    "id": "aplicacion-077",
+    "concepto": "aplicacion-correo-amenazas",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 40
+    },
+    "pregunta": "Un atacante inunda un servidor de correo para que deje de atender mensajes. ¿De qué categoría es la amenaza?",
+    "correcta": "Disponibilidad",
+    "distractores": [
+      "Integridad",
+      "Autenticación"
+    ],
+    "explicacion": "Dejar sin servicio es una amenaza de disponibilidad. La integridad trata de modificar mensajes. La autenticación trata de suplantar identidades."
+  },
+  {
+    "id": "aplicacion-078",
+    "concepto": "aplicacion-correo-amenazas",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 40
+    },
+    "pregunta": "Un atacante envía correos haciéndose pasar por otro remitente. ¿De qué categoría es la amenaza?",
+    "correcta": "Autenticación",
+    "distractores": [
+      "Confidencialidad",
+      "Disponibilidad"
+    ],
+    "explicacion": "Suplantar al remitente es una amenaza de autenticación. La confidencialidad trata de leer los mensajes. La disponibilidad trata de dejar el servicio sin respuesta."
+  },
+  {
+    "id": "aplicacion-079",
+    "concepto": "aplicacion-correo-puertos-tls",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 42
+    },
+    "pregunta": "¿Cómo protege TLS el correo con los puertos seguros del estilo HTTPS, como SMTPS o IMAPS?",
+    "correcta": "Con puertos dedicados donde la conexión es TLS desde el inicio",
+    "distractores": [
+      "Con los puertos normales, y un comando que pasa la conexión a TLS",
+      "Con un servidor intermedio que cifra el tráfico entre los MTA"
+    ],
+    "explicacion": "Los puertos seguros llevan TLS desde el primer byte. Pasar a TLS con un comando en el puerto normal es STARTTLS. No hay intermedio que cifre entre MTA."
+  },
+  {
+    "id": "aplicacion-080",
+    "concepto": "aplicacion-correo-puertos-tls",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 42
+    },
+    "pregunta": "Un cliente descarga correo con POP3 sobre TLS. ¿Qué puerto usa?",
+    "correcta": "995",
+    "distractores": [
+      "110",
+      "993"
+    ],
+    "explicacion": "POP3S usa el 995. El 110 es el puerto normal de POP3, sin TLS. El 993 es de IMAPS."
+  },
+  {
+    "id": "aplicacion-081",
+    "concepto": "aplicacion-correo-puertos-tls",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 42
+    },
+    "pregunta": "¿Qué inconveniente se atribuye a los puertos seguros dedicados de TLS para el correo?",
+    "correcta": "Resultan confusos y pueden desperdiciar puertos",
+    "distractores": [
+      "Dejan sin cifrar las cabeceras de los mensajes que pasan por esos puertos",
+      "Exigen un certificado en el cliente además del servidor"
+    ],
+    "explicacion": "El temario dice que son confusos y gastan puertos. Cifran la conexión entera, con las cabeceras. No exigen certificado en el cliente."
+  },
+  {
+    "id": "aplicacion-082",
+    "concepto": "aplicacion-correo-starttls",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 43
+    },
+    "pregunta": "¿Qué hace STARTTLS?",
+    "correcta": "Convierte una conexión en texto plano en una segura, sin cambiar de puerto",
+    "distractores": [
+      "Abre un puerto adicional donde la conexión es TLS desde el primer mensaje",
+      "Firma los mensajes de correo para autenticar al servidor"
+    ],
+    "explicacion": "STARTTLS sube a TLS la conexión en texto plano, en el mismo puerto. Un puerto dedicado es el mecanismo de SMTPS, IMAPS y similares. STARTTLS no firma mensajes: negocia TLS."
+  },
+  {
+    "id": "aplicacion-083",
+    "concepto": "aplicacion-correo-starttls",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 43
+    },
+    "pregunta": "Un servidor SMTP responde 250 STARTTLS a un EHLO. ¿Qué indica?",
+    "correcta": "Que ofrece pasar la conexión a TLS",
+    "distractores": [
+      "Que ya ha cifrado la conexión",
+      "Que exige autenticación del cliente"
+    ],
+    "explicacion": "Esa línea anuncia que el servidor ofrece STARTTLS. La conexión sigue en texto plano hasta que el cliente lo pide. El anuncio no exige autenticación."
+  },
+  {
+    "id": "aplicacion-084",
+    "concepto": "aplicacion-correo-starttls",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 43
+    },
+    "pregunta": "Tras el comando STARTTLS y la respuesta 220 Go ahead, ¿qué sigue?",
+    "correcta": "Cliente y servidor negocian una sesión TLS por la misma conexión",
+    "distractores": [
+      "El cliente abre una conexión nueva a un puerto seguro dedicado",
+      "Cliente y servidor firman el siguiente EHLO"
+    ],
+    "explicacion": "La negociación TLS ocurre por la misma conexión. Abrir otra conexión a un puerto dedicado es el mecanismo antiguo. Ningún mensaje se firma en esa fase."
+  },
+  {
+    "id": "aplicacion-085",
+    "concepto": "aplicacion-dnssec",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Qué aporta DNSSEC a los datos DNS?",
+    "correcta": "Autenticación e integridad, mediante la firma de los datos",
+    "distractores": [
+      "Confidencialidad, mediante el cifrado de las consultas y de los datos",
+      "Disponibilidad, mediante réplicas de los servidores"
+    ],
+    "explicacion": "DNSSEC firma los datos DNS, y así da autenticación e integridad. No cifra las consultas, y no da confidencialidad. Las réplicas no son su mecanismo."
+  },
+  {
+    "id": "aplicacion-086",
+    "concepto": "aplicacion-dnssec",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "Un atacante falsifica una respuesta DNS. ¿Qué permite a un resolvedor detectarlo con DNSSEC?",
+    "correcta": "La firma de los registros, que DNSSEC añade con registros especiales",
+    "distractores": [
+      "El cifrado de las consultas entre cliente y servidor DNS, que impide leerlas en la red",
+      "La lista de IPs autorizadas de los emisores del dominio"
+    ],
+    "explicacion": "DNSSEC firma los registros, y una respuesta falsa no lleva una firma válida. El cifrado de consultas no está en DNSSEC. La lista de IPs autorizadas es SPF."
+  },
+  {
+    "id": "aplicacion-087",
+    "concepto": "aplicacion-dnssec",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "En el esquema del correo seguro, ¿para qué se protege con DNSSEC el DNS del emisor y el del receptor?",
+    "correcta": "Para que los registros de SPF, DKIM y DANE lleguen autenticados",
+    "distractores": [
+      "Para cifrar los mensajes de correo entre los dos MTA y que nadie los lea en tránsito",
+      "Para firmar el mensaje con la clave del emisor"
+    ],
+    "explicacion": "DNSSEC autentica los registros que publica el DNS, incluida la información de DANE. No cifra mensajes. La firma del mensaje la ponen DKIM y S/MIME."
+  },
+  {
+    "id": "aplicacion-088",
+    "concepto": "aplicacion-dane",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Qué permite DANE?",
+    "correcta": "Asociar certificados a nombres, guardándolos en servidores DNS",
+    "distractores": [
+      "Definir rangos de IPs de emisores autorizados para un dominio",
+      "Firmar las cabeceras y el cuerpo de un mensaje"
+    ],
+    "explicacion": "DANE guarda certificados asociados a nombres en el DNS. Los rangos de IPs autorizados son de SPF. Firmar cabeceras y cuerpo es de DKIM."
+  },
+  {
+    "id": "aplicacion-089",
+    "concepto": "aplicacion-dane",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Qué usa DANE para enviar la información de los certificados?",
+    "correcta": "DNSSEC",
+    "distractores": [
+      "SPF",
+      "STARTTLS"
+    ],
+    "explicacion": "DANE usa DNSSEC para que la información del DNS vaya autenticada. SPF publica IPs, y no certificados. STARTTLS inicia TLS en SMTP."
+  },
+  {
+    "id": "aplicacion-090",
+    "concepto": "aplicacion-dane",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "En el esquema del correo seguro, ¿qué publica el DNS del receptor en un registro TLSA?",
+    "correcta": "El certificado TLS del servidor SMTP receptor",
+    "distractores": [
+      "La clave pública DKIM con la que firma el MTA emisor, que el receptor necesita",
+      "Las IPs autorizadas del emisor"
+    ],
+    "explicacion": "El registro TLSA de DANE da el certificado TLS del servidor SMTP. La clave DKIM está en un registro del DNS del emisor. Las IPs autorizadas son de SPF, y están también en el DNS del emisor."
+  },
+  {
+    "id": "aplicacion-091",
+    "concepto": "aplicacion-spf",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Qué permite SPF a los dueños de un dominio?",
+    "correcta": "Definir los rangos de IPs de emisores autorizados para su dominio",
+    "distractores": [
+      "Firmar las cabeceras y el cuerpo de los mensajes que salen de sus MTA hacia otros dominios",
+      "Asociar certificados a nombres de dominio en el DNS"
+    ],
+    "explicacion": "SPF define qué IPs pueden enviar correo del dominio. La firma de mensajes es de DKIM. Asociar certificados a nombres es de DANE."
+  },
+  {
+    "id": "aplicacion-092",
+    "concepto": "aplicacion-spf",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "Un MTA receptor recibe un correo de un dominio desde una IP fuera de su registro SPF. ¿Qué concluye?",
+    "correcta": "Que esa IP no es un emisor autorizado del dominio",
+    "distractores": [
+      "Que el mensaje del dominio se modificó durante el tránsito",
+      "Que la firma DKIM del mensaje es inválida"
+    ],
+    "explicacion": "SPF dice si la IP está autorizada para el dominio. Detectar modificaciones corresponde a una firma, y SPF no firma. La firma DKIM es otro mecanismo, y SPF no la comprueba."
+  },
+  {
+    "id": "aplicacion-093",
+    "concepto": "aplicacion-spf",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Dónde publica un dominio las IPs que autoriza con SPF?",
+    "correcta": "En un registro TXT de su DNS",
+    "distractores": [
+      "En un registro TLSA de su DNS",
+      "En la cabecera Return-path de cada mensaje"
+    ],
+    "explicacion": "SPF se publica en un registro TXT del DNS. TLSA es el registro de DANE, para certificados. Return-path es la ruta de regreso, y no una lista de IPs."
+  },
+  {
+    "id": "aplicacion-094",
+    "concepto": "aplicacion-dkim",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Qué permite DKIM?",
+    "correcta": "Que los MTA firmen las cabeceras y el cuerpo de un mensaje",
+    "distractores": [
+      "Que los emisores conozcan la efectividad de sus SPF y DKIM",
+      "Que los dueños de un dominio definan las IPs autorizadas"
+    ],
+    "explicacion": "DKIM permite firmar cabeceras y cuerpo en el MTA. Conocer la efectividad de SPF y DKIM es de DMARC. Definir las IPs autorizadas es de SPF."
+  },
+  {
+    "id": "aplicacion-095",
+    "concepto": "aplicacion-dkim",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Cómo comprueba el MTA receptor una firma DKIM?",
+    "correcta": "Con la clave pública del MTA emisor, que obtiene de un registro del DNS",
+    "distractores": [
+      "Con la clave pública S/MIME del usuario que envió el mensaje",
+      "Con el certificado TLS del MTA emisor, que obtiene de un registro TLSA"
+    ],
+    "explicacion": "La clave pública de DKIM la publica el emisor en el DNS. La clave S/MIME es del usuario, y no la usa DKIM. El registro TLSA da el certificado TLS, y no la clave DKIM."
+  },
+  {
+    "id": "aplicacion-096",
+    "concepto": "aplicacion-dkim",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "Un correo lleva una firma DKIM y otra S/MIME. ¿Quién produce cada una?",
+    "correcta": "DKIM la produce el MTA emisor, y S/MIME el MUA del usuario",
+    "distractores": [
+      "DKIM la produce el MUA del usuario, y S/MIME el MTA emisor",
+      "Las dos las produce el MTA emisor, con su clave"
+    ],
+    "explicacion": "El MTA firma con DKIM, y el MUA con S/MIME con la clave privada del usuario. Invertir los papeles es el error habitual. S/MIME es del usuario y no del servidor."
+  },
+  {
+    "id": "aplicacion-097",
+    "concepto": "aplicacion-dmarc",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Qué permite DMARC a los emisores?",
+    "correcta": "Conocer la efectividad de sus SPF y DKIM ante ataques",
+    "distractores": [
+      "Definir los rangos de IPs de emisores autorizados",
+      "Firmar las cabeceras y el cuerpo de un mensaje"
+    ],
+    "explicacion": "DMARC da informes de la efectividad de SPF y DKIM. Los rangos de IPs son de SPF. La firma es de DKIM."
+  },
+  {
+    "id": "aplicacion-098",
+    "concepto": "aplicacion-dmarc",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "En el esquema del correo seguro, ¿qué indica un registro TXT de DMARC al MTA receptor?",
+    "correcta": "Que el emisor usa DKIM y SPF",
+    "distractores": [
+      "La clave pública con la que firma el MTA emisor",
+      "El certificado TLS del servidor SMTP receptor"
+    ],
+    "explicacion": "El registro DMARC avisa de que el emisor usa DKIM y SPF. La clave pública de firma está en el registro de DKIM. El certificado TLS está en el registro TLSA de DANE."
+  },
+  {
+    "id": "aplicacion-099",
+    "concepto": "aplicacion-dmarc",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    },
+    "pregunta": "Un dominio ya publica SPF y DKIM. ¿Qué añade DMARC para el dominio?",
+    "correcta": "Informes de si esos mecanismos funcionan ante ataques",
+    "distractores": [
+      "Una firma extra que sustituye la de DKIM en cada uno de los mensajes del dominio",
+      "Un cifrado del correo entre sus MTA"
+    ],
+    "explicacion": "DMARC informa de la efectividad de SPF y DKIM. No sustituye la firma de DKIM. No cifra el correo: no tiene que ver con TLS."
+  },
+  {
+    "id": "aplicacion-100",
+    "concepto": "aplicacion-smime-emisor",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 48
+    },
+    "pregunta": "En el esquema de integridad y confidencialidad de S/MIME, ¿qué hace el emisor con el mensaje, y en qué orden?",
+    "correcta": "Lo firma con su clave privada, y después cifra mensaje y firma con una clave de un solo uso",
+    "distractores": [
+      "Lo cifra con la clave pública del receptor, y después firma el resultado",
+      "Lo firma con la clave pública del receptor, y después cifra mensaje y firma con otra clave simétrica"
+    ],
+    "explicacion": "Primero se firma con la clave privada del emisor, y luego se cifra todo con una clave de un solo uso. Cifrar con la clave pública del receptor se hace solo con la clave de sesión. La firma exige una clave privada, y la del receptor la tiene solo el receptor."
+  },
+  {
+    "id": "aplicacion-101",
+    "concepto": "aplicacion-smime-emisor",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 48
+    },
+    "pregunta": "En S/MIME, ¿sobre qué se calcula la firma y con qué clave se produce?",
+    "correcta": "Sobre el hash del mensaje, con la clave privada del emisor",
+    "distractores": [
+      "Sobre el mensaje ya cifrado, con la clave privada del emisor",
+      "Sobre el hash del mensaje, con la clave pública del receptor"
+    ],
+    "explicacion": "Se firma el resumen del mensaje con la clave privada del emisor. En el esquema se firma antes de cifrar, y no el mensaje cifrado. La clave pública del receptor no firma: la usa el emisor para cifrar la clave de sesión."
+  },
+  {
+    "id": "aplicacion-102",
+    "concepto": "aplicacion-smime-emisor",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 48
+    },
+    "pregunta": "¿Cómo viaja la clave de sesión de un solo uso en S/MIME?",
+    "correcta": "Cifrada con la clave pública del receptor, junto con el mensaje",
+    "distractores": [
+      "Firmada con la clave privada del emisor, junto con el mensaje",
+      "En claro, porque solo sirve para ese mensaje"
+    ],
+    "explicacion": "La clave de sesión se cifra con la clave pública del receptor, y solo él la recupera. Una firma da autenticidad, y no confidencialidad: la clave quedaría a la vista. Enviarla en claro permitiría a cualquiera descifrar el mensaje."
+  },
+  {
+    "id": "aplicacion-103",
+    "concepto": "aplicacion-smime-receptor",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 48
+    },
+    "pregunta": "En S/MIME, ¿qué hace primero el receptor con un mensaje firmado y cifrado?",
+    "correcta": "Descifra la clave de sesión con su clave privada",
+    "distractores": [
+      "Verifica la firma con la clave pública del emisor",
+      "Descifra la clave de sesión con la clave pública del emisor"
+    ],
+    "explicacion": "La clave de sesión se recupera con la clave privada del receptor, y con ella se descifra el mensaje. La firma solo se puede verificar con el mensaje ya descifrado. La clave pública del emisor no descifra la clave de sesión."
+  },
+  {
+    "id": "aplicacion-104",
+    "concepto": "aplicacion-smime-receptor",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 48
+    },
+    "pregunta": "¿Con qué clave verifica el receptor la firma de un mensaje S/MIME?",
+    "correcta": "Con la clave pública del emisor",
+    "distractores": [
+      "Con la clave privada del emisor",
+      "Con la clave pública del receptor"
+    ],
+    "explicacion": "La firma se verifica con la clave pública del emisor. La clave privada del emisor no la tiene el receptor. La clave pública del receptor sirve para cifrar hacia él."
+  },
+  {
+    "id": "aplicacion-105",
+    "concepto": "aplicacion-smime-receptor",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 48
+    },
+    "pregunta": "Un atacante intercepta un mensaje S/MIME firmado y cifrado, y no tiene la clave privada del receptor. ¿Qué no puede hacer?",
+    "correcta": "Recuperar la clave de sesión y, por tanto, leer el mensaje",
+    "distractores": [
+      "Comprobar la firma, que exige la clave privada del emisor",
+      "Calcular el hash del mensaje, que se cifra con la clave privada"
+    ],
+    "explicacion": "Sin la clave privada del receptor no se recupera la clave de sesión, y el mensaje sigue cifrado. Comprobar la firma exige la clave pública del emisor, que es pública. El hash se calcula con el mensaje, y no con una clave."
+  },
+  {
+    "id": "aplicacion-106",
+    "concepto": "aplicacion-smime-algoritmos",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 49
+    },
+    "pregunta": "¿Qué algoritmo debe soportar S/MIME (MUST) para cifrar el mensaje con una clave de un solo uso?",
+    "correcta": "AES-128 con CBC",
+    "distractores": [
+      "Triple DES con CBC",
+      "AES-256 con CBC"
+    ],
+    "explicacion": "AES-128 con CBC es obligatorio. Triple DES con CBC es solo recomendado (SHOULD). AES-256 también es recomendado, y no obligatorio."
+  },
+  {
+    "id": "aplicacion-107",
+    "concepto": "aplicacion-smime-algoritmos",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 49
+    },
+    "pregunta": "Para formar la firma digital con un resumen, ¿qué combinación debe soportar S/MIME (MUST)?",
+    "correcta": "RSA con SHA-256",
+    "distractores": [
+      "RSA con SHA-1",
+      "DSA con SHA-256"
+    ],
+    "explicacion": "RSA con SHA-256 es la combinación obligatoria. RSA con SHA-1 es solo recomendada. DSA con SHA-256 también es solo recomendada."
+  },
+  {
+    "id": "aplicacion-108",
+    "concepto": "aplicacion-smime-algoritmos",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 49
+    },
+    "pregunta": "Además de AES-128, ¿qué tamaños de clave AES recomienda S/MIME (SHOULD) para cifrar el mensaje?",
+    "correcta": "192 y 256 bits",
+    "distractores": [
+      "256 y 512 bits",
+      "56 y 112 bits"
+    ],
+    "explicacion": "S/MIME recomienda AES-192 y AES-256. AES no tiene una variante de 512 bits. Los tamaños de 56 y 112 bits son de DES y 3DES."
+  },
+  {
+    "id": "aplicacion-109",
+    "concepto": "aplicacion-smime-tipos-contenido",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 50
+    },
+    "pregunta": "¿Qué tipo de contenido de CMS usa S/MIME para aplicar una firma digital a un mensaje?",
+    "correcta": "SignedData",
+    "distractores": [
+      "EnvelopedData",
+      "CompressedData"
+    ],
+    "explicacion": "SignedData lleva la firma digital. EnvelopedData lleva datos encriptados. CompressedData lleva datos comprimidos."
+  },
+  {
+    "id": "aplicacion-110",
+    "concepto": "aplicacion-smime-tipos-contenido",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 50
+    },
+    "pregunta": "Un usuario quiere enviar un mensaje S/MIME cifrado para un destinatario. ¿Qué tipo de contenido usa?",
+    "correcta": "EnvelopedData",
+    "distractores": [
+      "SignedData",
+      "Data"
+    ],
+    "explicacion": "EnvelopedData es el tipo de datos encriptados. SignedData solo firma. Data es el propio contenido MIME codificado, sin protección."
+  },
+  {
+    "id": "aplicacion-111",
+    "concepto": "aplicacion-smime-tipos-contenido",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 50
+    },
+    "pregunta": "¿Qué tipo de contenido CMS es el propio contenido MIME codificado, sin firma ni cifrado?",
+    "correcta": "Data",
+    "distractores": [
+      "CompressedData",
+      "SignedData"
+    ],
+    "explicacion": "Data es el contenido MIME codificado. CompressedData añade compresión. SignedData añade una firma."
+  },
+  {
+    "id": "aplicacion-112",
+    "concepto": "aplicacion-smime-clear-signing",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 50
+    },
+    "pregunta": "¿Qué es el clear signing en S/MIME?",
+    "correcta": "Firmar un mensaje y poner mensaje y firma a continuación, sin formato especial",
+    "distractores": [
+      "Firmar un mensaje y encapsularlo con su firma en un formato especial",
+      "Firmar un mensaje y cifrarlo después con una clave de un solo uso"
+    ],
+    "explicacion": "El clear signing deja mensaje y firma uno tras otro, sin formato especial. Encapsularlos en un formato especial es SignedData. Cifrarlo después ya no es clear signing."
+  },
+  {
+    "id": "aplicacion-113",
+    "concepto": "aplicacion-smime-clear-signing",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 50
+    },
+    "pregunta": "¿Por qué un receptor sin S/MIME puede leer un mensaje con clear signing?",
+    "correcta": "Porque el mensaje va sin formato especial, y le basta con el tipo MIME",
+    "distractores": [
+      "Porque el mensaje va cifrado con una clave que todo receptor conoce",
+      "Porque va encapsulado en un SignedData que cualquier cliente abre"
+    ],
+    "explicacion": "En clear signing el mensaje va en claro y le basta el tipo MIME. No va cifrado. El SignedData sí exige entender S/MIME."
+  },
+  {
+    "id": "aplicacion-114",
+    "concepto": "aplicacion-smime-clear-signing",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 50
+    },
+    "pregunta": "¿Qué diferencia a SignedData del clear signing?",
+    "correcta": "En SignedData, el mensaje y la firma se encapsulan en un formato especial",
+    "distractores": [
+      "SignedData cifra el mensaje, y el clear signing solo lo firma",
+      "En clear signing, la firma se calcula con la clave pública del receptor"
+    ],
+    "explicacion": "SignedData encapsula mensaje y firma en un formato especial. SignedData tampoco cifra: solo firma. La firma de clear signing usa la clave privada del emisor."
+  },
+  {
+    "id": "aplicacion-115",
+    "concepto": "aplicacion-smime-objeto-pkcs",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 51
+    },
+    "pregunta": "¿Qué se añade a una entidad MIME firmada o cifrada para producir un objeto PKCS?",
+    "correcta": "Datos de seguridad, identificación de algoritmos y certificados",
+    "distractores": [
+      "Solo la firma digital o la clave de sesión cifrada",
+      "Una cabecera multipart/signed y la clave pública del receptor"
+    ],
+    "explicacion": "El objeto PKCS lleva datos de seguridad, algoritmos y certificados. No lleva solo la firma o la clave. La cabecera multipart/signed es del clear signing."
+  },
+  {
+    "id": "aplicacion-116",
+    "concepto": "aplicacion-smime-objeto-pkcs",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 51
+    },
+    "pregunta": "¿Cómo se vuelve a presentar el objeto PKCS para viajar por el correo?",
+    "correcta": "Como una entidad MIME, normalmente codificada en base64",
+    "distractores": [
+      "Como una entidad MIME en ASCII de 7 bits, sin codificar",
+      "Como un adjunto cifrado con la clave pública del receptor"
+    ],
+    "explicacion": "El objeto se procesa como un mensaje y se codifica en base64. Sin codificar no pasaría por SMTP. El cifrado ya está dentro del objeto."
+  },
+  {
+    "id": "aplicacion-117",
+    "concepto": "aplicacion-smime-objeto-pkcs",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 51
+    },
+    "pregunta": "¿De qué formas se puede asegurar una entidad MIME?",
+    "correcta": "Firmándola, encriptándola o de ambas formas",
+    "distractores": [
+      "Solo firmándola o solo encriptándola, no de ambas formas",
+      "Firmándola y comprimiéndola, pero no encriptándola"
+    ],
+    "explicacion": "Una entidad MIME se puede firmar, encriptar o ambas. S/MIME admite firmar y encriptar a la vez. La compresión es otro tipo, y se puede encriptar."
+  },
+  {
+    "id": "aplicacion-118",
+    "concepto": "aplicacion-smime-signeddata",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 52
+    },
+    "pregunta": "¿Qué se cifra con la clave privada del firmante al preparar un SignedData?",
+    "correcta": "El resumen (digest) del contenido",
+    "distractores": [
+      "El contenido completo del mensaje, cifrado con la clave privada del firmante",
+      "La clave de sesión"
+    ],
+    "explicacion": "Se calcula el resumen del contenido y se cifra con la clave privada. Cifrar el contenido completo sería confidencialidad. La clave de sesión es de EnvelopedData."
+  },
+  {
+    "id": "aplicacion-119",
+    "concepto": "aplicacion-smime-signeddata",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 52
+    },
+    "pregunta": "¿Qué contiene el bloque SignerInfo?",
+    "correcta": "El certificado de clave pública del firmante, los algoritmos y el resumen cifrado",
+    "distractores": [
+      "La clave privada del firmante y el resumen en claro",
+      "El identificador del certificado del destinatario y la clave de sesión cifrada"
+    ],
+    "explicacion": "SignerInfo lleva certificado, identificadores de algoritmos y el resumen cifrado. La clave privada nunca viaja. Identificador del destinatario y clave de sesión son de RecipientInfo."
+  },
+  {
+    "id": "aplicacion-120",
+    "concepto": "aplicacion-smime-signeddata",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 52
+    },
+    "pregunta": "¿En qué fichero adjunto se introduce el objeto S/MIME de un SignedData?",
+    "correcta": "smime.p7m",
+    "distractores": [
+      "smime.p7s",
+      "smime.p7c"
+    ],
+    "explicacion": "El objeto S/MIME va en smime.p7m. El fichero smime.p7s es el de la firma del clear signing. El smime.p7c no sale en el temario."
+  },
+  {
+    "id": "aplicacion-121",
+    "concepto": "aplicacion-smime-envelopeddata",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 54
+    },
+    "pregunta": "¿Cómo se cifra el contenido en un EnvelopedData?",
+    "correcta": "Con una clave de sesión pseudoaleatoria de un algoritmo simétrico",
+    "distractores": [
+      "Con la clave pública RSA de cada destinatario, una para cada uno de los receptores del mensaje",
+      "Con la clave privada del emisor"
+    ],
+    "explicacion": "El contenido se cifra con una clave de sesión simétrica. La clave pública RSA cifra solo la clave de sesión. La clave privada del emisor es la que firma."
+  },
+  {
+    "id": "aplicacion-122",
+    "concepto": "aplicacion-smime-envelopeddata",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 54
+    },
+    "pregunta": "Un mensaje S/MIME se envía a 3 destinatarios. ¿Cuántas veces se cifra la clave de sesión, y con qué?",
+    "correcta": "3 veces, una por destinatario, con su clave pública RSA",
+    "distractores": [
+      "Una vez, con una clave compartida por los tres destinatarios, que se acuerda aparte",
+      "3 veces, con la misma clave simétrica"
+    ],
+    "explicacion": "Para cada destinatario se cifra la clave de sesión con su clave pública. Una clave compartida por todos no existe en el esquema. Cifrar con la misma clave simétrica no permite que cada uno use su clave privada."
+  },
+  {
+    "id": "aplicacion-123",
+    "concepto": "aplicacion-smime-envelopeddata",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 54
+    },
+    "pregunta": "¿Qué contiene el bloque RecipientInfo?",
+    "correcta": "El identificador del certificado del destinatario, el algoritmo y la clave de sesión cifrada",
+    "distractores": [
+      "El certificado de clave pública del firmante, los algoritmos usados y el resumen cifrado con su clave privada",
+      "La clave de sesión en claro y el identificador del certificado del emisor"
+    ],
+    "explicacion": "RecipientInfo lleva el identificador del certificado del destinatario, el algoritmo y la clave de sesión cifrada. El certificado del firmante y el resumen son de SignerInfo. La clave de sesión no viaja en claro."
+  },
+  {
+    "id": "aplicacion-124",
+    "concepto": "aplicacion-smime-compatibilidad",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 47
+    },
+    "pregunta": "¿Para qué sirve la conversión radix-64 en S/MIME?",
+    "correcta": "Para convertir un mensaje cifrado en una cadena ASCII, compatible con el correo",
+    "distractores": [
+      "Para comprimir el mensaje antes de almacenarlo o transmitirlo, con ZIP o un algoritmo similar",
+      "Para cifrar la clave de sesión con la clave pública del receptor"
+    ],
+    "explicacion": "Radix-64 da compatibilidad con el correo, pasando a ASCII. Comprimir lo hace ZIP. Cifrar la clave de sesión es otro paso."
+  },
+  {
+    "id": "aplicacion-125",
+    "concepto": "aplicacion-smime-compatibilidad",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 47
+    },
+    "pregunta": "¿Qué función cumple ZIP en S/MIME?",
+    "correcta": "Comprimir el mensaje para guardarlo o transmitirlo",
+    "distractores": [
+      "Convertir el mensaje cifrado a una cadena ASCII",
+      "Resumir el mensaje para formar la firma digital"
+    ],
+    "explicacion": "ZIP comprime el mensaje. Pasar a ASCII lo hace radix-64. El resumen para la firma sale de una función hash."
+  },
+  {
+    "id": "aplicacion-126",
+    "concepto": "aplicacion-smime-compatibilidad",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 47
+    },
+    "pregunta": "¿Por qué un mensaje S/MIME cifrado pasa por radix-64 antes de enviarse?",
+    "correcta": "Porque el cifrado produce bytes arbitrarios, y el correo exige texto ASCII",
+    "distractores": [
+      "Porque el cifrado deja el mensaje demasiado largo y hay que comprimirlo",
+      "Porque la firma exige un formato en base 64 para verificarse"
+    ],
+    "explicacion": "El cifrado da bytes arbitrarios, y SMTP exige ASCII. La compresión es de ZIP. La firma se verifica sin pasar por radix-64."
+  },
+  {
     "id": "ssl-tls-029",
     "concepto": "transporte-aead-tls",
     "tema": "ssl-tls",
