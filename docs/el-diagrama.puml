@@ -7,18 +7,18 @@
 !pragma layout smetana
 skinparam classAttributeIconSize 0
 skinparam shadowing false
-title Las clases de app/\n+ es público, - es privado, <<ts-rs>> sale a interfaz/src/tipos/
+title Las clases de app/\n+ es público, - es privado, <<tsify>> sale a interfaz/src/nucleo/ como tipo de TypeScript
 left to right direction
 
 package nucleo {
-  class Examen <<examen.json>> {
+  class Examen <<examen.json, tsify>> {
     +titulo: String
     +preguntas: u32
     +opciones: u32
     +minutos: u32
     +penalizacion: f64
   }
-  class Pregunta <<preguntas.json>> {
+  class Pregunta <<preguntas.json, tsify>> {
     +id: String
     +concepto: String
     +tema: String
@@ -27,11 +27,16 @@ package nucleo {
     +distractores: Vec<String>
     +explicacion: String
   }
-  class Respuesta <<una línea de respuestas.jsonl>> {
+  class Respuesta <<una línea de respuestas.jsonl, tsify>> {
     +id: String
     +ts: String
-    +acierto: bool
+    +resultado: Resultado
     +seguro: bool
+  }
+  class Datos <<tsify>> {
+    +examen: Examen
+    +banco: Vec<Pregunta>
+    +historial: Vec<Respuesta>
   }
   enum Concepto {
     SinVer
@@ -47,30 +52,30 @@ package nucleo {
     -hasta(n): usize
     -barajar(lista)
   }
-  enum Inicio <<ts-rs>> {
+  enum Inicio <<tsify>> {
     BancoVacio { titulo }
     Listo { titulo, sesion, simulacro, tarjeta }
   }
-  class Simulacro <<ts-rs>> {
+  class Simulacro <<tsify>> {
     +segundos: u32
     +preguntas: Vec<PreguntaDeSesion>
   }
-  enum Resultado <<ts-rs>> {
+  enum Resultado <<tsify>> {
     Acierto
     Fallo
     Blanco
   }
-  class Cierre <<ts-rs>> {
+  class Cierre <<tsify>> {
     +preguntas: u32
     +resultados: Vec<Resultado>
   }
-  class NotaDelSimulacro <<ts-rs>> {
+  class NotaDelSimulacro <<tsify>> {
     +aciertos: u32
     +fallos: u32
     +en_blanco: u32
     +nota: String
   }
-  class Tarjeta <<ts-rs>> {
+  class Tarjeta <<tsify>> {
     +sabes: u32
     +no_sabes: u32
     +sin_ver: u32
@@ -82,13 +87,13 @@ package nucleo {
     +en_blanco: u32
     +dudas: Vec<Dudas>
   }
-  class Dudas <<ts-rs>> {
+  class Dudas <<tsify>> {
     +texto: String
     +conceptos: u32
     +porcentaje: u32
     +detalle: Option<String>
   }
-  class PreguntaDeSesion <<ts-rs>> {
+  class PreguntaDeSesion <<tsify>> {
     +id: String
     +tema: String
     +concepto: String
@@ -100,7 +105,7 @@ package nucleo {
     +paso_tras_seguro: String
     +paso_tras_otra: String
   }
-  enum Ronda <<ts-rs>> {
+  enum Ronda <<tsify>> {
     Inicio
     Pregunta { contestada }
     Final
@@ -115,12 +120,26 @@ package nucleo {
     +sesion(banco, historial, ahora, azar): Vec<PreguntaDeSesion>
     +simulacro(examen, banco, historial, azar): Simulacro
     +nota_del_simulacro(cierre, penalizacion): NotaDelSimulacro
+    +corregir(pregunta, opcion, seguro, ahora): Respuesta
+    +restante(empieza, segundos, ahora): ms
     +segundos(ts): Option<i64>
+    +hora(segundos): ts
     -estados(banco, historial): concepto → (Concepto, vence)
     -de_la_ronda(pregunta, estados, azar): PreguntaDeSesion
     -cuenta(banco, historial): (sabes, no sabes, sin ver)
     -probabilidad(sabes, acierto, objetivo, examen): f64
     -binomial(n, k, p): f64
+  }
+  class "wasm.rs" as wasm <<wasm-bindgen>> {
+    las horas van en ms, como Date.now()
+    --
+    +inicio(datos, objetivo): Inicio
+    +sesion(datos, ahora): PreguntaDeSesion[]
+    +simulacro(datos, ahora): Simulacro
+    +corregir(pregunta, opcion, seguro, ahora): Respuesta
+    +restante(empieza, segundos, ahora): ms
+    +nota(cierre, penalizacion): NotaDelSimulacro
+    -azar(ahora): Azar, con la hora de semilla
   }
 }
 
@@ -135,18 +154,15 @@ package servidor {
     --
     GET /:examen → 308 /:examen/
     GET /:examen/ → pagina → index.html
-    GET /:examen/api/inicio?objetivo → inicio → Inicio
-    GET /:examen/api/sesion → sesion → PreguntaDeSesion[]
-    GET /:examen/api/simulacro → simulacro → Simulacro
-    POST /:examen/api/cierre → cierre, con un Cierre → NotaDelSimulacro
+    GET /:examen/api/inicio → inicio → Datos
     POST /:examen/api/respuestas → responder → 204
     GET /assets/* → dist/assets
+    todo va con gzip
   }
   class "lectura" as lectura {
     -leer_examen(carpetas, examen): Examen
     -leer_banco(carpetas, examen): Vec<Pregunta>
     -leer_historial(carpetas, examen): Vec<Respuesta>
-    -leer_ronda(carpetas, examen): (banco, historial, ahora, Azar)
     -leer_si_existe(ruta): bytes
     -error_interno(e): 500
   }
@@ -154,19 +170,20 @@ package servidor {
 
 package interfaz {
   class "App.svelte" as App {
-    -inicio: Inicio
+    -datos: Datos
+    -inicio: Inicio, de nucleo.inicio(datos, objetivo)
     -objetivo: number, en localStorage <examen>-objetivo
     -ronda: Ronda
     -preguntas: PreguntaDeSesion[]
     -i: number
-    -aciertos: number
-    -eleccion: { opcion o null, seguro }
+    -eleccion: { opcion o null, respuesta }
     -error: string
     -simulacro: boolean
     -resultados: Resultado[]
     -nota: NotaDelSimulacro
-    -limite: ms
-    -restante: segundos
+    -empieza: ms
+    -segundos: number
+    -restante: ms
     --
     -empezar(comoSimulacro)
     -contar(), cada segundo
@@ -174,20 +191,12 @@ package interfaz {
     -siguiente()
     -terminar()
     -cargarInicio()
-    -cambiarObjetivo()
     -volver()
     -abandonar()
   }
-  class "tipos/*.ts" as tipos <<generado>> {
-    Inicio
-    Tarjeta
-    Dudas
-    PreguntaDeSesion
-    Ronda
-    Simulacro
-    Resultado
-    Cierre
-    NotaDelSimulacro
+  class "nucleo/nucleo.js y nucleo.d.ts" as generado <<generado>> {
+    las funciones de wasm.rs
+    los tipos <<tsify>>
   }
 }
 
@@ -204,19 +213,18 @@ funciones --> Simulacro : devuelve
 Simulacro *-- PreguntaDeSesion
 funciones ..> Cierre : lee
 Cierre *-- Resultado
+Respuesta *-- Resultado
+Datos *-- Examen
+Datos *-- Pregunta
+Datos *-- Respuesta
 funciones --> NotaDelSimulacro : devuelve
 rutas *-- Carpetas : estado
 rutas ..> lectura : lee la carpeta
-rutas ..> funciones : llama
-Inicio ..> tipos : ts-rs genera
-Tarjeta ..> tipos : ts-rs genera
-PreguntaDeSesion ..> tipos : ts-rs genera
-Ronda ..> tipos : ts-rs genera
-Simulacro ..> tipos : ts-rs genera
-Resultado ..> tipos : ts-rs genera
-Cierre ..> tipos : ts-rs genera
-NotaDelSimulacro ..> tipos : ts-rs genera
-App ..> tipos : importa
+rutas ..> Datos : devuelve
+rutas ..> Respuesta : valida
+wasm ..> funciones : llama
+wasm ..> generado : wasm-bindgen genera
+App ..> generado : importa y llama
 App ..> rutas : HTTP
 @enduml
 
@@ -248,23 +256,23 @@ skinparam shadowing false
 title El viaje de una sesión
 
 participant "App.svelte" as App
+participant "nucleo (WASM)" as N
 participant servidor as S
-participant nucleo as N
 database "carpeta del examen" as C
 
-App -> S : GET api/inicio?objetivo
+App -> S : GET api/inicio
 S -> C : examen.json, preguntas.json, respuestas.jsonl
-S -> N : inicio(examen, banco, historial, objetivo)
+S --> App : Datos { examen, banco, historial }
+App -> N : inicio(datos, objetivo)
 N --> App : Inicio (BancoVacio o Listo)
 
-App -> S : GET api/sesion
-S -> C : preguntas.json, respuestas.jsonl
-S -> N : sesion(banco, historial, ahora, Azar::new(nanos))
+App -> N : sesion(datos, Date.now())
 N --> App : 12 PreguntaDeSesion
 
 loop cada pregunta
-  note over App : el acierto es la opción elegida igual a correcta
-  App -> S : POST api/respuestas [id, ts, acierto, seguro]
+  App -> N : corregir(pregunta, opcion, seguro, Date.now())
+  N --> App : Respuesta, en blanco sin opción
+  App -> S : POST api/respuestas [id, ts, resultado, seguro]
   S -> C : añade a respuestas.jsonl la que no está
   S --> App : 204
   note over App : muestra paso_tras_seguro o paso_tras_otra
@@ -276,16 +284,18 @@ skinparam shadowing false
 title El final de un simulacro
 
 participant "App.svelte" as App
+participant "nucleo (WASM)" as N
 participant servidor as S
-participant nucleo as N
 
-App -> S : GET api/simulacro
-S -> N : simulacro(examen, banco, historial, Azar::new(nanos))
+App -> N : simulacro(datos, Date.now())
 N --> App : Simulacro { segundos, preguntas }
-note over App : limite = ahora + segundos; contar() cada segundo
-note over App : cada respuesta va a POST api/respuestas, como en la sesión
-App -> S : POST api/cierre { preguntas, resultados }
-S -> N : nota_del_simulacro(cierre, penalizacion)
+note over App : empieza = Date.now()
+loop cada segundo, contar()
+  App -> N : restante(empieza, segundos, Date.now())
+  N --> App : ms que quedan; a 0, terminar()
+end
+note over App : cada respuesta va a POST api/respuestas, como en la sesión;\nuna pregunta sin contestar al pasar el límite no va
+App -> N : nota({ preguntas, resultados }, penalizacion)
 note over N : cada pregunta sin resultado cuenta en blanco
 N --> App : NotaDelSimulacro
 @enduml
