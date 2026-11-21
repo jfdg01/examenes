@@ -99,20 +99,23 @@ El historial es una lista de respuestas que solo crece, con una respuesta por l�
 {"id": "rgpd-001", "ts": "2026-11-06T18:02:11Z", "acierto": true, "seguro": false}
 ```
 
-La interfaz calcula todo el estado con esta lista: la caja de cada pregunta y el dominio de cada concepto. Dos dispositivos no tienen conflictos, porque cada uno solo añade líneas.
+La interfaz calcula todo el estado con esta lista: el paso de cada concepto y su fecha de repaso. Dos dispositivos no tienen conflictos, porque cada uno solo añade líneas.
 
 El historial no entra en git. El servidor lo guarda en `respuestas.jsonl`, en la carpeta del examen.
 
 Una respuesta huérfana tiene un `id` que no está en el banco. Una pregunta que la regla 6 cambia deja sus respuestas huérfanas. La interfaz no usa las respuestas huérfanas en ninguna cuenta, y el archivo las conserva, porque una línea borrada no tiene vuelta atrás.
 
-## La confianza y las cajas
+## La confianza y el paso del concepto
 
-Antes de ver la solución, marcas "seguro" o "dudo". La pregunta va a una de 3 cajas:
+Antes de ver la solución, marcas "seguro" o "dudo". El historial, ordenado por `ts`, da a cada concepto un paso y una fecha de repaso:
 
-| Respuesta | Caja siguiente |
-|---|---|
-| Fallo, o acierto con "dudo" | Caja 1 |
-| Acierto con "seguro" | Una caja más, hasta la 3 |
+| Respuesta a una pregunta del concepto | Paso siguiente | El concepto vence |
+|---|---|---|
+| Ninguna | Sin ver | |
+| Acierto con "seguro" | Un paso más | En `ts` + el hueco del paso |
+| Fallo, acierto con "dudo" o pregunta en blanco | Paso 0 | En el acto |
+
+El hueco del paso N es 10 minutos × 3^(N − 1): 10 min, 30 min, 1 h 30 min, 4 h 30 min, 13 h 30 min, 40 h… Cada acierto con "seguro" sube el paso, aunque el concepto no haya vencido. Las respuestas del simulacro también mueven el paso.
 
 Cada concepto tiene uno de 3 estados. La última respuesta a una pregunta del concepto decide el estado:
 
@@ -124,17 +127,17 @@ Cada concepto tiene uno de 3 estados. La última respuesta a una pregunta del co
 
 Un acierto con "seguro" en una pregunta basta para saber el concepto, porque sus preguntas preguntan el mismo dato. Un fallo posterior en otra pregunta del concepto muestra una idea falsa, y el concepto pasa a "no lo sabes".
 
-Una sesión tiene 12 preguntas, y llena sus huecos en este orden:
+Una sesión tiene 12 preguntas, una por concepto, y llena sus huecos en este orden:
 
-1. Las preguntas de la caja 1.
-2. Una pregunta al azar de cada concepto sin ver.
-3. Un sorteo sin repetición, para los huecos que quedan.
+1. Los conceptos vencidos, del vencido hace más tiempo al vencido hace menos. Mientras quedan conceptos sin ver, los vencidos llenan 8 huecos como mucho.
+2. Los conceptos sin ver, al azar.
+3. Los conceptos que vencen antes.
 
-El paso 2 da la vuelta a todo el banco antes del repaso, porque un concepto nuevo enseña un dato, y una pregunta hermana solo lo confirma. El sorteo no saca otra pregunta de un concepto sin ver, así que un concepto sale una sola vez en su vuelta. Con todos los conceptos vistos, el paso 2 queda vacío.
+Los 4 huecos del paso 2 dan la vuelta a todo el banco mientras sigue el repaso, porque un concepto nuevo enseña un dato. Con todos los conceptos vistos, los vencidos llenan los 12 huecos.
 
-En el sorteo, una pregunta nueva y una pregunta de la caja 2 pesan 1, y una pregunta de la caja 3 pesa 0,5. Así, un grupo grande sale más, y todo el banco avanza a la vez. Las 12 preguntas salen en un orden al azar, con los temas y las cajas mezclados.
+De cada concepto sale una pregunta sin respuestas, al azar entre las de ese concepto. Si todas tienen respuestas, sale la de la respuesta más vieja. Así las preguntas hermanas se turnan. Las 12 preguntas salen en un orden al azar, con los temas mezclados.
 
-Un bloque de estudio termina con una pausa de 3 horas sin respuestas. Una pregunta de la caja 2 o de la caja 3 no sale en el bloque de su última respuesta. La caja 1 sale en cada sesión. Una sesión sin preguntas dice que el repaso vuelve después de una pausa de 3 horas.
+El título de la pregunta muestra "nuevo" para un concepto sin ver, o "paso N". La línea de la fuente muestra el paso del concepto.
 
 Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
 
@@ -222,7 +225,7 @@ Una sesión sin preguntas pendientes muestra la fecha de la próxima pregunta, y
 
 ## El simulacro
 
-El simulacro copia los parámetros del examen: `preguntas` preguntas al azar de todo el banco, sin mirar las cajas, y `minutos` minutos. Es el repaso de los últimos días.
+El simulacro copia los parámetros del examen: `preguntas` preguntas al azar de todo el banco, sin mirar los pasos, y `minutos` minutos. Es el repaso de los últimos días.
 
 Un reloj en la cabecera cuenta atrás desde los `minutos` del examen. Con el reloj en 0:00, el simulacro termina y cada pregunta sin contestar cuenta en blanco.
 
@@ -287,7 +290,7 @@ El test tiene 2 partes independientes: la interfaz y el banco. El formato de `pr
 
 ### La interfaz
 
-La interfaz tiene el servidor, la página web, las cajas, el simulacro y las imágenes de las páginas.
+La interfaz tiene el servidor, la página web, los pasos, el simulacro y las imágenes de las páginas.
 
 - La página lee `preguntas.json`, y no tiene ninguna pregunta en su código.
 - Los tests de la interfaz usan `ln/preguntas-ejemplo.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
@@ -325,4 +328,4 @@ node --test
 python3 -m unittest
 ```
 
-`node --test` prueba `logica.js`, la lógica de las cajas, de la sesión, del simulacro y del guardado de la ronda, sin el DOM. `python3 -m unittest` prueba `serve.py`, `sacar_paginas.py` y `comprobar_banco.py`.
+`node --test` prueba `logica.js`, la lógica de los pasos, de la sesión, del simulacro y del guardado de la ronda, sin el DOM. `python3 -m unittest` prueba `serve.py`, `sacar_paginas.py` y `comprobar_banco.py`.
