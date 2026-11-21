@@ -78,6 +78,13 @@ class ComprobarBanco(unittest.TestCase):
                 self.assertEqual(len(errores), 1)
                 self.assertIn("rgpd-brecha-plazo", errores[0])
 
+    def test_un_concepto_de_sigla_tiene_1_pregunta(self):
+        sigla = pregunta(concepto="sigla-rgpd")
+        self.assertEqual(comprobar([sigla], LN), [])
+        errores = comprobar([sigla, pregunta(id="rgpd-002", concepto="sigla-rgpd")], LN)
+        self.assertEqual(len(errores), 1)
+        self.assertIn("sigla-rgpd", errores[0])
+
     def test_el_script_falla_con_un_banco_con_errores(self):
         with tempfile.TemporaryDirectory() as tmp:
             banco = Path(tmp) / "preguntas.json"

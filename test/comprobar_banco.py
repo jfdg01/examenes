@@ -31,8 +31,10 @@ def comprobar(preguntas, carpeta):
         elif fuente.get("pagina", 0) > paginas(pdf):
             errores.append(f"{id_}: la página {fuente.get('pagina')} pasa de las {paginas(pdf)} de {pdf.name}")
     for concepto, n in collections.Counter(p.get("concepto") for p in preguntas).items():
-        if n not in (2, 3):
-            errores.append(f"{concepto}: {n} pregunta{'s' if n != 1 else ''}, y no 2 o 3")
+        validos = (1,) if str(concepto).startswith("sigla-") else (2, 3)
+        if n not in validos:
+            esperado = " o ".join(map(str, validos))
+            errores.append(f"{concepto}: {n} pregunta{'s' if n != 1 else ''}, y no {esperado}")
     return errores
 
 
