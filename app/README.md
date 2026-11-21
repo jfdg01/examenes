@@ -24,6 +24,7 @@ El servidor recibe la raíz de los exámenes y su dirección. Sirve cada carpeta
 
 - `GET api/inicio` da el examen, el banco y el historial.
 - `POST api/respuestas` añade al historial cada respuesta que no está. Una línea de `respuestas.jsonl` lleva `id`, `ts`, `resultado` (`Acierto`, `Fallo` o `Blanco`) y `seguro`.
+- `GET api/ronda` da `ronda.json`, y `PUT api/ronda` escribe el guardado más nuevo entre el que llega y el de `ronda.json`: `{"guardada", "ronda"}`, con la hora del guardado en milisegundos y la ronda a medias o `null`. La interfaz guarda la misma ronda en la clave `<carpeta>-ronda` de `localStorage`, y al cargar envía el guardado más nuevo de los dos.
 
 ## La WASM
 

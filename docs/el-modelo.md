@@ -1,6 +1,6 @@
 # El modelo de la práctica
 
-La app tiene 2 máquinas de estados: el paso de un concepto y la ronda. Las 2 se calculan desde `respuestas.jsonl`, y ningún estado se guarda aparte. `nucleo` calcula el paso y la sesión, y la interfaz guarda la ronda en memoria.
+La app tiene 2 máquinas de estados: el paso de un concepto y la ronda. El paso se calcula desde `respuestas.jsonl`. La ronda a medias se guarda en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
 
 ## El paso de un concepto
 
@@ -19,7 +19,7 @@ Rust tiene un `enum Concepto { SinVer, Paso(u32) }`.
 - Cada pregunta pasa de **sin contestar** a **contestada**, y la pantalla muestra la solución. El simulacro añade el botón "En blanco" y el reloj.
 - La última pregunta lleva al **final**, y el final vuelve al inicio. El botón ✕ también vuelve al inicio.
 - Un simulacro con el `limite` pasado va al final. Cada pregunta sin contestar cuenta en blanco para la nota, y no entra en el historial.
-- La ronda a medias vive en `localStorage` y en el servidor. Al cargar, gana el guardado más nuevo.
+- La ronda a medias vive en `localStorage` y en el servidor, con sus ids, sus resultados y el límite del simulacro. Al cargar, gana el guardado más nuevo, y la ronda sigue en la primera pregunta sin resultado. Una ronda con un id que ya no está en el banco no se restaura.
 
 Rust tiene un `enum Ronda { Inicio, Pregunta { contestada: bool }, Final }`.
 
