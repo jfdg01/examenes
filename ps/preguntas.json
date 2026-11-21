@@ -9742,5 +9742,853 @@
       "MitM: situarse entre cliente y servidor para modificar el tráfico que pasa"
     ],
     "explicacion": "El híbrido protege el tráfico capturado hoy. Downgrade y MitM son otros ataques."
+  },
+  {
+    "id": "introduccion-s01",
+    "concepto": "sigla-pgp",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué significa la sigla PGP?",
+    "correcta": "Pretty Good Privacy",
+    "distractores": [
+      "Protected Gateway Protocol",
+      "Private Group Provider"
+    ],
+    "explicacion": "PGP significa Pretty Good Privacy: PGP es un programa de cifrado y firma de correo con claves públicas. Protected Gateway Protocol suena a protocolo de red, y PGP no es un protocolo de pasarela. Private Group Provider suena a servicio de grupos, y PGP no es un proveedor."
+  },
+  {
+    "id": "introduccion-s02",
+    "concepto": "sigla-wpa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué significa la sigla WPA?",
+    "correcta": "Wi-Fi Protected Access",
+    "distractores": [
+      "Wireless Packet Authentication",
+      "Web Protocol Application"
+    ],
+    "explicacion": "WPA significa Wi-Fi Protected Access: WPA es el mecanismo de seguridad de las redes Wi-Fi, en la capa host-red. Wireless Packet Authentication inventa una autenticación por paquete que WPA no define. Web Protocol Application lo confunde con un protocolo de capa de aplicación, y WPA va en la capa host-red."
+  },
+  {
+    "id": "introduccion-s03",
+    "concepto": "sigla-aes",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué significa la sigla AES?",
+    "correcta": "Advanced Encryption Standard",
+    "distractores": [
+      "Asymmetric Encryption Standard",
+      "Authenticated Encryption System"
+    ],
+    "explicacion": "AES significa Advanced Encryption Standard: AES es un algoritmo de cifrado simétrico robusto. Asymmetric Encryption Standard lo hace de clave pública, y AES es simétrico. Authenticated Encryption System lo confunde con el cifrado autenticado, y AES solo cifra."
+  },
+  {
+    "id": "introduccion-s04",
+    "concepto": "sigla-des",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué significa la sigla DES?",
+    "correcta": "Data Encryption Standard",
+    "distractores": [
+      "Digital Encryption Signature",
+      "Double Encryption Scheme"
+    ],
+    "explicacion": "DES significa Data Encryption Standard: DES es un algoritmo de cifrado simétrico, hoy débil por su clave corta. Digital Encryption Signature mezcla cifrado y firma, y DES no firma. Double Encryption Scheme lo confunde con 3DES, que sí cifra varias veces."
+  },
+  {
+    "id": "introduccion-s05",
+    "concepto": "sigla-dsa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué significa la sigla DSA?",
+    "correcta": "Digital Signature Algorithm",
+    "distractores": [
+      "Data Security Algorithm",
+      "Distributed Session Authentication"
+    ],
+    "explicacion": "DSA significa Digital Signature Algorithm: DSA es un algoritmo de clave pública para firmar. Data Security Algorithm es un nombre genérico que no existe como estándar. Distributed Session Authentication lo confunde con la autenticación de sesión, y DSA firma mensajes."
+  },
+  {
+    "id": "introduccion-s06",
+    "concepto": "sigla-rsa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué significa la sigla RSA?",
+    "correcta": "Rivest-Shamir-Adleman",
+    "distractores": [
+      "Randomized Symmetric Algorithm",
+      "Remote Secure Authentication"
+    ],
+    "explicacion": "RSA significa Rivest-Shamir-Adleman: RSA es un algoritmo de clave pública, y su sigla son las iniciales de sus 3 autores. Randomized Symmetric Algorithm lo hace simétrico, y RSA es de clave pública. Remote Secure Authentication lo lee como un protocolo de acceso remoto, y RSA es un algoritmo."
+  },
+  {
+    "id": "introduccion-s07",
+    "concepto": "sigla-mac",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué significa la sigla MAC?",
+    "correcta": "Message Authentication Code",
+    "distractores": [
+      "Message Authentication Channel",
+      "Message Access Certificate"
+    ],
+    "explicacion": "MAC significa Message Authentication Code: un MAC es un valor calculado con un secreto compartido que da integridad y autenticidad al mensaje. Message Authentication Channel lo hace un canal, y un MAC es un valor que se añade al mensaje. Message Access Certificate mezcla el MAC con los certificados, y un MAC no es un certificado."
+  },
+  {
+    "id": "claves-s01",
+    "concepto": "sigla-kdc",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué significa la sigla KDC?",
+    "correcta": "Key Distribution Center",
+    "distractores": [
+      "Key Derivation Certificate",
+      "Kerberos Data Channel"
+    ],
+    "explicacion": "KDC significa Key Distribution Center: un KDC es el servidor con el que cada usuario comparte una clave maestra y que reparte claves de sesión. Key Derivation Certificate lo confunde con un certificado, y un KDC no es un documento. Kerberos Data Channel lo confunde con un canal de datos, y un KDC es un servidor."
+  },
+  {
+    "id": "claves-s02",
+    "concepto": "sigla-ca",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué significa la sigla CA?",
+    "correcta": "Certification Authority",
+    "distractores": [
+      "Cryptographic Algorithm",
+      "Certificate Archive"
+    ],
+    "explicacion": "CA significa Certification Authority: una CA es la entidad que firma certificados, y cualquiera con su clave pública los verifica. Cryptographic Algorithm es un nombre genérico, y una CA es una entidad. Certificate Archive lo confunde con un directorio de certificados, y una CA los firma."
+  },
+  {
+    "id": "claves-s03",
+    "concepto": "sigla-crl",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Qué significa la sigla CRL?",
+    "correcta": "Certificate Revocation List",
+    "distractores": [
+      "Certificate Renewal Log",
+      "Cryptographic Reference Library"
+    ],
+    "explicacion": "CRL significa Certificate Revocation List: una CRL es la lista de certificados revocados que mantiene cada CA. Certificate Renewal Log habla de renovar, y la CRL lista los revocados. Cryptographic Reference Library suena a biblioteca de código, y una CRL es una lista de certificados."
+  },
+  {
+    "id": "claves-s04",
+    "concepto": "sigla-ocsp",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Qué significa la sigla OCSP?",
+    "correcta": "Online Certificate Status Protocol",
+    "distractores": [
+      "Open Certificate Signing Process",
+      "Offline Certificate Storage Policy"
+    ],
+    "explicacion": "OCSP significa Online Certificate Status Protocol: OCSP es el protocolo para consultar en línea el estado de un solo certificado. Open Certificate Signing Process lo confunde con la emisión, y OCSP consulta el estado. Offline Certificate Storage Policy lo hace sin conexión, y OCSP es en línea."
+  },
+  {
+    "id": "claves-s05",
+    "concepto": "sigla-dos",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué significa la sigla DoS?",
+    "correcta": "Denial of Service",
+    "distractores": [
+      "Delay of Signature",
+      "Distribution of Secrets"
+    ],
+    "explicacion": "DoS significa Denial of Service: un ataque DoS busca que un servidor deje de estar disponible. Delay of Signature no es un ataque conocido. Distribution of Secrets suena a reparto de claves, y un DoS no reparte nada."
+  },
+  {
+    "id": "claves-s06",
+    "concepto": "sigla-pki",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 32
+    },
+    "pregunta": "¿Qué significa la sigla PKI?",
+    "correcta": "Public Key Infrastructure",
+    "distractores": [
+      "Private Key Interface",
+      "Protected Key Integration"
+    ],
+    "explicacion": "PKI significa Public Key Infrastructure: una PKI es el conjunto de hardware, software, personas y políticas que crea, distribuye y revoca certificados. Private Key Interface habla de claves privadas, y la PKI gestiona certificados de clave pública. Protected Key Integration no existe como sistema, y la P es de public."
+  },
+  {
+    "id": "transporte-s01",
+    "concepto": "sigla-ssl",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿Qué significa la sigla SSL?",
+    "correcta": "Secure Sockets Layer",
+    "distractores": [
+      "Secure Session Link",
+      "Safe Socket Language"
+    ],
+    "explicacion": "SSL significa Secure Sockets Layer: SSL es la capa de seguridad entre aplicación y TCP creada por Netscape. Secure Session Link inventa un enlace de sesión que SSL no define. Safe Socket Language lo lee como un lenguaje, y SSL es un protocolo."
+  },
+  {
+    "id": "transporte-s02",
+    "concepto": "sigla-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿Qué significa la sigla TLS?",
+    "correcta": "Transport Layer Security",
+    "distractores": [
+      "Trusted Link Service",
+      "Transmission Line Standard"
+    ],
+    "explicacion": "TLS significa Transport Layer Security: TLS es la evolución de SSL que asegura la web, el correo y más. Trusted Link Service suena a servicio de confianza, y TLS es un protocolo. Transmission Line Standard lo confunde con un estándar físico de cableado, y TLS va sobre TCP."
+  },
+  {
+    "id": "transporte-s03",
+    "concepto": "sigla-cbc",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué significa la sigla CBC?",
+    "correcta": "Cipher Block Chaining",
+    "distractores": [
+      "Cipher Binary Code",
+      "Chained Block Certificate"
+    ],
+    "explicacion": "CBC significa Cipher Block Chaining: CBC es el modo de cifrado por bloques que encadena cada bloque con el anterior mediante un IV. Cipher Binary Code habla de código binario, y CBC es un modo de cifrado de bloques. Chained Block Certificate lo confunde con un certificado, y CBC no firma ni certifica."
+  },
+  {
+    "id": "transporte-s04",
+    "concepto": "sigla-iv",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué significa la sigla IV?",
+    "correcta": "Initialization Vector",
+    "distractores": [
+      "Integrity Verification",
+      "Internal Variable"
+    ],
+    "explicacion": "IV significa Initialization Vector: un IV es el valor inicial que se usa para arrancar el cifrado en modo CBC. Integrity Verification lo confunde con la comprobación de integridad, que hace el MAC. Internal Variable lo toma por una variable de programa, y un IV es un valor criptográfico."
+  },
+  {
+    "id": "transporte-s05",
+    "concepto": "sigla-dss",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué significa la sigla DSS?",
+    "correcta": "Digital Signature Standard",
+    "distractores": [
+      "Data Security System",
+      "Distributed Secret Sharing"
+    ],
+    "explicacion": "DSS significa Digital Signature Standard: DSS es el estándar de firma digital, y en TLS permite una suite que solo firma. Data Security System es un nombre genérico, y DSS es un estándar de firma. Distributed Secret Sharing lo confunde con el reparto de secretos, y DSS firma."
+  },
+  {
+    "id": "transporte-s06",
+    "concepto": "sigla-prf",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué significa la sigla PRF?",
+    "correcta": "Pseudo-Random Function",
+    "distractores": [
+      "Public Registry Format",
+      "Protected Response Frame"
+    ],
+    "explicacion": "PRF significa Pseudo-Random Function: la PRF genera bloques de números aleatorios para crear o validar claves. Public Registry Format suena a formato de registro, y la PRF es una función. Protected Response Frame suena a trama de red, y la PRF no es una trama."
+  },
+  {
+    "id": "transporte-s07",
+    "concepto": "sigla-psk",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 43
+    },
+    "pregunta": "¿Qué significa la sigla PSK?",
+    "correcta": "Pre-Shared Key",
+    "distractores": [
+      "Public Session Key",
+      "Proxy Secret Key"
+    ],
+    "explicacion": "PSK significa Pre-Shared Key: una PSK es una clave compartida de antemano, que permite enviar datos desde el primer paquete. Public Session Key la hace pública, y una PSK es un secreto compartido. Proxy Secret Key la liga a un proxy, y una PSK es de las 2 partes."
+  },
+  {
+    "id": "transporte-s08",
+    "concepto": "sigla-aead",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 45
+    },
+    "pregunta": "¿Qué significa la sigla AEAD?",
+    "correcta": "Authenticated Encryption with Associated Data",
+    "distractores": [
+      "Asymmetric Encryption with Appended Digest",
+      "Authorized Encryption for Application Data"
+    ],
+    "explicacion": "AEAD significa Authenticated Encryption with Associated Data: AEAD es el cifrado que da confidencialidad e integridad a la vez, como GCM o ChaCha20-Poly1305. Asymmetric Encryption with Appended Digest lo hace asimétrico, y AEAD es simétrico. Authorized Encryption for Application Data cambia autenticado por autorizado, y AEAD autentica."
+  },
+  {
+    "id": "transporte-s09",
+    "concepto": "sigla-gcm",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 46
+    },
+    "pregunta": "¿Qué significa la sigla GCM?",
+    "correcta": "Galois/Counter Mode",
+    "distractores": [
+      "Generic Cipher Method",
+      "Grouped Chained Mode"
+    ],
+    "explicacion": "GCM significa Galois/Counter Mode: GCM es un modo de cifrado autenticado que usa GCTR para cifrar y GHASH para el hash. Generic Cipher Method es un nombre genérico, y GCM es un modo concreto. Grouped Chained Mode lo confunde con el encadenado de CBC, y GCM usa un contador."
+  },
+  {
+    "id": "transporte-s10",
+    "concepto": "sigla-ecdhe",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 52
+    },
+    "pregunta": "¿Qué significa la sigla ECDHE?",
+    "correcta": "Elliptic Curve Diffie-Hellman Ephemeral",
+    "distractores": [
+      "Elliptic Curve Digital Hash Encryption",
+      "Encrypted Certificate Diffie-Hellman Exchange"
+    ],
+    "explicacion": "ECDHE significa Elliptic Curve Diffie-Hellman Ephemeral: ECDHE es el intercambio de claves Diffie-Hellman con curvas elípticas y claves efímeras. Elliptic Curve Digital Hash Encryption lo hace un cifrado, y ECDHE acuerda claves. Encrypted Certificate Diffie-Hellman Exchange lo liga a certificados cifrados, y sus claves son efímeras."
+  },
+  {
+    "id": "transporte-s11",
+    "concepto": "sigla-ecdsa",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 52
+    },
+    "pregunta": "¿Qué significa la sigla ECDSA?",
+    "correcta": "Elliptic Curve Digital Signature Algorithm",
+    "distractores": [
+      "Elliptic Curve Data Security Agreement",
+      "Encrypted Certificate Digital Signing Authority"
+    ],
+    "explicacion": "ECDSA significa Elliptic Curve Digital Signature Algorithm: ECDSA es el algoritmo de firma digital con curvas elípticas. Elliptic Curve Data Security Agreement lo hace un acuerdo, y ECDSA es un algoritmo. Encrypted Certificate Digital Signing Authority lo confunde con una CA, y ECDSA es un algoritmo."
+  },
+  {
+    "id": "aplicacion-s01",
+    "concepto": "sigla-hsts",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué significa la sigla HSTS?",
+    "correcta": "HTTP Strict Transport Security",
+    "distractores": [
+      "HTTP Secure Transfer Service",
+      "Hybrid Session Token System"
+    ],
+    "explicacion": "HSTS significa HTTP Strict Transport Security: HSTS es la cabecera con la que un sitio obliga al navegador a usar solo HTTPS durante un tiempo. HTTP Secure Transfer Service lo confunde con HTTPS, y HSTS obliga a usarlo. Hybrid Session Token System lo toma por un sistema de sesiones, y HSTS es una cabecera."
+  },
+  {
+    "id": "aplicacion-s02",
+    "concepto": "sigla-hpkp",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Qué significa la sigla HPKP?",
+    "correcta": "HTTP Public Key Pinning",
+    "distractores": [
+      "HTTP Private Key Protection",
+      "HTTP Protected Keep-alive Protocol"
+    ],
+    "explicacion": "HPKP significa HTTP Public Key Pinning: HPKP es la cabecera que fija las claves públicas del servidor para conexiones futuras. HTTP Private Key Protection habla de claves privadas, y HPKP fija claves públicas. HTTP Protected Keep-alive Protocol lo liga a conexiones persistentes, y HPKP fija claves."
+  },
+  {
+    "id": "aplicacion-s03",
+    "concepto": "sigla-ssh",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué significa la sigla SSH?",
+    "correcta": "Secure Shell",
+    "distractores": [
+      "Secure Socket Handshake",
+      "Signed Session Host"
+    ],
+    "explicacion": "SSH significa Secure Shell: SSH es el protocolo para conexiones seguras entre equipos que sustituye a utilidades de acceso remoto inseguras. Secure Socket Handshake lo confunde con el handshake de TLS, y SSH es un protocolo entero. Signed Session Host lo toma por un servidor, y SSH es un protocolo."
+  },
+  {
+    "id": "aplicacion-s04",
+    "concepto": "sigla-dnssec",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 41
+    },
+    "pregunta": "¿Qué significa la sigla DNSSEC?",
+    "correcta": "Domain Name System Security Extensions",
+    "distractores": [
+      "Domain Name Secure Encryption Certificates",
+      "Dynamic Network Service Security Control"
+    ],
+    "explicacion": "DNSSEC significa Domain Name System Security Extensions: DNSSEC firma los datos DNS para dar autenticación e integridad. Domain Name Secure Encryption Certificates lo liga al cifrado, y DNSSEC firma pero no cifra. Dynamic Network Service Security Control lo toma por un control de red, y DNSSEC amplía el DNS."
+  },
+  {
+    "id": "aplicacion-s05",
+    "concepto": "sigla-dane",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 41
+    },
+    "pregunta": "¿Qué significa la sigla DANE?",
+    "correcta": "DNS-based Authentication of Named Entities",
+    "distractores": [
+      "Domain-based Access to Network Encryption",
+      "DNS-based Authorization of Network Endpoints"
+    ],
+    "explicacion": "DANE significa DNS-based Authentication of Named Entities: DANE asocia certificados a nombres guardándolos en servidores DNS. Domain-based Access to Network Encryption lo hace un control de acceso, y DANE autentica entidades. DNS-based Authorization of Network Endpoints cambia autenticación por autorización, y DANE autentica."
+  },
+  {
+    "id": "aplicacion-s06",
+    "concepto": "sigla-spf",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 41
+    },
+    "pregunta": "¿Qué significa la sigla SPF?",
+    "correcta": "Sender Policy Framework",
+    "distractores": [
+      "Secure Packet Filtering",
+      "Signed Public Fingerprint"
+    ],
+    "explicacion": "SPF significa Sender Policy Framework: SPF permite a un dominio definir los rangos de IPs autorizados a enviar su correo. Secure Packet Filtering lo confunde con un cortafuegos, y SPF actúa sobre el correo. Signed Public Fingerprint lo liga a firmas, y SPF lista emisores autorizados."
+  },
+  {
+    "id": "aplicacion-s07",
+    "concepto": "sigla-dkim",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 41
+    },
+    "pregunta": "¿Qué significa la sigla DKIM?",
+    "correcta": "DomainKeys Identified Mail",
+    "distractores": [
+      "Digital Key Integrity Module",
+      "Domain Key Interchange Mechanism"
+    ],
+    "explicacion": "DKIM significa DomainKeys Identified Mail: DKIM permite a los MTA firmar las cabeceras y el cuerpo de un mensaje. Digital Key Integrity Module lo toma por un módulo de claves, y DKIM firma correo. Domain Key Interchange Mechanism lo confunde con un reparto de claves, y DKIM firma mensajes."
+  },
+  {
+    "id": "aplicacion-s08",
+    "concepto": "sigla-dmarc",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 41
+    },
+    "pregunta": "¿Qué significa la sigla DMARC?",
+    "correcta": "Domain-based Message Authentication, Reporting, and Conformance",
+    "distractores": [
+      "Digital Mail Authentication and Routing Control",
+      "Domain Mail Access and Relay Configuration"
+    ],
+    "explicacion": "DMARC significa Domain-based Message Authentication, Reporting, and Conformance: DMARC permite a los emisores conocer la efectividad de su SPF y su DKIM. Digital Mail Authentication and Routing Control lo liga al encaminado, y DMARC informa. Domain Mail Access and Relay Configuration lo toma por una configuración de acceso, y DMARC informa."
+  },
+  {
+    "id": "aplicacion-s09",
+    "concepto": "sigla-s-mime",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 46
+    },
+    "pregunta": "¿Qué significa la sigla S/MIME?",
+    "correcta": "Secure/Multipurpose Internet Mail Extensions",
+    "distractores": [
+      "Signed/Multilayer Internet Message Encryption",
+      "Secure/Managed Internet Mail Exchange"
+    ],
+    "explicacion": "S/MIME significa Secure/Multipurpose Internet Mail Extensions: S/MIME es la mejora de seguridad de MIME que firma y cifra los mensajes de correo. Signed/Multilayer Internet Message Encryption cambia las palabras, y S/MIME es de seguridad en MIME. Secure/Managed Internet Mail Exchange lo confunde con un intercambio de correo, y S/MIME es una extensión."
+  },
+  {
+    "id": "aplicacion-s10",
+    "concepto": "sigla-cms",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 46
+    },
+    "pregunta": "¿Qué significa la sigla CMS?",
+    "correcta": "Cryptographic Message Syntax",
+    "distractores": [
+      "Certificate Management System",
+      "Cipher Mode Specification"
+    ],
+    "explicacion": "CMS significa Cryptographic Message Syntax: CMS es la sintaxis para firmar y cifrar mensajes en la que se basa S/MIME. Certificate Management System lo confunde con una gestión de certificados, y CMS define mensajes. Cipher Mode Specification lo toma por un modo de cifrado, y CMS es una sintaxis."
+  },
+  {
+    "id": "aplicacion-s11",
+    "concepto": "sigla-pkcs",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 51
+    },
+    "pregunta": "¿Qué significa la sigla PKCS?",
+    "correcta": "Public-Key Cryptography Standards",
+    "distractores": [
+      "Private Key Certificate Syntax",
+      "Protected Key Control Specification"
+    ],
+    "explicacion": "PKCS significa Public-Key Cryptography Standards: PKCS es la familia de estándares de criptografía de clave pública a la que pertenece el objeto que produce S/MIME. Private Key Certificate Syntax habla de claves privadas, y PKCS es de clave pública. Protected Key Control Specification lo toma por un control de claves, y PKCS son estándares."
+  },
+  {
+    "id": "ssl-tls-s01",
+    "concepto": "sigla-hmac",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué significa la sigla HMAC?",
+    "correcta": "Hash-based Message Authentication Code",
+    "distractores": [
+      "Hidden Message Access Control",
+      "Hardware Module Authentication Certificate"
+    ],
+    "explicacion": "HMAC significa Hash-based Message Authentication Code: un HMAC es un código de autenticación calculado con una función hash y una clave. Hidden Message Access Control lo confunde con el MAC de red, y un HMAC no controla accesos. Hardware Module Authentication Certificate lo liga a hardware y certificados, y un HMAC usa un hash."
+  },
+  {
+    "id": "ssl-tls-s02",
+    "concepto": "sigla-mitm",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué significa la sigla MitM?",
+    "correcta": "Man-in-the-Middle",
+    "distractores": [
+      "Machine-in-the-Mirror",
+      "Message-in-Transit Monitor"
+    ],
+    "explicacion": "MitM significa Man-in-the-Middle: un MitM es el atacante que se coloca entre las 2 partes e intercepta o altera su comunicación. Machine-in-the-Mirror no existe como ataque. Message-in-Transit Monitor lo toma por una herramienta de monitorización, y un MitM es un ataque."
+  },
+  {
+    "id": "ssl-tls-s03",
+    "concepto": "sigla-beast",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué significa la sigla BEAST?",
+    "correcta": "Browser Exploit Against SSL/TLS Tool",
+    "distractores": [
+      "Block Encryption Attack on Secure Transport",
+      "Buffer Exploit Against Session Tokens"
+    ],
+    "explicacion": "BEAST significa Browser Exploit Against SSL/TLS Tool: BEAST es el ataque que explota los IV predecibles de CBC en SSLv3 y TLSv1. Block Encryption Attack on Secure Transport es plausible pero no es el nombre. Buffer Exploit Against Session Tokens lo toma por un desbordamiento de memoria, y BEAST ataca el cifrado."
+  },
+  {
+    "id": "ssl-tls-s04",
+    "concepto": "sigla-ecb",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué significa la sigla ECB?",
+    "correcta": "Electronic Code Book",
+    "distractores": [
+      "Encrypted Chained Block",
+      "Elliptic Curve Binding"
+    ],
+    "explicacion": "ECB significa Electronic Code Book: ECB es el modo de cifrado por bloques que cifra cada bloque por separado, sin encadenar. Encrypted Chained Block lo encadena, y ECB no encadena los bloques. Elliptic Curve Binding lo toma por curvas elípticas, y ECB es un modo de cifrado de bloques."
+  },
+  {
+    "id": "ssl-tls-s05",
+    "concepto": "sigla-crime",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 52
+    },
+    "pregunta": "¿Qué significa la sigla CRIME?",
+    "correcta": "Compression Ratio Info-leak Made Easy",
+    "distractores": [
+      "Cipher Replay Injection for Man-in-the-Echo",
+      "Certificate Revocation Information Made Easy"
+    ],
+    "explicacion": "CRIME significa Compression Ratio Info-leak Made Easy: CRIME es el ataque que usa la compresión de TLS para descifrar partes de peticiones HTTPS. Cipher Replay Injection for Man-in-the-Echo inventa una repetición de mensajes cifrados. Certificate Revocation Information Made Easy lo confunde con la revocación, y CRIME ataca la compresión."
+  },
+  {
+    "id": "ssl-tls-s06",
+    "concepto": "sigla-breach",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 66
+    },
+    "pregunta": "¿Qué significa la sigla BREACH?",
+    "correcta": "Browser Reconnaissance and Exfiltration via Adaptive Compression of Hypertext",
+    "distractores": [
+      "Block Ratio Encryption Attack on Compressed Hypertext",
+      "Browser Replay Exploit Against Certificate Handshakes"
+    ],
+    "explicacion": "BREACH significa Browser Reconnaissance and Exfiltration via Adaptive Compression of Hypertext: BREACH es el ataque que aprovecha la compresión HTTP de las respuestas para descifrar secretos del cuerpo. Block Ratio Encryption Attack on Compressed Hypertext no es el nombre, aunque cite la compresión. Browser Replay Exploit Against Certificate Handshakes lo toma por un ataque al handshake, y BREACH ataca la compresión."
+  },
+  {
+    "id": "ssl-tls-s07",
+    "concepto": "sigla-poodle",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 78
+    },
+    "pregunta": "¿Qué significa la sigla POODLE?",
+    "correcta": "Padding Oracle On Downgraded Legacy Encryption",
+    "distractores": [
+      "Packet Overflow On Decrypted Legacy Encapsulation",
+      "Poisoned Oracle Of Downgraded Layered Exchange"
+    ],
+    "explicacion": "POODLE significa Padding Oracle On Downgraded Legacy Encryption: POODLE es el ataque al padding de SSLv3 con CBC. Packet Overflow On Decrypted Legacy Encapsulation lo hace un desbordamiento, y POODLE ataca el padding. Poisoned Oracle Of Downgraded Layered Exchange cambia padding por envenenamiento, y POODLE usa un oráculo de padding."
+  },
+  {
+    "id": "ssl-tls-s08",
+    "concepto": "sigla-freak",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 101
+    },
+    "pregunta": "¿Qué significa la sigla FREAK?",
+    "correcta": "Factoring RSA Export Keys",
+    "distractores": [
+      "Forcing RSA Encrypted Authentication Keys",
+      "Forging RSA Exchange Key Authorities"
+    ],
+    "explicacion": "FREAK significa Factoring RSA Export Keys: FREAK es el ataque que fuerza claves RSA de exportación de 40 bits, fáciles de factorizar. Forcing RSA Encrypted Authentication Keys no es el nombre, y habla de autenticación. Forging RSA Exchange Key Authorities lo confunde con falsificar CAs, y FREAK factoriza claves débiles."
+  },
+  {
+    "id": "ssl-tls-s09",
+    "concepto": "sigla-ev",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 106
+    },
+    "pregunta": "¿Qué significa la sigla EV?",
+    "correcta": "Extended Validation",
+    "distractores": [
+      "Enhanced Verification",
+      "Encrypted Verification"
+    ],
+    "explicacion": "EV significa Extended Validation: un certificado EV es el que exige una validación ampliada de la identidad de la organización. Enhanced Verification cambia las palabras, y la sigla es de validación. Encrypted Verification lo hace un cifrado, y un certificado EV no cifra más que otro."
+  },
+  {
+    "id": "ssl-tls-s10",
+    "concepto": "sigla-ct",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 106
+    },
+    "pregunta": "¿Qué significa la sigla CT?",
+    "correcta": "Certificate Transparency",
+    "distractores": [
+      "Certificate Trust",
+      "Certified Transport"
+    ],
+    "explicacion": "CT significa Certificate Transparency: CT es el sistema de registros públicos donde se buscan los certificados emitidos. Certificate Trust lo confunde con la confianza, y CT publica certificados. Certified Transport lo toma por un transporte, y CT es sobre certificados."
+  },
+  {
+    "id": "ssl-tls-s11",
+    "concepto": "sigla-drown",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 108
+    },
+    "pregunta": "¿Qué significa la sigla DROWN?",
+    "correcta": "Decrypting RSA with Obsolete and Weakened eNcryption",
+    "distractores": [
+      "Downgrading RSA with Outdated Weak Negotiation",
+      "Detecting Random Oracles With Network Noise"
+    ],
+    "explicacion": "DROWN significa Decrypting RSA with Obsolete and Weakened eNcryption: DROWN es el ataque que usa SSLv2 para descifrar tráfico TLS recuperando la clave privada RSA. Downgrading RSA with Outdated Weak Negotiation lo hace un ataque de degradación, y DROWN descifra. Detecting Random Oracles With Network Noise lo toma por un detector de ruido, y DROWN descifra tráfico."
+  },
+  {
+    "id": "ssl-tls-s12",
+    "concepto": "sigla-doh",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 114
+    },
+    "pregunta": "¿Qué significa la sigla DoH?",
+    "correcta": "DNS over HTTPS",
+    "distractores": [
+      "DNS over Hardware",
+      "Domain over Host"
+    ],
+    "explicacion": "DoH significa DNS over HTTPS: DoH resuelve las peticiones DNS a través de HTTPS para evitar escuchas y manipulación. DNS over Hardware no existe como estándar. Domain over Host no existe como estándar, y DoH usa HTTPS."
+  },
+  {
+    "id": "ssl-tls-s13",
+    "concepto": "sigla-sni",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 115
+    },
+    "pregunta": "¿Qué significa la sigla SNI?",
+    "correcta": "Server Name Indication",
+    "distractores": [
+      "Secure Network Identifier",
+      "Session Negotiation Index"
+    ],
+    "explicacion": "SNI significa Server Name Indication: SNI es la extensión en la que el cliente indica en claro el nombre del servidor al que va. Secure Network Identifier lo toma por un identificador seguro, y el SNI viaja en claro. Session Negotiation Index lo toma por un índice de sesión, y SNI nombra al servidor."
+  },
+  {
+    "id": "ssl-tls-s14",
+    "concepto": "sigla-esni",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 115
+    },
+    "pregunta": "¿Qué significa la sigla ESNI?",
+    "correcta": "Encrypted Server Name Indication",
+    "distractores": [
+      "Extended Session Negotiation Identifier",
+      "Enhanced Secure Network Interface"
+    ],
+    "explicacion": "ESNI significa Encrypted Server Name Indication: ESNI es el estándar que cifra el nombre del host que envía el SNI. Extended Session Negotiation Identifier lo toma por una negociación de sesión, y ESNI cifra el SNI. Enhanced Secure Network Interface lo toma por una interfaz de red, y ESNI es una extensión de TLS."
+  },
+  {
+    "id": "ssl-tls-s15",
+    "concepto": "sigla-ech",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 122
+    },
+    "pregunta": "¿Qué significa la sigla ECH?",
+    "correcta": "Encrypted Client Hello",
+    "distractores": [
+      "Elliptic Curve Handshake",
+      "Extended Certificate Header"
+    ],
+    "explicacion": "ECH significa Encrypted Client Hello: ECH es el estándar que cifra el ClientHello entero mediante un doble handshake Outer e Inner. Elliptic Curve Handshake lo toma por curvas elípticas, y ECH cifra el ClientHello. Extended Certificate Header lo toma por una cabecera de certificado, y ECH cifra el primer mensaje."
+  },
+  {
+    "id": "ssl-tls-s16",
+    "concepto": "sigla-alpn",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 122
+    },
+    "pregunta": "¿Qué significa la sigla ALPN?",
+    "correcta": "Application-Layer Protocol Negotiation",
+    "distractores": [
+      "Authenticated Link Protocol Notification",
+      "Asymmetric Layer Key Negotiation"
+    ],
+    "explicacion": "ALPN significa Application-Layer Protocol Negotiation: ALPN es la extensión de TLS con la que cliente y servidor negocian el protocolo de aplicación. Authenticated Link Protocol Notification lo toma por un aviso autenticado, y ALPN negocia. Asymmetric Layer Key Negotiation lo toma por una negociación de claves, y ALPN negocia el protocolo."
+  },
+  {
+    "id": "ssl-tls-s17",
+    "concepto": "sigla-alpaca",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 124
+    },
+    "pregunta": "¿Qué significa la sigla ALPACA?",
+    "correcta": "Application Layer Protocols Allowing Cross-Protocol Attacks",
+    "distractores": [
+      "Authenticated Layer Protocol Attack on Certificate Authorities",
+      "Asymmetric Link Packet Attack on Cipher Algorithms"
+    ],
+    "explicacion": "ALPACA significa Application Layer Protocols Allowing Cross-Protocol Attacks: ALPACA es el ataque de confusión de protocolo cruzado que redirige a la víctima a otro servicio con el mismo certificado. Authenticated Layer Protocol Attack on Certificate Authorities lo hace un ataque a CAs, y ALPACA aprovecha un certificado compartido. Asymmetric Link Packet Attack on Cipher Algorithms lo hace un ataque a algoritmos, y ALPACA es de protocolos."
+  },
+  {
+    "id": "ssl-tls-s18",
+    "concepto": "sigla-ml-kem",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 126
+    },
+    "pregunta": "¿Qué significa la sigla ML-KEM?",
+    "correcta": "Module-Lattice-Based Key-Encapsulation Mechanism",
+    "distractores": [
+      "Multi-Layer Key Exchange Method",
+      "Message-Length Keyed Encryption Mode"
+    ],
+    "explicacion": "ML-KEM significa Module-Lattice-Based Key-Encapsulation Mechanism: ML-KEM es el mecanismo post-cuántico de encapsulación de claves que el NIST estandarizó. Multi-Layer Key Exchange Method lo hace de capas, y ML-KEM es de retículos. Message-Length Keyed Encryption Mode lo toma por un modo de cifrado, y ML-KEM encapsula claves."
   }
 ]
