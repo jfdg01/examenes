@@ -257,7 +257,7 @@ function textoDelPaso(concepto) {
 
 function hoja(q, siguiente) {
   return el("div", { className: "hoja" }, el("div", {},
-    el("p", { textContent: q.explicacion }),
+    el("p", { className: "expl", textContent: q.explicacion }),
     el("button", { className: "grande", textContent: "Siguiente", onclick: siguiente }),
     fuentes(q)));
 }
