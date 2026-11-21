@@ -28,14 +28,7 @@ async fn arrancar(raiz: &Path) -> String {
 }
 
 async fn inicio(url: &str, carpeta: &str) -> Value {
-    reqwest::get(format!("{url}/{carpeta}/api/inicio"))
-        .await
-        .unwrap()
-        .error_for_status()
-        .unwrap()
-        .json()
-        .await
-        .unwrap()
+    reqwest::get(format!("{url}/{carpeta}/api/inicio")).await.unwrap().error_for_status().unwrap().json().await.unwrap()
 }
 
 #[tokio::test]
@@ -44,7 +37,7 @@ async fn el_inicio_da_el_titulo_del_examen() {
     crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
     let url = arrancar(raiz.path()).await;
 
-    assert_eq!(inicio(&url, "ln").await, json!({ "titulo": "LN", "banco_vacio": false }));
+    assert_eq!(inicio(&url, "ln").await, json!({ "estado": "Listo", "titulo": "LN", "sesion": 6 }));
 }
 
 #[tokio::test]
@@ -54,8 +47,8 @@ async fn un_examen_sin_preguntas_tiene_el_banco_vacio() {
     crear_examen(raiz.path(), "ps", "PS", Some("[]"));
     let url = arrancar(raiz.path()).await;
 
-    assert_eq!(inicio(&url, "asn").await["banco_vacio"], true);
-    assert_eq!(inicio(&url, "ps").await["banco_vacio"], true);
+    assert_eq!(inicio(&url, "asn").await, json!({ "estado": "BancoVacio", "titulo": "ASN" }));
+    assert_eq!(inicio(&url, "ps").await["estado"], "BancoVacio");
 }
 
 #[tokio::test]
@@ -92,4 +85,72 @@ async fn la_ruta_del_examen_sirve_la_pagina() {
     assert_eq!(respuesta.url().path(), "/ln/");
     assert_eq!(respuesta.status(), 200);
     assert!(respuesta.text().await.unwrap().contains("<div id=\"app\">"));
+}
+
+async fn sesion(url: &str, carpeta: &str) -> Vec<Value> {
+    reqwest::get(format!("{url}/{carpeta}/api/sesion")).await.unwrap().error_for_status().unwrap().json().await.unwrap()
+}
+
+async fn responder(url: &str, carpeta: &str, cuerpo: &Value) -> reqwest::StatusCode {
+    reqwest::Client::new().post(format!("{url}/{carpeta}/api/respuestas")).json(cuerpo).send().await.unwrap().status()
+}
+
+#[tokio::test]
+async fn la_sesion_envia_solo_lo_que_la_pantalla_muestra() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    let sesion = sesion(&url, "ln").await;
+    assert_eq!(sesion.len(), 6);
+    let mut campos: Vec<&String> = sesion[0].as_object().unwrap().keys().collect();
+    campos.sort();
+    let esperados = [
+        "concepto",
+        "correcta",
+        "explicacion",
+        "id",
+        "opciones",
+        "paso",
+        "paso_tras_otra",
+        "paso_tras_seguro",
+        "pregunta",
+        "tema",
+    ];
+    assert_eq!(campos, esperados);
+    assert_eq!(sesion[0]["opciones"].as_array().unwrap().len(), 4);
+    assert_eq!(sesion[0]["paso"], "sin ver");
+}
+
+#[tokio::test]
+async fn una_respuesta_entra_en_el_historial_una_sola_vez_y_mueve_el_paso() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+    let respuesta = json!({ "id": "rgpd-001", "ts": "2026-11-04T12:41:22Z", "acierto": true, "seguro": true });
+
+    assert_eq!(responder(&url, "ln", &json!([respuesta])).await, 204);
+    assert_eq!(responder(&url, "ln", &json!([respuesta])).await, 204);
+
+    let historial = fs::read_to_string(raiz.path().join("ln/respuestas.jsonl")).unwrap();
+    assert_eq!(historial, "{\"id\":\"rgpd-001\",\"ts\":\"2026-11-04T12:41:22Z\",\"acierto\":true,\"seguro\":true}\n");
+    let pregunta = sesion(&url, "ln").await.into_iter().find(|q| q["id"] == "rgpd-001").unwrap();
+    assert_eq!(pregunta["paso"], "paso 1");
+}
+
+#[tokio::test]
+async fn una_respuesta_mal_formada_no_entra_en_el_historial() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    for mala in [
+        json!([{ "id": "rgpd-001", "ts": "ayer", "acierto": true, "seguro": true }]),
+        json!([{ "id": "rgpd-001", "ts": "2026-11-04T12:41:22Z", "acierto": "sí", "seguro": true }]),
+        json!([{ "id": "rgpd-001", "ts": "2026-11-04T12:41:22Z", "acierto": true, "seguro": true, "extra": 1 }]),
+        json!({ "id": "rgpd-001" }),
+    ] {
+        assert!(responder(&url, "ln", &mala).await.is_client_error(), "{mala}");
+    }
+    assert!(!raiz.path().join("ln/respuestas.jsonl").exists());
 }

@@ -1,5 +1,9 @@
 //! El servidor lee la carpeta de cada examen y llama a `nucleo`.
 
+// Un handler devuelve `Result<_, Response>`, y un `Response` de axum pesa más de 128 bytes.
+// Copiar esos bytes en un error no se nota en un servidor local.
+#![allow(clippy::result_large_err)]
+
 use std::path::PathBuf;
 use std::sync::Arc;
 
@@ -8,7 +12,7 @@ use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
-use nucleo::{Examen, Pregunta};
+use nucleo::{Examen, Pregunta, Respuesta};
 use tower_http::services::ServeDir;
 
 struct Carpetas {
@@ -16,6 +20,8 @@ struct Carpetas {
     raiz: PathBuf,
     /// La build de la interfaz, con `index.html` y `assets/`.
     interfaz: PathBuf,
+    /// ponytail: un cerrojo para el historial de todos los exámenes, uno por examen si un día hay muchos usuarios.
+    historial: tokio::sync::Mutex<()>,
 }
 
 type Estado = State<Arc<Carpetas>>;
@@ -26,8 +32,10 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
         .route("/{examen}", get(|Path(examen): Path<String>| async move { Redirect::permanent(&format!("/{examen}/")) }))
         .route("/{examen}/", get(pagina))
         .route("/{examen}/api/inicio", get(inicio))
+        .route("/{examen}/api/sesion", get(sesion))
+        .route("/{examen}/api/respuestas", axum::routing::post(responder))
         .nest_service("/assets", assets)
-        .with_state(Arc::new(Carpetas { raiz, interfaz }))
+        .with_state(Arc::new(Carpetas { raiz, interfaz, historial: Default::default() }))
 }
 
 /// Un examen es una carpeta de la raíz con `examen.json`, y se lee en cada petición.
@@ -50,14 +58,78 @@ async fn pagina(State(carpetas): Estado, Path(examen): Path<String>) -> Result<H
     Ok(Html(html))
 }
 
+/// Un archivo que no existe es un archivo vacío.
+async fn leer_si_existe(ruta: PathBuf) -> Result<Vec<u8>, Response> {
+    match tokio::fs::read(ruta).await {
+        Ok(texto) => Ok(texto),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(Vec::new()),
+        Err(e) => Err(error_interno(e)),
+    }
+}
+
+async fn leer_banco(carpetas: &Carpetas, examen: &str) -> Result<Vec<Pregunta>, Response> {
+    let texto = leer_si_existe(carpetas.raiz.join(examen).join("preguntas.json")).await?;
+    if texto.is_empty() {
+        return Ok(Vec::new());
+    }
+    serde_json::from_slice(&texto).map_err(error_interno)
+}
+
+/// `respuestas.jsonl` tiene una respuesta por línea. Quien llama tiene el cerrojo del historial.
+async fn leer_historial(carpetas: &Carpetas, examen: &str) -> Result<Vec<Respuesta>, Response> {
+    let texto = leer_si_existe(carpetas.raiz.join(examen).join("respuestas.jsonl")).await?;
+    texto
+        .split(|&b| b == b'\n')
+        .filter(|linea| !linea.trim_ascii().is_empty())
+        .map(|linea| serde_json::from_slice(linea).map_err(error_interno))
+        .collect()
+}
+
 async fn inicio(State(carpetas): Estado, Path(examen): Path<String>) -> Result<Response, Response> {
     let datos = leer_examen(&carpetas, &examen).await?;
-    let banco: Vec<Pregunta> = match tokio::fs::read(carpetas.raiz.join(&examen).join("preguntas.json")).await {
-        Ok(texto) => serde_json::from_slice(&texto).map_err(error_interno)?,
-        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Vec::new(),
-        Err(e) => return Err(error_interno(e)),
-    };
+    let banco = leer_banco(&carpetas, &examen).await?;
     Ok(axum::Json(nucleo::inicio(&datos, &banco)).into_response())
+}
+
+async fn sesion(State(carpetas): Estado, Path(examen): Path<String>) -> Result<Response, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    let banco = leer_banco(&carpetas, &examen).await?;
+    let historial = {
+        let _cerrojo = carpetas.historial.lock().await;
+        leer_historial(&carpetas, &examen).await?
+    };
+    let ahora = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap();
+    let mut azar = nucleo::Azar::new(ahora.as_nanos() as u64);
+    Ok(axum::Json(nucleo::sesion(&banco, &historial, ahora.as_secs() as i64, &mut azar)).into_response())
+}
+
+/// Añade al historial cada respuesta nueva. Una respuesta con el mismo `id` y `ts` ya está, y no entra otra vez.
+async fn responder(
+    State(carpetas): Estado,
+    Path(examen): Path<String>,
+    axum::Json(respuestas): axum::Json<Vec<Respuesta>>,
+) -> Result<StatusCode, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    if respuestas.iter().any(|r| nucleo::segundos(&r.ts).is_none()) {
+        return Err((StatusCode::BAD_REQUEST, "La hora de una respuesta va como AAAA-MM-DDTHH:MM:SSZ").into_response());
+    }
+    let _cerrojo = carpetas.historial.lock().await;
+    let mut vistas: std::collections::HashSet<(String, String)> =
+        leer_historial(&carpetas, &examen).await?.into_iter().map(|r| (r.id, r.ts)).collect();
+    let mut nuevas = String::new();
+    for r in respuestas {
+        if vistas.insert((r.id.clone(), r.ts.clone())) {
+            nuevas += &serde_json::to_string(&r).map_err(error_interno)?;
+            nuevas += "\n";
+        }
+    }
+    if !nuevas.is_empty() {
+        use tokio::io::AsyncWriteExt;
+        let ruta = carpetas.raiz.join(&examen).join("respuestas.jsonl");
+        let mut archivo = tokio::fs::OpenOptions::new().create(true).append(true).open(ruta).await.map_err(error_interno)?;
+        archivo.write_all(nuevas.as_bytes()).await.map_err(error_interno)?;
+    }
+    Ok(StatusCode::NO_CONTENT)
 }
 
 fn error_interno(e: impl std::fmt::Display) -> Response {
