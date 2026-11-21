@@ -2,12 +2,13 @@
 name = "servidor"
 version = "0.1.0"
 edition = "2024"
+default-run = "servidor"
 
 [dependencies]
 nucleo = { path = "../nucleo" }
 axum = "0.8"
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "fs", "sync"] }
-tower-http = { version = "0.7", features = ["fs"] }
+tower-http = { version = "0.7", features = ["fs", "compression-gzip"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 

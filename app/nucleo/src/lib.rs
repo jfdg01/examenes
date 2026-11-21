@@ -1,10 +1,12 @@
 //! La lógica de la app. `nucleo` no lee archivos ni la red.
 
 use serde::{Deserialize, Serialize};
-use ts_rs::TS;
+use tsify::Tsify;
+
+pub mod wasm;
 
 /// Las cifras de un examen, de `examen.json`.
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, Tsify)]
 pub struct Examen {
     pub titulo: String,
     /// Las preguntas del examen real.
@@ -18,7 +20,7 @@ pub struct Examen {
 }
 
 /// Una pregunta del banco, de `preguntas.json`.
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Serialize, Tsify, Clone)]
 pub struct Pregunta {
     pub id: String,
     pub concepto: String,
@@ -30,13 +32,21 @@ pub struct Pregunta {
 }
 
 /// Una línea de `respuestas.jsonl`. `ts` es la hora en UTC, como `2026-11-04T12:41:22Z`.
-#[derive(Deserialize, Serialize, Clone, PartialEq, Debug)]
+#[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct Respuesta {
     pub id: String,
     pub ts: String,
-    pub acierto: bool,
+    pub resultado: Resultado,
     pub seguro: bool,
+}
+
+/// Lo que el servidor da de un examen: sus cifras, su banco y su historial.
+#[derive(Deserialize, Serialize, Tsify)]
+pub struct Datos {
+    pub examen: Examen,
+    pub banco: Vec<Pregunta>,
+    pub historial: Vec<Respuesta>,
 }
 
 /// El paso de un concepto: el número de aciertos con "seguro" seguidos.
@@ -95,6 +105,37 @@ pub fn segundos(ts: &str) -> Option<i64> {
     Some(dias * 86400 + h * 3600 + mi * 60 + s)
 }
 
+/// La hora `AAAA-MM-DDTHH:MM:SSZ` de unos segundos desde 1970.
+pub fn hora(segundos: i64) -> String {
+    let (dias, s) = (segundos.div_euclid(86400), segundos.rem_euclid(86400));
+    // El calendario civil de los días desde 1970, de Howard Hinnant.
+    let z = dias + 719468;
+    let era = z.div_euclid(146097);
+    let doe = z - era * 146097;
+    let ano = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
+    let doy = doe - (365 * ano + ano / 4 - ano / 100);
+    let mp = (5 * doy + 2) / 153;
+    let d = doy - (153 * mp + 2) / 5 + 1;
+    let m = if mp < 10 { mp + 3 } else { mp - 9 };
+    let a = ano + era * 400 + i64::from(m <= 2);
+    format!("{a:04}-{m:02}-{d:02}T{:02}:{:02}:{:02}Z", s / 3600, s / 60 % 60, s % 60)
+}
+
+/// La respuesta a una pregunta de la ronda. Sin `opcion`, la pregunta queda en blanco, sin "seguro".
+pub fn corregir(q: &PreguntaDeSesion, opcion: Option<u32>, seguro: bool, ahora: i64) -> Respuesta {
+    let resultado = match opcion {
+        None => Resultado::Blanco,
+        Some(o) if o == q.correcta => Resultado::Acierto,
+        Some(_) => Resultado::Fallo,
+    };
+    Respuesta { id: q.id.clone(), ts: hora(ahora), resultado, seguro: seguro && opcion.is_some() }
+}
+
+/// Los segundos que quedan de un simulacro de `segundos` que empezó en `empieza`. Las horas van en milisegundos.
+pub fn restante(empieza: f64, segundos: u32, ahora: f64) -> u32 {
+    ((empieza + segundos as f64 * 1000.0 - ahora) / 1000.0).round().max(0.0) as u32
+}
+
 /// El paso de cada concepto visto, y la hora en que vence.
 fn estados<'a>(banco: &'a [Pregunta], historial: &[Respuesta]) -> std::collections::HashMap<&'a str, (Concepto, i64)> {
     let concepto: std::collections::HashMap<&str, &str> = banco.iter().map(|q| (q.id.as_str(), q.concepto.as_str())).collect();
@@ -106,16 +147,15 @@ fn estados<'a>(banco: &'a [Pregunta], historial: &[Respuesta]) -> std::collectio
             continue;
         };
         let antes = estado.get(c).map_or(Concepto::SinVer, |e: &(Concepto, i64)| e.0);
-        let despues = antes.tras(r.acierto, r.seguro);
+        let despues = antes.tras(r.resultado == Resultado::Acierto, r.seguro);
         estado.insert(c, (despues, t.saturating_add(despues.hueco())));
     }
     estado
 }
 
 /// Lo que muestra la pantalla del inicio.
-#[derive(Serialize, TS, PartialEq, Debug)]
+#[derive(Serialize, Tsify, PartialEq, Debug)]
 #[serde(tag = "estado")]
-#[ts(export)]
 pub enum Inicio {
     BancoVacio {
         titulo: String,
@@ -131,9 +171,8 @@ pub enum Inicio {
 
 /// La pantalla de la ronda. Del inicio sale una sesión, cada pregunta pasa de sin contestar a contestada,
 /// y la última lleva al final. El botón ✕ y el final vuelven al inicio.
-#[derive(Serialize, TS)]
+#[derive(Serialize, Tsify)]
 #[serde(tag = "estado")]
-#[ts(export)]
 pub enum Ronda {
     Inicio,
     Pregunta { contestada: bool },
@@ -181,8 +220,7 @@ impl Azar {
 }
 
 /// Una pregunta de la sesión, con lo que muestran la pregunta y su solución.
-#[derive(Serialize, TS)]
-#[ts(export)]
+#[derive(Serialize, Deserialize, Tsify)]
 pub struct PreguntaDeSesion {
     pub id: String,
     pub tema: String,
@@ -261,8 +299,7 @@ fn de_la_ronda(q: &Pregunta, estado: &std::collections::HashMap<&str, (Concepto,
 }
 
 /// El simulacro: las preguntas del examen, al azar de todo el banco, y su duración.
-#[derive(Serialize, TS)]
-#[ts(export)]
+#[derive(Serialize, Tsify)]
 pub struct Simulacro {
     pub segundos: u32,
     pub preguntas: Vec<PreguntaDeSesion>,
@@ -279,9 +316,8 @@ pub fn simulacro(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], a
     }
 }
 
-/// Lo que pasó en una pregunta del simulacro.
-#[derive(Deserialize, TS, Clone, Copy, PartialEq, Debug)]
-#[ts(export)]
+/// Lo que pasó en una pregunta: un acierto, un fallo o una pregunta en blanco.
+#[derive(Deserialize, Serialize, Tsify, Clone, Copy, PartialEq, Debug)]
 pub enum Resultado {
     Acierto,
     Fallo,
@@ -289,16 +325,14 @@ pub enum Resultado {
 }
 
 /// El cierre de un simulacro: sus preguntas, y el resultado de las que tuvieron respuesta antes del límite.
-#[derive(Deserialize, TS)]
-#[ts(export)]
+#[derive(Deserialize, Serialize, Tsify)]
 pub struct Cierre {
     pub preguntas: u32,
     pub resultados: Vec<Resultado>,
 }
 
 /// El final del simulacro. `nota` va sobre 10, con 2 decimales como mucho.
-#[derive(Serialize, TS, PartialEq, Debug)]
-#[ts(export)]
+#[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct NotaDelSimulacro {
     pub aciertos: u32,
     pub fallos: u32,
@@ -321,8 +355,7 @@ pub fn nota_del_simulacro(cierre: &Cierre, penalizacion: f64) -> NotaDelSimulacr
 }
 
 /// La tarjeta de la nota, con la barra del camino. Los porcentajes van redondeados.
-#[derive(Serialize, TS, PartialEq, Debug)]
-#[ts(export)]
+#[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct Tarjeta {
     pub sabes: u32,
     pub no_sabes: u32,
@@ -342,8 +375,7 @@ pub struct Tarjeta {
     pub dudas: Vec<Dudas>,
 }
 
-#[derive(Serialize, TS, PartialEq, Debug)]
-#[ts(export)]
+#[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct Dudas {
     pub texto: String,
     pub conceptos: u32,
@@ -357,8 +389,9 @@ pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], obj
     let (sabes, no_sabes, sin_ver) = cuenta(banco, historial);
     let n = sabes + no_sabes + sin_ver;
     let total = n.max(1) as f64;
-    let dudas = historial.iter().filter(|r| !r.seguro).count();
-    let aciertos_dudo = historial.iter().filter(|r| !r.seguro && r.acierto).count();
+    // Una pregunta en blanco no es una duda contestada.
+    let dudas = historial.iter().filter(|r| !r.seguro && r.resultado != Resultado::Blanco).count();
+    let aciertos_dudo = historial.iter().filter(|r| !r.seguro && r.resultado == Resultado::Acierto).count();
     let tasa_dudo = if dudas == 0 { a_ciegas } else { aciertos_dudo as f64 / dudas as f64 };
     let tasa = (no_sabes as f64 * tasa_dudo + sin_ver as f64 * a_ciegas) / (no_sabes + sin_ver).max(1) as f64;
     let p = |s: u32, acierto| probabilidad(s as f64 / total, acierto, objetivo, examen);
@@ -647,7 +680,8 @@ mod tests {
     }
 
     pub(crate) fn respuesta(id: &str, ts: &str, acierto: bool, seguro: bool) -> Respuesta {
-        Respuesta { id: id.into(), ts: ts.into(), acierto, seguro }
+        let resultado = if acierto { Resultado::Acierto } else { Resultado::Fallo };
+        Respuesta { id: id.into(), ts: ts.into(), resultado, seguro }
     }
 
     #[test]
@@ -810,5 +844,42 @@ mod tests {
         assert_eq!((q.paso.as_str(), q.paso_tras_seguro.as_str(), q.paso_tras_otra.as_str()), ("paso 1", "paso 2", "paso 0"));
         let sin_ver = &sesion(&[pregunta("b1", "b")], &[], 0, &mut Azar::new(3))[0];
         assert_eq!((sin_ver.paso.as_str(), sin_ver.paso_tras_seguro.as_str()), ("sin ver", "paso 1"));
+    }
+
+    #[test]
+    fn la_hora_vuelve_de_segundos_al_texto() {
+        for ts in ["1970-01-01T00:00:00Z", "2026-11-04T12:41:22Z", "2024-02-29T23:59:59Z", "2000-03-01T00:00:00Z"] {
+            assert_eq!(hora(segundos(ts).unwrap()), ts);
+        }
+    }
+
+    #[test]
+    fn corregir_compara_la_opcion_con_la_correcta_y_sin_opcion_es_en_blanco() {
+        let q = &sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
+        let otra = (q.correcta + 1) % 4;
+        let r = corregir(q, Some(q.correcta), true, 1_793_796_082);
+        assert_eq!(
+            r,
+            Respuesta { id: "a1".into(), ts: "2026-11-04T12:41:22Z".into(), resultado: Resultado::Acierto, seguro: true }
+        );
+        assert_eq!(corregir(q, Some(otra), false, 0).resultado, Resultado::Fallo);
+        let blanco = corregir(q, None, true, 0);
+        assert_eq!((blanco.resultado, blanco.seguro), (Resultado::Blanco, false));
+    }
+
+    #[test]
+    fn el_reloj_cuenta_los_segundos_que_quedan_hasta_0() {
+        assert_eq!(restante(1_000_000.0, 60, 1_000_000.0), 60);
+        assert_eq!(restante(1_000_000.0, 60, 1_030_400.0), 30);
+        assert_eq!(restante(1_000_000.0, 60, 2_000_000.0), 0);
+    }
+
+    #[test]
+    fn una_pregunta_en_blanco_pone_el_paso_a_0_y_no_cuenta_como_duda() {
+        let mut h = historial_de(&[(0, true, true), (1, true, false)]);
+        h.push(Respuesta { resultado: Resultado::Blanco, ..respuesta("q0", "1970-01-01T01:00:00Z", false, false) });
+        let t = tarjeta(&LN, &banco_de(2), &h, 5.0);
+        assert_eq!((t.sabes, t.no_sabes), (0, 2));
+        assert_eq!(t.dudas[0].detalle.as_deref(), Some("1 de 1 «dudo»"));
     }
 }

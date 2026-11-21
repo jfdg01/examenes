@@ -1,4 +1,4 @@
-//! El servidor lee la carpeta de cada examen y llama a `nucleo`.
+//! El servidor guarda y sirve los archivos de cada examen. Valida con los tipos de `nucleo` lo que recibe.
 
 // Un handler devuelve `Result<_, Response>`, y un `Response` de axum pesa más de 128 bytes.
 // Copiar esos bytes en un error no se nota en un servidor local.
@@ -8,11 +8,12 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use axum::Router;
-use axum::extract::{Path, Query, State};
+use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
-use nucleo::{Examen, Pregunta, Respuesta};
+use nucleo::{Datos, Examen, Pregunta, Respuesta};
+use tower_http::compression::CompressionLayer;
 use tower_http::services::ServeDir;
 
 struct Carpetas {
@@ -32,12 +33,10 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
         .route("/{examen}", get(|Path(examen): Path<String>| async move { Redirect::permanent(&format!("/{examen}/")) }))
         .route("/{examen}/", get(pagina))
         .route("/{examen}/api/inicio", get(inicio))
-        .route("/{examen}/api/sesion", get(sesion))
-        .route("/{examen}/api/simulacro", get(simulacro))
-        .route("/{examen}/api/cierre", axum::routing::post(cierre))
         .route("/{examen}/api/respuestas", axum::routing::post(responder))
         .nest_service("/assets", assets)
         .with_state(Arc::new(Carpetas { raiz, interfaz, historial: Default::default() }))
+        .layer(CompressionLayer::new().gzip(true))
 }
 
 /// Un examen es una carpeta de la raíz con `examen.json`, y se lee en cada petición.
@@ -87,63 +86,13 @@ async fn leer_historial(carpetas: &Carpetas, examen: &str) -> Result<Vec<Respues
         .collect()
 }
 
-#[derive(serde::Deserialize)]
-struct Objetivo {
-    /// La nota sobre 10 de la tarjeta, 5 si falta.
-    objetivo: Option<f64>,
-}
-
-async fn inicio(
-    State(carpetas): Estado,
-    Path(examen): Path<String>,
-    Query(Objetivo { objetivo }): Query<Objetivo>,
-) -> Result<Response, Response> {
-    let objetivo = objetivo.unwrap_or(5.0);
-    if !(0.0..=10.0).contains(&objetivo) {
-        return Err((StatusCode::BAD_REQUEST, "El objetivo es una nota de 0 a 10").into_response());
-    }
+/// Las cifras, el banco y el historial del examen. La interfaz calcula todo con `nucleo`.
+async fn inicio(State(carpetas): Estado, Path(examen): Path<String>) -> Result<axum::Json<Datos>, Response> {
     let datos = leer_examen(&carpetas, &examen).await?;
     let banco = leer_banco(&carpetas, &examen).await?;
-    let historial = {
-        let _cerrojo = carpetas.historial.lock().await;
-        leer_historial(&carpetas, &examen).await?
-    };
-    Ok(axum::Json(nucleo::inicio(&datos, &banco, &historial, objetivo)).into_response())
-}
-
-/// El banco, el historial y la hora, con un azar sembrado por la hora.
-async fn leer_ronda(carpetas: &Carpetas, examen: &str) -> Result<(Vec<Pregunta>, Vec<Respuesta>, i64, nucleo::Azar), Response> {
-    let banco = leer_banco(carpetas, examen).await?;
-    let historial = {
-        let _cerrojo = carpetas.historial.lock().await;
-        leer_historial(carpetas, examen).await?
-    };
-    let ahora = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap();
-    Ok((banco, historial, ahora.as_secs() as i64, nucleo::Azar::new(ahora.as_nanos() as u64)))
-}
-
-async fn sesion(State(carpetas): Estado, Path(examen): Path<String>) -> Result<Response, Response> {
-    leer_examen(&carpetas, &examen).await?;
-    let (banco, historial, ahora, mut azar) = leer_ronda(&carpetas, &examen).await?;
-    Ok(axum::Json(nucleo::sesion(&banco, &historial, ahora, &mut azar)).into_response())
-}
-
-async fn simulacro(State(carpetas): Estado, Path(examen): Path<String>) -> Result<Response, Response> {
-    let datos = leer_examen(&carpetas, &examen).await?;
-    let (banco, historial, _, mut azar) = leer_ronda(&carpetas, &examen).await?;
-    Ok(axum::Json(nucleo::simulacro(&datos, &banco, &historial, &mut azar)).into_response())
-}
-
-async fn cierre(
-    State(carpetas): Estado,
-    Path(examen): Path<String>,
-    axum::Json(cierre): axum::Json<nucleo::Cierre>,
-) -> Result<Response, Response> {
-    let datos = leer_examen(&carpetas, &examen).await?;
-    if cierre.resultados.len() > cierre.preguntas as usize {
-        return Err((StatusCode::BAD_REQUEST, "El simulacro tiene más resultados que preguntas").into_response());
-    }
-    Ok(axum::Json(nucleo::nota_del_simulacro(&cierre, datos.penalizacion)).into_response())
+    let _cerrojo = carpetas.historial.lock().await;
+    let historial = leer_historial(&carpetas, &examen).await?;
+    Ok(axum::Json(Datos { examen: datos, banco, historial }))
 }
 
 /// Añade al historial cada respuesta nueva. Una respuesta con el mismo `id` y `ts` ya está, y no entra otra vez.

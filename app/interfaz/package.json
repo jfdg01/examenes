@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "tipos": "cargo test -p nucleo export_bindings",
-    "check": "npm run tipos && svelte-check --fail-on-warnings",
-    "build": "npm run check && vite build",
-    "dev": "npm run tipos && vite"
+    "wasm": "cargo build -p nucleo --release --target wasm32-unknown-unknown && wasm-bindgen --target web --out-dir src/nucleo ../target/wasm32-unknown-unknown/release/nucleo.wasm",
+    "prebuild": "npm run wasm",
+    "build": "svelte-check --fail-on-warnings && vite build",
+    "predev": "npm run wasm",
+    "dev": "vite"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.3.1",

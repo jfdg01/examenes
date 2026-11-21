@@ -1,4 +1,4 @@
 target/
 interfaz/node_modules/
 interfaz/dist/
-interfaz/src/tipos/
+interfaz/src/nucleo/

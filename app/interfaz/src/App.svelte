@@ -1,70 +1,50 @@
 <script lang="ts">
-  import type { Cierre } from "./tipos/Cierre";
-  import type { Inicio } from "./tipos/Inicio";
-  import type { NotaDelSimulacro } from "./tipos/NotaDelSimulacro";
-  import type { Resultado } from "./tipos/Resultado";
-  import type { Simulacro } from "./tipos/Simulacro";
-  import type { PreguntaDeSesion } from "./tipos/PreguntaDeSesion";
-  import type { Ronda } from "./tipos/Ronda";
-
-  // La página vive en /<carpeta>/, así que la ruta relativa llega al API de su examen.
-  const pedir = <T,>(ruta: string, opciones?: RequestInit): Promise<T> =>
-    fetch(ruta, opciones).then((r) => (r.ok ? r.json() : Promise.reject(new Error(`El servidor responde ${r.status}`))));
+  import * as nucleo from "./nucleo/nucleo.js";
+  import type { Datos, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
 
   // Todos los exámenes comparten un origen, así que la clave lleva la carpeta del examen.
   const claveObjetivo = `${location.pathname.split("/")[1]}-objetivo`;
   let objetivo = $state(Number(localStorage.getItem(claveObjetivo) ?? 5));
-  let inicio = $state<Inicio | null>(null);
+  let datos = $state.raw<Datos | null>(null);
+  const inicio = $derived(datos && nucleo.inicio(datos, objetivo));
 
+  // La página vive en /<carpeta>/, así que la ruta relativa llega al API de su examen.
   async function cargarInicio() {
-    const pedido = objetivo;
     try {
-      const datos = await pedir<Inicio>(`api/inicio?objetivo=${pedido}`);
-      // Con el slider en marcha, una respuesta vieja llega tarde y no pinta.
-      if (pedido !== objetivo) return;
-      inicio = datos;
-      document.title = datos.titulo;
+      const r = await fetch("api/inicio");
+      if (!r.ok) throw new Error(`El servidor responde ${r.status}`);
+      datos = await r.json();
+      document.title = datos!.examen.titulo;
     } catch (e) {
       error = (e as Error).message;
     }
   }
   cargarInicio();
 
-  function cambiarObjetivo() {
-    localStorage.setItem(claveObjetivo, String(objetivo));
-    cargarInicio();
-  }
   let ronda = $state<Ronda>({ estado: "Inicio" });
-  let preguntas = $state<PreguntaDeSesion[]>([]);
+  let preguntas = $state.raw<PreguntaDeSesion[]>([]);
   let i = $state(0);
-  let aciertos = $state(0);
   // `opcion` es null con "En blanco".
-  let eleccion = $state<{ opcion: number | null; seguro: boolean } | null>(null);
+  let eleccion = $state<{ opcion: number | null; respuesta: Respuesta } | null>(null);
   let error = $state("");
   let simulacro = $state(false);
   let resultados: Resultado[] = [];
   let nota = $state<NotaDelSimulacro | null>(null);
-  let limite = 0;
+  let empieza = 0;
+  let segundos = 0;
   let reloj: ReturnType<typeof setInterval> | undefined;
   let restante = $state(0);
 
   const q = $derived(preguntas[i]);
-  const acierto = $derived(eleccion?.opcion === q?.correcta);
+  const acierto = $derived(eleccion?.respuesta.resultado === "Acierto");
 
-  async function empezar(comoSimulacro: boolean) {
-    try {
-      if (comoSimulacro) {
-        const s = await pedir<Simulacro>("api/simulacro");
-        preguntas = s.preguntas;
-        limite = Date.now() + s.segundos * 1000;
-      } else preguntas = await pedir<PreguntaDeSesion[]>("api/sesion");
-    } catch (e) {
-      error = (e as Error).message;
-      return;
-    }
+  function empezar(comoSimulacro: boolean) {
+    if (!datos) return;
+    empieza = Date.now();
+    if (comoSimulacro) ({ preguntas, segundos } = nucleo.simulacro(datos, empieza));
+    else preguntas = nucleo.sesion(datos, empieza);
     simulacro = comoSimulacro;
     i = 0;
-    aciertos = 0;
     resultados = [];
     nota = null;
     eleccion = null;
@@ -77,35 +57,24 @@
   }
 
   function contar() {
-    restante = Math.max(0, Math.round((limite - Date.now()) / 1000));
+    restante = nucleo.restante(empieza, segundos, Date.now());
     if (!restante) terminar();
   }
 
-  // El final del simulacro pide la nota a Rust, que cuenta en blanco las preguntas sin contestar.
-  async function terminar() {
+  // Al pasar el límite, `nucleo` cuenta en blanco las preguntas sin contestar.
+  function terminar() {
     // El reloj y la última pregunta llegan aquí a la vez si el límite pasa en la última.
     if (ronda.estado === "Final") return;
     clearInterval(reloj);
     ronda = { estado: "Final" };
-    if (!simulacro) return;
-    const cierre: Cierre = { preguntas: preguntas.length, resultados };
-    try {
-      nota = await pedir<NotaDelSimulacro>("api/cierre", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cierre),
-      });
-    } catch (e) {
-      error = (e as Error).message;
-    }
+    nota = nucleo.nota({ preguntas: preguntas.length, resultados }, datos!.examen.penalizacion);
   }
 
   async function contestar(opcion: number | null, seguro: boolean) {
-    eleccion = { opcion, seguro };
+    const respuesta = nucleo.corregir(q, opcion, seguro, Date.now());
+    eleccion = { opcion, respuesta };
     ronda = { estado: "Pregunta", contestada: true };
-    if (acierto) aciertos++;
-    resultados.push(opcion === null ? "Blanco" : acierto ? "Acierto" : "Fallo");
-    const respuesta = { id: q.id, ts: new Date().toISOString().slice(0, 19) + "Z", acierto, seguro };
+    resultados.push(respuesta.resultado);
     const r = await fetch("api/respuestas", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -149,7 +118,7 @@
       <div>
         <label>
           Sacar más de {objetivo.toLocaleString("es")}
-          <input type="range" min="0.5" max="10" step="0.5" bind:value={objetivo} oninput={cambiarObjetivo} />
+          <input type="range" min="0.5" max="10" step="0.5" bind:value={objetivo} oninput={() => localStorage.setItem(claveObjetivo, String(objetivo))} />
         </label>
         <p>
           <b>{t.hoy} %</b> con {t.sabes} conceptos · {t.sesiones}
@@ -198,13 +167,13 @@
     {#if simulacro}<button onclick={() => contestar(null, false)}>En blanco</button>{/if}
     <p>Toca el texto si estás seguro. Toca «dudo» si dudas.</p>
   {:else}
-    {#if !acierto && eleccion?.seguro}
+    {#if eleccion?.respuesta.resultado === "Fallo" && eleccion.respuesta.seguro}
       <p>Fallo con «seguro»: una idea falsa. Repásala.</p>
-    {:else if acierto && !eleccion?.seguro}
+    {:else if acierto && !eleccion?.respuesta.seguro}
       <p>Acierto con «dudo»: cuenta como un fallo.</p>
     {/if}
     <p>{q.explicacion}</p>
-    <p>{q.concepto} ({acierto && eleccion?.seguro ? q.paso_tras_seguro : q.paso_tras_otra})</p>
+    <p>{q.concepto} ({acierto && eleccion?.respuesta.seguro ? q.paso_tras_seguro : q.paso_tras_otra})</p>
     <button onclick={siguiente}>Siguiente</button>
   {/if}
 {:else}
@@ -216,7 +185,7 @@
     {/if}
   {:else}
     <h1>La sesión ha terminado</h1>
-    <p>Aciertos: {aciertos} de {preguntas.length}</p>
+    {#if nota}<p>Aciertos: {nota.aciertos} de {preguntas.length}</p>{/if}
   {/if}
   <button onclick={volver}>Volver al inicio</button>
 {/if}
