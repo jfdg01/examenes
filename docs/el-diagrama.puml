@@ -105,6 +105,22 @@ package nucleo {
     +paso_tras_seguro: String
     +paso_tras_otra: String
   }
+  class Guardado <<ronda.json, localStorage <examen>-ronda, tsify>> {
+    +guardada: u64, en ms
+    +ronda: Option<RondaGuardada>
+  }
+  class RondaGuardada <<tsify>> {
+    +ids: Vec<String>
+    +resultados: Vec<Resultado>
+    +simulacro: bool
+    +limite: Option<u64>, en ms
+  }
+  class RondaAMedias <<tsify>> {
+    +preguntas: Vec<PreguntaDeSesion>
+    +resultados: Vec<Resultado>
+    +simulacro: bool
+    +limite: Option<u64>, en ms
+  }
   enum Ronda <<tsify>> {
     Inicio
     Pregunta { contestada }
@@ -121,7 +137,9 @@ package nucleo {
     +simulacro(examen, banco, historial, azar): Simulacro
     +nota_del_simulacro(cierre, penalizacion): NotaDelSimulacro
     +corregir(pregunta, opcion, seguro, ahora): Respuesta
-    +restante(empieza, segundos, ahora): ms
+    +restante(limite, ahora): segundos
+    +gana(a, b): Guardado
+    +restaurar(banco, historial, guardado, azar): Option<RondaAMedias>
     +segundos(ts): Option<i64>
     +hora(segundos): ts
     -estados(banco, historial): concepto → (Concepto, vence)
@@ -137,7 +155,9 @@ package nucleo {
     +sesion(datos, ahora): PreguntaDeSesion[]
     +simulacro(datos, ahora): Simulacro
     +corregir(pregunta, opcion, seguro, ahora): Respuesta
-    +restante(empieza, segundos, ahora): ms
+    +restante(limite, ahora): segundos
+    +gana(a, b): Guardado
+    +restaurar(datos, guardado, ahora): RondaAMedias o undefined
     +nota(cierre, penalizacion): NotaDelSimulacro
     -azar(ahora): Azar, con la hora de semilla
   }
@@ -147,7 +167,7 @@ package servidor {
   class Carpetas {
     -raiz: PathBuf
     -interfaz: PathBuf
-    -historial: Mutex
+    -cerrojo: Mutex, del historial y de la ronda
   }
   class "rutas (axum)" as rutas {
     +app(raiz, interfaz): Router
@@ -156,6 +176,8 @@ package servidor {
     GET /:examen/ → pagina → index.html
     GET /:examen/api/inicio → inicio → Datos
     POST /:examen/api/respuestas → responder → 204
+    GET /:examen/api/ronda → leer_ronda → Guardado
+    PUT /:examen/api/ronda → guardar_ronda → 204
     GET /assets/* → dist/assets
     todo va con gzip
   }
@@ -181,11 +203,14 @@ package interfaz {
     -simulacro: boolean
     -resultados: Resultado[]
     -nota: NotaDelSimulacro
-    -empieza: ms
-    -segundos: number
-    -restante: ms
+    -limite: ms
+    -restante: segundos
     --
+    -arrancar(), al cargar la página
+    -enviar(guardado), a localStorage <examen>-ronda y a PUT api/ronda
+    -guardar(), de empezar, contestar, terminar y volver
     -empezar(comoSimulacro)
+    -seguir(), en la primera pregunta sin resultado
     -contar(), cada segundo
     -contestar(opcion o null, seguro)
     -siguiente()
@@ -218,10 +243,16 @@ Datos *-- Examen
 Datos *-- Pregunta
 Datos *-- Respuesta
 funciones --> NotaDelSimulacro : devuelve
+funciones ..> Guardado : elige el más nuevo
+Guardado *-- RondaGuardada
+funciones --> RondaAMedias : devuelve
+RondaAMedias *-- PreguntaDeSesion
 rutas *-- Carpetas : estado
 rutas ..> lectura : lee la carpeta
 rutas ..> Datos : devuelve
 rutas ..> Respuesta : valida
+rutas ..> Guardado : valida y guarda el más nuevo
+rutas ..> funciones : gana()
 wasm ..> funciones : llama
 wasm ..> generado : wasm-bindgen genera
 App ..> generado : importa y llama
@@ -231,7 +262,7 @@ App ..> rutas : HTTP
 @startuml la-ronda
 !pragma layout smetana
 skinparam shadowing false
-title La ronda en App.svelte\nCada flecha lleva la función que hace el cambio
+title La ronda en App.svelte\nCada flecha lleva la función que hace el cambio\nempezar, contestar, terminar y volver llaman a guardar()
 
 state Inicio
 state "Pregunta { contestada: false }" as SinContestar
@@ -239,6 +270,8 @@ state "Pregunta { contestada: true }" as Contestada
 state Final
 
 [*] --> Inicio
+[*] --> SinContestar : arrancar() → seguir(), con una ronda a medias
+[*] --> Final : arrancar() → seguir() → terminar(), sin preguntas por contestar
 Inicio --> SinContestar : empezar(comoSimulacro)
 SinContestar --> Contestada : contestar(opcion, seguro)
 SinContestar --> Contestada : contestar(null), "En blanco" del simulacro
@@ -289,10 +322,10 @@ participant servidor as S
 
 App -> N : simulacro(datos, Date.now())
 N --> App : Simulacro { segundos, preguntas }
-note over App : empieza = Date.now()
+note over App : limite = Date.now() + segundos × 1000, y vive en el guardado de la ronda
 loop cada segundo, contar()
-  App -> N : restante(empieza, segundos, Date.now())
-  N --> App : ms que quedan; a 0, terminar()
+  App -> N : restante(limite, Date.now())
+  N --> App : segundos que quedan; a 0, terminar()
 end
 note over App : cada respuesta va a POST api/respuestas, como en la sesión;\nuna pregunta sin contestar al pasar el límite no va
 App -> N : nota({ preguntas, resultados }, penalizacion)
