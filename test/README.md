@@ -133,7 +133,7 @@ Una sesión tiene 12 preguntas, una por concepto, y llena sus huecos en este ord
 2. Los conceptos sin ver, al azar.
 3. Los conceptos que vencen antes.
 
-Los 4 huecos del paso 2 dan la vuelta a todo el banco mientras sigue el repaso, porque un concepto nuevo enseña un dato. Con todos los conceptos vistos, los vencidos llenan los 12 huecos.
+Los 4 huecos de los conceptos sin ver dan la vuelta a todo el banco mientras sigue el repaso, porque un concepto nuevo enseña un dato. Con todos los conceptos vistos, los vencidos llenan los 12 huecos.
 
 De cada concepto sale una pregunta sin respuestas, al azar entre las de ese concepto. Si todas tienen respuestas, sale la de la respuesta más vieja. Así las preguntas hermanas se turnan. Las 12 preguntas salen en un orden al azar, con los temas mezclados.
 
@@ -221,7 +221,7 @@ El botón con un icono de copiar está a la derecha del botón de las notas. El 
 
 Las imágenes están en `paginas/<pdf sin .pdf>-<pagina>.png`, en la carpeta del examen. `pdftoppm -png -r 80` las saca de los PDFs una sola vez.
 
-Una sesión sin preguntas pendientes muestra la fecha de la próxima pregunta, y ofrece el simulacro. No hay un botón para reiniciar el historial, porque el historial guarda los fallos con "seguro" y el porcentaje de "dudo".
+Con un banco no vacío, una sesión siempre tiene preguntas, porque los conceptos que vencen antes llenan los huecos. No hay un botón para reiniciar el historial, porque el historial guarda los fallos con "seguro" y el porcentaje de "dudo".
 
 ## El simulacro
 
