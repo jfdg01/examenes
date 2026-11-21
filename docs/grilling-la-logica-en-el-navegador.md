@@ -27,3 +27,29 @@ Esta nota prepara un `grill-with-docs`. El grilling decide dónde corre la lógi
 `respuestas.jsonl` guarda una pregunta en blanco como `{"acierto": false, "seguro": false}`, igual que un fallo con "dudo". Así, el servidor no puede calcular la nota desde el historial, y `el-modelo-de-la-nota` (#36) no puede medir si dejar en blanco sale a cuenta.
 
 En LN, 55 de las 312 respuestas tienen `acierto: false, seguro: false`. Ninguna pista dice cuáles fueron en blanco, así que una migración no las puede separar.
+
+## Las preguntas abiertas
+
+1. ¿Dónde corre la lógica?
+   - `nucleo` en WASM, en los 2 lados (la propuesta).
+   - El servidor manda en la ronda: la interfaz envía `{id, opcion}`. Rompe #24.
+   - Todo sigue como hoy, con una regla escrita sobre lo que la interfaz calcula.
+2. ¿Qué funciones de `nucleo` cruzan a la WASM? ¿La sesión y la tarjeta de la nota también, o solo corregir, cerrar, la nota y unir historiales?
+3. ¿Qué herramienta compila la WASM (`wasm-pack` o `wasm-bindgen-cli`), y cómo entra en `npm run build`? ¿Los tipos siguen con `ts-rs`, o salen de `wasm-bindgen`?
+4. ¿Qué rutas quedan en el servidor? ¿Desaparecen `api/sesion`, `api/simulacro` y `api/cierre`?
+5. ¿Cuánto pesa la página en el móvil con la WASM, y es aceptable?
+6. ¿Cómo marca `respuestas.jsonl` una pregunta en blanco? Por ejemplo, un campo `blanco: true`, o un campo `resultado` en lugar de `acierto`.
+7. ¿Qué pasa con las 55 respuestas ambiguas de LN? ¿Quedan como fallos con "dudo"?
+8. ¿Una pregunta sin contestar al pasar el límite entra en el historial como en blanco? Si entra, su concepto vuelve a paso 0.
+9. ¿Una pregunta en blanco mueve el paso igual que un fallo, o deja el paso como estaba?
+10. ¿El ADR nuevo sustituye al ADR 0001 entero, o solo a sus decisiones de la lógica y del formato?
+
+## Los docs que el grilling toca
+
+- `docs/adr/0001-la-app-en-rust-y-svelte.md`
+- `docs/migracion-a-rust.md`
+- `docs/el-modelo.md`
+- `docs/el-diagrama.puml`
+- `GLOSSARY.md`
+- `app/README.md`
+- Las issues #22, #23, #24 y #36.
