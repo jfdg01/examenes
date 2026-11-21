@@ -264,23 +264,10 @@ function hoja(q, siguiente) {
 
 function fuentes(q) {
   const { pdf, pagina } = q.fuente;
-  const paneles = [
-    ["Ver la página aquí", () => el("img", { src: imagenDePagina(q.fuente), alt: `La página ${pagina} de ${pdf}` })],
-    ["La fuente", () => el("div", {},
-      el("p", { textContent: `${pdf}, página ${pagina} · ${q.concepto} (${textoDelPaso(q.concepto)})` }),
-      el("p", {}, el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: `Abrir el PDF en la página ${pagina}` })))],
-  ];
-  const panel = el("div", { className: "panel" });
-  const botones = paneles.map(([texto, crear]) => {
-    const boton = el("button", { className: "fuente", textContent: texto, onclick: () => {
-      const abrir = !boton.classList.contains("abierto");
-      botones.forEach((b) => b.classList.remove("abierto"));
-      panel.replaceChildren(...(abrir ? [crear()] : []));
-      boton.classList.toggle("abierto", abrir);
-    } });
-    return boton;
-  });
-  return el("div", {}, el("div", { className: "fuentes" }, ...botones), panel);
+  return el("div", { className: "panel" },
+    el("p", {}, `${pdf}, página ${pagina} · ${q.concepto} (${textoDelPaso(q.concepto)}) · `,
+      el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: `Abrir el PDF en la página ${pagina}` })),
+    el("img", { src: imagenDePagina(q.fuente), alt: `La página ${pagina} de ${pdf}` }));
 }
 
 function fin(ronda) {
