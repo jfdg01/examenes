@@ -30,7 +30,7 @@ Las fechas y los números de RFC no entran en el examen. El resto del temario s�
 
 ## El banco
 
-El banco está vacío.
+El banco tiene 662 preguntas: 3 por cada idea de los 5 PDFs, y 1 por cada sigla de seguridad. Una idea que sale en 2 PDFs tiene un solo concepto.
 
 La interfaz está en https://3090.taila51846.ts.net:8606/:
 
