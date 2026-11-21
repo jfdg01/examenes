@@ -8,6 +8,7 @@ La app tiene 2 máquinas de estados: el paso de un concepto y la ronda. El paso 
 - Un acierto con "seguro" sube el paso en 1, aunque el concepto no haya vencido. El concepto vence 10 minutos × 3^(paso − 1) después de la respuesta.
 - Un fallo, un acierto con "dudo" o una pregunta en blanco ponen el paso a 0, y el concepto vence en el acto.
 - Cada respuesta mueve el paso, la de una sesión y la de un simulacro.
+- El paso sale del historial unido: el del servidor y las respuestas del dispositivo que aún no llegaron. Una respuesta con el mismo `id` y `ts` cuenta una vez.
 
 Un concepto con un paso de 1 o más está en **sabes**. La barra del camino y la tarjeta de la nota cuentan los conceptos en "sabes". La pantalla de la pregunta muestra el paso del concepto.
 
