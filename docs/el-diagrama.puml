@@ -13,6 +13,9 @@ left to right direction
 package nucleo {
   class Examen <<examen.json>> {
     +titulo: String
+    +preguntas: u32
+    +opciones: u32
+    +penalizacion: f64
   }
   class Pregunta <<preguntas.json>> {
     +id: String
@@ -45,7 +48,24 @@ package nucleo {
   }
   enum Inicio <<ts-rs>> {
     BancoVacio { titulo }
-    Listo { titulo, sesion }
+    Listo { titulo, sesion, tarjeta }
+  }
+  class Tarjeta <<ts-rs>> {
+    +sabes: u32
+    +no_sabes: u32
+    +sin_ver: u32
+    +hoy: u32
+    +meta: u32
+    +sesiones: String
+    +consejo: String
+    +puntos: u32
+    +dudas: Vec<Dudas>
+  }
+  class Dudas <<ts-rs>> {
+    +texto: String
+    +conceptos: u32
+    +porcentaje: u32
+    +detalle: Option<String>
   }
   class PreguntaDeSesion <<ts-rs>> {
     +id: String
@@ -67,10 +87,16 @@ package nucleo {
   class "nucleo (funciones)" as funciones <<lib.rs>> {
     -TAMANO_SESION = 12
     -HUECOS_SIN_VER = 4
-    +inicio(examen, banco): Inicio
+    -META = 0.95
+    -VENTANA = 60
+    +inicio(examen, banco, historial, objetivo): Inicio
+    +tarjeta(examen, banco, historial, objetivo): Tarjeta
     +sesion(banco, historial, ahora, azar): Vec<PreguntaDeSesion>
     +segundos(ts): Option<i64>
     -estados(banco, historial): concepto → (Concepto, vence)
+    -cuenta(banco, historial): (sabes, no sabes, sin ver)
+    -probabilidad(sabes, acierto, objetivo, examen): f64
+    -binomial(n, k, p): f64
   }
 }
 
@@ -85,7 +111,7 @@ package servidor {
     --
     GET /:examen → 308 /:examen/
     GET /:examen/ → pagina → index.html
-    GET /:examen/api/inicio → inicio → Inicio
+    GET /:examen/api/inicio?objetivo → inicio → Inicio
     GET /:examen/api/sesion → sesion → PreguntaDeSesion[]
     POST /:examen/api/respuestas → responder → 204
     GET /assets/* → dist/assets
@@ -101,7 +127,8 @@ package servidor {
 
 package interfaz {
   class "App.svelte" as App {
-    -inicio: Promise<Inicio>
+    -inicio: Inicio
+    -objetivo: number, en localStorage <examen>-objetivo
     -ronda: Ronda
     -preguntas: PreguntaDeSesion[]
     -i: number
@@ -112,11 +139,15 @@ package interfaz {
     -empezar()
     -contestar(opcion, seguro)
     -siguiente()
+    -cargarInicio()
+    -cambiarObjetivo()
     -volver()
     -abandonar()
   }
   class "tipos/*.ts" as tipos <<generado>> {
     Inicio
+    Tarjeta
+    Dudas
     PreguntaDeSesion
     Ronda
   }
@@ -128,11 +159,14 @@ funciones ..> Respuesta : lee
 funciones ..> Concepto : calcula el paso
 funciones ..> Azar : baraja
 funciones --> Inicio : devuelve
+Inicio *-- Tarjeta
+Tarjeta *-- Dudas
 funciones --> PreguntaDeSesion : devuelve
 rutas *-- Carpetas : estado
 rutas ..> lectura : lee la carpeta
 rutas ..> funciones : llama
 Inicio ..> tipos : ts-rs genera
+Tarjeta ..> tipos : ts-rs genera
 PreguntaDeSesion ..> tipos : ts-rs genera
 Ronda ..> tipos : ts-rs genera
 App ..> tipos : importa
@@ -168,9 +202,9 @@ participant servidor as S
 participant nucleo as N
 database "carpeta del examen" as C
 
-App -> S : GET api/inicio
-S -> C : examen.json, preguntas.json
-S -> N : inicio(examen, banco)
+App -> S : GET api/inicio?objetivo
+S -> C : examen.json, preguntas.json, respuestas.jsonl
+S -> N : inicio(examen, banco, historial, objetivo)
 N --> App : Inicio (BancoVacio o Listo)
 
 App -> S : GET api/sesion
