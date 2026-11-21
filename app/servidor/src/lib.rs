@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use axum::Router;
-use axum::extract::{Path, State};
+use axum::extract::{Path, Query, State};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
@@ -85,10 +85,28 @@ async fn leer_historial(carpetas: &Carpetas, examen: &str) -> Result<Vec<Respues
         .collect()
 }
 
-async fn inicio(State(carpetas): Estado, Path(examen): Path<String>) -> Result<Response, Response> {
+#[derive(serde::Deserialize)]
+struct Objetivo {
+    /// La nota sobre 10 de la tarjeta, 5 si falta.
+    objetivo: Option<f64>,
+}
+
+async fn inicio(
+    State(carpetas): Estado,
+    Path(examen): Path<String>,
+    Query(Objetivo { objetivo }): Query<Objetivo>,
+) -> Result<Response, Response> {
+    let objetivo = objetivo.unwrap_or(5.0);
+    if !(0.0..=10.0).contains(&objetivo) {
+        return Err((StatusCode::BAD_REQUEST, "El objetivo es una nota de 0 a 10").into_response());
+    }
     let datos = leer_examen(&carpetas, &examen).await?;
     let banco = leer_banco(&carpetas, &examen).await?;
-    Ok(axum::Json(nucleo::inicio(&datos, &banco)).into_response())
+    let historial = {
+        let _cerrojo = carpetas.historial.lock().await;
+        leer_historial(&carpetas, &examen).await?
+    };
+    Ok(axum::Json(nucleo::inicio(&datos, &banco, &historial, objetivo)).into_response())
 }
 
 async fn sesion(State(carpetas): Estado, Path(examen): Path<String>) -> Result<Response, Response> {

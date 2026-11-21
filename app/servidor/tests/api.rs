@@ -11,7 +11,11 @@ const BANCO_LN: &str = include_str!("datos/ln-preguntas.json");
 fn crear_examen(raiz: &Path, carpeta: &str, titulo: &str, banco: Option<&str>) {
     let dir = raiz.join(carpeta);
     fs::create_dir(&dir).unwrap();
-    fs::write(dir.join("examen.json"), json!({ "titulo": titulo }).to_string()).unwrap();
+    fs::write(
+        dir.join("examen.json"),
+        json!({ "titulo": titulo, "preguntas": 20, "opciones": 4, "penalizacion": 0.25 }).to_string(),
+    )
+    .unwrap();
     if let Some(banco) = banco {
         fs::write(dir.join("preguntas.json"), banco).unwrap();
     }
@@ -32,12 +36,37 @@ async fn inicio(url: &str, carpeta: &str) -> Value {
 }
 
 #[tokio::test]
-async fn el_inicio_da_el_titulo_del_examen() {
+async fn el_inicio_da_el_titulo_y_las_preguntas_de_la_sesion() {
     let raiz = TempDir::new().unwrap();
     crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
     let url = arrancar(raiz.path()).await;
 
-    assert_eq!(inicio(&url, "ln").await, json!({ "estado": "Listo", "titulo": "LN", "sesion": 6 }));
+    let inicio = inicio(&url, "ln").await;
+    assert_eq!((&inicio["estado"], &inicio["titulo"], &inicio["sesion"]), (&json!("Listo"), &json!("LN"), &json!(6)));
+}
+
+#[tokio::test]
+async fn la_tarjeta_del_inicio_cuenta_el_historial_con_el_objetivo_de_la_peticion() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+    let respuesta = json!({ "id": "rgpd-001", "ts": "2026-11-04T12:41:22Z", "acierto": true, "seguro": true });
+    assert_eq!(responder(&url, "ln", &json!([respuesta])).await, 204);
+
+    let tarjeta = |objetivo: &'static str| {
+        let url = url.clone();
+        async move {
+            let inicio: Value = reqwest::get(format!("{url}/ln/api/inicio{objetivo}")).await.unwrap().json().await.unwrap();
+            inicio["tarjeta"].clone()
+        }
+    };
+    let (cinco, diez) = (tarjeta("").await, tarjeta("?objetivo=10").await);
+    assert_eq!((&cinco["sabes"], &cinco["sin_ver"]), (&json!(1), &json!(5)));
+    assert!(diez["hoy"].as_u64() < cinco["hoy"].as_u64(), "{diez} {cinco}");
+    for mal in ["mucho", "NaN", "11", "-1"] {
+        let respuesta = reqwest::get(format!("{url}/ln/api/inicio?objetivo={mal}")).await.unwrap();
+        assert_eq!(respuesta.status(), 400, "{mal}");
+    }
 }
 
 #[tokio::test]

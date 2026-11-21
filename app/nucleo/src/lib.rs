@@ -7,6 +7,12 @@ use ts_rs::TS;
 #[derive(Deserialize)]
 pub struct Examen {
     pub titulo: String,
+    /// Las preguntas del examen real.
+    pub preguntas: u32,
+    /// Las opciones de cada pregunta.
+    pub opciones: u32,
+    /// La parte de un acierto que resta un fallo.
+    pub penalizacion: f64,
 }
 
 /// Una pregunta del banco, de `preguntas.json`.
@@ -116,6 +122,7 @@ pub enum Inicio {
     Listo {
         titulo: String,
         sesion: u32,
+        tarjeta: Tarjeta,
     },
 }
 
@@ -130,13 +137,15 @@ pub enum Ronda {
     Final,
 }
 
-pub fn inicio(examen: &Examen, banco: &[Pregunta]) -> Inicio {
+/// El inicio, con la tarjeta de la nota para sacar más de `objetivo` sobre 10.
+pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], objetivo: f64) -> Inicio {
     let titulo = examen.titulo.clone();
     if banco.is_empty() {
         return Inicio::BancoVacio { titulo };
     }
-    let conceptos: std::collections::HashSet<&str> = banco.iter().map(|q| q.concepto.as_str()).collect();
-    Inicio::Listo { titulo, sesion: conceptos.len().min(TAMANO_SESION) as u32 }
+    let tarjeta = tarjeta(examen, banco, historial, objetivo);
+    let sesion = (tarjeta.sabes + tarjeta.no_sabes + tarjeta.sin_ver).min(TAMANO_SESION as u32);
+    Inicio::Listo { titulo, sesion, tarjeta }
 }
 
 const TAMANO_SESION: usize = 12;
@@ -248,9 +257,268 @@ pub fn sesion(banco: &[Pregunta], historial: &[Respuesta], ahora: i64, azar: &mu
         .collect()
 }
 
+/// La tarjeta de la nota, con la barra del camino. Los porcentajes van redondeados.
+#[derive(Serialize, TS, PartialEq, Debug)]
+#[ts(export)]
+pub struct Tarjeta {
+    pub sabes: u32,
+    pub no_sabes: u32,
+    pub sin_ver: u32,
+    /// La probabilidad de sacar el objetivo hoy, con la forma de las dudas que da más.
+    pub hoy: u32,
+    /// Los conceptos en "sabes" que dan un 95 %.
+    pub meta: u32,
+    /// "✓", "≈1 sesión", "≈n sesiones" o "? sesiones".
+    pub sesiones: String,
+    pub consejo: String,
+    /// Los puntos de probabilidad que gana el consejo.
+    pub puntos: u32,
+    /// Los aciertos en una duda: en lo que viste, en lo que no viste y de media.
+    pub dudas: Vec<Dudas>,
+}
+
+#[derive(Serialize, TS, PartialEq, Debug)]
+#[ts(export)]
+pub struct Dudas {
+    pub texto: String,
+    pub conceptos: u32,
+    pub porcentaje: u32,
+    pub detalle: Option<String>,
+}
+
+/// La tarjeta de la nota para sacar más de `objetivo` sobre 10.
+pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], objetivo: f64) -> Tarjeta {
+    let a_ciegas = 1.0 / examen.opciones as f64;
+    let (sabes, no_sabes, sin_ver) = cuenta(banco, historial);
+    let n = sabes + no_sabes + sin_ver;
+    let total = n.max(1) as f64;
+    let dudas = historial.iter().filter(|r| !r.seguro).count();
+    let aciertos_dudo = historial.iter().filter(|r| !r.seguro && r.acierto).count();
+    let tasa_dudo = if dudas == 0 { a_ciegas } else { aciertos_dudo as f64 / dudas as f64 };
+    let tasa = (no_sabes as f64 * tasa_dudo + sin_ver as f64 * a_ciegas) / (no_sabes + sin_ver).max(1) as f64;
+    let p = |s: u32, acierto| probabilidad(s as f64 / total, acierto, objetivo, examen);
+    let mut meta = sabes;
+    while meta < n && p(meta, None).max(p(meta, Some(tasa))) < META {
+        meta += 1;
+    }
+    let faltan = meta - sabes;
+    // El ritmo: los conceptos que pasaron a "sabes" en las últimas respuestas, por sesión.
+    let mut ordenado = historial.to_vec();
+    ordenado.sort_by(|a, b| a.ts.cmp(&b.ts));
+    let antes = cuenta(banco, &ordenado[..ordenado.len().saturating_sub(VENTANA)]).0;
+    let sesiones_de_la_ventana =
+        if historial.is_empty() { 1.0 } else { historial.len().min(VENTANA) as f64 / TAMANO_SESION as f64 };
+    let ritmo = (sabes as f64 - antes as f64) / sesiones_de_la_ventana;
+    let (blanco, contesta) = (p(sabes, None), p(sabes, Some(tasa)));
+    let pc = |x: f64| (100.0 * x).round() as u32;
+    let ciegas = format!("a ciegas, 1 de {}", examen.opciones);
+    let fila = |texto: &str, conceptos, tasa, detalle| Dudas { texto: texto.into(), conceptos, porcentaje: pc(tasa), detalle };
+    Tarjeta {
+        sabes,
+        no_sabes,
+        sin_ver,
+        hoy: pc(blanco.max(contesta)),
+        meta,
+        sesiones: if faltan == 0 {
+            "✓".into()
+        } else if ritmo > 0.0 {
+            match (faltan as f64 / ritmo).ceil() {
+                1.0 => "≈1 sesión".into(),
+                n => format!("≈{n} sesiones"),
+            }
+        } else {
+            "? sesiones".into()
+        },
+        consejo: if contesta > blanco { "Contesta las dudas" } else { "Deja las dudas en blanco" }.into(),
+        puntos: pc((contesta - blanco).abs()),
+        dudas: vec![
+            fila(
+                "en lo que viste",
+                no_sabes,
+                tasa_dudo,
+                Some(if dudas == 0 { ciegas.clone() } else { format!("{aciertos_dudo} de {dudas} «dudo»") }),
+            ),
+            fila("en lo que no viste", sin_ver, a_ciegas, Some(ciegas)),
+            fila("de media", no_sabes + sin_ver, tasa, None),
+        ],
+    }
+}
+
+const META: f64 = 0.95;
+/// Las respuestas que cuentan para el ritmo: 5 sesiones de 12.
+const VENTANA: usize = 60;
+
+/// Los conceptos en "sabes", en "no sabes" y sin ver.
+fn cuenta(banco: &[Pregunta], historial: &[Respuesta]) -> (u32, u32, u32) {
+    let estado = estados(banco, historial);
+    let conceptos: std::collections::HashSet<&str> = banco.iter().map(|q| q.concepto.as_str()).collect();
+    let sabes = estado.values().filter(|e| matches!(e.0, Concepto::Paso(n) if n > 0)).count();
+    (sabes as u32, (estado.len() - sabes) as u32, (conceptos.len() - estado.len()) as u32)
+}
+
+fn binomial(n: u32, k: u32, p: f64) -> f64 {
+    let c = (0..k).fold(1.0, |c, i| c * (n - i) as f64 / (i + 1) as f64);
+    c * p.powi(k as i32) * (1.0 - p).powi((n - k) as i32)
+}
+
+/// La probabilidad de sacar más de `objetivo` si cada pregunta es de un concepto en "sabes" con probabilidad `sabes`.
+/// Una pregunta de otro concepto acierta con probabilidad `acierto`, o queda en blanco con `None`.
+/// El objetivo pide `objetivo × preguntas / 10` aciertos netos, y un fallo resta la penalización.
+fn probabilidad(sabes: f64, acierto: Option<f64>, objetivo: f64, examen: &Examen) -> f64 {
+    let n = examen.preguntas;
+    let netos = objetivo * n as f64 / 10.0;
+    let mut total = 0.0;
+    for k in 0..=n {
+        let resto = n - k;
+        match acierto {
+            None if k as f64 >= netos => total += binomial(n, k, sabes),
+            None => {}
+            Some(p) => {
+                for a in 0..=resto {
+                    if (k + a) as f64 - examen.penalizacion * (resto - a) as f64 >= netos {
+                        total += binomial(n, k, sabes) * binomial(resto, a, p);
+                    }
+                }
+            }
+        }
+    }
+    total
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    const LN: Examen = Examen { titulo: String::new(), preguntas: 20, opciones: 4, penalizacion: 0.25 };
+
+    /// Un banco de `n` conceptos `c0`, `c1`…, con una pregunta `q0`, `q1`… cada uno.
+    fn banco_de(n: usize) -> Vec<Pregunta> {
+        (0..n).map(|i| pregunta(&format!("q{i}"), &format!("c{i}"))).collect()
+    }
+
+    /// Una respuesta por minuto, de `(pregunta, acierto, seguro)`.
+    fn historial_de(respuestas: &[(usize, bool, bool)]) -> Vec<Respuesta> {
+        respuestas
+            .iter()
+            .enumerate()
+            .map(|(k, &(i, acierto, seguro))| {
+                let ts = format!("1970-01-01T{:02}:{:02}:00Z", k / 60, k % 60);
+                respuesta(&format!("q{i}"), &ts, acierto, seguro)
+            })
+            .collect()
+    }
+
+    fn cerca(a: f64, b: f64) {
+        assert!((a - b).abs() < 1e-9, "{a} ≠ {b}");
+    }
+
+    #[test]
+    fn la_probabilidad_de_una_nota_cuenta_los_aciertos_menos_la_penalizacion_de_los_fallos() {
+        cerca(probabilidad(1.0, None, 5.0, &LN), 1.0);
+        cerca(probabilidad(0.0, None, 5.0, &LN), 0.0);
+        cerca(probabilidad(0.5, None, 5.0, &LN), 0.5880985260009766);
+        cerca(probabilidad(0.5, Some(0.25), 5.0, &LN), 0.6828711582842681);
+        cerca(probabilidad(0.0, Some(0.25), 5.0, &LN), 0.000935391579332645);
+        cerca(probabilidad(0.5, None, 7.5, &LN), 0.020694732666015625);
+        cerca(probabilidad(0.5, Some(0.25), 7.5, &LN), 0.07904140886862707);
+        cerca(probabilidad(0.9, Some(0.25), 10.0, &LN), 0.21029776386659405);
+    }
+
+    #[test]
+    fn una_duda_acierta_con_el_porcentaje_de_dudo_en_lo_que_viste_y_a_ciegas_en_lo_que_no() {
+        let h = historial_de(&[(0, true, true), (1, false, false), (2, true, false)]);
+        let t = tarjeta(&LN, &banco_de(10), &h, 5.0);
+        assert_eq!((t.sabes, t.no_sabes, t.sin_ver), (1, 2, 7));
+        assert_eq!(t.dudas[0].detalle.as_deref(), Some("1 de 2 «dudo»"));
+        // 2 conceptos al 50 % y 7 al 25 %: 11/36.
+        assert_eq!([0, 1, 2].map(|i| t.dudas[i].porcentaje), [50, 25, 31]);
+    }
+
+    #[test]
+    fn la_tarjeta_sigue_la_forma_con_la_probabilidad_mas_alta_y_el_consejo_da_la_diferencia() {
+        // 10 conceptos que sabes y 10 con un fallo con dudo: contestar solo resta, y una duda acierta 0 %.
+        let respuestas: Vec<_> = (0..10).map(|i| (i, true, true)).chain((10..20).map(|i| (i, false, false))).collect();
+        let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 5.0);
+        assert_eq!((t.hoy, t.puntos), (59, 34));
+        assert_eq!(t.consejo, "Deja las dudas en blanco");
+    }
+
+    #[test]
+    fn el_camino_cuenta_los_conceptos_para_un_95_y_las_sesiones_salen_del_ritmo() {
+        // Para un 10 con 20 preguntas solo valen 20 aciertos, así que el 95 % pide todos los conceptos.
+        // 4 conceptos nuevos en 4 respuestas son 12 por sesión, y faltan 16.
+        let h = historial_de(&[(0, true, true), (1, true, true), (2, true, true), (3, true, true)]);
+        let t = tarjeta(&LN, &banco_de(20), &h, 10.0);
+        assert_eq!((t.sabes, t.meta), (4, 20));
+        assert_eq!(t.sesiones, "≈2 sesiones");
+    }
+
+    #[test]
+    fn una_sola_sesion_va_en_singular() {
+        // 19 conceptos nuevos en 19 respuestas son 12 por sesión, y falta 1.
+        let respuestas: Vec<_> = (0..19).map(|i| (i, true, true)).collect();
+        let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 10.0);
+        assert_eq!(t.sesiones, "≈1 sesión");
+    }
+
+    #[test]
+    fn el_ritmo_cuenta_solo_las_60_ultimas_respuestas() {
+        // 10 conceptos nuevos en las 60 últimas respuestas son 2 por sesión, y faltan 50.
+        let respuestas: Vec<_> = (0..50).map(|i| (i, true, true)).chain((0..50).map(|_| (0, true, true))).collect();
+        let t = tarjeta(&LN, &banco_de(100), &historial_de(&respuestas), 10.0);
+        assert_eq!((t.sabes, t.meta), (50, 100));
+        assert_eq!(t.sesiones, "≈25 sesiones");
+    }
+
+    #[test]
+    fn con_un_95_hoy_no_faltan_conceptos_ni_sesiones() {
+        let respuestas: Vec<_> = (0..20).map(|i| (i, true, true)).collect();
+        let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 5.0);
+        assert_eq!((t.sabes, t.meta, t.hoy), (20, 20, 100));
+        assert_eq!(t.sesiones, "✓");
+    }
+
+    #[test]
+    fn sin_ritmo_las_sesiones_no_se_pueden_calcular() {
+        let t = tarjeta(&LN, &banco_de(20), &historial_de(&[(0, false, true)]), 10.0);
+        assert_eq!((t.sabes, t.meta), (0, 20));
+        assert_eq!(t.sesiones, "? sesiones");
+    }
+
+    #[test]
+    fn sabes_es_un_paso_de_1_o_mas() {
+        // c0 sube a paso 2, c1 vuelve a paso 0 tras un acierto con dudo, y una respuesta huérfana no cuenta.
+        let mut h = historial_de(&[(0, true, true), (0, true, true), (1, true, true), (1, true, false)]);
+        h.push(respuesta("x", "1970-01-01T01:00:00Z", true, true));
+        let t = tarjeta(&LN, &banco_de(3), &h, 5.0);
+        assert_eq!((t.sabes, t.no_sabes, t.sin_ver), (1, 1, 1));
+    }
+
+    #[test]
+    fn un_examen_de_3_opciones_sin_penalizacion_aconseja_contestar() {
+        let asn = Examen { titulo: String::new(), preguntas: 35, opciones: 3, penalizacion: 0.0 };
+        let t = tarjeta(&asn, &banco_de(20), &[], 5.0);
+        assert_eq!(t.dudas[2].porcentaje, 33);
+        assert_eq!(t.dudas[1].detalle.as_deref(), Some("a ciegas, 1 de 3"));
+        assert_eq!(t.consejo, "Contesta las dudas");
+    }
+
+    #[test]
+    fn la_tarjeta_sin_historial_acierta_una_duda_a_ciegas_y_no_tiene_ritmo() {
+        let t = tarjeta(&LN, &banco_de(20), &[], 5.0);
+        assert_eq!((t.sabes, t.no_sabes, t.sin_ver, t.hoy, t.puntos), (0, 0, 20, 0, 0));
+        assert_eq!(t.consejo, "Contesta las dudas");
+        assert_eq!(t.sesiones, "? sesiones");
+        let a_ciegas = Some("a ciegas, 1 de 4".to_string());
+        assert_eq!(
+            t.dudas,
+            [
+                Dudas { texto: "en lo que viste".into(), conceptos: 0, porcentaje: 25, detalle: a_ciegas.clone() },
+                Dudas { texto: "en lo que no viste".into(), conceptos: 20, porcentaje: 25, detalle: a_ciegas },
+                Dudas { texto: "de media".into(), conceptos: 20, porcentaje: 25, detalle: None },
+            ]
+        );
+    }
 
     pub(crate) fn pregunta(id: &str, concepto: &str) -> Pregunta {
         Pregunta {
@@ -271,9 +539,10 @@ mod tests {
     #[test]
     fn el_inicio_da_el_titulo_y_las_preguntas_de_la_sesion() {
         let banco = [pregunta("a1", "a"), pregunta("a2", "a"), pregunta("b1", "b")];
-        let examen = Examen { titulo: "LN".into() };
-        assert_eq!(inicio(&examen, &banco), Inicio::Listo { titulo: "LN".into(), sesion: 2 });
-        assert_eq!(inicio(&examen, &[]), Inicio::BancoVacio { titulo: "LN".into() });
+        let examen = Examen { titulo: "LN".into(), ..LN };
+        let Inicio::Listo { titulo, sesion, .. } = inicio(&examen, &banco, &[], 5.0) else { panic!() };
+        assert_eq!((titulo.as_str(), sesion), ("LN", 2));
+        assert_eq!(inicio(&examen, &[], &[], 5.0), Inicio::BancoVacio { titulo: "LN".into() });
     }
 
     #[test]

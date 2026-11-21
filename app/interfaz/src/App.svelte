@@ -7,13 +7,29 @@
   const pedir = <T,>(ruta: string, opciones?: RequestInit): Promise<T> =>
     fetch(ruta, opciones).then((r) => (r.ok ? r.json() : Promise.reject(new Error(`El servidor responde ${r.status}`))));
 
-  const cargarInicio = () =>
-    pedir<Inicio>("api/inicio").then((datos) => {
-      document.title = datos.titulo;
-      return datos;
-    });
+  // Todos los exámenes comparten un origen, así que la clave lleva la carpeta del examen.
+  const claveObjetivo = `${location.pathname.split("/")[1]}-objetivo`;
+  let objetivo = $state(Number(localStorage.getItem(claveObjetivo) ?? 5));
+  let inicio = $state<Inicio | null>(null);
 
-  let inicio = $state(cargarInicio());
+  async function cargarInicio() {
+    const pedido = objetivo;
+    try {
+      const datos = await pedir<Inicio>(`api/inicio?objetivo=${pedido}`);
+      // Con el slider en marcha, una respuesta vieja llega tarde y no pinta.
+      if (pedido !== objetivo) return;
+      inicio = datos;
+      document.title = datos.titulo;
+    } catch (e) {
+      error = (e as Error).message;
+    }
+  }
+  cargarInicio();
+
+  function cambiarObjetivo() {
+    localStorage.setItem(claveObjetivo, String(objetivo));
+    cargarInicio();
+  }
   let ronda = $state<Ronda>({ estado: "Inicio" });
   let preguntas = $state<PreguntaDeSesion[]>([]);
   let i = $state(0);
@@ -58,7 +74,7 @@
   }
 
   function volver() {
-    inicio = cargarInicio();
+    cargarInicio();
     ronda = { estado: "Inicio" };
   }
 
@@ -68,16 +84,47 @@
 </script>
 
 {#if ronda.estado === "Inicio"}
-  {#await inicio then datos}
-    <h1>{datos.titulo}</h1>
-    {#if datos.estado === "BancoVacio"}
+  {#if inicio}
+    <h1>{inicio.titulo}</h1>
+    {#if inicio.estado === "BancoVacio"}
       <p>El banco no tiene preguntas</p>
     {:else}
-      <button onclick={empezar}>Empezar la sesión ({datos.sesion} preguntas)</button>
+      {@const t = inicio.tarjeta}
+      {@const parte = (n: number) => `${(100 * n) / (t.sabes + t.no_sabes + t.sin_ver)}%`}
+      <div class="tramos">
+        <i class="hecho" style:flex={t.sabes}></i>
+        <i class="mal" style:flex={t.no_sabes}></i>
+        <i style:flex={t.sin_ver}></i>
+      </div>
+      <p>Sabes {t.sabes} · No sabes {t.no_sabes} · Sin ver {t.sin_ver}, de {t.sabes + t.no_sabes + t.sin_ver} conceptos</p>
+      <div>
+        <label>
+          Sacar más de {objetivo.toLocaleString("es")}
+          <input type="range" min="0.5" max="10" step="0.5" bind:value={objetivo} oninput={cambiarObjetivo} />
+        </label>
+        <p>
+          <b>{t.hoy} %</b> con {t.sabes} conceptos · {t.sesiones}
+          {#if t.meta > t.sabes}· <b>95 %</b> con {t.meta} conceptos{/if}
+        </p>
+        <div class="camino">
+          <i class="hecho" style:width={parte(t.sabes)}></i>
+          <i class="falta" style:left={parte(t.sabes)} style:width={parte(t.meta - t.sabes)}></i>
+          <i class="marca" style:left={parte(t.meta)}></i>
+        </div>
+        <details>
+          <summary><b>{t.consejo}</b> +{t.puntos} puntos</summary>
+          <small>aciertos en una duda</small>
+          {#each t.dudas as d (d.texto)}
+            <p>
+              {d.texto} · {d.conceptos} conceptos · <b>{d.porcentaje} %</b>
+              {#if d.detalle}· <em>{d.detalle}</em>{/if}
+            </p>
+          {/each}
+        </details>
+      </div>
+      <button onclick={empezar}>Empezar la sesión ({inicio.sesion} preguntas)</button>
     {/if}
-  {:catch e}
-    <p>{e.message}</p>
-  {/await}
+  {/if}
 {:else if ronda.estado === "Pregunta"}
   <p>
     {i + 1} / {preguntas.length} · {q.tema} · {q.paso}
@@ -116,3 +163,42 @@
 {#if error}
   <p>{error}</p>
 {/if}
+
+<style>
+  .camino {
+    position: relative;
+    height: 20px;
+    border-radius: 6px;
+    background: #ddd;
+    overflow: hidden;
+  }
+  .camino i {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+  }
+  .tramos {
+    display: flex;
+    height: 8px;
+    border-radius: 4px;
+    background: #ddd;
+    overflow: hidden;
+  }
+  .mal {
+    background: #c33;
+  }
+  .hecho {
+    background: #3a3;
+  }
+  .camino .hecho {
+    left: 0;
+  }
+  .falta {
+    background: #e93;
+  }
+  .marca {
+    width: 2px;
+    margin-left: -1px;
+    background: #000;
+  }
+</style>
