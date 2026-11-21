@@ -271,8 +271,10 @@ pub struct Tarjeta {
     /// "✓", "≈1 sesión", "≈n sesiones" o "? sesiones".
     pub sesiones: String,
     pub consejo: String,
-    /// Los puntos de probabilidad que gana el consejo.
-    pub puntos: u32,
+    /// La probabilidad de sacar el objetivo si contestas las dudas.
+    pub si_contestas: u32,
+    /// La probabilidad de sacar el objetivo si dejas las dudas en blanco.
+    pub en_blanco: u32,
     /// Los aciertos en una duda: en lo que viste, en lo que no viste y de media.
     pub dudas: Vec<Dudas>,
 }
@@ -330,7 +332,8 @@ pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], obj
             "? sesiones".into()
         },
         consejo: if contesta > blanco { "Contesta las dudas" } else { "Deja las dudas en blanco" }.into(),
-        puntos: pc((contesta - blanco).abs()),
+        si_contestas: pc(contesta),
+        en_blanco: pc(blanco),
         dudas: vec![
             fila(
                 "en lo que viste",
@@ -435,11 +438,11 @@ mod tests {
     }
 
     #[test]
-    fn la_tarjeta_sigue_la_forma_con_la_probabilidad_mas_alta_y_el_consejo_da_la_diferencia() {
+    fn la_tarjeta_sigue_la_forma_con_la_probabilidad_mas_alta_y_el_consejo_da_las_dos() {
         // 10 conceptos que sabes y 10 con un fallo con dudo: contestar solo resta, y una duda acierta 0 %.
         let respuestas: Vec<_> = (0..10).map(|i| (i, true, true)).chain((10..20).map(|i| (i, false, false))).collect();
         let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 5.0);
-        assert_eq!((t.hoy, t.puntos), (59, 34));
+        assert_eq!((t.hoy, t.si_contestas, t.en_blanco), (59, 25, 59));
         assert_eq!(t.consejo, "Deja las dudas en blanco");
     }
 
@@ -506,7 +509,7 @@ mod tests {
     #[test]
     fn la_tarjeta_sin_historial_acierta_una_duda_a_ciegas_y_no_tiene_ritmo() {
         let t = tarjeta(&LN, &banco_de(20), &[], 5.0);
-        assert_eq!((t.sabes, t.no_sabes, t.sin_ver, t.hoy, t.puntos), (0, 0, 20, 0, 0));
+        assert_eq!((t.sabes, t.no_sabes, t.sin_ver, t.hoy, t.si_contestas, t.en_blanco), (0, 0, 20, 0, 0, 0));
         assert_eq!(t.consejo, "Contesta las dudas");
         assert_eq!(t.sesiones, "? sesiones");
         let a_ciegas = Some("a ciegas, 1 de 4".to_string());

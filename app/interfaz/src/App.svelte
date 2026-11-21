@@ -112,7 +112,7 @@
           <i class="marca" style:left={parte(t.meta)}></i>
         </div>
         <details>
-          <summary><b>{t.consejo}</b> +{t.puntos} % de probabilidad</summary>
+          <summary><b>{t.consejo}</b>: {t.si_contestas} % si contestas · {t.en_blanco} % en blanco</summary>
           <small>aciertos en una duda</small>
           {#each t.dudas as d (d.texto)}
             <p>
