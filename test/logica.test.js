@@ -178,7 +178,7 @@ test("la nota del simulacro es sobre 10: un acierto suma 0,5, un fallo resta 0,1
   assert.equal(nota(Array(20).fill("acierto"), 1 / 4), 10);
 });
 
-const ejemplo = JSON.parse(readFileSync(new URL("../ln/preguntas-ejemplo.json", import.meta.url)));
+const ejemplo = JSON.parse(readFileSync(new URL("../app/servidor/tests/datos/ln-preguntas.json", import.meta.url)));
 
 test("la hoja enlaza la imagen de la página y el PDF en esa página", () => {
   const fuente = { pdf: "2A _Teoría.pdf", pagina: 5 };
@@ -304,7 +304,7 @@ test("con un banco vacío no faltan conceptos", () => {
 const rondaDe = (preguntas, resultados, simulacro = false, limite = null) => ({ preguntas, resultados, simulacro, limite, i: resultados.length });
 
 test("un guardado lleva los id de la ronda, sus resultados, el simulacro y el límite, con la hora del guardado", () => {
-  const banco = JSON.parse(readFileSync(new URL("../ln/preguntas-ejemplo.json", import.meta.url), "utf8"));
+  const banco = JSON.parse(readFileSync(new URL("../app/servidor/tests/datos/ln-preguntas.json", import.meta.url), "utf8"));
   const g = guardado(rondaDe(banco.slice(0, 2), ["acierto"], true, 500), 123);
   assert.deepEqual(g, { guardada: 123, ronda: { ids: [banco[0].id, banco[1].id], resultados: ["acierto"], simulacro: true, limite: 500 } });
   assert.deepEqual(guardado(null, 124), { guardada: 124, ronda: null });
@@ -317,7 +317,7 @@ test("de 2 copias gana la guardada más nueva", () => {
 });
 
 test("restaurar abre la primera pregunta sin resultado, en el orden guardado", () => {
-  const banco = JSON.parse(readFileSync(new URL("../ln/preguntas-ejemplo.json", import.meta.url), "utf8"));
+  const banco = JSON.parse(readFileSync(new URL("../app/servidor/tests/datos/ln-preguntas.json", import.meta.url), "utf8"));
   const orden = [banco[3], banco[1], banco[2]];
   const ronda = restaurar(guardado(rondaDe(orden, ["fallo", "blanco"], true, 500), 1), banco);
   assert.deepEqual(ronda.preguntas.map((q) => q.id), orden.map((q) => q.id));
@@ -328,7 +328,7 @@ test("restaurar abre la primera pregunta sin resultado, en el orden guardado", (
 });
 
 test("sin ronda a medias, o con un id que no está en el banco, restaurar devuelve null", () => {
-  const banco = JSON.parse(readFileSync(new URL("../ln/preguntas-ejemplo.json", import.meta.url), "utf8"));
+  const banco = JSON.parse(readFileSync(new URL("../app/servidor/tests/datos/ln-preguntas.json", import.meta.url), "utf8"));
   assert.equal(restaurar({ guardada: 1, ronda: null }, banco), null);
   assert.equal(restaurar({ guardada: 1, ronda: { ids: [banco[0].id, "no-existe"], resultados: [], simulacro: false, limite: null } }, banco), null);
 });
