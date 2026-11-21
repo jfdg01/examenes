@@ -58,7 +58,8 @@ package nucleo {
     +meta: u32
     +sesiones: String
     +consejo: String
-    +puntos: u32
+    +si_contestas: u32
+    +en_blanco: u32
     +dudas: Vec<Dudas>
   }
   class Dudas <<ts-rs>> {
