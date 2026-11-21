@@ -1,6 +1,6 @@
-# El test corre en Rust y Svelte 5, con la lógica en el servidor
+# La app de práctica corre en Rust y Svelte 5, con la lógica en el servidor
 
-El test de práctica es un servidor de Rust y una interfaz de Svelte 5. El objetivo es una app robusta, con un código fácil de leer y fácil de escalar a más exámenes.
+La app de práctica es un servidor de Rust y una interfaz de Svelte 5. El código vive en `app/`. El objetivo es una app robusta, con un código fácil de leer y fácil de escalar a más exámenes.
 
 ## Las decisiones
 
