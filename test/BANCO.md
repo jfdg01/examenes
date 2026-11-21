@@ -21,6 +21,26 @@ El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.
 - `fuente` es el PDF y su página de PDF, y no el número de la diapositiva.
 - `distractores` tiene `opciones` − 1 opciones. La interfaz baraja la correcta con los distractores.
 
+## Las reglas
+
+Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002) y la guía de redacción del NBME. Valen para cada banco, salvo el de LN, que tiene 2 o 3 preguntas por concepto y una explicación de una línea.
+
+1. **Un concepto es una idea del temario.** Una idea es una regla, un mecanismo, la diferencia entre 2 cosas o lo que hace algo. Una página da tantos conceptos como ideas tiene, de 0 a varios. Una fecha, un número de RFC o de norma, o el nombre de quien publica algo no son una idea.
+2. **3 preguntas por concepto**, cada una desde un ángulo distinto: la definición, un caso, la consecuencia. Así, un acierto mide la idea, y no la forma de la pregunta.
+3. **Una sola respuesta defendible.** La correcta es cierta según su página, y cada distractor es falso. Un dato que el temario da de 2 formas no tiene pregunta.
+4. **El enunciado se contesta sin las opciones.** Con las opciones tapadas, quien sabe la idea da una respuesta corta. El enunciado pide una sola cosa, con el término del temario y con otras palabras que la diapositiva.
+5. **Cada distractor es un error plausible**, la confusión más probable de quien estudia: responsable y encargado, firma y cifrado. Sale del temario, o es una idea plausible fuera de él. Cada distractor falla por un _matiz_ que la explicación nombra.
+6. **Ninguna pista fuera de la idea.** Las opciones tienen una longitud y una forma gramatical parecidas. La correcta es la más larga en 1 de cada 3 preguntas como mucho. Una palabra, una sigla o una traducción del enunciado sale en todas las opciones o en ninguna. "Siempre", "nunca" y "solo" salen también en la correcta. Cada opción se lee sola, porque la interfaz las baraja.
+7. **El enunciado es afirmativo**, y pregunta qué es, qué hace o por qué.
+8. **La explicación nombra cada matiz:** una frase para la correcta y una frase por distractor.
+9. **Una sigla de seguridad es un concepto propio, con una sola pregunta:** el enunciado da la sigla y pide su significado, con 2 desarrollos plausibles como distractores. Las siglas generales de informática, como TCP, IP o ASCII, quedan fuera. Su `fuente` es la primera página que la explica.
+
+Una pregunta de cada 5 es difícil: un distractor copia la correcta y cambia un solo término, responde a otra pregunta del temario, o aplica la regla general a su excepción. Una pregunta difícil sigue las 9 reglas.
+
+Una pregunta que pasa a preguntar otra idea lleva un `id` nuevo. Una pregunta que cambia de forma o de distractores conserva su `id`.
+
+El `README.md` de cada examen dice lo que el profesor marcó como importante. Esas ideas tienen su concepto.
+
 ## El comprobador
 
 ```bash

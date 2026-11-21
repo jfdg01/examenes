@@ -43,43 +43,6 @@ Un examen nuevo es una carpeta nueva con su `examen.json`, un `preguntas.json` c
 
 El formato de `preguntas.json`, las reglas de una pregunta y el comprobador están en `BANCO.md`.
 
-### La calidad de una pregunta
-
-Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002), "A review of multiple-choice item-writing guidelines", y la guía de redacción de preguntas del NBME, de Case y Swanson.
-
-1. **Una sola respuesta defendible.** La correcta es cierta según su página, y cada distractor es falso según el temario. Un distractor "menos correcto" no vale. Un dato que el temario da de 2 formas distintas no tiene pregunta.
-2. **El enunciado se contesta sin las opciones.** El enunciado nombra el concepto del temario y pide una sola cosa de ese concepto. Con las opciones tapadas, quien sabe el dato da una sola respuesta corta. Así, la pregunta entrena el recuerdo del dato, y no solo su reconocimiento. Un caso práctico pide un solo salto: del caso al concepto, o del concepto a lo que hace, y no los 2. El enunciado no lleva un detalle que la respuesta no necesita. El enunciado dice la idea con otras palabras, y no copia la frase del temario, pero usa el término del temario para el concepto.
-3. **Ninguna pista fuera del dato.** Las opciones tienen una longitud parecida, y la correcta es la más larga en 1 de cada `opciones` preguntas como mucho: un 25 % con 4 opciones, y un 33 % con 3. Todas tienen la forma gramatical que pide el enunciado. Una palabra del enunciado no se repite solo en la correcta, y "siempre", "nunca" o "solo" no van solo en los distractores. Una sigla o una traducción del enunciado también es una pista: "CWNP" en el enunciado señala "CWSP", y "seguridad ofensiva" señala "Offensive Security". Ninguna opción es "todas las anteriores" ni "ninguna de las anteriores", porque la interfaz baraja las opciones.
-4. **Cada distractor sale del temario que dio el profesor.** Un distractor es un nombre, una cifra o una idea del temario, fuera de los ejercicios y de las actividades. El mejor distractor es la confusión más probable de quien estudia, como responsable y encargado. Un nombre que no sale en el temario se descarta sin saber el dato.
-5. **Ningún enunciado negativo.** Un "¿Cuál NO es…?" se lee mal con prisa, y entrena la búsqueda de la trampa, y no el dato.
-6. **Una idea, y no un dato suelto.** La pregunta pide una idea del temario: una regla, un plazo, la diferencia entre 2 figuras o lo que hace algo. Una fecha del calendario, el número de una norma o el nombre de la organización que ofrece una certificación no tienen pregunta. Un plazo sí la tiene, porque es una regla, como las 72 horas para notificar una brecha. Una pregunta puede nombrar una norma por su número, pero no pide ese número.
-
-Una pregunta que rompe la regla 6 deja su sitio a una pregunta nueva, sobre otra idea de la misma página. La pregunta nueva lleva un `id` nuevo, porque el historial del `id` viejo mide el dato suelto. Una página sin otra idea pierde la pregunta. Una pregunta que rompe la regla 3 conserva su `id`, porque su dato no cambia.
-
-### Las preguntas difíciles
-
-Una pregunta de cada 5 es difícil. Su distractor está muy cerca del dato, y falla solo en un detalle. Así, la pregunta obliga a entender el dato entero, y no solo a reconocer una palabra. Una pregunta difícil engaña con el contenido, y nunca con la forma: sigue las 6 reglas de calidad.
-
-Un distractor difícil tiene una de estas formas:
-
-- **Un solo cambio.** Copia la correcta y cambia un término: "responsable" por "encargado", o "desde que tiene constancia" por "desde que ocurre".
-- **Una verdad que no responde.** Es cierto en el temario, pero responde a otra pregunta, como el plazo de otro artículo.
-- **La excepción.** El caso parece seguir la regla general, pero el temario tiene una excepción para ese caso.
-- **La cifra en otra unidad.** El número es el correcto, pero la unidad o la referencia cambian: "72 días", o el 4 % del beneficio.
-
-Una pregunta pasa a ser difícil con otros distractores, y con el mismo dato. Así, su `id` mide el mismo dato en el historial.
-
-### Las reglas de un banco nuevo
-
-Un banco nuevo, como el de PS o el de ASN, sigue también estas 4 reglas. El banco de LN no las sigue, porque su examen ya pasó.
-
-1. **La explicación de cada opción.** La `explicacion` es un texto, con una frase para la correcta y una frase por distractor. Cada frase de un distractor nombra el matiz que lo hace incorrecto. Así, una ronda enseña también lo que separa cada distractor de la correcta. Un buen distractor es una idea plausible que una persona puede pensar con lo que sabe, y que es incorrecta por un matiz. Un distractor sin un matiz que explicar no vale.
-2. **La regla 4.** Un distractor sale del temario, o es una idea plausible fuera del temario, con su matiz en la explicación.
-3. **3 preguntas por concepto.** Un concepto agrupa 3 preguntas que preguntan el mismo dato desde ángulos distintos.
-4. **Las siglas.** Cada sigla de seguridad del temario es un concepto propio, con una sola pregunta. El enunciado da la sigla y pide su significado, con 2 desarrollos plausibles como distractores. Las siglas muy generales de informática, como TCP, IP o ASCII, no entran. La sigla es una excepción a la regla 6. Su `tema` es el tema del PDF que la explica, y su `fuente` es la primera página que la explica.
-
-`comprobar_banco.py` no comprueba que la explicación nombra cada distractor.
-
 ## El historial: `respuestas.jsonl`
 
 El historial es una lista de respuestas que solo crece, con una respuesta por línea:
