@@ -1,14 +1,13 @@
 # El modelo de la práctica
 
-La app tiene 3 máquinas de estados: la caja de una pregunta, el estado de un concepto y la ronda. Las 3 se calculan desde `respuestas.jsonl`, y ningún estado se guarda aparte. Este doc describe la lógica de `test/logica.js` sin el bloque de estudio. La revisión de la lógica, en [el registro de la migración](migracion-a-rust.md), decide qué cambia.
+La app tiene 3 máquinas de estados: el paso de un concepto, el estado de un concepto y la ronda. Las 3 se calculan desde `respuestas.jsonl`, y ningún estado se guarda aparte. El paso y la sesión entran antes en la app de JavaScript, con `los-intervalos-del-concepto` (#17), y la migración los pasa a Rust.
 
-## La caja de una pregunta
+## El paso de un concepto
 
-- Una pregunta sin respuestas es **nueva**. El dominio la cuenta como caja 1.
-- Un acierto con "seguro" sube una caja: de nueva a 2, de 1 a 2 y de 2 a 3. La caja 3 es el tope.
-- Un fallo, un acierto con "dudo" o una pregunta en blanco bajan la pregunta a la **caja 1**.
-- Cada respuesta mueve la caja, la de una sesión y la de un simulacro.
-- Rust tiene un `enum Caja { Nueva, Una, Dos, Tres }`, y una función que da la caja siguiente según la respuesta.
+- Un concepto sin respuestas está **sin ver**.
+- Un acierto con "seguro" sube el paso en 1, aunque el concepto no haya vencido. El concepto vence 10 minutos × 3^(paso − 1) después de la respuesta.
+- Un fallo, un acierto con "dudo" o una pregunta en blanco ponen el paso a 0, y el concepto vence en el acto.
+- Cada respuesta mueve el paso, la de una sesión y la de un simulacro.
 
 ## El estado de un concepto
 
@@ -16,7 +15,7 @@ La app tiene 3 máquinas de estados: la caja de una pregunta, el estado de un co
 - La última respuesta a una pregunta del concepto decide su estado. Un acierto con "seguro" deja el concepto en **sabes**. Otra respuesta lo deja en **no sabes**.
 - La barra del camino y la tarjeta de la nota usan este estado.
 
-El **dominio** de un concepto es la caja más baja de sus preguntas. El PC muestra el dominio al lado de la pregunta. El estado y el dominio pueden no coincidir: un concepto con 2 preguntas, una acertada con "seguro" y otra nueva, está en "sabes" con el dominio en la caja 1.
+La pantalla de la pregunta muestra el paso del concepto.
 
 ## La ronda
 
@@ -28,12 +27,8 @@ El **dominio** de un concepto es la caja más baja de sus preguntas. El PC muest
 
 ## La sesión de 12 preguntas
 
-La sesión junta las preguntas en este orden:
+1. Los conceptos vencidos, del vencido hace más tiempo al vencido hace menos.
+2. Mientras quedan conceptos sin ver, 4 huecos son para ellos.
+3. Los huecos que sobran se llenan con más conceptos sin ver, y después con los conceptos que vencen antes.
 
-1. Todas las preguntas de la caja 1.
-2. Una pregunta de cada concepto sin ver: la vuelta al banco.
-3. Un sorteo entre las demás preguntas de los conceptos vistos. Cada caja tiene un peso en el sorteo.
-
-La lista se corta en 12 preguntas, y sale en un orden al azar. Con todos los conceptos vistos, el sorteo siempre tiene candidatas. Así, una sesión de un banco de 12 preguntas o más tiene 12 preguntas. Una pregunta de la caja 3 puede salir en la sesión siguiente a su acierto.
-
-Los pesos del sorteo salen del prototipo de la sesión. El prototipo simula muchas sesiones, y cuenta las preguntas nuevas y las de cada caja en cada sesión de 12. Los pesos dan un reparto sensato en cada sesión.
+La sesión lleva una pregunta por concepto, y una pregunta sin respuestas sale antes que una con respuestas. Las 12 preguntas salen en un orden al azar.

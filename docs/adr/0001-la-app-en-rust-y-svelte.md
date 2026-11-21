@@ -4,7 +4,7 @@ La app de práctica es un servidor de Rust y una interfaz de Svelte 5. El códig
 
 ## Las decisiones
 
-- **La lógica vive en Rust, en el servidor.** Un crate `nucleo` tiene toda la lógica: las cajas, la sesión, el dominio de los conceptos, el simulacro y la tarjeta de la nota. `nucleo` no lee archivos ni la red, y sus tests corren con `cargo test`. El servidor calcula el estado, y la interfaz lo muestra.
+- **La lógica vive en Rust, en el servidor.** Un crate `nucleo` tiene toda la lógica: el paso de los conceptos, la sesión, el simulacro y la tarjeta de la nota. `nucleo` no lee archivos ni la red, y sus tests corren con `cargo test`. El servidor calcula el estado, y la interfaz lo muestra.
 - **La interfaz es Svelte 5 con Vite, sin SvelteKit.** La interfaz tiene una sola página. Vite compila Svelte a archivos estáticos en `dist/`, y el servidor de Rust los sirve.
 - **Los componentes van en TypeScript.** Los tipos del API salen de los tipos de Rust con `ts-rs`. Un cambio de un tipo en Rust rompe la build de la interfaz, y no la app en el móvil.
 - **El servidor usa `axum`**, con `tokio` y `tower-http`.

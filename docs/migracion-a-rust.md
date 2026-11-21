@@ -22,27 +22,26 @@ Una función que nadie usa no pasa a Rust, y su código se va. Una función que 
   - En el móvil: el plegado de las opciones, y la página del PDF a pantalla completa.
   - En el PC: la página al lado de la pregunta.
 - **Los tiradores de las columnas se quedan en el PC.** Mueven los bordes y el separador de las 2 columnas. Cada tirador muestra su asa cuando el ratón pasa por encima, y se arrastra siempre. El PC no tiene un modo de edición ni el botón del engranaje.
-- **La sesión no tiene un bloque de estudio.** Una pregunta de la caja 2 o de la caja 3 puede salir en la sesión siguiente, sin una pausa.
+- **La sesión elige conceptos por su fecha de repaso.** Las cajas de las preguntas, sus pesos y el bloque de estudio desaparecen. El detalle está en [el modelo](el-modelo.md).
 - **Un banco vacío no muestra la sesión ni el simulacro.** El inicio dice "El banco no tiene preguntas".
 - **El API envía solo lo que la pantalla muestra.** Un valor intermedio de un cálculo se queda en Rust.
 - **El servidor no tiene los flags `--banco` ni `--historial`.** Cada test de Rust crea una carpeta de examen temporal con sus archivos. `ln/preguntas-ejemplo.json` pasa a la carpeta de los tests de Rust.
 
 ## El flujo de trabajo
 
-1. El grilling termina con la revisión de la lógica de [el modelo](el-modelo.md): primero la caja de la pregunta, después el estado del concepto, y al final la sesión de 12 preguntas.
+1. El grilling termina con la revisión de la lógica de [el modelo](el-modelo.md): el paso y la sesión, que la app de JavaScript prueba antes, el estado del concepto y la ronda.
 2. `/to-spec` convierte las decisiones en un spec, y `/to-tickets` lo corta en tickets con sus dependencias.
 3. Cada ticket se construye con un `/implement`, con `/clear` entre ticket y ticket.
 
 Al final del grilling, cada doc que no hace falta se borra, y cada línea que no hace falta sale de los docs. Al final de la implementación, un doc que el código ya explica se resume a lo que el código no dice.
 
-La rama `feat/bkt` y su modelo BKT quedan fuera de la migración, congelados hasta que el dueño los nombre. La migración pasa a Rust el modelo de cajas.
+La rama `feat/bkt` y su modelo BKT quedan fuera de la migración, congelados hasta que el dueño los nombre. La migración pasa a Rust el modelo de los intervalos.
 
 ## Las preguntas abiertas
 
-- **El modelo que pasa a Rust.** La caja está confirmada. Falta confirmar el concepto y la ronda de [el modelo](el-modelo.md).
-- **El estado y el dominio del concepto.** El dueño quiere revisar la lógica antes de decidir si el concepto tiene una sola medida.
-- **Las máquinas de estados explícitas.** El spec define cada estado y cada transición. La caja es un `enum` de Rust, y falta confirmar el `enum` de las otras 2 máquinas.
-- **El prototipo de la sesión.** Un script en una rama `prototype/` simula muchas sesiones sin el bloque de estudio. Falta decidir qué reparto es sensato.
+- **El estado del concepto en la tarjeta de la nota.** Hoy "sabes" sale de la última respuesta, y no del paso.
+- **La ronda.** Falta confirmar su máquina en [el modelo](el-modelo.md).
+- **Las máquinas de estados explícitas.** El spec define cada estado y cada transición, y Rust tiene un `enum` por máquina.
 
 ## El final de este doc
 
