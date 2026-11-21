@@ -262,13 +262,25 @@ function hoja(q, siguiente) {
     fuentes(q)));
 }
 
-// El visor de PDF del navegador abre el PDF en la página: el PC no necesita la imagen.
 function fuentes(q) {
   const { pdf, pagina } = q.fuente;
-  return el("div", { className: "fuente" },
-    el("p", {}, `${pdf} · pág. ${pagina} · ${q.concepto} (${textoDelPaso(q.concepto)}) · `,
-      el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: "PDF" })),
-    el("iframe", { src: `${pdfEnPagina(q.fuente)}&navpanes=0&view=FitH`, title: `La página ${pagina} de ${pdf}` }));
+  const paneles = [
+    ["Ver la página aquí", () => el("img", { src: imagenDePagina(q.fuente), alt: `La página ${pagina} de ${pdf}` })],
+    ["La fuente", () => el("div", {},
+      el("p", { textContent: `${pdf}, página ${pagina} · ${q.concepto} (${textoDelPaso(q.concepto)})` }),
+      el("p", {}, el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: `Abrir el PDF en la página ${pagina}` })))],
+  ];
+  const panel = el("div", { className: "panel" });
+  const botones = paneles.map(([texto, crear]) => {
+    const boton = el("button", { className: "fuente", textContent: texto, onclick: () => {
+      const abrir = !boton.classList.contains("abierto");
+      botones.forEach((b) => b.classList.remove("abierto"));
+      panel.replaceChildren(...(abrir ? [crear()] : []));
+      boton.classList.toggle("abierto", abrir);
+    } });
+    return boton;
+  });
+  return el("div", {}, el("div", { className: "fuentes" }, ...botones), panel);
 }
 
 function fin(ronda) {

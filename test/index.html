@@ -33,8 +33,12 @@
   .fila.ko .icono { color:var(--ko); }
   .fila button:disabled { cursor:default; }
   .blanco { width:100%; padding:12px; border-radius:12px; border:2px dashed var(--line); background:none; color:var(--dim); }
-  .hoja .fuente p { margin:12px 0 6px; color:var(--dim); font-size:13px; }
-  .hoja .fuente iframe { display:block; width:100%; height:calc(100vh - 140px); border:0; border-radius:8px; background:#fff; }
+  .hoja img { width:100%; border-radius:8px; margin-top:6px; background:#fff; }
+  .hoja .fuentes { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0; }
+  .hoja .fuente { padding:12px 14px; border:2px solid var(--line); border-radius:12px; background:var(--card); color:var(--txt); font-size:14px; text-align:left; }
+  .hoja .fuente.abierto { border-color:var(--acc); }
+  .hoja .panel { color:var(--dim); font-size:13px; }
+  .hoja .panel > * { margin:8px 0; }
   .aviso-respuesta { font-size:14px; font-weight:600; padding:6px 10px; border-left:3px solid; border-radius:4px; margin:4px 0 0; }
   .alarma { color:var(--ko); background:color-mix(in srgb, var(--ko) 18%, var(--bg)); }
   .suerte { color:var(--warn); background:color-mix(in srgb, var(--warn) 15%, var(--bg)); }
