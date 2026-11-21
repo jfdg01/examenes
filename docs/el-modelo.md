@@ -1,6 +1,6 @@
 # El modelo de la práctica
 
-La app tiene 2 máquinas de estados: el paso de un concepto y la ronda. Las 2 se calculan desde `respuestas.jsonl`, y ningún estado se guarda aparte. El paso y la sesión entran antes en la app de JavaScript, con `los-intervalos-del-concepto` (#17), y la migración los pasa a Rust.
+La app tiene 2 máquinas de estados: el paso de un concepto y la ronda. Las 2 se calculan desde `respuestas.jsonl`, y ningún estado se guarda aparte. `nucleo` calcula el paso y la sesión, y la interfaz guarda la ronda en memoria.
 
 ## El paso de un concepto
 
@@ -29,4 +29,4 @@ Rust tiene un `enum Ronda { Inicio, Pregunta { contestada: bool }, Final }`.
 2. Mientras quedan conceptos sin ver, 4 huecos son para ellos.
 3. Los huecos que sobran se llenan con más conceptos sin ver, y después con los conceptos que vencen antes.
 
-La sesión lleva una pregunta por concepto, y una pregunta sin respuestas sale antes que una con respuestas. Las 12 preguntas salen en un orden al azar.
+La sesión lleva una pregunta por concepto, y una pregunta sin respuestas sale antes que una con respuestas. Las 12 preguntas salen en un orden al azar, y las opciones de cada una también. El azar sale de una semilla, y la misma semilla da el mismo orden.

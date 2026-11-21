@@ -1,6 +1,6 @@
 # La app de práctica
 
-Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están en [el ADR 0001](../docs/adr/0001-la-app-en-rust-y-svelte.md), y el diagrama de clases en [el diagrama](../docs/el-diagrama.md).
+Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están en [el ADR 0001](../docs/adr/0001-la-app-en-rust-y-svelte.md). Los diagramas de las clases, la ronda y una sesión están en PlantUML, en [el diagrama](../docs/el-diagrama.puml).
 
 - `nucleo/`: toda la lógica, sin leer archivos ni la red.
 - `servidor/`: el servidor de `axum`. Lee la carpeta de cada examen y llama a `nucleo`.
