@@ -75,7 +75,7 @@ export function unir(servidor, locales) {
   return [...vistas.values()];
 }
 
-// Un examen es el examen.json de su carpeta: titulo, preguntas, opciones, minutos, penalizacion y temas.
+// Un examen es el examen.json de su carpeta: titulo, preguntas, opciones, minutos, penalizacion y pdfs.
 // penalizacion es la parte de un acierto que resta un fallo.
 export const simulacro = (banco, n, azar = Math.random) => barajar(banco, azar).slice(0, n);
 

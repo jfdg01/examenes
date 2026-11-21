@@ -5,5 +5,14 @@
   "opciones": 3,
   "minutos": 45,
   "penalizacion": 0,
-  "temas": ["introduccion", "ciclo-de-vida", "alta-disponibilidad", "despliegue", "monitorizacion", "organizacion", "dfir", "contenedores"]
+  "pdfs": {
+    "1_Introduccion.pdf": ["introduccion"],
+    "2_Ciclo_de_vida.pdf": ["ciclo-de-vida"],
+    "3_Alta_disponibilidad.pdf": ["alta-disponibilidad"],
+    "4_Despliegue.pdf": ["despliegue"],
+    "5_Monitorizacion.pdf": ["monitorizacion"],
+    "6.1_Organizacion.pdf": ["organizacion"],
+    "6.2_DFIR.pdf": ["dfir"],
+    "S_Contenedores.pdf": ["contenedores"]
+  }
 }

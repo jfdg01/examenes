@@ -5,5 +5,11 @@
   "opciones": 3,
   "minutos": 25,
   "penalizacion": 0.3333333333333333,
-  "temas": ["introduccion", "claves", "transporte", "aplicacion", "ssl-tls"]
+  "pdfs": {
+    "1_Introduccion.pdf": ["introduccion"],
+    "2_Claves.pdf": ["claves"],
+    "3_Transporte.pdf": ["transporte"],
+    "4_Aplicacion.pdf": ["aplicacion"],
+    "E_SSL_TLS.pdf": ["ssl-tls"]
+  }
 }

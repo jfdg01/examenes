@@ -17,8 +17,6 @@ def comprobar(preguntas, carpeta):
         if id_ in vistos:
             errores.append(f"{id_}: id repetido")
         vistos.add(id_)
-        if p.get("tema") not in examen["temas"]:
-            errores.append(f"{id_}: tema fuera de la lista: {p.get('tema')}")
         distractores = p.get("distractores", [])
         if len(distractores) != distractores_por_pregunta:
             errores.append(f"{id_}: {len(distractores)} distractores, y no {distractores_por_pregunta}")
@@ -26,9 +24,12 @@ def comprobar(preguntas, carpeta):
             errores.append(f"{id_}: un distractor es la respuesta correcta: {p.get('correcta')}")
         fuente = p.get("fuente", {})
         pdf = Path(carpeta) / "pdfs" / fuente.get("pdf", "")
-        if not fuente.get("pdf") or not pdf.is_file():
-            errores.append(f"{id_}: el pdf no existe en pdfs/: {fuente.get('pdf')}")
-        elif fuente.get("pagina", 0) > paginas(pdf):
+        if fuente.get("pdf") not in examen["pdfs"] or not pdf.is_file():
+            errores.append(f"{id_}: el pdf no está en examen.json o en pdfs/: {fuente.get('pdf')}")
+            continue
+        if p.get("tema") not in examen["pdfs"][fuente["pdf"]]:
+            errores.append(f"{id_}: el tema {p.get('tema')} no es un tema de {fuente['pdf']} en examen.json")
+        if fuente.get("pagina", 0) > paginas(pdf):
             errores.append(f"{id_}: la página {fuente.get('pagina')} pasa de las {paginas(pdf)} de {pdf.name}")
     for concepto, n in collections.Counter(p.get("concepto") for p in preguntas).items():
         validos = (1,) if str(concepto).startswith("sigla-") else (2, 3)
@@ -46,6 +47,27 @@ def huerfanas(preguntas, historial):
     return sorted({json.loads(l)["id"] for l in lineas if l.strip()} - ids)
 
 
+ABSOLUTO = re.compile(r"\b(siempre|nunca|s[oó]l[oa]s?)\b", re.I)
+
+
+def absolutos(texto):
+    return set(m.lower() for m in ABSOLUTO.findall(re.sub(r"\buna? s[oó]l[oa]\b", "", texto, flags=re.I)))
+
+
+def pistas(preguntas):
+    """Los avisos de las pistas de la regla 6, que un revisor juzga."""
+    avisos = []
+    for p in preguntas:
+        sobran = set().union(*map(absolutos, p.get("distractores", []))) - absolutos(p.get("correcta", ""))
+        if sobran:
+            avisos.append(f"{p.get('id')}: un distractor dice {', '.join(sorted(sobran))}, y la correcta no")
+    normales = [p for p in preguntas if not str(p.get("concepto")).startswith("sigla-") and p.get("distractores")]
+    larga = sum(len(p["correcta"]) > max(map(len, p["distractores"])) for p in normales)
+    if normales and larga * 3 > len(normales):
+        avisos.append(f"la correcta es la opción más larga en {larga} de {len(normales)} preguntas, más de 1 de cada 3")
+    return avisos
+
+
 @functools.cache
 def paginas(pdf):
     info = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True, check=True).stdout
@@ -58,6 +80,8 @@ if __name__ == "__main__":
     preguntas = json.loads(banco.read_text())
     errores = comprobar(preguntas, carpeta)
     print("\n".join(errores) or "El banco no tiene errores.")
+    for aviso in pistas(preguntas):
+        print(f"Aviso: {aviso}")
     sin_banco = huerfanas(preguntas, carpeta / "respuestas.jsonl")
     if sin_banco:
         print(f"Aviso: {len(sin_banco)} id del historial no están en el banco: {', '.join(sin_banco)}")
