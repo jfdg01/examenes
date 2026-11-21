@@ -15,6 +15,7 @@ package nucleo {
     +titulo: String
     +preguntas: u32
     +opciones: u32
+    +minutos: u32
     +penalizacion: f64
   }
   class Pregunta <<preguntas.json>> {
@@ -48,7 +49,26 @@ package nucleo {
   }
   enum Inicio <<ts-rs>> {
     BancoVacio { titulo }
-    Listo { titulo, sesion, tarjeta }
+    Listo { titulo, sesion, simulacro, tarjeta }
+  }
+  class Simulacro <<ts-rs>> {
+    +segundos: u32
+    +preguntas: Vec<PreguntaDeSesion>
+  }
+  enum Resultado <<ts-rs>> {
+    Acierto
+    Fallo
+    Blanco
+  }
+  class Cierre <<ts-rs>> {
+    +preguntas: u32
+    +resultados: Vec<Resultado>
+  }
+  class NotaDelSimulacro <<ts-rs>> {
+    +aciertos: u32
+    +fallos: u32
+    +en_blanco: u32
+    +nota: String
   }
   class Tarjeta <<ts-rs>> {
     +sabes: u32
@@ -93,8 +113,11 @@ package nucleo {
     +inicio(examen, banco, historial, objetivo): Inicio
     +tarjeta(examen, banco, historial, objetivo): Tarjeta
     +sesion(banco, historial, ahora, azar): Vec<PreguntaDeSesion>
+    +simulacro(examen, banco, historial, azar): Simulacro
+    +nota_del_simulacro(cierre, penalizacion): NotaDelSimulacro
     +segundos(ts): Option<i64>
     -estados(banco, historial): concepto → (Concepto, vence)
+    -de_la_ronda(pregunta, estados, azar): PreguntaDeSesion
     -cuenta(banco, historial): (sabes, no sabes, sin ver)
     -probabilidad(sabes, acierto, objetivo, examen): f64
     -binomial(n, k, p): f64
@@ -114,6 +137,8 @@ package servidor {
     GET /:examen/ → pagina → index.html
     GET /:examen/api/inicio?objetivo → inicio → Inicio
     GET /:examen/api/sesion → sesion → PreguntaDeSesion[]
+    GET /:examen/api/simulacro → simulacro → Simulacro
+    POST /:examen/api/cierre → cierre, con un Cierre → NotaDelSimulacro
     POST /:examen/api/respuestas → responder → 204
     GET /assets/* → dist/assets
   }
@@ -121,6 +146,7 @@ package servidor {
     -leer_examen(carpetas, examen): Examen
     -leer_banco(carpetas, examen): Vec<Pregunta>
     -leer_historial(carpetas, examen): Vec<Respuesta>
+    -leer_ronda(carpetas, examen): (banco, historial, ahora, Azar)
     -leer_si_existe(ruta): bytes
     -error_interno(e): 500
   }
@@ -134,12 +160,19 @@ package interfaz {
     -preguntas: PreguntaDeSesion[]
     -i: number
     -aciertos: number
-    -eleccion: { opcion, seguro }
+    -eleccion: { opcion o null, seguro }
     -error: string
+    -simulacro: boolean
+    -resultados: Resultado[]
+    -nota: NotaDelSimulacro
+    -limite: ms
+    -restante: segundos
     --
-    -empezar()
-    -contestar(opcion, seguro)
+    -empezar(comoSimulacro)
+    -contar(), cada segundo
+    -contestar(opcion o null, seguro)
     -siguiente()
+    -terminar()
     -cargarInicio()
     -cambiarObjetivo()
     -volver()
@@ -151,6 +184,10 @@ package interfaz {
     Dudas
     PreguntaDeSesion
     Ronda
+    Simulacro
+    Resultado
+    Cierre
+    NotaDelSimulacro
   }
 }
 
@@ -163,6 +200,11 @@ funciones --> Inicio : devuelve
 Inicio *-- Tarjeta
 Tarjeta *-- Dudas
 funciones --> PreguntaDeSesion : devuelve
+funciones --> Simulacro : devuelve
+Simulacro *-- PreguntaDeSesion
+funciones ..> Cierre : lee
+Cierre *-- Resultado
+funciones --> NotaDelSimulacro : devuelve
 rutas *-- Carpetas : estado
 rutas ..> lectura : lee la carpeta
 rutas ..> funciones : llama
@@ -170,6 +212,10 @@ Inicio ..> tipos : ts-rs genera
 Tarjeta ..> tipos : ts-rs genera
 PreguntaDeSesion ..> tipos : ts-rs genera
 Ronda ..> tipos : ts-rs genera
+Simulacro ..> tipos : ts-rs genera
+Resultado ..> tipos : ts-rs genera
+Cierre ..> tipos : ts-rs genera
+NotaDelSimulacro ..> tipos : ts-rs genera
 App ..> tipos : importa
 App ..> rutas : HTTP
 @enduml
@@ -185,10 +231,13 @@ state "Pregunta { contestada: true }" as Contestada
 state Final
 
 [*] --> Inicio
-Inicio --> SinContestar : empezar()
+Inicio --> SinContestar : empezar(comoSimulacro)
 SinContestar --> Contestada : contestar(opcion, seguro)
+SinContestar --> Contestada : contestar(null), "En blanco" del simulacro
 Contestada --> SinContestar : siguiente(), quedan preguntas
-Contestada --> Final : siguiente(), la última
+Contestada --> Final : siguiente() → terminar(), la última
+SinContestar --> Final : contar() → terminar(), el límite del simulacro
+Contestada --> Final : contar() → terminar(), el límite del simulacro
 SinContestar --> Inicio : abandonar(), el botón ✕
 Contestada --> Inicio : abandonar(), el botón ✕
 Final --> Inicio : volver()
@@ -220,4 +269,23 @@ loop cada pregunta
   S --> App : 204
   note over App : muestra paso_tras_seguro o paso_tras_otra
 end
+@enduml
+
+@startuml el-final-de-un-simulacro
+skinparam shadowing false
+title El final de un simulacro
+
+participant "App.svelte" as App
+participant servidor as S
+participant nucleo as N
+
+App -> S : GET api/simulacro
+S -> N : simulacro(examen, banco, historial, Azar::new(nanos))
+N --> App : Simulacro { segundos, preguntas }
+note over App : limite = ahora + segundos; contar() cada segundo
+note over App : cada respuesta va a POST api/respuestas, como en la sesión
+App -> S : POST api/cierre { preguntas, resultados }
+S -> N : nota_del_simulacro(cierre, penalizacion)
+note over N : cada pregunta sin resultado cuenta en blanco
+N --> App : NotaDelSimulacro
 @enduml
