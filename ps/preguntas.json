@@ -2048,6 +2048,1830 @@
     "explicacion": "Un número no mayor que el último es un error de orden, y se destruye el mensaje. Aceptarlo permitiría una repetición. Ignorarlo sin destruir el mensaje deja datos sensibles."
   },
   {
+    "id": "claves-001",
+    "concepto": "claves-clave-de-sesion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué cifra la clave de sesión en una jerarquía de claves de dos niveles?",
+    "correcta": "Los datos que se intercambian durante una conexión",
+    "distractores": [
+      "Las claves de sesión que se distribuyen en otras conexiones",
+      "Las claves públicas que registra cada usuario"
+    ],
+    "explicacion": "La clave de sesión cifra los datos de una conexión. Cifrar la distribución de otras claves de sesión es el papel de la clave maestra. Las claves públicas de los usuarios no se cifran con una clave simétrica."
+  },
+  {
+    "id": "claves-002",
+    "concepto": "claves-clave-de-sesion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Por qué se cambia la clave simétrica de una comunicación a nivel de sesión?",
+    "correcta": "Para aumentar la seguridad, con una clave nueva en cada sesión",
+    "distractores": [
+      "Para que las dos partes dejen de necesitar una clave maestra entre ellas",
+      "Para que una misma clave dure más que la propia sesión"
+    ],
+    "explicacion": "Cambiar la clave por sesión aumenta la seguridad. La clave maestra sigue haciendo falta para distribuir las claves nuevas. Una clave de sesión no se alarga más allá de la conexión."
+  },
+  {
+    "id": "claves-003",
+    "concepto": "claves-clave-de-sesion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 5
+    },
+    "pregunta": "Un cliente abre una conexión nueva con un servidor con el que ya comparte una clave maestra. ¿Qué cifra los datos de esa conexión?",
+    "correcta": "Una clave de sesión nueva, distinta de la maestra",
+    "distractores": [
+      "La clave maestra que ya comparten los dos",
+      "La clave pública del servidor, usada para cada mensaje de la conexión"
+    ],
+    "explicacion": "Los datos de una conexión se cifran con una clave de sesión nueva. Usar la maestra para los datos la expondría, porque su papel es proteger la distribución. Cifrar cada mensaje con la clave pública no es el esquema de la jerarquía de dos niveles."
+  },
+  {
+    "id": "claves-004",
+    "concepto": "claves-clave-maestra",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Para qué sirve la clave maestra en una jerarquía de claves de dos niveles?",
+    "correcta": "Para cifrar la distribución de las claves de sesión",
+    "distractores": [
+      "Para cifrar los datos que viajan en cada conexión entre dos partes",
+      "Para firmar las claves públicas de los usuarios"
+    ],
+    "explicacion": "La clave maestra protege la distribución de las claves de sesión. Cifrar los datos de la conexión es el papel de la clave de sesión. Firmar certificados es trabajo de una autoridad de certificación, con criptografía asimétrica."
+  },
+  {
+    "id": "claves-005",
+    "concepto": "claves-clave-maestra",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué viaja cifrado con la clave maestra entre dos partes?",
+    "correcta": "Una clave de sesión nueva",
+    "distractores": [
+      "La clave pública de la parte que recibe",
+      "El certificado de cada parte"
+    ],
+    "explicacion": "Con la clave maestra viaja la clave de sesión nueva. Los datos van con la clave de sesión. Un certificado ya va firmado y no se cifra con una clave maestra."
+  },
+  {
+    "id": "claves-006",
+    "concepto": "claves-clave-maestra",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué clave de la jerarquía de dos niveles se renueva cada vez que se abre una conexión nueva?",
+    "correcta": "La clave de sesión",
+    "distractores": [
+      "La clave maestra",
+      "Las dos a la vez, en cada mensaje"
+    ],
+    "explicacion": "La clave de sesión es la que cambia por sesión. La clave maestra se mantiene para distribuir las nuevas. Cambiar las dos en cada mensaje anularía la jerarquía."
+  },
+  {
+    "id": "claves-007",
+    "concepto": "claves-opciones-de-distribucion-simetrica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 6
+    },
+    "pregunta": "A y B ya comparten una clave simétrica. ¿Cómo hace llegar A una clave nueva a B?",
+    "correcta": "La genera y se la envía cifrada con la clave compartida",
+    "distractores": [
+      "Se la entrega físicamente a B en una reunión entre los dos",
+      "La cifra con la clave pública de B"
+    ],
+    "explicacion": "Con una clave compartida, A genera la nueva y la envía cifrada con ella. La entrega física es otra opción, que no usa la clave compartida. Cifrar con la clave pública de B es criptografía asimétrica, y no usa la clave compartida."
+  },
+  {
+    "id": "claves-008",
+    "concepto": "claves-opciones-de-distribucion-simetrica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 6
+    },
+    "pregunta": "A y B tienen cada uno una conexión cifrada con un tercero C. ¿Cómo obtienen una clave común?",
+    "correcta": "C genera la clave y la envía por esas conexiones a A y a B",
+    "distractores": [
+      "A genera la clave y se la pasa a B a través de C como mensajero",
+      "C cifra con su clave privada la clave que genera B"
+    ],
+    "explicacion": "En esta opción C genera la clave y la envía a los dos. Que A la genere y use a C de mensajero no aprovecha el papel de C. Cifrar con su clave privada es una firma, y no hay claves públicas aquí."
+  },
+  {
+    "id": "claves-009",
+    "concepto": "claves-opciones-de-distribucion-simetrica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Por qué A o un tercero que entregue la clave físicamente no sirve como solución general en Internet?",
+    "correcta": "Porque se genera una clave entre casi cualquier pareja de interlocutores",
+    "distractores": [
+      "Porque una clave entregada así no se puede usar para cifrar",
+      "Porque la entrega física solo funciona con un único interlocutor a la vez"
+    ],
+    "explicacion": "Hoy se genera una clave de sesión entre casi cualquier pareja de interlocutores, y entregarlas en mano no escala. Una clave entregada así sí cifra. El límite no es un único interlocutor, sino el número de parejas."
+  },
+  {
+    "id": "claves-010",
+    "concepto": "claves-distribucion-descentralizada",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿En qué contexto se usa la distribución de claves descentralizada?",
+    "correcta": "En contextos locales donde dos equipos ya comparten una clave maestra",
+    "distractores": [
+      "En Internet, entre cualquier pareja de equipos desconocidos",
+      "Cuando una autoridad de certificación firma la clave pública de cada equipo"
+    ],
+    "explicacion": "Es para contextos locales con clave maestra entre los equipos. En Internet entre desconocidos no hay una clave maestra previa. La firma de una autoridad es el esquema de certificados."
+  },
+  {
+    "id": "claves-011",
+    "concepto": "claves-distribucion-descentralizada",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 8
+    },
+    "pregunta": "En la distribución descentralizada, ¿con qué se cifra la clave de sesión que viaja entre A y B?",
+    "correcta": "Con la clave maestra que comparten A y B",
+    "distractores": [
+      "Con la clave pública del equipo que la recibe",
+      "Con una clave maestra de cada uno con un KDC"
+    ],
+    "explicacion": "La clave de sesión viaja cifrada con la clave maestra entre A y B. La clave pública es del esquema asimétrico. Una clave maestra con un KDC es el esquema centralizado."
+  },
+  {
+    "id": "claves-012",
+    "concepto": "claves-distribucion-descentralizada",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué requisito impide usar la distribución descentralizada entre cualquier pareja de equipos de Internet?",
+    "correcta": "Cada pareja de equipos necesita ya una clave maestra común",
+    "distractores": [
+      "Cada equipo necesita un certificado firmado por una autoridad de certificación",
+      "Cada equipo necesita una conexión cifrada con un KDC"
+    ],
+    "explicacion": "Hace falta una clave maestra previa por pareja, y no escala. El certificado de una CA es del esquema de claves públicas. La conexión con un KDC es el esquema centralizado, que no es este."
+  },
+  {
+    "id": "claves-013",
+    "concepto": "claves-nonce",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué es un núnico (nonce) en estos protocolos?",
+    "correcta": "Un número generado aleatoriamente que se usa solo una vez",
+    "distractores": [
+      "Un número fijo que las dos partes acuerdan en el protocolo",
+      "Una clave de sesión que se renueva en cada mensaje"
+    ],
+    "explicacion": "Un núnico es un número aleatorio de un solo uso. Un número fijo acordado se repetiría. Una clave de sesión es otra cosa y no se llama núnico."
+  },
+  {
+    "id": "claves-014",
+    "concepto": "claves-nonce",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué puede servir como identificador único de una transacción?",
+    "correcta": "Un sello de tiempo, un contador o un número aleatorio",
+    "distractores": [
+      "La identidad de A o la identidad de B, repetida en cada transacción",
+      "La clave maestra entre A y el KDC"
+    ],
+    "explicacion": "El identificador único puede ser un sello de tiempo, un contador o un número aleatorio. La identidad de A o B se manda aparte y se repite en cada transacción. La clave maestra es secreta y duradera, no un identificador de transacción."
+  },
+  {
+    "id": "claves-015",
+    "concepto": "claves-nonce",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué es f(N) en los protocolos de distribución de claves?",
+    "correcta": "Una transformación sencilla del núnico, como sumarle 1",
+    "distractores": [
+      "Una función de hash que firma el núnico",
+      "El cifrado del núnico con la clave de sesión que ya comparten A y B"
+    ],
+    "explicacion": "f(N) es una transformación simple del núnico, por ejemplo N+1. Un hash que firma no es f(N). El cifrado con la clave de sesión se aplica después, sobre f(N), y no es la función."
+  },
+  {
+    "id": "claves-016",
+    "concepto": "claves-kdc",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué hace el centro de distribución de claves en la distribución de claves simétricas?",
+    "correcta": "Genera la clave de sesión y se la envía a los usuarios",
+    "distractores": [
+      "Guarda las claves públicas de todos los usuarios en un directorio",
+      "Firma los certificados de cada usuario"
+    ],
+    "explicacion": "El KDC genera la clave de sesión y la reparte. Guardar claves públicas es una autoridad o directorio. Firmar certificados es de una CA."
+  },
+  {
+    "id": "claves-017",
+    "concepto": "claves-kdc",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué clave comparte cada usuario con el KDC?",
+    "correcta": "Una clave maestra simétrica propia",
+    "distractores": [
+      "Una clave de sesión con cada otro usuario",
+      "La clave pública de la CA"
+    ],
+    "explicacion": "Cada usuario tiene su clave maestra con el KDC. Las claves de sesión las genera el KDC en cada sesión. La clave pública de la CA es de otro esquema."
+  },
+  {
+    "id": "claves-018",
+    "concepto": "claves-kdc",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿En qué esquema de distribución se basan las variaciones más usadas hoy?",
+    "correcta": "Una conexión cifrada con un tercero que genera la clave",
+    "distractores": [
+      "Un tercero que elige la clave y se la entrega físicamente a cada parte",
+      "Una clave nueva cifrada con una clave ya compartida"
+    ],
+    "explicacion": "Las más usadas parten de la conexión cifrada con un tercero, que es el KDC. La entrega física no es práctica hoy. Cifrar con una clave compartida solo sirve si ya hay clave entre los dos."
+  },
+  {
+    "id": "claves-019",
+    "concepto": "claves-kdc-mensajes",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 10
+    },
+    "pregunta": "En el protocolo con KDC, ¿qué devuelve el KDC a A?",
+    "correcta": "La clave de sesión cifrada con la maestra de A, y otra copia cifrada con la de B",
+    "distractores": [
+      "La clave de sesión cifrada con la clave pública de A, y otra copia cifrada con la de B",
+      "La clave de sesión sin cifrar, junto a un núnico"
+    ],
+    "explicacion": "El KDC manda a A dos copias, una por cada clave maestra. Con la clave pública de A no hay claves públicas en este esquema. Mandarla sin cifrar la expondría."
+  },
+  {
+    "id": "claves-020",
+    "concepto": "claves-kdc-mensajes",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 10
+    },
+    "pregunta": "En el protocolo con KDC, ¿cómo llega a B la clave de sesión?",
+    "correcta": "A le reenvía la copia que el KDC cifró con la clave maestra de B",
+    "distractores": [
+      "El KDC se la envía a B directamente en una conexión nueva, sin pasar por A",
+      "A la cifra con la clave pública de B"
+    ],
+    "explicacion": "A reenvía a B la copia cifrada con la maestra de B. En el esquema, el KDC solo responde a A. Cifrar con la clave pública de B no ocurre aquí."
+  },
+  {
+    "id": "claves-021",
+    "concepto": "claves-kdc-mensajes",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 10
+    },
+    "pregunta": "Tras recibir la clave de sesión, A y B se mandan E(Ks, N2) y E(Ks, f(N2)). ¿Para qué?",
+    "correcta": "Para autenticarse: comprobar que los dos tienen la clave de sesión",
+    "distractores": [
+      "Para distribuir la clave: así el KDC genera Ks y se la envía a los dos",
+      "Para renovar la clave maestra de B con el KDC en esa sesión"
+    ],
+    "explicacion": "Son pasos de autenticación: quien responde bien tiene Ks. La distribución ya terminó antes. La clave maestra de B no se renueva en esos mensajes."
+  },
+  {
+    "id": "claves-022",
+    "concepto": "claves-tiempo-de-vida",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Por qué el tiempo de vida de una clave de sesión es una solución de compromiso?",
+    "correcta": "Cambiarla a menudo da más seguridad, pero generar una clave nueva consume tiempo",
+    "distractores": [
+      "Cambiarla a menudo da más seguridad, pero impide usar cifrado simétrico a lo largo del tiempo",
+      "Cambiarla poco da más seguridad, pero con el tiempo hace más lenta la conexión"
+    ],
+    "explicacion": "Más cambios dan más seguridad y cuestan tiempo de generación. El cifrado simétrico no se impide por cambiar la clave. Cambiarla poco da menos seguridad, y no más."
+  },
+  {
+    "id": "claves-023",
+    "concepto": "claves-tiempo-de-vida",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 12
+    },
+    "pregunta": "En un protocolo orientado a conexión, ¿cuánto suele mantenerse la clave de sesión?",
+    "correcta": "Durante toda la conexión, salvo que sea muy larga",
+    "distractores": [
+      "Para un solo mensaje, que se cifra y la clave se descarta después",
+      "Hasta que caduca el certificado del servidor en esa conexión"
+    ],
+    "explicacion": "Lo habitual es toda la conexión, salvo que sea muy larga. Una clave por mensaje no es lo habitual. El certificado del servidor no fija la vida de la clave de sesión."
+  },
+  {
+    "id": "claves-024",
+    "concepto": "claves-tiempo-de-vida",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 12
+    },
+    "pregunta": "En un protocolo no orientado a conexión, ¿cuándo se cambia por defecto la clave de sesión?",
+    "correcta": "Cada cierto número de transacciones",
+    "distractores": [
+      "Al cerrar cada conexión",
+      "Cuando caduca el certificado del servidor"
+    ],
+    "explicacion": "Sin conexión no hay cierre, y se cambia cada cierto número de transacciones. Cerrar una conexión es el criterio del protocolo orientado a conexión. El certificado no controla la clave de sesión."
+  },
+  {
+    "id": "claves-025",
+    "concepto": "claves-clave-efimera-asimetrica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 13
+    },
+    "pregunta": "En la distribución de una clave simétrica con criptografía asimétrica, ¿qué genera A para empezar?",
+    "correcta": "Una pareja de claves pública y privada",
+    "distractores": [
+      "La clave de sesión que va a usar",
+      "Un certificado firmado con su clave privada"
+    ],
+    "explicacion": "A empieza generando su pareja de claves y manda la pública. La clave de sesión la genera B. Un certificado necesita una CA, y no aparece en este primer ejemplo."
+  },
+  {
+    "id": "claves-026",
+    "concepto": "claves-clave-efimera-asimetrica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 13
+    },
+    "pregunta": "En ese primer ejemplo, ¿cómo envía B la clave de sesión a A?",
+    "correcta": "Cifrada con la clave pública que A le mandó",
+    "distractores": [
+      "Cifrada con su propia clave privada, para que solo A la descifre",
+      "Firmada con la clave pública de A"
+    ],
+    "explicacion": "B cifra la clave de sesión con la clave pública de A, y solo A la descifra. Cifrar con la clave privada de B no da confidencialidad: cualquiera la descifra. La clave pública no firma."
+  },
+  {
+    "id": "claves-027",
+    "concepto": "claves-clave-efimera-asimetrica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 13
+    },
+    "pregunta": "¿Por qué es muy seguro que A y B desechen las claves al acabar el intercambio?",
+    "correcta": "Porque la pareja de claves se usa una vez y no se conserva",
+    "distractores": [
+      "Porque las claves públicas de A se guardan en un directorio compartido",
+      "Porque B conserva la clave privada para descifrar después"
+    ],
+    "explicacion": "La pareja se usa una vez y se tira, y no queda nada que atacar. Un directorio guardaría la clave pública. B no tiene clave privada en este ejemplo."
+  },
+  {
+    "id": "claves-028",
+    "concepto": "claves-mitm-clave-publica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 14
+    },
+    "pregunta": "En el intercambio sin autenticar, ¿qué hace el atacante con la clave pública que A manda a B?",
+    "correcta": "La intercepta y manda a B la suya propia en su lugar",
+    "distractores": [
+      "La descifra con la clave privada de A para leer su contenido",
+      "La modifica para que B no pueda cifrar con ella"
+    ],
+    "explicacion": "El atacante sustituye la clave de A por la suya. No puede descifrarla con la clave privada de A, que no tiene. B sí puede cifrar con la clave que recibe, la del atacante."
+  },
+  {
+    "id": "claves-029",
+    "concepto": "claves-mitm-clave-publica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué consigue el atacante con ese ataque de hombre en el medio?",
+    "correcta": "Conoce la clave de sesión que usan A y B",
+    "distractores": [
+      "Solo observa tráfico cifrado que no puede descifrar",
+      "Impide que B reciba la clave de sesión"
+    ],
+    "explicacion": "El atacante comparte la clave de sesión con A y con B. Observar sin descifrar es lo que ocurriría sin sustituir la clave. B sí recibe la clave, que le llega por el atacante."
+  },
+  {
+    "id": "claves-030",
+    "concepto": "claves-mitm-clave-publica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué falta en el esquema simple para impedir el ataque?",
+    "correcta": "Una forma de saber que la clave pública recibida es de A",
+    "distractores": [
+      "Un cifrado de la clave de sesión con la clave pública del receptor",
+      "Una clave de sesión más larga"
+    ],
+    "explicacion": "Falta autenticar la clave pública, con certificados por ejemplo. El cifrado con la clave pública ya existe y no basta. Una clave más larga no evita la sustitución."
+  },
+  {
+    "id": "claves-031",
+    "concepto": "claves-autenticacion-con-nonces",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 15
+    },
+    "pregunta": "En el esquema con autenticación y cifrado, ¿qué cifra A con la clave pública de B en el primer mensaje?",
+    "correcta": "Un núnico y su propia identidad",
+    "distractores": [
+      "La clave de sesión y un núnico",
+      "Su clave pública y su identidad"
+    ],
+    "explicacion": "El primer mensaje lleva N1 e IDA cifrados con la clave pública de B. La clave de sesión llega en el tercero. B ya tiene la clave pública de A, y no hace falta mandarla."
+  },
+  {
+    "id": "claves-032",
+    "concepto": "claves-autenticacion-con-nonces",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Para qué responde B con N1 y N2 cifrados con la clave pública de A?",
+    "correcta": "Para demostrar que descifró N1 con su clave privada",
+    "distractores": [
+      "Para enviar la clave de sesión cifrada con la clave pública de A",
+      "Para firmar la identidad de A"
+    ],
+    "explicacion": "Devolver N1 prueba que B tiene su clave privada. La clave de sesión viaja en el tercer mensaje. B no firma la identidad de A."
+  },
+  {
+    "id": "claves-033",
+    "concepto": "claves-autenticacion-con-nonces",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué supone el esquema con autenticación y cifrado sobre las claves públicas?",
+    "correcta": "Que las de A y B se han distribuido con seguridad",
+    "distractores": [
+      "Que las dos partes comparten una clave maestra",
+      "Que las dos partes comparten una clave maestra desde antes"
+    ],
+    "explicacion": "El esquema supone claves públicas distribuidas con seguridad. Una clave maestra compartida es del esquema simétrico. El KDC es el esquema centralizado simétrico."
+  },
+  {
+    "id": "claves-034",
+    "concepto": "claves-clave-firmada-y-cifrada",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 15
+    },
+    "pregunta": "En el tercer mensaje, A envía la clave de sesión como E(PUb, E(PRa, Ks)). ¿Con qué clave la firma A?",
+    "correcta": "Con su propia clave privada",
+    "distractores": [
+      "Con la clave pública de B, la que usa para cifrar",
+      "Con la clave pública de A"
+    ],
+    "explicacion": "Firmar es cifrar con la clave privada del emisor. La clave pública de B sirve para cifrar, no para firmar. Con la clave pública de A cualquiera podría descifrar y no probaría nada."
+  },
+  {
+    "id": "claves-035",
+    "concepto": "claves-clave-firmada-y-cifrada",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué consigue A al cifrar la clave de sesión ya firmada con la clave pública de B?",
+    "correcta": "Que solo B pueda descifrarla",
+    "distractores": [
+      "Que B sepa que la envía A",
+      "Que cualquiera pueda comprobar quién la envía"
+    ],
+    "explicacion": "Cifrar con la clave pública de B da confidencialidad. Que B sepa quién la envía lo da la firma. Cifrada, solo B accede a ella, y no cualquiera."
+  },
+  {
+    "id": "claves-036",
+    "concepto": "claves-clave-firmada-y-cifrada",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 15
+    },
+    "pregunta": "B recibe E(PUb, E(PRa, Ks)). ¿Qué hace para obtener Ks?",
+    "correcta": "Descifra con su clave privada y luego con la clave pública de A",
+    "distractores": [
+      "Descifra con la clave pública de A y luego con su clave privada",
+      "Descifra una sola vez con su clave privada"
+    ],
+    "explicacion": "Se deshace primero la capa externa con la clave privada de B y luego la firma con la pública de A. El orden invertido no funciona. Con un solo descifrado quedaría la firma de A."
+  },
+  {
+    "id": "claves-037",
+    "concepto": "claves-anuncio-publico",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿Cómo funciona la distribución de claves públicas por anuncio público?",
+    "correcta": "El propietario la hace pública sin ningún control",
+    "distractores": [
+      "Una autoridad la firma con su clave privada",
+      "Se pide a una autoridad cada vez que se necesita la clave"
+    ],
+    "explicacion": "En el anuncio público, la clave se difunde sin control. La firma de una autoridad es el certificado. Pedirla a una autoridad es la autoridad de claves públicas."
+  },
+  {
+    "id": "claves-038",
+    "concepto": "claves-anuncio-publico",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿Qué problema tiene el anuncio público de claves?",
+    "correcta": "Alguien puede apropiarse de la clave de otro y usarla de forma indebida",
+    "distractores": [
+      "La clave pública permite deducir la clave privada con un cálculo sencillo",
+      "El propietario no puede cambiar su clave después"
+    ],
+    "explicacion": "El riesgo es la apropiación y el mal uso de claves ajenas. Deducir la privada desde la pública no es posible. Cambiar la clave no se impide."
+  },
+  {
+    "id": "claves-039",
+    "concepto": "claves-anuncio-publico",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 17
+    },
+    "pregunta": "Un atacante publica una clave suya diciendo que es de Alice. ¿Qué falla en el anuncio público?",
+    "correcta": "No hay forma de comprobar a quién pertenece una clave",
+    "distractores": [
+      "No hay forma de cifrar con esa clave",
+      "No hay forma de cambiar la clave una vez publicada por el dueño"
+    ],
+    "explicacion": "Sin control no se sabe de quién es la clave. Cifrar con ella sí se puede, y por eso sirve al atacante. Cambiar la clave no es el problema."
+  },
+  {
+    "id": "claves-040",
+    "concepto": "claves-directorio-de-claves-publicas",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué contiene una entrada del directorio de claves públicas?",
+    "correcta": "El nombre del usuario y su clave pública",
+    "distractores": [
+      "La clave pública del usuario y su certificado",
+      "El nombre del usuario y su clave privada"
+    ],
+    "explicacion": "Una entrada es [nombre, clave pública]. No lleva certificado, que es otro esquema. Una clave privada no se publica."
+  },
+  {
+    "id": "claves-041",
+    "concepto": "claves-directorio-de-claves-publicas",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Cómo entra un usuario en el directorio de claves públicas?",
+    "correcta": "Se registra ante la autoridad siguiendo un protocolo",
+    "distractores": [
+      "Publica su clave por su cuenta cuando quiere, sin registrarse",
+      "La autoridad la copia de un anuncio público"
+    ],
+    "explicacion": "Cada usuario se registra ante la autoridad que mantiene el directorio. Publicar por su cuenta sin registro es el anuncio público. La autoridad no copia claves de un anuncio."
+  },
+  {
+    "id": "claves-042",
+    "concepto": "claves-directorio-de-claves-publicas",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Cómo debe acceder un participante al directorio de claves públicas?",
+    "correcta": "De forma autenticada y segura",
+    "distractores": [
+      "De forma anónima, para proteger su privacidad",
+      "Con un certificado por cada entrada que consulta"
+    ],
+    "explicacion": "El acceso al directorio es autenticado y seguro. Un acceso anónimo permitiría alterar el servicio. Un certificado por entrada no se pide."
+  },
+  {
+    "id": "claves-043",
+    "concepto": "claves-autoridad-de-claves-publicas",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Con qué clave firma la autoridad de claves públicas su respuesta?",
+    "correcta": "Con su propia clave privada",
+    "distractores": [
+      "Con la clave pública del solicitante",
+      "Con la clave privada del solicitante"
+    ],
+    "explicacion": "La autoridad firma con su clave privada. La clave pública del solicitante cifraría, y no firmaría. Su clave privada no la tiene la autoridad."
+  },
+  {
+    "id": "claves-044",
+    "concepto": "claves-autoridad-de-claves-publicas",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 19
+    },
+    "pregunta": "A pide a la autoridad la clave pública de B. ¿Qué incluye la respuesta firmada?",
+    "correcta": "La clave de B, la petición original y un sello de tiempo",
+    "distractores": [
+      "La clave privada de B, la petición original y un sello de tiempo",
+      "La clave de B, un núnico de B y la firma de B"
+    ],
+    "explicacion": "La respuesta lleva PUb, la petición y el sello de tiempo. La clave privada de B no se da. Un núnico y una firma de B no forman parte de la respuesta."
+  },
+  {
+    "id": "claves-045",
+    "concepto": "claves-autoridad-de-claves-publicas",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Cómo comprueba A que la respuesta viene de la autoridad?",
+    "correcta": "La descifra con la clave pública de la autoridad",
+    "distractores": [
+      "La descifra con su propia clave privada y compara el resultado",
+      "Comprueba que la firma de B coincide con la de la autoridad"
+    ],
+    "explicacion": "La firma de la autoridad se verifica con su clave pública. La clave privada de A sirve para mensajes cifrados para A. B no firma la respuesta."
+  },
+  {
+    "id": "claves-046",
+    "concepto": "claves-certificado-de-clave-publica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué recibe A de la autoridad de certificación al entregarle su clave pública?",
+    "correcta": "Un certificado con su identidad y su clave pública, firmado por la autoridad",
+    "distractores": [
+      "Una clave de sesión cifrada con la clave pública de A, generada por la autoridad",
+      "Una lista con las claves públicas de otros usuarios"
+    ],
+    "explicacion": "La autoridad devuelve un certificado firmado con identidad y clave pública. La clave de sesión no sale de la autoridad. La lista de claves es de un directorio."
+  },
+  {
+    "id": "claves-047",
+    "concepto": "claves-certificado-de-clave-publica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Cómo se pasan A y B sus claves públicas con certificados?",
+    "correcta": "Se intercambian directamente los certificados",
+    "distractores": [
+      "Cada uno pide a la autoridad el certificado del otro cada vez",
+      "Cada uno consulta el directorio de claves públicas"
+    ],
+    "explicacion": "Con certificados, A y B se los intercambian sin pasar por la autoridad. Pedirlo cada vez es la autoridad de claves públicas. El directorio es otro esquema."
+  },
+  {
+    "id": "claves-048",
+    "concepto": "claves-certificado-de-clave-publica",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué lleva firmado el certificado, además de la clave pública?",
+    "correcta": "La identidad del usuario y un sello de tiempo",
+    "distractores": [
+      "La clave privada del usuario y un sello de tiempo",
+      "La identidad del usuario y la clave de sesión"
+    ],
+    "explicacion": "El certificado firma sello de tiempo, identidad y clave pública. La clave privada nunca va en un certificado. La clave de sesión no forma parte de él."
+  },
+  {
+    "id": "claves-049",
+    "concepto": "claves-certificado-x509",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué contiene básicamente un certificado X.509?",
+    "correcta": "Una clave pública firmada con la clave privada de una autoridad de certificación",
+    "distractores": [
+      "Una clave privada cifrada con la clave pública de la propia autoridad de certificación",
+      "Una clave pública firmada con la clave privada de su propietario"
+    ],
+    "explicacion": "Un certificado X.509 es una clave pública firmada por una CA. Una clave privada no se incluye. Firmarla el propio propietario no da confianza de un tercero."
+  },
+  {
+    "id": "claves-050",
+    "concepto": "claves-certificado-x509",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué especifica X.509?",
+    "correcta": "Un formato de certificado, en un entorno de autentificación",
+    "distractores": [
+      "Un servicio de directorio con la información de los usuarios",
+      "Un protocolo de cifrado para canales seguros"
+    ],
+    "explicacion": "X.509 define el formato de certificado y su entorno de autentificación. El servicio de directorio es X.500. Un protocolo de cifrado de canales es TLS, por ejemplo."
+  },
+  {
+    "id": "claves-051",
+    "concepto": "claves-certificado-x509",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿En qué protocolos se usa el formato de certificado X.509?",
+    "correcta": "SSL/TLS, S/MIME e IP Security",
+    "distractores": [
+      "SSL/TLS, S/MIME y Kerberos, en todas sus versiones",
+      "SSH, S/MIME e IP Security"
+    ],
+    "explicacion": "El PDF cita SSL/TLS, S/MIME e IP Security. Kerberos no lo usa como formato de certificado. SSH no usa X.509 en su esquema habitual."
+  },
+  {
+    "id": "claves-052",
+    "concepto": "claves-certificado-generacion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Cómo se firma un certificado X.509?",
+    "correcta": "Se calcula su hash y se cifra con la clave privada de la CA",
+    "distractores": [
+      "Se cifra entero con la clave pública del usuario",
+      "Se calcula su hash y se cifra con la clave pública de la CA"
+    ],
+    "explicacion": "La firma es el hash cifrado con la clave privada de la CA. Cifrar con la pública del usuario daría confidencialidad, no firma. Con la pública de la CA cualquiera podría descifrarlo y no habría firma."
+  },
+  {
+    "id": "claves-053",
+    "concepto": "claves-certificado-generacion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Sobre qué se calcula el hash que firma la CA?",
+    "correcta": "Sobre la identidad del usuario, su clave pública y los datos de la CA",
+    "distractores": [
+      "Sobre la clave privada del usuario y su identidad completa más la de la CA",
+      "Sobre el certificado completo, incluida la firma"
+    ],
+    "explicacion": "Se firma el certificado sin firmar: identidad, clave pública e información de la CA. La clave privada del usuario nunca entra. La firma no puede incluirse en lo que se firma."
+  },
+  {
+    "id": "claves-054",
+    "concepto": "claves-certificado-generacion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Por qué la CA firma con su clave privada?",
+    "correcta": "Porque solo la CA puede producir una firma que todos verifican con su clave pública",
+    "distractores": [
+      "Porque así el certificado queda cifrado y nadie puede leer su contenido, ni el propio Bob",
+      "Porque así Bob puede descifrarlo con su clave privada"
+    ],
+    "explicacion": "La firma con la clave privada de la CA se verifica con su clave pública. El certificado sigue siendo legible, y no queda cifrado. Bob no descifra el certificado con su clave privada."
+  },
+  {
+    "id": "claves-055",
+    "concepto": "claves-certificado-verificacion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Cómo verifica un destinatario la firma de un certificado?",
+    "correcta": "Descifra la firma con la clave pública de la CA y compara el hash",
+    "distractores": [
+      "La descifra con su propia clave privada y compara el hash resultante",
+      "La descifra con la clave pública del titular y compara el hash"
+    ],
+    "explicacion": "Se descifra con la clave pública de la CA y se compara con el hash calculado. Su clave privada no descifra firmas de la CA. La clave pública del titular no firmó el certificado."
+  },
+  {
+    "id": "claves-056",
+    "concepto": "claves-certificado-verificacion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Quién puede verificar a un usuario y su clave pública con un certificado?",
+    "correcta": "Cualquier usuario con la clave pública de la CA",
+    "distractores": [
+      "Quien tenga la clave privada del usuario",
+      "Los usuarios registrados en el directorio de la CA"
+    ],
+    "explicacion": "Basta tener la clave pública de la CA. La clave privada del usuario no hace falta. El registro en un directorio no interviene."
+  },
+  {
+    "id": "claves-057",
+    "concepto": "claves-certificado-verificacion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 22
+    },
+    "pregunta": "Un atacante cambia la clave pública que lleva un certificado. ¿Qué pasa al verificarlo?",
+    "correcta": "El hash calculado no coincide con el de la firma, y se detecta",
+    "distractores": [
+      "La firma no se puede descifrar porque cambió la clave del usuario",
+      "No se detecta, porque el hash no cubre la clave pública"
+    ],
+    "explicacion": "El cambio altera el hash, que ya no coincide con el firmado. La firma se descifra con la clave de la CA, que no cambió. El hash sí cubre la clave pública del usuario."
+  },
+  {
+    "id": "claves-058",
+    "concepto": "claves-certificado-confianza-sin-canal-seguro",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Por qué un certificado se puede poner libremente en un directorio público?",
+    "correcta": "Porque nadie más que la CA puede modificarlo",
+    "distractores": [
+      "Porque su contenido está cifrado con la clave de la CA",
+      "Porque el directorio comprueba cada acceso"
+    ],
+    "explicacion": "Nadie más que la CA puede modificarlo sin que se detecte. El contenido no está cifrado, solo firmado. El directorio no es lo que garantiza la integridad."
+  },
+  {
+    "id": "claves-059",
+    "concepto": "claves-certificado-confianza-sin-canal-seguro",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 24
+    },
+    "pregunta": "Un usuario quiere que otro conozca su clave pública con certificado. ¿Qué hace?",
+    "correcta": "Le transmite su certificado directamente",
+    "distractores": [
+      "Le pide que consulte a la CA cada vez que lo necesite",
+      "Le envía su clave privada cifrada"
+    ],
+    "explicacion": "Un certificado se transmite directamente a otros usuarios. Consultar a la CA cada vez no hace falta. La clave privada no se envía."
+  },
+  {
+    "id": "claves-060",
+    "concepto": "claves-certificado-confianza-sin-canal-seguro",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 24
+    },
+    "pregunta": "Un usuario descarga un certificado de un directorio no confiable. ¿Por qué puede fiarse?",
+    "correcta": "Porque, si la firma de la CA verifica, nadie lo modificó",
+    "distractores": [
+      "Porque el directorio autentica a cada usuario que accede",
+      "Porque la CA firma el directorio entero"
+    ],
+    "explicacion": "Si la firma de la CA verifica, el certificado no se alteró. La autenticación de usuarios es del directorio de claves. La CA firma certificados, no directorios."
+  },
+  {
+    "id": "claves-061",
+    "concepto": "claves-cadena-de-certificados",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué se obtiene con una jerarquía de CA?",
+    "correcta": "Cadenas de firmas de certificados",
+    "distractores": [
+      "Un único certificado para todos los usuarios",
+      "Una clave de sesión común entre las CA"
+    ],
+    "explicacion": "Las jerarquías dan cadenas de firmas. Un único certificado común no existe. Las CA no comparten una clave de sesión."
+  },
+  {
+    "id": "claves-062",
+    "concepto": "claves-cadena-de-certificados",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué relación hay entre dos CA de una cadena?",
+    "correcta": "Una CA firma el certificado de otra CA",
+    "distractores": [
+      "Una CA cifra los datos de otra con su clave maestra",
+      "Una CA descarga la lista de revocados de otra"
+    ],
+    "explicacion": "Una CA emite el certificado de otra CA. La clave maestra es de la distribución simétrica. Las listas de revocados no definen una cadena."
+  },
+  {
+    "id": "claves-063",
+    "concepto": "claves-cadena-de-certificados",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Cómo se llama que una CA certifique a otra CA?",
+    "correcta": "Certificación cruzada",
+    "distractores": [
+      "Revocación en cadena automática",
+      "Registro delegado"
+    ],
+    "explicacion": "El modelo PKI muestra la certificación cruzada entre CA. La revocación es otro proceso. Un registro delegado lo hace una registration authority, que no certifica."
+  },
+  {
+    "id": "claves-064",
+    "concepto": "claves-certificado-contenido",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué indica el periodo de validez de un certificado X.509?",
+    "correcta": "Entre qué dos fechas es válido: not before y not after",
+    "distractores": [
+      "Cuánto tiempo puede usarse la clave privada del sujeto",
+      "Desde cuándo está revocado el certificado"
+    ],
+    "explicacion": "El periodo de validez son dos fechas. El periodo de uso de la clave privada es una extensión aparte. La revocación no figura en el certificado."
+  },
+  {
+    "id": "claves-065",
+    "concepto": "claves-certificado-contenido",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Dónde va la firma de la CA dentro del certificado X.509?",
+    "correcta": "En el último campo, con algoritmo, parámetros y hash cifrado",
+    "distractores": [
+      "En el nombre del emisor, junto al número de serie",
+      "En las extensiones opcionales, que se añadieron en la versión 3"
+    ],
+    "explicacion": "La firma ocupa el último campo, en todas las versiones. El nombre del emisor no lleva el hash cifrado. Las extensiones no contienen la firma."
+  },
+  {
+    "id": "claves-066",
+    "concepto": "claves-certificado-contenido",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué añade la versión 3 de X.509 respecto a la versión 2?",
+    "correcta": "Las extensiones",
+    "distractores": [
+      "Los identificadores únicos de emisor y sujeto",
+      "El periodo de validez"
+    ],
+    "explicacion": "La versión 3 añade las extensiones. Los identificadores únicos los añadió la versión 2. El periodo de validez ya estaba en la versión 1."
+  },
+  {
+    "id": "claves-067",
+    "concepto": "claves-revocacion-de-certificados",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿En qué caso hay que revocar un certificado, además de dejarlo caducar?",
+    "correcta": "Cuando la clave privada se ha visto comprometida",
+    "distractores": [
+      "Cuando llega su fecha de caducidad",
+      "Cuando la clave pública se publica en un directorio"
+    ],
+    "explicacion": "Una clave privada comprometida obliga a revocar. La fecha de caducidad ya lo invalida sin revocar. Publicar la clave pública es normal."
+  },
+  {
+    "id": "claves-068",
+    "concepto": "claves-revocacion-de-certificados",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Por qué hay que poder revocar un certificado antes de su caducidad?",
+    "correcta": "Porque la caducidad no protege si la clave se compromete antes de esa fecha",
+    "distractores": [
+      "Porque la fecha de caducidad se puede modificar sin la CA ni dejar rastro en el certificado",
+      "Porque una CA no puede firmar certificados con fecha"
+    ],
+    "explicacion": "La fecha de caducidad llega tarde ante un compromiso. Modificarla sin la CA rompería la firma. Una CA sí firma certificados con fecha."
+  },
+  {
+    "id": "claves-069",
+    "concepto": "claves-revocacion-de-certificados",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "Se compromete el certificado de una CA. ¿Qué hay que hacer con lo que emitió?",
+    "correcta": "Revocarlo, porque deja de ser fiable",
+    "distractores": [
+      "Mantenerlo hasta que cada certificado caduque",
+      "Renovarlo solo con la clave nueva de la CA"
+    ],
+    "explicacion": "El compromiso del certificado de la CA es motivo de revocación. Dejarlos caducar mantendría certificados no fiables. Renovarlos solos no es automático."
+  },
+  {
+    "id": "claves-070",
+    "concepto": "claves-crl",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Qué contiene la lista de revocación que mantiene cada CA?",
+    "correcta": "Los certificados revocados que todavía no han expirado",
+    "distractores": [
+      "Todos los certificados emitidos por la CA, vigentes y expirados",
+      "Los certificados que ya han expirado"
+    ],
+    "explicacion": "La lista tiene revocados no expirados. No lista todos los emitidos. Los expirados ya los invalida su fecha."
+  },
+  {
+    "id": "claves-071",
+    "concepto": "claves-crl",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Cómo consultan los clientes una lista de revocación?",
+    "correcta": "La descargan de la CA y la consultan en local",
+    "distractores": [
+      "Preguntan por cada certificado a la CA en línea",
+      "La reciben dentro de cada certificado"
+    ],
+    "explicacion": "Los clientes pueden consultarla y descargarla. Preguntar por cada certificado es OCSP. Un certificado no lleva dentro la lista."
+  },
+  {
+    "id": "claves-072",
+    "concepto": "claves-crl",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Por qué la lista no incluye los certificados expirados?",
+    "correcta": "Porque su fecha de caducidad ya los invalida",
+    "distractores": [
+      "Porque la CA los borra del directorio al caducar",
+      "Porque los expirados ya fueron revocados antes"
+    ],
+    "explicacion": "Un certificado expirado se rechaza por su fecha. La CA no los borra por eso. No hace falta que se hayan revocado."
+  },
+  {
+    "id": "claves-073",
+    "concepto": "claves-ocsp",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Qué hace un protocolo de estado de certificados en línea (OCSP)?",
+    "correcta": "Comprueba en línea el estado de un certificado",
+    "distractores": [
+      "Descarga la lista completa de certificados revocados de la CA",
+      "Firma el certificado con una validez corta"
+    ],
+    "explicacion": "OCSP consulta el estado en línea. Descargar una lista es una CRL. Una validez corta es de la respuesta del stapling."
+  },
+  {
+    "id": "claves-074",
+    "concepto": "claves-ocsp",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Qué ventaja tiene OCSP frente a una CRL?",
+    "correcta": "Se puede preguntar por un solo certificado",
+    "distractores": [
+      "No necesita conexión con la CA para saber el estado",
+      "No expone a qué sitio se accede"
+    ],
+    "explicacion": "OCSP responde por un solo certificado. Necesita conexión con un servidor. Expone el sitio, y es un problema de OCSP, no una ventaja."
+  },
+  {
+    "id": "claves-075",
+    "concepto": "claves-ocsp",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    },
+    "pregunta": "Un cliente quiere saber si un certificado concreto sigue vigente sin bajar una lista entera. ¿Qué hace?",
+    "correcta": "Consulta en línea el estado de ese certificado",
+    "distractores": [
+      "Descarga la lista de certificados revocados",
+      "Pide al servidor una respuesta firmada de validez corta"
+    ],
+    "explicacion": "Una consulta en línea es el mecanismo para un certificado concreto. Bajar la lista es lo que se evita. La respuesta firmada de validez corta es el stapling, donde pregunta el servidor."
+  },
+  {
+    "id": "claves-076",
+    "concepto": "claves-problemas-de-las-crl",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 26
+    },
+    "pregunta": "Un navegador descarga la lista de revocación de una CA grande. ¿Qué problema aparece?",
+    "correcta": "La lista es demasiado larga para mantenerla y descargarla",
+    "distractores": [
+      "La lista revela a la CA el sitio concreto que visita el navegador",
+      "La lista tarda en firmarse en cada consulta"
+    ],
+    "explicacion": "El tamaño de la lista es el problema. Exponer el sitio es de OCSP. Firmarse en cada consulta no es una CRL."
+  },
+  {
+    "id": "claves-077",
+    "concepto": "claves-problemas-de-las-crl",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué problema de disponibilidad tiene una lista de revocación?",
+    "correcta": "Si el servidor que la publica no responde, no se puede consultar",
+    "distractores": [
+      "Si el servidor la cifra, el cliente no puede leerla sin la clave de la CA",
+      "Si el cliente la descarga, la CA ve qué sitio visita"
+    ],
+    "explicacion": "Depende de que el servidor esté disponible. No se cifra. Que la CA vea el sitio es un problema de OCSP."
+  },
+  {
+    "id": "claves-078",
+    "concepto": "claves-problemas-de-las-crl",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Cuál es un problema de las CRL y no de OCSP?",
+    "correcta": "El tamaño de la lista que se descarga",
+    "distractores": [
+      "La latencia de la consulta al servidor",
+      "La filtración del sitio al que se accede"
+    ],
+    "explicacion": "El tamaño es propio de la lista. La latencia y la privacidad son problemas de OCSP."
+  },
+  {
+    "id": "claves-079",
+    "concepto": "claves-problemas-de-ocsp",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué latencia añade OCSP a una conexión TLS?",
+    "correcta": "La conexión espera la respuesta de una consulta al servidor",
+    "distractores": [
+      "La CA tarda en firmar cada certificado que el cliente consulta",
+      "El navegador descarga una lista larga antes de abrir la conexión"
+    ],
+    "explicacion": "Cada conexión espera la consulta. Firmar no ocurre en la consulta. Descargar la lista es el problema de las CRL."
+  },
+  {
+    "id": "claves-080",
+    "concepto": "claves-problemas-de-ocsp",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué compromiso de privacidad tiene OCSP?",
+    "correcta": "El navegador revela a la CA a qué sitio web accede",
+    "distractores": [
+      "La CA revela las claves privadas de sus usuarios a terceros",
+      "El sitio web conoce el historial del navegador"
+    ],
+    "explicacion": "La CA sabe qué sitio visita el navegador. Una CA no tiene claves privadas de usuarios. El sitio no ve el historial."
+  },
+  {
+    "id": "claves-081",
+    "concepto": "claves-problemas-de-ocsp",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Por qué se considera poco confiable OCSP?",
+    "correcta": "Los servidores objetivo de ataques DoS dejan de responder",
+    "distractores": [
+      "Las respuestas no llevan la firma de la CA, y cualquiera las falsifica",
+      "Los certificados cambian de estado sin avisar"
+    ],
+    "explicacion": "La disponibilidad cae bajo ataques de denegación de servicio. Las respuestas sí están firmadas. Los cambios de estado no son el problema."
+  },
+  {
+    "id": "claves-082",
+    "concepto": "claves-soft-fail",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    },
+    "pregunta": "Un cliente web soft-fail no recibe respuesta sobre el estado de un certificado. ¿Qué hace?",
+    "correcta": "Da por bueno el certificado",
+    "distractores": [
+      "Rechaza el certificado",
+      "Pide al usuario que lo revoque"
+    ],
+    "explicacion": "Soft-fail acepta el certificado sin respuesta. Rechazarlo sería hard-fail. Un usuario no revoca certificados."
+  },
+  {
+    "id": "claves-083",
+    "concepto": "claves-soft-fail",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Qué consecuencia tiene el soft-fail para la seguridad?",
+    "correcta": "Un atacante que bloquee la consulta consigue que se acepte un certificado revocado",
+    "distractores": [
+      "Un certificado válido se rechaza si la CA no responde a tiempo a la consulta del cliente",
+      "Todas las conexiones fallan si el servidor no responde"
+    ],
+    "explicacion": "Sin respuesta se acepta, y bloquear la consulta lo aprovecha. Un válido rechazado es hard-fail. Las conexiones no fallan en soft-fail."
+  },
+  {
+    "id": "claves-084",
+    "concepto": "claves-soft-fail",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    },
+    "pregunta": "Un navegador consulta el estado y el servidor de la CA está caído. ¿Qué ve el usuario con soft-fail?",
+    "correcta": "La página carga con normalidad",
+    "distractores": [
+      "Un aviso de certificado revocado",
+      "Un error que impide cargar la página"
+    ],
+    "explicacion": "Con soft-fail la página carga. No hay aviso de revocación porque no hay respuesta. Un error de carga sería hard-fail."
+  },
+  {
+    "id": "claves-085",
+    "concepto": "claves-ocsp-stapling",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Quién consulta el estado del certificado en OCSP Stapling?",
+    "correcta": "El propio servidor web, sobre sus certificados",
+    "distractores": [
+      "El navegador, antes de cada conexión con el servidor web",
+      "La CA, después de cada conexión"
+    ],
+    "explicacion": "En el stapling consulta el servidor. El navegador es el OCSP normal. La CA no consulta."
+  },
+  {
+    "id": "claves-086",
+    "concepto": "claves-ocsp-stapling",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Qué recibe el servidor de la CA en OCSP Stapling?",
+    "correcta": "Una respuesta firmada de validez corta",
+    "distractores": [
+      "Una lista de certificados revocados, firmada por la CA",
+      "Un certificado nuevo de validez corta"
+    ],
+    "explicacion": "Recibe una respuesta firmada de validez corta y la adjunta. La lista es de las CRL. No es un certificado nuevo."
+  },
+  {
+    "id": "claves-087",
+    "concepto": "claves-ocsp-stapling",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Qué problema de OCSP evita el stapling?",
+    "correcta": "El navegador ya no revela a la CA el sitio al que accede",
+    "distractores": [
+      "La CA ya no necesita firmar las respuestas sobre el estado del certificado",
+      "El servidor ya no necesita un certificado"
+    ],
+    "explicacion": "Ahora el servidor consulta, y la CA no ve al navegador. La CA sigue firmando. El servidor sigue necesitando certificado."
+  },
+  {
+    "id": "claves-088",
+    "concepto": "claves-revocacion-en-navegadores",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Qué son CRLSet de Chrome y OneCRL de Firefox?",
+    "correcta": "Una lista de revocados de las CA principales, integrada en el navegador",
+    "distractores": [
+      "Una consulta OCSP a la CA en cada conexión, hecha por el propio navegador",
+      "Una descarga de la lista completa de cada CA"
+    ],
+    "explicacion": "Son listas internas del navegador. No consultan OCSP. No descargan la lista entera de cada CA."
+  },
+  {
+    "id": "claves-089",
+    "concepto": "claves-revocacion-en-navegadores",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    },
+    "pregunta": "De OCSP y CRL, ¿qué usa Firefox?",
+    "correcta": "OCSP, pero no CRL",
+    "distractores": [
+      "CRL, pero no OCSP",
+      "OCSP y CRL"
+    ],
+    "explicacion": "Firefox usa OCSP pero no CRL. La combinación contraria no es la suya. Usar ambos tampoco."
+  },
+  {
+    "id": "claves-090",
+    "concepto": "claves-revocacion-en-navegadores",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Qué usa Chrome para saber si un certificado está revocado?",
+    "correcta": "Su propia lista interna, y no OCSP ni CRL",
+    "distractores": [
+      "OCSP en cada conexión, pero no CRL, como hace Firefox",
+      "CRL, pero no OCSP"
+    ],
+    "explicacion": "Chrome no implementa OCSP ni CRL y usa su lista interna. Firefox es el que usa OCSP. Chrome tampoco usa CRL."
+  },
+  {
+    "id": "claves-091",
+    "concepto": "claves-x509-v3-extensiones",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Por qué X.509 versión 3 usa extensiones?",
+    "correcta": "Para cubrir nuevas necesidades sin seguir insertando campos en un formato fijo",
+    "distractores": [
+      "Para sustituir la firma de la CA por la firma de varios emisores a la vez en el mismo certificado",
+      "Para que el certificado ya no necesite una clave pública"
+    ],
+    "explicacion": "Las extensiones evitan seguir añadiendo campos. La firma de la CA se mantiene. La clave pública sigue en el certificado."
+  },
+  {
+    "id": "claves-092",
+    "concepto": "claves-x509-v3-extensiones",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿De qué consta una extensión de un certificado?",
+    "correcta": "De un identificador, un valor y un indicador crítico",
+    "distractores": [
+      "De un identificador, una firma y un indicador de versión",
+      "De un valor, una clave y un hash"
+    ],
+    "explicacion": "Identificador, valor e indicador crítico. Una firma por extensión no existe. Clave y hash no son parte de la extensión."
+  },
+  {
+    "id": "claves-093",
+    "concepto": "claves-x509-v3-extensiones",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Cómo se clasifican las extensiones de certificados?",
+    "correcta": "Clave y política, atributos del certificado y emisor, restricciones de camino",
+    "distractores": [
+      "Clave y política, formato de firma y restricciones de camino de certificación",
+      "Sujeto, emisor y firma"
+    ],
+    "explicacion": "Son tres grupos de extensiones. El formato de firma no es un grupo. Sujeto, emisor y firma son campos del certificado."
+  },
+  {
+    "id": "claves-094",
+    "concepto": "claves-politica-y-uso-de-la-clave",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué es una política de certificado?",
+    "correcta": "Un conjunto de reglas sobre la comunidad o clase de aplicación del certificado",
+    "distractores": [
+      "Una regla sobre cuánto tiempo puede usarse la clave privada de un sujeto concreto",
+      "Una lista de las CA que pueden emitir certificados"
+    ],
+    "explicacion": "Es el conjunto de reglas de aplicabilidad. El tiempo de uso de la clave privada es otra extensión. Las CA que emiten se limitan con restricciones de camino."
+  },
+  {
+    "id": "claves-095",
+    "concepto": "claves-politica-y-uso-de-la-clave",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué indica la extensión de uso de la clave?",
+    "correcta": "Para qué se usa: firma digital, cifrado, no repudio",
+    "distractores": [
+      "Cuánto tiempo puede usarse la clave privada",
+      "Qué CA emitió el certificado y con qué clave lo firmó"
+    ],
+    "explicacion": "El uso de la clave dice su finalidad. El periodo es una extensión distinta. El emisor está en el nombre del emisor."
+  },
+  {
+    "id": "claves-096",
+    "concepto": "claves-politica-y-uso-de-la-clave",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 29
+    },
+    "pregunta": "Una CA certifica a otra CA. ¿Qué extensión lo recoge?",
+    "correcta": "Las asignaciones de políticas",
+    "distractores": [
+      "El identificador de clave de autoridad",
+      "Las limitaciones básicas"
+    ],
+    "explicacion": "Las asignaciones de políticas recogen una CA que certifica a otra. El identificador de clave de autoridad gestiona las claves de la CA. Las limitaciones básicas indican si el sujeto puede ser CA."
+  },
+  {
+    "id": "claves-097",
+    "concepto": "claves-atributos-y-nombres-alternativos",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Para qué sirve el nombre alternativo del sujeto (Subject Alternative Name)?",
+    "correcta": "Para dar otros nombres, en otros formatos, a la entidad del certificado",
+    "distractores": [
+      "Para identificar a la CA que emite el certificado con otro nombre distinto",
+      "Para indicar otra clave pública del sujeto"
+    ],
+    "explicacion": "Da nombres alternativos al sujeto. Los de la CA son del emisor. No indica otra clave pública."
+  },
+  {
+    "id": "claves-098",
+    "concepto": "claves-atributos-y-nombres-alternativos",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Qué buscan las extensiones de atributos del certificado y del emisor?",
+    "correcta": "Aumentar la confianza en que el sujeto es una persona o entidad concreta",
+    "distractores": [
+      "Limitar los tipos de certificados que emite la CA y los que siguen en la cadena",
+      "Indicar para qué se usa la clave del sujeto"
+    ],
+    "explicacion": "Buscan más confianza en el sujeto. Limitar lo que emite la CA son restricciones de camino. El uso de la clave es otra extensión."
+  },
+  {
+    "id": "claves-099",
+    "concepto": "claves-atributos-y-nombres-alternativos",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Para qué se incluyen los atributos de directorio del sujeto X.500?",
+    "correcta": "Para guardar información personal, profesional o geográfica del titular",
+    "distractores": [
+      "Para guardar el hash de la firma del titular junto con su clave pública cifrada",
+      "Para listar los certificados que ha revocado"
+    ],
+    "explicacion": "Almacenan datos adicionales del titular. El hash de la firma es del certificado. Los revocados van en la CRL."
+  },
+  {
+    "id": "claves-100",
+    "concepto": "claves-restricciones-de-camino",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué permiten las restricciones de camino de certificación?",
+    "correcta": "Limitar los certificados que una CA puede emitir o que aparecen después en una cadena",
+    "distractores": [
+      "Limitar los dominios en que el titular puede usar su clave privada o su clave pública de firma",
+      "Impedir que un certificado de CA se revoque"
+    ],
+    "explicacion": "Restringen lo que puede emitirse en la cadena. Los dominios del titular no son de este tipo. Revocar sigue siendo posible."
+  },
+  {
+    "id": "claves-101",
+    "concepto": "claves-restricciones-de-camino",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué indican las limitaciones básicas?",
+    "correcta": "Si el sujeto del certificado puede actuar como CA",
+    "distractores": [
+      "Si el certificado puede usarse para firma digital",
+      "Si el emisor ha revocado el certificado"
+    ],
+    "explicacion": "Dicen si el sujeto es una CA. Firma digital es el uso de la clave. La revocación no la indica el certificado."
+  },
+  {
+    "id": "claves-102",
+    "concepto": "claves-restricciones-de-camino",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿En qué certificados se incluyen las restricciones de camino?",
+    "correcta": "En los emitidos para una CA por otra CA",
+    "distractores": [
+      "En los emitidos para usuarios finales por una CA raíz",
+      "En los emitidos para servidores web"
+    ],
+    "explicacion": "Van en certificados de una CA emitidos por otra CA. Los de usuarios finales no llevan esas restricciones. Los de servidores tampoco."
+  },
+  {
+    "id": "claves-103",
+    "concepto": "claves-pki",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 32
+    },
+    "pregunta": "¿Qué es una PKI?",
+    "correcta": "El conjunto de hardware, software, personas, políticas y procedimientos que gestiona certificados",
+    "distractores": [
+      "Un servidor central que guarda las claves privadas de todos los usuarios y las reparte si se piden",
+      "Un protocolo que cifra la clave de sesión"
+    ],
+    "explicacion": "Una PKI es todo el conjunto de elementos. No guarda claves privadas. No es un protocolo."
+  },
+  {
+    "id": "claves-104",
+    "concepto": "claves-pki",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 32
+    },
+    "pregunta": "¿Qué actividades cubre una PKI con los certificados digitales?",
+    "correcta": "Crear, administrar, distribuir y revocar",
+    "distractores": [
+      "Crear, firmar y descifrar los datos de los usuarios",
+      "Generar y distribuir claves de sesión simétricas"
+    ],
+    "explicacion": "Cubre el ciclo del certificado. No descifra datos de usuarios. Las claves de sesión son del KDC."
+  },
+  {
+    "id": "claves-105",
+    "concepto": "claves-pki",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 32
+    },
+    "pregunta": "¿En qué se basa el modelo recomendable para desplegar certificados en Internet?",
+    "correcta": "En un modelo genérico y global basado en X.509",
+    "distractores": [
+      "En un modelo de KDC con claves maestras de usuarios",
+      "En un modelo de directorio X.500 que sustituye a los certificados"
+    ],
+    "explicacion": "El modelo PKIX se basa en X.509. El KDC es simétrico. X.500 es un directorio y no sustituye a los certificados."
+  },
+  {
+    "id": "claves-106",
+    "concepto": "claves-pki-entidades",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Qué es la end entity en el modelo de una PKI?",
+    "correcta": "El usuario que pide un certificado",
+    "distractores": [
+      "La CA que emite el certificado al usuario que lo pide",
+      "El servidor que publica las CRL"
+    ],
+    "explicacion": "Es el usuario que pide el certificado. La CA lo emite. Publicar CRL lo hace la CA o su CRL issuer."
+  },
+  {
+    "id": "claves-107",
+    "concepto": "claves-pki-entidades",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Qué hace la registration authority de una PKI?",
+    "correcta": "Ayuda a una CA en tareas de publicación o de comprobación de datos",
+    "distractores": [
+      "Firma los certificados en lugar de la CA cuando esta no está disponible",
+      "Publica las listas de revocación"
+    ],
+    "explicacion": "Ayuda a la CA y es opcional. Firmar es de la CA. Publicar las CRL es del CRL issuer."
+  },
+  {
+    "id": "claves-108",
+    "concepto": "claves-pki-entidades",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Qué entidad opcional ayuda a la CA a publicar las CRL?",
+    "correcta": "El CRL issuer",
+    "distractores": [
+      "La registration authority",
+      "La end entity"
+    ],
+    "explicacion": "El CRL issuer ayuda con las CRL. La registration authority ayuda con la publicación y la comprobación de datos. La end entity es quien pide el certificado."
+  },
+  {
+    "id": "claves-109",
+    "concepto": "claves-gestor-de-secretos",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Para qué sirve Vault?",
+    "correcta": "Para administrar secretos como claves API, contraseñas y certificados",
+    "distractores": [
+      "Para emitir certificados X.509 y firmarlos como una autoridad de certificación",
+      "Para distribuir claves de sesión como un KDC"
+    ],
+    "explicacion": "Vault administra secretos. No es una CA. No es un KDC."
+  },
+  {
+    "id": "claves-110",
+    "concepto": "claves-gestor-de-secretos",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué permite hacer Vault con los secretos?",
+    "correcta": "Generarlos, almacenarlos, definir su caducidad y renovación, y revocarlos",
+    "distractores": [
+      "Generarlos y publicarlos en un directorio abierto, para que todos los usuarios los consulten",
+      "Almacenarlos y firmarlos con la clave de la CA"
+    ],
+    "explicacion": "Cubre generación, almacenamiento, caducidad, renovación y revocación. Publicarlos en un directorio no es su función. No los firma con la CA."
+  },
+  {
+    "id": "claves-111",
+    "concepto": "claves-gestor-de-secretos",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué ofrece Vault al cifrar datos sin almacenarlos?",
+    "correcta": "Cifrar datos sin que Vault los guarde",
+    "distractores": [
+      "Guardar datos sin cifrar para consultarlos",
+      "Guardar la clave sin cifrarla"
+    ],
+    "explicacion": "Cifra datos sin guardarlos. Guardarlos sin cifrar es lo contrario. No se trata de guardar la clave."
+  },
+  {
+    "id": "claves-112",
+    "concepto": "claves-fortaleza-de-la-distribucion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿De qué depende la fortaleza de un sistema criptográfico en cuanto a las claves?",
+    "correcta": "De la técnica con que se distribuyen las claves",
+    "distractores": [
+      "De la longitud del mensaje que se cifra con cada clave",
+      "Del número de usuarios que lo emplean"
+    ],
+    "explicacion": "Depende de la distribución de las claves. La longitud del mensaje no la fija. El número de usuarios tampoco."
+  },
+  {
+    "id": "claves-113",
+    "concepto": "claves-fortaleza-de-la-distribucion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 2
+    },
+    "pregunta": "Un sistema usa un algoritmo muy fuerte, pero reparte las claves sin protección. ¿Cómo queda?",
+    "correcta": "Débil, porque quien captura la clave rompe el sistema",
+    "distractores": [
+      "Fuerte, porque el algoritmo protege los datos",
+      "Fuerte, porque la clave se usa una vez"
+    ],
+    "explicacion": "La distribución débil anula el algoritmo. Que el algoritmo sea fuerte no basta. Usar la clave una vez no protege su envío."
+  },
+  {
+    "id": "claves-114",
+    "concepto": "claves-fortaleza-de-la-distribucion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿Por qué los protocolos de seguridad necesitan administrar las claves?",
+    "correcta": "Porque las sesiones y conexiones de datos necesitan claves distribuidas",
+    "distractores": [
+      "Porque los algoritmos de cifrado no funcionan sin certificados que los respalden",
+      "Porque cada mensaje debe llevar su propia firma"
+    ],
+    "explicacion": "Hay que distribuir claves para sesiones y conexiones. Un algoritmo no exige certificados. La firma por mensaje no es el motivo."
+  },
+  {
     "id": "transporte-119",
     "concepto": "introduccion-ataque-de-degradacion",
     "tema": "transporte",
