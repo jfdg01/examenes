@@ -3872,6 +3872,1878 @@
     "explicacion": "Hay que distribuir claves para sesiones y conexiones. Un algoritmo no exige certificados. La firma por mensaje no es el motivo."
   },
   {
+    "id": "transporte-001",
+    "concepto": "transporte-servicios-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿Qué servicios de seguridad añade TLS entre la aplicación y TCP?",
+    "correcta": "Autenticación, cifrado e integridad de los datos",
+    "distractores": [
+      "Disponibilidad, enrutamiento y control de congestión",
+      "Anonimato, no repudio y filtrado de paquetes"
+    ],
+    "explicacion": "TLS provee autenticación, criptografía e integridad. La disponibilidad, el enrutamiento y la congestión son funciones de la red y de TCP, y no de TLS. TLS no filtra paquetes ni ofrece anonimato: protege los datos de un extremo a otro."
+  },
+  {
+    "id": "transporte-002",
+    "concepto": "transporte-servicios-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿En qué punto de la pila de protocolos se sitúa TLS?",
+    "correcta": "Entre la capa de aplicación y TCP",
+    "distractores": [
+      "Entre TCP e IP, dentro de la capa de red",
+      "Entre IP y la red local, como parte del enlace"
+    ],
+    "explicacion": "TLS es una capa de seguridad sobre TCP y bajo la aplicación. Entre TCP e IP trabaja IPsec, y no TLS. Entre IP y la LAN no hay una capa de seguridad TLS."
+  },
+  {
+    "id": "transporte-003",
+    "concepto": "transporte-servicios-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿Por qué TLS sirve tanto para la Web como para el correo?",
+    "correcta": "Va debajo de la aplicación y protege cualquier protocolo que use TCP",
+    "distractores": [
+      "Cada aplicación incorpora su propio cifrado dentro de TLS",
+      "Sustituye a TCP y cifra cada paquete IP de la red"
+    ],
+    "explicacion": "TLS se coloca bajo la aplicación, y por eso protege la Web, el correo y más. TLS es una capa común: la aplicación no implementa su cifrado. TLS se apoya en TCP y no lo sustituye, y cifra el flujo de la aplicación, no los paquetes IP."
+  },
+  {
+    "id": "transporte-004",
+    "concepto": "transporte-sesion-y-conexion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué es una sesión TLS?",
+    "correcta": "Una asociación entre cliente y servidor con parámetros criptográficos reutilizables",
+    "distractores": [
+      "Un canal transitorio entre dos pares que dura una sola transferencia",
+      "Una lista de algoritmos que el servidor ofrece a cualquier cliente"
+    ],
+    "explicacion": "Una sesión se crea con el Handshake y define parámetros que varias conexiones comparten. Un canal transitorio entre pares es una conexión, y no una sesión. Los algoritmos ofrecidos no forman una sesión: la sesión asocia a un cliente concreto con un servidor."
+  },
+  {
+    "id": "transporte-005",
+    "concepto": "transporte-sesion-y-conexion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Para qué sirve que varias conexiones TLS compartan una sesión?",
+    "correcta": "Evitar la costosa negociación de parámetros de seguridad en cada conexión",
+    "distractores": [
+      "Permitir que cada conexión use un algoritmo de cifrado distinto",
+      "Mantener las conexiones abiertas aunque un cortafuegos las vigile"
+    ],
+    "explicacion": "Los parámetros de la sesión se reutilizan, y no se negocian de nuevo. Los parámetros de la sesión son comunes: no se pensó para variar el algoritmo por conexión. Mantener una conexión activa es la misión del protocolo Heartbeat."
+  },
+  {
+    "id": "transporte-006",
+    "concepto": "transporte-sesion-y-conexion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 5
+    },
+    "pregunta": "Un navegador abre 5 conexiones TLS seguidas con el mismo servidor. ¿Cuántas sesiones necesitan como mínimo?",
+    "correcta": "Una, porque cada conexión se asocia a una sesión y una sesión admite varias",
+    "distractores": [
+      "Cinco, porque cada conexión necesita su propia sesión",
+      "Ninguna, porque las sesiones solo existen con certificado de cliente"
+    ],
+    "explicacion": "En una sesión se pueden definir varias conexiones. Cada conexión se asocia a una sesión, pero no hace falta una sesión por conexión. Las sesiones las crea el Handshake y no dependen del certificado de cliente."
+  },
+  {
+    "id": "transporte-007",
+    "concepto": "transporte-estado-de-la-sesion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué elementos definen el estado de una sesión TLS?",
+    "correcta": "Identificador, certificado del par, compresión, cipher spec, master secret y bandera de reanudable",
+    "distractores": [
+      "Números de secuencia, IV, claves de escritura MAC y de cifrado, y randoms de cliente y servidor",
+      "Versión de TLS, lista de extensiones, suite elegida, alertas pendientes y estado del Handshake"
+    ],
+    "explicacion": "El estado de la sesión incluye esos seis elementos. Esos elementos forman el estado de una conexión, y no el de la sesión. Ni la versión, ni las extensiones ni las alertas pendientes son elementos del estado de la sesión."
+  },
+  {
+    "id": "transporte-008",
+    "concepto": "transporte-estado-de-la-sesion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué tamaño tiene el master secret del estado de la sesión, y quién lo comparte?",
+    "correcta": "48 bytes, compartidos entre el cliente y el servidor",
+    "distractores": [
+      "32 bytes, elegidos por el servidor para identificar la sesión",
+      "16 bytes, distintos para cada sentido de la conexión"
+    ],
+    "explicacion": "El master secret es una clave de 48 bytes compartida por ambos. Una secuencia que el servidor elige para identificar la sesión es el session identifier. Las claves separadas por sentido son las claves de escritura de la conexión, y no el master secret."
+  },
+  {
+    "id": "transporte-009",
+    "concepto": "transporte-estado-de-la-sesion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 6
+    },
+    "pregunta": "Un cliente quiere abrir una conexión nueva reutilizando los parámetros ya negociados. ¿Qué elemento del estado lo permite?",
+    "correcta": "La bandera is resumable, que indica si la sesión sirve para nuevas conexiones",
+    "distractores": [
+      "El peer certificate, que siempre debe estar presente",
+      "La cipher spec, que se renegocia en cada conexión"
+    ],
+    "explicacion": "Is resumable marca si la sesión puede iniciar nuevas conexiones. El peer certificate puede ser nulo y no indica reanudabilidad. La cipher spec se fija en la sesión, y no se renegocia con cada conexión."
+  },
+  {
+    "id": "transporte-010",
+    "concepto": "transporte-estado-de-la-conexion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué claves distintas mantiene el estado de una conexión TLS?",
+    "correcta": "Un secreto MAC y una clave de cifrado para el cliente, y otros para el servidor",
+    "distractores": [
+      "Un único secreto MAC y una única clave de cifrado para ambos sentidos",
+      "Una clave pública del servidor y una clave privada del cliente"
+    ],
+    "explicacion": "Cada sentido tiene su propio secreto MAC y su propia clave de cifrado. Una única clave para ambos sentidos no existe: cliente y servidor escriben con claves distintas. El estado de la conexión guarda claves simétricas, y no un par asimétrico."
+  },
+  {
+    "id": "transporte-011",
+    "concepto": "transporte-estado-de-la-conexion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Con qué clave descifra el servidor los datos que cifró el cliente?",
+    "correcta": "Con la client write key",
+    "distractores": [
+      "Con la server write key",
+      "Con la server write MAC secret"
+    ],
+    "explicacion": "La client write key cifra lo que envía el cliente y lo descifra el servidor. La server write key cifra lo que envía el servidor, y lo descifra el cliente. Un MAC secret sirve para calcular el MAC, y no para descifrar."
+  },
+  {
+    "id": "transporte-012",
+    "concepto": "transporte-estado-de-la-conexion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué son los randoms de servidor y de cliente en el estado de la conexión?",
+    "correcta": "Secuencias aleatorias de bytes que cada parte genera para esa conexión",
+    "distractores": [
+      "Claves de cifrado que cada parte genera para toda la conexión",
+      "Identificadores que el servidor elige para reanudar la conexión"
+    ],
+    "explicacion": "Cada parte genera su secuencia de bytes para cada conexión. Las claves de cifrado son las write keys, y no los randoms. El identificador que el servidor elige es el session identifier, y pertenece a la sesión."
+  },
+  {
+    "id": "transporte-013",
+    "concepto": "transporte-numeros-de-secuencia-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Cómo se llevan los números de secuencia en una conexión TLS?",
+    "correcta": "Cada parte mantiene números separados para lo que envía y para lo que recibe",
+    "distractores": [
+      "Cada parte mantiene un solo número compartido para ambos sentidos",
+      "El servidor lleva los números de ambos sentidos y el cliente los copia"
+    ],
+    "explicacion": "Hay números de secuencia separados para los mensajes transmitidos y recibidos. No hay un contador compartido: se mantienen por separado. El cliente también lleva sus propios números, y no copia los del servidor."
+  },
+  {
+    "id": "transporte-014",
+    "concepto": "transporte-numeros-de-secuencia-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Cuándo se pone a cero un número de secuencia?",
+    "correcta": "Cuando se envía o se recibe un mensaje de cambio de cifrado",
+    "distractores": [
+      "Cuando alcanza su valor máximo y empieza de nuevo",
+      "Cuando termina el envío de cada registro de aplicación"
+    ],
+    "explicacion": "El mensaje de cambio de cifrado reinicia el número correspondiente. El número no puede superar su máximo, así que no se reinicia al alcanzarlo. El registro de aplicación incrementa el número, y no lo reinicia."
+  },
+  {
+    "id": "transporte-015",
+    "concepto": "transporte-numeros-de-secuencia-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué valor máximo puede tener un número de secuencia?",
+    "correcta": "2^64 - 1",
+    "distractores": [
+      "2^32 - 1",
+      "2^16 - 1"
+    ],
+    "explicacion": "Los números de secuencia no pueden superar 2^64 - 1. 2^32 - 1 es un límite más corto que el del temario. 2^16 - 1 es mucho menor que el límite real."
+  },
+  {
+    "id": "transporte-016",
+    "concepto": "transporte-iv-del-cifrado-cbc-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Cuándo mantiene TLS un vector de inicialización en el estado de la conexión?",
+    "correcta": "Cuando usa un cifrado por bloques en modo CBC",
+    "distractores": [
+      "Cuando usa un cifrado de flujo byte a byte",
+      "Cuando calcula el MAC de cada registro"
+    ],
+    "explicacion": "El IV se mantiene con el cifrado por bloques en modo CBC. Un cifrado de flujo no necesita IV de bloque. El MAC usa su secreto, y no un IV."
+  },
+  {
+    "id": "transporte-017",
+    "concepto": "transporte-iv-del-cifrado-cbc-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué protocolo inicializa el IV de una conexión?",
+    "correcta": "El protocolo Handshake",
+    "distractores": [
+      "El Record Protocol, con cada registro",
+      "El protocolo Change Cipher Spec"
+    ],
+    "explicacion": "El campo del IV se inicializa primero por el Handshake. El Record Protocol usa el IV, pero no lo inicializa. Change Cipher Spec solo anuncia el cambio de suite."
+  },
+  {
+    "id": "transporte-018",
+    "concepto": "transporte-iv-del-cifrado-cbc-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué IV se usa para cifrar el registro siguiente?",
+    "correcta": "El último bloque de texto cifrado del registro anterior",
+    "distractores": [
+      "Un valor aleatorio nuevo, enviado en claro con cada registro",
+      "El primer bloque de texto plano del registro anterior"
+    ],
+    "explicacion": "El último bloque cifrado de cada registro se conserva como IV del siguiente. TLS no genera un IV nuevo por registro en este esquema. El IV sale del texto cifrado, y no del texto plano."
+  },
+  {
+    "id": "transporte-019",
+    "concepto": "transporte-servicios-del-record-protocol",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué dos servicios ofrece el Record Protocol a las conexiones TLS?",
+    "correcta": "Confidencialidad e integridad de los mensajes",
+    "distractores": [
+      "Autenticación del servidor y negociación de la suite",
+      "Compresión y control de flujo de los datos"
+    ],
+    "explicacion": "El Record Protocol da confidencialidad y integridad. Autenticar y negociar la suite son funciones del Handshake. La compresión es un paso del registro, pero no un servicio de seguridad, y TLS no controla el flujo."
+  },
+  {
+    "id": "transporte-020",
+    "concepto": "transporte-servicios-del-record-protocol",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿De dónde sale la clave con la que el Record Protocol cifra los datos?",
+    "correcta": "Del Handshake, que define una clave secreta compartida",
+    "distractores": [
+      "Una clave que el Record Protocol genera con cada registro",
+      "Del certificado del servidor, que contiene esa clave firmada"
+    ],
+    "explicacion": "El Handshake define la clave secreta compartida del cifrado. El Record Protocol usa la clave, y no la genera. El certificado contiene una clave pública, y no la clave simétrica de cifrado."
+  },
+  {
+    "id": "transporte-021",
+    "concepto": "transporte-servicios-del-record-protocol",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué se forma con una clave secreta compartida para garantizar la integridad de un registro?",
+    "correcta": "Un código de autenticación de mensajes",
+    "distractores": [
+      "Una firma digital con la clave privada del servidor",
+      "Un certificado X.509 por cada registro"
+    ],
+    "explicacion": "La clave compartida forma el código de autenticación de mensajes. Una firma con clave privada es asimétrica, y el registro usa una clave compartida. Un certificado no se emite por registro."
+  },
+  {
+    "id": "transporte-022",
+    "concepto": "transporte-proceso-del-record-protocol",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿En qué orden procesa el Record Protocol los datos de aplicación antes de enviarlos?",
+    "correcta": "Fragmentar, comprimir, añadir MAC, cifrar y añadir la cabecera",
+    "distractores": [
+      "Fragmentar, cifrar, comprimir, añadir MAC y añadir la cabecera",
+      "Comprimir, fragmentar, añadir la cabecera, añadir MAC y cifrar"
+    ],
+    "explicacion": "Ese es el orden del esquema del Record Protocol. Cifrar antes de comprimir y de calcular el MAC no sigue el esquema. Se fragmenta antes de comprimir, y la cabecera va al final."
+  },
+  {
+    "id": "transporte-023",
+    "concepto": "transporte-proceso-del-record-protocol",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué se hace primero con unos datos de aplicación muy largos en TLS?",
+    "correcta": "Se dividen en fragmentos",
+    "distractores": [
+      "Se cifran en un solo bloque",
+      "Se les añade la cabecera"
+    ],
+    "explicacion": "El primer paso es fragmentar. Cifrar el bloque entero no es el primer paso, y los datos se fragmentan antes. La cabecera se añade al final."
+  },
+  {
+    "id": "transporte-024",
+    "concepto": "transporte-proceso-del-record-protocol",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Por qué el MAC de un registro viaja cifrado?",
+    "correcta": "Porque se añade antes de cifrar, y el paso de cifrar cubre el fragmento y el MAC",
+    "distractores": [
+      "Porque se añade tras cifrar y viaja a la vista al final del registro",
+      "Porque se calcula sobre la cabecera, que es lo último que se cifra"
+    ],
+    "explicacion": "El MAC se añade antes del paso de cifrado, así que el cifrado lo incluye. El MAC no se añade tras cifrar. El MAC se calcula sobre los datos, y la cabecera nunca se cifra."
+  },
+  {
+    "id": "transporte-025",
+    "concepto": "transporte-cabecera-del-registro-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Qué campo del registro TLS dice a qué protocolo superior pertenecen los datos?",
+    "correcta": "ContentType",
+    "distractores": [
+      "Major Version",
+      "Compressed Length"
+    ],
+    "explicacion": "ContentType especifica el protocolo de capa superior que transporta. Major Version indica la versión del protocolo. Compressed Length indica el tamaño del fragmento."
+  },
+  {
+    "id": "transporte-026",
+    "concepto": "transporte-cabecera-del-registro-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Qué cuatro tipos de contenido distingue un registro TLS?",
+    "correcta": "change_cipher_spec, alert, handshake y application_data",
+    "distractores": [
+      "client_hello, server_hello, certificate y finished",
+      "heartbeat, alert, handshake y key_exchange"
+    ],
+    "explicacion": "Esos son los cuatro valores de ContentType. Esos son mensajes del Handshake, y no tipos de contenido. Heartbeat y key_exchange no son valores de ContentType en el esquema."
+  },
+  {
+    "id": "transporte-027",
+    "concepto": "transporte-cabecera-del-registro-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 10
+    },
+    "pregunta": "Un registro TLS lleva una página HTTP. ¿Qué ContentType tiene?",
+    "correcta": "application_data",
+    "distractores": [
+      "handshake",
+      "alert"
+    ],
+    "explicacion": "Un protocolo de aplicación como HTTP viaja como application_data. Handshake transporta los mensajes de negociación. Alert transporta alertas."
+  },
+  {
+    "id": "transporte-028",
+    "concepto": "transporte-cifrado-de-flujo-y-de-bloque-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Cómo procesa TLS los datos con un cifrado de flujo?",
+    "correcta": "Byte a byte: calcula el MAC y cifra",
+    "distractores": [
+      "En bloques de tamaño fijo, con relleno tras el MAC",
+      "Fragmento a fragmento, cifrando primero y calculando el MAC después"
+    ],
+    "explicacion": "El flujo se procesa byte a byte con MAC y cifrado. Los bloques de tamaño fijo con relleno son el cifrado de bloque. En TLS 1.2 el MAC se calcula antes de cifrar."
+  },
+  {
+    "id": "transporte-029",
+    "concepto": "transporte-cifrado-de-flujo-y-de-bloque-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Cómo divide TLS la información con un cifrado de bloque?",
+    "correcta": "En bloques de tamaño fijo",
+    "distractores": [
+      "En bytes sueltos que se cifran de uno en uno",
+      "En fragmentos de tamaño variable sin relleno"
+    ],
+    "explicacion": "El cifrado de bloque trabaja con bloques de tamaño fijo. Cifrar byte a byte es el cifrado de flujo. El tamaño fijo del bloque obliga a rellenar cuando faltan datos."
+  },
+  {
+    "id": "transporte-030",
+    "concepto": "transporte-cifrado-de-flujo-y-de-bloque-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 12
+    },
+    "pregunta": "Una conexión TLS usa un cifrado que procesa byte a byte. ¿Hace falta relleno?",
+    "correcta": "No, porque el relleno solo completa bloques de tamaño fijo",
+    "distractores": [
+      "Sí, siempre se añade un relleno de hasta 255 bytes",
+      "Sí, el relleno alinea el MAC al final del registro"
+    ],
+    "explicacion": "Sin bloques no hay nada que completar. El relleno de hasta 255 bytes es propio del cifrado de bloque. El relleno no alinea el MAC: completa el último bloque."
+  },
+  {
+    "id": "transporte-031",
+    "concepto": "transporte-relleno-del-cifrado-de-bloque-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 13
+    },
+    "pregunta": "¿En qué punto se añade el relleno de un registro cifrado por bloques?",
+    "correcta": "Después de calcular el MAC y antes de cifrar",
+    "distractores": [
+      "Antes de calcular el MAC y antes de cifrar",
+      "Después de cifrar y antes de añadir la cabecera"
+    ],
+    "explicacion": "El relleno va tras el MAC y antes del cifrado. Si va antes del MAC, el relleno entraría en el cálculo del MAC. Tras el cifrado no se añade relleno."
+  },
+  {
+    "id": "transporte-032",
+    "concepto": "transporte-relleno-del-cifrado-de-bloque-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 13
+    },
+    "pregunta": "¿Cómo está formado el relleno de un registro?",
+    "correcta": "Por bytes de relleno más un byte que indica su longitud",
+    "distractores": [
+      "Por bytes de relleno más el MAC de esos bytes",
+      "Por un número fijo de ceros más el tamaño del bloque"
+    ],
+    "explicacion": "El relleno son bytes más un byte con la longitud del relleno. El relleno no lleva un MAC propio. La longitud no es fija, y el último byte indica cuánto relleno hay."
+  },
+  {
+    "id": "transporte-033",
+    "concepto": "transporte-relleno-del-cifrado-de-bloque-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 13
+    },
+    "pregunta": "¿Por qué TLS puede usar rellenos de longitud variable?",
+    "correcta": "Para impedir ataques que se apoyan en una longitud de relleno fija",
+    "distractores": [
+      "Para que la longitud del MAC sea siempre 16 bytes",
+      "Para que la longitud tras comprimir sea siempre la misma"
+    ],
+    "explicacion": "Los rellenos variables impiden ataques. El tamaño del MAC lo fija el algoritmo MAC, y no el relleno. El relleno se añade tras el MAC y no mejora la compresión."
+  },
+  {
+    "id": "transporte-034",
+    "concepto": "transporte-change-cipher-spec-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué hace el protocolo Change Cipher Spec?",
+    "correcta": "Anuncia que se va a cambiar la suite de cifrado",
+    "distractores": [
+      "Negocia la suite de cifrado con la lista del cliente",
+      "Avisa al interlocutor de un error en un registro"
+    ],
+    "explicacion": "Su único propósito es anunciar el cambio de suite. La negociación de la suite es del Handshake. Avisar de errores es del protocolo Alert."
+  },
+  {
+    "id": "transporte-035",
+    "concepto": "transporte-change-cipher-spec-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Cuándo se ejecuta por defecto el protocolo Change Cipher Spec?",
+    "correcta": "Tras el Handshake",
+    "distractores": [
+      "Antes del primer client_hello",
+      "Con cada registro de aplicación"
+    ],
+    "explicacion": "Por defecto va después del Handshake. Antes del client_hello aún no hay nada que cambiar. Un registro de aplicación no cambia la suite."
+  },
+  {
+    "id": "transporte-036",
+    "concepto": "transporte-change-cipher-spec-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 15
+    },
+    "pregunta": "En la fase 4 del Handshake de TLS 1.2, ¿qué mensaje precede al finished de cada parte?",
+    "correcta": "change_cipher_spec",
+    "distractores": [
+      "certificate_verify",
+      "client_key_exchange"
+    ],
+    "explicacion": "En la fase 4 cada parte manda change_cipher_spec y luego finished. certificate_verify va en la fase 3 y solo con certificado de cliente. client_key_exchange va en la fase 3."
+  },
+  {
+    "id": "transporte-037",
+    "concepto": "transporte-alert-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Para qué sirve el protocolo Alert?",
+    "correcta": "Para anunciar alertas al interlocutor",
+    "distractores": [
+      "Para pedir al interlocutor que confirme que sigue activo",
+      "Para anunciar un cambio de la suite de cifrado"
+    ],
+    "explicacion": "Alert anuncia alertas al interlocutor. Comprobar que el interlocutor está activo es Heartbeat. Anunciar el cambio de suite es Change Cipher Spec."
+  },
+  {
+    "id": "transporte-038",
+    "concepto": "transporte-alert-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué indica el primer byte de un mensaje de alerta?",
+    "correcta": "Su gravedad: warning o fatal",
+    "distractores": [
+      "Su causa, como bad record mac",
+      "El protocolo que la origina"
+    ],
+    "explicacion": "El primer byte es warning o fatal. La causa va en el segundo byte. Una alerta no indica el protocolo de origen."
+  },
+  {
+    "id": "transporte-039",
+    "concepto": "transporte-alert-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 15
+    },
+    "pregunta": "Llega un registro cuyo código de autenticación no cuadra. ¿Qué descripción de alerta corresponde?",
+    "correcta": "bad record mac",
+    "distractores": [
+      "handshake_failure",
+      "illegal_parameter"
+    ],
+    "explicacion": "Un MAC incorrecto se anuncia con bad record mac. handshake_failure señala un fallo al negociar el Handshake. illegal_parameter señala un parámetro del Handshake fuera de rango."
+  },
+  {
+    "id": "transporte-040",
+    "concepto": "transporte-heartbeat-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 16
+    },
+    "pregunta": "¿Qué dos misiones tiene el protocolo Heartbeat?",
+    "correcta": "Comprobar que el interlocutor está activo y generar actividad en la conexión",
+    "distractores": [
+      "Comprobar la identidad del interlocutor y renovar sus claves",
+      "Cerrar las conexiones inactivas y notificar el cierre al interlocutor"
+    ],
+    "explicacion": "Heartbeat comprueba que el interlocutor está activo y genera actividad. Comprobar la identidad es del Handshake, no de Heartbeat. Cerrar y notificar el cierre es de close_notify."
+  },
+  {
+    "id": "transporte-041",
+    "concepto": "transporte-heartbeat-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 16
+    },
+    "pregunta": "¿Por qué interesa generar actividad en una conexión TLS inactiva?",
+    "correcta": "Para que un cortafuegos que no tolera conexiones sin actividad no la cierre",
+    "distractores": [
+      "Para que la actividad haga caducar la sesión y se renegocien las claves",
+      "Para que la actividad evite un ataque de truncamiento sobre TCP"
+    ],
+    "explicacion": "Algunos cortafuegos cierran las conexiones sin actividad. La actividad mantiene la sesión: no la hace caducar. El truncamiento se evita con close_notify."
+  },
+  {
+    "id": "transporte-042",
+    "concepto": "transporte-heartbeat-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 16
+    },
+    "pregunta": "¿Qué mensajes forman Heartbeat y dónde se establece su uso?",
+    "correcta": "heartbeat_request y heartbeat_response, en la parte 1 del Handshake",
+    "distractores": [
+      "ping y pong, en la parte 1 del Handshake",
+      "heartbeat_request y heartbeat_response, en la parte 4 del Handshake"
+    ],
+    "explicacion": "Esos son los dos mensajes y su uso se fija en la parte 1. Los mensajes no se llaman ping y pong. La parte 4 es el cambio de suite y el finished."
+  },
+  {
+    "id": "transporte-043",
+    "concepto": "transporte-funciones-del-handshake-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿Qué funciones cumple el protocolo Handshake de TLS?",
+    "correcta": "Autenticar a los interlocutores y negociar la suite de cifrado",
+    "distractores": [
+      "Fragmentar y comprimir los datos, y calcular su MAC",
+      "Anunciar alertas y cerrar la conexión sin truncamiento"
+    ],
+    "explicacion": "El Handshake autentica y negocia la suite. Fragmentar, comprimir y calcular el MAC es del Record Protocol. Las alertas y el cierre son de Alert y close_notify."
+  },
+  {
+    "id": "transporte-044",
+    "concepto": "transporte-funciones-del-handshake-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿Qué negocia el Handshake como parte de la suite de cifrado?",
+    "correcta": "Los algoritmos y las claves de cifrado, y los algoritmos y las claves MAC",
+    "distractores": [
+      "Solo el algoritmo de cifrado, y el MAC lo fija el Record Protocol",
+      "Los certificados X.509 y las autoridades que se aceptan"
+    ],
+    "explicacion": "La suite incluye algoritmos y claves de cifrado y de MAC. También se negocia el algoritmo MAC. Los certificados se envían en el Handshake, pero no son la suite."
+  },
+  {
+    "id": "transporte-045",
+    "concepto": "transporte-funciones-del-handshake-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿Qué campos tiene cada mensaje del protocolo Handshake?",
+    "correcta": "Type, Length y Content",
+    "distractores": [
+      "Version, Random y SessionID",
+      "Level, Alert y Length"
+    ],
+    "explicacion": "Cada mensaje lleva su tipo, su longitud y su contenido. Version, Random y SessionID son campos del client_hello. Level y Alert son los campos del mensaje de alerta."
+  },
+  {
+    "id": "transporte-046",
+    "concepto": "transporte-fases-del-handshake-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué se hace en la fase 1 del Handshake de TLS 1.2?",
+    "correcta": "Establecer capacidades de seguridad: versión, suite, compresión y randoms",
+    "distractores": [
+      "El servidor envía su certificado y pide el del cliente",
+      "Se cambia la suite de cifrado y se termina el Handshake"
+    ],
+    "explicacion": "La fase 1 intercambia client_hello y server_hello. Eso es la fase 2. Eso es la fase 4."
+  },
+  {
+    "id": "transporte-047",
+    "concepto": "transporte-fases-del-handshake-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué envía el cliente en la fase 3?",
+    "correcta": "Su certificado si se lo piden, el client_key_exchange y, a veces, certificate_verify",
+    "distractores": [
+      "El client_hello con la lista de suites que soporta",
+      "El change_cipher_spec y el finished"
+    ],
+    "explicacion": "La fase 3 es del cliente: certificado, intercambio de clave y verificación. El client_hello abre la fase 1. Change_cipher_spec y finished son de la fase 4."
+  },
+  {
+    "id": "transporte-048",
+    "concepto": "transporte-fases-del-handshake-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Cuál de estos mensajes no se envía siempre en el Handshake de TLS 1.2?",
+    "correcta": "certificate_request",
+    "distractores": [
+      "client_key_exchange",
+      "finished"
+    ],
+    "explicacion": "El certificate_request es opcional. El client_key_exchange va siempre en la fase 3. El finished cierra la fase 4 en ambos sentidos."
+  },
+  {
+    "id": "transporte-049",
+    "concepto": "transporte-client-hello-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué contiene el mensaje client_hello?",
+    "correcta": "La versión más alta, un random, el SessionID, las suites y las compresiones que soporta",
+    "distractores": [
+      "La versión elegida, el random del servidor y la suite única seleccionada",
+      "El certificado del cliente, su clave pública DH y una firma del hash"
+    ],
+    "explicacion": "El client_hello ofrece versión, random, SessionID, suites y compresión. La versión elegida y la suite única son del server_hello. El certificado y la firma van en la fase 3, no en el client_hello."
+  },
+  {
+    "id": "transporte-050",
+    "concepto": "transporte-client-hello-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿En qué orden ofrece el cliente las suites de cifrado en el client_hello?",
+    "correcta": "En orden decreciente de preferencia",
+    "distractores": [
+      "En orden creciente de longitud de clave",
+      "En orden alfabético del nombre de la suite"
+    ],
+    "explicacion": "La lista va de la suite más preferida a la menos. La longitud de clave no ordena la lista. El nombre no ordena la lista."
+  },
+  {
+    "id": "transporte-051",
+    "concepto": "transporte-client-hello-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué es el campo Random del client_hello y cómo se forma?",
+    "correcta": "Un nonce: marca de tiempo de 32 bits más 28 bytes de un generador aleatorio seguro",
+    "distractores": [
+      "Una clave de 48 bytes que el cliente genera y cifra con RSA",
+      "Un identificador que el servidor asigna a la sesión"
+    ],
+    "explicacion": "El Random sirve como nonce. La clave de 48 bytes es la pre-master. El servidor asigna el SessionID, no el Random del cliente."
+  },
+  {
+    "id": "transporte-052",
+    "concepto": "transporte-session-id-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué indica un SessionID distinto de cero en el client_hello?",
+    "correcta": "Que el cliente quiere actualizar una conexión existente o crear otra en esa sesión",
+    "distractores": [
+      "Que el cliente quiere una conexión nueva en una sesión nueva",
+      "Que el servidor ya ha elegido la suite de esa sesión"
+    ],
+    "explicacion": "Un valor distinto de cero apunta a una sesión que ya existe. Una conexión nueva en sesión nueva se pide con cero. La suite la elige el servidor en el server_hello."
+  },
+  {
+    "id": "transporte-053",
+    "concepto": "transporte-session-id-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 20
+    },
+    "pregunta": "Un cliente envía SessionID igual a cero. ¿Qué responde el servidor?",
+    "correcta": "Un identificador con el valor de una sesión nueva",
+    "distractores": [
+      "El mismo valor cero, para confirmar la sesión",
+      "Una alerta, porque cero no es un identificador válido"
+    ],
+    "explicacion": "Con cero, el servidor devuelve el valor de una nueva sesión. El servidor repite el valor solo si el del cliente no era cero. Cero es válido: indica una nueva sesión."
+  },
+  {
+    "id": "transporte-054",
+    "concepto": "transporte-session-id-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 20
+    },
+    "pregunta": "Un cliente reconecta y quiere reutilizar su sesión. ¿Qué valor pone en SessionID y qué devuelve el servidor?",
+    "correcta": "Un valor distinto de cero, y el servidor devuelve el mismo",
+    "distractores": [
+      "Cero, y el servidor devuelve el mismo",
+      "Un valor distinto de cero, y el servidor devuelve uno nuevo"
+    ],
+    "explicacion": "Con un valor distinto de cero, el servidor usa el mismo valor. Con cero, el cliente pide una sesión nueva. Si el valor no era cero, el servidor no devuelve uno nuevo."
+  },
+  {
+    "id": "transporte-055",
+    "concepto": "transporte-server-hello-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué suite de cifrado incluye el server_hello?",
+    "correcta": "Una sola, elegida entre las que propuso el cliente",
+    "distractores": [
+      "La lista completa de suites que soporta el servidor",
+      "La primera de la lista del cliente, sin que el servidor decida"
+    ],
+    "explicacion": "El servidor elige un único conjunto de cifrado de los propuestos. La lista de suites la manda el cliente, y no el servidor. El servidor selecciona, y no tiene por qué coger la primera."
+  },
+  {
+    "id": "transporte-056",
+    "concepto": "transporte-server-hello-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Cómo se relaciona el Random del servidor con el del cliente?",
+    "correcta": "Es independiente: lo genera el servidor por su cuenta",
+    "distractores": [
+      "Es el del cliente cifrado con la clave del servidor",
+      "Es el del cliente más una marca de tiempo del servidor"
+    ],
+    "explicacion": "Cada parte genera su random de forma independiente. El servidor no cifra ni copia el del cliente. El servidor no suma nada al random del cliente."
+  },
+  {
+    "id": "transporte-057",
+    "concepto": "transporte-server-hello-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué versión de TLS lleva el server_hello?",
+    "correcta": "La más baja entre la sugerida por el cliente y la más alta que soporta el servidor",
+    "distractores": [
+      "La más alta que soporta el servidor, sea cual sea la del cliente",
+      "La más alta entre la sugerida por el cliente y la del servidor"
+    ],
+    "explicacion": "Es el mínimo de la versión del cliente y la más alta del servidor. El servidor no impone una versión mayor que la del cliente. Tomar el máximo daría una versión que una de las partes no entiende."
+  },
+  {
+    "id": "transporte-058",
+    "concepto": "transporte-intercambio-de-claves-rsa-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "En el intercambio de claves RSA de TLS 1.2, ¿cómo se protege la clave secreta?",
+    "correcta": "Se cifra con la clave pública RSA del receptor",
+    "distractores": [
+      "Se firma con la clave privada RSA del emisor",
+      "Se acuerda con parámetros Diffie-Hellman públicos"
+    ],
+    "explicacion": "Con RSA la clave secreta se cifra con la pública del receptor. Una firma da autenticidad y no oculta la clave. Acordarla con DH es otro método de intercambio."
+  },
+  {
+    "id": "transporte-059",
+    "concepto": "transporte-intercambio-de-claves-rsa-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué necesita el cliente para poder enviar la clave con RSA?",
+    "correcta": "Un certificado de clave pública para la clave del receptor",
+    "distractores": [
+      "Un certificado con la clave DH fija del servidor",
+      "Un certificado propio con la clave capaz de firmar"
+    ],
+    "explicacion": "Debe haber un certificado de clave pública del receptor. Los parámetros DH en certificado son de Fixed DH. El certificado de cliente con firma es de certificate_verify."
+  },
+  {
+    "id": "transporte-060",
+    "concepto": "transporte-intercambio-de-claves-rsa-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "Con el intercambio RSA, ¿quién genera la clave pre-master?",
+    "correcta": "El cliente",
+    "distractores": [
+      "El servidor",
+      "Ambos a la vez"
+    ],
+    "explicacion": "El cliente la genera, la cifra y la envía. El servidor solo la recibe. Generarla entre los dos a la vez es el cálculo de DH."
+  },
+  {
+    "id": "transporte-061",
+    "concepto": "transporte-diffie-hellman-fijo-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "En Fixed Diffie-Hellman, ¿dónde están los parámetros públicos DH del servidor?",
+    "correcta": "En el certificado del servidor",
+    "distractores": [
+      "El servidor los manda en un mensaje server_key_exchange firmado",
+      "El servidor los manda en el server_hello, junto al random"
+    ],
+    "explicacion": "El certificado del servidor contiene sus parámetros DH públicos. El server_key_exchange no se usa con DH fijo. El client_hello lo manda el cliente."
+  },
+  {
+    "id": "transporte-062",
+    "concepto": "transporte-diffie-hellman-fijo-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "En Fixed Diffie-Hellman, ¿cómo envía el cliente sus parámetros DH?",
+    "correcta": "En su certificado o en el mensaje client_key_exchange",
+    "distractores": [
+      "Solo en el mensaje certificate_verify",
+      "Cifrados con la clave pública RSA del servidor"
+    ],
+    "explicacion": "El cliente usa su certificado o el client_key_exchange. El certificate_verify no se envía con DH fijo. Los parámetros públicos no necesitan cifrarse."
+  },
+  {
+    "id": "transporte-063",
+    "concepto": "transporte-diffie-hellman-fijo-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "Si el cliente mandó sus parámetros DH en su certificado, ¿qué contiene el client_key_exchange?",
+    "correcta": "Nada: su contenido es nulo",
+    "distractores": [
+      "El pre_master_secret cifrado con RSA",
+      "Un hash firmado de los mensajes anteriores"
+    ],
+    "explicacion": "Con DH fijo y el parámetro en el certificado, el contenido es nulo. Cifrar el pre_master es el caso de RSA. Firmar un hash es el certificate_verify."
+  },
+  {
+    "id": "transporte-064",
+    "concepto": "transporte-diffie-hellman-efimero-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Cómo se intercambian las claves en Diffie-Hellman efímero?",
+    "correcta": "Se intercambian claves públicas DH y se firman con la clave privada RSA o DSS",
+    "distractores": [
+      "Cada extremo intercambia sus parámetros DH sin firma alguna",
+      "Las claves DH se leen de un certificado firmado por una CA"
+    ],
+    "explicacion": "Las claves públicas DH se intercambian y se firman. Enviar parámetros sin firma es DH anónimo. Leerlos del certificado es DH fijo."
+  },
+  {
+    "id": "transporte-065",
+    "concepto": "transporte-diffie-hellman-efimero-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Por qué Diffie-Hellman efímero es la opción DH más segura?",
+    "correcta": "Da como resultado una clave temporal y autenticada",
+    "distractores": [
+      "Reutiliza la misma clave en todas las sesiones",
+      "Evita el uso de certificados en el servidor"
+    ],
+    "explicacion": "La clave es temporal y autenticada. Reutilizar la clave es el comportamiento de DH fijo. El servidor sigue necesitando certificado."
+  },
+  {
+    "id": "transporte-066",
+    "concepto": "transporte-diffie-hellman-efimero-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué evita la firma de los parámetros en Diffie-Hellman efímero?",
+    "correcta": "Que un atacante en medio sustituya los parámetros sin ser detectado",
+    "distractores": [
+      "Que los parámetros del cliente necesiten un certificado propio",
+      "Que los parámetros se pierdan si un cortafuegos cierra la conexión"
+    ],
+    "explicacion": "La firma autentica los parámetros, y un cambio se detecta. El certificado de cliente es opcional con cualquier método. Evitar el cierre por inactividad es Heartbeat."
+  },
+  {
+    "id": "transporte-067",
+    "concepto": "transporte-diffie-hellman-anonimo-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué es Diffie-Hellman anónimo en TLS?",
+    "correcta": "Un intercambio en el que cada extremo envía sus parámetros DH sin autenticación",
+    "distractores": [
+      "Un intercambio en el que cada extremo firma sus parámetros con RSA",
+      "Un intercambio en el que el servidor pone sus parámetros en su certificado"
+    ],
+    "explicacion": "En DH anónimo no hay autenticación de los parámetros. Firmar los parámetros es DH efímero. Los parámetros en el certificado son DH fijo."
+  },
+  {
+    "id": "transporte-068",
+    "concepto": "transporte-diffie-hellman-anonimo-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿A qué ataque se expone un intercambio DH sin autenticación?",
+    "correcta": "Hombre en el medio",
+    "distractores": [
+      "Reproducción de mensajes",
+      "Truncamiento de la conexión"
+    ],
+    "explicacion": "Sin autenticación es vulnerable al hombre en el medio. La reproducción es un riesgo del 0-RTT. El truncamiento se evita con close_notify."
+  },
+  {
+    "id": "transporte-069",
+    "concepto": "transporte-diffie-hellman-anonimo-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "Un atacante se pone entre cliente y servidor en un intercambio DH anónimo. ¿Por qué ninguno lo detecta?",
+    "correcta": "Porque ningún extremo comprueba la identidad del otro",
+    "distractores": [
+      "Porque los parámetros viajan cifrados con RSA",
+      "Porque el servidor firma lo que el atacante le manda"
+    ],
+    "explicacion": "Nada autentica los parámetros, y el atacante puede suplantar a ambos. Los parámetros viajan sin cifrar. En DH anónimo el servidor no firma nada."
+  },
+  {
+    "id": "transporte-070",
+    "concepto": "transporte-cipherspec-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué campos tiene una CipherSpec?",
+    "correcta": "Algoritmo de cifrado, algoritmo MAC, tipo, tamaño de hash, material de claves y tamaño del IV",
+    "distractores": [
+      "Intercambio de claves, algoritmo de cifrado, versión de TLS, random y compresión",
+      "Identificador, certificado del par, compresión, master secret y bandera de reanudación"
+    ],
+    "explicacion": "Esos son los campos de una CipherSpec. El intercambio de claves es el primer elemento de la CipherSuite, y no de la CipherSpec. Esos son los elementos del estado de la sesión."
+  },
+  {
+    "id": "transporte-071",
+    "concepto": "transporte-cipherspec-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué algoritmos MAC admite la CipherSpec y qué tamaño de hash dan?",
+    "correcta": "MD5 con 16 bytes y SHA-1 con 20 bytes",
+    "distractores": [
+      "MD5 con 20 bytes y SHA-1 con 16 bytes",
+      "MD5 con 32 bytes y SHA-1 con 40 bytes"
+    ],
+    "explicacion": "MD5 da 16 bytes y SHA-1 da 20. Los tamaños están intercambiados. Los tamaños son el doble del real."
+  },
+  {
+    "id": "transporte-072",
+    "concepto": "transporte-cipherspec-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué indica el campo CipherType de la CipherSpec?",
+    "correcta": "Si el cifrado es de flujo o de bloque",
+    "distractores": [
+      "Si el intercambio de claves es RSA o Diffie-Hellman",
+      "Si el MAC es MD5 o SHA-1"
+    ],
+    "explicacion": "CipherType es flujo o bloque. El intercambio de claves es el primer elemento de la CipherSuite. El algoritmo MAC es el campo MACAlgorithm."
+  },
+  {
+    "id": "transporte-073",
+    "concepto": "transporte-server-key-exchange-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Cuándo no hace falta el mensaje server_key_exchange?",
+    "correcta": "Con DH fijo y con intercambio de claves RSA",
+    "distractores": [
+      "Con DH efímero y con DH anónimo",
+      "Con DH anónimo y con RSA de una clave solo de firma"
+    ],
+    "explicacion": "Con DH fijo, el certificado ya trae los parámetros, y con RSA el cliente cifra con la clave del certificado. Con DH efímero y anónimo el mensaje es necesario. Con DH anónimo y con una clave RSA solo de firma el mensaje es necesario."
+  },
+  {
+    "id": "transporte-074",
+    "concepto": "transporte-server-key-exchange-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué contiene server_key_exchange con DH efímero?",
+    "correcta": "El primo, la raíz primitiva, la clave pública DH del servidor y una firma",
+    "distractores": [
+      "Solo la clave pública DH del servidor, sin valores globales ni firma",
+      "Los parámetros del certificado DH fijo y un hash de los mensajes"
+    ],
+    "explicacion": "Incluye los tres valores DH más la firma de esos parámetros. Eso es DH anónimo si faltan valores globales y firma. El certificado DH fijo no se usa con efímero."
+  },
+  {
+    "id": "transporte-075",
+    "concepto": "transporte-server-key-exchange-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 23
+    },
+    "pregunta": "Un servidor tiene una clave RSA solo de firma. ¿Cómo da al cliente una clave con la que cifrar el secreto?",
+    "correcta": "Crea un par RSA temporal y envía la pública, firmada, en server_key_exchange",
+    "distractores": [
+      "Envía en el certificate su clave RSA de firma, y el cliente cifra con ella",
+      "Pide al cliente que genere un par RSA y le mande la pública"
+    ],
+    "explicacion": "El servidor crea una pareja temporal y la envía con firma. Una clave solo de firma no sirve para cifrar. El servidor es quien envía su clave pública, y no el cliente."
+  },
+  {
+    "id": "transporte-076",
+    "concepto": "transporte-certificate-request-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué servidor puede pedir un certificado al cliente?",
+    "correcta": "Uno que no usa Diffie-Hellman anónimo",
+    "distractores": [
+      "Cualquiera, incluso con DH anónimo",
+      "Solo uno que usa Diffie-Hellman fijo"
+    ],
+    "explicacion": "Un servidor no anónimo puede pedirlo. Con DH anónimo no hay autenticación y no pide certificado. No se limita a DH fijo."
+  },
+  {
+    "id": "transporte-077",
+    "concepto": "transporte-certificate-request-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué parámetros lleva el mensaje certificate_request?",
+    "correcta": "El tipo de certificado y las autoridades de certificación aceptables",
+    "distractores": [
+      "El certificado del servidor y su cadena de autoridades",
+      "Los parámetros DH del servidor y una firma"
+    ],
+    "explicacion": "Incluye tipo de certificado y autoridades aceptables. El certificado del servidor va en el mensaje certificate. Los parámetros DH y la firma son de server_key_exchange."
+  },
+  {
+    "id": "transporte-078",
+    "concepto": "transporte-certificate-request-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 24
+    },
+    "pregunta": "El servidor pidió certificado y el cliente no tiene ninguno adecuado. ¿Qué hace?",
+    "correcta": "Envía una alerta no_certificado",
+    "distractores": [
+      "Cierra la conexión con un close_notify",
+      "Sigue sin avisar, sin enviar nada"
+    ],
+    "explicacion": "Si no hay certificado adecuado, el cliente envía la alerta. close_notify cierra una conexión ya establecida. Sin aviso el servidor no sabría qué ha pasado."
+  },
+  {
+    "id": "transporte-079",
+    "concepto": "transporte-server-done-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué mensaje marca el final del saludo del servidor?",
+    "correcta": "server_done",
+    "distractores": [
+      "server_hello",
+      "certificate_request"
+    ],
+    "explicacion": "server_done indica el fin del saludo del servidor y de sus mensajes asociados. El server_hello abre el saludo. El certificate_request es opcional y va antes."
+  },
+  {
+    "id": "transporte-080",
+    "concepto": "transporte-server-done-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué carácter tiene el mensaje server_done?",
+    "correcta": "Es obligatorio",
+    "distractores": [
+      "Es opcional si el servidor usa RSA",
+      "Solo se envía si el servidor pidió certificado"
+    ],
+    "explicacion": "Se envía siempre. No depende del intercambio de claves. No depende de que se pida certificado."
+  },
+  {
+    "id": "transporte-081",
+    "concepto": "transporte-server-done-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 24
+    },
+    "pregunta": "El servidor pidió certificado de cliente y ya envió server_done. ¿Qué manda el cliente?",
+    "correcta": "Un mensaje certificate con el suyo",
+    "distractores": [
+      "Un certificate_verify antes de nada",
+      "Un finished con el hash de los mensajes"
+    ],
+    "explicacion": "El cliente empieza la fase enviando su certificado. El certificate_verify va después del client_key_exchange. El finished va al final, tras el cambio de cifrado."
+  },
+  {
+    "id": "transporte-082",
+    "concepto": "transporte-client-key-exchange-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿De qué depende el contenido del mensaje client_key_exchange?",
+    "correcta": "Del tipo de intercambio de claves",
+    "distractores": [
+      "Del número de conexiones de la sesión",
+      "Del certificado del cliente"
+    ],
+    "explicacion": "El contenido cambia según el método de intercambio. El número de conexiones no influye. El certificado cambia solo en el caso Fixed DH."
+  },
+  {
+    "id": "transporte-083",
+    "concepto": "transporte-client-key-exchange-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 25
+    },
+    "pregunta": "Con DH efímero o anónimo, ¿qué lleva el client_key_exchange?",
+    "correcta": "Los parámetros públicos DH del cliente",
+    "distractores": [
+      "Un pre-master de 48 bytes cifrado con RSA",
+      "Un mensaje nulo"
+    ],
+    "explicacion": "Se envían los parámetros públicos DH del cliente. El pre-master cifrado es de RSA. El mensaje nulo es el caso de Fixed DH con parámetros en el certificado."
+  },
+  {
+    "id": "transporte-084",
+    "concepto": "transporte-client-key-exchange-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 25
+    },
+    "pregunta": "Con RSA, ¿con qué clave cifra el cliente el pre-master?",
+    "correcta": "La pública del certificado del servidor o la RSA temporal del server_key_exchange",
+    "distractores": [
+      "La pública del certificado del cliente",
+      "Su propia clave privada RSA"
+    ],
+    "explicacion": "Se cifra con la pública del servidor, o con la temporal si la hay. El pre-master es para el servidor. Una clave privada no cifra para el receptor."
+  },
+  {
+    "id": "transporte-085",
+    "concepto": "transporte-certificate-verify-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Para qué sirve el mensaje certificate_verify?",
+    "correcta": "Para verificar de forma explícita el certificado del cliente",
+    "distractores": [
+      "Para verificar la cadena de certificados del servidor",
+      "Para confirmar que el intercambio de claves terminó bien"
+    ],
+    "explicacion": "Verifica el certificado del cliente. El certificado del servidor lo valida el cliente por su cuenta. Confirmar el intercambio es el finished."
+  },
+  {
+    "id": "transporte-086",
+    "concepto": "transporte-certificate-verify-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué firma el cliente en certificate_verify y con qué clave?",
+    "correcta": "Un hash de los mensajes del Handshake anteriores, con la clave privada del certificado",
+    "distractores": [
+      "El pre_master_secret, con la clave pública del servidor",
+      "Un hash de los datos de aplicación, con la clave privada del servidor"
+    ],
+    "explicacion": "Se firma el hash de los mensajes previos del Handshake. El pre-master se cifra, no se firma. Los datos de aplicación no existen aún y la clave es la del cliente."
+  },
+  {
+    "id": "transporte-087",
+    "concepto": "transporte-certificate-verify-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Cuándo no se envía certificate_verify aunque el cliente tenga certificado?",
+    "correcta": "Cuando el certificado contiene parámetros DH fijos",
+    "distractores": [
+      "Cuando el servidor usa DH efímero con su certificado",
+      "Cuando el certificado del cliente ya se usó en una sesión reanudable"
+    ],
+    "explicacion": "Solo se envía con certificados que pueden firmar, y los de DH fijos no. El método del servidor no decide el envío. El mensaje depende de la capacidad de firma del certificado."
+  },
+  {
+    "id": "transporte-088",
+    "concepto": "transporte-finished-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Qué verifica el mensaje finished?",
+    "correcta": "Que el intercambio de claves y la autenticación se han hecho bien",
+    "distractores": [
+      "Que el certificado del servidor no ha caducado",
+      "Que el servidor soporta la suite propuesta"
+    ],
+    "explicacion": "Finished verifica el intercambio y la autenticación. La caducidad se comprueba con el certificado. La suite se acuerda en el server_hello."
+  },
+  {
+    "id": "transporte-089",
+    "concepto": "transporte-finished-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Cómo se calcula el contenido de finished?",
+    "correcta": "Con la PRF sobre el master_secret, una etiqueta y el hash de los mensajes del Handshake",
+    "distractores": [
+      "Con una firma RSA del pre_master_secret",
+      "Con el MAC de los datos de aplicación enviados"
+    ],
+    "explicacion": "La PRF combina master_secret, etiqueta y hash. El pre_master no se firma en el finished. Finished sale antes de los datos de aplicación."
+  },
+  {
+    "id": "transporte-090",
+    "concepto": "transporte-finished-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Qué distingue el mensaje final del cliente del mensaje final del servidor?",
+    "correcta": "La etiqueta: client finished o server finished",
+    "distractores": [
+      "La clave: el cliente usa la pública y el servidor la privada",
+      "El hash: MD5 en el cliente y SHA en el servidor"
+    ],
+    "explicacion": "Cada parte usa su propia etiqueta. Ambos usan el master_secret. Los dos hashes se concatenan en los dos mensajes."
+  },
+  {
+    "id": "transporte-091",
+    "concepto": "transporte-clave-maestra-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Qué tamaño y qué alcance tiene la clave maestra de TLS?",
+    "correcta": "48 bytes, única para la sesión",
+    "distractores": [
+      "48 bytes, distinta para cada conexión",
+      "32 bytes, única para la sesión"
+    ],
+    "explicacion": "La clave maestra tiene 48 bytes y es única para la sesión. No cambia por conexión. El tamaño es 48 bytes."
+  },
+  {
+    "id": "transporte-092",
+    "concepto": "transporte-clave-maestra-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿En cuántas fases se crea la clave maestra?",
+    "correcta": "En dos: primero la pre-master y luego la clave maestra",
+    "distractores": [
+      "En una: se genera directamente la clave maestra al enviar el hello",
+      "En tres: random, pre-master y clave maestra"
+    ],
+    "explicacion": "Primero la pre-master, y después la maestra. No se genera de una vez. El key_block sale de la maestra."
+  },
+  {
+    "id": "transporte-093",
+    "concepto": "transporte-clave-maestra-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Cómo se obtiene la pre-master con Diffie-Hellman?",
+    "correcta": "Cada parte hace el cálculo DH con la pública del otro",
+    "distractores": [
+      "El cliente la genera y la cifra con la pública del servidor",
+      "El servidor la genera y la firma con su clave privada"
+    ],
+    "explicacion": "Ambos hacen el cálculo DH. Eso es RSA. Una firma no oculta la clave."
+  },
+  {
+    "id": "transporte-094",
+    "concepto": "transporte-key-block-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué se obtiene a partir del key_block?",
+    "correcta": "Los secretos MAC, las claves de escritura y los IV de cliente y servidor",
+    "distractores": [
+      "El master_secret y el pre_master_secret",
+      "Las suites y los métodos de compresión"
+    ],
+    "explicacion": "El key_block da seis valores de escritura. El master_secret es de donde sale el key_block. Las suites se negocian en los hello."
+  },
+  {
+    "id": "transporte-095",
+    "concepto": "transporte-key-block-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿De qué se deriva el key_block?",
+    "correcta": "De la clave maestra compartida",
+    "distractores": [
+      "Del certificado del servidor",
+      "Del hash de los mensajes del Handshake"
+    ],
+    "explicacion": "Los parámetros se obtienen de la clave maestra. El certificado no se usa para derivar claves simétricas. El hash de los mensajes entra en el finished."
+  },
+  {
+    "id": "transporte-096",
+    "concepto": "transporte-key-block-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Cuántos valores distintos da el key_block?",
+    "correcta": "Seis: secreto MAC, clave e IV para cada sentido",
+    "distractores": [
+      "Tres: secreto MAC, clave e IV, comunes a ambos sentidos",
+      "Cuatro: dos secretos MAC y dos claves, sin IV"
+    ],
+    "explicacion": "Hay tres tipos de valor para cliente y para servidor. Cada sentido tiene los suyos. Los IV también salen del key_block."
+  },
+  {
+    "id": "transporte-097",
+    "concepto": "transporte-prf-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Para qué sirve la PRF de TLS?",
+    "correcta": "Para generar bloques de números pseudoaleatorios para obtener o validar claves",
+    "distractores": [
+      "Para cifrar el pre_master_secret antes de enviarlo",
+      "Para firmar el hash de los mensajes del Handshake"
+    ],
+    "explicacion": "La PRF genera números aleatorios para claves. El pre-master lo cifra RSA. Firmar es asimétrico, y la PRF no firma."
+  },
+  {
+    "id": "transporte-098",
+    "concepto": "transporte-prf-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué hace la PRF si necesita más longitud de la que da una pasada?",
+    "correcta": "Se itera las veces que haga falta hasta alcanzar la longitud deseada",
+    "distractores": [
+      "Pide al servidor un random de mayor longitud",
+      "Repite el último bloque hasta alcanzar la longitud, con relleno"
+    ],
+    "explicacion": "Se itera hasta la longitud buscada. No pide nada al servidor. No usa relleno."
+  },
+  {
+    "id": "transporte-099",
+    "concepto": "transporte-prf-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué mensaje del Handshake usa la PRF en su contenido?",
+    "correcta": "finished",
+    "distractores": [
+      "server_hello",
+      "certificate_request"
+    ],
+    "explicacion": "finished se calcula con la PRF. El server_hello no se calcula. El certificate_request lleva tipo y autoridades."
+  },
+  {
+    "id": "transporte-100",
+    "concepto": "transporte-renegociacion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Qué es la renegociación en TLS?",
+    "correcta": "Una nueva ejecución del Handshake durante una conexión, para cambiar parámetros de seguridad",
+    "distractores": [
+      "La reanudación de una sesión anterior con un SessionID distinto de cero, sin repetir el Handshake completo",
+      "El cambio de suite con change_cipher_spec sin repetir el Handshake"
+    ],
+    "explicacion": "Renegociar es ejecutar de nuevo el Handshake durante la conexión para cambiar sus parámetros. Reanudar una sesión reutiliza parámetros guardados y no negocia otros nuevos en la conexión abierta. Change_cipher_spec solo anuncia un cambio ya acordado, y no negocia nada."
+  },
+  {
+    "id": "transporte-101",
+    "concepto": "transporte-renegociacion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Cómo pide el servidor una renegociación?",
+    "correcta": "Con un mensaje HelloRequest",
+    "distractores": [
+      "Con un mensaje ClientHello, igual que al abrir una conexión nueva",
+      "Con una alerta no_certificado, que obliga al cliente a empezar de nuevo"
+    ],
+    "explicacion": "El servidor pide renegociar con un HelloRequest, un mensaje del Handshake. El ClientHello es la forma en que lo pide el cliente, y no el servidor. La alerta no_certificado la envía el cliente cuando no tiene certificado, y no pide renegociar."
+  },
+  {
+    "id": "transporte-102",
+    "concepto": "transporte-renegociacion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Cómo pide el cliente una renegociación?",
+    "correcta": "Con un mensaje ClientHello típico",
+    "distractores": [
+      "Con un mensaje HelloRequest, igual que hace el servidor",
+      "Con un mensaje heartbeat_request, para comprobar que sigue activo"
+    ],
+    "explicacion": "El cliente renegocia con un ClientHello como en una negociación normal. El HelloRequest es la forma del servidor, y el cliente no lo usa. Heartbeat solo comprueba que el interlocutor está activo."
+  },
+  {
+    "id": "transporte-103",
+    "concepto": "transporte-usos-de-la-renegociacion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 33
+    },
+    "pregunta": "Un sitio web quiere pedir certificado de cliente solo al entrar en una zona. ¿Qué mecanismo de TLS usa?",
+    "correcta": "Una renegociación del Handshake",
+    "distractores": [
+      "Un mensaje heartbeat_request enviado al entrar en esa zona",
+      "Una extensión server_name añadida al ClientHello"
+    ],
+    "explicacion": "Pedir el certificado del cliente a partir de un momento dado es un escenario de renegociación. Heartbeat solo comprueba que el interlocutor está activo y no pide certificados. La extensión server_name indica el servidor virtual de destino, y no pide certificados."
+  },
+  {
+    "id": "transporte-104",
+    "concepto": "transporte-usos-de-la-renegociacion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Cómo puede un servidor subir la seguridad al pasar a una zona sensible?",
+    "correcta": "Pide una renegociación con parámetros más fuertes",
+    "distractores": [
+      "Pide una reanudación con SessionID igual a cero",
+      "Envía una alerta fatal y espera un nuevo client_hello del cliente"
+    ],
+    "explicacion": "Renegociar permite incrementar la seguridad al entrar en una zona sensible del sitio. Un SessionID igual a cero crea una sesión nueva y no mejora los parámetros de la conexión abierta. Una alerta fatal cierra la conexión, y no la mejora."
+  },
+  {
+    "id": "transporte-105",
+    "concepto": "transporte-usos-de-la-renegociacion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Por qué una renegociación oculta la suite que se va a usar?",
+    "correcta": "Porque la nueva suite se establece ya bajo cifrado",
+    "distractores": [
+      "Porque la renegociación no envía ninguna suite en el hello",
+      "Porque se cifra con la clave pública del servidor, sin Handshake"
+    ],
+    "explicacion": "La nueva suite se negocia con la conexión ya cifrada, y un observador no la ve. La renegociación sí envía suites, porque repite el Handshake. Cifrar con la clave pública del servidor no oculta la suite, y la renegociación sí usa el Handshake."
+  },
+  {
+    "id": "transporte-106",
+    "concepto": "transporte-extensiones-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 34
+    },
+    "pregunta": "¿Para qué sirven las extensiones de TLS?",
+    "correcta": "Para añadir funcionalidades sin cambiar el protocolo",
+    "distractores": [
+      "Para sustituir el Handshake por una negociación más corta y rápida",
+      "Para cifrar los mensajes hello antes de enviarlos"
+    ],
+    "explicacion": "Las extensiones añaden funcionalidades a TLS sin cambiar el protocolo en sí. Acortar el Handshake es un objetivo de TLS 1.3, y las extensiones no sustituyen el Handshake. Las extensiones no cifran: van en claro al final de los hello, salvo EncryptedExtensions de TLS 1.3."
+  },
+  {
+    "id": "transporte-107",
+    "concepto": "transporte-extensiones-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 34
+    },
+    "pregunta": "¿Dónde se añaden las extensiones?",
+    "correcta": "En un bloque al final de ClientHello y ServerHello",
+    "distractores": [
+      "En la cabecera de cada registro TLS que viaja por la conexión",
+      "En un mensaje propio que se envía después de server_done"
+    ],
+    "explicacion": "Las extensiones van en un bloque especial al final del ClientHello y del ServerHello. La cabecera del registro lleva el tipo, la versión y la longitud, y no extensiones. No existe un mensaje de extensiones propio tras server_done."
+  },
+  {
+    "id": "transporte-108",
+    "concepto": "transporte-extensiones-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 34
+    },
+    "pregunta": "Un cliente quiere ofrecer una función nueva a un servidor. ¿Qué mensaje la lleva?",
+    "correcta": "El ClientHello, con una extensión al final",
+    "distractores": [
+      "El certificate_request, con un tipo de certificado nuevo",
+      "El finished, con un campo adicional al final del hash"
+    ],
+    "explicacion": "El cliente ofrece una extensión al final de su ClientHello. El certificate_request lo envía el servidor, y no lleva extensiones. El finished es un hash que verifica el Handshake, y no lleva extensiones."
+  },
+  {
+    "id": "transporte-109",
+    "concepto": "transporte-extensiones-tipicas-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué indica la extensión server_name?",
+    "correcta": "El servidor virtual seguro al que se quiere conectar",
+    "distractores": [
+      "El nombre de la autoridad que firmó el certificado del servidor",
+      "El dominio del cliente que inicia la conexión TLS"
+    ],
+    "explicacion": "La extensión server_name indica el servidor virtual seguro al que se quiere conectar. La autoridad que firma el certificado no se anuncia en esa extensión. El nombre es el del destino, y no el del cliente."
+  },
+  {
+    "id": "transporte-110",
+    "concepto": "transporte-extensiones-tipicas-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué indica la extensión session_ticket?",
+    "correcta": "Soporte de reanudación de sesión sin estado",
+    "distractores": [
+      "Soporte de reanudación con un SessionID guardado en el servidor",
+      "Soporte de envío de datos en el primer paquete"
+    ],
+    "explicacion": "La extensión session_ticket indica soporte de reanudación sin estado en el servidor. Reanudar con un SessionID guardado exige que el servidor guarde la sesión, y es la reanudación con estado. Enviar datos en el primer paquete es la extensión early_data de TLS 1.3, y no el ticket."
+  },
+  {
+    "id": "transporte-111",
+    "concepto": "transporte-extensiones-tipicas-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Para qué pide el cliente la extensión status_request?",
+    "correcta": "Para indicar soporte de OCSP stapling",
+    "distractores": [
+      "Para indicar soporte del protocolo Heartbeat",
+      "Para indicar soporte de renegociación segura"
+    ],
+    "explicacion": "La extensión status_request indica soporte de OCSP stapling. La compatibilidad con Heartbeat se anuncia con la extensión heartbeat. La renegociación segura se anuncia con la extensión renegotiation_info."
+  },
+  {
+    "id": "transporte-112",
+    "concepto": "transporte-cierre-de-la-conexion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 36
+    },
+    "pregunta": "¿Cómo cierra TLS una conexión?",
+    "correcta": "Quien quiere cortar emite una alerta close_notify",
+    "distractores": [
+      "Cualquiera cierra la conexión con un simple FIN de TCP",
+      "Se envía un finished con una etiqueta de cierre"
+    ],
+    "explicacion": "Quien quiere cortar emite una alerta close_notify. Un FIN de TCP sin aviso es el cierre no autorizado que permite un ataque de truncamiento. El finished verifica el Handshake, y no cierra la conexión."
+  },
+  {
+    "id": "transporte-113",
+    "concepto": "transporte-cierre-de-la-conexion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 36
+    },
+    "pregunta": "¿Qué ataque evita el cierre con close_notify?",
+    "correcta": "El de truncamiento",
+    "distractores": [
+      "El de reproducción",
+      "El downgrade"
+    ],
+    "explicacion": "El cierre con close_notify evita un ataque de truncamiento, es decir, un cierre no autorizado con TCP. La reproducción de mensajes es un riesgo del 0-RTT, y no del cierre. El downgrade fuerza cifrados débiles en la negociación, y no en el cierre."
+  },
+  {
+    "id": "transporte-114",
+    "concepto": "transporte-cierre-de-la-conexion-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 36
+    },
+    "pregunta": "¿Qué hace quien recibe un close_notify?",
+    "correcta": "Descarta lo que tuviera que enviar y responde con otro close_notify",
+    "distractores": [
+      "Termina de enviar lo pendiente y cierra sin emitir ningún close_notify",
+      "Responde con un finished en vez de close_notify y pasa a la fase 4"
+    ],
+    "explicacion": "Quien recibe close_notify descarta cualquier envío y emite también un close_notify. No termina de enviar lo pendiente: lo descarta, y además responde. El finished y la fase 4 son del Handshake, y no del cierre."
+  },
+  {
+    "id": "transporte-115",
+    "concepto": "transporte-problemas-de-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 38
+    },
+    "pregunta": "¿Qué problema de eficiencia tiene el Handshake de TLS 1.2?",
+    "correcta": "Demasiados pasos (RTTs)",
+    "distractores": [
+      "Un cifrado de los registros demasiado lento",
+      "Un random demasiado largo en cada hello"
+    ],
+    "explicacion": "El Handshake de TLS 1.2 tiene demasiados pasos o RTTs, y alarga la negociación. La velocidad del cifrado de los registros no se cita como problema del Handshake. El tamaño del random no se cita como problema."
+  },
+  {
+    "id": "transporte-116",
+    "concepto": "transporte-problemas-de-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 38
+    },
+    "pregunta": "¿Por qué TLS 1.2 dificulta elegir las mejores suites?",
+    "correcta": "Hay decenas de combinaciones de CipherSuites",
+    "distractores": [
+      "Solo hay una suite aprobada, y es débil",
+      "Cada servidor define sus propias suites, sin un estándar común"
+    ],
+    "explicacion": "TLS 1.2 tiene decenas de CipherSuites, y elegir las mejores es difícil. Hay muchas suites, y no una sola. Las suites están estandarizadas: el problema es la cantidad."
+  },
+  {
+    "id": "transporte-117",
+    "concepto": "transporte-problemas-de-tls12",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 38
+    },
+    "pregunta": "¿Quién elige ciertos parámetros de algunos algoritmos en TLS 1.2?",
+    "correcta": "Los usuarios que configuran servidores",
+    "distractores": [
+      "El cliente, en la lista del client_hello que envía",
+      "La autoridad de certificación que firma el certificado del servidor"
+    ],
+    "explicacion": "En TLS 1.2 quedan en manos de quienes configuran servidores. El cliente ofrece suites, pero no elige los parámetros de esos algoritmos. La autoridad firma certificados, y no decide parámetros de algoritmos."
+  },
+  {
     "id": "transporte-119",
     "concepto": "introduccion-ataque-de-degradacion",
     "tema": "transporte",
@@ -3886,6 +5758,630 @@
       "El random del cliente usa una marca de tiempo predecible"
     ],
     "explicacion": "Algunas partes del protocolo no entran en la firma del servidor, y un atacante puede alterarlas. El servidor sí firma parte del Handshake, y no todo queda sin firmar. La marca de tiempo del random no es la causa del downgrade."
+  },
+  {
+    "id": "transporte-121",
+    "concepto": "transporte-key-share-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    },
+    "pregunta": "¿Cómo envía TLS 1.3 los parámetros para compartir la clave?",
+    "correcta": "Adjuntos al mensaje Hello, con extensiones KeyShare",
+    "distractores": [
+      "En server_key_exchange y client_key_exchange, firmados por cada parte",
+      "En un mensaje EncryptedExtensions cifrado tras server_hello"
+    ],
+    "explicacion": "TLS 1.3 adjunta los parámetros al Hello con extensiones KeyShare. Server_key_exchange y client_key_exchange son de TLS 1.2, y 1.3 los elimina. EncryptedExtensions cifra extensiones del server_hello, y no lleva la clave."
+  },
+  {
+    "id": "transporte-122",
+    "concepto": "transporte-key-share-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    },
+    "pregunta": "¿Qué mensajes de TLS 1.2 elimina TLS 1.3 al enviar la clave compartida en el Hello?",
+    "correcta": "server_key_exchange y client_key_exchange",
+    "distractores": [
+      "certificate y certificate_verify, que pasan a viajar cifrados",
+      "client_hello y server_hello, que ya no llevan extensiones"
+    ],
+    "explicacion": "Se eliminan server_key_exchange y client_key_exchange. El certificate y el certificate_verify siguen existiendo en 1.3. Los dos hello siguen existiendo, y llevan las extensiones KeyShare."
+  },
+  {
+    "id": "transporte-123",
+    "concepto": "transporte-key-share-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    },
+    "pregunta": "¿Qué ventaja da que el ClientHello lleve ya el key_share?",
+    "correcta": "El servidor puede derivar la clave tras el primer mensaje del cliente",
+    "distractores": [
+      "El cliente debe esperar al certificado del servidor antes de enviar su parte",
+      "El servidor ya no necesita enviar su certificado al cliente"
+    ],
+    "explicacion": "El key_share va ya en el ClientHello, y el servidor puede calcular la clave con su respuesta. El cliente no espera al certificado para enviar su parte. El servidor sigue enviando su certificado, ahora cifrado."
+  },
+  {
+    "id": "transporte-124",
+    "concepto": "transporte-cifrado-temprano-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    },
+    "pregunta": "¿Qué es EncryptedExtensions en TLS 1.3?",
+    "correcta": "Extensiones del server_hello que deben cifrarse",
+    "distractores": [
+      "Extensiones del client_hello cifradas con la clave pública",
+      "Un registro que cifra los certificados de la CA"
+    ],
+    "explicacion": "EncryptedExtensions son extensiones del server_hello que deben cifrarse. Las extensiones del client_hello van en claro, y no se cifran con la clave pública. No cifran certificados de la CA: son extensiones del servidor."
+  },
+  {
+    "id": "transporte-125",
+    "concepto": "transporte-cifrado-temprano-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    },
+    "pregunta": "¿Qué mensajes se cifran en TLS 1.3 desde el server_hello?",
+    "correcta": "Todos los enviados después de server_hello",
+    "distractores": [
+      "Solo el finished de cada parte, y el resto va en claro tras el server_hello",
+      "Todos, incluido el client_hello que precede al server_hello"
+    ],
+    "explicacion": "Cada mensaje enviado después de server_hello se cifra. No se cifra solo el finished: también el certificado y las extensiones. El client_hello va antes que server_hello, y viaja sin cifrar."
+  },
+  {
+    "id": "transporte-126",
+    "concepto": "transporte-cifrado-temprano-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    },
+    "pregunta": "¿Qué efecto tiene en TLS 1.3 cifrar todo lo que sigue a server_hello, frente a TLS 1.2?",
+    "correcta": "El cifrado de la conexión se adelanta",
+    "distractores": [
+      "El cifrado se retrasa hasta después del finished del cliente",
+      "El certificado del servidor viaja en claro hasta el finished"
+    ],
+    "explicacion": "El cifrado de la conexión se adelanta respecto a TLS 1.2. En 1.3 no se retrasa, sino al contrario. El certificado del servidor viaja ya cifrado, porque es posterior a server_hello."
+  },
+  {
+    "id": "transporte-127",
+    "concepto": "transporte-prohibiciones-de-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    },
+    "pregunta": "¿Qué intercambio de claves prohíbe TLS 1.3?",
+    "correcta": "RSA",
+    "distractores": [
+      "Diffie-Hellman efímero",
+      "Claves precompartidas"
+    ],
+    "explicacion": "TLS 1.3 prohíbe el intercambio de claves RSA. Diffie-Hellman efímero es el intercambio sobre el que se construye 1.3. Las claves precompartidas se mantienen, y se usan en la reanudación."
+  },
+  {
+    "id": "transporte-128",
+    "concepto": "transporte-prohibiciones-de-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    },
+    "pregunta": "¿Qué protocolo desaparece del Handshake de TLS 1.3?",
+    "correcta": "ChangeCipherSpec",
+    "distractores": [
+      "El protocolo Alert, que avisa de los errores",
+      "El Record Protocol, que fragmenta los datos"
+    ],
+    "explicacion": "TLS 1.3 elimina el protocolo ChangeCipherSpec. El protocolo Alert se mantiene, y sigue avisando de errores. El Record Protocol se mantiene, y sigue fragmentando y protegiendo los datos."
+  },
+  {
+    "id": "transporte-129",
+    "concepto": "transporte-prohibiciones-de-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    },
+    "pregunta": "¿Qué algoritmos básicos elimina TLS 1.3?",
+    "correcta": "RC4, SHA-1 y MD5",
+    "distractores": [
+      "AES, SHA-256 y ChaCha20",
+      "RC4, AES y SHA-256"
+    ],
+    "explicacion": "TLS 1.3 elimina algoritmos básicos como RC4, SHA-1 y MD5. AES, SHA-256 y ChaCha20 son los algoritmos que sustituyen a los eliminados. AES y SHA-256 no se eliminan, aunque RC4 sí."
+  },
+  {
+    "id": "transporte-130",
+    "concepto": "transporte-otras-eliminaciones-de-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Qué función de TLS 1.2, que repite el Handshake con la conexión abierta, elimina TLS 1.3?",
+    "correcta": "La renegociación",
+    "distractores": [
+      "La reanudación de sesión con un SessionID",
+      "El cierre de la conexión con close_notify"
+    ],
+    "explicacion": "TLS 1.3 elimina la renegociación. La reanudación de sesión se mantiene, y se acelera con 0-RTT. El cierre con close_notify se mantiene, y evita el truncamiento."
+  },
+  {
+    "id": "transporte-131",
+    "concepto": "transporte-otras-eliminaciones-de-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Qué nonces elimina TLS 1.3?",
+    "correcta": "Los que incluyen una marca de tiempo de 32 bits",
+    "distractores": [
+      "Los de 28 bytes generados con un generador aleatorio seguro",
+      "Los del servidor en el server_hello, por ser independientes"
+    ],
+    "explicacion": "TLS 1.3 elimina nonces como los que incluyen una marca de tiempo de 32 bits. Los bytes aleatorios de un generador seguro no se eliminan. El random del servidor tampoco se elimina: solo el que incluye marca de tiempo."
+  },
+  {
+    "id": "transporte-132",
+    "concepto": "transporte-otras-eliminaciones-de-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 44
+    },
+    "pregunta": "¿Qué cifrado autenticado deja de usar TLS 1.3?",
+    "correcta": "CBC-then-MAC",
+    "distractores": [
+      "GCM",
+      "ChaCha20-Poly1305"
+    ],
+    "explicacion": "TLS 1.3 elimina los cifrados autenticados CBC-then-MAC. GCM es un modo AEAD que TLS 1.3 propone. ChaCha20-Poly1305 es otro AEAD que TLS 1.3 propone."
+  },
+  {
+    "id": "transporte-133",
+    "concepto": "transporte-0-rtt-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 43
+    },
+    "pregunta": "¿Qué permite el handshake 0-RTT?",
+    "correcta": "Enviar datos desde el primer paquete al reanudar una sesión",
+    "distractores": [
+      "Omitir el certificado del servidor en cualquier conexión nueva",
+      "Evitar el cálculo de la clave maestra al reanudar una sesión"
+    ],
+    "explicacion": "0-RTT permite enviar datos desde el primer paquete al reanudar una sesión. No omite el certificado en conexiones nuevas: solo actúa en la reanudación. La clave sigue calculándose, y 0-RTT usa una clave precompartida antigua."
+  },
+  {
+    "id": "transporte-134",
+    "concepto": "transporte-0-rtt-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 43
+    },
+    "pregunta": "¿Qué se usa para enviar datos desde el primer paquete en 0-RTT?",
+    "correcta": "Una clave precompartida antigua, con pre_shared_key y early_data",
+    "distractores": [
+      "Una clave Diffie-Hellman efímera, enviada en un key_share del ServerHello",
+      "Un master_secret nuevo cifrado con RSA y enviado en el primer paquete"
+    ],
+    "explicacion": "0-RTT usa una clave precompartida antigua con pre_shared_key y early_data. Una clave DH efímera nueva exige esperar al ServerHello, y no permite enviar datos desde el primer paquete. RSA está prohibido en TLS 1.3."
+  },
+  {
+    "id": "transporte-135",
+    "concepto": "transporte-0-rtt-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 43
+    },
+    "pregunta": "¿Qué riesgo de seguridad tiene 0-RTT?",
+    "correcta": "Un ataque de reproducción",
+    "distractores": [
+      "Un ataque de truncamiento",
+      "Un ataque downgrade"
+    ],
+    "explicacion": "0-RTT tiene problemas de seguridad por ataques de reproducción. El truncamiento es un riesgo del cierre de la conexión, y no del 0-RTT. El downgrade es un riesgo de la negociación de TLS 1.2, y no del 0-RTT."
+  },
+  {
+    "id": "transporte-136",
+    "concepto": "transporte-orden-de-autenticar-y-cifrar",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 45
+    },
+    "pregunta": "¿Qué orden de autenticación y cifrado ha usado hasta ahora SSL/TLS?",
+    "correcta": "Primero autenticación (MAC) y luego cifrado",
+    "distractores": [
+      "Primero cifrado y luego autenticación del cifrado",
+      "Cifrado y autenticación en paralelo"
+    ],
+    "explicacion": "SSL/TLS calcula el MAC del mensaje y después cifra mensaje y MAC. Cifrar primero y autenticar el resultado es el orden de IPsec. Cifrar y autenticar en paralelo es el orden de SSH."
+  },
+  {
+    "id": "transporte-137",
+    "concepto": "transporte-orden-de-autenticar-y-cifrar",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 45
+    },
+    "pregunta": "¿Qué orden de cifrado y autenticación usa IPsec?",
+    "correcta": "Cifra el mensaje y luego calcula el MAC del texto cifrado",
+    "distractores": [
+      "Calcula el MAC del texto claro y luego deja cifrado el mensaje con su MAC",
+      "Obtiene el texto cifrado y el MAC a la vez, sobre el mensaje en claro"
+    ],
+    "explicacion": "IPsec cifra el mensaje y calcula el MAC sobre el texto cifrado. Calcular el MAC del texto claro y cifrar ambos es el orden de TLS. Cifrar y calcular el MAC a la vez sobre el claro es el orden de SSH."
+  },
+  {
+    "id": "transporte-138",
+    "concepto": "transporte-orden-de-autenticar-y-cifrar",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 45
+    },
+    "pregunta": "¿Qué se envía en SSH, que cifra y autentica el mensaje en paralelo?",
+    "correcta": "El texto cifrado y, junto a él, el MAC del mensaje en claro",
+    "distractores": [
+      "El texto cifrado con el MAC calculado sobre ese texto cifrado",
+      "El mensaje y el MAC cifrados juntos"
+    ],
+    "explicacion": "SSH envía el texto cifrado y el MAC calculado sobre el mensaje en claro. El MAC sobre el texto cifrado es el orden de IPsec. Cifrar mensaje y MAC juntos es el orden de TLS."
+  },
+  {
+    "id": "transporte-139",
+    "concepto": "transporte-aead-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 45
+    },
+    "pregunta": "¿Qué es AEAD?",
+    "correcta": "Cifrado autenticado que autentica también datos asociados, como longitudes o secuencias",
+    "distractores": [
+      "Un modo de cifrado de bloque que oculta la longitud del paquete con relleno aleatorio",
+      "Un esquema que firma cada paquete con una clave asimétrica y cifra solo la cabecera del registro"
+    ],
+    "explicacion": "AEAD autentica los datos del paquete y además datos asociados, como longitudes y números de secuencia. Ocultar la longitud con relleno es otro mecanismo, y no es AEAD. AEAD usa claves simétricas y no firma con claves asimétricas."
+  },
+  {
+    "id": "transporte-140",
+    "concepto": "transporte-aead-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 45
+    },
+    "pregunta": "¿Qué algoritmos usa TLS 1.3 con AEAD?",
+    "correcta": "GCM, CCM o ChaCha20-Poly1305",
+    "distractores": [
+      "CBC, RC4 o 3DES, como en TLS 1.2",
+      "MD5, SHA-1 o HMAC, que son funciones hash"
+    ],
+    "explicacion": "TLS 1.3 propone GCM, CCM o ChaCha20-Poly1305. CBC, RC4 y 3DES son de TLS 1.2 y no son AEAD. MD5 y SHA-1 son hashes, y no cifrados autenticados."
+  },
+  {
+    "id": "transporte-142",
+    "concepto": "transporte-gcm-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 46
+    },
+    "pregunta": "¿Qué dos funciones combina GCM?",
+    "correcta": "GCTR para cifrar y GHASH para el hash",
+    "distractores": [
+      "GHASH para cifrar y GCTR para el hash",
+      "GCTR para firmar y GHASH para cifrar"
+    ],
+    "explicacion": "En GCM, GCTR es la función de cifrado y GHASH es la de hashing. Invertir los papeles no es GCM. GCM no firma: cifra y autentica con claves simétricas."
+  },
+  {
+    "id": "transporte-143",
+    "concepto": "transporte-gcm-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 46
+    },
+    "pregunta": "¿Qué es GCM?",
+    "correcta": "Un modo de cifrado autenticado que cifra y autentica",
+    "distractores": [
+      "Un cifrado de flujo basado en RC4 que no autentica nada",
+      "Un método de intercambio de claves propio de TLS 1.3, basado en DH"
+    ],
+    "explicacion": "GCM es un modo de cifrado autenticado que cifra y autentica. RC4 es un cifrado de flujo que TLS 1.3 elimina, y GCM no se basa en él. GCM cifra y autentica, y no intercambia claves."
+  },
+  {
+    "id": "transporte-144",
+    "concepto": "transporte-gcm-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 46
+    },
+    "pregunta": "TLS 1.3 propone GCM. ¿Por qué encaja con lo que propone?",
+    "correcta": "Porque es AEAD: combina cifrado y autenticación",
+    "distractores": [
+      "Porque autentica primero y cifra después, como TLS 1.2",
+      "Porque solo cifra y deja la integridad al Record Protocol"
+    ],
+    "explicacion": "GCM es AEAD: combina cifrado y autenticación, como proponen las dos últimas opciones. Autenticar primero y cifrar después es el esquema de TLS 1.2. GCM no deja la integridad al Record Protocol: la calcula con GHASH."
+  },
+  {
+    "id": "transporte-145",
+    "concepto": "transporte-openssl",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 48
+    },
+    "pregunta": "¿Qué es OpenSSL?",
+    "correcta": "Un proyecto open source con un conjunto de herramientas SSL/TLS",
+    "distractores": [
+      "Un protocolo del IETF que sustituye a SSL/TLS en las aplicaciones",
+      "Una autoridad de certificación gratuita que emite certificados TLS"
+    ],
+    "explicacion": "OpenSSL es un proyecto open source que implementa herramientas SSL/TLS. El protocolo del IETF es TLS, y OpenSSL lo implementa. Una autoridad de certificación emite certificados, y OpenSSL no es una."
+  },
+  {
+    "id": "transporte-146",
+    "concepto": "transporte-openssl",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 48
+    },
+    "pregunta": "¿Qué subcomando de openssl lista las suites de cifrado?",
+    "correcta": "openssl ciphers -v",
+    "distractores": [
+      "openssl version -a",
+      "openssl speed rsa"
+    ],
+    "explicacion": "El subcomando ciphers lista las suites de cifrado. El subcomando version muestra la versión y la compilación. El subcomando speed mide el rendimiento de los algoritmos."
+  },
+  {
+    "id": "transporte-147",
+    "concepto": "transporte-openssl",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 48
+    },
+    "pregunta": "¿Qué muestra openssl ciphers -v por cada suite?",
+    "correcta": "Nombre, versión mínima, intercambio, autenticación, cifrado y MAC",
+    "distractores": [
+      "Nombre, certificado, fecha de caducidad y autoridad que lo firmó",
+      "Nombre, número de RTT, tamaño del handshake y método de compresión"
+    ],
+    "explicacion": "Muestra el nombre, la versión mínima, el intercambio de claves, la autenticación, el cifrado y el MAC. Los certificados no son parte de una suite. Los RTT y la compresión no se muestran en la lista de suites."
+  },
+  {
+    "id": "transporte-148",
+    "concepto": "transporte-rendimiento-rsa-openssl",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 54
+    },
+    "pregunta": "¿Qué mide openssl speed rsa?",
+    "correcta": "El rendimiento de firmar y verificar con RSA, por tamaño de clave",
+    "distractores": [
+      "La velocidad de la red entre cliente y servidor TLS, en bytes por segundo",
+      "El tiempo que tarda el Handshake completo de una conexión TLS"
+    ],
+    "explicacion": "La prueba mide las firmas y las verificaciones RSA por segundo para cada tamaño de clave. No mide la velocidad de la red. No mide el Handshake, solo las operaciones RSA."
+  },
+  {
+    "id": "transporte-149",
+    "concepto": "transporte-rendimiento-rsa-openssl",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 54
+    },
+    "pregunta": "En la prueba de RSA, ¿qué operación es más rápida?",
+    "correcta": "Verificar, con la clave pública",
+    "distractores": [
+      "Firmar, con la clave privada del servidor",
+      "Las dos tardan lo mismo, porque usan el mismo algoritmo"
+    ],
+    "explicacion": "Verificar con la clave pública es mucho más rápido: 18029 operaciones por segundo frente a 544.9 con 2048 bits. Firmar con la clave privada es la operación lenta. No tardan lo mismo, y la diferencia es de dos órdenes de magnitud."
+  },
+  {
+    "id": "transporte-150",
+    "concepto": "transporte-rendimiento-rsa-openssl",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 54
+    },
+    "pregunta": "¿Cómo cambia el rendimiento de firma al pasar de 2048 a 4096 bits?",
+    "correcta": "Cae mucho: se firma bastantes menos veces por segundo",
+    "distractores": [
+      "Apenas cambia, porque la firma la domina el cálculo del hash",
+      "Mejora, porque con una clave más grande la firma tiene menos pasos"
+    ],
+    "explicacion": "Con 4096 bits se firman 75.3 veces por segundo, frente a 544.9 con 2048. El hash no domina el tiempo de la firma RSA. Una clave más grande es más lenta, y no más rápida."
+  },
+  {
+    "id": "transporte-151",
+    "concepto": "transporte-negociacion-de-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 40
+    },
+    "pregunta": "¿Cómo elige los algoritmos un servidor TLS 1.2?",
+    "correcta": "Escoge una suite completa de la lista del cliente",
+    "distractores": [
+      "Elige cada algoritmo por separado: cifrado, intercambio y firma",
+      "Usa siempre la primera suite de la lista del servidor"
+    ],
+    "explicacion": "El servidor de TLS 1.2 escoge una suite completa de la lista del cliente. Elegir cada elemento por separado es la negociación de TLS 1.3. No toma siempre la primera, y selecciona entre las propuestas."
+  },
+  {
+    "id": "transporte-152",
+    "concepto": "transporte-negociacion-de-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 40
+    },
+    "pregunta": "¿Cómo negocia TLS 1.3?",
+    "correcta": "Elige por separado cifrado, intercambio de claves y firma",
+    "distractores": [
+      "Elige una suite que agrupa cifrado, intercambio de claves y firma",
+      "Fija todo y solo negocia el algoritmo de cifrado con el cliente"
+    ],
+    "explicacion": "TLS 1.3 elige individualmente cada elemento. Elegir una suite entera es la negociación de TLS 1.2. TLS 1.3 negocia también el intercambio y la firma, y no solo el cifrado."
+  },
+  {
+    "id": "transporte-153",
+    "concepto": "transporte-negociacion-de-tls13",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 40
+    },
+    "pregunta": "¿Qué consecuencia tiene negociar cada elemento por separado?",
+    "correcta": "La negociación se reduce al máximo y no hay tantas suites",
+    "distractores": [
+      "Aumenta el número de suites que el cliente debe listar",
+      "El servidor acepta siempre la primera propuesta del cliente"
+    ],
+    "explicacion": "Negociar por separado reduce al máximo la negociación y evita las decenas de combinaciones. El número de suites baja, y no aumenta. El servidor sigue seleccionando entre las propuestas."
+  },
+  {
+    "id": "transporte-154",
+    "concepto": "transporte-nombre-de-una-suite-de-cifrado",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 32
+    },
+    "pregunta": "En TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, ¿qué parte es el intercambio de claves?",
+    "correcta": "ECDHE",
+    "distractores": [
+      "RSA",
+      "GCM"
+    ],
+    "explicacion": "ECDHE es el método de intercambio de claves del nombre. RSA es el algoritmo de autenticación. GCM es el modo del cifrado."
+  },
+  {
+    "id": "transporte-155",
+    "concepto": "transporte-nombre-de-una-suite-de-cifrado",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 32
+    },
+    "pregunta": "En TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, ¿qué parte autentica?",
+    "correcta": "RSA",
+    "distractores": [
+      "ECDHE",
+      "SHA256"
+    ],
+    "explicacion": "RSA es el algoritmo de autenticación del nombre. ECDHE es el intercambio de claves. SHA256 es el MAC o la PRF."
+  },
+  {
+    "id": "transporte-156",
+    "concepto": "transporte-nombre-de-una-suite-de-cifrado",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 32
+    },
+    "pregunta": "En TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, ¿qué describe AES_128_GCM?",
+    "correcta": "El cifrado: algoritmo AES, de 128 bits, en modo GCM",
+    "distractores": [
+      "La autenticación: el algoritmo AES con una clave de 128 bits",
+      "El MAC o la PRF: AES en modo GCM"
+    ],
+    "explicacion": "AES_128_GCM es el cifrado: algoritmo AES, tamaño de clave de 128 bits y modo GCM. La autenticación es la parte RSA. El MAC o la PRF es la parte SHA256."
+  },
+  {
+    "id": "transporte-157",
+    "concepto": "transporte-rtt-del-handshake",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 41
+    },
+    "pregunta": "¿Cuántos RTT necesita el Handshake de TLS 1.2 con DH efímero?",
+    "correcta": "2",
+    "distractores": [
+      "1",
+      "3"
+    ],
+    "explicacion": "TLS 1.2 con DH efímero necesita 2 RTT. Un solo RTT es lo que necesita TLS 1.3. 3 RTT excede lo que muestra el diagrama."
+  },
+  {
+    "id": "transporte-158",
+    "concepto": "transporte-rtt-del-handshake",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 41
+    },
+    "pregunta": "¿Cuántos RTT necesita el Handshake de TLS 1.3?",
+    "correcta": "1",
+    "distractores": [
+      "2, igual que TLS 1.2",
+      "0 siempre, también en una conexión nueva"
+    ],
+    "explicacion": "TLS 1.3 necesita 1 RTT en una conexión nueva. 2 RTT son los de TLS 1.2. 0-RTT solo ocurre al reanudar con una clave precompartida."
+  },
+  {
+    "id": "transporte-159",
+    "concepto": "transporte-rtt-del-handshake",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 41
+    },
+    "pregunta": "¿Por qué TLS 1.3 acorta el Handshake?",
+    "correcta": "El servidor responde con hello, certificado y finished en un vuelo",
+    "distractores": [
+      "El cliente espera el certificado del servidor antes de enviar su parte",
+      "Se omite el finished y se envían los datos tras el server_hello"
+    ],
+    "explicacion": "El servidor responde con hello, certificado y finished en un solo vuelo. El cliente no espera: ya mandó su key_share en el primer mensaje. El finished se mantiene en ambos sentidos."
+  },
+  {
+    "id": "ssl-tls-029",
+    "concepto": "transporte-aead-tls",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Qué permite el soporte de AEAD en TLS 1.2?",
+    "correcta": "Evitar el uso de algoritmos de cifrado por bloques o de flujo por separado",
+    "distractores": [
+      "Evitar el uso de certificados X.509 para autenticar al servidor en el handshake",
+      "Evitar el intercambio de claves, que pasa a ser implícito entre cliente y servidor"
+    ],
+    "explicacion": "AEAD cifra y autentica a la vez, así que se pueden evitar los cifrados por bloques o de flujo usados por separado. Los certificados y el intercambio de claves siguen haciendo falta."
   },
   {
     "id": "ssl-tls-046",
