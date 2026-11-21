@@ -2,8 +2,8 @@
   "titulo": "PS",
   "puerto": 8607,
   "preguntas": 20,
-  "opciones": 4,
+  "opciones": 3,
   "minutos": 25,
-  "penalizacion": 0,
+  "penalizacion": 0.3333333333333333,
   "temas": ["introduccion", "claves", "transporte", "aplicacion", "ssl-tls"]
 }
