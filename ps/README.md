@@ -1,6 +1,6 @@
 # PS: Protocolos de Seguridad
 
-El examen es el lunes 23 de noviembre de 2026, a las 16:30. Tiene preguntas tipo test, con 3 opciones y una sola correcta. Un fallo resta 1/3 de un acierto, y una pregunta en blanco no cuenta.
+El examen es el lunes 23 de noviembre de 2026, a las 16:30. Tiene 2 partes: un test y preguntas cortas. El test tiene 3 opciones por pregunta y una sola correcta. Un fallo resta 1/3 de un acierto, y una pregunta en blanco no cuenta. El test de práctica entrena las ideas de las 2 partes con preguntas tipo test.
 
 El número de preguntas y la duración faltan. El simulacro usa 20 preguntas y 25 minutos, cifras provisionales de `examen.json`.
 
@@ -13,6 +13,22 @@ El número de preguntas y la duración faltan. El simulacro usa 20 preguntas y 2
 | `3_Transporte.pdf` | Tema 3. Capa de transporte | `transporte` |
 | `4_Aplicacion.pdf` | Tema 4. Capa de aplicación | `aplicacion` |
 | `E_SSL_TLS.pdf` | Seguridad en SSL/TLS: historia de un protocolo, un documento externo | `ssl-tls` |
+
+## Lo que marcó el profesor
+
+Las fechas y los números de RFC no entran en el examen. El resto del temario sí entra. Cada punto de esta lista tiene sus conceptos en el banco:
+
+- Los protocolos más importantes y sus elementos principales, a grandes rasgos.
+- La pila de protocolos de SSH, y su Transport Layer Protocol.
+- El handshake de SSH, y el handshake de TLS a grandes rasgos.
+- Cómo funciona un certificado.
+- La integridad y la confidencialidad en S/MIME, como ejemplo de un esquema entero.
+- Los algoritmos de cifrado, y cuáles son robustos, con sus tamaños de clave seguros.
+- Cómo se firma un mensaje: con qué clave, y sobre qué.
+- Cómo se envía la clave compartida: cifrada, firmada, o acordada.
+- Por qué un ataque provoca lo que ve la víctima. El caso marcado es el MITM de sslstrip con bettercap: el atacante hace de proxy hasta el sitio real, y el usuario ve una página idéntica en HTTP, o en un dominio parecido como `wwwww-facebook.com`.
+
+## El banco
 
 El banco está vacío.
 
