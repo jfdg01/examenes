@@ -18,9 +18,9 @@ Una función que nadie usa no pasa a Rust, y su código se va. Una función que 
 
 ## Lo que cambia en la app
 
-- **El diseño sale del CSS.** Las media queries eligen el diseño del móvil o del PC, y el diseño cambia con el ancho de la ventana. El contenido de cada diseño queda igual:
+- **El diseño sale del CSS.** Las media queries eligen el diseño del móvil o del PC, y el diseño cambia con el ancho de la ventana. Los 2 diseños muestran la misma información, y solo cambia su colocación:
   - En el móvil: el plegado de las opciones, y la página del PDF a pantalla completa.
-  - En el PC: la página al lado de la pregunta, el concepto y el dominio.
+  - En el PC: la página al lado de la pregunta.
 - **Los tiradores de las columnas se quedan en el PC.** Mueven los bordes y el separador de las 2 columnas. Cada tirador muestra su asa cuando el ratón pasa por encima, y se arrastra siempre. El PC no tiene un modo de edición ni el botón del engranaje.
 - **La sesión no tiene un bloque de estudio.** Una pregunta de la caja 2 o de la caja 3 puede salir en la sesión siguiente, sin una pausa.
 - **Un banco vacío no muestra la sesión ni el simulacro.** El inicio dice "El banco no tiene preguntas".
