@@ -1,0 +1,137 @@
+[
+  {
+    "id": "ssl-tls-039",
+    "regla": 6,
+    "gravedad": "leve",
+    "fallo": "La correcta es la opción más corta: 31 caracteres, frente a 50 y 43.",
+    "arreglo": {
+      "correcta": "Eliminando la compresión de TLS en los navegadores"
+    }
+  },
+  {
+    "id": "ssl-tls-042",
+    "regla": 6,
+    "gravedad": "leve",
+    "fallo": "'siempre' sale solo en el distractor 2, y la correcta no lo tiene.",
+    "arreglo": {
+      "distractores": [
+        "Desactivar la compresión de TLS en el servidor, porque el ataque la necesita",
+        "Activar HSTS en el servidor para forzar el uso de HTTPS"
+      ]
+    }
+  },
+  {
+    "id": "ssl-tls-042",
+    "regla": 4,
+    "gravedad": "leve",
+    "fallo": "El enunciado dice 'según el PDF', y remite al documento.",
+    "arreglo": null
+  },
+  {
+    "id": "ssl-tls-043",
+    "regla": 8,
+    "gravedad": "leve",
+    "fallo": "La explicación liga el 500/200 al 'padding oracle clásico del ejemplo de POODLE'. El ejemplo de 500/200 (página 86 y siguientes) usa 3DES y no nombra POODLE.",
+    "arreglo": {
+      "explicacion": "✓ Lucky 13 es un padding oracle basado en tiempo: el atacante percibe una diferencia de tiempo en la respuesta al modificar el relleno.\n✗ «Un mensaje de error distinto, 500 o 200»: es la señal del padding oracle clásico, no la de Lucky 13.\n✗ «La diferencia de tamaño de los paquetes»: es la señal de CRIME."
+    }
+  },
+  {
+    "id": "ssl-tls-044",
+    "regla": 6,
+    "gravedad": "leve",
+    "fallo": "El enunciado usa 'padding', y su traducción 'relleno' sale solo en la correcta.",
+    "arreglo": null
+  },
+  {
+    "id": "ssl-tls-047",
+    "regla": 4,
+    "gravedad": "leve",
+    "fallo": "'En el ejemplo del padding oracle' remite a la diapositiva. El enunciado no da el bloque cifrado, el IV ni las respuestas 200 o 500 del servidor (páginas 85 a 91).",
+    "arreglo": {
+      "pregunta": "Un servidor descifra un bloque cifrado que el atacante conoce, y responde 200 o 500 según el relleno. ¿Cómo averigua el atacante el primer byte del valor intermedio?"
+    }
+  },
+  {
+    "id": "ssl-tls-051",
+    "regla": 6,
+    "gravedad": "leve",
+    "fallo": "Los absolutos salen solo en los distractores: 'sin ninguna mejora' y 'en todas las sesiones que se establecen'.",
+    "arreglo": {
+      "distractores": [
+        "Porque TLS 1.0 conserva en su protocolo el mismo relleno que SSLv3, sin mejorarlo",
+        "Porque TLS 1.0 usa RC4 por defecto en las sesiones que se establecen"
+      ]
+    }
+  },
+  {
+    "id": "ssl-tls-053",
+    "regla": 6,
+    "gravedad": "leve",
+    "fallo": "La correcta es la opción más corta: 21 caracteres, frente a 38 y 33.",
+    "arreglo": {
+      "correcta": "Dejar de utilizar RC4 en cualquier versión de SSL/TLS",
+      "distractores": [
+        "Activar el 1/n-1 split en el navegador de la víctima",
+        "Usar claves RC4 de mayor longitud en el servidor"
+      ]
+    }
+  },
+  {
+    "id": "ssl-tls-053",
+    "regla": 4,
+    "gravedad": "leve",
+    "fallo": "El enunciado dice 'según el PDF', y remite al documento.",
+    "arreglo": null
+  },
+  {
+    "id": "ssl-tls-056",
+    "regla": 8,
+    "gravedad": "leve",
+    "fallo": "Una sola frase trata los 2 distractores ('Mantener SHA1 o MD5 contradice eso'). No nombra el matiz de 'Mantiene MD5 por rendimiento'.",
+    "arreglo": {
+      "explicacion": "✓ TLS 1.2 abandona MD5 y SHA1 a favor de SHA-256, por ejemplo en la generación de números pseudoaleatorios.\n✗ «Mantiene SHA1 como hash principal»: TLS 1.2 abandona SHA1 igual que MD5.\n✗ «Mantiene MD5 por rendimiento»: TLS 1.2 abandona MD5 sin excepción por rendimiento."
+    }
+  },
+  {
+    "id": "ssl-tls-064",
+    "regla": 6,
+    "gravedad": "leve",
+    "fallo": "'ninguna' sale solo en el distractor 1, y la correcta no lo tiene.",
+    "arreglo": {
+      "distractores": [
+        "Que las CAs no puedan emitir certificados sin permiso expreso del dueño del dominio",
+        "Que el navegador guarde la clave pública de cada sitio visitado"
+      ]
+    }
+  },
+  {
+    "id": "ssl-tls-075",
+    "regla": 4,
+    "gravedad": "leve",
+    "fallo": "El enunciado dice 'según el PDF', y remite al documento.",
+    "arreglo": null
+  },
+  {
+    "id": "ssl-tls-077",
+    "regla": 6,
+    "gravedad": "leve",
+    "fallo": "La correcta es la más larga: 83 caracteres, frente a 73 y 71. 'SSLv2' del enunciado no sale en el distractor 2.",
+    "arreglo": {
+      "correcta": "Descifra tráfico TLS de clientes y servidores que ni siquiera soportan SSLv2",
+      "distractores": [
+        "Afecta a conexiones SSLv2 establecidas, pero no alcanza al tráfico de TLS",
+        "Descifra tráfico de SSLv2 en las sesiones que usan TLS 1.0 y otras versiones"
+      ]
+    }
+  },
+  {
+    "id": "ssl-tls-078",
+    "regla": 6,
+    "gravedad": "leve",
+    "fallo": "'DROWN' del enunciado sale en los 2 distractores y no en la correcta.",
+    "arreglo": {
+      "correcta": "Una variante de DROWN con un bug de SSLv2 en OpenSSL que recupera la clave privada en tiempo real"
+    }
+  }
+]
