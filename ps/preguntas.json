@@ -1,1 +1,2114 @@
-[]
+[
+  {
+    "id": "introduccion-001",
+    "concepto": "introduccion-capas-comunicacion-virtual",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "En un modelo de capas, ¿cómo se comunican las capas del mismo nivel de dos hosts?",
+    "correcta": "Virtualmente, mediante el protocolo que comparten",
+    "distractores": [
+      "Físicamente, por un canal propio entre ambas",
+      "A través de la interfaz con la capa de arriba del mismo host"
+    ],
+    "explicacion": "Dos capas iguales hablan con el protocolo de su nivel, y esa conversación es virtual. Un canal propio entre ellas no existe: los datos bajan por las capas hasta el medio físico. La interfaz conecta una capa con la contigua del mismo host, y no con la de otro host."
+  },
+  {
+    "id": "introduccion-002",
+    "concepto": "introduccion-capas-comunicacion-virtual",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "Un mensaje de la capa 3 del host A llega a la capa 3 del host B. ¿Por dónde viaja realmente?",
+    "correcta": "Baja por las capas de A, cruza la red y sube por las de B",
+    "distractores": [
+      "Pasa directo de la capa 3 de A a la capa 3 de B por su protocolo",
+      "Cruza la red por la capa 3 y solo después baja de nivel"
+    ],
+    "explicacion": "La comunicación real baja por la pila de A, cruza la red por la capa 1 y sube por la pila de B. Pasar directo es la comunicación virtual, que solo es una vista lógica. La red se cruza por la capa 1, y no por la 3."
+  },
+  {
+    "id": "introduccion-003",
+    "concepto": "introduccion-capas-comunicacion-virtual",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "¿Por qué se llama virtual a la comunicación entre capas iguales de dos hosts?",
+    "correcta": "Porque los datos pasan por las capas inferiores, y no directos entre ellas",
+    "distractores": [
+      "Porque se hace por software y no por hardware",
+      "Porque las capas iguales de los dos hosts comparten memoria sin usar la red"
+    ],
+    "explicacion": "Es virtual porque el camino real baja y sube por las demás capas, y las dos iguales solo ven una conversación lógica. Que sea por software no es la razón: el medio físico sí interviene. Las capas de hosts distintos no comparten memoria."
+  },
+  {
+    "id": "introduccion-004",
+    "concepto": "introduccion-protocolo-reglas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué define un protocolo entre pares de capas?",
+    "correcta": "Las reglas de la conversación: qué mensajes, quién los envía y cuándo",
+    "distractores": [
+      "El medio físico y la señal por los que viajan los bits de la conversación",
+      "El algoritmo y la clave con los que se cifran los datos de la conversación"
+    ],
+    "explicacion": "Un protocolo fija las reglas de la conversación: qué mensajes, quién los envía y cuándo. El medio físico lo define la capa física, y no un protocolo entre pares. El cifrado es una función de algunos protocolos, y no lo que define a todos."
+  },
+  {
+    "id": "introduccion-005",
+    "concepto": "introduccion-protocolo-reglas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué aspectos fijan las reglas de un protocolo?",
+    "correcta": "Sintaxis, semántica y temporización de los mensajes",
+    "distractores": [
+      "Cifrado, autenticación y disponibilidad de los mensajes",
+      "Cabecera, carga y cola de los mensajes"
+    ],
+    "explicacion": "Las reglas cubren la sintaxis, la semántica y la temporización. Cifrado, autenticación y disponibilidad son propiedades de seguridad, y no aspectos de un protocolo cualquiera. Cabecera, carga y cola describen la estructura de un mensaje, y no las reglas de la conversación."
+  },
+  {
+    "id": "introduccion-006",
+    "concepto": "introduccion-protocolo-reglas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "En una conversación HTTP, el servidor responde después de la petición del cliente y nunca antes. ¿Qué aspecto del protocolo lo fija?",
+    "correcta": "La temporización: cuándo envía cada parte su mensaje",
+    "distractores": [
+      "La sintaxis: el formato que tiene cada mensaje",
+      "La semántica: el significado de cada campo del mensaje"
+    ],
+    "explicacion": "El orden y el momento de cada mensaje es la temporización. La sintaxis solo fija el formato de los campos. La semántica solo fija lo que significa cada campo, y no cuándo se envía."
+  },
+  {
+    "id": "introduccion-007",
+    "concepto": "introduccion-pdu-sdu",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué es una PDU?",
+    "correcta": "Un mensaje del protocolo: los datos a enviar más la cabecera de control",
+    "distractores": [
+      "Solo los datos que se entregan al protocolo para enviarlos, sin cabecera",
+      "Solo la cabecera con la información de control del protocolo"
+    ],
+    "explicacion": "Una PDU lleva los datos más la cabecera de control. Los datos solos son la SDU. La cabecera sola es una parte de la PDU, y no la PDU entera."
+  },
+  {
+    "id": "introduccion-008",
+    "concepto": "introduccion-pdu-sdu",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué es una SDU?",
+    "correcta": "Los datos que se envían, sin la información de control de la cabecera",
+    "distractores": [
+      "El mensaje completo del protocolo, con la cabecera de control y los datos",
+      "La cabecera con la información de control de la capa"
+    ],
+    "explicacion": "La SDU son los datos a enviar, sin cabecera. El mensaje completo con cabecera es la PDU. La cabecera es la información de control, y no la unidad de datos del servicio."
+  },
+  {
+    "id": "introduccion-009",
+    "concepto": "introduccion-pdu-sdu",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué nombre recibe la PDU de la capa de transporte?",
+    "correcta": "TPDU, Transport PDU",
+    "distractores": [
+      "NPDU, Network PDU",
+      "SDU, Service Data Unit"
+    ],
+    "explicacion": "La PDU de la capa de transporte es la TPDU. La NPDU es la PDU de la capa de red. La SDU son los datos que se envían, sin cabecera, y no una PDU de ninguna capa."
+  },
+  {
+    "id": "introduccion-010",
+    "concepto": "introduccion-capa-transporte-extremo-a-extremo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué proporciona la capa de transporte en Internet?",
+    "correcta": "Comunicación lógica extremo a extremo entre procesos de hosts distintos",
+    "distractores": [
+      "Comunicación física, bit a bit, entre equipos de una misma red local",
+      "Encaminamiento de los paquetes por las distintas redes que separan los hosts"
+    ],
+    "explicacion": "El transporte da comunicación lógica entre procesos que están en hosts distintos. La comunicación física entre equipos locales es de las capas de enlace y física. El encaminamiento entre redes es de la capa de red."
+  },
+  {
+    "id": "introduccion-011",
+    "concepto": "introduccion-capa-transporte-extremo-a-extremo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "Un proceso envía datos a otro proceso de otro host por varias redes distintas. ¿Qué hace la capa de transporte con esas redes?",
+    "correcta": "Las vuelve transparentes a los procesos",
+    "distractores": [
+      "Las configura una por una para cada proceso",
+      "Se las muestra a los procesos para que elijan una"
+    ],
+    "explicacion": "El transporte oculta las redes atravesadas y sus características a los procesos. No configura cada red, porque eso no es su trabajo. Tampoco las expone para que el proceso elija: el proceso ni las ve."
+  },
+  {
+    "id": "introduccion-012",
+    "concepto": "introduccion-capa-transporte-extremo-a-extremo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿En qué se diferencian TCP y UDP?",
+    "correcta": "TCP ofrece un servicio orientado a conexión, y UDP uno no orientado a conexión",
+    "distractores": [
+      "TCP ofrece un servicio no orientado a conexión, y UDP uno orientado a conexión",
+      "TCP cifra los datos de la conexión, y UDP los envía en claro"
+    ],
+    "explicacion": "TCP es orientado a conexión y UDP no lo es. La segunda opción invierte los dos. Ninguno de los dos cifra los datos: el cifrado lo añade un protocolo de seguridad por encima, como TLS."
+  },
+  {
+    "id": "introduccion-013",
+    "concepto": "introduccion-protocolo-de-seguridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué es un protocolo de seguridad?",
+    "correcta": "Un protocolo que define una funcionalidad de seguridad, como autenticar",
+    "distractores": [
+      "Un protocolo de seguridad que solo cifra los datos de la capa de aplicación",
+      "Un protocolo de seguridad del transporte que impide cualquier ataque"
+    ],
+    "explicacion": "Un protocolo de seguridad define alguna funcionalidad de seguridad: autenticación, distribución de claves, canal seguro. No solo cifra, y no es solo de la capa de aplicación. Ningún protocolo impide cualquier ataque."
+  },
+  {
+    "id": "introduccion-014",
+    "concepto": "introduccion-protocolo-de-seguridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Cuál de estas es una funcionalidad que define un protocolo de seguridad?",
+    "correcta": "La definición de un canal seguro entre dos partes",
+    "distractores": [
+      "El encaminamiento de los paquetes por la ruta más corta",
+      "La traducción de los nombres de dominio a direcciones IP"
+    ],
+    "explicacion": "Definir un canal seguro es una funcionalidad de seguridad. Encaminar por la ruta más corta es de la capa de red. Traducir nombres es del DNS, y no tiene que ver con la seguridad."
+  },
+  {
+    "id": "introduccion-015",
+    "concepto": "introduccion-protocolo-de-seguridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué suele usar un protocolo de seguridad para dar su funcionalidad?",
+    "correcta": "Algún tipo de criptografía",
+    "distractores": [
+      "Algún tipo de cortafuegos físico",
+      "Algún tipo de red privada dedicada"
+    ],
+    "explicacion": "Los protocolos de seguridad suelen usar criptografía. Un cortafuegos es un dispositivo de filtrado, y no lo que usa el protocolo. Una red dedicada aísla el tráfico, pero no es lo que el protocolo emplea para dar la funcionalidad."
+  },
+  {
+    "id": "introduccion-016",
+    "concepto": "introduccion-seguridad-en-cada-capa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿En qué capa se sitúa SSL/TLS, que se apoya en TCP?",
+    "correcta": "En la capa de transporte",
+    "distractores": [
+      "En la capa de red",
+      "En la capa de aplicación"
+    ],
+    "explicacion": "SSL/TLS va en la capa de transporte, sobre TCP. IPSec es el que va en la capa de red. HTTPS, PGP, S/MIME y Tor son de la capa de aplicación."
+  },
+  {
+    "id": "introduccion-017",
+    "concepto": "introduccion-seguridad-en-cada-capa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿En qué capa funciona IPSec?",
+    "correcta": "En la capa de red",
+    "distractores": [
+      "En la capa de transporte",
+      "En la capa host-red"
+    ],
+    "explicacion": "IPSec protege en la capa de red, junto a IP. En la capa de transporte está SSL/TLS. WPA es el protocolo de la capa host-red."
+  },
+  {
+    "id": "introduccion-018",
+    "concepto": "introduccion-seguridad-en-cada-capa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿En qué capa funcionan S/MIME y PGP?",
+    "correcta": "En la capa de aplicación",
+    "distractores": [
+      "En la capa de transporte",
+      "En la capa de red"
+    ],
+    "explicacion": "S/MIME y PGP son de la capa de aplicación, como HTTPS y Tor. La capa de transporte es la de SSL/TLS. La capa de red es la de IPSec."
+  },
+  {
+    "id": "introduccion-019",
+    "concepto": "introduccion-roles",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 10
+    },
+    "pregunta": "En una conexión bidireccional, ¿qué suele ser necesario identificar?",
+    "correcta": "El rol de cada parte, como cliente y servidor",
+    "distractores": [
+      "Qué parte cifra y qué parte solo descifra",
+      "Qué parte tiene la clave privada y cuál la pública"
+    ],
+    "explicacion": "Aunque la conexión es bidireccional, suele hacer falta un rol: cliente o servidor, iniciador o respondedor. Las dos partes pueden cifrar y descifrar. Tener clave privada o pública es una cuestión de criptografía, y no un rol."
+  },
+  {
+    "id": "introduccion-020",
+    "concepto": "introduccion-roles",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Cuál de estas es una pareja de roles de un protocolo?",
+    "correcta": "Cliente y servidor",
+    "distractores": [
+      "Cifrador y firmante",
+      "Emisor y verificador"
+    ],
+    "explicacion": "Cliente y servidor es una pareja de roles. Cifrar y firmar son operaciones que cualquier parte puede hacer. Emisor y verificador describen acciones de un mensaje, y no el papel de cada parte en la conversación."
+  },
+  {
+    "id": "introduccion-021",
+    "concepto": "introduccion-roles",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 10
+    },
+    "pregunta": "En un handshake, una parte envía el primer mensaje y la otra lo contesta. ¿Qué rol tiene la primera?",
+    "correcta": "Iniciador",
+    "distractores": [
+      "Respondedor",
+      "Intermediario"
+    ],
+    "explicacion": "Quien abre la conversación es el iniciador. El respondedor es el que contesta. Un intermediario no es una de las partes extremas del protocolo."
+  },
+  {
+    "id": "introduccion-022",
+    "concepto": "introduccion-confidencialidad-vs-integridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué garantiza la confidencialidad en una comunicación?",
+    "correcta": "Que solo el emisor y el receptor entienden el contenido",
+    "distractores": [
+      "Que el contenido no se altera en tránsito sin que se detecte",
+      "Que ambos confirman la identidad del otro"
+    ],
+    "explicacion": "La confidencialidad hace que solo emisor y receptor entiendan el contenido. Que no se altere sin detección es la integridad. Confirmar la identidad es la autenticación."
+  },
+  {
+    "id": "introduccion-023",
+    "concepto": "introduccion-confidencialidad-vs-integridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "Un atacante captura un mensaje cifrado y no puede leerlo, pero lo modifica y el receptor lo acepta sin notar nada. ¿Qué propiedad falla?",
+    "correcta": "La integridad",
+    "distractores": [
+      "La confidencialidad",
+      "La disponibilidad"
+    ],
+    "explicacion": "Se acepta un mensaje alterado sin detección: falla la integridad. La confidencialidad se mantiene, porque el atacante no leyó el contenido. La disponibilidad no falla, porque el servicio sigue accesible."
+  },
+  {
+    "id": "introduccion-024",
+    "concepto": "introduccion-confidencialidad-vs-integridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Cómo se consigue la confidencialidad de un mensaje?",
+    "correcta": "El emisor lo cifra y el receptor lo descifra",
+    "distractores": [
+      "El emisor lo firma y el receptor verifica la firma",
+      "El emisor añade un resumen y el receptor lo recalcula"
+    ],
+    "explicacion": "La confidencialidad se logra cifrando en el emisor y descifrando en el receptor. Firmar y verificar da integridad y no repudio, pero el contenido se sigue leyendo. Un resumen recalculado solo detecta cambios."
+  },
+  {
+    "id": "introduccion-025",
+    "concepto": "introduccion-autenticacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 13
+    },
+    "pregunta": "¿Qué demuestra la autenticación?",
+    "correcta": "Que un interlocutor es quien dice ser",
+    "distractores": [
+      "Que el contenido de un mensaje no se ha alterado",
+      "Que un emisor no podrá negar haber enviado algo"
+    ],
+    "explicacion": "La autenticación demuestra la identidad del interlocutor. Que el contenido no cambie es integridad. Que el emisor no pueda negar el envío es no repudio."
+  },
+  {
+    "id": "introduccion-026",
+    "concepto": "introduccion-autenticacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 13
+    },
+    "pregunta": "Bob recibe el mensaje «Soy Alicia» junto con una contraseña de Alicia. ¿Qué propiedad intenta comprobar?",
+    "correcta": "La autenticación",
+    "distractores": [
+      "La confidencialidad",
+      "El no repudio"
+    ],
+    "explicacion": "Comprobar que quien escribe es Alicia es autenticación. La confidencialidad trata de quién entiende el contenido. El no repudio trata de que el emisor no pueda negar luego el envío."
+  },
+  {
+    "id": "introduccion-027",
+    "concepto": "introduccion-autenticacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "En la propiedad de autenticación de una comunicación segura, ¿quién confirma la identidad de quién?",
+    "correcta": "Cada uno confirma la identidad del otro",
+    "distractores": [
+      "Solo el receptor confirma la identidad del emisor",
+      "Solo el cliente confirma la identidad del servidor"
+    ],
+    "explicacion": "La autenticación es mutua: cada extremo confirma la identidad del otro. No es solo el receptor al emisor. Tampoco es solo el cliente al servidor, porque el servidor también puede verificar al cliente."
+  },
+  {
+    "id": "introduccion-028",
+    "concepto": "introduccion-disponibilidad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué exige la propiedad de disponibilidad?",
+    "correcta": "Que los servicios sean accesibles, incluso ante denegación de servicio",
+    "distractores": [
+      "Que los datos solo los lea el destinatario previsto, aunque se intercepten",
+      "Que los servicios solo sean accesibles tras autenticarse"
+    ],
+    "explicacion": "La disponibilidad exige servicios accesibles y preparados para la denegación de servicio. Que solo el destinatario lea es confidencialidad. Exigir autenticación para acceder es control de acceso, y no disponibilidad."
+  },
+  {
+    "id": "introduccion-029",
+    "concepto": "introduccion-disponibilidad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "Un atacante satura un servidor con peticiones para que los usuarios no puedan usarlo. ¿Qué propiedad ataca?",
+    "correcta": "La disponibilidad",
+    "distractores": [
+      "La integridad",
+      "La confidencialidad"
+    ],
+    "explicacion": "Saturar para impedir el uso ataca la disponibilidad. La integridad trata de que los datos no se alteren. La confidencialidad trata de que nadie ajeno entienda el contenido."
+  },
+  {
+    "id": "introduccion-030",
+    "concepto": "introduccion-disponibilidad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "Para que un sistema siga accesible, ¿ante qué ataque hay que estar preparado?",
+    "correcta": "La denegación de servicio",
+    "distractores": [
+      "El análisis de tráfico",
+      "La captura pasiva de mensajes"
+    ],
+    "explicacion": "La disponibilidad se protege ante la denegación de servicio. El análisis de tráfico y la captura pasiva son ataques pasivos que no impiden usar el servicio."
+  },
+  {
+    "id": "introduccion-031",
+    "concepto": "introduccion-criptografia-simetrica-vs-publica",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué caracteriza a la criptografía de clave simétrica?",
+    "correcta": "Emisor y receptor usan claves idénticas que solo ellos conocen",
+    "distractores": [
+      "Se cifra con la clave pública y se descifra con la privada del receptor",
+      "Cada parte usa una clave distinta, y ambas son secretas"
+    ],
+    "explicacion": "En la simétrica la clave es la misma en emisor y receptor, y solo ellos la conocen. Cifrar con la pública y descifrar con la privada es la criptografía de clave pública. Dos claves distintas y secretas no es el esquema de ninguna de las dos."
+  },
+  {
+    "id": "introduccion-032",
+    "concepto": "introduccion-criptografia-simetrica-vs-publica",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Cómo funciona la criptografía de clave pública para cifrar un mensaje?",
+    "correcta": "Se cifra con la pública del destinatario y se descifra con su privada",
+    "distractores": [
+      "Se cifra con la clave privada del emisor y se descifra con la pública del emisor",
+      "Se cifra y se descifra con una clave compartida solo por ambos"
+    ],
+    "explicacion": "Se cifra con la pública y se descifra con la privada del destinatario. Cifrar con la privada del emisor es el esquema de la firma, y no el de confidencialidad. La clave compartida es el esquema simétrico."
+  },
+  {
+    "id": "introduccion-033",
+    "concepto": "introduccion-criptografia-simetrica-vs-publica",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué pareja contiene solo algoritmos de clave simétrica?",
+    "correcta": "DES y AES",
+    "distractores": [
+      "RSA y DSA",
+      "AES y RSA"
+    ],
+    "explicacion": "DES y AES son simétricos. RSA y DSA son de clave pública. AES y RSA mezcla uno simétrico con uno de clave pública."
+  },
+  {
+    "id": "introduccion-034",
+    "concepto": "introduccion-firma-digital-propiedades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué debe cumplir una firma digital?",
+    "correcta": "Ser verificable, no falsificable y no repudiable",
+    "distractores": [
+      "Ser confidencial, no falsificable y no repudiable",
+      "Ser verificable, no falsificable y renovable"
+    ],
+    "explicacion": "Una firma debe ser verificable, no falsificable y no repudiable. Confidencial no es un requisito: la firma no oculta el contenido. Renovable no es un requisito de la firma."
+  },
+  {
+    "id": "introduccion-035",
+    "concepto": "introduccion-firma-digital-propiedades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué significa que una firma digital sea no repudiable?",
+    "correcta": "Que el emisor no puede decir que la firma no es suya",
+    "distractores": [
+      "Que nadie puede crear una firma igual a la del emisor",
+      "Que se prueba sin ambigüedad a quién corresponde"
+    ],
+    "explicacion": "No repudiable es que el emisor no puede negar su firma. Que nadie pueda copiarla es la no falsificación. Probar a quién corresponde sin ambigüedad es la verificabilidad."
+  },
+  {
+    "id": "introduccion-036",
+    "concepto": "introduccion-firma-digital-propiedades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué propiedad de la firma digital impide que otra persona cree una firma de Roberto?",
+    "correcta": "Que no sea falsificable",
+    "distractores": [
+      "Que no sea repudiable por el emisor",
+      "Que sea verificable"
+    ],
+    "explicacion": "Que no sea falsificable impide crear una firma ajena. Que no sea repudiable impide que Roberto niegue la suya. Que sea verificable permite comprobar de quién es, pero no impide fabricarla."
+  },
+  {
+    "id": "introduccion-037",
+    "concepto": "introduccion-mac-integridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Cómo calcula el emisor un MAC en el esquema de la diapositiva?",
+    "correcta": "Aplica un hash al mensaje junto con un secreto compartido",
+    "distractores": [
+      "Cifra el mensaje con la clave pública del receptor y lo envía",
+      "Firma el resumen del mensaje con su clave privada"
+    ],
+    "explicacion": "El MAC es el hash del mensaje con un secreto compartido. Cifrar con la clave pública del receptor da confidencialidad, y no un MAC. Firmar el resumen con la clave privada es la firma digital, que no usa un secreto compartido."
+  },
+  {
+    "id": "introduccion-038",
+    "concepto": "introduccion-mac-integridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Cómo verifica el receptor un MAC?",
+    "correcta": "Añade el secreto al mensaje, calcula el hash y lo compara con el recibido",
+    "distractores": [
+      "Descifra el hash con la clave pública del emisor y lo compara con el suyo propio",
+      "Descifra el mensaje con el secreto y comprueba que se lee bien"
+    ],
+    "explicacion": "El receptor repite el cálculo con el secreto y compara los hashes. Descifrar con la clave pública del emisor es verificar una firma digital. Descifrar el mensaje no es el MAC: el mensaje viaja en claro con el hash."
+  },
+  {
+    "id": "introduccion-039",
+    "concepto": "introduccion-mac-integridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "Un atacante cambia un mensaje en tránsito, pero no conoce el secreto compartido. ¿Qué ocurre al recibirlo?",
+    "correcta": "Los hashes no coinciden y el receptor detecta la alteración",
+    "distractores": [
+      "El receptor lo descifra y obtiene otro mensaje sin saberlo",
+      "El receptor lo acepta, porque el hash del atacante coincide"
+    ],
+    "explicacion": "Sin el secreto el atacante no puede recalcular un hash válido, y el receptor lo detecta. El MAC no cifra nada, así que no hay un descifrado que dé otro mensaje. El hash del atacante no coincide con el del receptor, porque le falta el secreto."
+  },
+  {
+    "id": "introduccion-040",
+    "concepto": "introduccion-firma-digital-mecanismo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 16
+    },
+    "pregunta": "¿Con qué clave firma Roberto el resumen de un mensaje?",
+    "correcta": "Con su clave privada",
+    "distractores": [
+      "Con su clave pública",
+      "Con la clave pública del receptor"
+    ],
+    "explicacion": "La firma se hace con la clave privada del firmante. La clave pública es la que usa el receptor para verificar. La clave pública del receptor sirve para cifrar para él, y no para firmar."
+  },
+  {
+    "id": "introduccion-041",
+    "concepto": "introduccion-firma-digital-mecanismo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 16
+    },
+    "pregunta": "¿Sobre qué se calcula la firma digital de un mensaje largo?",
+    "correcta": "Sobre el resumen del mensaje, calculado con una función hash",
+    "distractores": [
+      "Sobre el mensaje entero, sin calcular antes ningún resumen ni hash",
+      "Sobre el secreto compartido entre emisor y receptor"
+    ],
+    "explicacion": "Se firma el resumen H(m), mucho más corto que el mensaje. Firmar el mensaje entero no es lo que hace el esquema. Un secreto compartido es propio del MAC."
+  },
+  {
+    "id": "introduccion-042",
+    "concepto": "introduccion-firma-digital-mecanismo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 16
+    },
+    "pregunta": "¿Cómo verifica el receptor una firma digital de Roberto?",
+    "correcta": "La desencripta con la clave pública de Roberto y la compara con el resumen del mensaje",
+    "distractores": [
+      "La desencripta con su propia clave privada y la compara con el resumen del mensaje",
+      "La desencripta con la clave pública de Roberto y la compara con el mensaje completo y sin resumen"
+    ],
+    "explicacion": "Se desencripta la firma con la pública de Roberto y se compara con H(m) del mensaje. La clave privada del receptor no sirve para verificar la firma de Roberto. Se compara con el resumen, y no con el mensaje completo."
+  },
+  {
+    "id": "introduccion-043",
+    "concepto": "introduccion-amenaza-vs-ataque",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿Qué es una amenaza en seguridad?",
+    "correcta": "Un posible peligro que puede explotar una vulnerabilidad",
+    "distractores": [
+      "Un intento deliberado de evadir los servicios de seguridad",
+      "Una debilidad del sistema que permite violar su política"
+    ],
+    "explicacion": "Una amenaza es un peligro posible que puede explotar una vulnerabilidad. El intento deliberado de evadir los servicios es el ataque. La debilidad del sistema es la vulnerabilidad."
+  },
+  {
+    "id": "introduccion-044",
+    "concepto": "introduccion-amenaza-vs-ataque",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿Qué es un ataque en seguridad?",
+    "correcta": "Un acto deliberado que intenta evadir los servicios de seguridad",
+    "distractores": [
+      "Una circunstancia o evento que podría causar daño, sin que nadie actúe",
+      "Cualquier fallo accidental que viola la política de seguridad"
+    ],
+    "explicacion": "El ataque es un acto deliberado derivado de una amenaza inteligente. Una circunstancia que podría causar daño es la amenaza, que no exige acto. Un fallo accidental no es deliberado, así que no es un ataque."
+  },
+  {
+    "id": "introduccion-045",
+    "concepto": "introduccion-amenaza-vs-ataque",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "Alguien intenta deliberadamente saltarse la autenticación de un servidor. ¿Qué es?",
+    "correcta": "Un ataque",
+    "distractores": [
+      "Una amenaza",
+      "Un mecanismo de seguridad"
+    ],
+    "explicacion": "Un acto deliberado para evadir un servicio de seguridad es un ataque. La amenaza es solo el peligro posible, sin acto. Un mecanismo de seguridad es lo que detecta o previene los ataques."
+  },
+  {
+    "id": "introduccion-046",
+    "concepto": "introduccion-ataque-pasivo-vs-activo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué distingue un ataque activo de uno pasivo?",
+    "correcta": "El activo intenta alterar los recursos o su funcionamiento, y el pasivo no los afecta",
+    "distractores": [
+      "El pasivo intenta alterar los recursos del sistema, y el activo solo aprende información",
+      "El activo viene de un atacante externo, y el pasivo de uno interno"
+    ],
+    "explicacion": "El activo altera recursos o su funcionamiento, y el pasivo solo aprende información. La segunda opción los invierte. El origen interno o externo no distingue un tipo del otro."
+  },
+  {
+    "id": "introduccion-047",
+    "concepto": "introduccion-ataque-pasivo-vs-activo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "Un atacante escucha el tráfico de una red sin modificar nada. ¿Qué tipo de ataque es?",
+    "correcta": "Un ataque pasivo",
+    "distractores": [
+      "Un ataque activo",
+      "Una denegación de servicio"
+    ],
+    "explicacion": "Escuchar sin modificar es un ataque pasivo. Un activo exige alterar o crear flujos. La denegación de servicio es un ataque activo que impide el uso del servicio."
+  },
+  {
+    "id": "introduccion-048",
+    "concepto": "introduccion-ataque-pasivo-vs-activo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Por qué es difícil prevenir los ataques activos?",
+    "correcta": "Por la variedad de vulnerabilidades físicas, de software y de red",
+    "distractores": [
+      "Porque no dejan ningún rastro en los datos ni en los registros del sistema",
+      "Porque el atacante usa credenciales legítimas"
+    ],
+    "explicacion": "Los activos son difíciles de prevenir por la variedad de vulnerabilidades posibles. Que no dejen rastro es falso: alteran flujos y a veces se detectan. No siempre usan credenciales legítimas."
+  },
+  {
+    "id": "introduccion-049",
+    "concepto": "introduccion-ataques-pasivos-tipos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué dos tipos de ataque pasivo hay?",
+    "correcta": "Acceso al contenido de los mensajes y análisis de tráfico",
+    "distractores": [
+      "Acceso al contenido de los mensajes y repetición de mensajes",
+      "Análisis de tráfico y denegación de servicio"
+    ],
+    "explicacion": "Los pasivos son el acceso al contenido y el análisis de tráfico. La repetición es un ataque activo. La denegación de servicio también es activa."
+  },
+  {
+    "id": "introduccion-050",
+    "concepto": "introduccion-ataques-pasivos-tipos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Cuál es el objetivo de un ataque pasivo?",
+    "correcta": "Obtener la información que se transmite",
+    "distractores": [
+      "Impedir el uso normal de las comunicaciones",
+      "Hacerse pasar por otra entidad"
+    ],
+    "explicacion": "El pasivo busca obtener la información que se transmite. Impedir el uso normal es la denegación de servicio, activa. Hacerse pasar por otra entidad es el enmascaramiento, activo."
+  },
+  {
+    "id": "introduccion-051",
+    "concepto": "introduccion-ataques-pasivos-tipos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "Un atacante no puede leer los mensajes cifrados, pero observa quién se comunica, cuándo y cuánto. ¿Qué ataque hace?",
+    "correcta": "Análisis de tráfico",
+    "distractores": [
+      "Acceso al contenido de los mensajes",
+      "Modificación de mensajes"
+    ],
+    "explicacion": "Observar quién, cuándo y cuánto es análisis de tráfico. Acceso al contenido exigiría leer los mensajes. La modificación es un ataque activo."
+  },
+  {
+    "id": "introduccion-052",
+    "concepto": "introduccion-enmascaramiento",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿En qué consiste el ataque de enmascaramiento?",
+    "correcta": "En que una entidad finge ser una entidad diferente",
+    "distractores": [
+      "En que se captura una unidad de datos y se retransmite más tarde",
+      "En que se altera una parte de un mensaje legítimo"
+    ],
+    "explicacion": "El enmascaramiento es fingir ser otra entidad. Capturar y retransmitir es la repetición. Alterar parte de un mensaje es la modificación de mensajes."
+  },
+  {
+    "id": "introduccion-053",
+    "concepto": "introduccion-enmascaramiento",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "Un atacante envía mensajes a un servidor diciendo que es Alicia, con datos que se inventa. ¿Qué ataque activo es?",
+    "correcta": "Enmascaramiento",
+    "distractores": [
+      "Repetición",
+      "Denegación de servicio"
+    ],
+    "explicacion": "Hacerse pasar por Alicia es enmascaramiento. La repetición exigiría haber capturado datos antes. La denegación de servicio busca impedir el uso, y no suplantar."
+  },
+  {
+    "id": "introduccion-054",
+    "concepto": "introduccion-enmascaramiento",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué suele incluir un ataque de enmascaramiento?",
+    "correcta": "Una de las otras formas de ataque activo",
+    "distractores": [
+      "Un ataque pasivo de análisis de tráfico previo",
+      "Un ataque que destruye el mensaje original"
+    ],
+    "explicacion": "El enmascaramiento suele combinarse con otra forma de ataque activo. El análisis de tráfico es un ataque pasivo, y no es lo que lo acompaña. Destruir el mensaje original no es parte del ataque."
+  },
+  {
+    "id": "introduccion-055",
+    "concepto": "introduccion-ataque-de-repeticion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿En qué consiste un ataque de repetición?",
+    "correcta": "En capturar datos y retransmitirlos después para lograr un efecto no autorizado",
+    "distractores": [
+      "En alterar una parte de un mensaje legítimo y enviarlo para lograr un efecto no autorizado",
+      "En fingir que se es otra entidad para lograr un efecto no autorizado"
+    ],
+    "explicacion": "La repetición captura pasivamente una unidad de datos y la retransmite. Alterar parte del mensaje es la modificación. Fingir ser otra entidad es el enmascaramiento."
+  },
+  {
+    "id": "introduccion-056",
+    "concepto": "introduccion-ataque-de-repeticion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 33
+    },
+    "pregunta": "Eve graba el mensaje «Soy Alicia» con la contraseña de Alicia y se lo envía a Roberto más tarde. ¿Qué ataque hace?",
+    "correcta": "Repetición",
+    "distractores": [
+      "Denegación de servicio",
+      "Análisis de tráfico"
+    ],
+    "explicacion": "Grabar un paquete y reenviarlo después es repetición. La denegación de servicio impide el uso del servicio. El análisis de tráfico no envía nada."
+  },
+  {
+    "id": "introduccion-057",
+    "concepto": "introduccion-ataque-de-repeticion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 33
+    },
+    "pregunta": "¿Por qué cifrar la contraseña no impide un ataque de repetición?",
+    "correcta": "Porque no necesita descifrarla: le basta reenviar el paquete grabado",
+    "distractores": [
+      "Porque el cifrado no oculta la contraseña del paquete",
+      "Porque el atacante deduce la clave de cifrado al comparar dos paquetes iguales"
+    ],
+    "explicacion": "El atacante reenvía el paquete tal cual, sin descifrarlo. Un buen cifrado sí oculta la contraseña, y aun así no basta. Ver el paquete no le da la clave."
+  },
+  {
+    "id": "introduccion-058",
+    "concepto": "introduccion-modificacion-de-mensajes",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué hace un ataque de modificación de mensajes?",
+    "correcta": "Altera parte de un mensaje legítimo, o lo retrasa o reordena",
+    "distractores": [
+      "Captura el mensaje legítimo y lo retransmite después sin cambiar nada",
+      "Impide el uso normal de las instalaciones de comunicaciones"
+    ],
+    "explicacion": "La modificación altera, retrasa o reordena mensajes legítimos. Capturar y retransmitir sin cambiar es la repetición. Impedir el uso normal es la denegación de servicio."
+  },
+  {
+    "id": "introduccion-059",
+    "concepto": "introduccion-modificacion-de-mensajes",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "Un atacante cambia el importe de una transferencia mientras viaja por la red. ¿Qué ataque es?",
+    "correcta": "Modificación de mensajes",
+    "distractores": [
+      "Repetición del mensaje",
+      "Análisis de tráfico pasivo"
+    ],
+    "explicacion": "Cambiar el contenido en tránsito es modificación. La repetición reenvía el mensaje intacto. El análisis de tráfico no altera nada."
+  },
+  {
+    "id": "introduccion-060",
+    "concepto": "introduccion-modificacion-de-mensajes",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "Un atacante retrasa y reordena paquetes legítimos sin cambiar su contenido. ¿Qué tipo de ataque activo es?",
+    "correcta": "Modificación de mensajes",
+    "distractores": [
+      "Repetición",
+      "Enmascaramiento de la entidad"
+    ],
+    "explicacion": "Retrasar o reordenar mensajes también es modificación de mensajes. La repetición retransmite un mensaje ya capturado. El enmascaramiento finge ser otra entidad."
+  },
+  {
+    "id": "introduccion-061",
+    "concepto": "introduccion-denegacion-de-servicio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué hace una denegación de servicio?",
+    "correcta": "Impide o inhibe el uso normal de las instalaciones de comunicaciones",
+    "distractores": [
+      "Captura datos y los retransmite más tarde para lograr un efecto no autorizado",
+      "Finge ser otra entidad para acceder a un sistema"
+    ],
+    "explicacion": "La denegación impide el uso normal de las comunicaciones. Capturar y retransmitir es la repetición. Fingir ser otra entidad es el enmascaramiento."
+  },
+  {
+    "id": "introduccion-062",
+    "concepto": "introduccion-denegacion-de-servicio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "Un atacante inunda un servidor de peticiones para que los usuarios legítimos no accedan. ¿Qué ataque es?",
+    "correcta": "Denegación de servicio",
+    "distractores": [
+      "Modificación de mensajes",
+      "Acceso al contenido de los mensajes"
+    ],
+    "explicacion": "Inundar para impedir el acceso es denegación de servicio. La modificación altera el contenido de los mensajes. El acceso al contenido es pasivo y no impide nada."
+  },
+  {
+    "id": "introduccion-063",
+    "concepto": "introduccion-denegacion-de-servicio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Por qué una denegación de servicio es un ataque activo?",
+    "correcta": "Porque afecta al funcionamiento de los recursos del sistema",
+    "distractores": [
+      "Porque modifica el contenido de los mensajes que pasan por la red",
+      "Porque necesita capturar antes el tráfico de la víctima"
+    ],
+    "explicacion": "Es activa porque afecta al funcionamiento de los recursos. No necesita modificar el contenido de los mensajes. Tampoco necesita capturar tráfico antes."
+  },
+  {
+    "id": "introduccion-064",
+    "concepto": "introduccion-x800-ataque-mecanismo-servicio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué es un servicio de seguridad en X.800?",
+    "correcta": "Lo que contrarresta ataques usando uno o más mecanismos de seguridad",
+    "distractores": [
+      "Un proceso de seguridad diseñado para detectar, prevenir o recuperarse de un ataque",
+      "Cualquier acción que comprometa la seguridad de la información"
+    ],
+    "explicacion": "El servicio contrarresta ataques usando uno o más mecanismos. Un proceso para detectar, prevenir o recuperarse es el mecanismo. Una acción que compromete la seguridad es el ataque."
+  },
+  {
+    "id": "introduccion-065",
+    "concepto": "introduccion-x800-ataque-mecanismo-servicio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué es un mecanismo de seguridad en X.800?",
+    "correcta": "Un proceso diseñado para detectar, prevenir o recuperarse de un ataque",
+    "distractores": [
+      "Un servicio que contrarresta ataques usando otros procesos de la organización",
+      "Cualquier acción que comprometa la seguridad de la información"
+    ],
+    "explicacion": "El mecanismo es el proceso que detecta, previene o recupera de un ataque. El servicio es el que usa mecanismos para contrarrestar ataques. La acción que compromete la seguridad es el ataque."
+  },
+  {
+    "id": "introduccion-066",
+    "concepto": "introduccion-x800-ataque-mecanismo-servicio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    },
+    "pregunta": "El cifrado se usa para dar confidencialidad. ¿Qué es cada uno en X.800?",
+    "correcta": "El cifrado es un mecanismo, y la confidencialidad es un servicio",
+    "distractores": [
+      "El cifrado es un servicio, y la confidencialidad es un mecanismo",
+      "El cifrado y la confidencialidad son los dos servicios"
+    ],
+    "explicacion": "El cifrado es el mecanismo que se usa, y la confidencialidad el servicio que se obtiene. La segunda opción los invierte. La tercera olvida que un servicio se apoya en mecanismos."
+  },
+  {
+    "id": "introduccion-067",
+    "concepto": "introduccion-x800-mecanismos-especificos-vs-generalizados",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué distingue a un mecanismo de seguridad específico de uno generalizado?",
+    "correcta": "El específico va en una capa de protocolo, y el generalizado en ninguna",
+    "distractores": [
+      "El generalizado va en la capa de protocolo adecuada, y el específico no es de ninguna capa",
+      "El específico cifra datos, y el generalizado solo controla accesos"
+    ],
+    "explicacion": "El específico se incorpora a la capa adecuada, y el generalizado no es de ninguna capa ni servicio concreto. La segunda opción los invierte. Cifrar o controlar accesos no los distingue: ambos tipos tienen mecanismos variados."
+  },
+  {
+    "id": "introduccion-068",
+    "concepto": "introduccion-x800-mecanismos-especificos-vs-generalizados",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Cuál de estos es un mecanismo de seguridad específico?",
+    "correcta": "La firma digital",
+    "distractores": [
+      "La detección de eventos",
+      "La recuperación de seguridad"
+    ],
+    "explicacion": "La firma digital es específica. La detección de eventos y la recuperación de seguridad son mecanismos generalizados."
+  },
+  {
+    "id": "introduccion-069",
+    "concepto": "introduccion-x800-mecanismos-especificos-vs-generalizados",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Cuál de estos es un mecanismo de seguridad generalizado?",
+    "correcta": "El registro de auditoría de los eventos",
+    "distractores": [
+      "El control de acceso a un recurso",
+      "El intercambio de autenticación entre las partes"
+    ],
+    "explicacion": "El registro de auditoría es generalizado. El control de acceso y el intercambio de autenticación son específicos."
+  },
+  {
+    "id": "introduccion-070",
+    "concepto": "introduccion-x800-relleno-de-trafico",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Para qué sirve el relleno de tráfico?",
+    "correcta": "Para frustrar el análisis de tráfico insertando bits en un flujo",
+    "distractores": [
+      "Para cifrar el tráfico de datos de usuario de cada bloque de un flujo",
+      "Para impedir que se pierdan paquetes del tráfico de un flujo"
+    ],
+    "explicacion": "El relleno inserta bits en los huecos para frustrar el análisis de tráfico. Cifrar los bloques es otro mecanismo. Evitar pérdidas no es su función."
+  },
+  {
+    "id": "introduccion-071",
+    "concepto": "introduccion-x800-relleno-de-trafico",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué servicio de confidencialidad protege la información que se deduce de observar quién se comunica, cuándo y cuánto?",
+    "correcta": "La confidencialidad del flujo de tráfico",
+    "distractores": [
+      "La confidencialidad en modo conexión",
+      "La confidencialidad de campos selectivos"
+    ],
+    "explicacion": "Es la confidencialidad del flujo de tráfico. La de modo conexión protege los datos de usuario de una conexión. La de campos selectivos protege campos concretos."
+  },
+  {
+    "id": "introduccion-072",
+    "concepto": "introduccion-x800-relleno-de-trafico",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    },
+    "pregunta": "Un atacante mide cuándo y cuánto transmite una oficina, sin leer nada. ¿Qué mecanismo lo frustra?",
+    "correcta": "El relleno de tráfico",
+    "distractores": [
+      "La firma digital",
+      "El control de encaminamiento"
+    ],
+    "explicacion": "El relleno oculta los patrones de tráfico. La firma digital prueba el origen y la integridad, pero no oculta patrones. El control de encaminamiento elige rutas seguras, pero no oculta cuánto se transmite."
+  },
+  {
+    "id": "introduccion-073",
+    "concepto": "introduccion-x800-no-repudio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué protege el servicio de no repudio?",
+    "correcta": "Frente a que una parte niegue haber participado en la comunicación",
+    "distractores": [
+      "Frente a la divulgación no autorizada de los datos que se transmiten",
+      "Frente a la modificación de los datos transmitidos"
+    ],
+    "explicacion": "El no repudio protege frente a que una parte niegue su participación. La divulgación no autorizada es asunto de la confidencialidad. La modificación es asunto de la integridad."
+  },
+  {
+    "id": "introduccion-074",
+    "concepto": "introduccion-x800-no-repudio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué distingue el no repudio de origen del no repudio de destino?",
+    "correcta": "El de origen prueba que el emisor envió, y el de destino que el receptor recibió",
+    "distractores": [
+      "El de origen prueba que el receptor lo recibió, y el de destino que el emisor lo envió",
+      "El de origen prueba que no se alteró, y el de destino que llegó entero"
+    ],
+    "explicacion": "El de origen prueba el envío y el de destino la recepción. La segunda opción los invierte. Probar que no se alteró es integridad."
+  },
+  {
+    "id": "introduccion-075",
+    "concepto": "introduccion-x800-no-repudio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "Un cliente niega haber recibido la confirmación de un pedido, y la tienda quiere probar que sí. ¿Qué servicio necesita?",
+    "correcta": "No repudio de destino",
+    "distractores": [
+      "No repudio de origen",
+      "Autenticación del origen de los datos"
+    ],
+    "explicacion": "Probar que el receptor recibió el mensaje es no repudio de destino. El de origen probaría que la tienda la envió. La autenticación del origen solo comprueba quién la envió."
+  },
+  {
+    "id": "introduccion-076",
+    "concepto": "introduccion-x800-integridad-con-o-sin-recuperacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué distingue la integridad de conexión con recuperación de la integridad sin recuperación?",
+    "correcta": "La primera intenta recuperar los datos alterados, y la segunda solo detecta",
+    "distractores": [
+      "La primera solo detecta alteraciones, y la segunda intenta recuperar los datos",
+      "La primera protege campos seleccionados, y la segunda todos los datos"
+    ],
+    "explicacion": "Con recuperación se detecta y se intenta recuperar, y sin recuperación solo se detecta. La segunda opción los invierte. Proteger campos seleccionados es otro servicio, el de campos selectivos."
+  },
+  {
+    "id": "introduccion-077",
+    "concepto": "introduccion-x800-integridad-con-o-sin-recuperacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué servicio de integridad protege un único bloque de datos, sin conexión?",
+    "correcta": "La integridad sin conexión",
+    "distractores": [
+      "La integridad de conexión con recuperación",
+      "La integridad de conexión sin recuperación"
+    ],
+    "explicacion": "La integridad sin conexión protege un solo bloque. Las otras dos protegen todos los datos de una conexión."
+  },
+  {
+    "id": "introduccion-078",
+    "concepto": "introduccion-x800-integridad-con-o-sin-recuperacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "Un protocolo solo necesita saber si ciertos campos de un bloque suelto se han modificado. ¿Qué servicio usa?",
+    "correcta": "Integridad sin conexión de campos selectivos",
+    "distractores": [
+      "Integridad de conexión de campos selectivos",
+      "Confidencialidad sin conexión de campos selectivos"
+    ],
+    "explicacion": "Un bloque suelto y solo ciertos campos es integridad sin conexión de campos selectivos. La de conexión es para los datos de una conexión. La confidencialidad no detecta modificaciones."
+  },
+  {
+    "id": "introduccion-079",
+    "concepto": "introduccion-x800-autenticacion-de-entidad-par-vs-de-origen",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué distingue la autenticación de entidad par de la autenticación del origen de los datos?",
+    "correcta": "La de entidad par va con una conexión lógica, y la del origen sin conexión",
+    "distractores": [
+      "La de entidad par se usa sin conexión, y la del origen con una conexión lógica",
+      "La de entidad par comprueba la integridad, y la del origen la confidencialidad"
+    ],
+    "explicacion": "La de entidad par va con conexión lógica, y la del origen en transferencias sin conexión. La segunda opción los invierte. Ninguna comprueba integridad ni confidencialidad."
+  },
+  {
+    "id": "introduccion-080",
+    "concepto": "introduccion-x800-autenticacion-de-entidad-par-vs-de-origen",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "Un servidor recibe datagramas sueltos, sin conexión, y quiere confirmar que vienen de quien dicen. ¿Qué servicio usa?",
+    "correcta": "Autenticación del origen de los datos",
+    "distractores": [
+      "Autenticación de entidad par en la conexión",
+      "No repudio de origen"
+    ],
+    "explicacion": "En una transferencia sin conexión se usa la autenticación del origen. La de entidad par exige una conexión lógica. El no repudio de origen prueba el envío ante terceros, y no solo la identidad."
+  },
+  {
+    "id": "introduccion-081",
+    "concepto": "introduccion-x800-autenticacion-de-entidad-par-vs-de-origen",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "Al establecer una conexión, cada extremo confirma la identidad del otro. ¿Qué servicio es?",
+    "correcta": "Autenticación de entidad par",
+    "distractores": [
+      "Autenticación del origen de los datos",
+      "Confidencialidad en modo conexión"
+    ],
+    "explicacion": "Confirmar la identidad de los extremos de una conexión es autenticación de entidad par. La del origen se usa sin conexión. La confidencialidad en modo conexión protege los datos, y no confirma identidades."
+  },
+  {
+    "id": "introduccion-082",
+    "concepto": "introduccion-x800-control-de-acceso",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué previene el servicio de control de acceso?",
+    "correcta": "El uso no autorizado de un recurso",
+    "distractores": [
+      "La divulgación no autorizada de los datos",
+      "Que una parte niegue haber participado"
+    ],
+    "explicacion": "El control de acceso previene el uso no autorizado de un recurso. La divulgación no autorizada la previene la confidencialidad. Negar la participación lo previene el no repudio."
+  },
+  {
+    "id": "introduccion-083",
+    "concepto": "introduccion-x800-control-de-acceso",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "Un sistema decide quién puede leer un fichero y en qué condiciones. ¿Qué servicio de seguridad aplica?",
+    "correcta": "Control de acceso",
+    "distractores": [
+      "Confidencialidad de campos selectivos",
+      "Autenticación de entidad par"
+    ],
+    "explicacion": "Decidir quién accede a un recurso y bajo qué condiciones es control de acceso. La confidencialidad protege los datos de su divulgación. La autenticación comprueba la identidad."
+  },
+  {
+    "id": "introduccion-084",
+    "concepto": "introduccion-x800-control-de-acceso",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué distingue el control de acceso de la confidencialidad?",
+    "correcta": "El primero decide quién usa un recurso, y la segunda protege los datos",
+    "distractores": [
+      "El primero protege los datos de su divulgación, y la segunda decide quién usa un recurso",
+      "El primero detecta modificaciones, y la segunda recupera los datos alterados"
+    ],
+    "explicacion": "El control de acceso regula el uso de recursos, y la confidencialidad evita la divulgación. La segunda opción los invierte. Detectar modificaciones o recuperar datos es la integridad."
+  },
+  {
+    "id": "introduccion-085",
+    "concepto": "introduccion-canal-seguro-propiedades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Qué puede conocer Eve de lo que Alice envía por un canal seguro?",
+    "correcta": "Solo la secuencia de mensajes, su temporización y su tamaño",
+    "distractores": [
+      "Solo su contenido cifrado, y no su tamaño ni su temporización",
+      "Su contenido y su tamaño, pero no su temporización"
+    ],
+    "explicacion": "Eve solo conoce la secuencia, la temporización y el tamaño. No conoce el contenido, y tampoco se le oculta el tamaño ni la temporización. El tamaño y la temporización sí son visibles para ella."
+  },
+  {
+    "id": "introduccion-086",
+    "concepto": "introduccion-canal-seguro-propiedades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Qué debe recibir Bob de los mensajes que envía Alice por un canal seguro?",
+    "correcta": "Como mucho una subsecuencia de los mensajes iniciales",
+    "distractores": [
+      "Todos los mensajes, aunque Eve borre alguno de ellos por el camino",
+      "Todos los mensajes, aunque posiblemente reordenados"
+    ],
+    "explicacion": "Bob recibe como mucho una subsecuencia de los mensajes enviados. No puede recibir todos si Eve borra alguno. Tampoco puede recibirlos reordenados, porque el orden se protege."
+  },
+  {
+    "id": "introduccion-087",
+    "concepto": "introduccion-canal-seguro-propiedades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Qué ocurre si Eve borra o inserta un mensaje en un canal seguro?",
+    "correcta": "No se puede impedir el borrado, pero la perturbación se detecta",
+    "distractores": [
+      "Se impide el borrado y se recupera el mensaje",
+      "Pasa inadvertido, porque el canal solo protege el contenido de los mensajes"
+    ],
+    "explicacion": "El canal no impide borrar, pero detecta el borrado y cualquier otra perturbación. No recupera el mensaje por sí mismo. Un canal seguro no solo protege el contenido: protege también la integridad de la secuencia."
+  },
+  {
+    "id": "introduccion-088",
+    "concepto": "introduccion-transporte-no-confiable",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué se asume siempre en seguridad sobre el protocolo de transporte subyacente?",
+    "correcta": "Que no es confiable, incluso aunque sea TCP",
+    "distractores": [
+      "Que es confiable cuando es TCP",
+      "Que es confiable cuando numera los paquetes"
+    ],
+    "explicacion": "En seguridad el transporte se toma por no confiable, también TCP. Asumir que TCP es confiable es el error que se evita. Numerar paquetes no protege ante un atacante activo."
+  },
+  {
+    "id": "introduccion-089",
+    "concepto": "introduccion-transporte-no-confiable",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Por qué TCP no basta para proteger una comunicación frente a un atacante?",
+    "correcta": "Porque no resiste ataques activos que cambien, inserten o borren paquetes",
+    "distractores": [
+      "Porque pierde paquetes con frecuencia en redes normales",
+      "Porque no permite enviar flujos de longitud indeterminada en una conexión"
+    ],
+    "explicacion": "TCP no resiste a un atacante activo que cambie, inserte o borre paquetes. Perder paquetes lo resuelve con reenvíos. Sí admite flujos de longitud indeterminada."
+  },
+  {
+    "id": "introduccion-090",
+    "concepto": "introduccion-transporte-no-confiable",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "Un atacante activo inserta un paquete falso en una conexión TCP. ¿Qué hace TCP?",
+    "correcta": "No lo detecta, porque no está pensado para esos ataques",
+    "distractores": [
+      "Lo detecta y lo descarta, porque TCP numera los paquetes",
+      "Lo detecta y cierra la conexión, porque TCP autentica al emisor"
+    ],
+    "explicacion": "TCP no está diseñado para ataques activos y no detecta la inserción como tal. Numerar paquetes no autentica quién los envía. TCP no autentica al emisor."
+  },
+  {
+    "id": "introduccion-091",
+    "concepto": "introduccion-mensajes-o-flujos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué hay que analizar al diseñar un protocolo seguro respecto a lo que se transmite?",
+    "correcta": "Si es un fichero de longitud conocida o un flujo sin longitud fija",
+    "distractores": [
+      "Si es texto legible o son datos binarios en un formato propio del protocolo",
+      "Si lo envía un cliente o un servidor"
+    ],
+    "explicacion": "Hay que saber si es un fichero de longitud conocida o un flujo indeterminado. Texto o binario no cambia el diseño del protocolo. Quién lo envía es el rol, y no la naturaleza de lo transmitido."
+  },
+  {
+    "id": "introduccion-092",
+    "concepto": "introduccion-mensajes-o-flujos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué se suele hacer con un fichero o flujo para transportarlo?",
+    "correcta": "Dividirlo en paquetes",
+    "distractores": [
+      "Cifrarlo entero antes de enviarlo",
+      "Enviarlo en un único paquete de longitud fija"
+    ],
+    "explicacion": "Se divide en paquetes que hay que transportar. Cifrarlo entero antes de enviar no es viable con un flujo sin fin. Un único paquete fijo no sirve para longitudes arbitrarias."
+  },
+  {
+    "id": "introduccion-093",
+    "concepto": "introduccion-mensajes-o-flujos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 26
+    },
+    "pregunta": "Una videollamada transmite datos sin que se sepa cuándo acabarán. ¿Qué tipo de transmisión es?",
+    "correcta": "Un flujo de longitud indeterminada",
+    "distractores": [
+      "Un fichero de longitud determinada",
+      "Un único mensaje de longitud fija"
+    ],
+    "explicacion": "Sin fin conocido es un flujo de longitud indeterminada. Un fichero tiene longitud determinada. Un mensaje único de longitud fija tampoco encaja con datos sin fin."
+  },
+  {
+    "id": "introduccion-094",
+    "concepto": "introduccion-identificacion-de-protocolo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Para qué se insertan campos de identificación del protocolo y de sus mensajes?",
+    "correcta": "Para ayudar a detectar errores u otros problemas",
+    "distractores": [
+      "Para cifrar el contenido de cada mensaje enviado",
+      "Para reducir el tamaño de la cabecera"
+    ],
+    "explicacion": "Los identificadores ayudan a detectar errores. No cifran nada. Añadir campos no reduce la cabecera: la alarga."
+  },
+  {
+    "id": "introduccion-095",
+    "concepto": "introduccion-identificacion-de-protocolo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Qué dos partes suele contener el identificador del protocolo?",
+    "correcta": "La versión y el subprotocolo criptográfico",
+    "distractores": [
+      "La versión y el algoritmo de cifrado negociado",
+      "El rol y el número de mensaje"
+    ],
+    "explicacion": "El identificador lleva la versión y el subprotocolo criptográfico. El algoritmo negociado no forma parte del identificador. El rol y el número de mensaje no identifican el protocolo."
+  },
+  {
+    "id": "introduccion-096",
+    "concepto": "introduccion-identificacion-de-protocolo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 27
+    },
+    "pregunta": "Llega un mensaje con un identificador de subprotocolo que no es el esperado. ¿Qué permite hacer el identificador?",
+    "correcta": "Detectar el problema y tratarlo como error",
+    "distractores": [
+      "Descifrarlo probando con otra clave distinta",
+      "Renegociar la versión del protocolo"
+    ],
+    "explicacion": "El identificador sirve para detectar que algo no cuadra y tratarlo como error. No se descifra con otra clave. Renegociar la versión no es lo que permite el campo."
+  },
+  {
+    "id": "introduccion-097",
+    "concepto": "introduccion-numeracion-de-paquetes",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Qué detecta la numeración de paquetes?",
+    "correcta": "Faltas, desórdenes y repeticiones",
+    "distractores": [
+      "Modificaciones, desórdenes y repeticiones",
+      "Faltas, modificaciones y suplantaciones"
+    ],
+    "explicacion": "La numeración detecta faltas, desórdenes y repeticiones. Una modificación del contenido la detecta la integridad, y no la numeración. Una suplantación la detecta la autenticación."
+  },
+  {
+    "id": "introduccion-098",
+    "concepto": "introduccion-numeracion-de-paquetes",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Qué propiedad debe tener el sistema de numeración de paquetes?",
+    "correcta": "Aumentar monotónicamente, sin repetir números",
+    "distractores": [
+      "Elegir un número aleatorio nuevo para cada paquete",
+      "Reiniciarse con cada mensaje recibido"
+    ],
+    "explicacion": "La numeración crece monotónicamente y no repite números. Los números aleatorios no permiten ver faltas ni orden. Reiniciarse con cada mensaje permitiría repetir números."
+  },
+  {
+    "id": "introduccion-099",
+    "concepto": "introduccion-numeracion-de-paquetes",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 28
+    },
+    "pregunta": "El receptor recibe los paquetes 1, 2, 3 y luego otro paquete con el número 2. ¿Qué detecta?",
+    "correcta": "Una repetición, porque el número no ha aumentado",
+    "distractores": [
+      "Una falta, porque falta el número que debía venir después",
+      "Una modificación, porque cambió el número"
+    ],
+    "explicacion": "Un número que no aumenta es una repetición. Una falta sería un salto hacia delante, como pasar del 2 al 4. La modificación del contenido no se detecta con la numeración."
+  },
+  {
+    "id": "introduccion-101",
+    "concepto": "introduccion-perfect-forward-secrecy",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Cómo deben ser las claves de sesión para tener Perfect Forward Secrecy?",
+    "correcta": "Temporales y no reutilizables",
+    "distractores": [
+      "Derivadas de la clave privada del servidor",
+      "Permanentes y compartidas entre sesiones"
+    ],
+    "explicacion": "Las claves deben ser temporales y no reutilizables. Derivarlas de la clave privada permitiría recuperarlas al robarla. Permanentes y compartidas romperían la propiedad."
+  },
+  {
+    "id": "introduccion-102",
+    "concepto": "introduccion-perfect-forward-secrecy",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 29
+    },
+    "pregunta": "Un atacante graba el tráfico cifrado durante años y hoy roba la clave privada del servidor. Con PFS, ¿qué consigue?",
+    "correcta": "Nada del tráfico pasado, porque sus claves eran temporales",
+    "distractores": [
+      "Todo el tráfico pasado, porque la clave privada genera las sesiones",
+      "Solo el tráfico de la última sesión grabada"
+    ],
+    "explicacion": "Con PFS el tráfico pasado sigue protegido, porque las claves de sesión eran temporales. Sin PFS, el atacante podría descifrarlo. No hay ninguna sesión que quede expuesta."
+  },
+  {
+    "id": "introduccion-103",
+    "concepto": "introduccion-orden-de-integridad-y-cifrado",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 30
+    },
+    "pregunta": "En «encriptar, luego integridad», ¿sobre qué se calcula el MAC?",
+    "correcta": "Sobre el texto cifrado, con una clave distinta",
+    "distractores": [
+      "Sobre el texto en claro, con la misma clave de cifrado",
+      "Sobre el texto en claro, que se cifra después con el MAC"
+    ],
+    "explicacion": "Se cifra primero y el MAC se calcula sobre el texto cifrado con una segunda clave. Calcularlo sobre el texto en claro es otro orden. Cifrar el MAC junto con el texto es «integridad, luego encriptar»."
+  },
+  {
+    "id": "introduccion-104",
+    "concepto": "introduccion-orden-de-integridad-y-cifrado",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Qué orden cifra el MAC junto con el mensaje?",
+    "correcta": "Integridad, luego encriptar",
+    "distractores": [
+      "Encriptar, luego integridad",
+      "Hacerlo en paralelo"
+    ],
+    "explicacion": "En «integridad, luego encriptar» el MAC se añade al texto en claro y todo se cifra. En «encriptar, luego integridad» el MAC se calcula sobre el cifrado y queda fuera. En paralelo el MAC también queda fuera."
+  },
+  {
+    "id": "introduccion-105",
+    "concepto": "introduccion-orden-de-integridad-y-cifrado",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿En qué orden se calculan el cifrado y el MAC a partir del texto en claro, de forma independiente?",
+    "correcta": "Hacerlo en paralelo",
+    "distractores": [
+      "Encriptar, luego integridad",
+      "Integridad, luego encriptar"
+    ],
+    "explicacion": "En paralelo, el cifrado y el MAC parten los dos del texto en claro. En «encriptar, luego integridad» el MAC parte del texto cifrado. En «integridad, luego encriptar» el cifrado incluye el MAC."
+  },
+  {
+    "id": "introduccion-106",
+    "concepto": "introduccion-tratamiento-de-errores",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Cuál es el tratamiento más seguro ante un error en un mensaje recibido?",
+    "correcta": "No enviar ni responder nada y eliminar el estado del protocolo",
+    "distractores": [
+      "Responder con un mensaje que diga qué chequeo ha fallado en el mensaje",
+      "Reintentar el mensaje y conservar el estado para diagnosticarlo"
+    ],
+    "explicacion": "Lo más seguro es no responder y eliminar el estado. Responder con el chequeo que falló da pistas al atacante. Conservar el estado deja abierta la sesión que se está atacando."
+  },
+  {
+    "id": "introduccion-107",
+    "concepto": "introduccion-tratamiento-de-errores",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué hay que hacer como mínimo cuando ocurre un error en un mensaje?",
+    "correcta": "Anotar en un log interno que ha habido un error",
+    "distractores": [
+      "Avisar al emisor del tipo de error",
+      "Cerrar la conexión y bloquear al emisor durante un tiempo"
+    ],
+    "explicacion": "Como mínimo se anota el error en un log interno. Avisar al emisor da información al atacante. Bloquear al emisor no se exige."
+  },
+  {
+    "id": "introduccion-108",
+    "concepto": "introduccion-tratamiento-de-errores",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué chequeos se hacen cada vez que llega un mensaje nuevo?",
+    "correcta": "Cifrado, integridad e identificadores del protocolo",
+    "distractores": [
+      "Cifrado, disponibilidad y roles",
+      "Integridad, confidencialidad y Perfect Forward Secrecy"
+    ],
+    "explicacion": "Se comprueban el cifrado, la integridad y los identificadores. La disponibilidad y los roles no se chequean por mensaje. La confidencialidad y PFS son propiedades, y no chequeos de un mensaje."
+  },
+  {
+    "id": "introduccion-109",
+    "concepto": "introduccion-ataque-de-oraculo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 32
+    },
+    "pregunta": "¿En qué consiste un ataque de oráculo?",
+    "correcta": "En aprovechar las respuestas de un sistema legítimo para deducir secretos",
+    "distractores": [
+      "En obligar a las partes a negociar una versión más débil del protocolo seguro",
+      "En capturar un mensaje y enviarlo de nuevo más tarde"
+    ],
+    "explicacion": "El oráculo es un sistema legítimo cuyas respuestas dan pistas indirectas. Forzar una versión débil es la degradación. Reenviar un mensaje capturado es la repetición."
+  },
+  {
+    "id": "introduccion-110",
+    "concepto": "introduccion-ataque-de-oraculo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 32
+    },
+    "pregunta": "Un atacante estudia los mensajes de error de un servidor para deducir datos secretos. ¿Qué tipo de ataque es?",
+    "correcta": "Un ataque de oráculo",
+    "distractores": [
+      "Un ataque de degradación",
+      "Un ataque de repetición"
+    ],
+    "explicacion": "Deducir secretos a partir de las respuestas es un ataque de oráculo. La degradación obliga a usar algo más débil. La repetición reenvía un mensaje grabado."
+  },
+  {
+    "id": "introduccion-111",
+    "concepto": "introduccion-ataque-de-oraculo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 32
+    },
+    "pregunta": "¿Qué pistas aprovecha el atacante en un ataque de oráculo?",
+    "correcta": "Mensajes de error y tiempos de procesamiento",
+    "distractores": [
+      "Números de secuencia y versiones del protocolo",
+      "Claves de sesión y certificados del servidor"
+    ],
+    "explicacion": "Se aprovechan los errores y los tiempos de respuesta. Los números de secuencia y las versiones no son pistas que revele el oráculo. Las claves de sesión y los certificados tampoco."
+  },
+  {
+    "id": "introduccion-112",
+    "concepto": "introduccion-oraculo-de-tiempo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 32
+    },
+    "pregunta": "¿En qué consiste un oráculo de tiempo?",
+    "correcta": "En medir cuánto tarda el protocolo en responder",
+    "distractores": [
+      "En modificar el texto cifrado y observar si hay error de relleno",
+      "En observar cuándo envía sus mensajes la víctima"
+    ],
+    "explicacion": "El oráculo de tiempo mide lo que tarda en responder el protocolo. Modificar el texto cifrado y observar errores de relleno es el oráculo de relleno. Ver cuándo envía la víctima es análisis de tráfico."
+  },
+  {
+    "id": "introduccion-113",
+    "concepto": "introduccion-oraculo-de-tiempo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 32
+    },
+    "pregunta": "Comprobar una contraseña tarda 2 ms si falla la primera letra y 4 ms si acierta. ¿Qué permite al atacante?",
+    "correcta": "Adivinar la clave carácter por carácter",
+    "distractores": [
+      "Descifrar el mensaje byte a byte",
+      "Imponer una versión más débil del protocolo"
+    ],
+    "explicacion": "La diferencia de tiempos permite adivinar la clave letra a letra. Descifrar byte a byte es el oráculo de relleno. Imponer una versión débil es la degradación."
+  },
+  {
+    "id": "introduccion-114",
+    "concepto": "introduccion-oraculo-de-tiempo",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 32
+    },
+    "pregunta": "¿Por qué la comprobación tarda más cuando la primera letra es correcta?",
+    "correcta": "Porque pasa al siguiente paso de verificación",
+    "distractores": [
+      "Porque el servidor descifra el mensaje antes de comparar",
+      "Porque el servidor renegocia el protocolo con el cliente"
+    ],
+    "explicacion": "Con la primera letra correcta la verificación sigue al paso siguiente, y eso tarda más. Descifrar el mensaje no es lo que añade tiempo. Renegociar el protocolo no ocurre en la verificación."
+  },
+  {
+    "id": "introduccion-117",
+    "concepto": "introduccion-oraculo-de-relleno",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 32
+    },
+    "pregunta": "Un servidor no da error de relleno ante un texto cifrado modificado por el atacante. ¿Qué sabe este?",
+    "correcta": "Que el relleno es válido, y con eso descifra",
+    "distractores": [
+      "Que el mensaje original no se ha modificado, aunque el relleno sí",
+      "Que la clave de sesión usada para el relleno es la correcta"
+    ],
+    "explicacion": "Sin error, el relleno coincide, y con eso el atacante avanza. El mensaje sí se ha modificado. La clave de sesión no se deduce de que el relleno sea válido."
+  },
+  {
+    "id": "introduccion-118",
+    "concepto": "introduccion-reproduccion-vs-reenvio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 34
+    },
+    "pregunta": "¿Cuándo se produce un reenvío en un protocolo?",
+    "correcta": "Cuando no hay respuesta, se cumple un temporizador y se reenvía el original",
+    "distractores": [
+      "Cuando un atacante graba un paquete legítimo y lo envía de nuevo más tarde a la víctima",
+      "Cuando el receptor pide renovar la clave de sesión"
+    ],
+    "explicacion": "El reenvío es legítimo: tras un temporizador sin respuesta se reenvía el original. Grabar y enviar más tarde es una reproducción. Renovar la clave no tiene que ver con reenviar."
+  },
+  {
+    "id": "introduccion-119",
+    "concepto": "introduccion-reproduccion-vs-reenvio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 34
+    },
+    "pregunta": "¿Por qué es complicado distinguir una reproducción de un reenvío?",
+    "correcta": "Porque en ambos casos llega de nuevo el mismo paquete",
+    "distractores": [
+      "Porque la reproducción siempre llega por un canal distinto",
+      "Porque el reenvío siempre lleva un número de secuencia nuevo"
+    ],
+    "explicacion": "En los dos casos llega otra vez el mismo paquete, y no se sabe quién lo manda. La reproducción no llega por otro canal necesariamente. Un reenvío reenvía el original, con el mismo número."
+  },
+  {
+    "id": "introduccion-120",
+    "concepto": "introduccion-reproduccion-vs-reenvio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 34
+    },
+    "pregunta": "Un receptor ve llegar dos veces el mismo paquete. ¿Qué causas posibles hay?",
+    "correcta": "Un reenvío legítimo, o una reproducción de un atacante",
+    "distractores": [
+      "Un desorden en la red, o una falta de un paquete previo",
+      "Una modificación, o una suplantación"
+    ],
+    "explicacion": "Un paquete repetido puede ser un reenvío o una reproducción. Un desorden o una falta no repiten el paquete. Una modificación o una suplantación cambian el paquete."
+  },
+  {
+    "id": "introduccion-121",
+    "concepto": "introduccion-ataque-de-degradacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué busca un ataque de degradación?",
+    "correcta": "Que las partes negocien una versión o algoritmos más débiles",
+    "distractores": [
+      "Que las partes reutilicen una clave de sesión antigua del servidor",
+      "Que el servidor responda con pistas indirectas"
+    ],
+    "explicacion": "La degradación fuerza el uso de versiones o algoritmos débiles. Reutilizar una clave antigua es otro ataque. Las pistas indirectas son propias del oráculo."
+  },
+  {
+    "id": "introduccion-122",
+    "concepto": "introduccion-ataque-de-degradacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿FREAK es un ejemplo de qué tipo de ataque?",
+    "correcta": "Un ataque de degradación",
+    "distractores": [
+      "Un ataque de repetición",
+      "Un ataque de oráculo de tiempo"
+    ],
+    "explicacion": "FREAK es un ejemplo de ataque de degradación. La repetición reenvía un mensaje grabado. El oráculo de tiempo mide lo que tarda el servidor."
+  },
+  {
+    "id": "introduccion-124",
+    "concepto": "introduccion-ejemplo-cuatro-claves",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 36
+    },
+    "pregunta": "En el protocolo de ejemplo, ¿cómo se obtienen las cuatro claves a partir de la clave K del canal?",
+    "correcta": "Con un hash SHA-256 de K y una cadena distinta para cada clave",
+    "distractores": [
+      "Cifrando K cuatro veces con AES y una clave de sesión distinta cada vez",
+      "Eligiendo cuatro claves aleatorias nuevas"
+    ],
+    "explicacion": "Cada clave sale de un hash de K con una cadena distinta. Cifrar K con AES no es la derivación del ejemplo. Elegir claves aleatorias exigiría acordarlas, y el ejemplo las deriva de K."
+  },
+  {
+    "id": "introduccion-125",
+    "concepto": "introduccion-ejemplo-cuatro-claves",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 36
+    },
+    "pregunta": "¿Qué cuatro claves usa el protocolo de ejemplo?",
+    "correcta": "Cifrado y autenticación, para enviar y para recibir",
+    "distractores": [
+      "Cifrado, firma, verificación y sesión",
+      "Una nueva por cada mensaje, derivada del contador de mensajes"
+    ],
+    "explicacion": "Son una clave de cifrado y una de autenticación para cada sentido. El ejemplo no usa clave de firma ni de verificación. Las claves no son una por mensaje."
+  },
+  {
+    "id": "introduccion-126",
+    "concepto": "introduccion-ejemplo-cuatro-claves",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 36
+    },
+    "pregunta": "Bob debe usar para recibir la clave que Alice usa para enviar. ¿Qué hace la inicialización?",
+    "correcta": "Intercambia las claves de envío y de recepción si es Bob",
+    "distractores": [
+      "Deriva otras cuatro claves distintas para Bob con otra cadena",
+      "Envía a Bob las claves cifradas con la clave K"
+    ],
+    "explicacion": "Si el rol es Bob, se intercambian las claves de envío y de recepción. No hay una segunda derivación para Bob. Las claves no viajan: cada parte las deriva de K."
+  },
+  {
+    "id": "introduccion-127",
+    "concepto": "introduccion-ejemplo-envio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 37
+    },
+    "pregunta": "En el envío del protocolo de ejemplo, ¿qué cubre el MAC?",
+    "correcta": "El número, la longitud y los datos adicionales, y el mensaje",
+    "distractores": [
+      "Solo el mensaje, una vez que ya está cifrado con AES en el envío",
+      "Solo el mensaje y su número"
+    ],
+    "explicacion": "El HMAC cubre el número, la longitud de x, x y m. No se calcula sobre el mensaje cifrado. No cubre solo el mensaje y su número, porque incluye los datos adicionales."
+  },
+  {
+    "id": "introduccion-128",
+    "concepto": "introduccion-ejemplo-envio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 37
+    },
+    "pregunta": "¿Cómo se cifra el mensaje en el protocolo de ejemplo?",
+    "correcta": "Con un XOR con un flujo de clave generado con AES-256",
+    "distractores": [
+      "Cifrando cada bloque directamente con AES, sin flujo de clave",
+      "Cifrando el mensaje con RSA y la clave pública del receptor"
+    ],
+    "explicacion": "Se hace XOR con un flujo de clave que genera AES. Cifrar cada bloque con AES directamente no es lo que hace el ejemplo. RSA no interviene."
+  },
+  {
+    "id": "introduccion-129",
+    "concepto": "introduccion-ejemplo-envio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 37
+    },
+    "pregunta": "¿Qué se hace con el contador de mensajes antes de enviar?",
+    "correcta": "Se comprueba el límite y se incrementa",
+    "distractores": [
+      "Se reinicia a cero tras cada mensaje enviado",
+      "Se cifra y se añade al final del mensaje"
+    ],
+    "explicacion": "Se comprueba el límite y se incrementa. No se reinicia, porque repetiría números. El número va delante, sin cifrar, y no al final."
+  },
+  {
+    "id": "introduccion-130",
+    "concepto": "introduccion-ejemplo-recepcion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 38
+    },
+    "pregunta": "En la recepción del protocolo de ejemplo, ¿qué hace el receptor tras descifrar?",
+    "correcta": "Recalcula el HMAC y lo compara con el recibido",
+    "distractores": [
+      "Compara la clave de recepción con la clave de envío",
+      "Vuelve a cifrar el mensaje y lo compara con el recibido"
+    ],
+    "explicacion": "El receptor recalcula el HMAC y lo compara con el que llegó. Las claves no se comparan entre sí. Volver a cifrar no se hace en el ejemplo."
+  },
+  {
+    "id": "introduccion-131",
+    "concepto": "introduccion-ejemplo-recepcion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 38
+    },
+    "pregunta": "El HMAC recalculado por el receptor no coincide con el recibido. ¿Qué hace?",
+    "correcta": "Devuelve error de autenticación y destruye el mensaje",
+    "distractores": [
+      "Pide al emisor que reenvíe el mensaje con otro número",
+      "Acepta el mensaje y registra el error"
+    ],
+    "explicacion": "Ante un MAC distinto se devuelve error de autenticación y se destruye todo. Pedir reenvío da una respuesta al atacante. Aceptar el mensaje sería ignorar la integridad."
+  },
+  {
+    "id": "introduccion-132",
+    "concepto": "introduccion-ejemplo-recepcion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 38
+    },
+    "pregunta": "El receptor recibe un mensaje con número igual o menor que el último recibido. ¿Qué hace?",
+    "correcta": "Da un error de orden y destruye el mensaje",
+    "distractores": [
+      "Lo acepta como válido si el MAC es correcto",
+      "Lo ignora, pero conserva el mensaje descifrado"
+    ],
+    "explicacion": "Un número no mayor que el último es un error de orden, y se destruye el mensaje. Aceptarlo permitiría una repetición. Ignorarlo sin destruir el mensaje deja datos sensibles."
+  },
+  {
+    "id": "transporte-119",
+    "concepto": "introduccion-ataque-de-degradacion",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 38
+    },
+    "pregunta": "¿Por qué TLS 1.2 es vulnerable a downgrade?",
+    "correcta": "Algunas partes del protocolo no entran en la firma del servidor",
+    "distractores": [
+      "El servidor no firma nada en todo el Handshake con su clave privada",
+      "El random del cliente usa una marca de tiempo predecible"
+    ],
+    "explicacion": "Algunas partes del protocolo no entran en la firma del servidor, y un atacante puede alterarlas. El servidor sí firma parte del Handshake, y no todo queda sin firmar. La marca de tiempo del random no es la causa del downgrade."
+  },
+  {
+    "id": "ssl-tls-046",
+    "concepto": "introduccion-oraculo-de-relleno",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 86
+    },
+    "pregunta": "¿Qué es un padding oracle?",
+    "correcta": "Un servidor que responde distinto según sea válido o no el relleno del mensaje",
+    "distractores": [
+      "Un servidor que cifra el relleno de cada mensaje con la clave de sesión del cliente",
+      "Un servidor que revela la longitud del mensaje por el tamaño de su respuesta"
+    ],
+    "explicacion": "El oráculo es la diferencia de respuesta ante relleno válido o inválido. Cifrar el relleno no es ningún oráculo. Revelar la longitud por el tamaño es lo que aprovecha CRIME."
+  },
+  {
+    "id": "ssl-tls-047",
+    "concepto": "introduccion-oraculo-de-relleno",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 86
+    },
+    "pregunta": "En el ejemplo del padding oracle, ¿cómo averigua el atacante el primer byte del valor intermedio?",
+    "correcta": "Prueba valores del último byte del IV hasta que el servidor responde 200, no 500",
+    "distractores": [
+      "Prueba claves de cifrado distintas hasta que el servidor responde 200 en vez de 500",
+      "Mide cuánto tarda el servidor en responder a cada valor que prueba en el IV"
+    ],
+    "explicacion": "El 200 indica un relleno válido, y de ese valor del IV se deduce el byte con un XOR. No se prueban claves: la clave no se conoce ni se necesita. Medir tiempos es Lucky 13, y el ejemplo usa la respuesta, no el tiempo."
+  },
+  {
+    "id": "ssl-tls-060",
+    "concepto": "introduccion-perfect-forward-secrecy",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 49
+    },
+    "pregunta": "¿Qué es el ataque store-now-decrypt-later, que el Forward Secrecy evita?",
+    "correcta": "Capturar tráfico hoy y descifrarlo después con la clave privada del servidor filtrada",
+    "distractores": [
+      "Capturar tráfico cifrado hoy y reenviarlo más tarde al servidor para repetir la operación",
+      "Guardar cookies hoy y usarlas después para suplantar al usuario ante el sitio"
+    ],
+    "explicacion": "Se captura ahora y se descifra después con una clave filtrada. Reenviar tráfico capturado es un replay. Usar cookies guardadas es un robo de sesión."
+  }
+]
