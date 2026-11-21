@@ -27,6 +27,21 @@ Una función que nadie usa no pasa a Rust, y su código se va. Una función que 
 - **El API envía solo lo que la pantalla muestra.** Un valor intermedio de un cálculo se queda en Rust.
 - **El servidor no tiene los flags `--banco` ni `--historial`.** Cada test de Rust crea una carpeta de examen temporal con sus archivos. `ln/preguntas-ejemplo.json` pasa a la carpeta de los tests de Rust.
 
+## El flujo de trabajo
+
+1. El grilling termina con la revisión de la lógica de [el modelo](el-modelo.md): primero la caja de la pregunta, después el estado del concepto, y al final la sesión de 12 preguntas.
+2. `/to-spec` convierte las decisiones en un spec, y `/to-tickets` lo corta en tickets con sus dependencias.
+3. Cada ticket se construye con un `/implement`, con `/clear` entre ticket y ticket.
+
+La rama `feat/bkt` y su modelo BKT quedan fuera de la migración, congelados hasta que el dueño los nombre. La migración pasa a Rust el modelo de cajas.
+
+## Las preguntas abiertas
+
+- **El modelo que pasa a Rust.** Falta confirmar las 3 máquinas de [el modelo](el-modelo.md).
+- **El estado y el dominio del concepto.** El dueño quiere revisar la lógica antes de decidir si el concepto tiene una sola medida.
+- **Las máquinas de estados explícitas.** La propuesta: el spec define cada estado y cada transición, y Rust tiene un `enum` por máquina, como `enum Caja { Nueva, Una, Dos, Tres }`.
+- **Un prototipo de la sesión.** La propuesta: un script en una rama `prototype/` simula un mes de sesiones sin el bloque de estudio, y mide cuándo vuelve cada pregunta.
+
 ## El final de este doc
 
 Este doc se borra cuando la migración termina.
