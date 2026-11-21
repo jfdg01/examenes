@@ -6,19 +6,48 @@
   const carpeta = location.pathname.split("/")[1];
   const claveObjetivo = `${carpeta}-objetivo`;
   const claveRonda = `${carpeta}-ronda`;
+  const clavePendientes = `${carpeta}-pendientes`;
   let objetivo = $state(Number(localStorage.getItem(claveObjetivo) ?? 5));
   let datos = $state.raw<Datos | null>(null);
+  let error = $state("");
   const inicio = $derived(datos && nucleo.inicio(datos, objetivo));
+
+  // Una respuesta sin red espera en `localStorage` hasta que llega al servidor.
+  const pendientes = (): Respuesta[] => JSON.parse(localStorage.getItem(clavePendientes) ?? "[]");
+
+  // Los envíos van en cola, y una respuesta nueva solo entra al final de las pendientes.
+  // Así las enviadas son las primeras. El error es "" cuando todas llegaron.
+  let cola = Promise.resolve("");
+  function enviarPendientes() {
+    return (cola = cola.then(async () => {
+      const enviando = pendientes();
+      if (!enviando.length) return "";
+      const r = await fetch("api/respuestas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(enviando),
+      }).catch(() => null);
+      if (!r) return "Sin red: la respuesta se envía al volver la red.";
+      if (!r.ok) return `El servidor responde ${r.status}, y la respuesta sigue en este dispositivo.`;
+      localStorage.setItem(clavePendientes, JSON.stringify(pendientes().slice(enviando.length)));
+      return "";
+    }));
+  }
+  // Con la red de vuelta, las pendientes salen y el historial llega con las respuestas de otros dispositivos.
+  addEventListener("online", cargarInicio);
 
   // La página vive en /<carpeta>/, así que la ruta relativa llega al API de su examen.
   async function cargarInicio() {
+    error = await enviarPendientes();
     try {
       const r = await fetch("api/inicio");
       if (!r.ok) throw new Error(`El servidor responde ${r.status}`);
-      datos = await r.json();
-      document.title = datos!.examen.titulo;
+      const d: Datos = await r.json();
+      // Una respuesta que no llegó al servidor sigue en el historial de la pantalla.
+      datos = { ...d, historial: nucleo.unir(d.historial, pendientes()) };
+      document.title = datos.examen.titulo;
     } catch (e) {
-      error = (e as Error).message;
+      error = datos ? "Sin red: el inicio usa el historial de este dispositivo." : (e as Error).message;
     }
   }
 
@@ -59,7 +88,6 @@
   let i = $state(0);
   // `opcion` es null con "En blanco".
   let eleccion = $state<{ opcion: number | null; respuesta: Respuesta } | null>(null);
-  let error = $state("");
   let simulacro = $state(false);
   let resultados: Resultado[] = [];
   let nota = $state<NotaDelSimulacro | null>(null);
@@ -120,12 +148,9 @@
     ronda = { estado: "Pregunta", contestada: true };
     resultados.push(respuesta.resultado);
     guardar();
-    const r = await fetch("api/respuestas", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify([respuesta]),
-    }).catch(() => null);
-    error = r?.ok ? "" : "La respuesta no llegó al servidor.";
+    localStorage.setItem(clavePendientes, JSON.stringify([...pendientes(), respuesta]));
+    datos = { ...datos!, historial: nucleo.unir(datos!.historial, [respuesta]) };
+    error = await enviarPendientes();
   }
 
   function siguiente() {

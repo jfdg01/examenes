@@ -69,6 +69,13 @@ pub fn gana(a: Ts<Guardado>, b: Ts<Guardado>) -> Js<Guardado> {
 }
 
 #[wasm_bindgen]
+pub fn unir(a: Vec<Ts<Respuesta>>, b: Vec<Ts<Respuesta>>) -> Result<Vec<Ts<Respuesta>>, JsError> {
+    let a: Vec<_> = a.into_iter().map(leer).collect::<Result<_, _>>()?;
+    let b: Vec<_> = b.into_iter().map(leer).collect::<Result<_, _>>()?;
+    crate::unir(&a, &b).into_iter().map(dar).collect()
+}
+
+#[wasm_bindgen]
 pub fn restaurar(datos: Ts<Datos>, guardado: Ts<Guardado>, ahora: f64) -> Result<Option<Ts<RondaAMedias>>, JsError> {
     let d = leer(datos)?;
     crate::restaurar(&d.banco, &d.historial, &leer(guardado)?, &mut azar(ahora)).map(dar).transpose()

@@ -340,6 +340,14 @@ pub fn gana(a: Guardado, b: Guardado) -> Guardado {
     if b.guardada > a.guardada { b } else { a }
 }
 
+/// Las respuestas de 2 historiales en orden de hora. Una respuesta con el mismo `id` y `ts` entra una vez.
+pub fn unir(a: &[Respuesta], b: &[Respuesta]) -> Vec<Respuesta> {
+    let mut vistas = std::collections::HashSet::new();
+    let mut u: Vec<Respuesta> = a.iter().chain(b).filter(|r| vistas.insert((&r.id, &r.ts))).cloned().collect();
+    u.sort_by_key(|r| segundos(&r.ts));
+    u
+}
+
 /// La ronda a medias de un guardado, con las preguntas del banco. La pregunta actual es la primera sin resultado.
 #[derive(Serialize, Tsify)]
 pub struct RondaAMedias {
@@ -954,5 +962,14 @@ mod tests {
         let banco = [pregunta("a1", "a")];
         assert!(restaurar(&banco, &[], &guardado(1, &["a1", "x9"], &[]), &mut Azar::new(1)).is_none());
         assert!(restaurar(&banco, &[], &Guardado { guardada: 1, ronda: None }, &mut Azar::new(1)).is_none());
+    }
+
+    #[test]
+    fn la_union_de_2_historiales_va_en_orden_de_hora_sin_repeticiones() {
+        let pc = [respuesta("a1", "2026-01-01T10:00:00Z", true, true), respuesta("b1", "2026-01-01T12:00:00Z", false, true)];
+        let movil = [respuesta("c1", "2026-01-01T11:00:00Z", true, false), pc[1].clone()];
+        let u = unir(&pc, &movil);
+        assert_eq!(u.iter().map(|r| r.id.as_str()).collect::<Vec<_>>(), ["a1", "c1", "b1"]);
+        assert_eq!(unir(&movil, &pc), u);
     }
 }
