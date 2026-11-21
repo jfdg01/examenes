@@ -1,6 +1,8 @@
 # PS: Protocolos de Seguridad
 
-La fecha y el formato del examen faltan. Las cifras de `examen.json` son provisionales: un simulacro de 20 preguntas con 4 opciones, 25 minutos y `penalizacion` 0. Cambia cada cifra en `examen.json` cuando sepas el formato del examen.
+El examen es el lunes 23 de noviembre de 2026, a las 16:30. Tiene preguntas tipo test, con 3 opciones y una sola correcta. Un fallo resta 1/3 de un acierto, y una pregunta en blanco no cuenta.
+
+El número de preguntas y la duración faltan. El simulacro usa 20 preguntas y 25 minutos, cifras provisionales de `examen.json`.
 
 ## El temario
 
