@@ -6608,6 +6608,38 @@
     "explicacion": "Un cierre que no es el seguro puede ser un ataque. Que TCP cierre no valida el cierre de TLS. No se trata como un error de red, y un atacante puede provocar el corte."
   },
   {
+    "id": "aplicacion-017",
+    "concepto": "ssl-tls-hsts",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "Un navegador recibe la cabecera Strict-Transport-Security: max-age=31536000. ¿Qué hace a partir de ese momento?",
+    "correcta": "Antepone https a las URLs de ese sitio durante el período indicado",
+    "distractores": [
+      "Comprueba el certificado del sitio contra las claves públicas fijadas",
+      "Prueba https primero, y pasa a HTTP si el servidor no responde"
+    ],
+    "explicacion": "Con HSTS el navegador antepone https durante el período de max-age. Comprobar claves fijadas es HPKP. Con HSTS no hay vuelta a HTTP: si no hay https, no se conecta."
+  },
+  {
+    "id": "aplicacion-021",
+    "concepto": "ssl-tls-public-key-pinning",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Por qué abandonó Google HPKP?",
+    "correcta": "Podía contradecir a una autoridad de certificación o a un certificado, incluso por un error",
+    "distractores": [
+      "Obligaba a cifrar las cabeceras HTTP, y frenaba cada petición con un nuevo handshake completo de TLS",
+      "Dejaba las claves fijadas expuestas a un atacante en la red"
+    ],
+    "explicacion": "El problema de HPKP era poder contradecir a una CA o a un certificado, incluso por un error. Las cabeceras no se cifran por HPKP. Las claves fijadas son públicas, y su exposición no es un problema."
+  },
+  {
     "id": "aplicacion-022",
     "concepto": "aplicacion-ssh-funcion",
     "tema": "aplicacion",
@@ -8288,6 +8320,422 @@
     "explicacion": "El cifrado da bytes arbitrarios, y SMTP exige ASCII. La compresión es de ZIP. La firma se verifica sin pasar por radix-64."
   },
   {
+    "id": "ssl-tls-001",
+    "concepto": "ssl-tls-sslstrip-mitm",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué consigue un atacante con sslstrip?",
+    "correcta": "Que el navegador de la víctima use HTTP creyendo que usa HTTPS",
+    "distractores": [
+      "Que el navegador de la víctima acepte un certificado falso sin mostrar avisos",
+      "Que el servidor descifre el tráfico de la víctima con una clave más débil"
+    ],
+    "explicacion": "sslstrip fuerza HTTP en un navegador que cree estar en HTTPS (HTTPS stripping). Un certificado falso es otro ataque, y el navegador sí avisaría; sslstrip no toca los certificados. Debilitar la clave del cifrado es el downgrade de SSLv2, un ataque distinto: aquí el cifrado desaparece, no se debilita."
+  },
+  {
+    "id": "ssl-tls-002",
+    "concepto": "ssl-tls-sslstrip-mitm",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 21
+    },
+    "pregunta": "En un MitM con sslstrip lanzado con bettercap, ¿por qué la víctima ve la misma página de siempre, pero sin cifrar?",
+    "correcta": "El atacante pide la página al sitio real por HTTPS y se la reenvía a la víctima por HTTP",
+    "distractores": [
+      "El atacante sirve una copia de la página desde su propio servidor con un certificado autofirmado",
+      "El navegador baja a HTTP porque el certificado del sitio real ha caducado"
+    ],
+    "explicacion": "El atacante hace de proxy: habla HTTPS con el sitio real y HTTP con la víctima, así que el contenido es el auténtico. Una copia en su servidor sería otra página, y un certificado autofirmado provocaría un aviso. El navegador no baja solo a HTTP ante un certificado caducado: un error de certificado no degrada la conexión."
+  },
+  {
+    "id": "ssl-tls-003",
+    "concepto": "ssl-tls-sslstrip-mitm",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué necesita el atacante para que sslstrip funcione?",
+    "correcta": "Estar situado entre la víctima y el servidor, tras un MitM previo",
+    "distractores": [
+      "Conocer la clave privada del servidor al que se conecta la víctima",
+      "Estar situado entre la víctima y el servidor, tras romper el cifrado TLS"
+    ],
+    "explicacion": "sslstrip exige un MitM previo: el atacante debe estar entre la víctima y el servidor. No necesita la clave privada del servidor, porque no descifra nada. Tampoco rompe el cifrado TLS: evita que exista, mostrando HTTP a la víctima."
+  },
+  {
+    "id": "ssl-tls-004",
+    "concepto": "ssl-tls-sslstrip-dominio-parecido",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 21
+    },
+    "pregunta": "En un MitM de sslstrip, ¿para qué sirve que los enlaces apunten a un dominio parecido, como wwwww-facebook.com?",
+    "correcta": "Para que la víctima siga navegando por HTTP a través del atacante sin notar el cambio",
+    "distractores": [
+      "Para que el certificado del sitio real siga siendo válido también en el dominio nuevo del atacante",
+      "Para que el servidor real cifre todas sus respuestas con la clave pública que le da el atacante"
+    ],
+    "explicacion": "El dominio casi idéntico mantiene a la víctima en el proxy del atacante sin que repare en la dirección. El certificado del sitio real no vale para otro dominio. El servidor real cifra con su propia sesión TLS con el atacante, no con una clave del atacante."
+  },
+  {
+    "id": "ssl-tls-005",
+    "concepto": "ssl-tls-sslstrip-dominio-parecido",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué ve una víctima de sslstrip cuando el atacante le muestra un dominio parecido al del sitio?",
+    "correcta": "Una página idéntica a la real, servida por HTTP desde un dominio casi igual",
+    "distractores": [
+      "Un aviso de certificado no válido, que debe aceptar manualmente para poder continuar",
+      "Una página con el candado de HTTPS, pero con el contenido preparado por el atacante"
+    ],
+    "explicacion": "El proxy devuelve el contenido auténtico por HTTP, así que la página es idéntica. No hay aviso de certificado, porque no se presenta ningún certificado falso. Tampoco hay candado: la conexión de la víctima no es HTTPS, y el contenido no es del atacante, sino del sitio real."
+  },
+  {
+    "id": "ssl-tls-006",
+    "concepto": "ssl-tls-sslstrip-dominio-parecido",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Por qué una víctima de sslstrip no sospecha de un dominio como wwwww-facebook.com?",
+    "correcta": "El dominio se parece al real y el contenido llega del sitio auténtico a través del proxy",
+    "distractores": [
+      "El navegador lo marca como de confianza porque el sitio real lo tiene precargado en su lista de HSTS",
+      "El certificado del dominio parecido lo firma la misma CA que firma el certificado del sitio real"
+    ],
+    "explicacion": "El parecido del dominio y el contenido auténtico hacen que nada parezca raro. HSTS precargado forzaría HTTPS al sitio real y frenaría el ataque, no lo ayuda. Aquí no se presenta certificado alguno, porque la víctima habla HTTP con el atacante."
+  },
+  {
+    "id": "ssl-tls-008",
+    "concepto": "ssl-tls-hsts",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 56
+    },
+    "pregunta": "¿Por qué HSTS frena un ataque sslstrip?",
+    "correcta": "El navegador cambia el enlace HTTP por HTTPS y no deja continuar si el certificado falla",
+    "distractores": [
+      "El servidor detecta que el atacante está en medio de la conexión y la corta antes de responder",
+      "El navegador cifra el tráfico HTTP con una clave que el atacante no conoce y nunca ha visto"
+    ],
+    "explicacion": "Con HSTS el navegador nunca habla HTTP con ese sitio, así que no hay tráfico que degradar. El servidor no puede detectar al atacante: la política la aplica el navegador. El tráfico HTTP no se cifra: se sustituye por HTTPS."
+  },
+  {
+    "id": "ssl-tls-009",
+    "concepto": "ssl-tls-hsts",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 56
+    },
+    "pregunta": "¿Qué limitación tiene HSTS en el primer acceso de un usuario a un sitio?",
+    "correcta": "Necesita una conexión previa por SSL/TLS, o estar en la lista precargada",
+    "distractores": [
+      "Necesita que el usuario instale antes un certificado raíz propio del sitio",
+      "Necesita que el servidor use claves de 2048 bits o más en su certificado"
+    ],
+    "explicacion": "El navegador solo conoce la política HSTS tras una conexión previa por SSL/TLS, o si el sitio viene precargado en una lista. No se instala ningún certificado raíz del sitio. El tamaño de clave del servidor no condiciona HSTS."
+  },
+  {
+    "id": "ssl-tls-010",
+    "concepto": "ssl-tls-renegociacion-inyeccion",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué permite a un atacante MitM la renegociación insegura de SSL?",
+    "correcta": "Inyectar peticiones en la sesión HTTPS, que el servidor atiende como de la víctima",
+    "distractores": [
+      "Descifrar la sesión HTTPS de la víctima leyendo la clave que se negocia al renegociar",
+      "Cambiar el certificado del servidor por otro propio sin que el navegador muestre ningún aviso"
+    ],
+    "explicacion": "El atacante inyecta contenido y hace peticiones en nombre de la víctima. No descifra la sesión: no ve la clave negociada. Tampoco cambia el certificado: el fallo está en cómo se une la renegociación a la sesión previa."
+  },
+  {
+    "id": "ssl-tls-011",
+    "concepto": "ssl-tls-renegociacion-inyeccion",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 20
+    },
+    "pregunta": "En el ataque de renegociación insegura, ¿por qué el servidor atiende la petición inyectada con la cookie de la víctima?",
+    "correcta": "Une el texto del atacante y la petición de la víctima en una sola, con la cookie dentro",
+    "distractores": [
+      "El atacante roba la cookie de la víctima antes de renegociar y la añade a su propia petición",
+      "El servidor reutiliza la cookie de la sesión anterior al renegociar y la añade a la petición"
+    ],
+    "explicacion": "El servidor recibe primero la petición del atacante, y la petición de la víctima, tras la renegociación, queda absorbida como cabecera de la primera, cookie incluida. El atacante nunca ve la cookie, porque el tráfico va cifrado. El servidor no reutiliza cookies por renegociar."
+  },
+  {
+    "id": "ssl-tls-012",
+    "concepto": "ssl-tls-renegociacion-inyeccion",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Cómo se corrige la renegociación insegura de SSL?",
+    "correcta": "Con Secure Renegotiation, o deshabilitando la renegociación",
+    "distractores": [
+      "Limitando las peticiones por minuto con un WAF delante del servidor",
+      "Eliminando la compresión de las respuestas HTTP que genera el servidor"
+    ],
+    "explicacion": "La solución es deshabilitar la renegociación o usar solo Secure Renegotiation. Limitar peticiones con un WAF es una mitigación de CRIME y BREACH. Quitar la compresión de las respuestas HTTP tampoco afecta a este fallo."
+  },
+  {
+    "id": "ssl-tls-013",
+    "concepto": "ssl-tls-renegociacion-dos",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Por qué la renegociación de SSL permite un ataque de denegación de servicio?",
+    "correcta": "Establecer la conexión cuesta al servidor unas 15 veces más procesamiento que al cliente",
+    "distractores": [
+      "Cada renegociación obliga al servidor a descifrar el tráfico anterior de todos los clientes",
+      "El cliente puede dejar la renegociación a medias y bloquear el puerto del servidor"
+    ],
+    "explicacion": "El desequilibrio de coste, unas 15 veces más para el servidor, hace rentable repetir renegociaciones hasta saturarlo. El servidor no descifra tráfico de otros clientes al renegociar. Dejar la renegociación a medias no bloquea el puerto: el problema es el coste de cada una."
+  },
+  {
+    "id": "ssl-tls-014",
+    "concepto": "ssl-tls-renegociacion-dos",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 11
+    },
+    "pregunta": "Un atacante repite renegociaciones sobre una conexión SSL. ¿Qué consigue?",
+    "correcta": "Saturar el servidor, que gasta mucha más capacidad que el atacante en cada una",
+    "distractores": [
+      "Obtener la clave de sesión comparando los mensajes de cada una de las renegociaciones",
+      "Forzar al servidor a elegir un algoritmo de cifrado más débil que el negociado antes"
+    ],
+    "explicacion": "Cada renegociación pesa más al servidor que al atacante, y repetirlas lo satura. Las renegociaciones no revelan la clave de sesión. Forzar un cifrado débil es el ataque de downgrade del handshake de SSLv2, no una denegación de servicio."
+  },
+  {
+    "id": "ssl-tls-015",
+    "concepto": "ssl-tls-renegociacion-dos",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué medida frena la denegación de servicio por renegociación en SSL?",
+    "correcta": "Deshabilitar la renegociación en el servidor",
+    "distractores": [
+      "Activar HSTS en el servidor",
+      "Usar claves de 2048 bits en el intercambio de claves"
+    ],
+    "explicacion": "Sin renegociación, el atacante no puede repetirla. HSTS fuerza HTTPS, y no limita el coste del handshake. Subir el tamaño de clave encarece más el handshake, no lo reduce."
+  },
+  {
+    "id": "ssl-tls-016",
+    "concepto": "ssl-tls-nul-byte-certificados",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué debilidad usa el ataque del byte NUL contra los certificados?",
+    "correcta": "Las CAs leen el nombre con su longitud, y los navegadores lo leen hasta el primer NUL",
+    "distractores": [
+      "Las CAs y los navegadores comparan los nombres sin distinguir mayúsculas de minúsculas",
+      "Las CAs firman con MD5 y los navegadores aceptan certificados que colisionan sin avisar"
+    ],
+    "explicacion": "El desacuerdo entre cómo gestionan la cadena las CAs (ASN.1, con longitud) y los navegadores (cadenas de C, que terminan en NUL) crea el ataque. Las mayúsculas no intervienen. Las colisiones de MD5 son el ataque de Flame, y no el del byte NUL."
+  },
+  {
+    "id": "ssl-tls-017",
+    "concepto": "ssl-tls-nul-byte-certificados",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 26
+    },
+    "pregunta": "Un certificado lleva el nombre www.paypal.com\\0.thoughtcrime.org. ¿Cómo lo interpreta un navegador que lee cadenas al estilo de C?",
+    "correcta": "Como un certificado emitido para www.paypal.com",
+    "distractores": [
+      "Como un certificado emitido para thoughtcrime.org",
+      "Como un certificado no válido, por contener un carácter extraño"
+    ],
+    "explicacion": "El navegador corta la cadena en el NUL y lee www.paypal.com. La CA, que usa la longitud, entiende que el nombre es del dominio thoughtcrime.org: esa es su lectura, y no la del navegador. El navegador no rechaza el certificado: no lo ve como extraño."
+  },
+  {
+    "id": "ssl-tls-018",
+    "concepto": "ssl-tls-nul-byte-certificados",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Por qué el ataque del byte NUL permitía un MitM invisible para la víctima?",
+    "correcta": "El certificado lo firmaba una CA de confianza, así que el navegador no mostraba aviso",
+    "distractores": [
+      "El atacante lo sustituía por uno autofirmado que el navegador aceptaba sin mostrar ningún aviso",
+      "El atacante degradaba la conexión a HTTP y ocultaba el candado de la barra de direcciones"
+    ],
+    "explicacion": "Una CA de confianza emitía realmente el certificado, y el navegador lo daba por bueno para otro dominio. Un certificado autofirmado sí provocaría aviso. Degradar a HTTP es sslstrip, en cuyo caso no hay certificado ni candado."
+  },
+  {
+    "id": "ssl-tls-019",
+    "concepto": "ssl-tls-sidejacking",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué es el sidejacking?",
+    "correcta": "Un robo de sesión que recupera identificadores de un tráfico sin cifrar",
+    "distractores": [
+      "Un robo de sesión que descifra el tráfico TLS para obtener los identificadores",
+      "Un ataque que fuerza al navegador a usar HTTP aunque el sitio ofrezca HTTPS"
+    ],
+    "explicacion": "El sidejacking recupera identificadores de sesión que viajan sin cifrar. No descifra TLS: no lo necesita. Forzar HTTP en lugar de HTTPS es HTTPS stripping, el ataque de sslstrip."
+  },
+  {
+    "id": "ssl-tls-020",
+    "concepto": "ssl-tls-sidejacking",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Por qué Firesheep hizo trivial el sidejacking en redes inalámbricas?",
+    "correcta": "El tráfico sin cifrar se captura en el aire, sin hacer MitM ni descifrar",
+    "distractores": [
+      "El plugin rompe el cifrado WPA de la red inalámbrica para poder leer todas las cookies",
+      "El plugin falsifica certificados de los sitios para hacer un MitM sobre HTTPS"
+    ],
+    "explicacion": "En una red inalámbrica el tráfico sin cifrar se puede escuchar directamente. El plugin no rompe el cifrado de la red. Falsificar certificados es otro ataque, y no hace falta cuando las cookies viajan en claro."
+  },
+  {
+    "id": "ssl-tls-021",
+    "concepto": "ssl-tls-sidejacking",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué necesita el sidejacking para tener éxito?",
+    "correcta": "Que el sitio envíe el identificador de sesión sin cifrar",
+    "distractores": [
+      "Que el sitio use compresión en TLS",
+      "Que el atacante inyecte código en el navegador de la víctima"
+    ],
+    "explicacion": "Basta con tráfico sin cifrar: el atacante no descifra nada. La compresión en TLS es el requisito de CRIME. Inyectar código en el navegador es el requisito de BEAST."
+  },
+  {
+    "id": "ssl-tls-022",
+    "concepto": "ssl-tls-beast",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué debilidad explota BEAST?",
+    "correcta": "Los vectores de inicialización predecibles del modo CBC en SSLv3 y TLS 1.0",
+    "distractores": [
+      "Los sesgos estadísticos en los primeros bytes de la salida del algoritmo RC4",
+      "El mensaje de error distinto del servidor cuando el relleno del mensaje es incorrecto"
+    ],
+    "explicacion": "BEAST usa IVs predecibles en CBC. Los sesgos de RC4 son el ataque BIAS. El error distinto según el relleno es la base de un padding oracle, como POODLE."
+  },
+  {
+    "id": "ssl-tls-023",
+    "concepto": "ssl-tls-beast",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué hace el atacante de BEAST para descifrar una cookie de sesión byte a byte?",
+    "correcta": "Inyecta bloques conocidos desde el navegador y compara el resultado cifrado",
+    "distractores": [
+      "Mide el tiempo de respuesta del servidor al alterar el relleno del mensaje",
+      "Comprime los bloques y mide el tamaño de los paquetes que genera el servidor"
+    ],
+    "explicacion": "Con IVs predecibles, el atacante inyecta bloques conocidos con JavaScript y compara el resultado cifrado. Medir el tiempo ante cambios de relleno es Lucky 13. Medir el tamaño tras comprimir es CRIME."
+  },
+  {
+    "id": "ssl-tls-024",
+    "concepto": "ssl-tls-beast",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué hace el mecanismo 1/n-1 split que incluyeron los navegadores tras BEAST?",
+    "correcta": "Divide cada bloque en 2, con 1 byte en el primero, y simula IVs aleatorios",
+    "distractores": [
+      "Divide la cookie en 2 cabeceras para que el atacante no la capture entera en la red",
+      "Cifra cada byte con una clave distinta derivada del IV"
+    ],
+    "explicacion": "El 1/n-1 split no elimina la vulnerabilidad, pero impide descifrar byte a byte porque simula IVs aleatorios. Partir la cookie en cabeceras no cambia el cifrado. Cifrar cada byte con una clave distinta no es lo que hace el mecanismo."
+  },
+  {
+    "id": "ssl-tls-025",
+    "concepto": "ssl-tls-tls11-cbc",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué cambia TLS 1.1 respecto a TLS 1.0 en el modo CBC?",
+    "correcta": "El vector de inicialización pasa de implícito a explícito",
+    "distractores": [
+      "El vector de inicialización pasa de explícito a implícito",
+      "El relleno se completa con valores aleatorios en cada bloque"
+    ],
+    "explicacion": "TLS 1.1 hace explícito el IV. Pasar a un IV implícito sería lo contrario, y es lo que tenía TLS 1.0. El relleno aleatorio no forma parte de los cambios."
+  },
+  {
+    "id": "ssl-tls-026",
+    "concepto": "ssl-tls-tls11-cbc",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué ataque a CBC cierra el IV explícito de TLS 1.1?",
+    "correcta": "BEAST, que necesita IVs predecibles",
+    "distractores": [
+      "CRIME, que necesita compresión en TLS",
+      "Heartbleed, que necesita la extensión Heartbeat"
+    ],
+    "explicacion": "Con IV explícito, el atacante de BEAST ya no predice el siguiente IV. CRIME depende de la compresión, y no del IV. Heartbleed es un bug de una implementación de OpenSSL."
+  },
+  {
+    "id": "ssl-tls-027",
+    "concepto": "ssl-tls-tls11-cbc",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Por qué TLS 1.1 elimina los errores generados por el relleno?",
+    "correcta": "Para proteger el modo CBC de ataques que se basan en esas respuestas de error",
+    "distractores": [
+      "Para permitir la interoperabilidad de TLS 1.1 con servidores que solo hablan SSLv3",
+      "Para reducir el coste de procesamiento del handshake en servidores muy cargados"
+    ],
+    "explicacion": "Las respuestas de error por relleno dan información a un padding oracle contra CBC. TLS 1.0 no permitía interoperar con SSLv3, y TLS 1.1 tampoco cambia eso. El coste del handshake no cambia con los errores de relleno."
+  },
+  {
     "id": "ssl-tls-029",
     "concepto": "transporte-aead-tls",
     "tema": "ssl-tls",
@@ -8302,6 +8750,246 @@
       "Evitar el intercambio de claves, que pasa a ser implícito entre cliente y servidor"
     ],
     "explicacion": "AEAD cifra y autentica a la vez, así que se pueden evitar los cifrados por bloques o de flujo usados por separado. Los certificados y el intercambio de claves siguen haciendo falta."
+  },
+  {
+    "id": "ssl-tls-031",
+    "concepto": "ssl-tls-sslv1-fallos",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué dos fallos de diseño tenía SSL v1?",
+    "correcta": "No controlaba los cambios en el mensaje y no evitaba el reenvío de paquetes",
+    "distractores": [
+      "No cifraba el mensaje y no autenticaba al servidor frente a un atacante en medio",
+      "No controlaba los cambios en el mensaje y no permitía renegociar"
+    ],
+    "explicacion": "SSL v1 carecía de integridad y de protección contra el reenvío. No se le atribuye falta de cifrado ni de autenticación del servidor. La renegociación no figura entre sus problemas."
+  },
+  {
+    "id": "ssl-tls-032",
+    "concepto": "ssl-tls-sslv1-fallos",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué ataque permitía SSL v1 al no evitar el reenvío de paquetes?",
+    "correcta": "Un replay: el atacante reenvía paquetes capturados y el servidor los acepta",
+    "distractores": [
+      "Un downgrade: el atacante fuerza un algoritmo de cifrado más débil en el handshake",
+      "Un cierre forzado: el atacante inyecta paquetes TCP FIN"
+    ],
+    "explicacion": "Sin protección contra el reenvío, un replay funciona. Forzar un cifrado débil en el handshake y los FIN inyectados son problemas de SSL v2."
+  },
+  {
+    "id": "ssl-tls-033",
+    "concepto": "ssl-tls-sslv1-fallos",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Por qué el CRC que se añadió a SSL v1 no resolvió su falta de integridad?",
+    "correcta": "Porque un CRC es débil desde el punto de vista criptográfico",
+    "distractores": [
+      "Porque un CRC cifra el mensaje con una clave demasiado corta",
+      "Porque un CRC no detecta ninguna modificación accidental del mensaje"
+    ],
+    "explicacion": "Un CRC detecta errores accidentales, pero un atacante puede recalcularlo: es débil criptográficamente. Un CRC no cifra nada. Detecta modificaciones accidentales; falla ante un atacante."
+  },
+  {
+    "id": "ssl-tls-034",
+    "concepto": "ssl-tls-sslv2-fallos",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué permitía un MitM durante el handshake de SSL v2?",
+    "correcta": "Forzar la elección de un algoritmo de cifrado más débil que el normal",
+    "distractores": [
+      "Sustituir el certificado del servidor sin que el cliente lo notase en el navegador",
+      "Obligar a ambos a pasar a SSL v1 para reenviar paquetes"
+    ],
+    "explicacion": "Un MitM podía forzar un cifrado más débil durante el intercambio de claves. Sustituir el certificado y volver a SSL v1 no son problemas descritos de SSL v2."
+  },
+  {
+    "id": "ssl-tls-035",
+    "concepto": "ssl-tls-sslv2-fallos",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué podía hacer un atacante con paquetes TCP FIN en una sesión de SSL v2?",
+    "correcta": "Inyectarlos para forzar el cierre de la sesión establecida",
+    "distractores": [
+      "Inyectarlos para obtener la clave de sesión",
+      "Inyectarlos para reiniciar el handshake con un cifrado más débil"
+    ],
+    "explicacion": "Inyectar FIN cierra la sesión: es un corte, no una fuga. Un FIN no revela la clave de sesión. Tampoco reinicia el handshake."
+  },
+  {
+    "id": "ssl-tls-036",
+    "concepto": "ssl-tls-sslv2-fallos",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué debilidad de SSL v2 afectaba a la comprobación de integridad de los mensajes?",
+    "correcta": "Usaba MD5 como algoritmo de hash",
+    "distractores": [
+      "Usaba un CRC como código de comprobación",
+      "No incluía ninguna comprobación de integridad"
+    ],
+    "explicacion": "SSL v2 verificaba la integridad con MD5. El CRC se añadió a SSL v1 después de que este no tuviera integridad: ambos son errores de versión."
+  },
+  {
+    "id": "ssl-tls-037",
+    "concepto": "ssl-tls-crime",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 52
+    },
+    "pregunta": "¿Qué explota CRIME para descifrar partes de una petición HTTPS?",
+    "correcta": "La compresión de TLS, cuyo tamaño cambia según el contenido repetido",
+    "distractores": [
+      "La compresión de HTTP aplicada al cuerpo de la respuesta del servidor",
+      "El vector de inicialización predecible del modo CBC en SSLv3"
+    ],
+    "explicacion": "CRIME mide cómo cambia el tamaño al comprimir con TLS. La compresión HTTP de la respuesta es BREACH. El IV predecible es BEAST."
+  },
+  {
+    "id": "ssl-tls-038",
+    "concepto": "ssl-tls-crime",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 52
+    },
+    "pregunta": "¿Qué debe poder hacer el atacante de CRIME?",
+    "correcta": "Inyectar texto claro en la petición y medir el tamaño de los paquetes enviados",
+    "distractores": [
+      "Inyectar texto claro en la petición y medir el tiempo de respuesta del servidor",
+      "Leer la memoria del servidor y medir el tamaño de los paquetes enviados"
+    ],
+    "explicacion": "CRIME necesita inyectar texto (iframe, XSS) y medir tamaños (MitM). El tiempo de respuesta es la medida de Lucky 13. Leer la memoria del servidor es Heartbleed."
+  },
+  {
+    "id": "ssl-tls-039",
+    "concepto": "ssl-tls-crime",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 52
+    },
+    "pregunta": "¿Cómo respondieron los fabricantes de navegadores a CRIME?",
+    "correcta": "Eliminando la compresión de TLS",
+    "distractores": [
+      "Eliminando la compresión de HTTP en los servidores",
+      "Dividiendo cada bloque en 2 con 1/n-1 split"
+    ],
+    "explicacion": "Sin compresión en TLS, CRIME no funciona. Quitar la de HTTP es la reacción a BREACH, y no es cosa de navegadores. El 1/n-1 split es la reacción a BEAST."
+  },
+  {
+    "id": "ssl-tls-040",
+    "concepto": "ssl-tls-breach",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 66
+    },
+    "pregunta": "¿Qué diferencia a BREACH de CRIME?",
+    "correcta": "Usa la compresión de HTTP, así que desactivar la de TLS no lo evita",
+    "distractores": [
+      "Usa la compresión de TLS y busca los secretos en las cabeceras de la petición",
+      "No necesita inyectar peticiones en el cliente"
+    ],
+    "explicacion": "BREACH explota la compresión HTTP (gzip, Deflate). Usar la de TLS es CRIME. BREACH, como CRIME, sí requiere inyectar peticiones."
+  },
+  {
+    "id": "ssl-tls-041",
+    "concepto": "ssl-tls-breach",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 66
+    },
+    "pregunta": "¿Dónde están los secretos que BREACH descifra?",
+    "correcta": "En el cuerpo de la respuesta HTTP, como un token CSRF",
+    "distractores": [
+      "En la cabecera de la petición HTTP, como una cookie",
+      "En la cabecera de la respuesta HTTP, como una redirección"
+    ],
+    "explicacion": "BREACH busca secretos en el cuerpo de la respuesta, como tokens CSRF. Los secretos de las cabeceras de petición son el objetivo de CRIME. No hay secretos en la cabecera de respuesta."
+  },
+  {
+    "id": "ssl-tls-042",
+    "concepto": "ssl-tls-breach",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 66
+    },
+    "pregunta": "¿Qué medida frena BREACH a nivel de servidor, según el PDF?",
+    "correcta": "Limitar las peticiones por minuto con un WAF, pues requiere muchas",
+    "distractores": [
+      "Desactivar la compresión de TLS en el servidor, porque el ataque la necesita",
+      "Activar HSTS en el servidor para forzar el uso de HTTPS siempre"
+    ],
+    "explicacion": "El ataque requiere tantas peticiones que un WAF las detecta. Desactivar la compresión de TLS no sirve, porque BREACH usa la de HTTP. HSTS fuerza HTTPS y no limita peticiones."
+  },
+  {
+    "id": "ssl-tls-043",
+    "concepto": "ssl-tls-lucky13",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 60
+    },
+    "pregunta": "¿Qué observa el atacante en Lucky 13 para recuperar un byte?",
+    "correcta": "La diferencia de tiempo en la respuesta del servidor al alterar el relleno",
+    "distractores": [
+      "Un mensaje de error distinto, 500 o 200, según sea correcto o no el relleno",
+      "La diferencia de tamaño de los paquetes al comprimir el texto inyectado"
+    ],
+    "explicacion": "Lucky 13 es un padding oracle basado en tiempo. El 500 o 200 es la señal del padding oracle clásico del ejemplo de POODLE. El tamaño de los paquetes es la señal de CRIME."
+  },
+  {
+    "id": "ssl-tls-044",
+    "concepto": "ssl-tls-lucky13",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 60
+    },
+    "pregunta": "¿Por qué Lucky 13 es un padding oracle basado en tiempo?",
+    "correcta": "El servidor tarda distinto en procesar un relleno alterado que uno esperado",
+    "distractores": [
+      "El servidor responde antes cuando el vector de inicialización es predecible para el atacante",
+      "El servidor tarda más cuando la cookie coincide con el texto conocido"
+    ],
+    "explicacion": "El servidor se comporta distinto, y tarda distinto, con relleno alterado. El IV predecible es BEAST. La coincidencia con texto conocido es la base de CRIME y BREACH."
+  },
+  {
+    "id": "ssl-tls-045",
+    "concepto": "ssl-tls-lucky13",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 60
+    },
+    "pregunta": "¿Qué limita la explotación de Lucky 13?",
+    "correcta": "Solo se puede explotar en redes locales",
+    "distractores": [
+      "Solo funciona con SSLv3",
+      "Solo funciona si el atacante controla el navegador de la víctima"
+    ],
+    "explicacion": "Lucky 13 solo es explotable en redes locales. Afecta a suites CBC de TLS, y no solo a SSLv3. No exige controlar el navegador: es un ataque por medidas de tiempo."
   },
   {
     "id": "ssl-tls-046",
@@ -8336,6 +9024,150 @@
     "explicacion": "El 200 indica un relleno válido, y de ese valor del IV se deduce el byte con un XOR. No se prueban claves: la clave no se conoce ni se necesita. Medir tiempos es Lucky 13, y el ejemplo usa la respuesta, no el tiempo."
   },
   {
+    "id": "ssl-tls-049",
+    "concepto": "ssl-tls-poodle",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 78
+    },
+    "pregunta": "¿Qué mecanismo de SSLv3 explota POODLE?",
+    "correcta": "El relleno (padding) de los cifrados por bloques en modo CBC",
+    "distractores": [
+      "Los vectores de inicialización predecibles del modo CBC",
+      "La compresión de las peticiones HTTPS que envía el cliente al servidor"
+    ],
+    "explicacion": "POODLE es un padding oracle sobre el relleno de SSLv3. Los IV predecibles son BEAST. La compresión es CRIME."
+  },
+  {
+    "id": "ssl-tls-050",
+    "concepto": "ssl-tls-poodle",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 78
+    },
+    "pregunta": "¿Qué consecuencia tuvo POODLE para SSLv3?",
+    "correcta": "Dejó de ser usable, porque CBC no es seguro en él y RC4 tampoco",
+    "distractores": [
+      "Pasó a usarse solo con RC4, que seguía siendo seguro frente a este ataque",
+      "Se corrigió con un IV explícito y siguió en uso en los servidores"
+    ],
+    "explicacion": "Con CBC roto por POODLE y RC4 roto por BIAS, SSLv3 se quedó sin cifrado seguro. RC4 no era seguro tras BIAS. El IV explícito es un cambio de TLS 1.1, no de SSLv3."
+  },
+  {
+    "id": "ssl-tls-051",
+    "concepto": "ssl-tls-poodle",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 78
+    },
+    "pregunta": "¿Por qué POODLE TLS afecta a TLS 1.0, si este mejora el relleno de SSLv3?",
+    "correcta": "Por implementaciones de fabricantes que permiten repetir el ataque al pasar de SSLv3 a TLS 1.0",
+    "distractores": [
+      "Porque TLS 1.0 conserva en su protocolo el mismo relleno que SSLv3, sin ninguna mejora",
+      "Porque TLS 1.0 usa RC4 por defecto en todas las sesiones que se establecen"
+    ],
+    "explicacion": "El fallo está en implementaciones, no en el protocolo. El protocolo TLS 1.0 sí mejora el relleno. RC4 no es el cifrado por defecto de TLS 1.0 ni la causa."
+  },
+  {
+    "id": "ssl-tls-052",
+    "concepto": "ssl-tls-bias-rc4",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 61
+    },
+    "pregunta": "¿Qué debilidad de RC4 describe el ataque BIAS?",
+    "correcta": "Sesgos estadísticos en su salida, que filtran secretos con muchas copias del mismo texto",
+    "distractores": [
+      "Un vector de inicialización predecible que permite inyectar bloques de texto conocido",
+      "Un relleno cuya validez revela el servidor al responder de forma distinta a cada intento"
+    ],
+    "explicacion": "BIAS usa sesgos estadísticos de RC4. El IV predecible es BEAST. El relleno que revela el servidor es el padding oracle, que afecta a CBC, y no a RC4."
+  },
+  {
+    "id": "ssl-tls-053",
+    "concepto": "ssl-tls-bias-rc4",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 61
+    },
+    "pregunta": "¿Qué solución tiene BIAS, según el PDF?",
+    "correcta": "Dejar de utilizar RC4",
+    "distractores": [
+      "Activar el 1/n-1 split en el navegador",
+      "Usar claves RC4 de mayor longitud"
+    ],
+    "explicacion": "La única solución es dejar de usar RC4. El 1/n-1 split es la reacción a BEAST. Una clave más larga no corrige un sesgo estadístico del algoritmo."
+  },
+  {
+    "id": "ssl-tls-054",
+    "concepto": "ssl-tls-bias-rc4",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 61
+    },
+    "pregunta": "¿Qué diferencia a BIAS de BEAST en las versiones afectadas?",
+    "correcta": "BIAS afecta a toda versión que use RC4, y BEAST solo a SSLv3 y TLS 1.0",
+    "distractores": [
+      "BIAS afecta solo a SSLv3 y TLS 1.0, y BEAST a toda versión que use RC4",
+      "BIAS y BEAST afectan solo a TLS 1.2, que es la versión que corrige ambos"
+    ],
+    "explicacion": "BIAS depende del algoritmo RC4, sin importar la versión. BEAST depende de CBC con IV predecible, y TLS 1.1 y 1.2 no lo sufren. Invertir las dos es el error. Ninguno afecta solo a TLS 1.2."
+  },
+  {
+    "id": "ssl-tls-055",
+    "concepto": "ssl-tls-md5-sha1-debiles",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 51
+    },
+    "pregunta": "¿Por qué Flame pudo firmar código haciéndose pasar por Microsoft?",
+    "correcta": "Usó un certificado falso que colisionaba en MD5 con uno oficial de Microsoft",
+    "distractores": [
+      "Robó la clave privada de la CA que firma los certificados de código de Microsoft",
+      "Usó un certificado SHA1 con la misma clave pública que el oficial"
+    ],
+    "explicacion": "La colisión en MD5 permitió que la firma del certificado oficial valiera para el falso. No hizo falta robar ninguna clave privada. SHA1 no es el algoritmo de Flame."
+  },
+  {
+    "id": "ssl-tls-056",
+    "concepto": "ssl-tls-md5-sha1-debiles",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Qué cambia TLS 1.2 en las funciones de hash?",
+    "correcta": "Abandona MD5 y SHA1 a favor de SHA-256",
+    "distractores": [
+      "Abandona MD5 y mantiene SHA1 como hash principal",
+      "Abandona SHA1 y mantiene MD5 por rendimiento"
+    ],
+    "explicacion": "TLS 1.2 deja MD5 y SHA1. Mantener SHA1 o MD5 contradice eso: ambos tienen debilidades demostradas."
+  },
+  {
+    "id": "ssl-tls-057",
+    "concepto": "ssl-tls-md5-sha1-debiles",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 110
+    },
+    "pregunta": "¿Qué obligó a las empresas a migrar a certificados SHA256 a comienzos de 2017?",
+    "correcta": "Los navegadores dejaron de aceptar certificados SHA1 y los marcaron como inseguros",
+    "distractores": [
+      "Las CAs revocaron todos los certificados SHA1 que había en circulación en esa fecha",
+      "TLS 1.3 prohibió SHA1 en el handshake y obligó a las empresas a renovar sus certificados"
+    ],
+    "explicacion": "Los navegadores dejaron de aceptar SHA1. Las CAs ya habían dejado de emitirlos en 2016, pero no los revocaron. TLS 1.3 no aparece en esta historia: es de 2018."
+  },
+  {
     "id": "ssl-tls-060",
     "concepto": "introduccion-perfect-forward-secrecy",
     "tema": "ssl-tls",
@@ -8350,5 +9182,565 @@
       "Guardar cookies hoy y usarlas después para suplantar al usuario ante el sitio"
     ],
     "explicacion": "Se captura ahora y se descifra después con una clave filtrada. Reenviar tráfico capturado es un replay. Usar cookies guardadas es un robo de sesión."
+  },
+  {
+    "id": "ssl-tls-061",
+    "concepto": "ssl-tls-public-key-pinning",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 46
+    },
+    "pregunta": "¿En qué consiste el Public Key Pinning?",
+    "correcta": "En que el cliente trae ya la clave pública del sitio y no depende solo de CAs",
+    "distractores": [
+      "En que la CA guarde la clave pública de cada cliente para poder validar sus conexiones",
+      "En que el servidor fije la versión de TLS que usa el cliente durante todo el handshake"
+    ],
+    "explicacion": "Pinning incluye la clave pública en el cliente y evita depender de CAs de terceros. No es la CA quien guarda claves de clientes. Fijar la versión de TLS no tiene que ver."
+  },
+  {
+    "id": "ssl-tls-062",
+    "concepto": "ssl-tls-public-key-pinning",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 46
+    },
+    "pregunta": "¿Qué ataque corrige el Public Key Pinning?",
+    "correcta": "El MitM con un certificado fraudulento emitido por una CA",
+    "distractores": [
+      "El HTTPS stripping que hace sslstrip al degradar la conexión a HTTP",
+      "El robo de sesión por sidejacking de cookies sin cifrar en la red"
+    ],
+    "explicacion": "El pinning impide que un certificado distinto del fijado valga, y corrige el MitM. El stripping lo corrige HSTS. El sidejacking se evita cifrando el tráfico."
+  },
+  {
+    "id": "ssl-tls-064",
+    "concepto": "ssl-tls-transparencia-certificados",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 111
+    },
+    "pregunta": "¿Qué logra la Transparencia de Certificados?",
+    "correcta": "Que cualquiera pueda ver los certificados emitidos y detectar los no autorizados",
+    "distractores": [
+      "Que ninguna CA pueda emitir certificados sin permiso expreso del dueño del dominio",
+      "Que el navegador guarde la clave pública de cada sitio visitado"
+    ],
+    "explicacion": "CT publica los certificados para que se vean los no autorizados. No impide la emisión: solo la hace detectable. Guardar claves públicas es pinning."
+  },
+  {
+    "id": "ssl-tls-065",
+    "concepto": "ssl-tls-transparencia-certificados",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 111
+    },
+    "pregunta": "¿Por qué Chrome sustituyó HPKP por la Transparencia de Certificados?",
+    "correcta": "Porque con CT se descubre la emisión de certificados no autorizados",
+    "distractores": [
+      "Porque HPKP no permitía fijar certificados emitidos por CAs de terceros",
+      "Porque CT cifra el ClientHello y HPKP no lo cifraba"
+    ],
+    "explicacion": "Con CT los certificados no autorizados se descubren, y eso reduce su uso. HPKP sí fijaba certificados de CAs. CT no cifra nada del ClientHello."
+  },
+  {
+    "id": "ssl-tls-066",
+    "concepto": "ssl-tls-transparencia-certificados",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 111
+    },
+    "pregunta": "A partir de julio de 2018, ¿qué certificados acepta Chrome?",
+    "correcta": "Solo los que se han publicado con Transparencia de Certificados",
+    "distractores": [
+      "Solo los que llevan una cabecera Public-Key-Pins en la respuesta del sitio",
+      "Solo los firmados con SHA-256 por CAs precargadas"
+    ],
+    "explicacion": "Chrome 68 exige CT. HPKP se abandonó. Chrome no restringe a CAs precargadas."
+  },
+  {
+    "id": "ssl-tls-067",
+    "concepto": "ssl-tls-heartbleed",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 73
+    },
+    "pregunta": "¿Qué provoca Heartbleed?",
+    "correcta": "Que un bug de Heartbeat, en OpenSSL, deje leer parte de la memoria del sistema",
+    "distractores": [
+      "Que un fallo del protocolo TLS exponga la clave de sesión durante el handshake inicial",
+      "Que el servidor acepte certificados firmados con MD5 en lugar de SHA-256"
+    ],
+    "explicacion": "Es un bug de implementación en Heartbeat, que filtra memoria. No es un fallo del protocolo. Los certificados MD5 son el caso de Flame."
+  },
+  {
+    "id": "ssl-tls-068",
+    "concepto": "ssl-tls-heartbleed",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 73
+    },
+    "pregunta": "¿Qué puede recuperar el atacante con Heartbleed?",
+    "correcta": "Claves privadas, cookies de sesión de otros usuarios y contraseñas",
+    "distractores": [
+      "Solo la clave de sesión de su propia conexión con el servidor",
+      "Solo las cabeceras HTTP cifradas de su propia conexión con el servidor"
+    ],
+    "explicacion": "La memoria leída contiene datos de otros usuarios y claves privadas. Lo de la propia conexión no necesita ningún bug."
+  },
+  {
+    "id": "ssl-tls-069",
+    "concepto": "ssl-tls-heartbleed",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 73
+    },
+    "pregunta": "¿Por qué Heartbleed no exigió cambiar el protocolo TLS?",
+    "correcta": "Es un fallo de una implementación, OpenSSL, y no del diseño del protocolo",
+    "distractores": [
+      "Solo afecta a las conexiones TLS 1.0, que ya estaban prohibidas cuando se descubrió",
+      "Solo afecta a los clientes que usan OpenSSL, y no a los servidores"
+    ],
+    "explicacion": "El fallo estaba en OpenSSL 1.0.1 a 1.0.1f, y se corrige actualizando. No depende de la versión de TLS. Afecta a clientes y a servidores."
+  },
+  {
+    "id": "ssl-tls-070",
+    "concepto": "ssl-tls-freak",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 101
+    },
+    "pregunta": "¿Qué permite FREAK al atacante?",
+    "correcta": "Forzar claves RSA débiles, de 40 bits, y descifrar la comunicación en tiempo real",
+    "distractores": [
+      "Forzar claves Diffie-Hellman débiles de 512 bits y descifrar en tiempo real con un MitM",
+      "Recuperar la clave privada RSA del servidor con peticiones sobre SSLv2 obsoleto"
+    ],
+    "explicacion": "FREAK fuerza claves RSA de exportación de 40 bits. Forzar Diffie-Hellman de 512 bits es Logjam. Recuperar la clave privada mediante SSLv2 es DROWN."
+  },
+  {
+    "id": "ssl-tls-071",
+    "concepto": "ssl-tls-freak",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 101
+    },
+    "pregunta": "¿Qué debe tener habilitado un servidor para ser vulnerable a FREAK?",
+    "correcta": "La opción RSA_EXPORT",
+    "distractores": [
+      "La opción DHE_EXPORT",
+      "El soporte de SSLv2"
+    ],
+    "explicacion": "FREAK necesita RSA_EXPORT. DHE_EXPORT es el requisito de Logjam. SSLv2 es el de DROWN."
+  },
+  {
+    "id": "ssl-tls-072",
+    "concepto": "ssl-tls-freak",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 101
+    },
+    "pregunta": "¿Cómo se evita FREAK?",
+    "correcta": "Dejando de soportar RSA_EXPORT y actualizando las bibliotecas de cifrado",
+    "distractores": [
+      "Forzando claves de 2048 bits en el intercambio Diffie-Hellman del servidor",
+      "Dejando de soportar RC4 en las suites de cifrado"
+    ],
+    "explicacion": "La solución es quitar RSA_EXPORT y actualizar. Las claves de 2048 bits en DH son la respuesta de Logjam. RC4 es otra debilidad, la de BIAS."
+  },
+  {
+    "id": "ssl-tls-073",
+    "concepto": "ssl-tls-logjam",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 103
+    },
+    "pregunta": "¿Qué hace Logjam?",
+    "correcta": "Fuerza claves débiles, de 512 bits, en un intercambio Diffie-Hellman",
+    "distractores": [
+      "Fuerza claves RSA débiles, de 40 bits, en el intercambio de claves",
+      "Recupera la clave negociada midiendo tiempos del intercambio Diffie-Hellman"
+    ],
+    "explicacion": "Logjam debilita Diffie-Hellman. Las claves RSA de 40 bits son FREAK. Medir tiempos del intercambio es Raccoon."
+  },
+  {
+    "id": "ssl-tls-074",
+    "concepto": "ssl-tls-logjam",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 103
+    },
+    "pregunta": "¿Qué necesita Logjam, además de un servidor con DHE_EXPORT?",
+    "correcta": "Un MitM previo entre el cliente y el servidor",
+    "distractores": [
+      "Un script ejecutándose en el navegador de la víctima",
+      "La compresión activada en la sesión"
+    ],
+    "explicacion": "El atacante debe estar en medio para forzar claves débiles. Un script en el navegador es el requisito de BEAST. La compresión es el de CRIME."
+  },
+  {
+    "id": "ssl-tls-075",
+    "concepto": "ssl-tls-logjam",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 103
+    },
+    "pregunta": "¿Qué solución propone el PDF contra Logjam?",
+    "correcta": "No soportar DHE_EXPORT y forzar claves de 2048 bits",
+    "distractores": [
+      "No soportar RSA_EXPORT y forzar claves de 1024 bits",
+      "Mantener DHE_EXPORT y subir las claves a 768 bits"
+    ],
+    "explicacion": "Se quita DHE_EXPORT y se usan 2048 bits. RSA_EXPORT es el caso de FREAK. 768 bits y 1024 bits también pueden ser vulnerables."
+  },
+  {
+    "id": "ssl-tls-076",
+    "concepto": "ssl-tls-drown",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 108
+    },
+    "pregunta": "¿Qué debilidad usa DROWN?",
+    "correcta": "Que en SSLv2 se puede recuperar la clave privada a partir de la pública",
+    "distractores": [
+      "Que en SSLv3 se puede predecir el vector de inicialización del siguiente bloque CBC",
+      "Que en SSLv2 se puede forzar el cierre de la sesión inyectando FIN"
+    ],
+    "explicacion": "DROWN recupera la clave privada usando SSLv2. El IV predecible es BEAST. Los FIN inyectados cierran sesiones, y no dan la clave."
+  },
+  {
+    "id": "ssl-tls-077",
+    "concepto": "ssl-tls-drown",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 108
+    },
+    "pregunta": "¿Qué hace especial a DROWN frente a otros ataques a SSLv2?",
+    "correcta": "Puede descifrar tráfico TLS de clientes y servidores que ni siquiera soportan SSLv2",
+    "distractores": [
+      "Solo afecta a conexiones SSLv2 establecidas, sin alcanzar nunca al tráfico de TLS",
+      "Descifra tráfico de otros protocolos, pero solo cuando se usa TLS 1.0 en la sesión"
+    ],
+    "explicacion": "DROWN llega a tráfico TLS. No se limita a SSLv2 ni a TLS 1.0."
+  },
+  {
+    "id": "ssl-tls-078",
+    "concepto": "ssl-tls-drown",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 108
+    },
+    "pregunta": "¿Qué es Special DROWN?",
+    "correcta": "Un bug de SSLv2 en ciertas versiones de OpenSSL que recupera la clave privada en tiempo real",
+    "distractores": [
+      "Una variante de DROWN que necesita claves RSA de exportación de 40 bits en el servidor",
+      "Una variante de DROWN que afecta a servidores configurados solo con TLS 1.3"
+    ],
+    "explicacion": "Special DROWN es un bug de implementación de OpenSSL. No tiene que ver con claves de exportación. TLS 1.3 no incluye SSLv2."
+  },
+  {
+    "id": "ssl-tls-079",
+    "concepto": "ssl-tls-tls13",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 113
+    },
+    "pregunta": "¿Qué mejora de seguridad aporta TLS 1.3 en los algoritmos?",
+    "correcta": "Solo incluye algoritmos sin vulnerabilidades conocidas, lo que evita FREAK o Logjam",
+    "distractores": [
+      "Mantiene los algoritmos de exportación, pero solo con claves de 2048 bits o más",
+      "Mantiene RC4 como opción para clientes antiguos que no soportan otros algoritmos"
+    ],
+    "explicacion": "TLS 1.3 elimina los algoritmos vulnerables. No mantiene los de exportación ni RC4."
+  },
+  {
+    "id": "ssl-tls-080",
+    "concepto": "ssl-tls-tls13",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 113
+    },
+    "pregunta": "¿Qué mejora de privacidad aporta TLS 1.3 en el handshake?",
+    "correcta": "Cifra parte del handshake y usa Forward Secrecy por defecto",
+    "distractores": [
+      "Cifra el ClientHello entero con una clave del servidor obtenida por DNS",
+      "Elimina el certificado del handshake para no identificar al servidor"
+    ],
+    "explicacion": "TLS 1.3 cifra parte del handshake y trae Forward Secrecy. Cifrar el ClientHello entero es ECH, un añadido posterior. El certificado sigue en el handshake, aunque cifrado."
+  },
+  {
+    "id": "ssl-tls-081",
+    "concepto": "ssl-tls-tls13",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 113
+    },
+    "pregunta": "¿Qué mejora de rendimiento aporta TLS 1.3?",
+    "correcta": "Reduce el número de peticiones del handshake",
+    "distractores": [
+      "Elimina el cifrado de los mensajes pequeños",
+      "Reutiliza siempre la clave de la sesión anterior"
+    ],
+    "explicacion": "Menos peticiones en el handshake hacen la conexión más rápida. No elimina el cifrado. Reutilizar la clave anterior rompería el Forward Secrecy."
+  },
+  {
+    "id": "ssl-tls-082",
+    "concepto": "ssl-tls-doh",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 114
+    },
+    "pregunta": "¿Para qué sirve DNS over HTTPS?",
+    "correcta": "Para resolver las peticiones DNS por HTTPS, evitando escuchas y manipulaciones",
+    "distractores": [
+      "Para cifrar el SNI del ClientHello con la clave pública que el servidor publica",
+      "Para publicar en el DNS la clave pública que el navegador fija"
+    ],
+    "explicacion": "DoH envía las consultas DNS por HTTPS. Cifrar el SNI es ESNI o ECH. Fijar claves es pinning."
+  },
+  {
+    "id": "ssl-tls-083",
+    "concepto": "ssl-tls-doh",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 114
+    },
+    "pregunta": "¿Qué ataque de un MitM evita DNS over HTTPS?",
+    "correcta": "El DNS Spoofing, la manipulación de la resolución DNS",
+    "distractores": [
+      "El HTTPS stripping, la degradación de HTTPS a HTTP por un MitM",
+      "El sidejacking, el robo de identificadores de sesión"
+    ],
+    "explicacion": "Con DoH, un MitM no puede manipular la resolución DNS. El stripping se evita con HSTS. El sidejacking se evita cifrando el tráfico."
+  },
+  {
+    "id": "ssl-tls-084",
+    "concepto": "ssl-tls-doh",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 115
+    },
+    "pregunta": "¿Por qué DoH pierde sentido mientras el SNI viaje en claro?",
+    "correcta": "El primer paquete de TLS revela igualmente el sitio al que se conecta el usuario",
+    "distractores": [
+      "DoH solo cifra la respuesta DNS que recibe el cliente y no la consulta que envía",
+      "El SNI sirve a un atacante para descifrar las consultas DNS que viajan por HTTPS"
+    ],
+    "explicacion": "El SNI en claro delata el destino aunque el DNS esté cifrado. DoH cifra consulta y respuesta. El SNI no sirve para descifrar nada."
+  },
+  {
+    "id": "ssl-tls-085",
+    "concepto": "ssl-tls-ech",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 122
+    },
+    "pregunta": "¿Qué limitación tenía ESNI?",
+    "correcta": "Solo cifraba el nombre del host, y el resto del ClientHello viajaba en claro",
+    "distractores": [
+      "Cifraba todo el ClientHello, pero con una clave que el servidor no renovaba nunca",
+      "Cifraba solo el certificado del servidor, y no el nombre del host"
+    ],
+    "explicacion": "ESNI cifraba solo el nombre. No cifraba el ClientHello entero. Tampoco cifraba el certificado."
+  },
+  {
+    "id": "ssl-tls-086",
+    "concepto": "ssl-tls-ech",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 122
+    },
+    "pregunta": "¿Cómo protege ECH el ClientHello?",
+    "correcta": "Lo encapsula: un ClientHelloOuter visible y un ClientHelloInner cifrado para el servidor",
+    "distractores": [
+      "Cifra solo el nombre del host dentro de una extensión aislada del ClientHello",
+      "Envía dos handshakes completos, uno con cada una de las claves del servidor"
+    ],
+    "explicacion": "ECH usa Outer visible e Inner cifrado. Cifrar solo el nombre es ESNI. No son dos handshakes completos."
+  },
+  {
+    "id": "ssl-tls-087",
+    "concepto": "ssl-tls-ech",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 122
+    },
+    "pregunta": "¿Por qué ESNI era fácil de bloquear para un cortafuegos como el chino?",
+    "correcta": "Era una extensión aislada en texto claro, que se podía identificar y descartar",
+    "distractores": [
+      "Usaba un puerto propio distinto del 443, que el cortafuegos podía cerrar",
+      "Su clave se publicaba en un certificado EV que el cortafuegos podía rechazar"
+    ],
+    "explicacion": "Al ser una extensión aislada en texto claro, se identificaba y bloqueaba. No usaba un puerto propio. No dependía de certificados EV."
+  },
+  {
+    "id": "ssl-tls-088",
+    "concepto": "ssl-tls-raccoon",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 121
+    },
+    "pregunta": "¿Qué explota Raccoon?",
+    "correcta": "Una característica de Diffie-Hellman, midiendo tiempos para recuperar la clave negociada",
+    "distractores": [
+      "El relleno de CBC, midiendo el tiempo de respuesta que da el servidor a cada intento",
+      "Un fallo de la extensión Heartbeat de OpenSSL que permite leer la memoria del servidor"
+    ],
+    "explicacion": "Raccoon es un ataque de tiempo contra Diffie-Hellman. Medir tiempos de relleno CBC es Lucky 13. Leer memoria es Heartbleed."
+  },
+  {
+    "id": "ssl-tls-089",
+    "concepto": "ssl-tls-raccoon",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 121
+    },
+    "pregunta": "¿Qué versiones de TLS afecta Raccoon?",
+    "correcta": "TLS 1.2 y todas las anteriores",
+    "distractores": [
+      "Solo TLS 1.3 y las versiones posteriores",
+      "Solo TLS 1.0 y TLS 1.1, ya prohibidas"
+    ],
+    "explicacion": "Afecta a TLS 1.2 y anteriores. No a TLS 1.3. No se limita a TLS 1.0 y 1.1."
+  },
+  {
+    "id": "ssl-tls-090",
+    "concepto": "ssl-tls-raccoon",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 121
+    },
+    "pregunta": "¿Por qué Raccoon es muy difícil de explotar en la práctica?",
+    "correcta": "Requiere estar muy cerca del servidor para medir tiempos con mucha precisión",
+    "distractores": [
+      "Requiere inyectar texto claro en el navegador de la víctima durante la sesión TLS",
+      "Requiere que el servidor tenga DHE_EXPORT habilitado"
+    ],
+    "explicacion": "Las medidas de tiempo exigen proximidad. Inyectar texto claro es el requisito de CRIME. DHE_EXPORT es el de Logjam."
+  },
+  {
+    "id": "ssl-tls-091",
+    "concepto": "ssl-tls-alpaca",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 124
+    },
+    "pregunta": "¿Qué es ALPACA?",
+    "correcta": "Un ataque de confusión de protocolo: la conexión al puerto web acaba en otro servicio con el mismo certificado",
+    "distractores": [
+      "Un ataque que degrada HTTPS a HTTP mientras mantiene un dominio parecido al del sitio",
+      "Un ataque que fuerza un cifrado débil en servicios que comparten la misma dirección IP"
+    ],
+    "explicacion": "ALPACA redirige la conexión a otro servicio que comparte certificado. Degradar a HTTP es sslstrip. Forzar cifrado débil es Logjam o FREAK."
+  },
+  {
+    "id": "ssl-tls-092",
+    "concepto": "ssl-tls-alpaca",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 124
+    },
+    "pregunta": "¿Cómo se filtran las cookies en ALPACA?",
+    "correcta": "El servidor FTP no entiende la petición HTTP y devuelve al atacante un error con parte de ella",
+    "distractores": [
+      "El servidor FTP envía las cookies al atacante dentro de una respuesta HTTP válida",
+      "El atacante lee las cookies en el handshake TLS, porque comparte certificado con el servidor"
+    ],
+    "explicacion": "El error del servidor FTP repite parte de la petición, y con ella las cookies. El FTP no habla HTTP. Las cookies no van en el handshake."
+  },
+  {
+    "id": "ssl-tls-093",
+    "concepto": "ssl-tls-alpaca",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 124
+    },
+    "pregunta": "¿Qué medida evita ALPACA?",
+    "correcta": "Usar ALPN para que el servidor rechace un protocolo que no coincide con el puerto",
+    "distractores": [
+      "Usar SNI para que el servidor rechace nombres que no coinciden con el certificado",
+      "Usar HSTS para que el navegador rechace las conexiones HTTP"
+    ],
+    "explicacion": "ALPN hace que el servidor rechace el protocolo equivocado. SNI trata nombres. HSTS fuerza HTTPS, pero no impide la redirección de puerto."
+  },
+  {
+    "id": "ssl-tls-094",
+    "concepto": "ssl-tls-tls-hibrido",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 128
+    },
+    "pregunta": "¿Qué combina el TLS híbrido en el handshake de TLS 1.3?",
+    "correcta": "Un algoritmo clásico de curva elíptica, como X25519, y uno post-cuántico, como ML-KEM",
+    "distractores": [
+      "Dos mecanismos post-cuánticos, ML-KEM para el intercambio y ML-DSA para la firma",
+      "Un algoritmo RSA clásico y un Diffie-Hellman clásico de 2048 bits de clave"
+    ],
+    "explicacion": "El híbrido une X25519 y ML-KEM. ML-DSA es de firma. RSA y Diffie-Hellman son clásicos."
+  },
+  {
+    "id": "ssl-tls-095",
+    "concepto": "ssl-tls-tls-hibrido",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 128
+    },
+    "pregunta": "¿Por qué se mantiene el algoritmo clásico junto a ML-KEM?",
+    "correcta": "Por redundancia: si ML-KEM resulta débil, el clásico sigue protegiendo la sesión",
+    "distractores": [
+      "Por compatibilidad: ML-KEM no puede usarse en el handshake sin un algoritmo clásico",
+      "Porque ML-KEM solo firma el intercambio, y el clásico lo cifra"
+    ],
+    "explicacion": "La razón es la redundancia. ML-KEM funciona solo. ML-KEM es de intercambio de claves, y no de firma."
+  },
+  {
+    "id": "ssl-tls-096",
+    "concepto": "ssl-tls-tls-hibrido",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 128
+    },
+    "pregunta": "¿Qué ataque busca mitigar el TLS híbrido?",
+    "correcta": "Store-now-decrypt-later: capturar tráfico hoy y descifrarlo con ordenadores cuánticos",
+    "distractores": [
+      "Downgrade: forzar el uso de una versión antigua de TLS en el handshake",
+      "MitM: situarse entre cliente y servidor para modificar el tráfico que pasa"
+    ],
+    "explicacion": "El híbrido protege el tráfico capturado hoy. Downgrade y MitM son otros ataques."
   }
 ]
