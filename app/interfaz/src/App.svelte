@@ -1,5 +1,9 @@
 <script lang="ts">
+  import type { Cierre } from "./tipos/Cierre";
   import type { Inicio } from "./tipos/Inicio";
+  import type { NotaDelSimulacro } from "./tipos/NotaDelSimulacro";
+  import type { Resultado } from "./tipos/Resultado";
+  import type { Simulacro } from "./tipos/Simulacro";
   import type { PreguntaDeSesion } from "./tipos/PreguntaDeSesion";
   import type { Ronda } from "./tipos/Ronda";
 
@@ -34,30 +38,73 @@
   let preguntas = $state<PreguntaDeSesion[]>([]);
   let i = $state(0);
   let aciertos = $state(0);
-  let eleccion = $state<{ opcion: number; seguro: boolean } | null>(null);
+  // `opcion` es null con "En blanco".
+  let eleccion = $state<{ opcion: number | null; seguro: boolean } | null>(null);
   let error = $state("");
+  let simulacro = $state(false);
+  let resultados: Resultado[] = [];
+  let nota = $state<NotaDelSimulacro | null>(null);
+  let limite = 0;
+  let reloj: ReturnType<typeof setInterval> | undefined;
+  let restante = $state(0);
 
   const q = $derived(preguntas[i]);
   const acierto = $derived(eleccion?.opcion === q?.correcta);
 
-  async function empezar() {
+  async function empezar(comoSimulacro: boolean) {
     try {
-      preguntas = await pedir<PreguntaDeSesion[]>("api/sesion");
+      if (comoSimulacro) {
+        const s = await pedir<Simulacro>("api/simulacro");
+        preguntas = s.preguntas;
+        limite = Date.now() + s.segundos * 1000;
+      } else preguntas = await pedir<PreguntaDeSesion[]>("api/sesion");
     } catch (e) {
       error = (e as Error).message;
       return;
     }
+    simulacro = comoSimulacro;
     i = 0;
     aciertos = 0;
+    resultados = [];
+    nota = null;
     eleccion = null;
     error = "";
     ronda = { estado: "Pregunta", contestada: false };
+    if (simulacro) {
+      contar();
+      reloj = setInterval(contar, 1000);
+    }
   }
 
-  async function contestar(opcion: number, seguro: boolean) {
+  function contar() {
+    restante = Math.max(0, Math.round((limite - Date.now()) / 1000));
+    if (!restante) terminar();
+  }
+
+  // El final del simulacro pide la nota a Rust, que cuenta en blanco las preguntas sin contestar.
+  async function terminar() {
+    // El reloj y la última pregunta llegan aquí a la vez si el límite pasa en la última.
+    if (ronda.estado === "Final") return;
+    clearInterval(reloj);
+    ronda = { estado: "Final" };
+    if (!simulacro) return;
+    const cierre: Cierre = { preguntas: preguntas.length, resultados };
+    try {
+      nota = await pedir<NotaDelSimulacro>("api/cierre", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cierre),
+      });
+    } catch (e) {
+      error = (e as Error).message;
+    }
+  }
+
+  async function contestar(opcion: number | null, seguro: boolean) {
     eleccion = { opcion, seguro };
     ronda = { estado: "Pregunta", contestada: true };
     if (acierto) aciertos++;
+    resultados.push(opcion === null ? "Blanco" : acierto ? "Acierto" : "Fallo");
     const respuesta = { id: q.id, ts: new Date().toISOString().slice(0, 19) + "Z", acierto, seguro };
     const r = await fetch("api/respuestas", {
       method: "POST",
@@ -70,16 +117,18 @@
   function siguiente() {
     eleccion = null;
     if (++i < preguntas.length) ronda = { estado: "Pregunta", contestada: false };
-    else ronda = { estado: "Final" };
+    else terminar();
   }
 
   function volver() {
+    clearInterval(reloj);
     cargarInicio();
     ronda = { estado: "Inicio" };
   }
 
   function abandonar() {
-    if (confirm("¿Abandonar la sesión? Las respuestas quedan en el historial.")) volver();
+    const que = simulacro ? "el simulacro" : "la sesión";
+    if (confirm(`¿Abandonar ${que}? Las respuestas quedan en el historial.`)) volver();
   }
 </script>
 
@@ -122,12 +171,14 @@
           {/each}
         </details>
       </div>
-      <button onclick={empezar}>Empezar la sesión ({inicio.sesion} preguntas)</button>
+      <button onclick={() => empezar(false)}>Empezar la sesión ({inicio.sesion} preguntas)</button>
+      <button onclick={() => empezar(true)}>Simulacro ({inicio.simulacro} preguntas)</button>
     {/if}
   {/if}
 {:else if ronda.estado === "Pregunta"}
   <p>
-    {i + 1} / {preguntas.length} · {q.tema} · {q.paso}
+    {simulacro ? "Simulacro · " : ""}{i + 1} / {preguntas.length} · {q.tema} ·
+    {simulacro ? `${Math.floor(restante / 60)}:${String(restante % 60).padStart(2, "0")}` : q.paso}
     <button title="Abandonar" onclick={abandonar}>✕</button>
   </p>
   <p>{q.pregunta}</p>
@@ -144,6 +195,7 @@
     </div>
   {/each}
   {#if !ronda.contestada}
+    {#if simulacro}<button onclick={() => contestar(null, false)}>En blanco</button>{/if}
     <p>Toca el texto si estás seguro. Toca «dudo» si dudas.</p>
   {:else}
     {#if !acierto && eleccion?.seguro}
@@ -156,8 +208,16 @@
     <button onclick={siguiente}>Siguiente</button>
   {/if}
 {:else}
-  <h1>La sesión ha terminado</h1>
-  <p>Aciertos: {aciertos} de {preguntas.length}</p>
+  {#if simulacro}
+    <h1>El simulacro ha terminado</h1>
+    {#if nota}
+      <p>Aciertos: {nota.aciertos} · Fallos: {nota.fallos} · En blanco: {nota.en_blanco}</p>
+      <p>Nota: {nota.nota} sobre 10.</p>
+    {/if}
+  {:else}
+    <h1>La sesión ha terminado</h1>
+    <p>Aciertos: {aciertos} de {preguntas.length}</p>
+  {/if}
   <button onclick={volver}>Volver al inicio</button>
 {/if}
 {#if error}

@@ -13,7 +13,7 @@ fn crear_examen(raiz: &Path, carpeta: &str, titulo: &str, banco: Option<&str>) {
     fs::create_dir(&dir).unwrap();
     fs::write(
         dir.join("examen.json"),
-        json!({ "titulo": titulo, "preguntas": 20, "opciones": 4, "penalizacion": 0.25 }).to_string(),
+        json!({ "titulo": titulo, "preguntas": 20, "opciones": 4, "minutos": 25, "penalizacion": 0.25 }).to_string(),
     )
     .unwrap();
     if let Some(banco) = banco {
@@ -42,7 +42,10 @@ async fn el_inicio_da_el_titulo_y_las_preguntas_de_la_sesion() {
     let url = arrancar(raiz.path()).await;
 
     let inicio = inicio(&url, "ln").await;
-    assert_eq!((&inicio["estado"], &inicio["titulo"], &inicio["sesion"]), (&json!("Listo"), &json!("LN"), &json!(6)));
+    assert_eq!(
+        (&inicio["estado"], &inicio["titulo"], &inicio["sesion"], &inicio["simulacro"]),
+        (&json!("Listo"), &json!("LN"), &json!(6), &json!(6))
+    );
 }
 
 #[tokio::test]
@@ -182,4 +185,32 @@ async fn una_respuesta_mal_formada_no_entra_en_el_historial() {
         assert!(responder(&url, "ln", &mala).await.is_client_error(), "{mala}");
     }
     assert!(!raiz.path().join("ln/respuestas.jsonl").exists());
+}
+
+#[tokio::test]
+async fn el_simulacro_da_su_reloj_y_las_preguntas_del_banco() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    let simulacro: Value = reqwest::get(format!("{url}/ln/api/simulacro")).await.unwrap().json().await.unwrap();
+    assert_eq!(simulacro["segundos"], 25 * 60);
+    assert_eq!(simulacro["preguntas"].as_array().unwrap().len(), 6);
+}
+
+async fn cerrar(url: &str, cuerpo: &Value) -> reqwest::Response {
+    reqwest::Client::new().post(format!("{url}/ln/api/cierre")).json(cuerpo).send().await.unwrap()
+}
+
+#[tokio::test]
+async fn la_nota_del_simulacro_lleva_la_penalizacion_del_examen() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    let cierre = json!({ "preguntas": 4, "resultados": ["Acierto", "Acierto", "Fallo"] });
+    let nota: Value = cerrar(&url, &cierre).await.json().await.unwrap();
+    assert_eq!(nota, json!({ "aciertos": 2, "fallos": 1, "en_blanco": 1, "nota": "4,38" }));
+    let de_mas = json!({ "preguntas": 1, "resultados": ["Acierto", "Fallo"] });
+    assert_eq!(cerrar(&url, &de_mas).await.status(), 400);
 }

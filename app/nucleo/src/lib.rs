@@ -11,6 +11,8 @@ pub struct Examen {
     pub preguntas: u32,
     /// Las opciones de cada pregunta.
     pub opciones: u32,
+    /// La duración del examen real.
+    pub minutos: u32,
     /// La parte de un acierto que resta un fallo.
     pub penalizacion: f64,
 }
@@ -118,10 +120,11 @@ pub enum Inicio {
     BancoVacio {
         titulo: String,
     },
-    /// `sesion` es el número de preguntas de la sesión.
+    /// `sesion` y `simulacro` son el número de preguntas de cada ronda.
     Listo {
         titulo: String,
         sesion: u32,
+        simulacro: u32,
         tarjeta: Tarjeta,
     },
 }
@@ -145,7 +148,8 @@ pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], obje
     }
     let tarjeta = tarjeta(examen, banco, historial, objetivo);
     let sesion = (tarjeta.sabes + tarjeta.no_sabes + tarjeta.sin_ver).min(TAMANO_SESION as u32);
-    Inicio::Listo { titulo, sesion, tarjeta }
+    let simulacro = examen.preguntas.min(banco.len() as u32);
+    Inicio::Listo { titulo, sesion, simulacro, tarjeta }
 }
 
 const TAMANO_SESION: usize = 12;
@@ -234,27 +238,86 @@ pub fn sesion(banco: &[Pregunta], historial: &[Respuesta], ahora: i64, azar: &mu
     let mut elegidos: Vec<&str> =
         vistos[..vencidos].iter().chain(&sin_ver).chain(&vistos[vencidos..]).take(TAMANO_SESION).copied().collect();
     azar.barajar(&mut elegidos);
-    elegidos
-        .into_iter()
-        .map(|c| {
-            let q = pregunta[c];
-            let paso = estado.get(c).map_or(Concepto::SinVer, |e| e.0);
-            let mut opciones: Vec<String> = std::iter::once(&q.correcta).chain(&q.distractores).cloned().collect();
-            azar.barajar(&mut opciones);
-            PreguntaDeSesion {
-                id: q.id.clone(),
-                tema: q.tema.clone(),
-                concepto: q.concepto.clone(),
-                pregunta: q.pregunta.clone(),
-                correcta: opciones.iter().position(|o| *o == q.correcta).unwrap() as u32,
-                opciones,
-                explicacion: q.explicacion.clone(),
-                paso: paso.to_string(),
-                paso_tras_seguro: paso.tras(true, true).to_string(),
-                paso_tras_otra: paso.tras(false, false).to_string(),
-            }
-        })
-        .collect()
+    elegidos.into_iter().map(|c| de_la_ronda(pregunta[c], &estado, azar)).collect()
+}
+
+/// La pregunta con sus opciones al azar y el paso de su concepto.
+fn de_la_ronda(q: &Pregunta, estado: &std::collections::HashMap<&str, (Concepto, i64)>, azar: &mut Azar) -> PreguntaDeSesion {
+    let paso = estado.get(q.concepto.as_str()).map_or(Concepto::SinVer, |e| e.0);
+    let mut opciones: Vec<String> = std::iter::once(&q.correcta).chain(&q.distractores).cloned().collect();
+    azar.barajar(&mut opciones);
+    PreguntaDeSesion {
+        id: q.id.clone(),
+        tema: q.tema.clone(),
+        concepto: q.concepto.clone(),
+        pregunta: q.pregunta.clone(),
+        correcta: opciones.iter().position(|o| *o == q.correcta).unwrap() as u32,
+        opciones,
+        explicacion: q.explicacion.clone(),
+        paso: paso.to_string(),
+        paso_tras_seguro: paso.tras(true, true).to_string(),
+        paso_tras_otra: paso.tras(false, false).to_string(),
+    }
+}
+
+/// El simulacro: las preguntas del examen, al azar de todo el banco, y su duración.
+#[derive(Serialize, TS)]
+#[ts(export)]
+pub struct Simulacro {
+    pub segundos: u32,
+    pub preguntas: Vec<PreguntaDeSesion>,
+}
+
+pub fn simulacro(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], azar: &mut Azar) -> Simulacro {
+    let estado = estados(banco, historial);
+    let mut barajado: Vec<&Pregunta> = banco.iter().collect();
+    azar.barajar(&mut barajado);
+    barajado.truncate(examen.preguntas as usize);
+    Simulacro {
+        segundos: examen.minutos.saturating_mul(60),
+        preguntas: barajado.into_iter().map(|q| de_la_ronda(q, &estado, azar)).collect(),
+    }
+}
+
+/// Lo que pasó en una pregunta del simulacro.
+#[derive(Deserialize, TS, Clone, Copy, PartialEq, Debug)]
+#[ts(export)]
+pub enum Resultado {
+    Acierto,
+    Fallo,
+    Blanco,
+}
+
+/// El cierre de un simulacro: sus preguntas, y el resultado de las que tuvieron respuesta antes del límite.
+#[derive(Deserialize, TS)]
+#[ts(export)]
+pub struct Cierre {
+    pub preguntas: u32,
+    pub resultados: Vec<Resultado>,
+}
+
+/// El final del simulacro. `nota` va sobre 10, con 2 decimales como mucho.
+#[derive(Serialize, TS, PartialEq, Debug)]
+#[ts(export)]
+pub struct NotaDelSimulacro {
+    pub aciertos: u32,
+    pub fallos: u32,
+    pub en_blanco: u32,
+    pub nota: String,
+}
+
+/// La nota del simulacro: un fallo resta `penalizacion` aciertos, y cada pregunta sin resultado cuenta en blanco.
+pub fn nota_del_simulacro(cierre: &Cierre, penalizacion: f64) -> NotaDelSimulacro {
+    let cuenta = |r| cierre.resultados.iter().filter(|&&x| x == r).count() as u32;
+    let (aciertos, fallos) = (cuenta(Resultado::Acierto), cuenta(Resultado::Fallo));
+    let nota = (aciertos as f64 - penalizacion * fallos as f64) / cierre.preguntas.max(1) as f64 * 10.0;
+    let nota = format!("{:.2}", (nota * 100.0).round() / 100.0);
+    NotaDelSimulacro {
+        aciertos,
+        fallos,
+        en_blanco: cierre.preguntas.saturating_sub(aciertos + fallos),
+        nota: nota.trim_end_matches('0').trim_end_matches('.').replace('.', ","),
+    }
 }
 
 /// La tarjeta de la nota, con la barra del camino. Los porcentajes van redondeados.
@@ -392,7 +455,7 @@ fn probabilidad(sabes: f64, acierto: Option<f64>, objetivo: f64, examen: &Examen
 mod tests {
     use super::*;
 
-    const LN: Examen = Examen { titulo: String::new(), preguntas: 20, opciones: 4, penalizacion: 0.25 };
+    const LN: Examen = Examen { titulo: String::new(), preguntas: 20, opciones: 4, minutos: 25, penalizacion: 0.25 };
 
     /// Un banco de `n` conceptos `c0`, `c1`…, con una pregunta `q0`, `q1`… cada uno.
     fn banco_de(n: usize) -> Vec<Pregunta> {
@@ -499,7 +562,7 @@ mod tests {
 
     #[test]
     fn un_examen_de_3_opciones_sin_penalizacion_aconseja_contestar() {
-        let asn = Examen { titulo: String::new(), preguntas: 35, opciones: 3, penalizacion: 0.0 };
+        let asn = Examen { titulo: String::new(), preguntas: 35, opciones: 3, minutos: 45, penalizacion: 0.0 };
         let t = tarjeta(&asn, &banco_de(20), &[], 5.0);
         assert_eq!(t.dudas[2].porcentaje, 33);
         assert_eq!(t.dudas[1].detalle.as_deref(), Some("a ciegas, 1 de 3"));
@@ -523,6 +586,54 @@ mod tests {
         );
     }
 
+    fn cierre(preguntas: u32, resultados: &[Resultado]) -> Cierre {
+        Cierre { preguntas, resultados: resultados.to_vec() }
+    }
+
+    #[test]
+    fn la_nota_suma_un_acierto_resta_la_penalizacion_de_un_fallo_y_no_cuenta_una_en_blanco() {
+        use Resultado::*;
+        let n = nota_del_simulacro(&cierre(4, &[Acierto, Acierto, Fallo, Blanco]), 0.25);
+        // (2 − 0,25) / 4 × 10 = 4,375.
+        assert_eq!((n.aciertos, n.fallos, n.en_blanco, n.nota.as_str()), (2, 1, 1, "4,38"));
+        assert_eq!(nota_del_simulacro(&cierre(2, &[Acierto, Acierto]), 0.25).nota, "10");
+        assert_eq!(nota_del_simulacro(&cierre(2, &[Fallo, Blanco]), 0.25).nota, "-1,25");
+        assert_eq!(nota_del_simulacro(&cierre(3, &[Acierto, Fallo]), 0.0).nota, "3,33");
+    }
+
+    #[test]
+    fn el_cierre_al_pasar_el_limite_cuenta_en_blanco_las_preguntas_sin_contestar() {
+        let n = nota_del_simulacro(&cierre(20, &[Resultado::Acierto, Resultado::Fallo]), 0.25);
+        assert_eq!((n.aciertos, n.fallos, n.en_blanco, n.nota.as_str()), (1, 1, 18, "0,38"));
+        assert_eq!(nota_del_simulacro(&cierre(20, &[]), 0.25).en_blanco, 20);
+    }
+
+    #[test]
+    fn el_simulacro_saca_al_azar_las_preguntas_del_examen_de_todo_el_banco_con_su_reloj() {
+        // 3 preguntas por concepto: el simulacro no lleva una sola por concepto.
+        let banco: Vec<Pregunta> = (0..30).map(|i| pregunta(&format!("q{i}"), &format!("c{}", i / 3))).collect();
+        let s = simulacro(&LN, &banco, &[], &mut Azar::new(1));
+        assert_eq!((s.segundos, s.preguntas.len()), (25 * 60, 20));
+        let mut ids: Vec<&str> = s.preguntas.iter().map(|q| q.id.as_str()).collect();
+        ids.sort();
+        ids.dedup();
+        assert_eq!(ids.len(), 20);
+        let otro = simulacro(&LN, &banco, &[], &mut Azar::new(2));
+        assert_ne!(
+            s.preguntas.iter().map(|q| &q.id).collect::<Vec<_>>(),
+            otro.preguntas.iter().map(|q| &q.id).collect::<Vec<_>>()
+        );
+        assert_eq!(simulacro(&LN, &banco[..5], &[], &mut Azar::new(1)).preguntas.len(), 5);
+    }
+
+    #[test]
+    fn una_pregunta_del_simulacro_da_el_paso_de_su_concepto() {
+        let banco = [pregunta("a1", "a"), pregunta("a2", "a")];
+        let historial = [respuesta("a1", &minuto(0, 0), true, true)];
+        let s = simulacro(&LN, &banco, &historial, &mut Azar::new(1));
+        assert!(s.preguntas.iter().all(|q| q.paso == "paso 1" && q.paso_tras_otra == "paso 0"));
+    }
+
     pub(crate) fn pregunta(id: &str, concepto: &str) -> Pregunta {
         Pregunta {
             id: id.into(),
@@ -543,8 +654,8 @@ mod tests {
     fn el_inicio_da_el_titulo_y_las_preguntas_de_la_sesion() {
         let banco = [pregunta("a1", "a"), pregunta("a2", "a"), pregunta("b1", "b")];
         let examen = Examen { titulo: "LN".into(), ..LN };
-        let Inicio::Listo { titulo, sesion, .. } = inicio(&examen, &banco, &[], 5.0) else { panic!() };
-        assert_eq!((titulo.as_str(), sesion), ("LN", 2));
+        let Inicio::Listo { titulo, sesion, simulacro, .. } = inicio(&examen, &banco, &[], 5.0) else { panic!() };
+        assert_eq!((titulo.as_str(), sesion, simulacro), ("LN", 2, 3));
         assert_eq!(inicio(&examen, &[], &[], 5.0), Inicio::BancoVacio { titulo: "LN".into() });
     }
 
