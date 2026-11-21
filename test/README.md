@@ -148,8 +148,10 @@ La solución tiene, en este orden:
 
 1. La `explicacion`.
 2. El botón "Siguiente".
-3. Una línea con el PDF, la página, el concepto y el enlace "PDF", que abre el PDF en una pestaña nueva.
-4. El PDF, abierto en la página de la fuente con el visor del navegador: `#page=N&navpanes=0&view=FitH` en la URL.
+3. Una fila con 2 botones fijos: "Ver la página aquí" a la izquierda y "La fuente" a la derecha.
+4. Un panel debajo de la fila. "Ver la página aquí" muestra la imagen de la página. "La fuente" muestra el PDF, la página, el concepto y el enlace "Abrir el PDF en la página N", con `#page=N` en la URL.
+
+Un solo panel está abierto a la vez. El panel va debajo de "Siguiente", así que un panel abierto no mueve el botón.
 
 El engranaje muestra los tiradores de las columnas. Sus posiciones quedan en `localStorage`, en `ln-columnas`, y cada dispositivo tiene las suyas.
 
