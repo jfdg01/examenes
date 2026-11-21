@@ -1,0 +1,188 @@
+' Los diagramas de app/: las clases de nucleo, el servidor y la interfaz, la ronda y el viaje de una sesión.
+' Un cambio de un tipo, una función, una ruta o una dependencia entre las 3 partes actualiza este archivo en el mismo commit.
+' En VS Code, la extensión jebbs.plantuml abre la vista previa del diagrama bajo el cursor con Alt+D.
+' `smetana` dibuja el diagrama sin Graphviz.
+
+@startuml las-clases
+!pragma layout smetana
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+title Las clases de app/\n+ es público, - es privado, <<ts-rs>> sale a interfaz/src/tipos/
+left to right direction
+
+package nucleo {
+  class Examen <<examen.json>> {
+    +titulo: String
+  }
+  class Pregunta <<preguntas.json>> {
+    +id: String
+    +concepto: String
+    +tema: String
+    +pregunta: String
+    +correcta: String
+    +distractores: Vec<String>
+    +explicacion: String
+  }
+  class Respuesta <<una línea de respuestas.jsonl>> {
+    +id: String
+    +ts: String
+    +acierto: bool
+    +seguro: bool
+  }
+  enum Concepto {
+    SinVer
+    Paso(u32)
+    --
+    +tras(acierto, seguro): Concepto
+    +hueco(): i64
+    +to_string(): "sin ver" o "paso n"
+  }
+  class Azar {
+    -semilla: u64
+    +new(semilla): Azar
+    -hasta(n): usize
+    -barajar(lista)
+  }
+  enum Inicio <<ts-rs>> {
+    BancoVacio { titulo }
+    Listo { titulo, sesion }
+  }
+  class PreguntaDeSesion <<ts-rs>> {
+    +id: String
+    +tema: String
+    +concepto: String
+    +pregunta: String
+    +opciones: Vec<String>
+    +correcta: u32
+    +explicacion: String
+    +paso: String
+    +paso_tras_seguro: String
+    +paso_tras_otra: String
+  }
+  enum Ronda <<ts-rs>> {
+    Inicio
+    Pregunta { contestada }
+    Final
+  }
+  class "nucleo (funciones)" as funciones <<lib.rs>> {
+    -TAMANO_SESION = 12
+    -HUECOS_SIN_VER = 4
+    +inicio(examen, banco): Inicio
+    +sesion(banco, historial, ahora, azar): Vec<PreguntaDeSesion>
+    +segundos(ts): Option<i64>
+    -estados(banco, historial): concepto → (Concepto, vence)
+  }
+}
+
+package servidor {
+  class Carpetas {
+    -raiz: PathBuf
+    -interfaz: PathBuf
+    -historial: Mutex
+  }
+  class "rutas (axum)" as rutas {
+    +app(raiz, interfaz): Router
+    --
+    GET /:examen → 308 /:examen/
+    GET /:examen/ → pagina → index.html
+    GET /:examen/api/inicio → inicio → Inicio
+    GET /:examen/api/sesion → sesion → PreguntaDeSesion[]
+    POST /:examen/api/respuestas → responder → 204
+    GET /assets/* → dist/assets
+  }
+  class "lectura" as lectura {
+    -leer_examen(carpetas, examen): Examen
+    -leer_banco(carpetas, examen): Vec<Pregunta>
+    -leer_historial(carpetas, examen): Vec<Respuesta>
+    -leer_si_existe(ruta): bytes
+    -error_interno(e): 500
+  }
+}
+
+package interfaz {
+  class "App.svelte" as App {
+    -inicio: Promise<Inicio>
+    -ronda: Ronda
+    -preguntas: PreguntaDeSesion[]
+    -i: number
+    -aciertos: number
+    -eleccion: { opcion, seguro }
+    -error: string
+    --
+    -empezar()
+    -contestar(opcion, seguro)
+    -siguiente()
+    -volver()
+    -abandonar()
+  }
+  class "tipos/*.ts" as tipos <<generado>> {
+    Inicio
+    PreguntaDeSesion
+    Ronda
+  }
+}
+
+funciones ..> Examen : lee
+funciones ..> Pregunta : lee
+funciones ..> Respuesta : lee
+funciones ..> Concepto : calcula el paso
+funciones ..> Azar : baraja
+funciones --> Inicio : devuelve
+funciones --> PreguntaDeSesion : devuelve
+rutas *-- Carpetas : estado
+rutas ..> lectura : lee la carpeta
+rutas ..> funciones : llama
+Inicio ..> tipos : ts-rs genera
+PreguntaDeSesion ..> tipos : ts-rs genera
+Ronda ..> tipos : ts-rs genera
+App ..> tipos : importa
+App ..> rutas : HTTP
+@enduml
+
+@startuml la-ronda
+!pragma layout smetana
+skinparam shadowing false
+title La ronda en App.svelte\nCada flecha lleva la función que hace el cambio
+
+state Inicio
+state "Pregunta { contestada: false }" as SinContestar
+state "Pregunta { contestada: true }" as Contestada
+state Final
+
+[*] --> Inicio
+Inicio --> SinContestar : empezar()
+SinContestar --> Contestada : contestar(opcion, seguro)
+Contestada --> SinContestar : siguiente(), quedan preguntas
+Contestada --> Final : siguiente(), la última
+SinContestar --> Inicio : abandonar(), el botón ✕
+Contestada --> Inicio : abandonar(), el botón ✕
+Final --> Inicio : volver()
+@enduml
+
+@startuml el-viaje-de-una-sesion
+skinparam shadowing false
+title El viaje de una sesión
+
+participant "App.svelte" as App
+participant servidor as S
+participant nucleo as N
+database "carpeta del examen" as C
+
+App -> S : GET api/inicio
+S -> C : examen.json, preguntas.json
+S -> N : inicio(examen, banco)
+N --> App : Inicio (BancoVacio o Listo)
+
+App -> S : GET api/sesion
+S -> C : preguntas.json, respuestas.jsonl
+S -> N : sesion(banco, historial, ahora, Azar::new(nanos))
+N --> App : 12 PreguntaDeSesion
+
+loop cada pregunta
+  note over App : el acierto es la opción elegida igual a correcta
+  App -> S : POST api/respuestas [id, ts, acierto, seguro]
+  S -> C : añade a respuestas.jsonl la que no está
+  S --> App : 204
+  note over App : muestra paso_tras_seguro o paso_tras_otra
+end
+@enduml
