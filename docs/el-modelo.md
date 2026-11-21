@@ -18,7 +18,7 @@ Rust tiene un `enum Concepto { SinVer, Paso(u32) }`.
 - Del **inicio**, una ronda empieza como una sesión o como un simulacro.
 - Cada pregunta pasa de **sin contestar** a **contestada**, y la pantalla muestra la solución. El simulacro añade el botón "En blanco" y el reloj.
 - La última pregunta lleva al **final**, y el final vuelve al inicio. El botón ✕ también vuelve al inicio.
-- Un simulacro con el `limite` pasado va al final, y cada pregunta sin contestar cuenta en blanco.
+- Un simulacro con el `limite` pasado va al final. Cada pregunta sin contestar cuenta en blanco para la nota, y no entra en el historial.
 - La ronda a medias vive en `localStorage` y en el servidor. Al cargar, gana el guardado más nuevo.
 
 Rust tiene un `enum Ronda { Inicio, Pregunta { contestada: bool }, Final }`.

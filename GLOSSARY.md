@@ -10,11 +10,13 @@ Una app para practicar exámenes tipo test, con un banco de preguntas por examen
 
 **Concepto**: La idea que una pregunta pone a prueba. Varias preguntas del banco comparten un concepto. _Evita_: tema (un tema agrupa conceptos)
 
-**Historial**: Todas las respuestas de un examen, en orden de hora.
+**Historial**: Todas las respuestas de un examen, en orden de hora. Cada respuesta es un acierto, un fallo o una pregunta en blanco.
 
 ## La respuesta
 
 **Acierto con "seguro"**: Una respuesta correcta, marcada como segura antes de ver la solución. Es la única respuesta que sube el paso.
+
+**En blanco**: Una pregunta que dejas sin contestar a propósito. Entra en el historial, y pone el paso a 0 como un fallo. Una pregunta sin contestar al pasar el límite del simulacro no entra en el historial.
 
 ## El concepto
 
