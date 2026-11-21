@@ -1,6 +1,6 @@
 # El modelo de la práctica
 
-La app tiene 3 máquinas de estados: el paso de un concepto, el estado de un concepto y la ronda. Las 3 se calculan desde `respuestas.jsonl`, y ningún estado se guarda aparte. El paso y la sesión entran antes en la app de JavaScript, con `los-intervalos-del-concepto` (#17), y la migración los pasa a Rust.
+La app tiene 2 máquinas de estados: el paso de un concepto y la ronda. Las 2 se calculan desde `respuestas.jsonl`, y ningún estado se guarda aparte. El paso y la sesión entran antes en la app de JavaScript, con `los-intervalos-del-concepto` (#17), y la migración los pasa a Rust.
 
 ## El paso de un concepto
 
@@ -9,13 +9,9 @@ La app tiene 3 máquinas de estados: el paso de un concepto, el estado de un con
 - Un fallo, un acierto con "dudo" o una pregunta en blanco ponen el paso a 0, y el concepto vence en el acto.
 - Cada respuesta mueve el paso, la de una sesión y la de un simulacro.
 
-## El estado de un concepto
+Un concepto con un paso de 1 o más está en **sabes**. La barra del camino y la tarjeta de la nota cuentan los conceptos en "sabes". La pantalla de la pregunta muestra el paso del concepto.
 
-- Un concepto sin respuestas está **sin ver**.
-- La última respuesta a una pregunta del concepto decide su estado. Un acierto con "seguro" deja el concepto en **sabes**. Otra respuesta lo deja en **no sabes**.
-- La barra del camino y la tarjeta de la nota usan este estado.
-
-La pantalla de la pregunta muestra el paso del concepto.
+Rust tiene un `enum Concepto { SinVer, Paso(u32) }`.
 
 ## La ronda
 
@@ -24,6 +20,8 @@ La pantalla de la pregunta muestra el paso del concepto.
 - La última pregunta lleva al **final**, y el final vuelve al inicio. El botón ✕ también vuelve al inicio.
 - Un simulacro con el `limite` pasado va al final, y cada pregunta sin contestar cuenta en blanco.
 - La ronda a medias vive en `localStorage` y en el servidor. Al cargar, gana el guardado más nuevo.
+
+Rust tiene un `enum Ronda { Inicio, Pregunta { contestada: bool }, Final }`.
 
 ## La sesión de 12 preguntas
 

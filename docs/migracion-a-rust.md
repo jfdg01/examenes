@@ -29,19 +29,13 @@ Una función que nadie usa no pasa a Rust, y su código se va. Una función que 
 
 ## El flujo de trabajo
 
-1. El grilling termina con la revisión de la lógica de [el modelo](el-modelo.md): el paso y la sesión, que la app de JavaScript prueba antes, el estado del concepto y la ronda.
+1. El grilling termina con la revisión de la lógica de [el modelo](el-modelo.md): el paso del concepto, que la app de JavaScript prueba antes, y la ronda. El spec define cada estado y cada transición.
 2. `/to-spec` convierte las decisiones en un spec, y `/to-tickets` lo corta en tickets con sus dependencias.
 3. Cada ticket se construye con un `/implement`, con `/clear` entre ticket y ticket.
 
 Al final del grilling, cada doc que no hace falta se borra, y cada línea que no hace falta sale de los docs. Al final de la implementación, un doc que el código ya explica se resume a lo que el código no dice.
 
 La rama `feat/bkt` y su modelo BKT quedan fuera de la migración, congelados hasta que el dueño los nombre. La migración pasa a Rust el modelo de los intervalos.
-
-## Las preguntas abiertas
-
-- **El estado del concepto en la tarjeta de la nota.** Hoy "sabes" sale de la última respuesta, y no del paso.
-- **La ronda.** Falta confirmar su máquina en [el modelo](el-modelo.md).
-- **Las máquinas de estados explícitas.** El spec define cada estado y cada transición, y Rust tiene un `enum` por máquina.
 
 ## El final de este doc
 
