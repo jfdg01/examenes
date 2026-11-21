@@ -148,10 +148,8 @@ La solución tiene, en este orden:
 
 1. La `explicacion`.
 2. El botón "Siguiente".
-3. Una fila con 2 botones fijos: "Ver la página aquí" a la izquierda y "La fuente" a la derecha.
-4. Un panel debajo de la fila. "Ver la página aquí" muestra la imagen de la página. "La fuente" muestra el PDF, la página, el concepto y el enlace "Abrir el PDF en la página N", con `#page=N` en la URL.
-
-Un solo panel está abierto a la vez. El panel va debajo de "Siguiente", así que un panel abierto no mueve el botón.
+3. Una línea con el PDF, la página, el concepto con su paso y el enlace "Abrir el PDF en la página N", con `#page=N` en la URL.
+4. La imagen de la página.
 
 El engranaje muestra los tiradores de las columnas. Sus posiciones quedan en `localStorage`, en `ln-columnas`, y cada dispositivo tiene las suyas.
 
