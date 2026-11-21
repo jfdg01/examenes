@@ -139,6 +139,7 @@ package nucleo {
     +corregir(pregunta, opcion, seguro, ahora): Respuesta
     +restante(limite, ahora): segundos
     +gana(a, b): Guardado
+    +unir(a, b): Vec<Respuesta>, en orden de hora y sin repetir id y ts
     +restaurar(banco, historial, guardado, azar): Option<RondaAMedias>
     +segundos(ts): Option<i64>
     +hora(segundos): ts
@@ -157,6 +158,7 @@ package nucleo {
     +corregir(pregunta, opcion, seguro, ahora): Respuesta
     +restante(limite, ahora): segundos
     +gana(a, b): Guardado
+    +unir(a, b): Respuesta[]
     +restaurar(datos, guardado, ahora): RondaAMedias o undefined
     +nota(cierre, penalizacion): NotaDelSimulacro
     -azar(ahora): Azar, con la hora de semilla
@@ -208,6 +210,8 @@ package interfaz {
     --
     -arrancar(), al cargar la página
     -enviar(guardado), a localStorage <examen>-ronda y a PUT api/ronda
+    -pendientes(): Respuesta[], de localStorage <examen>-pendientes
+    -enviarPendientes(): error o "", en cola, a POST api/respuestas
     -guardar(), de empezar, contestar, terminar y volver
     -empezar(comoSimulacro)
     -seguir(), en la primera pregunta sin resultado
@@ -215,7 +219,7 @@ package interfaz {
     -contestar(opcion o null, seguro)
     -siguiente()
     -terminar()
-    -cargarInicio()
+    -cargarInicio(), al cargar, al volver y al volver la red
     -volver()
     -abandonar()
   }
@@ -296,6 +300,8 @@ database "carpeta del examen" as C
 App -> S : GET api/inicio
 S -> C : examen.json, preguntas.json, respuestas.jsonl
 S --> App : Datos { examen, banco, historial }
+App -> N : unir(historial, pendientes)
+N --> App : el historial de la pantalla
 App -> N : inicio(datos, objetivo)
 N --> App : Inicio (BancoVacio o Listo)
 
@@ -305,9 +311,15 @@ N --> App : 12 PreguntaDeSesion
 loop cada pregunta
   App -> N : corregir(pregunta, opcion, seguro, Date.now())
   N --> App : Respuesta, en blanco sin opción
-  App -> S : POST api/respuestas [id, ts, resultado, seguro]
-  S -> C : añade a respuestas.jsonl la que no está
-  S --> App : 204
+  note over App : la respuesta entra en localStorage <examen>-pendientes,\ny datos.historial = unir(historial, [respuesta])
+  App -> S : POST api/respuestas, con todas las pendientes
+  alt con red
+    S -> C : añade a respuestas.jsonl las que no están
+    S --> App : 204
+    note over App : las enviadas salen de las pendientes
+  else sin red
+    note over App : las pendientes esperan al evento online o a la carga siguiente
+  end
   note over App : muestra paso_tras_seguro o paso_tras_otra
 end
 @enduml
