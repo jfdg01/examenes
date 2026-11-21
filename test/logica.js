@@ -1,15 +1,18 @@
-export function cajas(historial) {
+const TAMANO_SESION = 12;
+const HUECOS_SIN_VER = 4;
+const HUECO = 10 * 60 * 1000;
+
+export function pasos(banco, historial) {
+  const concepto = new Map(banco.map((q) => [q.id, q.concepto]));
   const estado = new Map();
   for (const r of [...historial].sort((a, b) => a.ts.localeCompare(b.ts))) {
-    const caja = estado.get(r.id)?.caja ?? 1;
-    estado.set(r.id, { caja: r.acierto && r.seguro ? Math.min(caja + 1, 3) : 1, ts: r.ts });
+    const c = concepto.get(r.id);
+    if (c === undefined) continue;
+    const paso = r.acierto && r.seguro ? (estado.get(c)?.paso ?? 0) + 1 : 0;
+    estado.set(c, { paso, vence: Date.parse(r.ts) + (paso && HUECO * 3 ** (paso - 1)) });
   }
   return estado;
 }
-
-const TAMANO_SESION = 12;
-const PAUSA = 3 * 3600 * 1000;
-const PESO = { 2: 1, 3: 0.5 };
 
 export function barajar(lista, azar = Math.random) {
   const copia = [...lista];
@@ -20,29 +23,21 @@ export function barajar(lista, azar = Math.random) {
   return copia;
 }
 
-function principioDelBloque(historial, ahora) {
-  let principio = ahora.getTime();
-  for (const t of historial.map((r) => Date.parse(r.ts)).sort((a, b) => b - a)) {
-    if (t > principio) continue;
-    if (principio - t >= PAUSA) break;
-    principio = t;
-  }
-  return principio;
-}
-
 export function sesion(banco, historial, ahora, azar = Math.random) {
-  const estado = cajas(historial);
-  const bloque = principioDelBloque(historial, ahora);
-  const vistos = new Set(banco.filter((q) => estado.has(q.id)).map((q) => q.concepto));
-  const caja1 = [], sinVer = new Map(), sorteo = [];
+  const estado = pasos(banco, historial);
+  const ultima = new Map();
+  for (const r of historial) if (!(r.ts <= ultima.get(r.id))) ultima.set(r.id, r.ts);
+  const pregunta = new Map();
   for (const q of barajar(banco, azar)) {
-    const e = estado.get(q.id);
-    if (e?.caja === 1) caja1.push(q);
-    else if (!vistos.has(q.concepto)) { if (!sinVer.has(q.concepto)) sinVer.set(q.concepto, q); }
-    else if (!e || Date.parse(e.ts) < bloque) sorteo.push({ q, clave: -Math.log(azar()) / (e ? PESO[e.caja] : 1) });
+    const otra = pregunta.get(q.concepto);
+    if (!otra || (ultima.has(otra.id) && (!ultima.has(q.id) || ultima.get(q.id) < ultima.get(otra.id)))) pregunta.set(q.concepto, q);
   }
-  const elegidas = sorteo.sort((a, b) => a.clave - b.clave).map((x) => x.q);
-  return barajar([...caja1, ...sinVer.values(), ...elegidas].slice(0, TAMANO_SESION), azar);
+  const conceptos = [...pregunta.keys()];
+  const sinVer = conceptos.filter((c) => !estado.has(c));
+  const vistos = conceptos.filter((c) => estado.has(c)).sort((a, b) => estado.get(a).vence - estado.get(b).vence);
+  const vencidos = vistos.filter((c) => estado.get(c).vence <= ahora.getTime()).slice(0, TAMANO_SESION - (sinVer.length && HUECOS_SIN_VER));
+  const resto = vistos.slice(vencidos.length);
+  return barajar([...vencidos, ...sinVer, ...resto].slice(0, TAMANO_SESION).map((c) => pregunta.get(c)), azar);
 }
 
 export function conceptos(banco, historial) {
@@ -72,16 +67,6 @@ export function porcentajeDudo(historial) {
   return { porcentaje: (100 * aciertos) / dudas.length, total: dudas.length, aciertos };
 }
 
-export function dominio(banco, historial) {
-  const estado = cajas(historial);
-  const minimo = new Map();
-  for (const q of banco) {
-    const caja = estado.get(q.id)?.caja ?? 1;
-    minimo.set(q.concepto, Math.min(caja, minimo.get(q.concepto) ?? 3));
-  }
-  return minimo;
-}
-
 export const clave = (r) => r.id + "|" + r.ts;
 
 export function unir(servidor, locales) {
@@ -90,7 +75,7 @@ export function unir(servidor, locales) {
   return [...vistas.values()];
 }
 
-// Un examen es el examen.json de su carpeta: titulo, preguntas, opciones, minutos, penalizacion y temas.
+// Un examen es el examen.json de su carpeta: titulo, preguntas, opciones, minutos, penalizacion y pdfs.
 // penalizacion es la parte de un acierto que resta un fallo.
 export const simulacro = (banco, n, azar = Math.random) => barajar(banco, azar).slice(0, n);
 

@@ -1,5 +1,5 @@
 import {
-  cajas, conceptos, dominio, guardado, masNueva, restaurar, tarjetaDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, nota, opciones, pdfEnPagina, respuesta, resultado, sesion, simulacro, unir, clave,
+  pasos, conceptos, guardado, masNueva, restaurar, tarjetaDeLaNota, textoParaCopiar, imagenDePagina, mover, COLUMNAS, nota, opciones, pdfEnPagina, respuesta, resultado, sesion, simulacro, unir, clave,
 } from "./logica.js";
 
 const PENDIENTES = "ln-pendientes";
@@ -117,9 +117,7 @@ function inicio() {
     sinEnviar ? el("p", { className: "aviso", textContent: `${sinEnviar} respuestas sin enviar al servidor.` }) : null,
     lista.length
       ? el("button", { className: "grande", textContent: `Empezar la sesión (${lista.length} preguntas)`, onclick: () => empezar({ preguntas: lista, simulacro: false, i: 0, resultados: [] }) })
-      : el("p", { className: "tarjeta", textContent: banco.length
-        ? "No hay preguntas pendientes. El repaso vuelve después de una pausa de 3 horas."
-        : "El banco no tiene preguntas." }),
+      : el("p", { className: "tarjeta", textContent: "El banco no tiene preguntas." }),
     el("button", { className: "grande otro", textContent: `Simulacro (${simulacro(banco, examen.preguntas).length} preguntas)`, onclick: () => empezar({ preguntas: simulacro(banco, examen.preguntas), simulacro: true, i: 0, resultados: [], limite: Date.now() + examen.minutos * 60000 }) }),
   );
 }
@@ -141,7 +139,6 @@ function pregunta(ronda) {
   const q = ronda.preguntas[ronda.i];
   const movil = !matchMedia("(min-width:900px)").matches;
   const ops = opciones(q);
-  const caja = cajas(historial).get(q.id)?.caja ?? 1;
   const filas = ops.map((op) => el("div", { className: "fila" },
     el("button", { className: "texto", textContent: op, onclick: () => contestar(op, true) }),
     el("button", { className: "dudo", textContent: "dudo", onclick: () => contestar(op, false) })));
@@ -172,7 +169,7 @@ function pregunta(ronda) {
   const blanco = ronda.simulacro ? el("button", { className: "blanco", textContent: "En blanco", onclick: () => contestar(null, false) }) : null;
   const ayuda = el("p", { className: "dim ayuda", textContent: "Toca el texto si estás seguro. Toca «dudo» si dudas." });
   const derecha = el("div", { className: "hoja vacia" }, el("div", {}, el("p", { textContent: "Elige una opción. La explicación sale aquí." })));
-  const titulo = [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : `caja ${caja}`].filter(Boolean).join(" · ");
+  const titulo = [ronda.simulacro ? "Simulacro" : null, `${ronda.i + 1} / ${ronda.preguntas.length}`, q.tema, ronda.simulacro ? null : textoDelPaso(q.concepto)].filter(Boolean).join(" · ");
   const enunciado = el("div", { className: "q", textContent: q.pregunta });
   const cuerpo = el("div", { className: "cuerpo" }, enunciado, ...filas, campo);
   const pie = el("div", { className: "pie" }, blanco, ayuda);
@@ -253,32 +250,24 @@ function verFuente(q) {
   document.body.append(ov);
 }
 
+function textoDelPaso(concepto) {
+  const e = pasos(banco, historial).get(concepto);
+  return e ? `paso ${e.paso}` : "nuevo";
+}
+
 function hoja(q, siguiente) {
   return el("div", { className: "hoja" }, el("div", {},
-    el("p", { textContent: q.explicacion }),
+    el("p", { className: "expl", textContent: q.explicacion }),
     el("button", { className: "grande", textContent: "Siguiente", onclick: siguiente }),
     fuentes(q)));
 }
 
 function fuentes(q) {
   const { pdf, pagina } = q.fuente;
-  const paneles = [
-    ["Ver la página aquí", () => el("img", { src: imagenDePagina(q.fuente), alt: `La página ${pagina} de ${pdf}` })],
-    ["La fuente", () => el("div", {},
-      el("p", { textContent: `${pdf}, página ${pagina} · ${q.concepto} (dominio: caja ${dominio(banco, historial).get(q.concepto)})` }),
-      el("p", {}, el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: `Abrir el PDF en la página ${pagina}` })))],
-  ];
-  const panel = el("div", { className: "panel" });
-  const botones = paneles.map(([texto, crear]) => {
-    const boton = el("button", { className: "fuente", textContent: texto, onclick: () => {
-      const abrir = !boton.classList.contains("abierto");
-      botones.forEach((b) => b.classList.remove("abierto"));
-      panel.replaceChildren(...(abrir ? [crear()] : []));
-      boton.classList.toggle("abierto", abrir);
-    } });
-    return boton;
-  });
-  return el("div", {}, el("div", { className: "fuentes" }, ...botones), panel);
+  return el("div", { className: "panel" },
+    el("p", {}, `${pdf}, página ${pagina} · ${q.concepto} (${textoDelPaso(q.concepto)}) · `,
+      el("a", { href: pdfEnPagina(q.fuente), target: "_blank", textContent: `Abrir el PDF en la página ${pagina}` })),
+    el("img", { src: imagenDePagina(q.fuente), alt: `La página ${pagina} de ${pdf}` }));
 }
 
 function fin(ronda) {

@@ -5,7 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from comprobar_banco import comprobar, huerfanas
+from aplicar_revision import aplicar
+from comprobar_banco import comprobar, huerfanas, pistas
 
 AQUI = Path(__file__).parent
 LN = AQUI.parent / "ln"
@@ -52,6 +53,11 @@ class ComprobarBanco(unittest.TestCase):
                 self.assertEqual(len(errores), 1)
                 self.assertIn("distractores", errores[0])
 
+    def test_un_tema_que_no_es_de_su_pdf_falla(self):
+        errores = comprobar(con_pareja(pregunta(tema="ens")), LN)
+        self.assertEqual(len(errores), 1)
+        self.assertIn("ens", errores[0])
+
     def test_un_distractor_igual_a_la_correcta_falla(self):
         errores = comprobar(con_pareja(pregunta(distractores=["24 horas", "72 horas", "Un mes"])), LN)
         self.assertEqual(len(errores), 1)
@@ -78,6 +84,13 @@ class ComprobarBanco(unittest.TestCase):
                 self.assertEqual(len(errores), 1)
                 self.assertIn("rgpd-brecha-plazo", errores[0])
 
+    def test_un_concepto_de_sigla_tiene_1_pregunta(self):
+        sigla = pregunta(concepto="sigla-rgpd")
+        self.assertEqual(comprobar([sigla], LN), [])
+        errores = comprobar([sigla, pregunta(id="rgpd-002", concepto="sigla-rgpd")], LN)
+        self.assertEqual(len(errores), 1)
+        self.assertIn("sigla-rgpd", errores[0])
+
     def test_el_script_falla_con_un_banco_con_errores(self):
         with tempfile.TemporaryDirectory() as tmp:
             banco = Path(tmp) / "preguntas.json"
@@ -88,6 +101,31 @@ class ComprobarBanco(unittest.TestCase):
                 r = subprocess.run([sys.executable, AQUI / "comprobar_banco.py", banco], capture_output=True)
                 self.assertEqual(r.returncode, codigo)
 
+    def test_un_absoluto_solo_en_un_distractor_es_una_pista(self):
+        avisos = pistas([pregunta(distractores=["Siempre 24 h", "Un mes", "48 horas"])])
+        self.assertEqual(len(avisos), 1)
+        self.assertIn("siempre", avisos[0])
+        for correcta, distractores in (("72 horas", ["Un solo día", "Un mes", "48 horas"]), ("Nunca 72 h", ["Nunca 24 horas", "Un mes", "48 horas"])):
+            with self.subTest(distractores=distractores):
+                self.assertEqual(pistas([pregunta(correcta=correcta, distractores=distractores)]), [])
+
+    def test_la_correcta_más_larga_en_más_de_1_de_cada_3_es_una_pista(self):
+        larga = pregunta(correcta="72 horas desde que lo sabe")
+        sigla = pregunta(concepto="sigla-rgpd", correcta="72 horas desde que lo sabe")
+        self.assertEqual(pistas([larga, pregunta(), pregunta(), sigla]), [])
+        self.assertEqual(len(pistas([larga, larga, pregunta()])), 1)
+
+    def test_la_revisión_aplica_los_arreglos_y_da_el_resto(self):
+        banco = [pregunta()]
+        fallos = [
+            {"id": "rgpd-001", "regla": 3, "gravedad": "grave", "fallo": "x", "arreglo": {"correcta": "3 días"}},
+            {"id": "rgpd-001", "regla": 5, "gravedad": "leve", "fallo": "y", "arreglo": None},
+            {"id": "rgpd-001", "regla": 0, "gravedad": "leve", "fallo": "z", "arreglo": {"id": "rgpd-009"}},
+            {"id": "viejo-1", "regla": 3, "gravedad": "grave", "fallo": "w", "arreglo": {"correcta": "1"}},
+        ]
+        self.assertEqual([f["fallo"] for f in aplicar(banco, fallos)], ["y", "z", "w"])
+        self.assertEqual(banco[0]["correcta"], "3 días")
+        self.assertEqual(banco[0]["id"], "rgpd-001")
 
     def test_un_id_del_historial_fuera_del_banco_es_huerfano(self):
         with tempfile.TemporaryDirectory() as tmp:

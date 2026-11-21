@@ -1,6 +1,6 @@
 # El test de práctica
 
-Un banco de preguntas tipo test del temario de un examen, con una interfaz web y un servidor que sincroniza el historial entre el móvil y el PC. Esta carpeta tiene el código, y cada examen tiene una carpeta de datos al lado: `ln/` y `asn/`.
+Un banco de preguntas tipo test del temario de un examen, con una interfaz web y un servidor que sincroniza el historial entre el móvil y el PC. Esta carpeta tiene el código, y cada examen tiene una carpeta de datos al lado: `ln/`, `asn/` y `ps/`.
 
 ## Los exámenes
 
@@ -24,72 +24,26 @@ El historial, las notas y la ronda a medias también viven en la carpeta del exa
   "opciones": 3,
   "minutos": 45,
   "penalizacion": 0,
-  "temas": ["introduccion", "ciclo-de-vida"]
+  "pdfs": {
+    "1_Introduccion.pdf": ["introduccion"],
+    "2_Ciclo_de_vida.pdf": ["ciclo-de-vida"]
+  }
 }
 ```
 
-- `titulo` sale en el título de la página.
 - `puerto` es el puerto local del servidor. `tailscale serve` pone HTTPS delante, en el puerto anterior: 8604 para 8605.
 - `preguntas` y `minutos` son las cifras del simulacro.
 - `opciones` es el número de opciones de una pregunta del examen. Una pregunta del banco tiene `opciones` − 1 distractores.
 - `penalizacion` es la parte de un acierto que un fallo resta: 0,25 resta 1/4 de un acierto, y 0 no resta.
-- `temas` es la lista de los valores de `tema`.
+- `pdfs` da los temas de cada PDF de `pdfs/`. Un PDF de LN tiene varios temas.
 
 Cada examen tiene su puerto, y el navegador separa el `localStorage` de cada puerto. Así, las claves `ln-*` de un examen no pisan las claves de otro examen.
 
 Un examen nuevo es una carpeta nueva con su `examen.json`, un `preguntas.json` con `[]` y sus PDFs en `pdfs/`. Elige un `puerto` libre: `tailscale serve status` lista los puertos ocupados.
 
-## El banco: `preguntas.json`
+## El banco
 
-El banco es una lista de preguntas en JSON. El navegador lo lee con `fetch`, sin dependencias.
-
-```json
-{
-  "id": "rgpd-001",
-  "concepto": "rgpd-brecha-plazo",
-  "tema": "rgpd",
-  "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 38 },
-  "pregunta": "¿En qué plazo notifica el responsable una brecha a la autoridad de control?",
-  "correcta": "72 horas desde que tiene constancia de la brecha",
-  "distractores": ["24 horas desde que ocurre la brecha", "Un mes desde que tiene constancia", "Sin plazo fijo"],
-  "explicacion": "Art. 33 del RGPD."
-}
-```
-
-- `id` no cambia nunca, porque el historial lo usa como clave.
-- `concepto` agrupa 2 o 3 preguntas que preguntan el mismo dato desde ángulos distintos. Así, una respuesta mide el dato, y no la forma de la pregunta.
-- `tema` es uno de los `temas` de `examen.json`.
-- `fuente` lleva el PDF y la página del PDF. `pagina` es la página del PDF, y no el número de la diapositiva. Cada pregunta sale del temario, y no de otra fuente.
-- `correcta` va aparte de los `distractores`, y la interfaz baraja las opciones. Una opción no dice "todas las anteriores", porque el barajado la rompe.
-- `explicacion` dice el contraste clave en una línea.
-
-Una pregunta tiene las `opciones` del examen, para que el test entrene la misma elección que el examen.
-
-### La calidad de una pregunta
-
-Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002), "A review of multiple-choice item-writing guidelines", y la guía de redacción de preguntas del NBME, de Case y Swanson.
-
-1. **Una sola respuesta defendible.** La correcta es cierta según su página, y cada distractor es falso según el temario. Un distractor "menos correcto" no vale. Un dato que el temario da de 2 formas distintas no tiene pregunta.
-2. **El enunciado se contesta sin las opciones.** El enunciado nombra el concepto del temario y pide una sola cosa de ese concepto. Con las opciones tapadas, quien sabe el dato da una sola respuesta corta. Así, la pregunta entrena el recuerdo del dato, y no solo su reconocimiento. Un caso práctico pide un solo salto: del caso al concepto, o del concepto a lo que hace, y no los 2. El enunciado no lleva un detalle que la respuesta no necesita. El enunciado dice la idea con otras palabras, y no copia la frase del temario, pero usa el término del temario para el concepto.
-3. **Ninguna pista fuera del dato.** Las opciones tienen una longitud parecida, y la correcta es la más larga en 1 de cada `opciones` preguntas como mucho: un 25 % con 4 opciones, y un 33 % con 3. Todas tienen la forma gramatical que pide el enunciado. Una palabra del enunciado no se repite solo en la correcta, y "siempre", "nunca" o "solo" no van solo en los distractores. Una sigla o una traducción del enunciado también es una pista: "CWNP" en el enunciado señala "CWSP", y "seguridad ofensiva" señala "Offensive Security". Ninguna opción es "todas las anteriores" ni "ninguna de las anteriores", porque la interfaz baraja las opciones.
-4. **Cada distractor sale del temario que dio el profesor.** Un distractor es un nombre, una cifra o una idea del temario, fuera de los ejercicios y de las actividades. El mejor distractor es la confusión más probable de quien estudia, como responsable y encargado. Un nombre que no sale en el temario se descarta sin saber el dato.
-5. **Ningún enunciado negativo.** Un "¿Cuál NO es…?" se lee mal con prisa, y entrena la búsqueda de la trampa, y no el dato.
-6. **Una idea, y no un dato suelto.** La pregunta pide una idea del temario: una regla, un plazo, la diferencia entre 2 figuras o lo que hace algo. Una fecha del calendario, el número de una norma o el nombre de la organización que ofrece una certificación no tienen pregunta. Un plazo sí la tiene, porque es una regla, como las 72 horas para notificar una brecha. Una pregunta puede nombrar una norma por su número, pero no pide ese número.
-
-Una pregunta que rompe la regla 6 deja su sitio a una pregunta nueva, sobre otra idea de la misma página. La pregunta nueva lleva un `id` nuevo, porque el historial del `id` viejo mide el dato suelto. Una página sin otra idea pierde la pregunta. Una pregunta que rompe la regla 3 conserva su `id`, porque su dato no cambia.
-
-### Las preguntas difíciles
-
-Una pregunta de cada 5 es difícil. Su distractor está muy cerca del dato, y falla solo en un detalle. Así, la pregunta obliga a entender el dato entero, y no solo a reconocer una palabra. Una pregunta difícil engaña con el contenido, y nunca con la forma: sigue las 6 reglas de calidad.
-
-Un distractor difícil tiene una de estas formas:
-
-- **Un solo cambio.** Copia la correcta y cambia un término: "responsable" por "encargado", o "desde que tiene constancia" por "desde que ocurre".
-- **Una verdad que no responde.** Es cierto en el temario, pero responde a otra pregunta, como el plazo de otro artículo.
-- **La excepción.** El caso parece seguir la regla general, pero el temario tiene una excepción para ese caso.
-- **La cifra en otra unidad.** El número es el correcto, pero la unidad o la referencia cambian: "72 días", o el 4 % del beneficio.
-
-Una pregunta pasa a ser difícil con otros distractores, y con el mismo dato. Así, su `id` mide el mismo dato en el historial.
+El formato de `preguntas.json`, las reglas de una pregunta y el comprobador están en `BANCO.md`.
 
 ## El historial: `respuestas.jsonl`
 
@@ -99,20 +53,21 @@ El historial es una lista de respuestas que solo crece, con una respuesta por l�
 {"id": "rgpd-001", "ts": "2026-11-06T18:02:11Z", "acierto": true, "seguro": false}
 ```
 
-La interfaz calcula todo el estado con esta lista: la caja de cada pregunta y el dominio de cada concepto. Dos dispositivos no tienen conflictos, porque cada uno solo añade líneas.
+La interfaz calcula todo el estado con esta lista: el paso de cada concepto y su fecha de repaso. Dos dispositivos no tienen conflictos, porque cada uno solo añade líneas.
 
-El historial no entra en git. El servidor lo guarda en `respuestas.jsonl`, en la carpeta del examen.
+Una respuesta huérfana tiene un `id` que no está en el banco. Una pregunta que pasa a preguntar otra idea lleva un `id` nuevo, y deja sus respuestas huérfanas. La interfaz no usa las respuestas huérfanas en ninguna cuenta, y el archivo las conserva, porque una línea borrada no tiene vuelta atrás.
 
-Una respuesta huérfana tiene un `id` que no está en el banco. Una pregunta que la regla 6 cambia deja sus respuestas huérfanas. La interfaz no usa las respuestas huérfanas en ninguna cuenta, y el archivo las conserva, porque una línea borrada no tiene vuelta atrás.
+## La confianza y el paso del concepto
 
-## La confianza y las cajas
+Antes de ver la solución, marcas "seguro" o "dudo". El historial, ordenado por `ts`, da a cada concepto un paso y una fecha de repaso:
 
-Antes de ver la solución, marcas "seguro" o "dudo". La pregunta va a una de 3 cajas:
+| Respuesta a una pregunta del concepto | Paso siguiente | El concepto vence |
+|---|---|---|
+| Ninguna | Sin ver | |
+| Acierto con "seguro" | Un paso más | En `ts` + el hueco del paso |
+| Fallo, acierto con "dudo" o pregunta en blanco | Paso 0 | En el acto |
 
-| Respuesta | Caja siguiente |
-|---|---|
-| Fallo, o acierto con "dudo" | Caja 1 |
-| Acierto con "seguro" | Una caja más, hasta la 3 |
+El hueco del paso N es 10 minutos × 3^(N − 1): 10 min, 30 min, 1 h 30 min, 4 h 30 min, 13 h 30 min, 40 h… Cada acierto con "seguro" sube el paso, aunque el concepto no haya vencido. Las respuestas del simulacro también mueven el paso.
 
 Cada concepto tiene uno de 3 estados. La última respuesta a una pregunta del concepto decide el estado:
 
@@ -124,17 +79,17 @@ Cada concepto tiene uno de 3 estados. La última respuesta a una pregunta del co
 
 Un acierto con "seguro" en una pregunta basta para saber el concepto, porque sus preguntas preguntan el mismo dato. Un fallo posterior en otra pregunta del concepto muestra una idea falsa, y el concepto pasa a "no lo sabes".
 
-Una sesión tiene 12 preguntas, y llena sus huecos en este orden:
+Una sesión tiene 12 preguntas, una por concepto, y llena sus huecos en este orden:
 
-1. Las preguntas de la caja 1.
-2. Una pregunta al azar de cada concepto sin ver.
-3. Un sorteo sin repetición, para los huecos que quedan.
+1. Los conceptos vencidos, del vencido hace más tiempo al vencido hace menos. Mientras quedan conceptos sin ver, los vencidos llenan 8 huecos como mucho.
+2. Los conceptos sin ver, al azar.
+3. Los conceptos que vencen antes.
 
-El paso 2 da la vuelta a todo el banco antes del repaso, porque un concepto nuevo enseña un dato, y una pregunta hermana solo lo confirma. El sorteo no saca otra pregunta de un concepto sin ver, así que un concepto sale una sola vez en su vuelta. Con todos los conceptos vistos, el paso 2 queda vacío.
+Los 4 huecos de los conceptos sin ver dan la vuelta a todo el banco mientras sigue el repaso, porque un concepto nuevo enseña un dato. Con todos los conceptos vistos, los vencidos llenan los 12 huecos.
 
-En el sorteo, una pregunta nueva y una pregunta de la caja 2 pesan 1, y una pregunta de la caja 3 pesa 0,5. Así, un grupo grande sale más, y todo el banco avanza a la vez. Las 12 preguntas salen en un orden al azar, con los temas y las cajas mezclados.
+De cada concepto sale una pregunta sin respuestas, al azar entre las de ese concepto. Si todas tienen respuestas, sale la de la respuesta más vieja. Así las preguntas hermanas se turnan. Las 12 preguntas salen en un orden al azar, con los temas mezclados.
 
-Un bloque de estudio termina con una pausa de 3 horas sin respuestas. Una pregunta de la caja 2 o de la caja 3 no sale en el bloque de su última respuesta. La caja 1 sale en cada sesión. Una sesión sin preguntas dice que el repaso vuelve después de una pausa de 3 horas.
+El título de la pregunta muestra "nuevo" para un concepto sin ver, o "paso N". La línea de la fuente muestra el paso del concepto.
 
 Un fallo con "seguro" se marca en la pantalla de la solución, porque es una idea falsa.
 
@@ -144,15 +99,13 @@ Un fallo resta la `penalizacion` de un acierto. La tarjeta de la nota, en la pan
 
 Debajo del título, la pantalla de inicio tiene una barra con 3 tramos, uno por cada estado de un concepto: verde para "lo sabes", rojo para "no lo sabes" y gris para "sin ver". El largo de cada tramo es su parte de los conceptos del banco. Debajo de la barra van las 3 cifras: "Sabes 79 · No sabes 6 · Sin ver 66, de 151 conceptos".
 
-El tramo gris baja con cada sesión, hasta que la vuelta a todo el banco termina.
-
-Debajo de las cifras va la tarjeta de la nota, la única tarjeta de la pantalla. Arriba dice "Sacar más de 5", con un slider que elige la nota, de 0,5 a 10, con pasos de 0,5. La nota empieza en 5, y queda en `localStorage`, en `ln-objetivo`. El cálculo cuenta la nota elegida o más.
+Debajo va la tarjeta de la nota, con un slider que elige la nota, de 0,5 a 10. La nota empieza en 5, y queda en `localStorage`, en `ln-objetivo`. El cálculo cuenta la nota elegida o más.
 
 La tarjeta tiene 3 partes, de arriba abajo:
 
-1. **La flecha**: a la izquierda, la probabilidad de hoy, "80 %", con "con 81 conceptos" debajo. A la derecha, "95 %", con "con 98 conceptos" debajo. En el medio, una flecha con "≈4 sesiones". La palabra "probabilidad" no sale.
-2. **La barra del camino**: un tramo verde para los conceptos que sabes, un tramo amarillo para los conceptos que faltan, y una marca en el 95 %. El largo de cada tramo es su parte de los conceptos del banco. La barra no tiene bloques.
-3. **El consejo**: "Contesta las dudas · +9 puntos", o "Deja las dudas en blanco · +N puntos". Los puntos son la diferencia entre la probabilidad de las 2 formas, en puntos de porcentaje. Un botón "?" abre el desglose, un `<details>` que empieza cerrado. El desglose sigue abierto cuando el slider se mueve.
+1. **La flecha**: a la izquierda, la probabilidad de hoy, "80 %", con "con 81 conceptos" debajo. A la derecha, "95 %", con "con 98 conceptos" debajo. En el medio, una flecha con "≈4 sesiones".
+2. **La barra del camino**: un tramo verde para los conceptos que sabes, un tramo amarillo para los conceptos que faltan, y una marca en el 95 %. El largo de cada tramo es su parte de los conceptos del banco.
+3. **El consejo**: "Contesta las dudas · +9 puntos", o "Deja las dudas en blanco · +N puntos". Los puntos son la diferencia entre la probabilidad de las 2 formas, en puntos de porcentaje. Un botón "?" abre el desglose.
 
 El desglose da los aciertos en una duda, con una fila por grupo de conceptos:
 
@@ -185,44 +138,39 @@ Las cifras son un límite optimista. El examen pregunta con otras palabras, y no
 
 Cada opción es una fila con 2 zonas. Un toque en el texto responde con "seguro", y un toque en el botón "dudo" de la derecha responde con "dudo". Un solo toque responde.
 
-Después de la respuesta, las opciones quedan en verde la correcta y en rojo la tuya si fallas. Cada una de las dos lleva al final de la fila un circulito: un tick en la correcta y una cruz en la tuya. Debajo de las opciones sale el aviso de un fallo con "seguro" o de un acierto con "dudo".
+Después de la respuesta, las opciones quedan en verde la correcta y en rojo la tuya si fallas. Debajo de las opciones sale el aviso de un fallo con "seguro" o de un acierto con "dudo".
 
 ### La pantalla ancha
 
-Una pantalla de 900 px o más tiene 2 columnas estáticas, sin animaciones: la pregunta a la izquierda y la solución a la derecha. La columna de la solución dice "Elige una opción" antes de la respuesta.
+Una pantalla de 900 px o más tiene 2 columnas estáticas: la pregunta a la izquierda y la solución a la derecha.
 
 La solución tiene, en este orden:
 
 1. La `explicacion`.
 2. El botón "Siguiente".
-3. Una fila con 2 botones fijos: "Ver la página aquí" a la izquierda y "La fuente" a la derecha.
-4. Un panel debajo de la fila. "Ver la página aquí" muestra la imagen de la página. "La fuente" muestra el PDF, la página, el concepto y el enlace "Abrir el PDF en la página N", con `#page=N` en la URL.
+3. Una línea con el PDF, la página, el concepto con su paso y el enlace "Abrir el PDF en la página N", con `#page=N` en la URL.
+4. La imagen de la página.
 
-Un solo panel está abierto a la vez. Un toque en el botón abierto cierra el panel. Los botones no cambian de sitio, y el panel va debajo de "Siguiente", así que un panel abierto no mueve el botón.
-
-El botón con un icono de engranaje, a la derecha de la línea de arriba, muestra los tiradores: los 2 bordes y el separador. Cada zona mide como mínimo el 15 % de la pantalla. Las posiciones quedan en `localStorage`, en `ln-columnas`, y cada dispositivo tiene las suyas.
+El engranaje muestra los tiradores de las columnas. Sus posiciones quedan en `localStorage`, en `ln-columnas`, y cada dispositivo tiene las suyas.
 
 ### La pantalla del móvil
 
-Una pantalla de menos de 900 px es una columna con 4 partes: la línea de arriba, la barra de progreso, el cuerpo con su scroll y el pie fijo. No tiene zonas, ni tiradores, ni engranaje.
+Una pantalla de menos de 900 px es una columna: la línea de arriba, la barra de progreso, el cuerpo con su scroll y el pie fijo.
 
-- La línea de arriba lleva el progreso, el botón ✕, el botón de las notas y el botón de copiar.
-- El cuerpo lleva la pregunta y las opciones. Tras responder, lleva también el aviso, la explicación y el campo de notas. El campo de notas empieza escondido hasta que lo muestras con el botón de las notas.
+- El cuerpo lleva la pregunta y las opciones. Tras responder, lleva también el aviso, la explicación y el campo de notas.
 - Antes de responder, el pie dice "Toca el texto si estás seguro. Toca «dudo» si dudas." En el simulacro, el pie lleva también el botón "En blanco".
 - Tras responder, las opciones que no son la correcta ni la tuya se atenúan. Si el cuerpo no cabe en la pantalla, esas opciones se pliegan tras el botón "ver las otras N opciones".
 - Tras responder, el pie tiene 2 botones: "pág. N" a la izquierda y "Siguiente". "pág. N" abre la fuente a pantalla completa: la imagen de la página, que un toque amplía al 200 %, y el enlace "PDF". La ✕ y el botón de atrás del móvil cierran la fuente.
 
-Debajo de las opciones hay un campo de texto para las notas de la pregunta. El botón con un icono de libreta y lápiz, a la izquierda del botón de copiar, muestra y esconde el campo. El navegador guarda esa elección en `localStorage`, en `ln-notas-visibles`. El campo guarda la nota en el servidor 500 ms después de la última tecla, y la nota vuelve cada vez que sale esa pregunta. Una nota vacía la borra.
+Debajo de las opciones va el campo de las notas de la pregunta. El botón de las notas lo muestra y lo esconde, y `ln-notas-visibles` guarda esa elección. El campo guarda la nota en el servidor 500 ms después de la última tecla, y la nota vuelve cada vez que sale esa pregunta.
 
-El botón con un icono de copiar está a la derecha del botón de las notas. El botón copia al portapapeles el enunciado de la pregunta y sus opciones, con una letra por opción, en el orden en que la pantalla las muestra. El texto no incluye la opción correcta ni la explicación.
+El botón de copiar copia el enunciado y las opciones, con una letra por opción, sin la correcta ni la explicación.
 
-Las imágenes están en `paginas/<pdf sin .pdf>-<pagina>.png`, en la carpeta del examen. `pdftoppm -png -r 80` las saca de los PDFs una sola vez.
-
-Una sesión sin preguntas pendientes muestra la fecha de la próxima pregunta, y ofrece el simulacro. No hay un botón para reiniciar el historial, porque el historial guarda los fallos con "seguro" y el porcentaje de "dudo".
+Con un banco no vacío, una sesión siempre tiene preguntas, porque los conceptos que vencen antes llenan los huecos. No hay un botón para reiniciar el historial, porque el historial guarda los fallos con "seguro" y el porcentaje de "dudo".
 
 ## El simulacro
 
-El simulacro copia los parámetros del examen: `preguntas` preguntas al azar de todo el banco, sin mirar las cajas, y `minutos` minutos. Es el repaso de los últimos días.
+El simulacro copia los parámetros del examen: `preguntas` preguntas al azar de todo el banco, sin mirar los pasos, y `minutos` minutos. Es el repaso de los últimos días.
 
 Un reloj en la cabecera cuenta atrás desde los `minutos` del examen. Con el reloj en 0:00, el simulacro termina y cada pregunta sin contestar cuenta en blanco.
 
@@ -251,20 +199,13 @@ Una ronda con un `id` que no está en el banco se descarta, y la app abre el ini
 
 El reloj del simulacro cuenta hasta `limite`, una hora fija, así que sigue con la página cerrada. Un simulacro con el `limite` pasado abre la pantalla del final, y cada pregunta sin contestar cuenta en blanco.
 
-La línea de arriba de la pregunta lleva un botón ✕, a la izquierda del botón de las notas. El botón pregunta "¿Abandonar la sesión? Las respuestas quedan en el historial." con el diálogo del navegador, `confirm`. En un simulacro, la pregunta dice "el simulacro". Un "sí" guarda `"ronda": null` y abre el inicio.
+El botón ✕ abandona la ronda, con un `confirm`: guarda `"ronda": null` y abre el inicio. Las respuestas quedan en el historial.
 
 Con 2 dispositivos abiertos a la vez, gana el último guardado. Un dispositivo no ve el guardado del otro hasta que recarga la página.
 
 ## El servidor: `serve.py`
 
-`serve.py` usa solo la stdlib de Python. Sirve la interfaz, el banco, los PDFs y las imágenes de las páginas, y tiene 6 rutas:
-
-- `GET /api/respuestas` devuelve el historial entero.
-- `POST /api/respuestas` añade una lista de respuestas al historial.
-- `GET /api/notas` devuelve las notas, un objeto con el `id` de la pregunta como clave.
-- `POST /api/notas` guarda `{"id", "texto"}`. Un `texto` vacío borra la nota. Las notas viven en `notas.json`.
-- `GET /api/ronda` devuelve el guardado de la ronda, o `{"guardada": 0, "ronda": null}` sin guardado.
-- `POST /api/ronda` guarda un guardado de la ronda. Un guardado con otros campos o con otros tipos recibe un 400. El guardado vive en `ronda.json`.
+`serve.py` usa solo la stdlib de Python. Sirve los archivos, y las rutas `/api/respuestas`, `/api/notas` y `/api/ronda` leen con `GET` y guardan con `POST` el historial, `notas.json` y `ronda.json`.
 
 La interfaz guarda en `localStorage` cada respuesta sin enviar, y la envía cuando el servidor responde. Así, una sesión en el móvil sin red no pierde respuestas.
 
@@ -287,34 +228,12 @@ El test tiene 2 partes independientes: la interfaz y el banco. El formato de `pr
 
 ### La interfaz
 
-La interfaz tiene el servidor, la página web, las cajas, el simulacro y las imágenes de las páginas.
-
-- La página lee `preguntas.json`, y no tiene ninguna pregunta en su código.
 - Los tests de la interfaz usan `ln/preguntas-ejemplo.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
-- `python3 test/sacar_paginas.py asn` saca las imágenes de `asn/paginas/` de los PDFs de `asn/pdfs/`. El script no repite una imagen que ya existe.
+- `python3 test/sacar_paginas.py asn` saca las imágenes de `asn/paginas/`, como `<pdf sin .pdf>-<pagina>.png`, de los PDFs de `asn/pdfs/`.
 
 ### El banco
 
-El banco tiene el `preguntas.json` de cada examen y `test/comprobar_banco.py`.
-
-`comprobar_banco.py` usa solo la stdlib de Python, y falla con cada pregunta que rompe el formato:
-
-- un `id` repetido, o un `tema` fuera de la lista;
-- un número de distractores distinto de `opciones` − 1, o un distractor igual a la respuesta correcta;
-- un `pdf` que no existe en `pdfs/`, o una `pagina` mayor que el número de páginas del PDF;
-- un `concepto` con menos de 2 preguntas o con más de 3.
-
-`comprobar_banco.py` lee el banco de su argumento, y lee `examen.json` y `pdfs/` de la carpeta del banco:
-
-```bash
-python3 test/comprobar_banco.py asn/preguntas.json
-```
-
-El script también lista los `id` de las respuestas huérfanas del `respuestas.jsonl` de esa carpeta, como un aviso que no falla. El aviso muestra un `id` cambiado por error, porque un `id` no cambia nunca.
-
-El banco crece por tandas, con una tanda por tema y un commit por tanda. La revisión de la primera tanda va antes de las demás tandas, porque fija el nivel de las preguntas y de los distractores.
-
-Después de las tandas, una revisión independiente compara cada pregunta con su página y con las reglas de calidad. Quien escribe una pregunta no ve sus propios errores, y por eso la revisión la hacen agentes que no escribieron el banco. Los revisores dan la lista de fallos, y un solo agente cambia `preguntas.json`.
+El banco es el `preguntas.json` de cada examen, y `test/comprobar_banco.py` lo comprueba. `BANCO.md` lo describe.
 
 ### Los tests
 
@@ -325,4 +244,4 @@ node --test
 python3 -m unittest
 ```
 
-`node --test` prueba `logica.js`, la lógica de las cajas, de la sesión, del simulacro y del guardado de la ronda, sin el DOM. `python3 -m unittest` prueba `serve.py`, `sacar_paginas.py` y `comprobar_banco.py`.
+`node --test` prueba `logica.js`, la lógica de los pasos, de la sesión, del simulacro y del guardado de la ronda, sin el DOM. `python3 -m unittest` prueba `serve.py`, `sacar_paginas.py` y `comprobar_banco.py`.

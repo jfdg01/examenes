@@ -1,32 +1,33 @@
 import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { cajas, conceptos, probabilidadDeLaNota, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, tarjetaDeLaNota, dominio, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS, guardado, masNueva, restaurar } from "./logica.js";
+import { pasos, conceptos, probabilidadDeLaNota, textoParaCopiar, sesion, opciones, respuesta, porcentajeDudo, tarjetaDeLaNota, unir, simulacro, nota, imagenDePagina, pdfEnPagina, resultado, mover, COLUMNAS, guardado, masNueva, restaurar } from "./logica.js";
 const LN = JSON.parse(readFileSync(new URL("../ln/examen.json", import.meta.url)));
 
 const r = (id, ts, acierto, seguro) => ({ id, ts, acierto, seguro });
 
-test("un acierto con seguro sube una caja, hasta la 3", () => {
-  const h = [
-    r("a", "2026-11-01T10:00:00Z", true, true),
-    r("a", "2026-11-03T10:00:00Z", true, true),
-    r("a", "2026-11-07T10:00:00Z", true, true),
-  ];
-  assert.equal(cajas(h).get("a").caja, 3);
-  assert.equal(cajas(h.slice(0, 1)).get("a").caja, 2);
+test("un acierto con seguro sube un paso, y el hueco es 10 minutos por 3 elevado al paso menos 1", () => {
+  const banco = [p("a")];
+  const h = [r("a", "2026-11-01T10:00:00Z", true, true)];
+  assert.deepEqual(pasos(banco, h).get("a"), { paso: 1, vence: Date.parse("2026-11-01T10:10:00Z") });
+  h.push(r("a", "2026-11-01T10:01:00Z", true, true));
+  assert.deepEqual(pasos(banco, h).get("a"), { paso: 2, vence: Date.parse("2026-11-01T10:31:00Z") });
+  h.push(r("a", "2026-11-01T10:02:00Z", true, true));
+  assert.deepEqual(pasos(banco, h).get("a"), { paso: 3, vence: Date.parse("2026-11-01T11:32:00Z") });
 });
 
-test("un fallo o un acierto con dudo vuelve a la caja 1", () => {
+test("un fallo, un acierto con dudo o una pregunta en blanco vuelven al paso 0, y el concepto vence en el acto", () => {
+  const banco = [p("a")];
   const sube = [r("a", "2026-11-01T10:00:00Z", true, true), r("a", "2026-11-03T10:00:00Z", true, true)];
-  assert.equal(cajas([...sube, r("a", "2026-11-07T10:00:00Z", false, true)]).get("a").caja, 1);
-  assert.equal(cajas([...sube, r("a", "2026-11-07T10:00:00Z", true, false)]).get("a").caja, 1);
-  assert.equal(cajas([...sube, r("a", "2026-11-07T10:00:00Z", false, false)]).get("a").caja, 1);
+  for (const [acierto, seguro] of [[false, true], [true, false], [false, false]])
+    assert.deepEqual(pasos(banco, [...sube, r("a", "2026-11-07T10:00:00Z", acierto, seguro)]).get("a"), { paso: 0, vence: Date.parse("2026-11-07T10:00:00Z") });
 });
 
-test("el historial se ordena por fecha, venga de donde venga", () => {
-  const h = [r("a", "2026-11-03T10:00:00Z", false, true), r("a", "2026-11-01T10:00:00Z", true, true)];
-  assert.equal(cajas(h).get("a").caja, 1);
-  assert.equal(cajas(h).get("a").ts, "2026-11-03T10:00:00Z");
+test("el paso es del concepto, el historial se ordena por fecha, y una respuesta huérfana no cuenta", () => {
+  const banco = [{ ...p("a1"), concepto: "A" }, { ...p("a2"), concepto: "A" }];
+  const h = [r("a2", "2026-11-03T10:00:00Z", true, true), r("x", "2026-11-04T10:00:00Z", false, true), r("a1", "2026-11-01T10:00:00Z", true, true)];
+  assert.equal(pasos(banco, h).get("A").paso, 2);
+  assert.equal(pasos(banco, []).has("A"), false);
 });
 
 function semilla(n) {
@@ -46,58 +47,42 @@ test("una pregunta nueva sale en la sesión", () => {
   assert.deepEqual(ids(sesion([p("a")], [], dia(6), semilla(1))), ["a"]);
 });
 
-test("una pregunta de la caja 2 o de la caja 3 no sale en su bloque, y sale después de una pausa de 3 horas", () => {
-  const caja2 = [r("a", iso(dia(6, 10)), true, true)];
-  assert.deepEqual(ids(sesion([p("a")], caja2, dia(6, 12), semilla(1))), []);
-  assert.deepEqual(ids(sesion([p("a")], caja2, dia(6, 13), semilla(1))), ["a"]);
-  const caja3 = [r("a", iso(dia(5)), true, true), r("a", iso(dia(6, 10)), true, true)];
-  assert.deepEqual(ids(sesion([p("a")], caja3, dia(6, 12), semilla(1))), []);
-  assert.deepEqual(ids(sesion([p("a")], caja3, dia(6, 13), semilla(1))), ["a"]);
+const minuto = (m) => new Date(Date.UTC(2026, 10, 6, 10, m));
+const vistos = (n, prefijo = "v") => Array.from({ length: n }, (_, k) => p(prefijo + k));
+
+test("los vencidos salen del vencido hace más tiempo al vencido hace menos", () => {
+  const banco = vistos(20);
+  const hist = banco.map((q, k) => r(q.id, iso(minuto(k)), false, true));
+  const s = sesion(banco, hist, minuto(30), semilla(1));
+  assert.deepEqual(ids(s), ids(banco.slice(0, 12)));
 });
 
-test("un bloque sigue mientras las pausas entre respuestas no llegan a 3 horas", () => {
-  const hist = [r("a", iso(dia(6, 10)), true, true), r("b", iso(dia(6, 12)), false, true), r("b", iso(dia(6, 14)), false, true)];
-  assert.deepEqual(ids(sesion([p("a"), p("b")], hist, dia(6, 15), semilla(1))), ["b"]);
-  assert.deepEqual(ids(sesion([p("a"), p("b")], hist, dia(6, 17), semilla(1))), ["a", "b"]);
+test("mientras quedan conceptos sin ver, 4 huecos son para ellos", () => {
+  const banco = [...vistos(20), ...vistos(10, "n")];
+  const hist = vistos(20).map((q, k) => r(q.id, iso(minuto(k)), false, true));
+  const s = ids(sesion(banco, hist, minuto(30), semilla(1)));
+  assert.equal(s.filter((id) => id.startsWith("n")).length, 4);
+  assert.deepEqual(s.filter((id) => id.startsWith("v")), ids(vistos(8)));
 });
 
-test("una sesión tiene 12 preguntas, y la caja 1 entra entera antes que cualquier otra pregunta", () => {
-  const banco = Array.from({ length: 40 }, (_, k) => p("q" + k));
-  const hist = [];
-  for (let k = 0; k < 30; k++) hist.push(r("q" + k, iso(dia(1)), true, true));
-  for (let k = 30; k < 35; k++) hist.push(r("q" + k, iso(dia(1)), k % 2 === 0, false));
-  const s = sesion(banco, hist, dia(6), semilla(3));
+test("los huecos que sobran se llenan con más conceptos sin ver, y después con los que vencen antes", () => {
+  const banco = [...vistos(5), ...vistos(3, "n"), ...vistos(10, "f")];
+  const hist = [...vistos(5).map((q, k) => r(q.id, iso(minuto(k)), false, true)), ...vistos(10, "f").map((q, k) => r(q.id, iso(minuto(k)), true, true))];
+  const s = ids(sesion(banco, hist, minuto(9), semilla(1)));
+  assert.deepEqual(s, ids([...vistos(5), ...vistos(3, "n"), ...vistos(4, "f")]));
+});
+
+test("300 conceptos acertados en el mismo minuto: la sesión siguiente saca los 12 que vencen antes", () => {
+  const banco = vistos(300);
+  const hist = banco.map((q, k) => r(q.id, iso(new Date(Date.UTC(2026, 10, 6, 10, 0, k % 60))), true, true));
+  const s = sesion(banco, hist, minuto(1), semilla(1));
   assert.equal(s.length, 12);
-  for (let k = 30; k < 35; k++) assert.ok(s.some((q) => q.id === "q" + k));
-  for (let k = 20; k < 40; k++) hist.push(r("q" + k, iso(dia(2)), false, true));
-  assert.ok(sesion(banco, hist, dia(6), semilla(3)).every((q) => Number(q.id.slice(1)) >= 20));
-});
-
-const cuenta = (banco, hist, prefijo) => {
-  let n = 0;
-  for (let k = 0; k < 300; k++) n += sesion(banco, hist, dia(6), semilla(k)).filter((q) => q.id.startsWith(prefijo)).length;
-  return n;
-};
-
-test("con 200 nuevas de conceptos vistos y 80 de la caja 2, las 2 clases salen en una proporción cercana a sus tamaños", () => {
-  const banco = [...Array.from({ length: 200 }, (_, k) => ({ ...p("n" + k), concepto: "d" + (k % 80) })), ...Array.from({ length: 80 }, (_, k) => p("d" + k))];
-  const hist = Array.from({ length: 80 }, (_, k) => r("d" + k, iso(dia(1)), true, true));
-  const nuevas = cuenta(banco, hist, "n") / (300 * 12);
-  assert.ok(Math.abs(nuevas - 200 / 280) < 0.03, String(nuevas));
-});
-
-test("una pregunta de la caja 3 sale la mitad de veces que una de la caja 2", () => {
-  const banco = [...Array.from({ length: 100 }, (_, k) => p("d" + k)), ...Array.from({ length: 100 }, (_, k) => p("t" + k))];
-  const hist = [];
-  for (let k = 0; k < 100; k++) hist.push(r("d" + k, iso(dia(1)), true, true));
-  for (let k = 0; k < 100; k++) hist.push(r("t" + k, iso(dia(1)), true, true), r("t" + k, iso(dia(2)), true, true));
-  const razon = cuenta(banco, hist, "t") / cuenta(banco, hist, "d");
-  assert.ok(razon > 0.45 && razon < 0.6, String(razon));
+  assert.ok(s.every((q) => Number(q.id.slice(1)) % 60 < 3), ids(s).join());
 });
 
 const hermanas = (c, n) => Array.from({ length: n }, (_, k) => ({ ...p(c + k), concepto: c }));
 
-test("la sesión da una sola pregunta de cada concepto sin ver", () => {
+test("la sesión lleva una pregunta por concepto", () => {
   const banco = Array.from({ length: 20 }, (_, k) => hermanas("c" + k, 3)).flat();
   for (let k = 0; k < 20; k++) {
     const s = sesion(banco, [], dia(6), semilla(k));
@@ -106,15 +91,16 @@ test("la sesión da una sola pregunta de cada concepto sin ver", () => {
   }
 });
 
-test("un concepto sin ver entra después de la caja 1 y antes del sorteo", () => {
-  const vistas = Array.from({ length: 30 }, (_, k) => p("v" + k));
-  const banco = [...vistas, ...hermanas("a", 2), ...hermanas("b", 2), p("f")];
-  const hist = [...vistas.map((q) => r(q.id, iso(dia(1)), true, true)), r("f", iso(dia(1)), false, true)];
-  for (let k = 0; k < 20; k++) {
-    const s = sesion(banco, hist, dia(6), semilla(k));
-    assert.deepEqual(s.filter((q) => !q.id.startsWith("v")).map((q) => q.concepto).sort(), ["a", "b", "f"]);
-  }
+test("de un concepto sale primero una pregunta sin respuestas, y después la de la respuesta más vieja", () => {
+  const banco = hermanas("a", 3);
+  const h = [r("a0", iso(minuto(0)), false, true), r("a1", iso(minuto(1)), false, true)];
+  assert.deepEqual(ids(sesion(banco, h, minuto(5), semilla(1))), ["a2"]);
+  h.push(r("a2", iso(minuto(2)), false, true));
+  assert.deepEqual(ids(sesion(banco, h, minuto(5), semilla(1))), ["a0"]);
+  h.push(r("a0", iso(minuto(3)), false, true));
+  assert.deepEqual(ids(sesion(banco, h, minuto(5), semilla(1))), ["a1"]);
 });
+
 
 test("el estado de un concepto sale de la última respuesta a una de sus preguntas", () => {
   const banco = [...hermanas("a", 2), ...hermanas("b", 2), ...hermanas("c", 2), ...hermanas("d", 2)];
@@ -144,11 +130,6 @@ test("la sesión mezcla los temas", () => {
   assert.deepEqual([...temas].sort(), ["ens", "rgpd"]);
 });
 
-test("una sesión sin preguntas pendientes está vacía", () => {
-  const hist = [r("a", iso(dia(6, 10)), true, true), r("b", iso(dia(6, 11)), true, true)];
-  assert.deepEqual(sesion([p("a"), p("b")], hist, dia(6, 12), semilla(1)), []);
-});
-
 test("la interfaz baraja las 4 opciones", () => {
   const q = p("a");
   const vistas = new Set();
@@ -176,22 +157,13 @@ test("el porcentaje de aciertos con dudo solo cuenta las respuestas con dudo", (
   assert.equal(porcentajeDudo([r("d", "4", true, true)]), null);
 });
 
-test("el dominio de un concepto es la caja más baja de sus preguntas", () => {
-  const banco = [{ ...p("a1"), concepto: "A" }, { ...p("a2"), concepto: "A" }, { ...p("b1"), concepto: "B" }];
-  const h = [r("a1", iso(dia(1)), true, true), r("a1", iso(dia(3)), true, true), r("a2", iso(dia(1)), true, true), r("b1", iso(dia(1)), true, true)];
-  const d = dominio(banco, h);
-  assert.equal(d.get("A"), 2);
-  assert.equal(d.get("B"), 2);
-  assert.equal(dominio(banco, []).get("A"), 1);
-});
-
 test("unir 2 historiales quita las respuestas repetidas", () => {
   const a = r("a", "2026-11-06T18:02:11Z", true, true);
   const b = r("b", "2026-11-06T18:03:00Z", false, false);
   assert.deepEqual(unir([a, b], [{ ...a }]), [a, b]);
 });
 
-test("el simulacro saca 20 preguntas distintas al azar de todo el banco, sin mirar las cajas", () => {
+test("el simulacro saca 20 preguntas distintas al azar de todo el banco, sin mirar los pasos", () => {
   const banco = Array.from({ length: 100 }, (_, k) => p("q" + k));
   const s = simulacro(banco, LN.preguntas, semilla(2));
   assert.equal(s.length, 20);

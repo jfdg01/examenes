@@ -34,10 +34,7 @@
   .fila button:disabled { cursor:default; }
   .blanco { width:100%; padding:12px; border-radius:12px; border:2px dashed var(--line); background:none; color:var(--dim); }
   .hoja img { width:100%; border-radius:8px; margin-top:6px; background:#fff; }
-  .hoja .fuentes { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0; }
-  .hoja .fuente { padding:12px 14px; border:2px solid var(--line); border-radius:12px; background:var(--card); color:var(--txt); font-size:14px; text-align:left; }
-  .hoja .fuente.abierto { border-color:var(--acc); }
-  .hoja .panel { color:var(--dim); font-size:13px; }
+  .hoja .panel { color:var(--dim); font-size:13px; margin-top:12px; }
   .hoja .panel > * { margin:8px 0; }
   .aviso-respuesta { font-size:14px; font-weight:600; padding:6px 10px; border-left:3px solid; border-radius:4px; margin:4px 0 0; }
   .alarma { color:var(--ko); background:color-mix(in srgb, var(--ko) 18%, var(--bg)); }
@@ -116,7 +113,7 @@
   .fila.resto { opacity:.5; }
   .fila.plegada { display:none; }
   .pant .aviso-respuesta { margin:0 0 10px; }
-  .expl { margin:0 0 10px; }
+  .expl { margin:0 0 10px; white-space:pre-line; }
   .pant .notas { margin-top:12px; padding:10px; border-radius:10px; font-size:13px; }
   .chip { width:100%; margin-bottom:8px; padding:6px 10px; border:1px dashed var(--line); border-radius:8px; background:none; color:var(--dim); font-size:12px; }
   .pie { padding:10px 14px calc(10px + env(safe-area-inset-bottom)); border-top:2px solid var(--line); background:var(--bg); }
