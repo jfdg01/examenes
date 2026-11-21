@@ -47,6 +47,6 @@ El `README.md` de cada examen dice lo que el profesor marcó como importante. Es
 python3 test/comprobar_banco.py ps/preguntas.json
 ```
 
-`comprobar_banco.py` falla con cada pregunta que rompe el formato: un `id` repetido, un `tema` fuera de la lista, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 2 preguntas o con más de 3. También avisa, sin fallar, de las respuestas del historial con un `id` fuera del banco.
+`comprobar_banco.py` falla con cada pregunta que rompe el formato: un `id` repetido, un `tema` fuera de la lista, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 2 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. También avisa, sin fallar, de las respuestas del historial con un `id` fuera del banco.
 
 Una revisión de agentes que no escribieron las preguntas compara cada pregunta con su página y con las reglas. Los revisores dan la lista de fallos, y un solo agente cambia `preguntas.json`.
