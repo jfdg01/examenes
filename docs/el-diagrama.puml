@@ -237,7 +237,6 @@ package interfaz {
     -columnas: Columnas, en localStorage <examen>-columnas
     -abiertas: boolean, las opciones plegadas del móvil
     -pagina: boolean, la página a pantalla completa del móvil
-    -zoom: boolean
     --
     -arrancar(), al cargar la página
     -enviar(guardado), a localStorage <examen>-ronda y a PUT api/ronda
@@ -254,6 +253,33 @@ package interfaz {
     -cargarInicio(), al cargar, al volver y al volver la red
     -volver()
     -abandonar()
+  }
+  class "Inicio.svelte" as InicioSvelte {
+    inicio, objetivo, error
+    onobjetivo(objetivo), onempezar(simulacro)
+  }
+  class "Pregunta.svelte" as PreguntaSvelte {
+    la cabecera, la barra, las opciones y el pie
+    q, i, total, simulacro, restante, eleccion, abiertas, error
+    children: la hoja
+    onabandonar(), oncontestar(opcion o null, seguro), onabiertas(), onverpagina(), onsiguiente()
+  }
+  class "Hoja.svelte" as Hoja {
+    la explicación, la fuente y la imagen de la página
+    q, respuesta
+  }
+  class "Tiradores.svelte" as Tiradores {
+    los 3 tiradores del PC
+    onmover(tirador, x), onsoltar()
+  }
+  class "PaginaCompleta.svelte" as PaginaCompleta {
+    la página a pantalla completa del móvil
+    q, oncerrar()
+    -zoom: boolean
+  }
+  class "Final.svelte" as Final {
+    simulacro, nota, preguntas, error
+    onvolver()
   }
   class "nucleo/nucleo.js y nucleo.d.ts" as generado <<generado>> {
     las funciones de wasm.rs
@@ -296,6 +322,12 @@ wasm ..> funciones : llama
 wasm ..> generado : wasm-bindgen genera
 App ..> generado : importa y llama
 App ..> rutas : HTTP
+App *-- InicioSvelte : props y callbacks
+App *-- PreguntaSvelte
+App *-- Hoja
+App *-- Tiradores
+App *-- PaginaCompleta
+App *-- Final
 @enduml
 
 @startuml la-ronda
