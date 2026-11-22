@@ -33,6 +33,24 @@ const visible = (page, sel) => page.locator(sel).first().isVisible();
 const contestar = (page) => page.locator(".opcion button").first().click();
 
 try {
+  // La lista: cada examen de la raíz abre su ruta, y su inicio lleva de vuelta a la lista.
+  for (const [nombre, width, height] of [["movil", 390, 844], ["pc", 1280, 800]]) {
+    const lista = await navegador.newPage({ viewport: { width, height } });
+    await lista.goto("http://127.0.0.1:8691/");
+    await lista.locator(".examen").first().waitFor();
+    assert.equal(await lista.locator(".examen").count(), 2, "la lista lleva los 2 exámenes de la raíz");
+    await lista.screenshot({ path: `capturas/${nombre}-lista.png` });
+    await lista.locator(`.examen[href="/${nombre}/"]`).click();
+    await lista.getByText("Empezar la sesión").waitFor();
+    await lista.locator(".volver").click();
+    await lista.locator(".examen").first().waitFor();
+    assert.equal(new URL(lista.url()).pathname, "/", "el enlace del inicio vuelve a la lista");
+    await lista.route("**/api/examenes", (r) => r.fulfill({ json: [] }));
+    await lista.reload();
+    await lista.getByText("No hay exámenes").waitFor();
+    await lista.close();
+  }
+
   // El móvil: la página de la fuente se abre a pantalla completa, y las otras opciones se pliegan.
   const movil = await abrir("movil", 390, 844);
   await movil.screenshot({ path: "capturas/movil-pregunta.png" });

@@ -19,6 +19,13 @@ pub struct Examen {
     pub penalizacion: f64,
 }
 
+/// Un examen de la lista de la raíz, que abre `/<carpeta>/`.
+#[derive(Serialize, Tsify)]
+pub struct ExamenDeLaLista {
+    pub carpeta: String,
+    pub titulo: String,
+}
+
 /// Una pregunta del banco, de `preguntas.json`.
 #[derive(Deserialize, Serialize, Tsify, Clone)]
 pub struct Pregunta {

@@ -267,3 +267,26 @@ async fn una_nota_mal_formada_no_se_guarda() {
     }
     assert!(!raiz.path().join("ln/notas.json").exists());
 }
+
+#[tokio::test]
+async fn la_lista_da_cada_examen_por_su_titulo() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ps", "PS", None);
+    crear_examen(raiz.path(), "ln", "LN", None);
+    fs::create_dir(raiz.path().join("docs")).unwrap();
+    let url = arrancar(raiz.path()).await;
+    let lista = || async { reqwest::get(format!("{url}/api/examenes")).await.unwrap().json::<Value>().await.unwrap() };
+
+    assert_eq!(lista().await, json!([{ "carpeta": "ln", "titulo": "LN" }, { "carpeta": "ps", "titulo": "PS" }]));
+    crear_examen(raiz.path(), "asn", "ASN", None);
+    assert_eq!(lista().await[0], json!({ "carpeta": "asn", "titulo": "ASN" }));
+}
+
+#[tokio::test]
+async fn una_raiz_sin_examenes_sirve_la_interfaz_y_la_lista_vacia() {
+    let raiz = TempDir::new().unwrap();
+    let url = arrancar(raiz.path()).await;
+
+    assert_eq!(reqwest::get(format!("{url}/api/examenes")).await.unwrap().json::<Value>().await.unwrap(), json!([]));
+    assert_eq!(reqwest::get(format!("{url}/")).await.unwrap().text().await.unwrap(), "<div id=\"app\"></div>");
+}

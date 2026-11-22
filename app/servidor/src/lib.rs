@@ -12,7 +12,7 @@ use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
-use nucleo::{Datos, Examen, Guardado, Nota, Pregunta, Respuesta};
+use nucleo::{Datos, Examen, ExamenDeLaLista, Guardado, Nota, Pregunta, Respuesta};
 use tower_http::compression::CompressionLayer;
 use tower_http::services::ServeDir;
 
@@ -31,6 +31,8 @@ type Estado = State<Arc<Carpetas>>;
 pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
     let assets = ServeDir::new(interfaz.join("assets"));
     Router::new()
+        .route("/", get(la_interfaz))
+        .route("/api/examenes", get(examenes))
         .route("/{examen}", get(|Path(examen): Path<String>| async move { Redirect::permanent(&format!("/{examen}/")) }))
         .route("/{examen}/", get(pagina))
         .route("/{examen}/api/inicio", get(inicio))
@@ -80,10 +82,31 @@ async fn leer_examen(carpetas: &Carpetas, examen: &str) -> Result<Examen, Respon
     serde_json::from_slice(&texto).map_err(error_interno)
 }
 
-async fn pagina(State(carpetas): Estado, Path(examen): Path<String>) -> Result<Html<Vec<u8>>, Response> {
-    leer_examen(&carpetas, &examen).await?;
+/// Cada carpeta de la raíz con `examen.json`, ordenada por título.
+async fn examenes(State(carpetas): Estado) -> Result<axum::Json<Vec<ExamenDeLaLista>>, Response> {
+    let mut lista = Vec::new();
+    let mut entradas = tokio::fs::read_dir(&carpetas.raiz).await.map_err(error_interno)?;
+    while let Some(entrada) = entradas.next_entry().await.map_err(error_interno)? {
+        let Ok(carpeta) = entrada.file_name().into_string() else { continue };
+        match leer_examen(&carpetas, &carpeta).await {
+            Ok(examen) => lista.push(ExamenDeLaLista { carpeta, titulo: examen.titulo }),
+            Err(e) if e.status() == StatusCode::NOT_FOUND => {}
+            Err(e) => return Err(e),
+        }
+    }
+    lista.sort_by(|a, b| a.titulo.cmp(&b.titulo));
+    Ok(axum::Json(lista))
+}
+
+/// `index.html` de la interfaz, que pinta la lista en `/` y el examen en `/<carpeta>/`.
+async fn la_interfaz(State(carpetas): Estado) -> Result<Html<Vec<u8>>, Response> {
     let html = tokio::fs::read(carpetas.interfaz.join("index.html")).await.map_err(error_interno)?;
     Ok(Html(html))
+}
+
+async fn pagina(State(carpetas): Estado, Path(examen): Path<String>) -> Result<Html<Vec<u8>>, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    la_interfaz(State(carpetas)).await
 }
 
 /// Un archivo que no existe es un archivo vacío.
