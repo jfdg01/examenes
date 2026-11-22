@@ -42,7 +42,7 @@ try {
   assert(await visible(movil, ".hoja p"), "el móvil muestra la explicación");
   assert(!(await visible(movil, ".hoja img")), "el móvil no muestra la página en la hoja");
   assert(await visible(movil, ".chip"), "el móvil pliega las otras opciones");
-  const marcadas = await movil.locator(".opcion", { hasText: /[✓✗]/ }).count();
+  const marcadas = await movil.locator(".opcion:has(.icono)").count();
   assert.equal(await movil.locator(".opcion:visible").count(), marcadas, "solo quedan la correcta y la elegida");
   await movil.screenshot({ path: "capturas/movil-solucion.png" });
   await movil.locator(".ver-pagina").click();

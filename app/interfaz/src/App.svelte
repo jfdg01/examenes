@@ -235,7 +235,7 @@
   <!-- El móvil: la línea de arriba, la barra, el cuerpo con su scroll y el pie fijo.
        El PC: 2 columnas. --l, --s y --r son el borde izquierdo, el separador y el borde derecho. -->
   <div
-    class="flex h-dvh flex-col pc:ml-(--l) pc:box-border pc:grid pc:h-auto pc:w-[calc(var(--r)-var(--l))] pc:grid-cols-[calc(var(--s)-var(--l)-48px)_1fr] pc:grid-rows-[auto_auto_auto_1fr] pc:content-start pc:items-start pc:gap-x-12 pc:px-6 pc:py-4 pc:[grid-template-areas:'meta_hoja'_'barra_hoja'_'izq_hoja'_'pie_hoja']"
+    class="flex h-dvh flex-col text-[14px]/[1.45] [-webkit-tap-highlight-color:transparent] pc:ml-(--l) pc:text-[15px]/[1.5] pc:box-border pc:grid pc:h-auto pc:w-[calc(var(--r)-var(--l))] pc:grid-cols-[calc(var(--s)-var(--l)-48px)_1fr] pc:grid-rows-[auto_auto_auto_1fr] pc:content-start pc:items-start pc:gap-x-12 pc:px-6 pc:py-4 pc:[grid-template-areas:'meta_hoja'_'barra_hoja'_'izq_hoja'_'pie_hoja']"
     style:--l="{columnas.l * 100}vw"
     style:--s="{columnas.s * 100}vw"
     style:--r="{columnas.r * 100}vw"
@@ -259,7 +259,7 @@
       onverpagina={verPagina}
       onsiguiente={siguiente}
     >
-      <Hoja {q} paso={eleccion?.correccion.paso} />
+      <Hoja {q} paso={eleccion?.correccion.paso} onsiguiente={siguiente} />
     </Pregunta>
     <Tiradores
       onmover={(k, x) => (columnas = nucleo.mover(columnas, k, x))}

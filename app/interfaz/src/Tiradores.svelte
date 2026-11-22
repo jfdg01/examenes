@@ -13,7 +13,7 @@
       k === "S" && "after:bg-linea",
       "before:absolute before:top-1/2 before:left-[5px] before:z-1 before:-mt-5 before:box-border before:hidden before:h-10 before:w-3.5",
       "before:rounded-[7px] before:border-2 before:border-acento hover:before:block active:before:block",
-      "before:[background:radial-gradient(circle,#888_1.5px,transparent_2px)_center/6px_8px_repeat-y,#fff]",
+      "before:[background:radial-gradient(circle,var(--color-tenue)_1.5px,transparent_2px)_center/6px_8px_repeat-y,var(--color-tarjeta)]",
     ]}
     role="separator"
     aria-orientation="vertical"

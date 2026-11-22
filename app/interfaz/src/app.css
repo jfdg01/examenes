@@ -1,23 +1,28 @@
-/* Sin el preflight de Tailwind: los botones y los márgenes son los del navegador. */
-@layer theme, base, components, utilities;
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
+@import "tailwindcss";
 
-/* El corte del móvil y del PC: `pc:` aplica desde 900 px. Los colores de la app. */
-@theme {
-  --breakpoint-pc: 900px;
-  --color-linea: #ddd;
-  --color-acento: #36c;
-  --color-mal: #c33;
-  --color-hecho: #3a3;
-  --color-falta: #e93;
-  --color-tenue: #888;
-  --color-chip: #aaa;
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url(fuentes/JetBrainsMono-Regular.ttf);
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url(fuentes/JetBrainsMono-Bold.ttf);
+  font-weight: 600 800;
 }
 
-@layer base {
-  body {
-    margin: 0;
-    font: 15px/1.5 system-ui, sans-serif;
-  }
+/* El corte del móvil y del PC: `pc:` aplica desde 900 px. La paleta es Gruvbox dark, la de la terminal. */
+@theme {
+  --breakpoint-pc: 900px;
+  --default-font-family: "JetBrains Mono", monospace;
+  --color-fondo: #282828;
+  --color-tarjeta: #3c3836;
+  --color-linea: #504945;
+  --color-texto: #ebdbb2;
+  --color-tenue: #a89984;
+  --color-acierto: #b8bb26;
+  --color-fallo: #fb4934;
+  --color-aviso: #fabd2f;
+  --color-acento: #83a598;
+  --color-sobre-acento: #282828;
 }
