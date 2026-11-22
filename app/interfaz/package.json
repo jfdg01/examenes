@@ -8,7 +8,7 @@
     "build": "svelte-check --fail-on-warnings && vite build",
     "predev": "npm run wasm",
     "dev": "vite",
-    "comprobar": "node comprobar.mjs"
+    "comprobar": "node comprobar.ts"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.3.1",

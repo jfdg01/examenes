@@ -5,7 +5,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { cpSync, mkdirSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { chromium } from "playwright";
+import { chromium, type Page } from "playwright";
 
 const raiz = mkdtempSync(join(tmpdir(), "examenes-"));
 // Cada pantalla tiene su copia, porque el servidor guarda la ronda a medias de cada examen.
@@ -22,19 +22,19 @@ const navegador = await chromium.launch();
 const hoja = await (await navegador.newPage({ viewport: { width: 600, height: 800 } })).screenshot();
 mkdirSync("capturas", { recursive: true });
 
-async function abrir(examen, width, height) {
+async function abrir(examen: string, width: number, height: number) {
   const page = await navegador.newPage({ viewport: { width, height } });
   await page.route("**/paginas/**", (r) => r.fulfill({ contentType: "image/png", body: hoja }));
   await page.goto(`http://127.0.0.1:8691/${examen}/`);
   await page.getByText("Empezar la sesión").click();
   return page;
 }
-const visible = (page, sel) => page.locator(sel).first().isVisible();
-const contestar = (page) => page.locator(".opcion button").first().click();
+const visible = (page: Page, sel: string) => page.locator(sel).first().isVisible();
+const contestar = (page: Page) => page.locator(".opcion button").first().click();
 
 try {
   // La lista: cada examen de la raíz abre su ruta, y su inicio lleva de vuelta a la lista.
-  for (const [nombre, width, height] of [["movil", 390, 844], ["pc", 1280, 800]]) {
+  for (const [nombre, width, height] of [["movil", 390, 844], ["pc", 1280, 800]] as const) {
     const lista = await navegador.newPage({ viewport: { width, height } });
     await lista.goto("http://127.0.0.1:8691/");
     await lista.locator(".examen").first().waitFor();
@@ -83,15 +83,15 @@ try {
 
   const asa = () => pc.locator(".tirador").nth(1).evaluate((t) => getComputedStyle(t, "::before").display);
   assert.equal(await asa(), "none", "el asa no se ve sin el ratón encima");
-  const caja = await pc.locator(".tirador").nth(1).boundingBox();
+  const caja = (await pc.locator(".tirador").nth(1).boundingBox())!;
   await pc.mouse.move(caja.x + 12, 400);
   assert.equal(await asa(), "block", "el asa sale al pasar el ratón");
-  const antes = (await pc.locator(".hoja").boundingBox()).x;
+  const antes = (await pc.locator(".hoja").boundingBox())!.x;
   await pc.mouse.down();
   await pc.mouse.move(0.35 * 1280, 400, { steps: 5 });
   await pc.mouse.up();
-  assert((await pc.locator(".hoja").boundingBox()).x < antes - 100, "el separador mueve la hoja");
-  const guardadas = JSON.parse(await pc.evaluate(() => localStorage.getItem("pc-columnas")));
+  assert((await pc.locator(".hoja").boundingBox())!.x < antes - 100, "el separador mueve la hoja");
+  const guardadas = JSON.parse(await pc.evaluate(() => localStorage.getItem("pc-columnas")!));
   assert(Math.abs(guardadas.s - 0.35) < 0.01, "las columnas quedan en localStorage");
   await pc.screenshot({ path: "capturas/pc-solucion.png" });
 
