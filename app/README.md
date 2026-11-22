@@ -5,7 +5,7 @@ Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están 
 - `nucleo/`: toda la lógica, sin leer archivos ni la red. Corre en el navegador como WASM, y el servidor usa sus tipos para validar.
 - `servidor/`: el servidor de `axum`. Guarda y sirve los archivos de cada examen, con gzip.
 - `banco/`: las herramientas del banco de un examen, para su dueño. `banco comprobar <carpeta>` comprueba `preguntas.json` con las reglas de [`BANCO.md`](../test/BANCO.md), `banco paginas <carpeta>` saca las imágenes de `paginas/` de los PDFs de `pdfs/`, y `banco revision <carpeta> <informe>...` aplica los informes de una revisión a `preguntas.json`. `comprobar` y `paginas` necesitan `pdfinfo` y `pdftoppm`, de poppler.
-- `interfaz/`: la interfaz de Svelte 5, con Vite, TypeScript y Tailwind 4. `App.svelte` guarda el estado de la ronda y llama a `nucleo` para cada cálculo. Los componentes `Inicio`, `Pregunta`, `Hoja`, `Tiradores`, `PaginaCompleta` y `Final` reciben sus datos por props y avisan con callbacks.
+- `interfaz/`: la interfaz de Svelte 5, con Vite, TypeScript y Tailwind 4. `main.ts` monta `Lista.svelte` en `/` y `App.svelte` en `/<carpeta>/`. `App.svelte` guarda el estado de la ronda y llama a `nucleo` para cada cálculo. Los componentes `Inicio`, `Pregunta`, `Hoja`, `Tiradores`, `PaginaCompleta` y `Final` reciben sus datos por props y avisan con callbacks.
 
 ## Arrancar
 
@@ -23,6 +23,8 @@ cd .. && cargo run -p servidor -- .. 127.0.0.1:8601
 
 El servidor recibe la raíz de los exámenes y su dirección. Sirve cada carpeta de la raíz con `examen.json` en `/<carpeta>/`, y lee la carpeta en cada petición. Un examen nuevo aparece al crear su carpeta, sin reiniciar el servidor.
 
+`/` muestra la lista de los exámenes, y `GET /api/examenes` da cada examen con su `carpeta` y su `titulo`, ordenados por título. El inicio de cada examen lleva el enlace «← Exámenes» de vuelta a la lista. Cada ruta de abajo cuelga de `/<carpeta>/`.
+
 - `GET api/inicio` da el examen, el banco y el historial.
 - `POST api/respuestas` añade al historial cada respuesta que no está. Una línea de `respuestas.jsonl` lleva `id`, `ts`, `resultado` (`Acierto`, `Fallo` o `Blanco`) y `seguro`. La interfaz guarda cada respuesta en la clave `<carpeta>-pendientes` de `localStorage` hasta que llega al servidor. Al cargar la página y al volver la red, envía las que esperan.
 - `GET api/ronda` da `ronda.json`, y `PUT api/ronda` escribe el guardado más nuevo entre el que llega y el de `ronda.json`: `{"guardada", "ronda"}`, con la hora del guardado en milisegundos y la ronda a medias o `null`. La interfaz guarda la misma ronda en la clave `<carpeta>-ronda` de `localStorage`, y al cargar envía el guardado más nuevo de los dos.
@@ -39,6 +41,6 @@ El diseño sale de las clases de Tailwind: el móvil por defecto, y el PC desde 
 
 `cargo test` corre los tests de `nucleo`, del servidor y de `banco`. Los tests de `banco` crean una carpeta temporal de examen con un PDF mínimo. Cada test del servidor crea una raíz temporal de exámenes, arranca el servidor y le habla por HTTP.
 
-`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia de `ln/`. Las capturas quedan en `interfaz/capturas/`, que no entra en git. Las aserciones buscan las clases `tirador`, `hoja`, `chip`, `opcion`, `icono`, `ver-pagina`, `pagina`, `vacia`, `nota`, `ver-nota` y `copiar`, que no llevan estilo.
+`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia de `ln/`. Las capturas quedan en `interfaz/capturas/`, que no entra en git. La comprobación empieza por la lista, con la raíz de las 2 copias y con una raíz vacía. Las aserciones buscan las clases `examen`, `volver`, `tirador`, `hoja`, `chip`, `opcion`, `icono`, `ver-pagina`, `pagina`, `vacia`, `nota`, `ver-nota` y `copiar`, que no llevan estilo.
 
-En desarrollo, `npm run dev` sirve la interfaz con Vite y pasa el API al servidor de `127.0.0.1:8601`.
+En desarrollo, `npm run dev` sirve la interfaz con Vite y pasa la lista y el API de cada examen al servidor de `127.0.0.1:8601`.
