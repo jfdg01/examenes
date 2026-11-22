@@ -1,5 +1,5 @@
-' Los diagramas de app/: las clases de nucleo, el servidor y la interfaz, la ronda y el viaje de una sesión.
-' Un cambio de un tipo, una función, una ruta o una dependencia entre las 3 partes actualiza este archivo en el mismo commit.
+' Los diagramas de app/: las clases de nucleo, el servidor, banco y la interfaz, la ronda y el viaje de una sesión.
+' Un cambio de un tipo, una función, una ruta o una dependencia entre las 4 partes actualiza este archivo en el mismo commit.
 ' En VS Code, la extensión jebbs.plantuml abre la vista previa del diagrama bajo el cursor con Alt+D.
 ' `smetana` dibuja el diagrama sin Graphviz.
 
@@ -233,6 +233,25 @@ package servidor {
   }
 }
 
+package banco {
+  class "Examen (banco)" as ExamenBanco {
+    +opciones: u32
+    +pdfs: pdf → temas
+  }
+  class "banco (funciones)" as herramientas <<lib.rs>> {
+    +informe(carpeta): bool, sin errores; escribe los errores y los avisos
+    +comprobar(preguntas, examen, carpeta): errores
+    +pistas(preguntas): avisos de la regla 6
+    +huerfanas(preguntas, historial): id fuera del banco
+    +sacar(carpeta): paginas/<pdf>-<página>.png a 80 ppp
+    +paginas(pdf): u32, de pdfinfo
+  }
+  class "main.rs" as ordenes {
+    banco comprobar <carpeta>
+    banco paginas <carpeta>
+  }
+}
+
 package interfaz {
   class "App.svelte" as App {
     -datos: Datos
@@ -333,6 +352,9 @@ funciones ..> Guardado : elige el más nuevo
 Guardado *-- RondaGuardada
 funciones --> RondaAMedias : devuelve
 RondaAMedias *-- PreguntaDeSesion
+ordenes ..> herramientas : llama
+herramientas ..> ExamenBanco : lee examen.json
+herramientas ..> Pregunta : lee preguntas.json
 rutas *-- Carpetas : estado
 rutas ..> lectura : lee la carpeta
 rutas ..> Datos : devuelve
