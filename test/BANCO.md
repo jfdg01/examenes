@@ -44,10 +44,10 @@ El `README.md` de cada examen dice lo que el profesor marcó como importante. Es
 ## El comprobador
 
 ```bash
-python3 test/comprobar_banco.py ps/preguntas.json
+cargo run --manifest-path app/Cargo.toml -p banco -- comprobar ps
 ```
 
-`comprobar_banco.py` falla con cada pregunta que rompe el formato: un `id` repetido, un `tema` que no es de su PDF, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 2 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. También avisa, sin fallar, de 3 cosas:
+`banco comprobar` recibe la carpeta del examen, y falla con cada pregunta que rompe el formato: un `id` repetido, un `tema` que no es de su PDF, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 2 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. También avisa, sin fallar, de 3 cosas:
 
 - un "siempre", un "nunca" o un "solo" de un distractor que la correcta no dice;
 - una correcta que es la opción más larga en más de 1 de cada 3 preguntas, sin contar las siglas;

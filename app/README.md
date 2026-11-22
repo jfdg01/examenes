@@ -4,6 +4,7 @@ Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están 
 
 - `nucleo/`: toda la lógica, sin leer archivos ni la red. Corre en el navegador como WASM, y el servidor usa sus tipos para validar.
 - `servidor/`: el servidor de `axum`. Guarda y sirve los archivos de cada examen, con gzip.
+- `banco/`: las herramientas del banco de un examen, para su dueño. `banco comprobar <carpeta>` comprueba `preguntas.json` con las reglas de [`BANCO.md`](../test/BANCO.md), y `banco paginas <carpeta>` saca las imágenes de `paginas/` de los PDFs de `pdfs/`. Las 2 necesitan `pdfinfo` y `pdftoppm`, de poppler.
 - `interfaz/`: la interfaz de Svelte 5, con Vite, TypeScript y Tailwind 4. `App.svelte` guarda el estado de la ronda y llama a `nucleo` para cada cálculo. Los componentes `Inicio`, `Pregunta`, `Hoja`, `Tiradores`, `PaginaCompleta` y `Final` reciben sus datos por props y avisan con callbacks.
 
 ## Arrancar
@@ -36,7 +37,7 @@ El diseño sale de las clases de Tailwind: el móvil por defecto, y el PC desde 
 
 ## Los tests
 
-`cargo test` corre los tests de `nucleo` y del servidor. Cada test del servidor crea una raíz temporal de exámenes, arranca el servidor y le habla por HTTP.
+`cargo test` corre los tests de `nucleo`, del servidor y de `banco`. Los tests de `banco` crean una carpeta temporal de examen con un PDF mínimo. Cada test del servidor crea una raíz temporal de exámenes, arranca el servidor y le habla por HTTP.
 
 `npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia de `ln/`. Las capturas quedan en `interfaz/capturas/`, que no entra en git. Las aserciones buscan las clases `tirador`, `hoja`, `chip`, `opcion`, `ver-pagina`, `pagina`, `vacia`, `nota`, `ver-nota` y `copiar`, que no llevan estilo.
 

@@ -229,11 +229,11 @@ El test tiene 2 partes independientes: la interfaz y el banco. El formato de `pr
 ### La interfaz
 
 - Los tests de la interfaz usan `app/servidor/tests/datos/ln-preguntas.json`, con 6 preguntas reales del temario. Los tests no dependen del banco real.
-- `python3 test/sacar_paginas.py asn` saca las imágenes de `asn/paginas/`, como `<pdf sin .pdf>-<pagina>.png`, de los PDFs de `asn/pdfs/`.
+- `cargo run --manifest-path app/Cargo.toml -p banco -- paginas asn` saca las imágenes de `asn/paginas/`, como `<pdf sin .pdf>-<pagina>.png` a 80 ppp, de los PDFs de `asn/pdfs/`. Una imagen que ya existe se queda.
 
 ### El banco
 
-El banco es el `preguntas.json` de cada examen, y `test/comprobar_banco.py` lo comprueba. `BANCO.md` lo describe.
+El banco es el `preguntas.json` de cada examen, y `banco comprobar`, de `app/banco/`, lo comprueba. `BANCO.md` lo describe.
 
 ### Los tests
 
@@ -244,4 +244,4 @@ node --test
 python3 -m unittest
 ```
 
-`node --test` prueba `logica.js`, la lógica de los pasos, de la sesión, del simulacro y del guardado de la ronda, sin el DOM. `python3 -m unittest` prueba `serve.py`, `sacar_paginas.py` y `comprobar_banco.py`.
+`node --test` prueba `logica.js`, la lógica de los pasos, de la sesión, del simulacro y del guardado de la ronda, sin el DOM. `python3 -m unittest` prueba `serve.py` y `aplicar_revision.py`.
