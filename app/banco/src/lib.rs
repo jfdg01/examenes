@@ -1,5 +1,6 @@
-//! Las herramientas del banco de un examen: la comprobación de `preguntas.json` y las imágenes de las
-//! páginas de los PDFs. Las 2 leen la carpeta del examen, y llaman a `pdfinfo` y `pdftoppm` de poppler.
+//! Las herramientas del banco de un examen: la comprobación de `preguntas.json`, las imágenes de las páginas
+//! de los PDFs y los arreglos de una revisión. Las 3 leen la carpeta del examen. La comprobación y las
+//! imágenes llaman a `pdfinfo` y `pdftoppm` de poppler.
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fs;
@@ -199,6 +200,85 @@ pub fn sacar(carpeta: &Path) -> Result<(), String> {
     Ok(())
 }
 
+/// Un fallo del informe de un revisor. La revisión de `BANCO.md` define cada campo.
+#[derive(Deserialize)]
+pub struct Fallo {
+    #[serde(default)]
+    pub id: String,
+    #[serde(default)]
+    pub gravedad: String,
+    #[serde(default)]
+    pub fallo: String,
+    /// Un `Arreglo` que el revisor propone, o `null`.
+    #[serde(default)]
+    pub arreglo: serde_json::Value,
+}
+
+/// Los campos de una pregunta que un arreglo cambia. Otro campo deja el fallo para arreglarlo a mano.
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Arreglo {
+    pregunta: Option<String>,
+    correcta: Option<String>,
+    distractores: Option<Vec<String>>,
+    explicacion: Option<String>,
+    fuente: Option<nucleo::Fuente>,
+}
+
+/// Aplica cada arreglo al banco, y devuelve los fallos que un agente arregla a mano: un fallo sin arreglo,
+/// con un campo que un arreglo no cambia, o con un `id` fuera del banco.
+pub fn aplicar(banco: &mut [Pregunta], fallos: Vec<Fallo>) -> Vec<Fallo> {
+    let mut pendientes = Vec::new();
+    for f in fallos {
+        let arreglo = serde_json::from_value::<Arreglo>(f.arreglo.clone()).ok().filter(|a| {
+            a.pregunta.is_some()
+                || a.correcta.is_some()
+                || a.distractores.is_some()
+                || a.explicacion.is_some()
+                || a.fuente.is_some()
+        });
+        let (Some(a), Some(p)) = (arreglo, banco.iter_mut().find(|p| p.id == f.id)) else {
+            pendientes.push(f);
+            continue;
+        };
+        if let Some(v) = a.pregunta {
+            p.pregunta = v;
+        }
+        if let Some(v) = a.correcta {
+            p.correcta = v;
+        }
+        if let Some(v) = a.distractores {
+            p.distractores = v;
+        }
+        if let Some(v) = a.explicacion {
+            p.explicacion = v;
+        }
+        if let Some(v) = a.fuente {
+            p.fuente = v;
+        }
+    }
+    pendientes
+}
+
+/// Aplica los informes de la revisión a `preguntas.json` de la carpeta, y lista los fallos sin aplicar.
+pub fn revision(carpeta: &Path, informes: &[String]) -> Result<(), String> {
+    let archivo = carpeta.join("preguntas.json");
+    let mut banco: Vec<Pregunta> = leer(&archivo)?;
+    let mut fallos = Vec::new();
+    for informe in informes {
+        fallos.extend(leer::<Vec<Fallo>>(Path::new(informe))?);
+    }
+    let total = fallos.len();
+    let pendientes = aplicar(&mut banco, fallos);
+    let texto = serde_json::to_string_pretty(&banco).map_err(|e| e.to_string())? + "\n";
+    fs::write(&archivo, texto).map_err(|e| format!("{}: {e}", archivo.display()))?;
+    println!("{} arreglos aplicados.", total - pendientes.len());
+    for f in pendientes {
+        println!("A mano: {} ({}): {}", f.id, f.gravedad, f.fallo);
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -383,5 +463,24 @@ mod tests {
         // 100 puntos a 80 ppp son 112 píxeles: el ancho va en los bytes 16 a 19 del PNG.
         let png = fs::read(paginas.join("1_Legislacion-2.png")).unwrap();
         assert_eq!(u32::from_be_bytes(png[16..20].try_into().unwrap()), 112);
+    }
+
+    #[test]
+    fn aplicar_cambia_los_campos_del_arreglo_y_da_el_resto() {
+        let mut banco = vec![pregunta("rgpd-001")];
+        let fallos: Vec<Fallo> = serde_json::from_str(
+            r#"[
+                {"id": "rgpd-001", "regla": 3, "gravedad": "grave", "fallo": "x", "arreglo": {"correcta": "3 días"}},
+                {"id": "rgpd-001", "regla": 5, "gravedad": "leve", "fallo": "y", "arreglo": null},
+                {"id": "rgpd-001", "regla": 0, "gravedad": "leve", "fallo": "z", "arreglo": {"id": "rgpd-009"}},
+                {"id": "viejo-1", "regla": 3, "gravedad": "grave", "fallo": "w", "arreglo": {"correcta": "1"}},
+                {"id": "rgpd-001", "regla": 4, "gravedad": "leve", "fallo": "v", "arreglo": {}}
+            ]"#,
+        )
+        .unwrap();
+        let pendientes: Vec<String> = aplicar(&mut banco, fallos).into_iter().map(|f| f.fallo).collect();
+        assert_eq!(pendientes, ["y", "z", "w", "v"]);
+        assert_eq!(banco[0].correcta, "3 días");
+        assert_eq!(banco[0].id, "rgpd-001");
     }
 }

@@ -25,11 +25,11 @@ pub struct Pregunta {
     pub id: String,
     pub concepto: String,
     pub tema: String,
+    pub fuente: Fuente,
     pub pregunta: String,
     pub correcta: String,
     pub distractores: Vec<String>,
     pub explicacion: String,
-    pub fuente: Fuente,
 }
 
 /// La página del PDF de `pdfs/` que respalda una pregunta.
