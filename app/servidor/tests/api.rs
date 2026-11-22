@@ -290,3 +290,16 @@ async fn una_raiz_sin_examenes_sirve_la_interfaz_y_la_lista_vacia() {
     assert_eq!(reqwest::get(format!("{url}/api/examenes")).await.unwrap().json::<Value>().await.unwrap(), json!([]));
     assert_eq!(reqwest::get(format!("{url}/")).await.unwrap().text().await.unwrap(), "<div id=\"app\"></div>");
 }
+
+#[tokio::test]
+async fn la_lista_va_en_orden_alfabetico_sin_tildes_ni_mayusculas() {
+    let raiz = TempDir::new().unwrap();
+    for (carpeta, titulo) in [("z", "Zeta"), ("b", "bases"), ("o", "Óptica"), ("a", "Álgebra"), ("n", "Nubes")] {
+        crear_examen(raiz.path(), carpeta, titulo, None);
+    }
+    let url = arrancar(raiz.path()).await;
+
+    let lista: Value = reqwest::get(format!("{url}/api/examenes")).await.unwrap().json().await.unwrap();
+    let titulos: Vec<_> = lista.as_array().unwrap().iter().map(|e| e["titulo"].as_str().unwrap()).collect();
+    assert_eq!(titulos, ["Álgebra", "bases", "Nubes", "Óptica", "Zeta"]);
+}

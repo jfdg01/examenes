@@ -82,7 +82,13 @@ async fn leer_examen(carpetas: &Carpetas, examen: &str) -> Result<Examen, Respon
     serde_json::from_slice(&texto).map_err(error_interno)
 }
 
-/// Cada carpeta de la raíz con `examen.json`, ordenada por título.
+/// El texto sin tildes ni otros diacríticos, y en minúsculas: «Álgebra» va delante de «bases».
+fn clave_alfabetica(texto: &str) -> String {
+    use unicode_normalization::{UnicodeNormalization, char::is_combining_mark};
+    texto.nfd().filter(|c| !is_combining_mark(*c)).flat_map(char::to_lowercase).collect()
+}
+
+/// Cada carpeta de la raíz con `examen.json`, en orden alfabético por título.
 async fn examenes(State(carpetas): Estado) -> Result<axum::Json<Vec<ExamenDeLaLista>>, Response> {
     let mut lista = Vec::new();
     let mut entradas = tokio::fs::read_dir(&carpetas.raiz).await.map_err(error_interno)?;
@@ -94,7 +100,7 @@ async fn examenes(State(carpetas): Estado) -> Result<axum::Json<Vec<ExamenDeLaLi
             Err(e) => return Err(e),
         }
     }
-    lista.sort_by(|a, b| a.titulo.cmp(&b.titulo));
+    lista.sort_by_cached_key(|e| (clave_alfabetica(&e.titulo), e.carpeta.clone()));
     Ok(axum::Json(lista))
 }
 
