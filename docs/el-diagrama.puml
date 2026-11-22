@@ -26,6 +26,11 @@ package nucleo {
     +correcta: String
     +distractores: Vec<String>
     +explicacion: String
+    +fuente: Fuente
+  }
+  class Fuente <<tsify>> {
+    +pdf: String
+    +pagina: u32
   }
   class Respuesta <<una línea de respuestas.jsonl, tsify>> {
     +id: String
@@ -104,6 +109,21 @@ package nucleo {
     +paso: String
     +paso_tras_seguro: String
     +paso_tras_otra: String
+    +fuente: String, "<pdf> · pág. n"
+    +pagina: u32
+    +imagen: String, paginas/<pdf sin .pdf>-<n>.png
+    +pdf: String, pdfs/<pdf>#page=<n>
+  }
+  class Columnas <<localStorage <examen>-columnas, tsify>> {
+    +l: f64, el borde izquierdo
+    +s: f64, el separador
+    +r: f64, el borde derecho
+    las 3, en fracción del ancho
+  }
+  enum Tirador <<tsify>> {
+    L
+    S
+    R
   }
   class Guardado <<ronda.json, localStorage <examen>-ronda, tsify>> {
     +guardada: u64, en ms
@@ -141,6 +161,7 @@ package nucleo {
     +gana(a, b): Guardado
     +unir(a, b): Vec<Respuesta>, en orden de hora y sin repetir id y ts
     +restaurar(banco, historial, guardado, azar): Option<RondaAMedias>
+    +mover(columnas, tirador, x): Columnas, con cada columna de 0,15 como mínimo
     +segundos(ts): Option<i64>
     +hora(segundos): ts
     -estados(banco, historial): concepto → (Concepto, vence)
@@ -161,6 +182,8 @@ package nucleo {
     +unir(a, b): Respuesta[]
     +restaurar(datos, guardado, ahora): RondaAMedias o undefined
     +nota(cierre, penalizacion): NotaDelSimulacro
+    +columnas(): Columnas, las de partida
+    +mover(columnas, tirador, x): Columnas
     -azar(ahora): Azar, con la hora de semilla
   }
 }
@@ -180,6 +203,8 @@ package servidor {
     POST /:examen/api/respuestas → responder → 204
     GET /:examen/api/ronda → leer_ronda → Guardado
     PUT /:examen/api/ronda → guardar_ronda → 204
+    GET /:examen/paginas/:archivo → servir → image/png
+    GET /:examen/pdfs/:archivo → servir → application/pdf
     GET /assets/* → dist/assets
     todo va con gzip
   }
@@ -187,6 +212,8 @@ package servidor {
     -leer_examen(carpetas, examen): Examen
     -leer_banco(carpetas, examen): Vec<Pregunta>
     -leer_historial(carpetas, examen): Vec<Respuesta>
+    -un_nombre(nombre): bool, un nombre sin / ni punto delante
+    -servir(carpetas, examen, carpeta, archivo, tipo): el archivo o 404
     -leer_si_existe(ruta): bytes
     -error_interno(e): 500
   }
@@ -207,6 +234,10 @@ package interfaz {
     -nota: NotaDelSimulacro
     -limite: ms
     -restante: segundos
+    -columnas: Columnas, en localStorage <examen>-columnas
+    -abiertas: boolean, las opciones plegadas del móvil
+    -pagina: boolean, la página a pantalla completa del móvil
+    -zoom: boolean
     --
     -arrancar(), al cargar la página
     -enviar(guardado), a localStorage <examen>-ronda y a PUT api/ronda
@@ -218,6 +249,7 @@ package interfaz {
     -contar(), cada segundo
     -contestar(opcion o null, seguro)
     -siguiente()
+    -verPagina(), con una entrada del historial; atrás la cierra
     -terminar()
     -cargarInicio(), al cargar, al volver y al volver la red
     -volver()
@@ -238,6 +270,9 @@ funciones --> Inicio : devuelve
 Inicio *-- Tarjeta
 Tarjeta *-- Dudas
 funciones --> PreguntaDeSesion : devuelve
+Pregunta *-- Fuente
+funciones --> Columnas : mover()
+funciones ..> Tirador : lee
 funciones --> Simulacro : devuelve
 Simulacro *-- PreguntaDeSesion
 funciones ..> Cierre : lee
