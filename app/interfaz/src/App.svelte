@@ -311,7 +311,6 @@
       revision={revisando}
       {marcas}
       oneditar={editar}
-      onanterior={() => ir(i - 1)}
       onir={ir}
       onterminar={intentarTerminar}
       {etiqueta}

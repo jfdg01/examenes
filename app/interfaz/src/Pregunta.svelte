@@ -32,7 +32,6 @@
     revision,
     marcas,
     oneditar,
-    onanterior,
     onir,
     onterminar,
     etiqueta,
@@ -64,7 +63,6 @@
     revision: boolean;
     marcas: string[];
     oneditar: (cambios: { pregunta: string; opciones: string[]; explicacion: string }) => void;
-    onanterior: () => void;
     onir: (k: number) => void;
     onterminar: () => void;
     // El texto del botón grande: "Siguiente", "Terminar" o "Volver al resultado".
@@ -93,7 +91,6 @@
   // Los botones de la línea de arriba.
   const accion = "flex h-7 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border bg-tarjeta text-[12px]";
   const otras = $derived(q.opciones.length - (eleccion?.opcion == null || eleccion.opcion === q.correcta ? 1 : 2));
-  const flecha = "cursor-pointer rounded-[10px] border-2 border-linea bg-tarjeta whitespace-nowrap px-3 py-2.5 text-[14px] text-texto disabled:opacity-30";
 </script>
 
 <!-- En el PC, cada parte ocupa su área de la rejilla de la ronda, y el cuerpo deja pasar sus 2 columnas. -->
@@ -219,7 +216,7 @@
     {/if}
     {#if notasVisibles && !borrador}
       <textarea
-        class="nota mt-3 block w-full resize-y rounded-[10px] border-2 border-linea bg-tarjeta p-2.5 text-[13px] pc:mt-4 pc:rounded-xl pc:p-3 pc:text-[14px]"
+        class="nota mt-3 mb-3 block w-full resize-y rounded-[10px] border-2 border-linea bg-tarjeta p-2.5 text-[13px] pc:mt-4 pc:rounded-xl pc:p-3 pc:text-[14px]"
         rows="3"
         placeholder="La nota de esta pregunta"
         value={nota}
@@ -230,46 +227,36 @@
   <!-- La edición ya lleva la explicación, así que la hoja se oculta mientras dura. -->
   {#if !borrador}{@render children()}{/if}
 </div>
-<div
-  class={[
-    "border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:border-0 pc:p-0 pc:[grid-area:pie]",
-    contestada && "grid grid-cols-[auto_1fr] gap-2 pc:block",
-  ]}
->
-  <div class="col-span-full mb-2.5 grid grid-cols-[auto_1fr_auto] gap-2 pc:mt-6">
-    <button class={flecha} disabled={i === 0} onclick={onanterior}>‹ Anterior</button>
-    <button
-      class="flex cursor-pointer items-center justify-center gap-2 rounded-[10px] border-2 border-linea bg-tarjeta py-2.5 text-[15px] font-semibold text-texto"
-      title="Las preguntas"
-      onclick={() => (cuadricula = true)}
-    >
-      {@render icono(18, "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z")}
-      {i + 1} / {total}
-    </button>
-    <button class={flecha} disabled={i === total - 1} onclick={() => onir(i + 1)}>Siguiente ›</button>
-  </div>
+<div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:border-0 pc:p-0 pc:[grid-area:pie]">
   {#if !contestada}
     {#if simulacro}
       <button class="mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue" onclick={() => oncontestar(null, false)}
         >En blanco</button
       >
     {/if}
-    <p class="m-0 text-center text-[11.5px] text-tenue pc:my-[1em] pc:text-left pc:text-[13px]">Toca el texto si estás seguro. Toca «dudo» si dudas.</p>
+    <div class="flex items-center gap-3 pc:mt-[1em]">
+      <p class="m-0 flex-1 text-[11.5px] text-tenue pc:text-[13px]">Toca el texto si estás seguro. Toca «dudo» si dudas.</p>
+      {@render rejilla()}
+    </div>
   {:else}
-    {#if corregida}
-    <button
-      class="ver-pagina flex cursor-pointer pc:hidden items-center gap-1.5 rounded-[10px] border-2 border-linea bg-tarjeta px-3.5 text-[13px]"
-      onclick={onverpagina}
-    >
-      {@render icono(16, "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8")} pág. {q.pagina}
-    </button>
-    {/if}
-    <button
-      class={["cursor-pointer rounded-[10px] bg-acento p-3.5 text-[15px] font-semibold text-sobre-acento", corregida ? "pc:hidden" : "col-span-full pc:w-full"]}
-      onclick={onsiguiente}>{etiqueta}</button
-    >
+    <!-- La página, la cuadrícula y el botón grande. En el PC, la página y el botón grande de una pregunta corregida van en la hoja. -->
+    <div class="flex gap-2 pc:mt-6">
+      {#if corregida}
+        <button
+          class="ver-pagina flex cursor-pointer pc:hidden items-center gap-1.5 rounded-[10px] border-2 border-linea bg-tarjeta px-3.5 text-[13px]"
+          onclick={onverpagina}
+        >
+          {@render icono(16, "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8")} pág. {q.pagina}
+        </button>
+      {/if}
+      {@render rejilla()}
+      <button
+        class={["flex-1 cursor-pointer rounded-[10px] bg-acento p-3.5 text-[15px] font-semibold text-sobre-acento", corregida && "pc:hidden"]}
+        onclick={onsiguiente}>{etiqueta}</button
+      >
+    </div>
   {/if}
-  {#if error}<p class="col-span-full m-0 mt-1 text-center text-[12px] text-aviso pc:text-left">{error}</p>{/if}
+  {#if error}<p class="m-0 mt-1 text-center text-[12px] text-aviso pc:text-left">{error}</p>{/if}
 </div>
 
 {#if cuadricula}
@@ -302,6 +289,18 @@
 {/if}
 
 <!-- Los iconos de la app: un trazo de 24 × 24. -->
+<!-- El botón de la cuadrícula, con la posición en la ronda. -->
+{#snippet rejilla()}
+  <button
+    class="flex shrink-0 cursor-pointer items-center justify-center gap-2 self-stretch rounded-[10px] border-2 border-linea bg-tarjeta px-3.5 py-2 text-[15px] font-semibold whitespace-nowrap text-texto"
+    title="Las preguntas"
+    onclick={() => (cuadricula = true)}
+  >
+    {@render icono(18, "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z")}
+    {i + 1} / {total}
+  </button>
+{/snippet}
+
 {#snippet icono(lado: number, d: string, grosor = 2)}
   <svg width={lado} height={lado} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width={grosor} stroke-linecap="round" stroke-linejoin="round">
     <path {d} />
