@@ -65,7 +65,7 @@
     oneditar: (cambios: { pregunta: string; opciones: string[]; explicacion: string }) => void;
     onir: (k: number) => void;
     onterminar: () => void;
-    // El texto del botón grande: "Siguiente", "Terminar" o "Volver al resultado".
+    // El texto del botón grande: "Siguiente", "Terminar" o "Resultado".
     etiqueta: string;
   } = $props();
 
@@ -242,14 +242,14 @@
   <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible, y la cuadrícula no se mueve. -->
   <div class="flex gap-2 pc:hidden">
     <button
-      class={["ver-pagina flex cursor-pointer items-center gap-1.5 rounded-[10px] border-2 border-linea bg-tarjeta px-3.5 text-[13px]", !(contestada && corregida) && "invisible"]}
+      class={["ver-pagina flex shrink-0 cursor-pointer items-center gap-1.5 rounded-[10px] border-2 border-linea bg-tarjeta px-3 text-[13px] whitespace-nowrap", !(contestada && corregida) && "invisible"]}
       onclick={onverpagina}
     >
       {@render icono(16, "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8")} pág. {q.pagina}
     </button>
     {@render rejilla()}
     <button
-      class={["flex-1 cursor-pointer rounded-[10px] bg-acento p-3.5 text-[15px] font-semibold text-sobre-acento", !contestada && "invisible"]}
+      class={["min-w-0 flex-1 cursor-pointer rounded-[10px] bg-acento px-2 py-3.5 text-[15px] font-semibold whitespace-nowrap text-sobre-acento", !contestada && "invisible"]}
       onclick={onsiguiente}>{etiqueta}</button
     >
   </div>
@@ -295,7 +295,7 @@
 <!-- El botón de la cuadrícula, con la posición en la ronda. -->
 {#snippet rejilla()}
   <button
-    class="flex shrink-0 cursor-pointer items-center justify-center gap-2 self-stretch rounded-[10px] border-2 border-linea bg-tarjeta px-3.5 py-2 text-[15px] font-semibold whitespace-nowrap text-texto"
+    class="flex shrink-0 cursor-pointer items-center justify-center gap-2 self-stretch rounded-[10px] border-2 border-linea bg-tarjeta px-3 py-2 text-[15px] font-semibold whitespace-nowrap text-texto"
     title="Las preguntas"
     onclick={() => (cuadricula = true)}
   >

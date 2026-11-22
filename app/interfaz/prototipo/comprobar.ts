@@ -85,7 +85,7 @@ for (const [ancho, alto] of [[390, 800], [1400, 900]] as const) {
   assert.match(await contador(p), /^Revisión · .*\| 5 \/ 20/);
   assert.equal(await p.locator(".icono").count() > 0, true, "la revisión corrige");
   await foto(p, `${n}-simulacro-revision`);
-  await p.getByRole("button", { name: "Volver al resultado", exact: true }).filter({ visible: true }).last().click();
+  await p.getByRole("button", { name: "Resultado", exact: true }).filter({ visible: true }).last().click();
   await p.getByText("El simulacro ha terminado").waitFor();
   await p.close();
 }

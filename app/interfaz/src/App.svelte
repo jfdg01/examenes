@@ -236,7 +236,7 @@
 
   // Con todas contestadas, el botón grande termina desde cualquier pregunta. En la revisión, vuelve al resultado.
   const todas = $derived(resultados.every((r) => r !== null));
-  const etiqueta = $derived(revisando ? "Volver al resultado" : todas || i === preguntas.length - 1 ? "Terminar" : "Siguiente");
+  const etiqueta = $derived(revisando ? "Resultado" : todas || i === preguntas.length - 1 ? "Terminar" : "Siguiente");
   function siguiente() {
     if (revisando) revisando = false;
     else if (todas || i + 1 >= preguntas.length) intentarTerminar();
