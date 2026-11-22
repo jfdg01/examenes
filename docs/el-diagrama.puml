@@ -22,11 +22,11 @@ package nucleo {
     +id: String
     +concepto: String
     +tema: String
+    +fuente: Fuente
     +pregunta: String
     +correcta: String
     +distractores: Vec<String>
     +explicacion: String
-    +fuente: Fuente
   }
   class Fuente <<tsify>> {
     +pdf: String
@@ -245,10 +245,13 @@ package banco {
     +huerfanas(preguntas, historial): id fuera del banco
     +sacar(carpeta): paginas/<pdf>-<página>.png a 80 ppp
     +paginas(pdf): u32, de pdfinfo
+    +revision(carpeta, informes): escribe preguntas.json y los fallos sin aplicar
+    +aplicar(banco, fallos): fallos sin aplicar
   }
   class "main.rs" as ordenes {
     banco comprobar <carpeta>
     banco paginas <carpeta>
+    banco revision <carpeta> <informe>...
   }
 }
 
