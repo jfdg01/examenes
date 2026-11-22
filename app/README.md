@@ -23,7 +23,7 @@ cd .. && cargo run -p servidor -- .. 127.0.0.1:8601
 
 El servidor recibe la raíz de los exámenes y su dirección. Sirve cada carpeta de la raíz con `examen.json` en `/<carpeta>/`, y lee la carpeta en cada petición. Un examen nuevo aparece al crear su carpeta, sin reiniciar el servidor.
 
-`/` muestra la lista de los exámenes, y `GET /api/examenes` da cada examen con su `carpeta` y su `titulo`, ordenados por título. El inicio de cada examen lleva el enlace «← Exámenes» de vuelta a la lista. Cada ruta de abajo cuelga de `/<carpeta>/`.
+`/` muestra la lista de los exámenes, y `GET /api/examenes` da cada examen con su `carpeta` y su `titulo`, en orden alfabético por título, sin tener en cuenta las tildes ni las mayúsculas. El inicio de cada examen lleva el enlace «← Exámenes» de vuelta a la lista. Cada ruta de abajo cuelga de `/<carpeta>/`.
 
 - `GET api/inicio` da el examen, el banco y el historial.
 - `POST api/respuestas` añade al historial cada respuesta que no está. Una línea de `respuestas.jsonl` lleva `id`, `ts`, `resultado` (`Acierto`, `Fallo` o `Blanco`) y `seguro`. La interfaz guarda cada respuesta en la clave `<carpeta>-pendientes` de `localStorage` hasta que llega al servidor. Al cargar la página y al volver la red, envía las que esperan.
