@@ -1,12 +1,13 @@
 <script lang="ts">
   import * as nucleo from "./nucleo/nucleo.js";
-  import type { Datos, Guardado, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
+  import type { Columnas, Datos, Guardado, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Resultado, Ronda, Tirador } from "./nucleo/nucleo.js";
 
   // Todos los exámenes comparten un origen, así que cada clave lleva la carpeta del examen.
   const carpeta = location.pathname.split("/")[1];
   const claveObjetivo = `${carpeta}-objetivo`;
   const claveRonda = `${carpeta}-ronda`;
   const clavePendientes = `${carpeta}-pendientes`;
+  const claveColumnas = `${carpeta}-columnas`;
   let objetivo = $state(Number(localStorage.getItem(claveObjetivo) ?? 5));
   let datos = $state.raw<Datos | null>(null);
   let error = $state("");
@@ -95,6 +96,19 @@
   let reloj: ReturnType<typeof setInterval> | undefined;
   let restante = $state(0);
 
+  let columnas = $state<Columnas>(JSON.parse(localStorage.getItem(claveColumnas) ?? "null") ?? nucleo.columnas());
+  // Las otras opciones de una pregunta contestada, plegadas en el móvil.
+  let abiertas = $state(false);
+  // La página de la fuente a pantalla completa es una entrada del historial: la ✕ y el botón de atrás la cierran igual.
+  let pagina = $state(false);
+  let zoom = $state(false);
+  function verPagina() {
+    history.pushState({ pagina: true }, "");
+    pagina = true;
+    zoom = false;
+  }
+  addEventListener("popstate", () => (pagina = false));
+
   const q = $derived(preguntas[i]);
   const acierto = $derived(eleccion?.respuesta.resultado === "Acierto");
 
@@ -117,6 +131,7 @@
     i = resultados.length;
     nota = null;
     eleccion = null;
+    abiertas = false;
     error = "";
     if (i >= preguntas.length) return terminar();
     ronda = { estado: "Pregunta", contestada: false };
@@ -155,6 +170,7 @@
 
   function siguiente() {
     eleccion = null;
+    abiertas = false;
     if (++i < preguntas.length) ronda = { estado: "Pregunta", contestada: false };
     else terminar();
   }
@@ -172,7 +188,12 @@
   }
 </script>
 
+{#snippet aviso()}
+  {#if error}<p class="error">{error}</p>{/if}
+{/snippet}
+
 {#if ronda.estado === "Inicio"}
+  <main>
   {#if inicio}
     <h1>{inicio.titulo}</h1>
     {#if inicio.estado === "BancoVacio"}
@@ -215,39 +236,99 @@
       <button onclick={() => empezar(true)}>Simulacro ({inicio.simulacro} preguntas)</button>
     {/if}
   {/if}
+  {@render aviso()}
+  </main>
 {:else if ronda.estado === "Pregunta"}
-  <p>
-    {simulacro ? "Simulacro · " : ""}{i + 1} / {preguntas.length} · {q.tema} ·
-    {simulacro ? `${Math.floor(restante / 60)}:${String(restante % 60).padStart(2, "0")}` : q.paso}
-    <button title="Abandonar" onclick={abandonar}>✕</button>
-  </p>
-  <p>{q.pregunta}</p>
-  {#each q.opciones as opcion, k (k)}
-    <div>
-      <button disabled={ronda.contestada} onclick={() => contestar(k, true)}>{opcion}</button>
-      {#if !ronda.contestada}
-        <button onclick={() => contestar(k, false)}>dudo</button>
-      {:else if k === q.correcta}
-        ✓
-      {:else if k === eleccion?.opcion}
-        ✗
-      {/if}
+  {@const otras = q.opciones.length - (eleccion?.opcion == null || eleccion.opcion === q.correcta ? 1 : 2)}
+  <div class="ronda" style:--l="{columnas.l * 100}vw" style:--s="{columnas.s * 100}vw" style:--r="{columnas.r * 100}vw">
+    <p class="meta">
+      <span>
+        {simulacro ? "Simulacro · " : ""}{i + 1} / {preguntas.length} · {q.tema} ·
+        {simulacro ? `${Math.floor(restante / 60)}:${String(restante % 60).padStart(2, "0")}` : q.paso}
+      </span>
+      <button title="Abandonar" onclick={abandonar}>✕</button>
+    </p>
+    <div class="barra"><i style:width="{(100 * (i + 1)) / preguntas.length}%"></i></div>
+    <div class="cuerpo">
+      <div class="izq">
+        <p class="enunciado">{q.pregunta}</p>
+        {#each q.opciones as opcion, k (k)}
+          {@const marca = !ronda.contestada ? "" : k === q.correcta ? "✓" : k === eleccion?.opcion ? "✗" : ""}
+          <div class="opcion" class:resto={ronda.contestada && !marca} class:plegada={ronda.contestada && !marca && !abiertas}>
+            <button disabled={ronda.contestada} onclick={() => contestar(k, true)}>{opcion}</button>
+            {#if !ronda.contestada}
+              <button onclick={() => contestar(k, false)}>dudo</button>
+            {:else}
+              {marca}
+            {/if}
+          </div>
+        {/each}
+        {#if ronda.contestada}
+          <button class="chip" onclick={() => (abiertas = !abiertas)}>
+            {abiertas ? "ocultar las otras" : `ver las otras ${otras} opciones`}
+          </button>
+          {#if eleccion?.respuesta.resultado === "Fallo" && eleccion.respuesta.seguro}
+            <p>Fallo con «seguro»: una idea falsa. Repásala.</p>
+          {:else if acierto && !eleccion?.respuesta.seguro}
+            <p>Acierto con «dudo»: cuenta como un fallo.</p>
+          {/if}
+        {/if}
+      </div>
+      <div class="hoja">
+        {#if !ronda.contestada}
+          <p class="vacia">Elige una opción. La explicación sale aquí.</p>
+        {:else}
+          <p>{q.explicacion}</p>
+          <p>{q.concepto} ({acierto && eleccion?.respuesta.seguro ? q.paso_tras_seguro : q.paso_tras_otra})</p>
+          <p>{q.fuente} · <a href={q.pdf} target="_blank">Abrir el PDF en la página {q.pagina}</a></p>
+          <img src={q.imagen} alt="La página {q.pagina} de la fuente" />
+        {/if}
+      </div>
     </div>
-  {/each}
-  {#if !ronda.contestada}
-    {#if simulacro}<button onclick={() => contestar(null, false)}>En blanco</button>{/if}
-    <p>Toca el texto si estás seguro. Toca «dudo» si dudas.</p>
-  {:else}
-    {#if eleccion?.respuesta.resultado === "Fallo" && eleccion.respuesta.seguro}
-      <p>Fallo con «seguro»: una idea falsa. Repásala.</p>
-    {:else if acierto && !eleccion?.respuesta.seguro}
-      <p>Acierto con «dudo»: cuenta como un fallo.</p>
-    {/if}
-    <p>{q.explicacion}</p>
-    <p>{q.concepto} ({acierto && eleccion?.respuesta.seguro ? q.paso_tras_seguro : q.paso_tras_otra})</p>
-    <button onclick={siguiente}>Siguiente</button>
+    <div class="pie">
+      {#if !ronda.contestada}
+        {#if simulacro}<button onclick={() => contestar(null, false)}>En blanco</button>{/if}
+        <p>Toca el texto si estás seguro. Toca «dudo» si dudas.</p>
+      {:else}
+        <button class="ver-pagina" onclick={verPagina}>pág. {q.pagina}</button>
+        <button onclick={siguiente}>Siguiente</button>
+      {/if}
+      {@render aviso()}
+    </div>
+    {#each ["l", "s", "r"] as const as k (k)}
+      <div
+        class="tirador"
+        class:separador={k === "s"}
+        role="separator"
+        aria-orientation="vertical"
+        style:left="var(--{k})"
+        onpointerdown={(e) => {
+          // Sin `preventDefault`, el navegador arrastra el texto seleccionado y cancela el puntero.
+          e.preventDefault();
+          e.currentTarget.setPointerCapture(e.pointerId);
+        }}
+        onpointermove={(e) => {
+          if (e.currentTarget.hasPointerCapture(e.pointerId)) columnas = nucleo.mover(columnas, k.toUpperCase() as Tirador, e.clientX / innerWidth);
+        }}
+        onlostpointercapture={() => localStorage.setItem(claveColumnas, JSON.stringify(columnas))}
+      ></div>
+    {/each}
+  </div>
+  {#if pagina}
+    <div class="pagina">
+      <p class="meta">
+        <span>{q.fuente}</span>
+        <a href={q.pdf} target="_blank">PDF</a>
+        <button title="Cerrar" onclick={() => history.back()}>✕</button>
+      </p>
+      <div class="cuerpo">
+        <button class:zoom onclick={() => (zoom = !zoom)}><img src={q.imagen} alt="La página {q.pagina} de la fuente" /></button>
+      </div>
+      <p class="pie">Toca la página para ampliarla</p>
+    </div>
   {/if}
 {:else}
+  <main>
   {#if simulacro}
     <h1>El simulacro ha terminado</h1>
     {#if nota}
@@ -259,12 +340,228 @@
     {#if nota}<p>Aciertos: {nota.aciertos} de {preguntas.length}</p>{/if}
   {/if}
   <button onclick={volver}>Volver al inicio</button>
-{/if}
-{#if error}
-  <p>{error}</p>
+  {@render aviso()}
+  </main>
 {/if}
 
 <style>
+  :global(body) {
+    margin: 0;
+    font: 15px/1.5 system-ui, sans-serif;
+  }
+  main {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+  .meta span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .barra {
+    height: 3px;
+    background: #ddd;
+  }
+  .barra i {
+    display: block;
+    height: 100%;
+    background: #36c;
+  }
+  .opcion {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .opcion button:first-child {
+    flex: 1;
+    text-align: left;
+    padding: 10px;
+  }
+  .resto {
+    opacity: 0.5;
+  }
+  .hoja img {
+    display: block;
+    width: 100%;
+  }
+  .error {
+    color: #c33;
+  }
+
+  /* El móvil, por defecto: la línea de arriba, la barra, el cuerpo con su scroll y el pie fijo. */
+  .ronda {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+  }
+  .cuerpo {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 12px 14px;
+  }
+  .pie {
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    border-top: 2px solid #ddd;
+  }
+  .pie p {
+    margin: 4px 0 0;
+    font-size: 12px;
+    text-align: center;
+  }
+  .plegada,
+  .vacia,
+  .hoja img,
+  .tirador {
+    display: none;
+  }
+  .chip {
+    width: 100%;
+    margin-bottom: 8px;
+    border: 1px dashed #aaa;
+    background: none;
+  }
+  .pagina {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+  }
+  .pagina .cuerpo {
+    padding: 0;
+  }
+  .pagina .cuerpo button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  .pagina img {
+    display: block;
+    width: 100%;
+  }
+  .pagina .zoom {
+    width: 200%;
+  }
+
+  /* El PC: 2 columnas. --l, --s y --r son el borde izquierdo, el separador y el borde derecho. */
+  @media (min-width: 900px) {
+    .ronda {
+      display: grid;
+      grid-template-columns: calc(var(--s) - var(--l) - 48px) 1fr;
+      grid-template-areas: "meta hoja" "barra hoja" "izq hoja" "pie hoja";
+      grid-template-rows: auto auto auto 1fr;
+      align-content: start;
+      align-items: start;
+      column-gap: 48px;
+      box-sizing: border-box;
+      height: auto;
+      margin-left: var(--l);
+      width: calc(var(--r) - var(--l));
+      padding: 16px 24px;
+    }
+    .cuerpo {
+      display: contents;
+    }
+    .meta {
+      grid-area: meta;
+      padding: 0 0 8px;
+    }
+    .barra {
+      grid-area: barra;
+    }
+    .izq {
+      grid-area: izq;
+      padding-top: 12px;
+    }
+    .hoja {
+      grid-area: hoja;
+      position: sticky;
+      top: 16px;
+      max-height: calc(100vh - 32px);
+      overflow: auto;
+    }
+    .pie {
+      grid-area: pie;
+      padding: 0;
+      border: 0;
+    }
+    .plegada {
+      display: flex;
+    }
+    .vacia {
+      display: block;
+      color: #888;
+    }
+    .hoja img {
+      display: block;
+    }
+    .chip,
+    .ver-pagina {
+      display: none;
+    }
+    /* Cada tirador es una franja de 24 px. El separador muestra su línea, y el asa sale al pasar el ratón. */
+    .tirador {
+      display: block;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 24px;
+      margin-left: -12px;
+      cursor: col-resize;
+      touch-action: none;
+      z-index: 9;
+    }
+    .tirador::after {
+      content: "";
+      position: absolute;
+      top: 16px;
+      bottom: 16px;
+      left: 11px;
+      width: 2px;
+      background: #ddd;
+    }
+    .tirador:not(.separador)::after {
+      background: none;
+    }
+    .tirador::before {
+      content: "";
+      display: none;
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 5px;
+      width: 14px;
+      height: 40px;
+      margin-top: -20px;
+      border: 2px solid #36c;
+      border-radius: 7px;
+      background: radial-gradient(circle, #888 1.5px, transparent 2px) center / 6px 8px repeat-y, #fff;
+      box-sizing: border-box;
+    }
+    .tirador:hover::before,
+    .tirador:active::before {
+      display: block;
+    }
+    .tirador:hover::after,
+    .tirador:active::after {
+      background: #36c;
+    }
+  }
   .camino {
     position: relative;
     height: 20px;

@@ -6,7 +6,7 @@ use serde::de::DeserializeOwned;
 use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
 
-use crate::{Cierre, Datos, Guardado, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta, RondaAMedias, Simulacro};
+use crate::{Cierre, Columnas, Tirador, Datos, Guardado, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta, RondaAMedias, Simulacro};
 
 type Js<T> = Result<Ts<T>, JsError>;
 
@@ -79,4 +79,15 @@ pub fn unir(a: Vec<Ts<Respuesta>>, b: Vec<Ts<Respuesta>>) -> Result<Vec<Ts<Respu
 pub fn restaurar(datos: Ts<Datos>, guardado: Ts<Guardado>, ahora: f64) -> Result<Option<Ts<RondaAMedias>>, JsError> {
     let d = leer(datos)?;
     crate::restaurar(&d.banco, &d.historial, &leer(guardado)?, &mut azar(ahora)).map(dar).transpose()
+}
+
+/// Las columnas del PC antes de mover un tirador.
+#[wasm_bindgen]
+pub fn columnas() -> Js<Columnas> {
+    dar(Columnas::default())
+}
+
+#[wasm_bindgen]
+pub fn mover(columnas: Ts<Columnas>, tirador: Ts<Tirador>, x: f64) -> Js<Columnas> {
+    dar(crate::mover(leer(columnas)?, leer(tirador)?, x))
 }

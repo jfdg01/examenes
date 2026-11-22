@@ -36,17 +36,41 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
         .route("/{examen}/api/inicio", get(inicio))
         .route("/{examen}/api/respuestas", axum::routing::post(responder))
         .route("/{examen}/api/ronda", get(leer_ronda).put(guardar_ronda))
+        .route("/{examen}/paginas/{archivo}", get(|e, Path((examen, archivo))| servir(e, examen, "paginas", archivo, "image/png")))
+        .route("/{examen}/pdfs/{archivo}", get(|e, Path((examen, archivo))| servir(e, examen, "pdfs", archivo, "application/pdf")))
         .nest_service("/assets", assets)
         .with_state(Arc::new(Carpetas { raiz, interfaz, cerrojo: Default::default() }))
         .layer(CompressionLayer::new().gzip(true))
 }
 
+/// Un nombre de una sola carpeta o un solo archivo: sin `/`, sin `..` y sin los ocultos.
+fn un_nombre(nombre: &str) -> bool {
+    let mut partes = std::path::Path::new(nombre).components();
+    let uno = matches!((partes.next(), partes.next()), (Some(std::path::Component::Normal(_)), None));
+    uno && !nombre.starts_with('.')
+}
+
+/// Un archivo de `paginas/` o de `pdfs/` del examen.
+async fn servir(
+    State(carpetas): Estado,
+    examen: String,
+    carpeta: &str,
+    archivo: String,
+    tipo: &'static str,
+) -> Result<Response, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    if !un_nombre(&archivo) {
+        return Err(StatusCode::NOT_FOUND.into_response());
+    }
+    let bytes = tokio::fs::read(carpetas.raiz.join(&examen).join(carpeta).join(archivo))
+        .await
+        .map_err(|_| StatusCode::NOT_FOUND.into_response())?;
+    Ok(([(axum::http::header::CONTENT_TYPE, tipo)], bytes).into_response())
+}
+
 /// Un examen es una carpeta de la raíz con `examen.json`, y se lee en cada petición.
 async fn leer_examen(carpetas: &Carpetas, examen: &str) -> Result<Examen, Response> {
-    // El nombre es una sola carpeta de la raíz: sin `/`, sin `..` y sin las carpetas ocultas.
-    let mut partes = std::path::Path::new(examen).components();
-    let una_carpeta = matches!((partes.next(), partes.next()), (Some(std::path::Component::Normal(_)), None));
-    if !una_carpeta || examen.starts_with('.') {
+    if !un_nombre(examen) {
         return Err(StatusCode::NOT_FOUND.into_response());
     }
     let texto = tokio::fs::read(carpetas.raiz.join(examen).join("examen.json"))

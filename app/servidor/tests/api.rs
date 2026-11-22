@@ -192,3 +192,26 @@ async fn un_guardado_mas_viejo_no_pisa_la_ronda() {
     assert_eq!(guardar_ronda(&url, &viejo).await, 204);
     assert_eq!(ronda(&url).await, nuevo);
 }
+
+#[tokio::test]
+async fn el_examen_sirve_las_imagenes_de_las_paginas_y_los_pdfs() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let ln = raiz.path().join("ln");
+    fs::create_dir(ln.join("paginas")).unwrap();
+    fs::create_dir(ln.join("pdfs")).unwrap();
+    fs::write(ln.join("paginas/2A _Teoría-7.png"), "png").unwrap();
+    fs::write(ln.join("pdfs/2A _Teoría.pdf"), "pdf").unwrap();
+    let url = arrancar(raiz.path()).await;
+
+    for (ruta, tipo, cuerpo) in
+        [("paginas/2A _Teoría-7.png", "image/png", "png"), ("pdfs/2A _Teoría.pdf#page=7", "application/pdf", "pdf")]
+    {
+        let r = reqwest::get(format!("{url}/ln/{ruta}")).await.unwrap().error_for_status().unwrap();
+        assert_eq!(r.headers()["content-type"], tipo);
+        assert_eq!(r.text().await.unwrap(), cuerpo);
+    }
+    for ruta in ["paginas/no-esta.png", "paginas/..%2Fexamen.json", "otra/examen.json"] {
+        assert_eq!(reqwest::get(format!("{url}/ln/{ruta}")).await.unwrap().status(), 404, "{ruta}");
+    }
+}

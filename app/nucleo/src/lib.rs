@@ -29,6 +29,14 @@ pub struct Pregunta {
     pub correcta: String,
     pub distractores: Vec<String>,
     pub explicacion: String,
+    pub fuente: Fuente,
+}
+
+/// La página del PDF de `pdfs/` que respalda una pregunta.
+#[derive(Deserialize, Serialize, Tsify, Clone)]
+pub struct Fuente {
+    pub pdf: String,
+    pub pagina: u32,
 }
 
 /// Una línea de `respuestas.jsonl`. `ts` es la hora en UTC, como `2026-11-04T12:41:22Z`.
@@ -236,6 +244,13 @@ pub struct PreguntaDeSesion {
     pub paso_tras_seguro: String,
     /// El paso tras un fallo, un acierto con "dudo" o una pregunta en blanco.
     pub paso_tras_otra: String,
+    /// El PDF y la página, como `2A _Teoría.pdf · pág. 7`.
+    pub fuente: String,
+    pub pagina: u32,
+    /// La imagen de la página en `paginas/`, relativa a la página del examen.
+    pub imagen: String,
+    /// El PDF abierto en la página.
+    pub pdf: String,
 }
 
 /// La sesión de 12: los vencidos, 4 huecos para los conceptos sin ver, y el relleno con los que vencen antes.
@@ -295,6 +310,10 @@ fn de_la_ronda(q: &Pregunta, estado: &std::collections::HashMap<&str, (Concepto,
         paso: paso.to_string(),
         paso_tras_seguro: paso.tras(true, true).to_string(),
         paso_tras_otra: paso.tras(false, false).to_string(),
+        fuente: format!("{} · pág. {}", q.fuente.pdf, q.fuente.pagina),
+        pagina: q.fuente.pagina,
+        imagen: format!("paginas/{}-{}.png", q.fuente.pdf.strip_suffix(".pdf").unwrap_or(&q.fuente.pdf), q.fuente.pagina),
+        pdf: format!("pdfs/{}#page={}", q.fuente.pdf, q.fuente.pagina),
     }
 }
 
@@ -534,6 +553,38 @@ fn probabilidad(sabes: f64, acierto: Option<f64>, objetivo: f64, examen: &Examen
     total
 }
 
+/// Las 2 columnas del PC, en partes del ancho de la ventana: el borde izquierdo, el separador y el borde derecho.
+#[derive(Deserialize, Serialize, Tsify, Clone, Copy, PartialEq, Debug)]
+pub struct Columnas {
+    pub l: f64,
+    pub s: f64,
+    pub r: f64,
+}
+
+impl Default for Columnas {
+    fn default() -> Self {
+        Columnas { l: 0.08, s: 0.5, r: 0.92 }
+    }
+}
+
+#[derive(Deserialize, Serialize, Tsify, Clone, Copy)]
+pub enum Tirador {
+    L,
+    S,
+    R,
+}
+
+const COLUMNA_MINIMA: f64 = 0.15;
+
+/// Lleva un tirador a `x`, sin dejar una columna más estrecha que `COLUMNA_MINIMA`.
+pub fn mover(c: Columnas, tirador: Tirador, x: f64) -> Columnas {
+    match tirador {
+        Tirador::L => Columnas { l: x.clamp(0.0, c.s - COLUMNA_MINIMA), ..c },
+        Tirador::S => Columnas { s: x.clamp(c.l + COLUMNA_MINIMA, c.r - COLUMNA_MINIMA), ..c },
+        Tirador::R => Columnas { r: x.clamp(c.s + COLUMNA_MINIMA, 1.0), ..c },
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -726,7 +777,29 @@ mod tests {
             correcta: "sí".into(),
             distractores: vec!["no".into(), "a veces".into(), "nunca".into()],
             explicacion: "porque sí".into(),
+            fuente: Fuente { pdf: "2A _Teoría.pdf".into(), pagina: 7 },
         }
+    }
+
+    #[test]
+    fn un_tirador_deja_cada_columna_con_el_15_por_ciento_como_minimo() {
+        let c = Columnas::default();
+        assert_eq!(mover(c, Tirador::S, 0.3), Columnas { s: 0.3, ..c });
+        assert_eq!(mover(c, Tirador::S, 0.0), Columnas { s: 0.08 + 0.15, ..c });
+        assert_eq!(mover(c, Tirador::S, 1.0), Columnas { s: 0.92 - 0.15, ..c });
+        assert_eq!(mover(c, Tirador::L, -0.2), Columnas { l: 0.0, ..c });
+        assert_eq!(mover(c, Tirador::L, 0.9), Columnas { l: 0.5 - 0.15, ..c });
+        assert_eq!(mover(c, Tirador::R, 1.4), Columnas { r: 1.0, ..c });
+        assert_eq!(mover(c, Tirador::R, 0.1), Columnas { r: 0.5 + 0.15, ..c });
+    }
+
+    #[test]
+    fn la_pregunta_da_su_fuente_la_imagen_de_la_pagina_y_el_pdf_en_la_pagina() {
+        let q = sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(1)).remove(0);
+        assert_eq!(q.fuente, "2A _Teoría.pdf · pág. 7");
+        assert_eq!(q.pagina, 7);
+        assert_eq!(q.imagen, "paginas/2A _Teoría-7.png");
+        assert_eq!(q.pdf, "pdfs/2A _Teoría.pdf#page=7");
     }
 
     pub(crate) fn respuesta(id: &str, ts: &str, acierto: bool, seguro: bool) -> Respuesta {
