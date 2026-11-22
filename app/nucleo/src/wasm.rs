@@ -7,8 +7,8 @@ use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
 
 use crate::{
-    Cierre, Columnas, Correccion, Datos, Guardado, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta, RondaAMedias,
-    Simulacro, Tirador,
+    Cierre, Columnas, Correccion, Datos, Edicion, Editada, Guardado, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta,
+    RondaAMedias, Simulacro, Tirador,
 };
 
 type Js<T> = Result<Ts<T>, JsError>;
@@ -54,6 +54,11 @@ pub fn simulacro(datos: Ts<Datos>, ahora: f64) -> Js<Simulacro> {
 #[wasm_bindgen]
 pub fn corregir(pregunta: Ts<PreguntaDeSesion>, opcion: Option<u32>, seguro: bool, ahora: f64) -> Js<Correccion> {
     dar(crate::corregir(&leer(pregunta)?, opcion, seguro, jiff::Timestamp::from_second(en_segundos(ahora))?))
+}
+
+#[wasm_bindgen]
+pub fn editar(datos: Ts<Datos>, pregunta: Ts<PreguntaDeSesion>, edicion: Ts<Edicion>) -> Result<Option<Ts<Editada>>, JsError> {
+    crate::editar(&leer(datos)?.banco, &leer(pregunta)?, &leer(edicion)?).map(dar).transpose()
 }
 
 #[wasm_bindgen]

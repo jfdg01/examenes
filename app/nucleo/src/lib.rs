@@ -31,7 +31,7 @@ pub struct ExamenDeLaLista {
 }
 
 /// Una pregunta del banco, de `preguntas.json`.
-#[derive(Deserialize, Serialize, Tsify, Clone)]
+#[derive(Deserialize, Serialize, Tsify, Clone, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Pregunta {
     pub id: String,
@@ -45,7 +45,7 @@ pub struct Pregunta {
 }
 
 /// La página del PDF de `pdfs/` que respalda una pregunta.
-#[derive(Deserialize, Serialize, Tsify, Clone)]
+#[derive(Deserialize, Serialize, Tsify, Clone, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Fuente {
     pub pdf: String,
@@ -236,7 +236,7 @@ impl Azar {
 }
 
 /// Una pregunta de la sesión, con lo que muestran la pregunta y su solución.
-#[derive(Serialize, Deserialize, Tsify)]
+#[derive(Serialize, Deserialize, Tsify, Clone)]
 pub struct PreguntaDeSesion {
     pub id: String,
     pub tema: String,
@@ -315,10 +315,7 @@ fn de_la_ronda(q: &Pregunta, estado: &std::collections::HashMap<&str, (Concepto,
         concepto: q.concepto.clone(),
         pregunta: q.pregunta.clone(),
         correcta: opciones.iter().position(|o| *o == q.correcta).unwrap() as u32,
-        copiar: std::iter::once(format!("{}\n", q.pregunta))
-            .chain(opciones.iter().zip('A'..).map(|(o, letra)| format!("{letra}) {o}")))
-            .collect::<Vec<_>>()
-            .join("\n"),
+        copiar: para_copiar(&q.pregunta, &opciones),
         opciones,
         explicacion: q.explicacion.clone(),
         paso: paso.to_string(),
@@ -329,6 +326,55 @@ fn de_la_ronda(q: &Pregunta, estado: &std::collections::HashMap<&str, (Concepto,
         imagen: format!("paginas/{}-{}.png", q.fuente.pdf.strip_suffix(".pdf").unwrap_or(&q.fuente.pdf), q.fuente.pagina),
         pdf: format!("pdfs/{}#page={}", q.fuente.pdf, q.fuente.pagina),
     }
+}
+
+/// La pregunta y sus opciones con su letra.
+fn para_copiar(pregunta: &str, opciones: &[String]) -> String {
+    std::iter::once(format!("{pregunta}\n"))
+        .chain(opciones.iter().zip('A'..).map(|(o, letra)| format!("{letra}) {o}")))
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+/// Los textos de una pregunta editada durante el test, con las opciones en el orden de la pantalla.
+#[derive(Deserialize, Tsify)]
+#[serde(deny_unknown_fields)]
+pub struct Edicion {
+    pub pregunta: String,
+    pub opciones: Vec<String>,
+    pub explicacion: String,
+}
+
+/// La pregunta editada: la del banco, para `preguntas.json`, y la de la ronda, con sus opciones en el mismo sitio.
+#[derive(Serialize, Tsify)]
+pub struct Editada {
+    pub banco: Pregunta,
+    pub ronda: PreguntaDeSesion,
+}
+
+/// Cada opción vuelve a su sitio del banco por su texto antes de la edición, así `distractores` conserva su orden.
+/// Una pregunta que no está en el banco, o con otras opciones, no se edita.
+pub fn editar(banco: &[Pregunta], q: &PreguntaDeSesion, e: &Edicion) -> Option<Editada> {
+    let original = banco.iter().find(|b| b.id == q.id)?;
+    if e.opciones.len() != q.opciones.len() {
+        return None;
+    }
+    let nueva = |viejo: &String| Some(e.opciones[q.opciones.iter().position(|o| o == viejo)?].clone());
+    let editada = Pregunta {
+        pregunta: e.pregunta.clone(),
+        correcta: nueva(&original.correcta)?,
+        distractores: original.distractores.iter().map(nueva).collect::<Option<_>>()?,
+        explicacion: e.explicacion.clone(),
+        ..original.clone()
+    };
+    let ronda = PreguntaDeSesion {
+        pregunta: e.pregunta.clone(),
+        opciones: e.opciones.clone(),
+        explicacion: e.explicacion.clone(),
+        copiar: para_copiar(&e.pregunta, &e.opciones),
+        ..q.clone()
+    };
+    Some(Editada { banco: editada, ronda })
 }
 
 /// El simulacro: las preguntas del examen, al azar de todo el banco, y su duración.
@@ -359,12 +405,13 @@ pub struct Guardado {
     pub ronda: Option<RondaGuardada>,
 }
 
-/// Una ronda a medias: sus preguntas, el resultado de las contestadas y el límite del simulacro, en milisegundos.
+/// Una ronda a medias: sus preguntas, el resultado de cada una y el límite del simulacro, en milisegundos.
+/// `resultados` va en el orden de `ids`, con `null` en una pregunta sin contestar.
 #[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct RondaGuardada {
     pub ids: Vec<String>,
-    pub resultados: Vec<Resultado>,
+    pub resultados: Vec<Option<Resultado>>,
     pub simulacro: bool,
     pub limite: Option<u64>,
 }
@@ -382,22 +429,29 @@ pub fn unir(a: &[Respuesta], b: &[Respuesta]) -> Vec<Respuesta> {
     u
 }
 
-/// La ronda a medias de un guardado, con las preguntas del banco. La pregunta actual es la primera sin resultado.
+/// La ronda a medias de un guardado, con las preguntas del banco y un resultado por pregunta.
+/// La pregunta actual es la primera sin resultado.
 #[derive(Serialize, Tsify)]
 pub struct RondaAMedias {
     pub preguntas: Vec<PreguntaDeSesion>,
-    pub resultados: Vec<Resultado>,
+    pub resultados: Vec<Option<Resultado>>,
     pub simulacro: bool,
     pub limite: Option<u64>,
 }
 
-/// Una ronda con un id que no está en el banco no se restaura.
+/// Una ronda con un id que no está en el banco, o con más resultados que preguntas, no se restaura.
+/// Una lista de resultados más corta que `ids` acaba en preguntas sin contestar.
 pub fn restaurar(banco: &[Pregunta], historial: &[Respuesta], guardado: &Guardado, azar: &mut Azar) -> Option<RondaAMedias> {
     let r = guardado.ronda.as_ref()?;
     let estado = estados(banco, historial);
-    let preguntas =
+    let preguntas: Vec<_> =
         r.ids.iter().map(|id| Some(de_la_ronda(banco.iter().find(|q| q.id == *id)?, &estado, azar))).collect::<Option<_>>()?;
-    Some(RondaAMedias { preguntas, resultados: r.resultados.clone(), simulacro: r.simulacro, limite: r.limite })
+    if r.resultados.len() > preguntas.len() {
+        return None;
+    }
+    let mut resultados = r.resultados.clone();
+    resultados.resize(preguntas.len(), None);
+    Some(RondaAMedias { preguntas, resultados, simulacro: r.simulacro, limite: r.limite })
 }
 
 /// Lo que pasó en una pregunta: un acierto, un fallo o una pregunta en blanco.
@@ -823,6 +877,27 @@ mod tests {
     }
 
     #[test]
+    fn una_pregunta_editada_lleva_cada_opcion_a_su_sitio_del_banco_y_la_ronda_conserva_su_orden() {
+        let banco = [pregunta("a1", "a")];
+        let q = sesion(&banco, &[], 0, &mut Azar::new(1)).remove(0);
+        assert_eq!(q.opciones, ["a veces", "sí", "nunca", "no"]);
+        let e = Edicion {
+            pregunta: "¿a1 bien?".into(),
+            opciones: vec!["a ratos".into(), "claro".into(), "jamás".into(), "no".into()],
+            explicacion: "porque claro".into(),
+        };
+        let r = editar(&banco, &q, &e).unwrap();
+        assert_eq!((r.banco.pregunta.as_str(), r.banco.correcta.as_str()), ("¿a1 bien?", "claro"));
+        assert_eq!(r.banco.distractores, ["no", "a ratos", "jamás"]);
+        assert_eq!(r.banco.explicacion, "porque claro");
+        assert_eq!((r.banco.id.as_str(), r.banco.concepto.as_str()), ("a1", "a"));
+        assert_eq!((r.ronda.opciones, r.ronda.correcta), (e.opciones.clone(), 1));
+        assert_eq!(r.ronda.copiar, "¿a1 bien?\n\nA) a ratos\nB) claro\nC) jamás\nD) no");
+        assert_eq!(r.ronda.paso, q.paso);
+        assert!(editar(&[pregunta("b1", "b")], &q, &e).is_none(), "sin la pregunta en el banco no hay edición");
+    }
+
+    #[test]
     fn la_pregunta_da_su_fuente_la_imagen_de_la_pagina_y_el_pdf_en_la_pagina() {
         let q = sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(1)).remove(0);
         assert_eq!(q.fuente, "2A _Teoría.pdf · pág. 7");
@@ -1043,7 +1118,7 @@ mod tests {
         assert_eq!(t.dudas[0].detalle.as_deref(), Some("1 de 1 «dudo»"));
     }
 
-    fn guardado(guardada: i64, ids: &[&str], resultados: &[Resultado]) -> Guardado {
+    fn guardado(guardada: i64, ids: &[&str], resultados: &[Option<Resultado>]) -> Guardado {
         let ids = ids.iter().map(|&i| i.into()).collect();
         Guardado {
             guardada: Timestamp::from_second(guardada).unwrap(),
@@ -1063,11 +1138,20 @@ mod tests {
     #[test]
     fn la_ronda_restaurada_sigue_en_la_primera_pregunta_sin_resultado() {
         let banco = [pregunta("a1", "a"), pregunta("b1", "b"), pregunta("c1", "c")];
-        let g = guardado(1, &["c1", "a1", "b1"], &[Resultado::Fallo]);
+        let g = guardado(1, &["c1", "a1", "b1"], &[Some(Resultado::Fallo)]);
         let r = restaurar(&banco, &[], &g, &mut Azar::new(1)).unwrap();
         assert_eq!(r.preguntas.iter().map(|q| q.id.as_str()).collect::<Vec<_>>(), ["c1", "a1", "b1"]);
-        assert_eq!(r.resultados, [Resultado::Fallo]);
+        assert_eq!(r.resultados, [Some(Resultado::Fallo), None, None]);
         assert_eq!((r.simulacro, r.limite), (false, None));
+    }
+
+    #[test]
+    fn la_ronda_restaurada_guarda_cada_resultado_con_su_pregunta_aunque_haya_saltos() {
+        let banco = [pregunta("a1", "a"), pregunta("b1", "b"), pregunta("c1", "c")];
+        let g = guardado(1, &["c1", "a1", "b1"], &[None, Some(Resultado::Acierto), None]);
+        let r = restaurar(&banco, &[], &g, &mut Azar::new(1)).unwrap();
+        assert_eq!(r.resultados, [None, Some(Resultado::Acierto), None]);
+        assert!(restaurar(&banco, &[], &guardado(1, &["a1"], &[None, None]), &mut Azar::new(1)).is_none());
     }
 
     #[test]

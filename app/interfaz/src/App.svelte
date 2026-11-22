@@ -1,6 +1,7 @@
 <script lang="ts">
   import * as nucleo from "./nucleo/nucleo.js";
-  import type { Columnas, Datos, Guardado, Nota, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
+  import type { Columnas, Datos, Edicion, Guardado, Nota, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
+  import { aviso, type Marca } from "./Cuadricula.svelte";
   import Final from "./Final.svelte";
   import Hoja from "./Hoja.svelte";
   import Inicio from "./Inicio.svelte";
@@ -77,6 +78,7 @@
     const r = nucleo.restaurar(datos, g, Date.now());
     if (!r) return;
     ({ preguntas, resultados, simulacro } = r);
+    elecciones = preguntas.map(() => null);
     limite = r.limite ?? 0;
     seguir();
   }
@@ -128,9 +130,23 @@
   let ronda = $state<Ronda>({ estado: "Inicio" });
   let preguntas = $state.raw<PreguntaDeSesion[]>([]);
   let i = $state(0);
-  let eleccion = $state<Eleccion | null>(null);
+  // La elección y el resultado de cada pregunta van en su posición, porque la ronda salta entre preguntas.
+  let elecciones = $state<(Eleccion | null)[]>([]);
+  const eleccion = $derived(elecciones[i] ?? null);
   let simulacro = $state(false);
-  let resultados: Resultado[] = [];
+  let resultados = $state<(Resultado | undefined)[]>([]);
+  // La revisión de una pregunta desde el final.
+  let revisando = $state(false);
+  const final = $derived(ronda.estado === "Final");
+  const contestada = $derived(revisando || (ronda.estado === "Pregunta" && ronda.contestada));
+  const marcas: Marca[] = $derived(
+    preguntas.map((_, k) => {
+      const r = resultados[k];
+      if (r == null) return final ? "blanco" : "falta";
+      if (simulacro && !final) return "contestada";
+      return r === "Acierto" ? "acierto" : r === "Fallo" ? "fallo" : "blanco";
+    }),
+  );
   let nota = $state<NotaDelSimulacro | null>(null);
   let limite = 0;
   let reloj: ReturnType<typeof setInterval> | undefined;
@@ -158,16 +174,18 @@
       limite = ahora + s.segundos * 1000;
     } else preguntas = nucleo.sesion(datos, ahora);
     simulacro = comoSimulacro;
-    resultados = [];
+    resultados = preguntas.map(() => undefined);
+    elecciones = preguntas.map(() => null);
+    revisando = false;
     seguir();
     guardar();
   }
 
   // La ronda sigue en la primera pregunta sin resultado.
   function seguir() {
-    i = resultados.length;
+    i = resultados.findIndex((r) => r === undefined);
+    if (i < 0) i = preguntas.length;
     nota = null;
-    eleccion = null;
     abiertas = false;
     error = "";
     if (i >= preguntas.length) return terminar();
@@ -191,26 +209,62 @@
     clearInterval(reloj);
     ronda = { estado: "Final" };
     guardar();
-    nota = nucleo.nota({ preguntas: preguntas.length, resultados }, datos!.examen.penalizacion);
+    nota = nucleo.nota({ preguntas: preguntas.length, resultados: resultados.filter((r) => r !== undefined) }, datos!.examen.penalizacion);
   }
 
   async function contestar(opcion: number | null, seguro: boolean) {
     const correccion = nucleo.corregir(q, opcion, seguro, Date.now());
     const respuesta = correccion.respuesta;
-    eleccion = { opcion, correccion };
+    elecciones[i] = { opcion, correccion };
     ronda = { estado: "Pregunta", contestada: true };
-    resultados.push(respuesta.resultado);
+    resultados[i] = respuesta.resultado;
     guardar();
     localStorage.setItem(clavePendientes, JSON.stringify([...pendientes(), respuesta]));
     datos = { ...datos!, historial: nucleo.unir(datos!.historial, [respuesta]) };
     error = await enviarPendientes();
   }
 
-  function siguiente() {
-    eleccion = null;
+  function ir(k: number) {
+    i = k;
+    avisar = false;
     abiertas = false;
-    if (++i < preguntas.length) ronda = { estado: "Pregunta", contestada: false };
-    else terminar();
+    if (!revisando) ronda = { estado: "Pregunta", contestada: resultados[k] !== undefined };
+  }
+
+  // Con todas contestadas, el botón grande termina desde cualquier pregunta. En la revisión, vuelve al resultado.
+  const todas = $derived(resultados.every((r) => r !== undefined));
+  const etiqueta = $derived(revisando ? "Resultado" : todas || i === preguntas.length - 1 ? "Terminar" : "Siguiente");
+  function siguiente() {
+    if (revisando) revisando = false;
+    else if (todas || i + 1 >= preguntas.length) intentarTerminar();
+    else ir(i + 1);
+  }
+
+  // La ronda no termina con preguntas sin contestar: lleva a la primera que falta, con el aviso hasta la pregunta siguiente.
+  let avisar = $state(false);
+  const faltan = $derived(resultados.filter((r) => r === undefined).length);
+  function intentarTerminar() {
+    const falta = resultados.findIndex((r) => r === undefined);
+    if (falta < 0) return terminar();
+    ir(falta);
+    avisar = true;
+  }
+
+  // La edición entra en `preguntas.json`, en el banco de la pantalla y en la pregunta de la ronda, con el mismo `id`.
+  async function editar(edicion: Edicion): Promise<string> {
+    const e = nucleo.editar(datos!, q, edicion);
+    if (!e) return "La pregunta ya no está en el banco: recarga la página.";
+    const r = await fetch("api/preguntas", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(e.banco),
+    }).catch(() => null);
+    if (!r) return "Sin red: la edición no llegó al servidor.";
+    if (!r.ok) return `El servidor responde ${r.status}, y la pregunta sigue como estaba.`;
+    const k = i;
+    datos = { ...datos!, banco: datos!.banco.map((b) => (b.id === e.banco.id ? e.banco : b)) };
+    preguntas = preguntas.map((p, j) => (j === k ? e.ronda : p));
+    return "";
   }
 
   function volver() {
@@ -221,6 +275,7 @@
   }
 
   function abandonar() {
+    if (revisando) return void (revisando = false);
     const que = simulacro ? "el simulacro" : "la sesión";
     if (confirm(`¿Abandonar ${que}? Las respuestas quedan en el historial.`)) volver();
   }
@@ -234,7 +289,7 @@
     onobjetivo={(o) => localStorage.setItem(claveObjetivo, String((objetivo = o)))}
     onempezar={empezar}
   />
-{:else if ronda.estado === "Pregunta"}
+{:else if ronda.estado === "Pregunta" || revisando}
   <!-- El móvil: la línea de arriba, la barra, el cuerpo con su scroll y el pie fijo.
        El PC: 2 columnas. --l, --s y --r son el borde izquierdo, el separador y el borde derecho. -->
   <div
@@ -243,6 +298,8 @@
     style:--s="{columnas.s * 100}vw"
     style:--r="{columnas.r * 100}vw"
   >
+    <!-- Una edición a medias se cierra al cambiar de pregunta. -->
+    {#key i}
     <Pregunta
       {q}
       {i}
@@ -250,10 +307,11 @@
       {simulacro}
       {restante}
       {eleccion}
+      {contestada}
       {abiertas}
       nota={notas[q.id] ?? ""}
       {notasVisibles}
-      {error}
+      error={error || (avisar && faltan ? aviso(faltan) : "")}
       onabandonar={abandonar}
       oncontestar={contestar}
       onabiertas={() => (abiertas = !abiertas)}
@@ -261,9 +319,17 @@
       onnotasvisibles={alternarNotas}
       onverpagina={verPagina}
       onsiguiente={siguiente}
+      corregida={!simulacro || final}
+      revision={revisando}
+      {marcas}
+      oneditar={editar}
+      onir={ir}
+      onterminar={intentarTerminar}
+      {etiqueta}
     >
-      <Hoja {q} paso={eleccion?.correccion.paso} onsiguiente={siguiente} />
+      <Hoja {q} paso={contestada && (!simulacro || final) ? (eleccion?.correccion.paso ?? q.paso) : undefined} onsiguiente={siguiente} {etiqueta} />
     </Pregunta>
+    {/key}
     <Tiradores
       onmover={(k, x) => (columnas = nucleo.mover(columnas, k, x))}
       onsoltar={() => localStorage.setItem(claveColumnas, JSON.stringify(columnas))}
@@ -271,5 +337,16 @@
   </div>
   {#if pagina}<PaginaCompleta {q} oncerrar={() => history.back()} />{/if}
 {:else}
-  <Final {simulacro} {nota} preguntas={preguntas.length} {error} onvolver={volver} />
+  <Final
+    {simulacro}
+    {nota}
+    preguntas={preguntas.length}
+    {error}
+    onvolver={volver}
+    {marcas}
+    onrevisar={(k) => {
+      revisando = true;
+      i = k;
+    }}
+  />
 {/if}

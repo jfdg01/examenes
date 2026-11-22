@@ -37,6 +37,7 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
         .route("/{examen}/", get(pagina))
         .route("/{examen}/api/inicio", get(inicio))
         .route("/{examen}/api/respuestas", axum::routing::post(responder))
+        .route("/{examen}/api/preguntas", axum::routing::put(editar))
         .route("/{examen}/api/notas", get(leer_notas).post(anotar))
         .route("/{examen}/api/ronda", get(leer_ronda).put(guardar_ronda))
         .route(
@@ -136,6 +137,32 @@ async fn leer_banco(carpetas: &Carpetas, examen: &str) -> Result<Vec<Pregunta>, 
         return Ok(Vec::new());
     }
     serde_json::from_slice(&texto).map_err(error_interno)
+}
+
+/// Cambia los textos de una pregunta del banco por su `id`: el enunciado, `correcta`, `distractores` y `explicacion`.
+/// El archivo queda con el formato de `banco revision`.
+async fn editar(
+    State(carpetas): Estado,
+    Path(examen): Path<String>,
+    axum::Json(nueva): axum::Json<Pregunta>,
+) -> Result<StatusCode, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    let _cerrojo = carpetas.cerrojo.lock().await;
+    let mut banco = leer_banco(&carpetas, &examen).await?;
+    let q = banco.iter_mut().find(|q| q.id == nueva.id).ok_or_else(|| StatusCode::NOT_FOUND.into_response())?;
+    let en_blanco = [&nueva.pregunta, &nueva.correcta, &nueva.explicacion]
+        .into_iter()
+        .chain(&nueva.distractores)
+        .any(|t| t.trim().is_empty());
+    let solo_textos = (&q.concepto, &q.tema, &q.fuente, q.distractores.len())
+        == (&nueva.concepto, &nueva.tema, &nueva.fuente, nueva.distractores.len());
+    if !solo_textos || en_blanco {
+        return Err((StatusCode::UNPROCESSABLE_ENTITY, "solo cambian los textos, y ninguno va en blanco").into_response());
+    }
+    *q = nueva;
+    let texto = serde_json::to_string_pretty(&banco).map_err(error_interno)? + "\n";
+    tokio::fs::write(carpetas.raiz.join(&examen).join("preguntas.json"), texto).await.map_err(error_interno)?;
+    Ok(StatusCode::NO_CONTENT)
 }
 
 /// `respuestas.jsonl` tiene una respuesta por línea. Quien llama tiene el cerrojo.

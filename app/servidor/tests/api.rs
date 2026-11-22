@@ -325,3 +325,55 @@ async fn la_lista_va_en_orden_alfabetico_sin_tildes_ni_mayusculas() {
     let titulos: Vec<_> = lista.as_array().unwrap().iter().map(|e| e["titulo"].as_str().unwrap()).collect();
     assert_eq!(titulos, ["Álgebra", "bases", "Nubes", "Óptica", "Zeta"]);
 }
+
+async fn editar(url: &str, cuerpo: &Value) -> reqwest::StatusCode {
+    reqwest::Client::new().put(format!("{url}/ln/api/preguntas")).json(cuerpo).send().await.unwrap().status()
+}
+
+#[tokio::test]
+async fn una_pregunta_editada_entra_en_preguntas_json_con_su_id() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    let mut q = inicio(&url, "ln").await["banco"][2].clone();
+    let (pregunta, distractor) = (q["pregunta"].clone(), q["distractores"][1].clone());
+    q["pregunta"] = json!("¿Un enunciado editado?");
+    q["distractores"][1] = json!("Un distractor editado");
+    assert_eq!(editar(&url, &q).await, 204);
+    let banco = inicio(&url, "ln").await["banco"].clone();
+    assert_eq!(banco[2], q);
+    assert_eq!(banco.as_array().unwrap().len(), 6);
+    // El archivo cambia solo en los textos editados, con el formato de `banco revision`.
+    let esperado = BANCO_LN.replacen(&pregunta.to_string(), "\"¿Un enunciado editado?\"", 1).replacen(
+        &distractor.to_string(),
+        "\"Un distractor editado\"",
+        1,
+    );
+    assert_eq!(fs::read_to_string(raiz.path().join("ln/preguntas.json")).unwrap(), esperado);
+}
+
+#[tokio::test]
+async fn una_edicion_mal_formada_no_toca_preguntas_json() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    let q = inicio(&url, "ln").await["banco"][0].clone();
+    let con = |campo: &str, valor: Value| {
+        let mut m = q.clone();
+        m[campo] = valor;
+        m
+    };
+    for (mala, estado) in [
+        (con("id", json!("no-esta")), 404),
+        (con("pregunta", json!("  ")), 422),
+        (con("explicacion", json!("")), 422),
+        (con("distractores", json!(["uno"])), 422),
+        (con("concepto", json!("otro")), 422),
+        (con("extra", json!(1)), 422),
+    ] {
+        assert_eq!(editar(&url, &mala).await, estado, "{mala}");
+    }
+    assert_eq!(fs::read_to_string(raiz.path().join("ln/preguntas.json")).unwrap(), BANCO_LN);
+}

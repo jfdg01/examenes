@@ -31,6 +31,67 @@ async function abrir(examen: string, width: number, height: number) {
 }
 const visible = (page: Page, sel: string) => page.locator(sel).first().isVisible();
 const contestar = (page: Page) => page.locator(".opcion button").first().click();
+const rejilla = (page: Page) => page.getByTitle("Las preguntas").filter({ visible: true });
+async function irA(page: Page, n: number) {
+  await rejilla(page).click();
+  await page.locator(".cuadricula button", { hasText: new RegExp(`^${n}$`) }).click();
+}
+
+// La navegación por la cuadrícula, la edición y el simulacro, sobre una página con la pregunta 1 contestada.
+async function navegar(page: Page, nombre: string) {
+  // La ronda a medias vuelve al recargar, en la primera pregunta sin contestar.
+  await page.reload();
+  await rejilla(page).getByText("2 / 12").waitFor();
+  await irA(page, 4);
+  await rejilla(page).getByText("4 / 12").waitFor();
+  assert.equal(await page.locator(".icono").count(), 0, "una pregunta saltada espera su respuesta");
+  await rejilla(page).click();
+  assert(await page.getByText("Terminar la sesión").isDisabled(), "terminar queda gris con preguntas sin contestar");
+  await page.getByText("Te faltan 11 preguntas. Contéstalas para terminar.").waitFor();
+  await page.screenshot({ path: `capturas/${nombre}-cuadricula.png` });
+  await page.locator(".cuadricula button", { hasText: /^1$/ }).click();
+  assert(await page.locator(".opcion button").first().isDisabled(), "una pregunta contestada no cambia de respuesta");
+
+  // La edición entra en `preguntas.json` con el mismo id, y Cancelar deja la pregunta como estaba.
+  await page.getByTitle("Editar la pregunta").click();
+  assert.equal(await page.locator(".hoja").count(), 0, "la edición oculta la hoja");
+  assert.equal(await page.locator(".nota").count(), 0, "la edición oculta la nota");
+  await page.screenshot({ path: `capturas/${nombre}-editar.png` });
+  await page.locator("textarea").first().fill("¿Un enunciado editado?");
+  await page.getByText("Guardar").click();
+  await page.getByText("¿Un enunciado editado?").waitFor();
+  const banco = await page.evaluate(() => fetch("api/inicio").then((r) => r.json()));
+  assert.equal(banco.banco.filter((q: { pregunta: string }) => q.pregunta === "¿Un enunciado editado?").length, 1, "la edición llega al banco");
+  await page.getByTitle("Editar la pregunta").click();
+  await page.locator("textarea").first().fill("Otro");
+  await page.getByText("Cancelar").click();
+  await page.getByText("¿Un enunciado editado?").waitFor();
+
+  // El simulacro solo marca la opción elegida, y corrige al final.
+  page.once("dialog", (d) => d.accept());
+  await page.getByTitle("Abandonar").click();
+  await page.getByText(/^Simulacro/).click();
+  for (let k = 0; k < 20; k++) {
+    await page.locator(".opcion button").first().click();
+    assert.equal(await page.locator(".icono").count(), 0, "el simulacro no corrige al momento");
+    // En el PC, el simulacro avanza con "Siguiente ›", porque la hoja no lleva la corrección.
+    if (k < 19) await page.getByRole("button", { name: /^Siguiente/ }).filter({ visible: true }).last().click();
+  }
+  // Con todas contestadas, el móvil termina con el botón grande desde cualquier pregunta, y el PC desde la cuadrícula.
+  await irA(page, 3);
+  if (nombre === "movil") await page.getByRole("button", { name: "Terminar", exact: true }).filter({ visible: true }).click();
+  else {
+    await rejilla(page).click();
+    await page.getByText("Terminar el simulacro").click();
+  }
+  await page.getByText("El simulacro ha terminado").waitFor();
+  await page.screenshot({ path: `capturas/${nombre}-final.png` });
+  await page.locator(".cuadricula button", { hasText: /^5$/ }).click();
+  await page.getByText(/^Revisión · /).waitFor();
+  assert((await page.locator(".icono").count()) > 0, "la revisión corrige");
+  await page.getByRole("button", { name: "Resultado", exact: true }).filter({ visible: true }).click();
+  await page.getByText("El simulacro ha terminado").waitFor();
+}
 
 try {
   // La lista: cada examen de la raíz abre su ruta, y su inicio lleva de vuelta a la lista.
@@ -116,6 +177,10 @@ try {
   assert(await visible(pc, ".ver-pagina"), "una ventana estrecha usa el diseño del móvil");
   assert(!(await visible(pc, ".tirador")), "una ventana estrecha no tiene tiradores");
   await pc.screenshot({ path: "capturas/pc-estrecho.png" });
+  await pc.setViewportSize({ width: 1280, height: 800 });
+
+  await navegar(movil, "movil");
+  await navegar(pc, "pc");
   console.log("Todas las pantallas pasan.");
 } finally {
   await navegador.close();
