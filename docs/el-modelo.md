@@ -17,10 +17,12 @@ Rust tiene un `enum Concepto { SinVer, Paso(u32) }`.
 ## La ronda
 
 - Del **inicio**, una ronda empieza como una sesión o como un simulacro.
-- Cada pregunta pasa de **sin contestar** a **contestada**, y la pantalla muestra la solución. El simulacro añade el botón "En blanco" y el reloj.
-- La última pregunta lleva al **final**, y el final vuelve al inicio. El botón ✕ también vuelve al inicio.
+- Cada pregunta pasa de **sin contestar** a **contestada**, y la pantalla muestra la solución. El simulacro añade el botón "En blanco" y el reloj, y solo marca la opción elegida hasta el final.
+- La cuadrícula lleva a cualquier pregunta de la ronda. Una pregunta contestada no cambia de respuesta, y una pregunta saltada espera la suya.
+- La ronda va al **final** cuando todas las preguntas están contestadas. Con alguna sin contestar, "Terminar" queda gris y lleva a la primera que falta. El final vuelve al inicio, y el botón ✕ también.
+- El final muestra la cuadrícula en verde y rojo. Un número abre su pregunta corregida, y "Resultado" vuelve al final.
 - Un simulacro con el `limite` pasado va al final. Cada pregunta sin contestar cuenta en blanco para la nota, y no entra en el historial.
-- La ronda a medias vive en `localStorage` y en el servidor, con sus ids, sus resultados y el límite del simulacro. Al cargar, gana el guardado más nuevo, y la ronda sigue en la primera pregunta sin resultado. Una ronda con un id que ya no está en el banco no se restaura.
+- La ronda a medias vive en `localStorage` y en el servidor, con sus ids, un resultado o `null` por pregunta y el límite del simulacro. Al cargar, gana el guardado más nuevo, y la ronda sigue en la primera pregunta sin resultado. Una ronda con un id que ya no está en el banco no se restaura.
 
 Rust tiene un `enum Ronda { Inicio, Pregunta { contestada: bool }, Final }`.
 
