@@ -215,3 +215,55 @@ async fn el_examen_sirve_las_imagenes_de_las_paginas_y_los_pdfs() {
         assert_eq!(reqwest::get(format!("{url}/ln/{ruta}")).await.unwrap().status(), 404, "{ruta}");
     }
 }
+
+async fn notas(url: &str) -> Value {
+    reqwest::get(format!("{url}/ln/api/notas")).await.unwrap().error_for_status().unwrap().json().await.unwrap()
+}
+
+async fn anotar(url: &str, cuerpo: &Value) -> reqwest::StatusCode {
+    reqwest::Client::new().post(format!("{url}/ln/api/notas")).json(cuerpo).send().await.unwrap().status()
+}
+
+#[tokio::test]
+async fn una_nota_se_guarda_en_notas_json_y_vuelve() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+    assert_eq!(notas(&url).await, json!({}));
+
+    assert_eq!(anotar(&url, &json!({ "id": "rgpd-001", "texto": "El art. 6" })).await, 204);
+    assert_eq!(anotar(&url, &json!({ "id": "rgpd-002", "texto": "Otra" })).await, 204);
+    assert_eq!(anotar(&url, &json!({ "id": "rgpd-001", "texto": "El art. 6.1" })).await, 204);
+    let esperadas = json!({ "rgpd-001": "El art. 6.1", "rgpd-002": "Otra" });
+    assert_eq!(notas(&url).await, esperadas);
+    let archivo: Value = serde_json::from_str(&fs::read_to_string(raiz.path().join("ln/notas.json")).unwrap()).unwrap();
+    assert_eq!(archivo, esperadas);
+}
+
+#[tokio::test]
+async fn una_nota_en_blanco_se_borra() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    assert_eq!(anotar(&url, &json!({ "id": "rgpd-001", "texto": "El art. 6" })).await, 204);
+    assert_eq!(anotar(&url, &json!({ "id": "rgpd-001", "texto": " \n" })).await, 204);
+    assert_eq!(notas(&url).await, json!({}));
+}
+
+#[tokio::test]
+async fn una_nota_mal_formada_no_se_guarda() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    for mala in [
+        json!({ "id": "rgpd-001" }),
+        json!({ "id": "rgpd-001", "texto": 1 }),
+        json!({ "id": "rgpd-001", "texto": "x", "extra": 1 }),
+        json!([{ "id": "rgpd-001", "texto": "x" }]),
+    ] {
+        assert!(anotar(&url, &mala).await.is_client_error(), "{mala}");
+    }
+    assert!(!raiz.path().join("ln/notas.json").exists());
+}

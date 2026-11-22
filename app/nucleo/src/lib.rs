@@ -49,6 +49,14 @@ pub struct Respuesta {
     pub seguro: bool,
 }
 
+/// La nota que el usuario escribe en una pregunta. `notas.json` guarda un objeto de `id` a `texto`.
+#[derive(Deserialize, Serialize, Tsify)]
+#[serde(deny_unknown_fields)]
+pub struct Nota {
+    pub id: String,
+    pub texto: String,
+}
+
 /// Lo que el servidor da de un examen: sus cifras, su banco y su historial.
 #[derive(Deserialize, Serialize, Tsify)]
 pub struct Datos {
@@ -274,6 +282,8 @@ pub struct PreguntaDeSesion {
     pub imagen: String,
     /// El PDF abierto en la página.
     pub pdf: String,
+    /// La pregunta y sus opciones con su letra, sin la solución, para preguntar a otra herramienta.
+    pub copiar: String,
 }
 
 /// La sesión de 12: los vencidos, 4 huecos para los conceptos sin ver, y el relleno con los que vencen antes.
@@ -328,6 +338,10 @@ fn de_la_ronda(q: &Pregunta, estado: &std::collections::HashMap<&str, (Concepto,
         concepto: q.concepto.clone(),
         pregunta: q.pregunta.clone(),
         correcta: opciones.iter().position(|o| *o == q.correcta).unwrap() as u32,
+        copiar: std::iter::once(format!("{}\n", q.pregunta))
+            .chain(opciones.iter().zip('A'..).map(|(o, letra)| format!("{letra}) {o}")))
+            .collect::<Vec<_>>()
+            .join("\n"),
         opciones,
         explicacion: q.explicacion.clone(),
         paso: paso.to_string(),
@@ -802,6 +816,13 @@ mod tests {
             explicacion: "porque sí".into(),
             fuente: Fuente { pdf: "2A _Teoría.pdf".into(), pagina: 7 },
         }
+    }
+
+    #[test]
+    fn el_texto_para_copiar_lleva_la_pregunta_y_sus_opciones_en_orden_sin_la_solucion() {
+        let q = sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(1)).remove(0);
+        assert_eq!(q.opciones, ["a veces", "sí", "nunca", "no"]);
+        assert_eq!(q.copiar, "¿a1?\n\nA) a veces\nB) sí\nC) nunca\nD) no");
     }
 
     #[test]

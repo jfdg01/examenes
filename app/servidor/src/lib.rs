@@ -12,7 +12,7 @@ use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
-use nucleo::{Datos, Examen, Guardado, Pregunta, Respuesta};
+use nucleo::{Datos, Examen, Guardado, Nota, Pregunta, Respuesta};
 use tower_http::compression::CompressionLayer;
 use tower_http::services::ServeDir;
 
@@ -35,6 +35,7 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
         .route("/{examen}/", get(pagina))
         .route("/{examen}/api/inicio", get(inicio))
         .route("/{examen}/api/respuestas", axum::routing::post(responder))
+        .route("/{examen}/api/notas", get(leer_notas).post(anotar))
         .route("/{examen}/api/ronda", get(leer_ronda).put(guardar_ronda))
         .route("/{examen}/paginas/{archivo}", get(|e, Path((examen, archivo))| servir(e, examen, "paginas", archivo, "image/png")))
         .route("/{examen}/pdfs/{archivo}", get(|e, Path((examen, archivo))| servir(e, examen, "pdfs", archivo, "application/pdf")))
@@ -176,6 +177,43 @@ async fn guardar_ronda(
     let _cerrojo = carpetas.cerrojo.lock().await;
     let gana = nucleo::gana(leer_guardado(ruta.clone()).await?, guardado);
     let texto = serde_json::to_vec(&gana).map_err(error_interno)?;
+    tokio::fs::write(ruta, texto).await.map_err(error_interno)?;
+    Ok(StatusCode::NO_CONTENT)
+}
+
+type Notas = std::collections::BTreeMap<String, String>;
+
+/// Sin `notas.json`, no hay notas. Quien llama tiene el cerrojo.
+async fn leer_archivo_de_notas(ruta: PathBuf) -> Result<Notas, Response> {
+    let texto = leer_si_existe(ruta).await?;
+    if texto.is_empty() {
+        return Ok(Notas::new());
+    }
+    serde_json::from_slice(&texto).map_err(error_interno)
+}
+
+async fn leer_notas(State(carpetas): Estado, Path(examen): Path<String>) -> Result<axum::Json<Notas>, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    let _cerrojo = carpetas.cerrojo.lock().await;
+    leer_archivo_de_notas(carpetas.raiz.join(&examen).join("notas.json")).await.map(axum::Json)
+}
+
+/// Guarda la nota de una pregunta. Una nota en blanco se borra.
+async fn anotar(
+    State(carpetas): Estado,
+    Path(examen): Path<String>,
+    axum::Json(nota): axum::Json<Nota>,
+) -> Result<StatusCode, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    let ruta = carpetas.raiz.join(&examen).join("notas.json");
+    let _cerrojo = carpetas.cerrojo.lock().await;
+    let mut notas = leer_archivo_de_notas(ruta.clone()).await?;
+    if nota.texto.trim().is_empty() {
+        notas.remove(&nota.id);
+    } else {
+        notas.insert(nota.id, nota.texto);
+    }
+    let texto = serde_json::to_vec_pretty(&notas).map_err(error_interno)?;
     tokio::fs::write(ruta, texto).await.map_err(error_interno)?;
     Ok(StatusCode::NO_CONTENT)
 }

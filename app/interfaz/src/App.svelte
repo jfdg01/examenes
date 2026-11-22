@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as nucleo from "./nucleo/nucleo.js";
-  import type { Columnas, Datos, Guardado, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
+  import type { Columnas, Datos, Guardado, Nota, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
   import Final from "./Final.svelte";
   import Hoja from "./Hoja.svelte";
   import Inicio from "./Inicio.svelte";
@@ -14,6 +14,7 @@
   const claveRonda = `${carpeta}-ronda`;
   const clavePendientes = `${carpeta}-pendientes`;
   const claveColumnas = `${carpeta}-columnas`;
+  const claveNotasVisibles = `${carpeta}-notas-visibles`;
   let objetivo = $state(Number(localStorage.getItem(claveObjetivo) ?? 5));
   let datos = $state.raw<Datos | null>(null);
   let error = $state("");
@@ -77,6 +78,37 @@
     seguir();
   }
   arrancar();
+
+  // La nota de cada pregunta, por su id. Sin la clave, la nota se ve en el PC y no en el móvil.
+  let notas = $state<Record<string, string>>({});
+  fetch("api/notas")
+    .then((r) => r.json())
+    .then((n) => (notas = n))
+    .catch(() => {});
+  let notasVisibles = $state(
+    (localStorage.getItem(claveNotasVisibles) ?? (matchMedia("(min-width: 900px)").matches ? "si" : "no")) === "si",
+  );
+  function alternarNotas() {
+    notasVisibles = !notasVisibles;
+    localStorage.setItem(claveNotasVisibles, notasVisibles ? "si" : "no");
+  }
+
+  // La nota sale al servidor medio segundo después de la última tecla en su pregunta.
+  const temporizadores: Record<string, ReturnType<typeof setTimeout>> = {};
+  function anotar(texto: string) {
+    const id = q.id;
+    notas[id] = texto;
+    clearTimeout(temporizadores[id]);
+    temporizadores[id] = setTimeout(async () => {
+      const r = await fetch("api/notas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, texto } satisfies Nota),
+      }).catch(() => null);
+      // Un envío correcto no borra el aviso de otra cosa, como el de una respuesta sin red.
+      if (!r?.ok) error = "La nota no llegó al servidor, y sigue solo en esta pantalla.";
+    }, 500);
+  }
 
   function enviar(g: Guardado) {
     localStorage.setItem(claveRonda, JSON.stringify(g));
@@ -216,10 +248,14 @@
       {restante}
       {eleccion}
       {abiertas}
+      nota={notas[q.id] ?? ""}
+      {notasVisibles}
       {error}
       onabandonar={abandonar}
       oncontestar={contestar}
       onabiertas={() => (abiertas = !abiertas)}
+      onnota={anotar}
+      onnotasvisibles={alternarNotas}
       onverpagina={verPagina}
       onsiguiente={siguiente}
     >

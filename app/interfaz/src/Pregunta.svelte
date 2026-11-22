@@ -8,7 +8,26 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  let { q, i, total, simulacro, restante, eleccion, abiertas, error, children, onabandonar, oncontestar, onabiertas, onverpagina, onsiguiente }: {
+  let {
+    q,
+    i,
+    total,
+    simulacro,
+    restante,
+    eleccion,
+    abiertas,
+    nota,
+    notasVisibles,
+    error,
+    children,
+    onabandonar,
+    oncontestar,
+    onabiertas,
+    onnota,
+    onnotasvisibles,
+    onverpagina,
+    onsiguiente,
+  }: {
     q: PreguntaDeSesion;
     i: number;
     total: number;
@@ -18,17 +37,30 @@
     eleccion: Eleccion | null;
     // Las otras opciones de una pregunta contestada, plegadas en el móvil.
     abiertas: boolean;
+    nota: string;
+    notasVisibles: boolean;
     error: string;
     // La hoja, que va al lado de las opciones.
     children: Snippet;
     onabandonar: () => void;
     oncontestar: (opcion: number | null, seguro: boolean) => void;
     onabiertas: () => void;
+    onnota: (texto: string) => void;
+    onnotasvisibles: () => void;
     onverpagina: () => void;
     onsiguiente: () => void;
   } = $props();
 
   const contestada = $derived(eleccion !== null);
+
+  // El botón de copiar se marca un segundo después de copiar.
+  let copiada = $state(false);
+  async function copiar() {
+    // Sin permiso del portapapeles, el botón no se marca.
+    if (!(await navigator.clipboard.writeText(q.copiar).then(() => true, () => false))) return;
+    copiada = true;
+    setTimeout(() => (copiada = false), 1000);
+  }
   const otras = $derived(q.opciones.length - (eleccion?.opcion == null || eleccion.opcion === q.correcta ? 1 : 2));
 </script>
 
@@ -39,6 +71,8 @@
     {simulacro ? `${Math.floor(restante / 60)}:${String(restante % 60).padStart(2, "0")}` : q.paso}
   </span>
   <button title="Abandonar" onclick={onabandonar}>✕</button>
+  <button class={["ver-nota", notasVisibles && "text-acento"]} title="Mostrar u ocultar la nota" onclick={onnotasvisibles}>✎</button>
+  <button class={["copiar", copiada && "text-hecho"]} title="Copiar la pregunta y las opciones" onclick={copiar}>⧉</button>
 </p>
 <div class="h-[3px] bg-linea pc:[grid-area:barra]"><i class="block h-full bg-acento" style:width="{(100 * (i + 1)) / total}%"></i></div>
 <div class="min-h-0 flex-1 overflow-auto px-3.5 py-3 pc:contents">
@@ -61,6 +95,15 @@
         {abiertas ? "ocultar las otras" : `ver las otras ${otras} opciones`}
       </button>
       {#if eleccion.correccion.aviso}<p>{eleccion.correccion.aviso}</p>{/if}
+    {/if}
+    {#if notasVisibles}
+      <textarea
+        class="nota box-border w-full"
+        rows="3"
+        placeholder="La nota de esta pregunta"
+        value={nota}
+        oninput={(e) => onnota(e.currentTarget.value)}
+      ></textarea>
     {/if}
   </div>
   {@render children()}

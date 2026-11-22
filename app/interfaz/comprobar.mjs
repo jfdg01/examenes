@@ -37,6 +37,7 @@ try {
   const movil = await abrir("movil", 390, 844);
   await movil.screenshot({ path: "capturas/movil-pregunta.png" });
   assert(!(await visible(movil, ".tirador")), "el móvil no tiene tiradores");
+  assert(!(await visible(movil, ".nota")), "el móvil oculta la nota sin la clave");
   await contestar(movil);
   assert(await visible(movil, ".hoja p"), "el móvil muestra la explicación");
   assert(!(await visible(movil, ".hoja img")), "el móvil no muestra la página en la hoja");
@@ -75,6 +76,22 @@ try {
   const guardadas = JSON.parse(await pc.evaluate(() => localStorage.getItem("pc-columnas")));
   assert(Math.abs(guardadas.s - 0.35) < 0.01, "las columnas quedan en localStorage");
   await pc.screenshot({ path: "capturas/pc-solucion.png" });
+
+  // La nota llega a `notas.json`. El botón de la nota la oculta en ese examen.
+  await pc.locator(".nota").fill("Mi nota");
+  await pc.waitForTimeout(800);
+  const notas = await pc.evaluate(() => fetch("api/notas").then((r) => r.json()));
+  assert.deepEqual(Object.values(notas), ["Mi nota"], "la nota llega al servidor");
+  await pc.locator(".ver-nota").click();
+  assert(!(await visible(pc, ".nota")), "el botón oculta la nota");
+  assert.equal(await pc.evaluate(() => localStorage.getItem("pc-notas-visibles")), "no");
+  await pc.locator(".ver-nota").click();
+
+  // El botón de copiar deja la pregunta y sus opciones en el portapapeles, sin la solución.
+  await pc.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+  await pc.locator(".copiar").click();
+  const copiado = await pc.evaluate(() => navigator.clipboard.readText());
+  assert.match(copiado, /\n\nA\) .+\nB\) /, "el portapapeles lleva las opciones con su letra");
 
   // Una ventana estrecha del PC usa el diseño del móvil, sin recargar.
   await pc.setViewportSize({ width: 800, height: 800 });
