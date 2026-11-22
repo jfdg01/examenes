@@ -42,6 +42,10 @@ package nucleo {
     +id: String
     +texto: String, en blanco la borra
   }
+  class ExamenDeLaLista <<tsify>> {
+    +carpeta: String
+    +titulo: String
+  }
   class Datos <<tsify>> {
     +examen: Examen
     +banco: Vec<Pregunta>
@@ -208,8 +212,10 @@ package servidor {
   class "rutas (axum)" as rutas {
     +app(raiz, interfaz): Router
     --
+    GET / → la_interfaz → index.html
+    GET /api/examenes → examenes → Vec<ExamenDeLaLista>, por título
     GET /:examen → 308 /:examen/
-    GET /:examen/ → pagina → index.html
+    GET /:examen/ → pagina → index.html, si existe examen.json
     GET /:examen/api/inicio → inicio → Datos
     POST /:examen/api/respuestas → responder → 204
     GET /:examen/api/ronda → leer_ronda → Guardado
@@ -294,9 +300,17 @@ package interfaz {
     -alternarNotas()
     -anotar(texto), a POST api/notas medio segundo después de la última tecla
   }
+  class "main.ts" as MainTs {
+    monta Lista en / y App en /:examen/
+  }
+  class "Lista.svelte" as Lista {
+    -examenes: ExamenDeLaLista[], de GET /api/examenes
+    un enlace a /:examen/ por examen, o "No hay exámenes"
+  }
   class "Inicio.svelte" as InicioSvelte {
     inicio, objetivo, error
     onobjetivo(objetivo), onempezar(simulacro)
+    el enlace «← Exámenes» a /
   }
   class "Pregunta.svelte" as PreguntaSvelte {
     la cabecera, la barra, las opciones y el pie
@@ -362,12 +376,16 @@ herramientas ..> Pregunta : lee preguntas.json
 rutas *-- Carpetas : estado
 rutas ..> lectura : lee la carpeta
 rutas ..> Datos : devuelve
+rutas ..> ExamenDeLaLista : devuelve
 rutas ..> Respuesta : valida
 rutas ..> Guardado : valida y guarda el más nuevo
 rutas ..> Nota : valida y guarda
 rutas ..> funciones : gana()
 wasm ..> funciones : llama
 wasm ..> generado : wasm-bindgen genera
+MainTs *-- Lista
+MainTs *-- App
+Lista ..> rutas : HTTP
 App ..> generado : importa y llama
 App ..> rutas : HTTP
 App *-- InicioSvelte : props y callbacks
