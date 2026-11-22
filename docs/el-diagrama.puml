@@ -306,8 +306,9 @@ package interfaz {
     -copiar(), q.copiar al portapapeles
   }
   class "Hoja.svelte" as Hoja {
-    la explicación, la fuente y la imagen de la página
+    la explicación, la fuente, la imagen de la página y el Siguiente del PC
     q, paso: el de la corrección
+    onsiguiente()
   }
   class "Tiradores.svelte" as Tiradores {
     los 3 tiradores del PC
