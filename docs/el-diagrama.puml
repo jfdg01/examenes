@@ -17,6 +17,7 @@ package nucleo {
     +opciones: u32
     +minutos: u32
     +penalizacion: f64
+    +pdfs: pdf → temas
   }
   class Pregunta <<preguntas.json, tsify>> {
     +id: String
@@ -34,7 +35,7 @@ package nucleo {
   }
   class Respuesta <<una línea de respuestas.jsonl, tsify>> {
     +id: String
-    +ts: String
+    +ts: Timestamp, en ISO 8601 con Z
     +resultado: Resultado
     +seguro: bool
   }
@@ -140,7 +141,7 @@ package nucleo {
     R
   }
   class Guardado <<ronda.json, localStorage <examen>-ronda, tsify>> {
-    +guardada: u64, en ms
+    +guardada: Timestamp, en ISO 8601 con Z
     +ronda: Option<RondaGuardada>
   }
   class RondaGuardada <<tsify>> {
@@ -176,8 +177,6 @@ package nucleo {
     +unir(a, b): Vec<Respuesta>, en orden de hora y sin repetir id y ts
     +restaurar(banco, historial, guardado, azar): Option<RondaAMedias>
     +mover(columnas, tirador, x): Columnas, con cada columna de 0,15 como mínimo
-    +segundos(ts): Option<i64>
-    +hora(segundos): ts
     -estados(banco, historial): concepto → (Concepto, vence)
     -de_la_ronda(pregunta, estados, azar): PreguntaDeSesion
     -sube(acierto, seguro): bool, solo con un acierto con «seguro»
@@ -241,10 +240,6 @@ package servidor {
 }
 
 package banco {
-  class "Examen (banco)" as ExamenBanco {
-    +opciones: u32
-    +pdfs: pdf → temas
-  }
   class "banco (funciones)" as herramientas <<lib.rs>> {
     +informe(carpeta): bool, sin errores; escribe los errores y los avisos
     +comprobar(preguntas, examen, carpeta): errores
@@ -372,7 +367,7 @@ Guardado *-- RondaGuardada
 funciones --> RondaAMedias : devuelve
 RondaAMedias *-- PreguntaDeSesion
 ordenes ..> herramientas : llama
-herramientas ..> ExamenBanco : lee examen.json
+herramientas ..> Examen : lee examen.json
 herramientas ..> Pregunta : lee preguntas.json
 rutas *-- Carpetas : estado
 rutas ..> lectura : lee la carpeta
