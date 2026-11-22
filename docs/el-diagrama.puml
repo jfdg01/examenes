@@ -38,6 +38,10 @@ package nucleo {
     +resultado: Resultado
     +seguro: bool
   }
+  class Nota <<un par de notas.json, tsify>> {
+    +id: String
+    +texto: String, en blanco la borra
+  }
   class Datos <<tsify>> {
     +examen: Examen
     +banco: Vec<Pregunta>
@@ -118,6 +122,7 @@ package nucleo {
     +pagina: u32
     +imagen: String, paginas/<pdf sin .pdf>-<n>.png
     +pdf: String, pdfs/<pdf>#page=<n>
+    +copiar: String, la pregunta y "A) …" por opción, sin la solución
   }
   class Columnas <<localStorage <examen>-columnas, tsify>> {
     +l: f64, el borde izquierdo
@@ -198,7 +203,7 @@ package servidor {
   class Carpetas {
     -raiz: PathBuf
     -interfaz: PathBuf
-    -cerrojo: Mutex, del historial y de la ronda
+    -cerrojo: Mutex, del historial, la ronda y las notas
   }
   class "rutas (axum)" as rutas {
     +app(raiz, interfaz): Router
@@ -209,6 +214,8 @@ package servidor {
     POST /:examen/api/respuestas → responder → 204
     GET /:examen/api/ronda → leer_ronda → Guardado
     PUT /:examen/api/ronda → guardar_ronda → 204
+    GET /:examen/api/notas → leer_notas → id → texto
+    POST /:examen/api/notas → anotar(Nota) → 204
     GET /:examen/paginas/:archivo → servir → image/png
     GET /:examen/pdfs/:archivo → servir → application/pdf
     GET /assets/* → dist/assets
@@ -221,6 +228,7 @@ package servidor {
     -un_nombre(nombre): bool, un nombre sin / ni punto delante
     -servir(carpetas, examen, carpeta, archivo, tipo): el archivo o 404
     -leer_si_existe(ruta): bytes
+    -leer_archivo_de_notas(ruta): id → texto
     -error_interno(e): 500
   }
 }
@@ -243,6 +251,8 @@ package interfaz {
     -columnas: Columnas, en localStorage <examen>-columnas
     -abiertas: boolean, las opciones plegadas del móvil
     -pagina: boolean, la página a pantalla completa del móvil
+    -notas: id → texto, de GET api/notas
+    -notasVisibles: boolean, en localStorage <examen>-notas-visibles
     --
     -arrancar(), al cargar la página
     -enviar(guardado), a localStorage <examen>-ronda y a PUT api/ronda
@@ -259,6 +269,8 @@ package interfaz {
     -cargarInicio(), al cargar, al volver y al volver la red
     -volver()
     -abandonar()
+    -alternarNotas()
+    -anotar(texto), a POST api/notas medio segundo después de la última tecla
   }
   class "Inicio.svelte" as InicioSvelte {
     inicio, objetivo, error
@@ -266,9 +278,10 @@ package interfaz {
   }
   class "Pregunta.svelte" as PreguntaSvelte {
     la cabecera, la barra, las opciones y el pie
-    q, i, total, simulacro, restante, eleccion, abiertas, error
+    q, i, total, simulacro, restante, eleccion, abiertas, nota, notasVisibles, error
     children: la hoja
-    onabandonar(), oncontestar(opcion o null, seguro), onabiertas(), onverpagina(), onsiguiente()
+    onabandonar(), oncontestar(opcion o null, seguro), onabiertas(), onnota(texto), onnotasvisibles(), onverpagina(), onsiguiente()
+    -copiar(), q.copiar al portapapeles
   }
   class "Hoja.svelte" as Hoja {
     la explicación, la fuente y la imagen de la página
@@ -325,6 +338,7 @@ rutas ..> lectura : lee la carpeta
 rutas ..> Datos : devuelve
 rutas ..> Respuesta : valida
 rutas ..> Guardado : valida y guarda el más nuevo
+rutas ..> Nota : valida y guarda
 rutas ..> funciones : gana()
 wasm ..> funciones : llama
 wasm ..> generado : wasm-bindgen genera
