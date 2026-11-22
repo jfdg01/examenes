@@ -24,9 +24,11 @@ for (const [ancho, alto] of [[390, 800], [1400, 900]] as const) {
   await p.locator("div.grid button", { hasText: /^3$/ }).click();
   assert.match(await contador(p), /^3 \/ 12/);
   await p.getByTitle("Las preguntas").click();
-  await p.getByText("Terminar la sesión").click();
-  assert.match(await contador(p), /^2 \/ 12/);
+  // Terminar queda gris con preguntas sin contestar, y el aviso va debajo.
+  assert.equal(await p.getByText("Terminar la sesión").isDisabled(), true);
   await p.getByText(/faltan 11 preguntas/).waitFor();
+  await foto(p, `${n}-terminar-gris`);
+  await p.locator("div.grid button", { hasText: /^2$/ }).click();
 
   // La edición: cambia el enunciado de la 2 y guarda.
   await p.getByTitle("Editar la pregunta").click();

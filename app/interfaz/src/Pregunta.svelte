@@ -236,7 +236,7 @@
     contestada && "grid grid-cols-[auto_1fr] gap-2 pc:block",
   ]}
 >
-  <div class="col-span-full mb-2.5 grid grid-cols-[auto_1fr_auto] gap-2">
+  <div class="col-span-full mb-2.5 grid grid-cols-[auto_1fr_auto] gap-2 pc:mt-6">
     <button class={flecha} disabled={i === 0} onclick={onanterior}>‹ Anterior</button>
     <button
       class="flex cursor-pointer items-center justify-center gap-2 rounded-[10px] border-2 border-linea bg-tarjeta py-2.5 text-[15px] font-semibold text-texto"
@@ -282,14 +282,21 @@
   >
     <Cuadricula {marcas} {i} onir={ir} />
     {#if !revision}
-      <p class="mt-3 mb-2 text-[12px] text-tenue">{marcas.filter((m) => m === "falta").length} sin contestar</p>
+      {@const faltan = marcas.filter((m) => m === "falta").length}
+      <!-- Terminar queda gris hasta que la ronda no tiene preguntas sin contestar. -->
       <button
-        class="w-full cursor-pointer rounded-[10px] bg-acento p-3 text-[14px] font-semibold text-sobre-acento"
+        class="mt-3.5 w-full cursor-pointer rounded-[10px] bg-acento p-3 text-[14px] font-semibold text-sobre-acento disabled:cursor-default disabled:bg-linea disabled:text-tenue"
+        disabled={faltan > 0}
         onclick={() => {
           cuadricula = false;
           onterminar();
         }}>Terminar {simulacro ? "el simulacro" : "la sesión"}</button
       >
+      {#if faltan}
+        <p class="mt-2 mb-0 text-center text-[12px] text-aviso">
+          Te {faltan === 1 ? "falta 1 pregunta" : `faltan ${faltan} preguntas`}. Contéstala{faltan === 1 ? "" : "s"} para terminar.
+        </p>
+      {/if}
     {/if}
   </div>
 {/if}
