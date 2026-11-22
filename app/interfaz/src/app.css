@@ -1,0 +1,23 @@
+/* Sin el preflight de Tailwind: los botones y los márgenes son los del navegador. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* El corte del móvil y del PC: `pc:` aplica desde 900 px. Los colores de la app. */
+@theme {
+  --breakpoint-pc: 900px;
+  --color-linea: #ddd;
+  --color-acento: #36c;
+  --color-mal: #c33;
+  --color-hecho: #3a3;
+  --color-falta: #e93;
+  --color-tenue: #888;
+  --color-chip: #aaa;
+}
+
+@layer base {
+  body {
+    margin: 0;
+    font: 15px/1.5 system-ui, sans-serif;
+  }
+}
