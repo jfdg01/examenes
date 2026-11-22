@@ -70,6 +70,7 @@
   } = $props();
 
   const contestada = $derived(eleccion !== null || revision);
+  const flecha = "cursor-pointer rounded-[10px] border-2 border-linea bg-tarjeta whitespace-nowrap px-3 py-2.5 text-[14px] text-texto disabled:cursor-default disabled:opacity-30";
   let cuadricula = $state(false);
   let borrador = $state<{ pregunta: string; opciones: string[]; explicacion: string } | null>(null);
   function editar() {
@@ -98,8 +99,10 @@
   class="m-0 flex items-center gap-2 px-3.5 pt-2 pb-1.5 text-[12px] whitespace-nowrap text-tenue pc:gap-1.5 pc:px-0 pc:pt-0 pc:pb-2.5 pc:text-[13px] pc:[grid-area:meta]"
 >
   <span class="flex-1 truncate">
-    {revision ? "Revisión · " : simulacro ? "Simulacro · " : ""}{i + 1} / {total} · {q.tema} ·
-    {simulacro ? `${Math.floor(restante / 60)}:${String(restante % 60).padStart(2, "0")}` : q.paso}
+    <!-- La posición en la ronda va en el botón de la cuadrícula, y aquí queda sitio para el tema y el paso. -->
+    {#if revision}Revisión · {q.tema}
+    {:else if simulacro}{Math.floor(restante / 60)}:{String(restante % 60).padStart(2, "0")} · {q.tema}
+    {:else}{q.tema} · {q.paso}{/if}
   </span>
   <button
     class={[accion, borrador ? "border-acento text-acento" : "border-linea text-tenue"]}
@@ -234,28 +237,28 @@
         >En blanco</button
       >
     {/if}
-    <div class="flex items-center gap-3 pc:mt-[1em]">
-      <p class="m-0 flex-1 text-[11.5px] text-tenue pc:text-[13px]">Toca el texto si estás seguro. Toca «dudo» si dudas.</p>
-      {@render rejilla()}
-    </div>
-  {:else}
-    <!-- La página, la cuadrícula y el botón grande. En el PC, la página y el botón grande de una pregunta corregida van en la hoja. -->
-    <div class="flex gap-2 pc:mt-6">
-      {#if corregida}
-        <button
-          class="ver-pagina flex cursor-pointer pc:hidden items-center gap-1.5 rounded-[10px] border-2 border-linea bg-tarjeta px-3.5 text-[13px]"
-          onclick={onverpagina}
-        >
-          {@render icono(16, "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8")} pág. {q.pagina}
-        </button>
-      {/if}
-      {@render rejilla()}
-      <button
-        class={["flex-1 cursor-pointer rounded-[10px] bg-acento p-3.5 text-[15px] font-semibold text-sobre-acento", corregida && "pc:hidden"]}
-        onclick={onsiguiente}>{etiqueta}</button
-      >
-    </div>
+    <p class="m-0 mb-2 text-center text-[11.5px] text-tenue pc:mt-[1em] pc:mb-0 pc:text-left pc:text-[13px]">Toca el texto si estás seguro. Toca «dudo» si dudas.</p>
   {/if}
+  <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible, y la cuadrícula no se mueve. -->
+  <div class="flex gap-2 pc:hidden">
+    <button
+      class={["ver-pagina flex cursor-pointer items-center gap-1.5 rounded-[10px] border-2 border-linea bg-tarjeta px-3.5 text-[13px]", !(contestada && corregida) && "invisible"]}
+      onclick={onverpagina}
+    >
+      {@render icono(16, "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8")} pág. {q.pagina}
+    </button>
+    {@render rejilla()}
+    <button
+      class={["flex-1 cursor-pointer rounded-[10px] bg-acento p-3.5 text-[15px] font-semibold text-sobre-acento", !contestada && "invisible"]}
+      onclick={onsiguiente}>{etiqueta}</button
+    >
+  </div>
+  <!-- En el PC, la fila es siempre anterior, la cuadrícula y siguiente. El botón grande de una pregunta corregida va en la hoja. -->
+  <div class="hidden gap-2 pc:mt-6 pc:grid pc:grid-cols-[1fr_auto_1fr]">
+    <button class={flecha} disabled={i === 0} onclick={() => onir(i - 1)}>‹ Anterior</button>
+    {@render rejilla()}
+    <button class={flecha} disabled={i === total - 1} onclick={() => onir(i + 1)}>Siguiente ›</button>
+  </div>
   {#if error}<p class="m-0 mt-1 text-center text-[12px] text-aviso pc:text-left">{error}</p>{/if}
 </div>
 

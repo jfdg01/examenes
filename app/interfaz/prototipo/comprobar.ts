@@ -8,7 +8,7 @@ const url = "http://127.0.0.1:8604/ps/";
 mkdirSync("prototipo/capturas", { recursive: true });
 const navegador = await chromium.launch();
 const foto = (p: Page, n: string) => p.screenshot({ path: `prototipo/capturas/${n}.png` });
-const contador = (p: Page) => p.locator("span.truncate").first().innerText();
+const contador = async (p: Page) => (await p.locator("span.truncate").first().innerText()) + " | " + (await p.getByTitle("Las preguntas").filter({ visible: true }).innerText());
 
 for (const [ancho, alto] of [[390, 800], [1400, 900]] as const) {
   const n = `${ancho}`;
@@ -19,11 +19,11 @@ for (const [ancho, alto] of [[390, 800], [1400, 900]] as const) {
   await p.getByText("Empezar la sesión").click();
   await p.locator(".opcion button").first().click();
   assert.equal(await p.locator(".icono").count() > 0, true, "la sesión corrige al momento");
-  await p.getByTitle("Las preguntas").click();
+  await p.getByTitle("Las preguntas").filter({ visible: true }).click();
   await foto(p, `${n}-sesion-cuadricula`);
   await p.locator("div.grid button", { hasText: /^3$/ }).click();
-  assert.match(await contador(p), /^3 \/ 12/);
-  await p.getByTitle("Las preguntas").click();
+  assert.match(await contador(p), /\| 3 \/ 12/);
+  await p.getByTitle("Las preguntas").filter({ visible: true }).click();
   // Terminar queda gris con preguntas sin contestar, y el aviso va debajo.
   assert.equal(await p.getByText("Terminar la sesión").isDisabled(), true);
   await p.getByText(/faltan 11 preguntas/).waitFor();
@@ -43,12 +43,12 @@ for (const [ancho, alto] of [[390, 800], [1400, 900]] as const) {
   await p.getByText("Un enunciado editado").waitFor();
   await foto(p, `${n}-sesion`);
   // La nota abierta en una pregunta contestada no choca con la fila de navegación.
-  await p.getByTitle("Las preguntas").click();
+  await p.getByTitle("Las preguntas").filter({ visible: true }).click();
   await p.locator("div.grid button", { hasText: /^1$/ }).click();
   if (!(await p.locator("textarea.nota").count())) await p.getByTitle("Mostrar u ocultar la nota").click();
   await p.locator("textarea.nota").scrollIntoViewIfNeeded();
   const nota = (await p.locator("textarea.nota").boundingBox())!;
-  const fila = (await p.getByTitle("Las preguntas").boundingBox())!;
+  const fila = (await p.getByTitle("Las preguntas").filter({ visible: true }).boundingBox())!;
   assert.ok(nota.y + nota.height <= fila.y || nota.y >= fila.y + fila.height, "la nota choca con la navegación");
   await foto(p, `${n}-nota`);
   // La edición de una pregunta contestada oculta la explicación de la hoja.
@@ -67,20 +67,25 @@ for (const [ancho, alto] of [[390, 800], [1400, 900]] as const) {
     await p.locator(".opcion button").first().click();
     assert.equal(await p.locator(".icono").count(), 0, "el simulacro no corrige al momento");
     if (k === 0) await foto(p, `${n}-simulacro-contestada`);
-    if (k < 19) await p.getByRole("button", { name: "Siguiente", exact: true }).last().click();
+    if (k < 19) await p.getByRole("button", { name: /^Siguiente/ }).filter({ visible: true }).last().click();
   }
   // Con todas contestadas, el botón grande termina desde cualquier pregunta.
-  await p.getByTitle("Las preguntas").click();
+  await p.getByTitle("Las preguntas").filter({ visible: true }).click();
   await p.locator("div.grid button", { hasText: /^3$/ }).click();
   await foto(p, `${n}-simulacro-todas`);
-  await p.getByRole("button", { name: "Terminar", exact: true }).click();
+  // En el móvil, el botón grande termina. En el PC, termina la cuadrícula.
+  if (ancho === 390) await p.getByRole("button", { name: "Terminar", exact: true }).filter({ visible: true }).click();
+  else {
+    await p.getByTitle("Las preguntas").filter({ visible: true }).click();
+    await p.getByText("Terminar el simulacro").click();
+  }
   await p.getByText("El simulacro ha terminado").waitFor();
   await foto(p, `${n}-simulacro-final`);
   await p.locator("main div.grid button", { hasText: /^5$/ }).click();
-  assert.match(await contador(p), /^Revisión · 5 \/ 20/);
+  assert.match(await contador(p), /^Revisión · .*\| 5 \/ 20/);
   assert.equal(await p.locator(".icono").count() > 0, true, "la revisión corrige");
   await foto(p, `${n}-simulacro-revision`);
-  await p.getByRole("button", { name: "Volver al resultado", exact: true }).last().click();
+  await p.getByRole("button", { name: "Volver al resultado", exact: true }).filter({ visible: true }).last().click();
   await p.getByText("El simulacro ha terminado").waitFor();
   await p.close();
 }
