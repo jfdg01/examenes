@@ -6,7 +6,8 @@ La app de práctica es un servidor de Rust y una interfaz de Svelte 5. El códig
 
 - **La lógica vive en Rust.** Un crate `nucleo` tiene toda la lógica: el paso de los conceptos, la sesión, el simulacro y la tarjeta de la nota. `nucleo` no lee archivos ni la red, y sus tests corren con `cargo test`.
 - **La interfaz es Svelte 5 con Vite, sin SvelteKit.** La interfaz tiene una sola página. Vite compila Svelte a archivos estáticos en `dist/`, y el servidor de Rust los sirve.
-- **Los componentes van en TypeScript.**
+- **Los componentes van en TypeScript.** `App.svelte` guarda el estado de la ronda y llama a `nucleo`. Cada componente recibe sus datos por props y avisa con callbacks.
+- **El estilo va en Tailwind 4**, con `@tailwindcss/vite`, sin el preflight: los botones y los márgenes son los del navegador. El corte del móvil y del PC es el breakpoint propio `pc:`, en 900 px.
 - **El servidor usa `axum`**, con `tokio` y `tower-http`.
 - **Un solo proceso sirve todos los exámenes.** Cada examen tiene su ruta: `/ln/`, `/asn/` y `/ps/`. Un examen nuevo es solo una carpeta nueva, sin un puerto nuevo ni una ruta nueva de `tailscale serve`. Todos los exámenes comparten un origen, así que cada clave de `localStorage` lleva el nombre del examen.
 - **Las herramientas del banco también van en Rust.** El proyecto no tiene Python.
@@ -16,4 +17,5 @@ La app de práctica es un servidor de Rust y una interfaz de Svelte 5. El códig
 
 - **La lógica en TypeScript**, con Rust solo para guardar los archivos. El dueño no quiere mantener la lógica en JavaScript ni en TypeScript.
 - **SvelteKit con `adapter-static`.** Da el mismo resultado que Vite, con rutas y configuración que una sola página no usa.
+- **Un bloque `<style>` por componente.** Cada componente repite los colores y el corte de 900 px, y la media query del PC queda lejos de la clase a la que cambia.
 - **Un proceso por examen**, con un puerto por examen. Cada examen nuevo necesita un puerto libre y una ruta de `tailscale serve`.

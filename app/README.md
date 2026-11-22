@@ -4,7 +4,7 @@ Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están 
 
 - `nucleo/`: toda la lógica, sin leer archivos ni la red. Corre en el navegador como WASM, y el servidor usa sus tipos para validar.
 - `servidor/`: el servidor de `axum`. Guarda y sirve los archivos de cada examen, con gzip.
-- `interfaz/`: la interfaz de Svelte 5, con Vite y TypeScript. Llama a `nucleo` para cada cálculo.
+- `interfaz/`: la interfaz de Svelte 5, con Vite, TypeScript y Tailwind 4. `App.svelte` guarda el estado de la ronda y llama a `nucleo` para cada cálculo. Los componentes `Inicio`, `Pregunta`, `Hoja`, `Tiradores`, `PaginaCompleta` y `Final` reciben sus datos por props y avisan con callbacks.
 
 ## Arrancar
 
@@ -27,7 +27,7 @@ El servidor recibe la raíz de los exámenes y su dirección. Sirve cada carpeta
 - `GET api/ronda` da `ronda.json`, y `PUT api/ronda` escribe el guardado más nuevo entre el que llega y el de `ronda.json`: `{"guardada", "ronda"}`, con la hora del guardado en milisegundos y la ronda a medias o `null`. La interfaz guarda la misma ronda en la clave `<carpeta>-ronda` de `localStorage`, y al cargar envía el guardado más nuevo de los dos.
 - `GET paginas/<archivo>` da la imagen de una página del PDF, y `GET pdfs/<archivo>` da un PDF. Los 2 leen la carpeta `paginas/` o `pdfs/` del examen, y dan 404 a un nombre con `/` o con un punto delante.
 
-El diseño sale de las media queries: el móvil por debajo de 900 px y el PC desde 900 px. En el PC, la interfaz guarda las 3 posiciones de los tiradores en la clave `<carpeta>-columnas` de `localStorage`.
+El diseño sale de las clases de Tailwind: el móvil por defecto, y el PC desde 900 px con el breakpoint `pc:` de `src/app.css`. En el PC, la interfaz guarda las 3 posiciones de los tiradores en la clave `<carpeta>-columnas` de `localStorage`.
 
 ## La WASM
 
@@ -37,6 +37,6 @@ El diseño sale de las media queries: el móvil por debajo de 900 px y el PC des
 
 `cargo test` corre los tests de `nucleo` y del servidor. Cada test del servidor crea una raíz temporal de exámenes, arranca el servidor y le habla por HTTP.
 
-`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia de `ln/`. Las capturas quedan en `interfaz/capturas/`, que no entra en git.
+`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia de `ln/`. Las capturas quedan en `interfaz/capturas/`, que no entra en git. Las aserciones buscan las clases `tirador`, `hoja`, `chip`, `opcion`, `ver-pagina`, `pagina` y `vacia`, que no llevan estilo.
 
 En desarrollo, `npm run dev` sirve la interfaz con Vite y pasa el API al servidor de `127.0.0.1:8601`.
