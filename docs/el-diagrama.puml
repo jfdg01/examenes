@@ -213,7 +213,7 @@ package servidor {
     +app(raiz, interfaz): Router
     --
     GET / → la_interfaz → index.html
-    GET /api/examenes → examenes → Vec<ExamenDeLaLista>, por título
+    GET /api/examenes → examenes → Vec<ExamenDeLaLista>, en orden alfabético por título
     GET /:examen → 308 /:examen/
     GET /:examen/ → pagina → index.html, si existe examen.json
     GET /:examen/api/inicio → inicio → Datos
@@ -235,6 +235,7 @@ package servidor {
     -servir(carpetas, examen, carpeta, archivo, tipo): el archivo o 404
     -leer_si_existe(ruta): bytes
     -leer_archivo_de_notas(ruta): id → texto
+    -clave_alfabetica(texto): sin diacríticos y en minúsculas
     -error_interno(e): 500
   }
 }
