@@ -35,6 +35,7 @@
     onanterior,
     onir,
     onterminar,
+    etiqueta,
   }: {
     q: PreguntaDeSesion;
     i: number;
@@ -66,11 +67,11 @@
     onanterior: () => void;
     onir: (k: number) => void;
     onterminar: () => void;
+    // El texto del botón grande: "Siguiente", "Terminar" o "Volver al resultado".
+    etiqueta: string;
   } = $props();
 
   const contestada = $derived(eleccion !== null || revision);
-  // PROTOTIPO: ?v=a pone la navegación arriba, y ?v=b la pone en el pie.
-  const variante = new URLSearchParams(location.search).get("v") ?? "a";
   let cuadricula = $state(false);
   let borrador = $state<{ pregunta: string; opciones: string[]; explicacion: string } | null>(null);
   function editar() {
@@ -90,28 +91,19 @@
     setTimeout(() => (copiada = false), 1000);
   }
   // Los botones de la línea de arriba.
-  const accion = "flex cursor-pointer items-center rounded-md border bg-tarjeta px-2 py-0.5 text-[12px]";
+  const accion = "flex h-7 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border bg-tarjeta text-[12px]";
   const otras = $derived(q.opciones.length - (eleccion?.opcion == null || eleccion.opcion === q.correcta ? 1 : 2));
-  const flecha = "cursor-pointer rounded-md border border-linea bg-tarjeta px-2 text-[15px] leading-none text-texto disabled:opacity-30";
+  const flecha = "cursor-pointer rounded-[10px] border-2 border-linea bg-tarjeta whitespace-nowrap px-3 py-2.5 text-[14px] text-texto disabled:opacity-30";
 </script>
 
 <!-- En el PC, cada parte ocupa su área de la rejilla de la ronda, y el cuerpo deja pasar sus 2 columnas. -->
 <p
   class="m-0 flex items-center gap-2 px-3.5 pt-2 pb-1.5 text-[12px] whitespace-nowrap text-tenue pc:gap-1.5 pc:px-0 pc:pt-0 pc:pb-2.5 pc:text-[13px] pc:[grid-area:meta]"
 >
-  {#if variante === "a"}
-    <button class={[flecha, "py-1"]} disabled={i === 0} onclick={onanterior} title="Anterior">‹</button>
-    <button class={[flecha, "py-1"]} disabled={i === total - 1} onclick={() => onir(i + 1)} title="Siguiente">›</button>
-  {/if}
   <span class="flex-1 truncate">
     {revision ? "Revisión · " : simulacro ? "Simulacro · " : ""}{i + 1} / {total} · {q.tema} ·
     {simulacro ? `${Math.floor(restante / 60)}:${String(restante % 60).padStart(2, "0")}` : q.paso}
   </span>
-  {#if variante === "a"}
-    <button class={[accion, cuadricula ? "border-acento text-acento" : "border-linea text-tenue"]} title="Las preguntas" onclick={() => (cuadricula = !cuadricula)}>
-      {@render icono(14, "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z")}
-    </button>
-  {/if}
   <button
     class={[accion, borrador ? "border-acento text-acento" : "border-linea text-tenue"]}
     title="Editar la pregunta"
@@ -119,13 +111,12 @@
   >
     {@render icono(14, "M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z")}
   </button>
-  <button class={[accion, "border-linea text-tenue"]} title={revision ? "Volver al resultado" : "Abandonar"} onclick={onabandonar}>✕</button>
   <button
     class={["ver-nota", accion, notasVisibles ? "border-acento text-acento" : "border-linea text-tenue"]}
     title="Mostrar u ocultar la nota"
     onclick={onnotasvisibles}
   >
-    {@render icono(14, "M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z")}
+    {@render icono(14, "M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5zM15 3v4a2 2 0 0 0 2 2h4M7 13h7M7 17h4")}
   </button>
   <button
     class={["copiar", accion, copiada ? "border-acierto text-acierto" : "border-linea text-tenue"]}
@@ -133,6 +124,14 @@
     onclick={copiar}
   >
     {@render icono(14, "M5 15V5a2 2 0 0 1 2-2h10M11 9h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2z")}
+  </button>
+  <!-- Cerrar va en la esquina, en rojo, para que no se confunda con los otros. -->
+  <button
+    class={[accion, "border-fallo text-fallo bg-[color-mix(in_srgb,var(--color-fallo)_18%,var(--color-fondo))]!"]}
+    title={revision ? "Volver al resultado" : "Abandonar"}
+    onclick={onabandonar}
+  >
+    {@render icono(14, "M6 6l12 12M18 6L6 18", 2.5)}
   </button>
 </p>
 <div class="h-[3px] bg-linea pc:hidden"><i class="block h-full bg-acento" style:width="{(100 * (i + 1)) / total}%"></i></div>
@@ -218,7 +217,7 @@
       {/if}
     {/if}
     {/if}
-    {#if notasVisibles}
+    {#if notasVisibles && !borrador}
       <textarea
         class="nota mt-3 block w-full resize-y rounded-[10px] border-2 border-linea bg-tarjeta p-2.5 text-[13px] pc:mt-4 pc:rounded-xl pc:p-3 pc:text-[14px]"
         rows="3"
@@ -228,7 +227,8 @@
       ></textarea>
     {/if}
   </div>
-  {@render children()}
+  <!-- La edición ya lleva la explicación, así que la hoja se oculta mientras dura. -->
+  {#if !borrador}{@render children()}{/if}
 </div>
 <div
   class={[
@@ -236,16 +236,18 @@
     contestada && "grid grid-cols-[auto_1fr] gap-2 pc:block",
   ]}
 >
-  {#if variante === "b"}
-    <div class="col-span-full mb-2 grid grid-cols-[auto_1fr_auto] gap-2">
-      <button class={[flecha, "px-4 py-2"]} disabled={i === 0} onclick={onanterior}>‹ Anterior</button>
-      <button class="flex cursor-pointer items-center justify-center gap-1.5 rounded-md border border-linea bg-tarjeta text-[13px] text-tenue" onclick={() => (cuadricula = true)}>
-        {@render icono(14, "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z")}
-        {i + 1} / {total}
-      </button>
-      <button class={[flecha, "px-4 py-2"]} disabled={i === total - 1} onclick={() => onir(i + 1)}>Siguiente ›</button>
-    </div>
-  {/if}
+  <div class="col-span-full mb-2.5 grid grid-cols-[auto_1fr_auto] gap-2">
+    <button class={flecha} disabled={i === 0} onclick={onanterior}>‹ Anterior</button>
+    <button
+      class="flex cursor-pointer items-center justify-center gap-2 rounded-[10px] border-2 border-linea bg-tarjeta py-2.5 text-[15px] font-semibold text-texto"
+      title="Las preguntas"
+      onclick={() => (cuadricula = true)}
+    >
+      {@render icono(18, "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z")}
+      {i + 1} / {total}
+    </button>
+    <button class={flecha} disabled={i === total - 1} onclick={() => onir(i + 1)}>Siguiente ›</button>
+  </div>
   {#if !contestada}
     {#if simulacro}
       <button class="mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue" onclick={() => oncontestar(null, false)}
@@ -264,19 +266,18 @@
     {/if}
     <button
       class={["cursor-pointer rounded-[10px] bg-acento p-3.5 text-[15px] font-semibold text-sobre-acento", corregida ? "pc:hidden" : "col-span-full pc:w-full"]}
-      onclick={onsiguiente}>{i === total - 1 && !revision ? "Terminar" : "Siguiente"}</button
+      onclick={onsiguiente}>{etiqueta}</button
     >
   {/if}
   {#if error}<p class="col-span-full m-0 mt-1 text-center text-[12px] text-aviso pc:text-left">{error}</p>{/if}
 </div>
 
 {#if cuadricula}
-  <!-- PROTOTIPO: la cuadrícula arriba con ?v=a, y abajo con ?v=b. -->
   <button class="fixed inset-0 z-10 cursor-default bg-black/50" aria-label="Cerrar" onclick={() => (cuadricula = false)}></button>
   <div
     class={[
       "fixed inset-x-0 z-20 mx-auto max-w-[560px] bg-fondo p-3.5 shadow-xl",
-      variante === "a" ? "top-0 rounded-b-xl" : "bottom-0 rounded-t-xl pb-[calc(14px+env(safe-area-inset-bottom))]",
+      "bottom-0 rounded-t-xl pb-[calc(14px+env(safe-area-inset-bottom))]",
     ]}
   >
     <Cuadricula {marcas} {i} onir={ir} />

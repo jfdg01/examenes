@@ -234,10 +234,13 @@
     if (!revisando) ronda = { estado: "Pregunta", contestada: elecciones[k] !== null };
   }
 
+  // Con todas contestadas, el botón grande termina desde cualquier pregunta. En la revisión, vuelve al resultado.
+  const todas = $derived(resultados.every((r) => r !== null));
+  const etiqueta = $derived(revisando ? "Volver al resultado" : todas || i === preguntas.length - 1 ? "Terminar" : "Siguiente");
   function siguiente() {
-    if (i + 1 < preguntas.length) ir(i + 1);
-    else if (revisando) revisando = false;
-    else intentarTerminar();
+    if (revisando) revisando = false;
+    else if (todas || i + 1 >= preguntas.length) intentarTerminar();
+    else ir(i + 1);
   }
 
   // La ronda no termina con preguntas sin contestar: lleva a la primera que falta.
@@ -267,18 +270,6 @@
   }
 </script>
 
-{#if ronda.estado === "Inicio" || (ronda.estado === "Final" && !revisando)}
-  <!-- PROTOTIPO: el cambio de variante recarga la página, y la ronda se pierde. -->
-  <nav class="fixed right-2 bottom-2 z-30 flex gap-1 rounded-full bg-tarjeta p-1 text-[12px] shadow-xl">
-    <span class="px-2 py-1 text-tenue">PROTOTIPO · la navegación:</span>
-    {#each [["a", "arriba"], ["b", "en el pie"]] as [v, nombre] (v)}
-      <a
-        class={["rounded-full px-2.5 py-1", (new URLSearchParams(location.search).get("v") ?? "a") === v ? "bg-acento text-sobre-acento" : "text-texto"]}
-        href="?v={v}">{nombre}</a
-      >
-    {/each}
-  </nav>
-{/if}
 {#if ronda.estado === "Inicio"}
   <Inicio
     {inicio}
@@ -323,8 +314,9 @@
       onanterior={() => ir(i - 1)}
       onir={ir}
       onterminar={intentarTerminar}
+      {etiqueta}
     >
-      <Hoja {q} paso={!simulacro || final ? (eleccion?.correccion.paso ?? (revisando ? q.paso : undefined)) : undefined} onsiguiente={siguiente} />
+      <Hoja {q} paso={!simulacro || final ? (eleccion?.correccion.paso ?? (revisando ? q.paso : undefined)) : undefined} onsiguiente={siguiente} {etiqueta} />
     </Pregunta>
     {/key}
     <Tiradores

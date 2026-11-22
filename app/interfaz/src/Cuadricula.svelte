@@ -11,11 +11,12 @@
   };
 </script>
 
-<div class="grid grid-cols-[repeat(auto-fill,minmax(42px,1fr))] gap-1.5">
+<!-- Tantas columnas como filas, más o menos: 12 son 4 × 3, y 20 son 5 × 4. -->
+<div class="mx-auto grid w-fit gap-2" style:grid-template-columns="repeat({Math.ceil(Math.sqrt(marcas.length))}, 3.25rem)">
   {#each marcas as m, k (k)}
     <button
       class={[
-        "h-10 cursor-pointer rounded-lg border-2 text-[14px] font-semibold",
+        "aspect-square cursor-pointer rounded-xl border-2 text-[16px] font-semibold",
         color[m],
         k === i && "outline-2 outline-offset-2 outline-texto",
       ]}

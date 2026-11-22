@@ -3,7 +3,7 @@
 
   // `paso` es el paso del concepto tras la respuesta. Sin `paso`, la pregunta espera su respuesta.
   // En el PC, "Siguiente" va en la hoja, debajo de la explicación. En el móvil va en el pie.
-  let { q, paso, onsiguiente }: { q: PreguntaDeSesion; paso: string | undefined; onsiguiente: () => void } = $props();
+  let { q, paso, onsiguiente, etiqueta }: { q: PreguntaDeSesion; paso: string | undefined; onsiguiente: () => void; etiqueta: string } = $props();
 </script>
 
 <div class="hoja pc:sticky pc:top-4 pc:max-h-[calc(100vh-32px)] pc:overflow-auto pc:[grid-area:hoja]">
@@ -13,7 +13,7 @@
     <p class="mb-2.5 whitespace-pre-line">{q.explicacion}</p>
     <button
       class="my-3 hidden w-full cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento pc:block"
-      onclick={onsiguiente}>Siguiente</button
+      onclick={onsiguiente}>{etiqueta}</button
     >
     <div class="mt-3 text-[13px] text-tenue">
       <p class="my-2">
