@@ -79,6 +79,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "banco"
+version = "0.1.0"
+dependencies = [
+ "nucleo",
+ "serde",
+ "serde_json",
+ "tempfile",
+]
+
+[[package]]
 name = "base64"
 version = "0.23.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
