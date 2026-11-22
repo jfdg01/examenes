@@ -67,7 +67,7 @@ pub enum Concepto {
 impl Concepto {
     /// Un acierto con "seguro" sube el paso, aunque el concepto no haya vencido. Otra respuesta lo pone a 0.
     pub fn tras(self, acierto: bool, seguro: bool) -> Concepto {
-        match (self, acierto && seguro) {
+        match (self, sube(acierto, seguro)) {
             (Concepto::SinVer, true) => Concepto::Paso(1),
             (Concepto::Paso(n), true) => Concepto::Paso(n.saturating_add(1)),
             (_, false) => Concepto::Paso(0),
@@ -129,14 +129,37 @@ pub fn hora(segundos: i64) -> String {
     format!("{a:04}-{m:02}-{d:02}T{:02}:{:02}:{:02}Z", s / 3600, s / 60 % 60, s % 60)
 }
 
-/// La respuesta a una pregunta de la ronda. Sin `opcion`, la pregunta queda en blanco, sin "seguro".
-pub fn corregir(q: &PreguntaDeSesion, opcion: Option<u32>, seguro: bool, ahora: i64) -> Respuesta {
+/// Solo un acierto con "seguro" sube el paso de un concepto.
+fn sube(acierto: bool, seguro: bool) -> bool {
+    acierto && seguro
+}
+
+/// La respuesta a una pregunta de la ronda, con el paso del concepto tras ella y su aviso.
+#[derive(Serialize, Tsify, PartialEq, Debug)]
+pub struct Correccion {
+    pub respuesta: Respuesta,
+    pub paso: String,
+    pub aviso: Option<String>,
+}
+
+/// Corrige una pregunta de la ronda. Sin `opcion`, la pregunta queda en blanco, sin "seguro".
+pub fn corregir(q: &PreguntaDeSesion, opcion: Option<u32>, seguro: bool, ahora: i64) -> Correccion {
     let resultado = match opcion {
         None => Resultado::Blanco,
         Some(o) if o == q.correcta => Resultado::Acierto,
         Some(_) => Resultado::Fallo,
     };
-    Respuesta { id: q.id.clone(), ts: hora(ahora), resultado, seguro: seguro && opcion.is_some() }
+    let seguro = seguro && opcion.is_some();
+    let aviso = match (resultado, seguro) {
+        (Resultado::Fallo, true) => Some("Fallo con «seguro»: una idea falsa. Repásala."),
+        (Resultado::Acierto, false) => Some("Acierto con «dudo»: cuenta como un fallo."),
+        _ => None,
+    };
+    Correccion {
+        paso: if sube(resultado == Resultado::Acierto, seguro) { &q.paso_tras_seguro } else { &q.paso_tras_otra }.clone(),
+        aviso: aviso.map(Into::into),
+        respuesta: Respuesta { id: q.id.clone(), ts: hora(ahora), resultado, seguro },
+    }
 }
 
 /// Los segundos que quedan de un simulacro que termina en `limite`. Las horas van en milisegundos.
@@ -980,14 +1003,26 @@ mod tests {
     fn corregir_compara_la_opcion_con_la_correcta_y_sin_opcion_es_en_blanco() {
         let q = &sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
         let otra = (q.correcta + 1) % 4;
-        let r = corregir(q, Some(q.correcta), true, 1_793_796_082);
+        let r = corregir(q, Some(q.correcta), true, 1_793_796_082).respuesta;
         assert_eq!(
             r,
             Respuesta { id: "a1".into(), ts: "2026-11-04T12:41:22Z".into(), resultado: Resultado::Acierto, seguro: true }
         );
-        assert_eq!(corregir(q, Some(otra), false, 0).resultado, Resultado::Fallo);
-        let blanco = corregir(q, None, true, 0);
+        assert_eq!(corregir(q, Some(otra), false, 0).respuesta.resultado, Resultado::Fallo);
+        let blanco = corregir(q, None, true, 0).respuesta;
         assert_eq!((blanco.resultado, blanco.seguro), (Resultado::Blanco, false));
+    }
+
+    #[test]
+    fn corregir_da_el_paso_tras_la_respuesta_y_avisa_de_un_fallo_seguro_y_un_acierto_dudoso() {
+        let q = &sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
+        let otra = (q.correcta + 1) % 4;
+        let fila = |c: Correccion| (c.paso, c.aviso);
+        assert_eq!(fila(corregir(q, Some(q.correcta), true, 0)), ("paso 1".into(), None));
+        assert_eq!(fila(corregir(q, Some(q.correcta), false, 0)), ("paso 0".into(), Some("Acierto con «dudo»: cuenta como un fallo.".into())));
+        assert_eq!(fila(corregir(q, Some(otra), true, 0)), ("paso 0".into(), Some("Fallo con «seguro»: una idea falsa. Repásala.".into())));
+        assert_eq!(fila(corregir(q, Some(otra), false, 0)), ("paso 0".into(), None));
+        assert_eq!(fila(corregir(q, None, true, 0)), ("paso 0".into(), None));
     }
 
     #[test]

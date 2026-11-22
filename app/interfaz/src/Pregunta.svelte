@@ -1,8 +1,8 @@
 <script lang="ts" module>
-  import type { PreguntaDeSesion, Respuesta } from "./nucleo/nucleo.js";
+  import type { Correccion, PreguntaDeSesion } from "./nucleo/nucleo.js";
 
   // `opcion` es null con "En blanco".
-  export type Eleccion = { opcion: number | null; respuesta: Respuesta };
+  export type Eleccion = { opcion: number | null; correccion: Correccion };
 </script>
 
 <script lang="ts">
@@ -60,11 +60,7 @@
       <button class="chip mb-2 w-full border border-dashed border-chip bg-transparent pc:hidden" onclick={onabiertas}>
         {abiertas ? "ocultar las otras" : `ver las otras ${otras} opciones`}
       </button>
-      {#if eleccion.respuesta.resultado === "Fallo" && eleccion.respuesta.seguro}
-        <p>Fallo con «seguro»: una idea falsa. Repásala.</p>
-      {:else if eleccion.respuesta.resultado === "Acierto" && !eleccion.respuesta.seguro}
-        <p>Acierto con «dudo»: cuenta como un fallo.</p>
-      {/if}
+      {#if eleccion.correccion.aviso}<p>{eleccion.correccion.aviso}</p>{/if}
     {/if}
   </div>
   {@render children()}

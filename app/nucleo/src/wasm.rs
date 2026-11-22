@@ -6,7 +6,7 @@ use serde::de::DeserializeOwned;
 use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
 
-use crate::{Cierre, Columnas, Tirador, Datos, Guardado, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta, RondaAMedias, Simulacro};
+use crate::{Cierre, Columnas, Correccion, Tirador, Datos, Guardado, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta, RondaAMedias, Simulacro};
 
 type Js<T> = Result<Ts<T>, JsError>;
 
@@ -49,7 +49,7 @@ pub fn simulacro(datos: Ts<Datos>, ahora: f64) -> Js<Simulacro> {
 }
 
 #[wasm_bindgen]
-pub fn corregir(pregunta: Ts<PreguntaDeSesion>, opcion: Option<u32>, seguro: bool, ahora: f64) -> Js<Respuesta> {
+pub fn corregir(pregunta: Ts<PreguntaDeSesion>, opcion: Option<u32>, seguro: bool, ahora: f64) -> Js<Correccion> {
     dar(crate::corregir(&leer(pregunta)?, opcion, seguro, en_segundos(ahora)))
 }
 

@@ -160,8 +160,9 @@
   }
 
   async function contestar(opcion: number | null, seguro: boolean) {
-    const respuesta = nucleo.corregir(q, opcion, seguro, Date.now());
-    eleccion = { opcion, respuesta };
+    const correccion = nucleo.corregir(q, opcion, seguro, Date.now());
+    const respuesta = correccion.respuesta;
+    eleccion = { opcion, correccion };
     ronda = { estado: "Pregunta", contestada: true };
     resultados.push(respuesta.resultado);
     guardar();
@@ -222,7 +223,7 @@
       onverpagina={verPagina}
       onsiguiente={siguiente}
     >
-      <Hoja {q} respuesta={eleccion?.respuesta} />
+      <Hoja {q} paso={eleccion?.correccion.paso} />
     </Pregunta>
     <Tiradores
       onmover={(k, x) => (columnas = nucleo.mover(columnas, k, x))}
