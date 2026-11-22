@@ -25,6 +25,7 @@ El servidor recibe la raíz de los exámenes y su dirección. Sirve cada carpeta
 - `GET api/inicio` da el examen, el banco y el historial.
 - `POST api/respuestas` añade al historial cada respuesta que no está. Una línea de `respuestas.jsonl` lleva `id`, `ts`, `resultado` (`Acierto`, `Fallo` o `Blanco`) y `seguro`. La interfaz guarda cada respuesta en la clave `<carpeta>-pendientes` de `localStorage` hasta que llega al servidor. Al cargar la página y al volver la red, envía las que esperan.
 - `GET api/ronda` da `ronda.json`, y `PUT api/ronda` escribe el guardado más nuevo entre el que llega y el de `ronda.json`: `{"guardada", "ronda"}`, con la hora del guardado en milisegundos y la ronda a medias o `null`. La interfaz guarda la misma ronda en la clave `<carpeta>-ronda` de `localStorage`, y al cargar envía el guardado más nuevo de los dos.
+- `GET api/notas` da `notas.json`, un objeto de `id` a texto. `POST api/notas` recibe `{"id", "texto"}` y guarda la nota de esa pregunta, o la borra si el texto está en blanco. La interfaz envía la nota medio segundo después de la última tecla en su pregunta. El botón ✎ muestra u oculta la nota, y guarda la elección en la clave `<carpeta>-notas-visibles` de `localStorage`. Sin la clave, la nota se ve en el PC y no en el móvil.
 - `GET paginas/<archivo>` da la imagen de una página del PDF, y `GET pdfs/<archivo>` da un PDF. Los 2 leen la carpeta `paginas/` o `pdfs/` del examen, y dan 404 a un nombre con `/` o con un punto delante.
 
 El diseño sale de las clases de Tailwind: el móvil por defecto, y el PC desde 900 px con el breakpoint `pc:` de `src/app.css`. En el PC, la interfaz guarda las 3 posiciones de los tiradores en la clave `<carpeta>-columnas` de `localStorage`.
@@ -37,6 +38,6 @@ El diseño sale de las clases de Tailwind: el móvil por defecto, y el PC desde 
 
 `cargo test` corre los tests de `nucleo` y del servidor. Cada test del servidor crea una raíz temporal de exámenes, arranca el servidor y le habla por HTTP.
 
-`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia de `ln/`. Las capturas quedan en `interfaz/capturas/`, que no entra en git. Las aserciones buscan las clases `tirador`, `hoja`, `chip`, `opcion`, `ver-pagina`, `pagina` y `vacia`, que no llevan estilo.
+`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia de `ln/`. Las capturas quedan en `interfaz/capturas/`, que no entra en git. Las aserciones buscan las clases `tirador`, `hoja`, `chip`, `opcion`, `ver-pagina`, `pagina`, `vacia`, `nota`, `ver-nota` y `copiar`, que no llevan estilo.
 
 En desarrollo, `npm run dev` sirve la interfaz con Vite y pasa el API al servidor de `127.0.0.1:8601`.
