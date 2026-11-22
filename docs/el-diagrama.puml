@@ -74,6 +74,11 @@ package nucleo {
     +preguntas: u32
     +resultados: Vec<Resultado>
   }
+  class Correccion <<tsify>> {
+    +respuesta: Respuesta
+    +paso: String, el del concepto tras la respuesta
+    +aviso: Option<String>, con un fallo con «seguro» o un acierto con «dudo»
+  }
   class NotaDelSimulacro <<tsify>> {
     +aciertos: u32
     +fallos: u32
@@ -156,7 +161,7 @@ package nucleo {
     +sesion(banco, historial, ahora, azar): Vec<PreguntaDeSesion>
     +simulacro(examen, banco, historial, azar): Simulacro
     +nota_del_simulacro(cierre, penalizacion): NotaDelSimulacro
-    +corregir(pregunta, opcion, seguro, ahora): Respuesta
+    +corregir(pregunta, opcion, seguro, ahora): Correccion
     +restante(limite, ahora): segundos
     +gana(a, b): Guardado
     +unir(a, b): Vec<Respuesta>, en orden de hora y sin repetir id y ts
@@ -166,6 +171,7 @@ package nucleo {
     +hora(segundos): ts
     -estados(banco, historial): concepto → (Concepto, vence)
     -de_la_ronda(pregunta, estados, azar): PreguntaDeSesion
+    -sube(acierto, seguro): bool, solo con un acierto con «seguro»
     -cuenta(banco, historial): (sabes, no sabes, sin ver)
     -probabilidad(sabes, acierto, objetivo, examen): f64
     -binomial(n, k, p): f64
@@ -176,7 +182,7 @@ package nucleo {
     +inicio(datos, objetivo): Inicio
     +sesion(datos, ahora): PreguntaDeSesion[]
     +simulacro(datos, ahora): Simulacro
-    +corregir(pregunta, opcion, seguro, ahora): Respuesta
+    +corregir(pregunta, opcion, seguro, ahora): Correccion
     +restante(limite, ahora): segundos
     +gana(a, b): Guardado
     +unir(a, b): Respuesta[]
@@ -266,7 +272,7 @@ package interfaz {
   }
   class "Hoja.svelte" as Hoja {
     la explicación, la fuente y la imagen de la página
-    q, respuesta
+    q, paso: el de la corrección
   }
   class "Tiradores.svelte" as Tiradores {
     los 3 tiradores del PC
@@ -304,6 +310,8 @@ Simulacro *-- PreguntaDeSesion
 funciones ..> Cierre : lee
 Cierre *-- Resultado
 Respuesta *-- Resultado
+Correccion *-- Respuesta
+funciones --> Correccion : corregir()
 Datos *-- Examen
 Datos *-- Pregunta
 Datos *-- Respuesta
@@ -377,7 +385,7 @@ N --> App : 12 PreguntaDeSesion
 
 loop cada pregunta
   App -> N : corregir(pregunta, opcion, seguro, Date.now())
-  N --> App : Respuesta, en blanco sin opción
+  N --> App : Correccion, con la respuesta en blanco sin opción
   note over App : la respuesta entra en localStorage <examen>-pendientes,\ny datos.historial = unir(historial, [respuesta])
   App -> S : POST api/respuestas, con todas las pendientes
   alt con red
@@ -387,7 +395,7 @@ loop cada pregunta
   else sin red
     note over App : las pendientes esperan al evento online o a la carga siguiente
   end
-  note over App : muestra paso_tras_seguro o paso_tras_otra
+  note over App : muestra el paso y el aviso de la corrección
 end
 @enduml
 
