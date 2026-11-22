@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { NotaDelSimulacro } from "./nucleo/nucleo.js";
+  import Cuadricula from "./Cuadricula.svelte";
 
-  let { simulacro, nota, preguntas, error, onvolver }: {
+  let { simulacro, nota, preguntas, error, onvolver, marcas, onrevisar }: {
+    // PROTOTIPO: la cuadrícula corregida, y cada número abre su pregunta.
+    marcas: string[];
+    onrevisar: (k: number) => void;
     simulacro: boolean;
     nota: NotaDelSimulacro | null;
     preguntas: number;
@@ -21,6 +25,8 @@
       <p class={tarjeta}>Aciertos: {nota.aciertos} de {preguntas}</p>
     {/if}
   {/if}
+  <p class="mt-4 mb-2 text-[13px] text-tenue">Toca un número para ver su pregunta corregida.</p>
+  <Cuadricula {marcas} i={-1} onir={onrevisar} />
   <button class="my-3 block w-full cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento" onclick={onvolver}
     >Volver al inicio</button
   >
