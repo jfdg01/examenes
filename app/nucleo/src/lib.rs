@@ -1047,8 +1047,14 @@ mod tests {
         let otra = (q.correcta + 1) % 4;
         let fila = |c: Correccion| (c.paso, c.aviso);
         assert_eq!(fila(corregir(q, Some(q.correcta), true, 0)), ("paso 1".into(), None));
-        assert_eq!(fila(corregir(q, Some(q.correcta), false, 0)), ("paso 0".into(), Some("Acierto con «dudo»: cuenta como un fallo.".into())));
-        assert_eq!(fila(corregir(q, Some(otra), true, 0)), ("paso 0".into(), Some("Fallo con «seguro»: una idea falsa. Repásala.".into())));
+        assert_eq!(
+            fila(corregir(q, Some(q.correcta), false, 0)),
+            ("paso 0".into(), Some("Acierto con «dudo»: cuenta como un fallo.".into()))
+        );
+        assert_eq!(
+            fila(corregir(q, Some(otra), true, 0)),
+            ("paso 0".into(), Some("Fallo con «seguro»: una idea falsa. Repásala.".into()))
+        );
         assert_eq!(fila(corregir(q, Some(otra), false, 0)), ("paso 0".into(), None));
         assert_eq!(fila(corregir(q, None, true, 0)), ("paso 0".into(), None));
     }

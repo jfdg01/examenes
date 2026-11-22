@@ -39,8 +39,14 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
         .route("/{examen}/api/respuestas", axum::routing::post(responder))
         .route("/{examen}/api/notas", get(leer_notas).post(anotar))
         .route("/{examen}/api/ronda", get(leer_ronda).put(guardar_ronda))
-        .route("/{examen}/paginas/{archivo}", get(|e, Path((examen, archivo))| servir(e, examen, "paginas", archivo, "image/png")))
-        .route("/{examen}/pdfs/{archivo}", get(|e, Path((examen, archivo))| servir(e, examen, "pdfs", archivo, "application/pdf")))
+        .route(
+            "/{examen}/paginas/{archivo}",
+            get(|e, Path((examen, archivo))| servir(e, examen, "paginas", archivo, "image/png")),
+        )
+        .route(
+            "/{examen}/pdfs/{archivo}",
+            get(|e, Path((examen, archivo))| servir(e, examen, "pdfs", archivo, "application/pdf")),
+        )
         .nest_service("/assets", assets)
         .with_state(Arc::new(Carpetas { raiz, interfaz, cerrojo: Default::default() }))
         .layer(CompressionLayer::new().gzip(true))

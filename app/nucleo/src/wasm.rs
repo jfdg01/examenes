@@ -6,7 +6,10 @@ use serde::de::DeserializeOwned;
 use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
 
-use crate::{Cierre, Columnas, Correccion, Tirador, Datos, Guardado, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta, RondaAMedias, Simulacro};
+use crate::{
+    Cierre, Columnas, Correccion, Datos, Guardado, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta, RondaAMedias,
+    Simulacro, Tirador,
+};
 
 type Js<T> = Result<Ts<T>, JsError>;
 
