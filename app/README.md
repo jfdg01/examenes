@@ -4,7 +4,7 @@ Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están 
 
 - `nucleo/`: toda la lógica, sin leer archivos ni la red. Corre en el navegador como WASM, y el servidor usa sus tipos para validar.
 - `servidor/`: el servidor de `axum`. Guarda y sirve los archivos de cada examen, con gzip.
-- `banco/`: las herramientas del banco de un examen, para su dueño. `banco comprobar <carpeta>` comprueba `preguntas.json` con las reglas de [`BANCO.md`](../test/BANCO.md), y `banco paginas <carpeta>` saca las imágenes de `paginas/` de los PDFs de `pdfs/`. Las 2 necesitan `pdfinfo` y `pdftoppm`, de poppler.
+- `banco/`: las herramientas del banco de un examen, para su dueño. `banco comprobar <carpeta>` comprueba `preguntas.json` con las reglas de [`BANCO.md`](../test/BANCO.md), `banco paginas <carpeta>` saca las imágenes de `paginas/` de los PDFs de `pdfs/`, y `banco revision <carpeta> <informe>...` aplica los informes de una revisión a `preguntas.json`. `comprobar` y `paginas` necesitan `pdfinfo` y `pdftoppm`, de poppler.
 - `interfaz/`: la interfaz de Svelte 5, con Vite, TypeScript y Tailwind 4. `App.svelte` guarda el estado de la ronda y llama a `nucleo` para cada cálculo. Los componentes `Inicio`, `Pregunta`, `Hoja`, `Tiradores`, `PaginaCompleta` y `Final` reciben sus datos por props y avisan con callbacks.
 
 ## Arrancar

@@ -70,7 +70,7 @@ Una revisión de agentes que no escribieron las preguntas compara cada pregunta 
 Un solo agente aplica los informes:
 
 ```bash
-python3 test/aplicar_revision.py ps/preguntas.json revision-*.json
+cargo run --manifest-path app/Cargo.toml -p banco -- revision ps revision-*.json
 ```
 
-El script lista los fallos sin aplicar, y ese agente los arregla a mano. Después corre el comprobador.
+`banco revision` lista los fallos sin aplicar, y ese agente los arregla a mano. Después corre el comprobador.
