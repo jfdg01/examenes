@@ -34,11 +34,6 @@ Las fechas y los números de RFC no entran en el examen. El resto del temario s�
 
 El banco tiene 662 preguntas: 3 por cada idea de los 5 PDFs, y 1 por cada sigla de seguridad. Una idea que sale en 2 PDFs tiene un solo concepto.
 
-La interfaz está en https://3090.taila51846.ts.net:8606/:
+La interfaz está en https://3090.taila51846.ts.net:8601/ps/, en el servidor de `app/`. El servidor sirve todos los exámenes, y la raíz lista cada uno.
 
-```bash
-python3 test/serve.py ps
-tailscale serve --bg --https=8606 http://127.0.0.1:8607
-```
-
-El código está en `test/README.md`, y el formato y las reglas del banco están en `test/BANCO.md`.
+El código está en `app/README.md`, y el formato y las reglas del banco están en `test/BANCO.md`.

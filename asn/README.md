@@ -24,11 +24,6 @@ El examen pide un bolígrafo de tinta azul o negra y el NIF, o un documento ofic
 
 El banco está vacío.
 
-La interfaz está en https://3090.taila51846.ts.net:8604/:
+La interfaz está en https://3090.taila51846.ts.net:8601/asn/, en el servidor de `app/`. El servidor sirve todos los exámenes, y la raíz lista cada uno.
 
-```bash
-python3 test/serve.py asn
-tailscale serve --bg --https=8604 http://127.0.0.1:8605
-```
-
-El código está en `test/README.md`, y el formato y las reglas del banco están en `test/BANCO.md`.
+El código está en `app/README.md`, y el formato y las reglas del banco están en `test/BANCO.md`.
