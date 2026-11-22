@@ -146,15 +146,24 @@ package nucleo {
   }
   class RondaGuardada <<tsify>> {
     +ids: Vec<String>
-    +resultados: Vec<Resultado>
+    +resultados: Vec<Option<Resultado>>, en el orden de ids, null sin contestar
     +simulacro: bool
     +limite: Option<u64>, en ms
   }
   class RondaAMedias <<tsify>> {
     +preguntas: Vec<PreguntaDeSesion>
-    +resultados: Vec<Resultado>
+    +resultados: Vec<Option<Resultado>>
     +simulacro: bool
     +limite: Option<u64>, en ms
+  }
+  class Edicion <<tsify>> {
+    +pregunta: String
+    +opciones: Vec<String>, en el orden de la ronda
+    +explicacion: String
+  }
+  class Editada <<tsify>> {
+    +banco: Pregunta
+    +ronda: PreguntaDeSesion
   }
   enum Ronda <<tsify>> {
     Inicio
@@ -177,6 +186,7 @@ package nucleo {
     +unir(a, b): Vec<Respuesta>, en orden de hora y sin repetir id y ts
     +restaurar(banco, historial, guardado, azar): Option<RondaAMedias>
     +mover(columnas, tirador, x): Columnas, con cada columna de 0,15 como mínimo
+    +editar(banco, pregunta, edicion): Option<Editada>, cada opción a su sitio del banco
     -estados(banco, historial): concepto → (Concepto, vence)
     -de_la_ronda(pregunta, estados, azar): PreguntaDeSesion
     -sube(acierto, seguro): bool, solo con un acierto con «seguro»
@@ -198,6 +208,7 @@ package nucleo {
     +nota(cierre, penalizacion): NotaDelSimulacro
     +columnas(): Columnas, las de partida
     +mover(columnas, tirador, x): Columnas
+    +editar(datos, pregunta, edicion): Editada o undefined
     -azar(ahora): Azar, con la hora de semilla
   }
 }
@@ -206,7 +217,7 @@ package servidor {
   class Carpetas {
     -raiz: PathBuf
     -interfaz: PathBuf
-    -cerrojo: Mutex, del historial, la ronda y las notas
+    -cerrojo: Mutex, del banco, el historial, la ronda y las notas
   }
   class "rutas (axum)" as rutas {
     +app(raiz, interfaz): Router
@@ -221,6 +232,7 @@ package servidor {
     PUT /:examen/api/ronda → guardar_ronda → 204
     GET /:examen/api/notas → leer_notas → id → texto
     POST /:examen/api/notas → anotar(Nota) → 204
+    PUT /:examen/api/preguntas → editar(Pregunta) → 204, 404 sin el id, 422 con otro concepto, tema, fuente o número de distractores, o un texto en blanco
     GET /:examen/paginas/:archivo → servir → image/png
     GET /:examen/pdfs/:archivo → servir → application/pdf
     GET /assets/* → dist/assets
@@ -265,10 +277,12 @@ package interfaz {
     -ronda: Ronda
     -preguntas: PreguntaDeSesion[]
     -i: number
-    -eleccion: { opcion o null, respuesta }
+    -elecciones: { opcion o null, correccion } o null, por posición
     -error: string
     -simulacro: boolean
-    -resultados: Resultado[]
+    -resultados: Resultado o undefined, por posición
+    -revisando: boolean, una pregunta del final
+    -marcas: Marca[], de resultados
     -nota: NotaDelSimulacro
     -limite: ms
     -restante: segundos
@@ -285,9 +299,11 @@ package interfaz {
     -guardar(), de empezar, contestar, terminar y volver
     -empezar(comoSimulacro)
     -seguir(), en la primera pregunta sin resultado
+    -ir(k), de la cuadrícula
     -contar(), cada segundo
     -contestar(opcion o null, seguro)
-    -siguiente()
+    -siguiente(): ir(i + 1), intentarTerminar() o vuelta al final desde la revisión
+    -intentarTerminar(): terminar(), o la primera pregunta sin contestar y el aviso
     -verPagina(), con una entrada del historial; atrás la cierra
     -terminar()
     -cargarInicio(), al cargar, al volver y al volver la red
@@ -295,6 +311,7 @@ package interfaz {
     -abandonar()
     -alternarNotas()
     -anotar(texto), a POST api/notas medio segundo después de la última tecla
+    -editar(edicion): error o "", a PUT api/preguntas, y cambia el banco y la ronda
   }
   class "main.ts" as MainTs {
     monta Lista en / y App en /:examen/
@@ -310,14 +327,15 @@ package interfaz {
   }
   class "Pregunta.svelte" as PreguntaSvelte {
     la cabecera, la barra, las opciones y el pie
-    q, i, total, simulacro, restante, eleccion, abiertas, nota, notasVisibles, error
+    q, i, total, simulacro, restante, eleccion, contestada, corregida, revision, marcas, etiqueta, abiertas, nota, notasVisibles, error
     children: la hoja
-    onabandonar(), oncontestar(opcion o null, seguro), onabiertas(), onnota(texto), onnotasvisibles(), onverpagina(), onsiguiente()
+    onabandonar(), oncontestar(opcion o null, seguro), onabiertas(), onnota(texto), onnotasvisibles(), onverpagina(), onsiguiente(), onir(k), onterminar(), oneditar(edicion): error o ""
+    -borrador: Edicion o null, oculta la nota y la hoja
     -copiar(), q.copiar al portapapeles
   }
   class "Hoja.svelte" as Hoja {
     la explicación, la fuente, la imagen de la página y el Siguiente del PC
-    q, paso: el de la corrección
+    q, paso: el de la corrección, etiqueta
     onsiguiente()
   }
   class "Tiradores.svelte" as Tiradores {
@@ -330,8 +348,13 @@ package interfaz {
     -zoom: boolean
   }
   class "Final.svelte" as Final {
-    simulacro, nota, preguntas, error
-    onvolver()
+    simulacro, nota, preguntas, marcas, error
+    onvolver(), onrevisar(k)
+  }
+  class "Cuadricula.svelte" as Cuadricula {
+    un botón por pregunta, casi cuadrada
+    marcas: falta, contestada, acierto, fallo o blanco; i
+    onir(k)
   }
   class "nucleo/nucleo.js y nucleo.d.ts" as generado <<generado>> {
     las funciones de wasm.rs
@@ -366,6 +389,8 @@ funciones ..> Guardado : elige el más nuevo
 Guardado *-- RondaGuardada
 funciones --> RondaAMedias : devuelve
 RondaAMedias *-- PreguntaDeSesion
+funciones ..> Edicion : lee
+funciones --> Editada : editar()
 ordenes ..> herramientas : llama
 herramientas ..> Examen : lee examen.json
 herramientas ..> Pregunta : lee preguntas.json
@@ -376,6 +401,7 @@ rutas ..> ExamenDeLaLista : devuelve
 rutas ..> Respuesta : valida
 rutas ..> Guardado : valida y guarda el más nuevo
 rutas ..> Nota : valida y guarda
+rutas ..> Pregunta : valida y guarda en preguntas.json
 rutas ..> funciones : gana()
 wasm ..> funciones : llama
 wasm ..> generado : wasm-bindgen genera
@@ -390,6 +416,8 @@ App *-- Hoja
 App *-- Tiradores
 App *-- PaginaCompleta
 App *-- Final
+PreguntaSvelte *-- Cuadricula
+Final *-- Cuadricula
 @enduml
 
 @startuml la-ronda
@@ -408,12 +436,14 @@ state Final
 Inicio --> SinContestar : empezar(comoSimulacro)
 SinContestar --> Contestada : contestar(opcion, seguro)
 SinContestar --> Contestada : contestar(null), "En blanco" del simulacro
-Contestada --> SinContestar : siguiente(), quedan preguntas
-Contestada --> Final : siguiente() → terminar(), la última
+Contestada --> SinContestar : siguiente() o ir(k), a una sin contestar
+SinContestar --> Contestada : ir(k), a una contestada
+Contestada --> Final : intentarTerminar() → terminar(), todas contestadas
 SinContestar --> Final : contar() → terminar(), el límite del simulacro
 Contestada --> Final : contar() → terminar(), el límite del simulacro
 SinContestar --> Inicio : abandonar(), el botón ✕
 Contestada --> Inicio : abandonar(), el botón ✕
+Final --> Final : onrevisar(k) y siguiente(), la revisión de una pregunta
 Final --> Inicio : volver()
 @enduml
 
@@ -470,6 +500,6 @@ loop cada segundo, contar()
 end
 note over App : cada respuesta va a POST api/respuestas, como en la sesión;\nuna pregunta sin contestar al pasar el límite no va
 App -> N : nota({ preguntas, resultados }, penalizacion)
-note over N : cada pregunta sin resultado cuenta en blanco
+note over N : cada pregunta sin resultado cuenta en blanco;\nel final muestra la cuadrícula en verde y rojo
 N --> App : NotaDelSimulacro
 @enduml
