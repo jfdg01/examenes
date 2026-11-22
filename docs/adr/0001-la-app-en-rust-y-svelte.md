@@ -11,7 +11,6 @@ La app de práctica es un servidor de Rust y una interfaz de Svelte 5. El códig
 - **El servidor usa `axum`**, con `tokio` y `tower-http`.
 - **Un solo proceso sirve todos los exámenes.** Cada examen tiene su ruta: `/ln/`, `/asn/` y `/ps/`. Un examen nuevo es solo una carpeta nueva, sin un puerto nuevo ni una ruta nueva de `tailscale serve`. Todos los exámenes comparten un origen, así que cada clave de `localStorage` lleva el nombre del examen.
 - **Las herramientas del banco también van en Rust.** El proyecto no tiene Python.
-- **El formato de los datos de un examen no cambia**, salvo `respuestas.jsonl`: `examen.json`, `preguntas.json`, `notas.json` y `ronda.json`.
 
 ## Las alternativas
 

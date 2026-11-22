@@ -36,4 +36,4 @@ El banco tiene 662 preguntas: 3 por cada idea de los 5 PDFs, y 1 por cada sigla 
 
 La interfaz está en https://3090.taila51846.ts.net:8601/ps/, en el servidor de `app/`. El servidor sirve todos los exámenes, y la raíz lista cada uno.
 
-El código está en `app/README.md`, y el formato y las reglas del banco están en `test/BANCO.md`.
+El código está en `app/README.md`, y el formato y las reglas del banco están en [`docs/BANCO.md`](../docs/BANCO.md).
