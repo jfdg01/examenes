@@ -39,6 +39,6 @@ El diseño sale de las clases de Tailwind: el móvil por defecto, y el PC desde 
 
 `cargo test` corre los tests de `nucleo`, del servidor y de `banco`. Los tests de `banco` crean una carpeta temporal de examen con un PDF mínimo. Cada test del servidor crea una raíz temporal de exámenes, arranca el servidor y le habla por HTTP.
 
-`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia de `ln/`. Las capturas quedan en `interfaz/capturas/`, que no entra en git. Las aserciones buscan las clases `tirador`, `hoja`, `chip`, `opcion`, `ver-pagina`, `pagina`, `vacia`, `nota`, `ver-nota` y `copiar`, que no llevan estilo.
+`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia de `ln/`. Las capturas quedan en `interfaz/capturas/`, que no entra en git. Las aserciones buscan las clases `tirador`, `hoja`, `chip`, `opcion`, `icono`, `ver-pagina`, `pagina`, `vacia`, `nota`, `ver-nota` y `copiar`, que no llevan estilo.
 
 En desarrollo, `npm run dev` sirve la interfaz con Vite y pasa el API al servidor de `127.0.0.1:8601`.
