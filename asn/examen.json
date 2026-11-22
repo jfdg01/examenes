@@ -1,6 +1,5 @@
 {
   "titulo": "ASN",
-  "puerto": 8605,
   "preguntas": 35,
   "opciones": 3,
   "minutos": 45,

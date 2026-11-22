@@ -63,13 +63,16 @@
   async function arrancar() {
     await cargarInicio();
     if (!datos) return;
-    const sinRonda: Guardado = { guardada: 0, ronda: undefined };
+    const sinRonda: Guardado = { guardada: new Date(0).toISOString(), ronda: undefined };
     const servidor: Guardado = await fetch("api/ronda")
       .then((r) => (r.ok ? r.json() : sinRonda))
       .catch(() => sinRonda);
     // Un clic en "Empezar" antes de la respuesta ya empezó una ronda nueva, que gana.
     if (ronda.estado !== "Inicio") return;
-    const g = nucleo.gana(servidor, JSON.parse(localStorage.getItem(claveRonda) ?? "null") ?? sinRonda);
+    const local = JSON.parse(localStorage.getItem(claveRonda) ?? "null") ?? sinRonda;
+    // Un guardado de este dispositivo con la hora en milisegundos pasa a ISO, y no pierde la ronda.
+    if (typeof local.guardada === "number") local.guardada = new Date(local.guardada).toISOString();
+    const g = nucleo.gana(servidor, local);
     enviar(g);
     const r = nucleo.restaurar(datos, g, Date.now());
     if (!r) return;
@@ -119,7 +122,7 @@
   function guardar() {
     const aMedias = ronda.estado === "Pregunta";
     const ids = preguntas.map((q) => q.id);
-    enviar({ guardada: Date.now(), ronda: aMedias ? { ids, resultados, simulacro, limite: simulacro ? limite : undefined } : undefined });
+    enviar({ guardada: new Date().toISOString(), ronda: aMedias ? { ids, resultados, simulacro, limite: simulacro ? limite : undefined } : undefined });
   }
 
   let ronda = $state<Ronda>({ estado: "Inicio" });

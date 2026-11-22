@@ -2,22 +2,13 @@
 //! de los PDFs y los arreglos de una revisión. Las 3 leen la carpeta del examen. La comprobación y las
 //! imágenes llaman a `pdfinfo` y `pdftoppm` de poppler.
 
-use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeSet, HashMap, HashSet};
 use std::fs;
 use std::path::Path;
 use std::process::Command;
 
-use nucleo::Pregunta;
+use nucleo::{Examen, Pregunta};
 use serde::Deserialize;
-
-/// La parte de `examen.json` que la comprobación usa. `nucleo::Examen` no lleva `pdfs`, porque la app no los
-/// necesita.
-#[derive(Deserialize)]
-pub struct Examen {
-    pub opciones: u32,
-    /// Los temas de cada PDF de `pdfs/`.
-    pub pdfs: BTreeMap<String, Vec<String>>,
-}
 
 fn leer<T: serde::de::DeserializeOwned>(archivo: &Path) -> Result<T, String> {
     let texto = fs::read_to_string(archivo).map_err(|e| format!("{}: {e}", archivo.display()))?;
@@ -283,6 +274,7 @@ pub fn revision(carpeta: &Path, informes: &[String]) -> Result<(), String> {
 mod tests {
     use super::*;
     use nucleo::Fuente;
+    use std::collections::BTreeMap;
 
     /// Un PDF mínimo con `n` páginas, que poppler lee.
     fn pdf(archivo: &Path, n: u32) {
@@ -304,7 +296,11 @@ mod tests {
         fs::create_dir(dir.path().join("pdfs")).unwrap();
         pdf(&dir.path().join("pdfs/1_Legislacion.pdf"), 5);
         let examen = Examen {
+            titulo: "LN".into(),
+            preguntas: 20,
             opciones: 4,
+            minutos: 25,
+            penalizacion: 0.25,
             pdfs: BTreeMap::from([
                 ("1_Legislacion.pdf".into(), vec!["rgpd".into(), "lssi".into()]),
                 ("2_Teoria.pdf".into(), vec!["ens".into()]),

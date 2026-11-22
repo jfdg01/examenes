@@ -13,7 +13,7 @@ fn crear_examen(raiz: &Path, carpeta: &str, titulo: &str, banco: Option<&str>) {
     fs::create_dir(&dir).unwrap();
     fs::write(
         dir.join("examen.json"),
-        json!({ "titulo": titulo, "preguntas": 20, "opciones": 4, "minutos": 25, "penalizacion": 0.25 }).to_string(),
+        json!({ "titulo": titulo, "preguntas": 20, "opciones": 4, "minutos": 25, "penalizacion": 0.25, "pdfs": {} }).to_string(),
     )
     .unwrap();
     if let Some(banco) = banco {
@@ -142,6 +142,27 @@ async fn una_respuesta_mal_formada_no_entra_en_el_historial() {
     assert!(!raiz.path().join("ln/respuestas.jsonl").exists());
 }
 
+#[tokio::test]
+async fn un_campo_de_mas_en_el_examen_o_en_el_banco_da_un_error_que_lo_nombra() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+    let error = || async { reqwest::get(format!("{url}/ln/api/inicio")).await.unwrap().text().await.unwrap() };
+
+    let examen = raiz.path().join("ln/examen.json");
+    let mut e: Value = serde_json::from_str(&fs::read_to_string(&examen).unwrap()).unwrap();
+    e["puerto"] = json!(8601);
+    fs::write(&examen, e.to_string()).unwrap();
+    assert!(error().await.contains("unknown field `puerto`"));
+
+    crear_examen(raiz.path(), "ps", "PS", None);
+    let mut banco: Value = serde_json::from_str(BANCO_LN).unwrap();
+    banco[0]["dificultad"] = json!(3);
+    fs::write(raiz.path().join("ps/preguntas.json"), banco.to_string()).unwrap();
+    let texto = reqwest::get(format!("{url}/ps/api/inicio")).await.unwrap().text().await.unwrap();
+    assert!(texto.contains("unknown field `dificultad`"), "{texto}");
+}
+
 async fn ronda(url: &str) -> Value {
     reqwest::get(format!("{url}/ln/api/ronda")).await.unwrap().error_for_status().unwrap().json().await.unwrap()
 }
@@ -155,9 +176,9 @@ async fn la_ronda_guardada_vuelve_igual() {
     let raiz = TempDir::new().unwrap();
     crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
     let url = arrancar(raiz.path()).await;
-    assert_eq!(ronda(&url).await, json!({ "guardada": 0, "ronda": null }));
+    assert_eq!(ronda(&url).await, json!({ "guardada": "1970-01-01T00:00:00Z", "ronda": null }));
 
-    let g = json!({ "guardada": 1_795_183_876_012_u64, "ronda": {
+    let g = json!({ "guardada": "2026-11-21T10:51:16.012Z", "ronda": {
         "ids": ["rgpd-001", "rgpd-002"], "resultados": ["Blanco"], "simulacro": true, "limite": 1_795_185_376_012_u64 } });
     assert_eq!(guardar_ronda(&url, &g).await, 204);
     assert_eq!(ronda(&url).await, g);
@@ -171,9 +192,10 @@ async fn una_ronda_mal_formada_no_se_guarda() {
     let url = arrancar(raiz.path()).await;
 
     for mala in [
-        json!({ "guardada": 1.5, "ronda": null }),
-        json!({ "guardada": 1, "ronda": null, "extra": 1 }),
-        json!({ "guardada": 1, "ronda": { "ids": [], "resultados": ["acierto"], "simulacro": false, "limite": null } }),
+        json!({ "guardada": 1_795_183_876_012_u64, "ronda": null }),
+        json!({ "guardada": "ayer", "ronda": null }),
+        json!({ "guardada": "2026-11-21T10:51:16Z", "ronda": null, "extra": 1 }),
+        json!({ "guardada": "2026-11-21T10:51:16Z", "ronda": { "ids": [], "resultados": ["acierto"], "simulacro": false, "limite": null } }),
     ] {
         assert!(guardar_ronda(&url, &mala).await.is_client_error(), "{mala}");
     }
@@ -185,10 +207,10 @@ async fn un_guardado_mas_viejo_no_pisa_la_ronda() {
     let raiz = TempDir::new().unwrap();
     crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
     let url = arrancar(raiz.path()).await;
-    let nuevo = json!({ "guardada": 2, "ronda": null });
+    let nuevo = json!({ "guardada": "2026-11-21T10:51:17Z", "ronda": null });
 
     assert_eq!(guardar_ronda(&url, &nuevo).await, 204);
-    let viejo = json!({ "guardada": 1, "ronda": { "ids": ["rgpd-001"], "resultados": [], "simulacro": false, "limite": null } });
+    let viejo = json!({ "guardada": "2026-11-21T10:51:16Z", "ronda": { "ids": ["rgpd-001"], "resultados": [], "simulacro": false, "limite": null } });
     assert_eq!(guardar_ronda(&url, &viejo).await, 204);
     assert_eq!(ronda(&url).await, nuevo);
 }

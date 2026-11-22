@@ -1,6 +1,5 @@
 {
   "titulo": "PS",
-  "puerto": 8607,
   "preguntas": 20,
   "opciones": 3,
   "minutos": 25,

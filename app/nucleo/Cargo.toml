@@ -7,6 +7,7 @@ edition = "2024"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+jiff = { version = "1.0.2", default-features = false, features = ["std", "serde"] }
 serde = { version = "1", features = ["derive"] }
 tsify = { version = "0.5", features = ["js"] }
 # La versión es la de `wasm-bindgen-cli`.

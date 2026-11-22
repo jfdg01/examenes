@@ -1,4 +1,4 @@
-//! Las funciones de `nucleo` que llama la interfaz. Una hora va en milisegundos desde 1970, como `Date.now()`.
+//! Las funciones de `nucleo` que llama la interfaz. `ahora` va en milisegundos desde 1970, como `Date.now()`.
 //! Un dato que no encaja con su tipo lanza un error en JavaScript.
 
 use serde::Serialize;
@@ -53,7 +53,7 @@ pub fn simulacro(datos: Ts<Datos>, ahora: f64) -> Js<Simulacro> {
 
 #[wasm_bindgen]
 pub fn corregir(pregunta: Ts<PreguntaDeSesion>, opcion: Option<u32>, seguro: bool, ahora: f64) -> Js<Correccion> {
-    dar(crate::corregir(&leer(pregunta)?, opcion, seguro, en_segundos(ahora)))
+    dar(crate::corregir(&leer(pregunta)?, opcion, seguro, jiff::Timestamp::from_second(en_segundos(ahora))?))
 }
 
 #[wasm_bindgen]

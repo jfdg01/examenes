@@ -1,5 +1,6 @@
 //! La lógica de la app. `nucleo` no lee archivos ni la red.
 
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
@@ -7,6 +8,7 @@ pub mod wasm;
 
 /// Las cifras de un examen, de `examen.json`.
 #[derive(Deserialize, Serialize, Tsify)]
+#[serde(deny_unknown_fields)]
 pub struct Examen {
     pub titulo: String,
     /// Las preguntas del examen real.
@@ -17,6 +19,8 @@ pub struct Examen {
     pub minutos: u32,
     /// La parte de un acierto que resta un fallo.
     pub penalizacion: f64,
+    /// Los temas de cada PDF de `pdfs/`.
+    pub pdfs: std::collections::BTreeMap<String, Vec<String>>,
 }
 
 /// Un examen de la lista de la raíz, que abre `/<carpeta>/`.
@@ -28,6 +32,7 @@ pub struct ExamenDeLaLista {
 
 /// Una pregunta del banco, de `preguntas.json`.
 #[derive(Deserialize, Serialize, Tsify, Clone)]
+#[serde(deny_unknown_fields)]
 pub struct Pregunta {
     pub id: String,
     pub concepto: String,
@@ -41,17 +46,19 @@ pub struct Pregunta {
 
 /// La página del PDF de `pdfs/` que respalda una pregunta.
 #[derive(Deserialize, Serialize, Tsify, Clone)]
+#[serde(deny_unknown_fields)]
 pub struct Fuente {
     pub pdf: String,
     pub pagina: u32,
 }
 
-/// Una línea de `respuestas.jsonl`. `ts` es la hora en UTC, como `2026-11-04T12:41:22Z`.
+/// Una línea de `respuestas.jsonl`. `ts` es la hora en ISO 8601 con `Z`, como `2026-11-04T12:41:22Z`.
 #[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct Respuesta {
     pub id: String,
-    pub ts: String,
+    #[tsify(type = "string")]
+    pub ts: Timestamp,
     pub resultado: Resultado,
     pub seguro: bool,
 }
@@ -107,43 +114,6 @@ impl std::fmt::Display for Concepto {
     }
 }
 
-/// Los segundos desde 1970 de una hora `AAAA-MM-DDTHH:MM:SSZ`.
-pub fn segundos(ts: &str) -> Option<i64> {
-    let b = ts.as_bytes();
-    if b.len() != 20 || b[4] != b'-' || b[7] != b'-' || b[10] != b'T' || b[13] != b':' || b[16] != b':' || b[19] != b'Z' {
-        return None;
-    }
-    let num = |a: usize, z: usize| ts.get(a..z)?.parse::<i64>().ok();
-    let (a, m, d) = (num(0, 4)?, num(5, 7)?, num(8, 10)?);
-    let (h, mi, s) = (num(11, 13)?, num(14, 16)?, num(17, 19)?);
-    if !(1..=12).contains(&m) || !(1..=31).contains(&d) || h > 23 || mi > 59 || s > 59 {
-        return None;
-    }
-    // Los días desde 1970 del calendario civil, de Howard Hinnant.
-    let a = if m <= 2 { a - 1 } else { a };
-    let era = a.div_euclid(400);
-    let ano = a - era * 400;
-    let dia_del_ano = (153 * ((m + 9) % 12) + 2) / 5 + d - 1;
-    let dias = era * 146097 + ano * 365 + ano / 4 - ano / 100 + dia_del_ano - 719468;
-    Some(dias * 86400 + h * 3600 + mi * 60 + s)
-}
-
-/// La hora `AAAA-MM-DDTHH:MM:SSZ` de unos segundos desde 1970.
-pub fn hora(segundos: i64) -> String {
-    let (dias, s) = (segundos.div_euclid(86400), segundos.rem_euclid(86400));
-    // El calendario civil de los días desde 1970, de Howard Hinnant.
-    let z = dias + 719468;
-    let era = z.div_euclid(146097);
-    let doe = z - era * 146097;
-    let ano = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
-    let doy = doe - (365 * ano + ano / 4 - ano / 100);
-    let mp = (5 * doy + 2) / 153;
-    let d = doy - (153 * mp + 2) / 5 + 1;
-    let m = if mp < 10 { mp + 3 } else { mp - 9 };
-    let a = ano + era * 400 + i64::from(m <= 2);
-    format!("{a:04}-{m:02}-{d:02}T{:02}:{:02}:{:02}Z", s / 3600, s / 60 % 60, s % 60)
-}
-
 /// Solo un acierto con "seguro" sube el paso de un concepto.
 fn sube(acierto: bool, seguro: bool) -> bool {
     acierto && seguro
@@ -158,7 +128,7 @@ pub struct Correccion {
 }
 
 /// Corrige una pregunta de la ronda. Sin `opcion`, la pregunta queda en blanco, sin "seguro".
-pub fn corregir(q: &PreguntaDeSesion, opcion: Option<u32>, seguro: bool, ahora: i64) -> Correccion {
+pub fn corregir(q: &PreguntaDeSesion, opcion: Option<u32>, seguro: bool, ahora: Timestamp) -> Correccion {
     let resultado = match opcion {
         None => Resultado::Blanco,
         Some(o) if o == q.correcta => Resultado::Acierto,
@@ -173,7 +143,7 @@ pub fn corregir(q: &PreguntaDeSesion, opcion: Option<u32>, seguro: bool, ahora: 
     Correccion {
         paso: if sube(resultado == Resultado::Acierto, seguro) { &q.paso_tras_seguro } else { &q.paso_tras_otra }.clone(),
         aviso: aviso.map(Into::into),
-        respuesta: Respuesta { id: q.id.clone(), ts: hora(ahora), resultado, seguro },
+        respuesta: Respuesta { id: q.id.clone(), ts: ahora, resultado, seguro },
     }
 }
 
@@ -185,7 +155,7 @@ pub fn restante(limite: f64, ahora: f64) -> u32 {
 /// El paso de cada concepto visto, y la hora en que vence.
 fn estados<'a>(banco: &'a [Pregunta], historial: &[Respuesta]) -> std::collections::HashMap<&'a str, (Concepto, i64)> {
     let concepto: std::collections::HashMap<&str, &str> = banco.iter().map(|q| (q.id.as_str(), q.concepto.as_str())).collect();
-    let mut ordenado: Vec<(i64, &Respuesta)> = historial.iter().filter_map(|r| Some((segundos(&r.ts)?, r))).collect();
+    let mut ordenado: Vec<(i64, &Respuesta)> = historial.iter().map(|r| (r.ts.as_second(), r)).collect();
     ordenado.sort_by_key(|(t, _)| *t);
     let mut estado = std::collections::HashMap::new();
     for (t, r) in ordenado {
@@ -297,10 +267,10 @@ pub struct PreguntaDeSesion {
 /// `ahora` va en segundos desde 1970.
 pub fn sesion(banco: &[Pregunta], historial: &[Respuesta], ahora: i64, azar: &mut Azar) -> Vec<PreguntaDeSesion> {
     let estado = estados(banco, historial);
-    let mut ultima: std::collections::HashMap<&str, &str> = std::collections::HashMap::new();
+    let mut ultima: std::collections::HashMap<&str, Timestamp> = std::collections::HashMap::new();
     for r in historial {
-        let ts = ultima.entry(r.id.as_str()).or_insert(r.ts.as_str());
-        *ts = (*ts).max(r.ts.as_str());
+        let ts = ultima.entry(r.id.as_str()).or_insert(r.ts);
+        *ts = (*ts).max(r.ts);
     }
     // Una pregunta por concepto: la que no tiene respuestas, o la de la respuesta más vieja. El azar rompe los empates.
     let mut barajado: Vec<&Pregunta> = banco.iter().collect();
@@ -379,12 +349,13 @@ pub fn simulacro(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], a
     }
 }
 
-/// `ronda.json`, y la ronda de `localStorage`: la ronda a medias y la hora del guardado, en milisegundos.
+/// `ronda.json`, y la ronda de `localStorage`: la ronda a medias y la hora del guardado, en ISO 8601 con `Z`.
 /// Sin ronda a medias, `ronda` es `None`.
 #[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct Guardado {
-    pub guardada: u64,
+    #[tsify(type = "string")]
+    pub guardada: Timestamp,
     pub ronda: Option<RondaGuardada>,
 }
 
@@ -407,7 +378,7 @@ pub fn gana(a: Guardado, b: Guardado) -> Guardado {
 pub fn unir(a: &[Respuesta], b: &[Respuesta]) -> Vec<Respuesta> {
     let mut vistas = std::collections::HashSet::new();
     let mut u: Vec<Respuesta> = a.iter().chain(b).filter(|r| vistas.insert((&r.id, &r.ts))).cloned().collect();
-    u.sort_by_key(|r| segundos(&r.ts));
+    u.sort_by_key(|r| r.ts);
     u
 }
 
@@ -515,7 +486,7 @@ pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], obj
     let faltan = meta - sabes;
     // El ritmo: los conceptos que pasaron a "sabes" en las últimas respuestas, por sesión.
     let mut ordenado = historial.to_vec();
-    ordenado.sort_by(|a, b| a.ts.cmp(&b.ts));
+    ordenado.sort_by_key(|r| r.ts);
     let antes = cuenta(banco, &ordenado[..ordenado.len().saturating_sub(VENTANA)]).0;
     let sesiones_de_la_ventana =
         if historial.is_empty() { 1.0 } else { historial.len().min(VENTANA) as f64 / TAMANO_SESION as f64 };
@@ -633,7 +604,14 @@ pub fn mover(c: Columnas, tirador: Tirador, x: f64) -> Columnas {
 mod tests {
     use super::*;
 
-    const LN: Examen = Examen { titulo: String::new(), preguntas: 20, opciones: 4, minutos: 25, penalizacion: 0.25 };
+    const LN: Examen = Examen {
+        titulo: String::new(),
+        preguntas: 20,
+        opciones: 4,
+        minutos: 25,
+        penalizacion: 0.25,
+        pdfs: std::collections::BTreeMap::new(),
+    };
 
     /// Un banco de `n` conceptos `c0`, `c1`…, con una pregunta `q0`, `q1`… cada uno.
     fn banco_de(n: usize) -> Vec<Pregunta> {
@@ -740,7 +718,7 @@ mod tests {
 
     #[test]
     fn un_examen_de_3_opciones_sin_penalizacion_aconseja_contestar() {
-        let asn = Examen { titulo: String::new(), preguntas: 35, opciones: 3, minutos: 45, penalizacion: 0.0 };
+        let asn = Examen { preguntas: 35, opciones: 3, minutos: 45, penalizacion: 0.0, ..LN };
         let t = tarjeta(&asn, &banco_de(20), &[], 5.0);
         assert_eq!(t.dudas[2].porcentaje, 33);
         assert_eq!(t.dudas[1].detalle.as_deref(), Some("a ciegas, 1 de 3"));
@@ -855,7 +833,7 @@ mod tests {
 
     pub(crate) fn respuesta(id: &str, ts: &str, acierto: bool, seguro: bool) -> Respuesta {
         let resultado = if acierto { Resultado::Acierto } else { Resultado::Fallo };
-        Respuesta { id: id.into(), ts: ts.into(), resultado, seguro }
+        Respuesta { id: id.into(), ts: ts.parse().unwrap(), resultado, seguro }
     }
 
     #[test]
@@ -865,16 +843,6 @@ mod tests {
         let Inicio::Listo { titulo, sesion, simulacro, .. } = inicio(&examen, &banco, &[], 5.0) else { panic!() };
         assert_eq!((titulo.as_str(), sesion, simulacro), ("LN", 2, 3));
         assert_eq!(inicio(&examen, &[], &[], 5.0), Inicio::BancoVacio { titulo: "LN".into() });
-    }
-
-    #[test]
-    fn la_hora_pasa_a_segundos() {
-        assert_eq!(segundos("1970-01-01T00:00:00Z"), Some(0));
-        assert_eq!(segundos("2026-11-04T12:41:22Z"), Some(1_793_796_082));
-        assert_eq!(segundos("2024-02-29T00:00:00Z"), Some(1_709_164_800));
-        assert_eq!(segundos("2026-11-04 12:41:22Z"), None);
-        assert_eq!(segundos("2026-13-04T12:41:22Z"), None);
-        assert_eq!(segundos("hoy"), None);
     }
 
     /// El paso del concepto de la única pregunta del banco, como lo muestra la sesión.
@@ -919,8 +887,10 @@ mod tests {
     }
 
     fn de_la_sesion(banco: &[Pregunta], historial: &[Respuesta]) -> Vec<String> {
-        let mut ids: Vec<String> =
-            sesion(banco, historial, segundos(AHORA).unwrap(), &mut Azar::new(1)).into_iter().map(|q| q.id).collect();
+        let mut ids: Vec<String> = sesion(banco, historial, AHORA.parse::<Timestamp>().unwrap().as_second(), &mut Azar::new(1))
+            .into_iter()
+            .map(|q| q.id)
+            .collect();
         ids.sort();
         ids
     }
@@ -988,7 +958,7 @@ mod tests {
         let banco = conceptos("c", 300);
         let historial: Vec<Respuesta> =
             banco.iter().enumerate().map(|(i, q)| respuesta(&q.id, &minuto(0, i as i64 / 5), true, true)).collect();
-        let ahora = segundos(&minuto(5, 0)).unwrap();
+        let ahora = minuto(5, 0).parse::<Timestamp>().unwrap().as_second();
         let sesion = sesion(&banco, &historial, ahora, &mut Azar::new(1));
         let mut indices: Vec<usize> = sesion.iter().map(|q| q.concepto[1..].parse().unwrap()).collect();
         indices.sort();
@@ -1021,23 +991,21 @@ mod tests {
     }
 
     #[test]
-    fn la_hora_vuelve_de_segundos_al_texto() {
-        for ts in ["1970-01-01T00:00:00Z", "2026-11-04T12:41:22Z", "2024-02-29T23:59:59Z", "2000-03-01T00:00:00Z"] {
-            assert_eq!(hora(segundos(ts).unwrap()), ts);
-        }
-    }
-
-    #[test]
     fn corregir_compara_la_opcion_con_la_correcta_y_sin_opcion_es_en_blanco() {
         let q = &sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
         let otra = (q.correcta + 1) % 4;
-        let r = corregir(q, Some(q.correcta), true, 1_793_796_082).respuesta;
+        let r = corregir(q, Some(q.correcta), true, "2026-11-04T12:41:22Z".parse().unwrap()).respuesta;
         assert_eq!(
             r,
-            Respuesta { id: "a1".into(), ts: "2026-11-04T12:41:22Z".into(), resultado: Resultado::Acierto, seguro: true }
+            Respuesta {
+                id: "a1".into(),
+                ts: "2026-11-04T12:41:22Z".parse().unwrap(),
+                resultado: Resultado::Acierto,
+                seguro: true
+            }
         );
-        assert_eq!(corregir(q, Some(otra), false, 0).respuesta.resultado, Resultado::Fallo);
-        let blanco = corregir(q, None, true, 0).respuesta;
+        assert_eq!(corregir(q, Some(otra), false, Timestamp::UNIX_EPOCH).respuesta.resultado, Resultado::Fallo);
+        let blanco = corregir(q, None, true, Timestamp::UNIX_EPOCH).respuesta;
         assert_eq!((blanco.resultado, blanco.seguro), (Resultado::Blanco, false));
     }
 
@@ -1046,17 +1014,17 @@ mod tests {
         let q = &sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
         let otra = (q.correcta + 1) % 4;
         let fila = |c: Correccion| (c.paso, c.aviso);
-        assert_eq!(fila(corregir(q, Some(q.correcta), true, 0)), ("paso 1".into(), None));
+        assert_eq!(fila(corregir(q, Some(q.correcta), true, Timestamp::UNIX_EPOCH)), ("paso 1".into(), None));
         assert_eq!(
-            fila(corregir(q, Some(q.correcta), false, 0)),
+            fila(corregir(q, Some(q.correcta), false, Timestamp::UNIX_EPOCH)),
             ("paso 0".into(), Some("Acierto con «dudo»: cuenta como un fallo.".into()))
         );
         assert_eq!(
-            fila(corregir(q, Some(otra), true, 0)),
+            fila(corregir(q, Some(otra), true, Timestamp::UNIX_EPOCH)),
             ("paso 0".into(), Some("Fallo con «seguro»: una idea falsa. Repásala.".into()))
         );
-        assert_eq!(fila(corregir(q, Some(otra), false, 0)), ("paso 0".into(), None));
-        assert_eq!(fila(corregir(q, None, true, 0)), ("paso 0".into(), None));
+        assert_eq!(fila(corregir(q, Some(otra), false, Timestamp::UNIX_EPOCH)), ("paso 0".into(), None));
+        assert_eq!(fila(corregir(q, None, true, Timestamp::UNIX_EPOCH)), ("paso 0".into(), None));
     }
 
     #[test]
@@ -1075,15 +1043,18 @@ mod tests {
         assert_eq!(t.dudas[0].detalle.as_deref(), Some("1 de 1 «dudo»"));
     }
 
-    fn guardado(guardada: u64, ids: &[&str], resultados: &[Resultado]) -> Guardado {
+    fn guardado(guardada: i64, ids: &[&str], resultados: &[Resultado]) -> Guardado {
         let ids = ids.iter().map(|&i| i.into()).collect();
-        Guardado { guardada, ronda: Some(RondaGuardada { ids, resultados: resultados.to_vec(), simulacro: false, limite: None }) }
+        Guardado {
+            guardada: Timestamp::from_second(guardada).unwrap(),
+            ronda: Some(RondaGuardada { ids, resultados: resultados.to_vec(), simulacro: false, limite: None }),
+        }
     }
 
     #[test]
     fn gana_el_guardado_mas_nuevo() {
         let viejo = guardado(1, &["a1"], &[]);
-        let nuevo = Guardado { guardada: 2, ronda: None };
+        let nuevo = Guardado { guardada: Timestamp::from_second(2).unwrap(), ronda: None };
         assert_eq!(gana(viejo.clone(), nuevo.clone()), nuevo);
         assert_eq!(gana(nuevo.clone(), viejo.clone()), nuevo);
         assert_eq!(gana(viejo.clone(), guardado(1, &["b1"], &[])), viejo);
@@ -1103,7 +1074,10 @@ mod tests {
     fn una_ronda_con_una_pregunta_que_no_esta_en_el_banco_no_se_restaura() {
         let banco = [pregunta("a1", "a")];
         assert!(restaurar(&banco, &[], &guardado(1, &["a1", "x9"], &[]), &mut Azar::new(1)).is_none());
-        assert!(restaurar(&banco, &[], &Guardado { guardada: 1, ronda: None }, &mut Azar::new(1)).is_none());
+        assert!(
+            restaurar(&banco, &[], &Guardado { guardada: Timestamp::from_second(1).unwrap(), ronda: None }, &mut Azar::new(1))
+                .is_none()
+        );
     }
 
     #[test]

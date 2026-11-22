@@ -164,15 +164,12 @@ async fn responder(
     axum::Json(respuestas): axum::Json<Vec<Respuesta>>,
 ) -> Result<StatusCode, Response> {
     leer_examen(&carpetas, &examen).await?;
-    if respuestas.iter().any(|r| nucleo::segundos(&r.ts).is_none()) {
-        return Err((StatusCode::BAD_REQUEST, "La hora de una respuesta va como AAAA-MM-DDTHH:MM:SSZ").into_response());
-    }
     let _cerrojo = carpetas.cerrojo.lock().await;
-    let mut vistas: std::collections::HashSet<(String, String)> =
+    let mut vistas: std::collections::HashSet<(String, jiff::Timestamp)> =
         leer_historial(&carpetas, &examen).await?.into_iter().map(|r| (r.id, r.ts)).collect();
     let mut nuevas = String::new();
     for r in respuestas {
-        if vistas.insert((r.id.clone(), r.ts.clone())) {
+        if vistas.insert((r.id.clone(), r.ts)) {
             nuevas += &serde_json::to_string(&r).map_err(error_interno)?;
             nuevas += "\n";
         }
@@ -190,7 +187,7 @@ async fn responder(
 async fn leer_guardado(ruta: PathBuf) -> Result<Guardado, Response> {
     let texto = leer_si_existe(ruta).await?;
     if texto.is_empty() {
-        return Ok(Guardado { guardada: 0, ronda: None });
+        return Ok(Guardado { guardada: jiff::Timestamp::UNIX_EPOCH, ronda: None });
     }
     serde_json::from_slice(&texto).map_err(error_interno)
 }
