@@ -1,1 +1,2178 @@
-[]
+[
+  {
+    "id": "introduccion-001",
+    "concepto": "introduccion-nube-definicion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "Según la definición del NIST, ¿qué es la computación en la nube?",
+    "correcta": "Acceso por red a un conjunto compartido de recursos configurables, aprovisionados con poco esfuerzo de gestión",
+    "distractores": [
+      "Alquiler de un centro de datos físico que el cliente administra por completo",
+      "Conjunto de servidores propios de una organización, unidos por una red privada"
+    ],
+    "explicacion": "✓ El NIST define la nube como acceso por red a recursos compartidos y configurables, que se aprovisionan con poco esfuerzo de gestión.\n✗ «Alquiler de un centro de datos físico»: la nube comparte recursos y el cliente no los administra por completo.\n✗ «Servidores propios de una organización»: un conjunto compartido de recursos no es una infraestructura propia y privada."
+  },
+  {
+    "id": "introduccion-002",
+    "concepto": "introduccion-nube-definicion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "Una empresa pide servidores cuando los necesita y los libera al terminar, con poca gestión del proveedor. ¿Qué dice la definición del NIST que ilustra?",
+    "correcta": "Los recursos se aprovisionan y liberan rápido, con poco esfuerzo de gestión",
+    "distractores": [
+      "Los recursos pertenecen al cliente, que los gestiona desde su propio centro de datos",
+      "Los recursos se reservan por contrato para un cliente, durante un periodo fijo"
+    ],
+    "explicacion": "✓ La definición del NIST pide aprovisionar y liberar recursos rápido y con poco esfuerzo de gestión o de interacción con el proveedor.\n✗ «Los recursos pertenecen al cliente»: los recursos son del proveedor y se comparten.\n✗ «Se reservan por contrato»: la nube se ofrece bajo demanda, y no con una reserva fija."
+  },
+  {
+    "id": "introduccion-003",
+    "concepto": "introduccion-nube-definicion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "En 1961, John McCarthy anticipó la computación como un servicio comparable a otro. ¿A cuál?",
+    "correcta": "Al sistema telefónico, un servicio de utilidad pública",
+    "distractores": [
+      "Al correo postal, un servicio privado de cada empresa",
+      "A la radiodifusión, un servicio gratuito y sin medición"
+    ],
+    "explicacion": "✓ McCarthy comparó la computación con el sistema telefónico, una utilidad pública.\n✗ «Al correo postal»: McCarthy habló de una utilidad pública, y no de un servicio privado de cada empresa.\n✗ «A la radiodifusión»: una utilidad pública se mide y se paga por su uso, y no es gratuita."
+  },
+  {
+    "id": "introduccion-004",
+    "concepto": "introduccion-propiedades-nube",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "¿Qué significa «autoservicio bajo demanda» en la nube?",
+    "correcta": "El cliente contrata y libera recursos por sí mismo, sin intervención del proveedor",
+    "distractores": [
+      "El proveedor reserva recursos fijos para el cliente según un contrato anual",
+      "El cliente pide cada recurso a un técnico del proveedor, que lo instala"
+    ],
+    "explicacion": "✓ En el autoservicio bajo demanda el cliente aprovisiona sus recursos por sí mismo, cuando los necesita.\n✗ «Reserva recursos fijos»: el recurso se pide a demanda, y no se reserva con un contrato fijo.\n✗ «El cliente pide cada»: el cliente actúa por sí mismo, sin intervención humana del proveedor."
+  },
+  {
+    "id": "introduccion-005",
+    "concepto": "introduccion-propiedades-nube",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "¿Cómo se cobra el uso de los recursos en la nube, por su propiedad de medición?",
+    "correcta": "Según el uso medido de cada recurso",
+    "distractores": [
+      "Con una cuota fija por el hardware reservado, aunque no se use",
+      "Con un pago único por la compra de los servidores del proveedor"
+    ],
+    "explicacion": "✓ La nube mide el uso de los recursos y cobra por lo que se consume.\n✗ «Una cuota fija por el hardware»: el pago sigue al uso medido, y no a una reserva.\n✗ «Con un pago único»: el cliente no compra el hardware, y paga por uso."
+  },
+  {
+    "id": "introduccion-006",
+    "concepto": "introduccion-propiedades-nube",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    },
+    "pregunta": "¿Qué describe la propiedad de «acceso universal a través de la red» de la nube?",
+    "correcta": "Los servicios se usan desde cualquier lugar con conexión de red",
+    "distractores": [
+      "Los servicios se usan desde la red interna del proveedor",
+      "Los servicios se instalan en cada equipo del cliente que los usa"
+    ],
+    "explicacion": "✓ El acceso universal permite usar los servicios desde cualquier lugar con conexión de red.\n✗ «Desde la red interna del proveedor»: el acceso va por la red, y no se limita a la red interna del proveedor.\n✗ «Se instalan en cada equipo»: los servicios se consumen por la red, y no se instalan en cada equipo."
+  },
+  {
+    "id": "introduccion-007",
+    "concepto": "introduccion-aplicacion-escalado",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué es el escalado horizontal de una aplicación en la nube?",
+    "correcta": "Aumentar el número de componentes que atienden la carga",
+    "distractores": [
+      "Dar más CPU y memoria a la máquina que ya ejecuta la aplicación",
+      "Mover la aplicación a una región con más usuarios cercanos"
+    ],
+    "explicacion": "✓ El escalado horizontal sube el número de componentes que atienden el aumento de carga.\n✗ «Dar más CPU y memoria»: eso es escalar en vertical, sobre la misma máquina.\n✗ «Mover la aplicación a una región»: cambiar de región no aumenta los componentes que atienden la carga."
+  },
+  {
+    "id": "introduccion-008",
+    "concepto": "introduccion-aplicacion-escalado",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "Una tienda web suma 5 servidores idénticos en Navidad para atender más peticiones. ¿Qué escalado usa?",
+    "correcta": "Horizontal, porque aumenta el número de componentes",
+    "distractores": [
+      "Vertical, porque aumenta la capacidad total del conjunto",
+      "Ninguno, porque la nube reparte la carga sin añadir recursos"
+    ],
+    "explicacion": "✓ Sumar servidores idénticos es escalado horizontal: crece el número de componentes.\n✗ «Vertical»: el escalado vertical engorda una máquina, y no suma componentes.\n✗ «Ninguno»: atender más carga exige más recursos, y la nube los aprovisiona."
+  },
+  {
+    "id": "introduccion-009",
+    "concepto": "introduccion-aplicacion-escalado",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué es la elasticidad de una aplicación en la nube?",
+    "correcta": "Aprovisionar o liberar recursos para ajustarse a la demanda",
+    "distractores": [
+      "Repartir la carga entre componentes idénticos con un balanceador",
+      "Replicar los datos en varias zonas para evitar su pérdida"
+    ],
+    "explicacion": "✓ La elasticidad ajusta los recursos a la demanda: se aprovisionan al subir la carga y se liberan al bajar.\n✗ «Repartir la carga entre»: eso reparte el trabajo, pero no cambia los recursos.\n✗ «Replicar los datos en varias zonas»: eso da disponibilidad y no ajusta recursos a la demanda."
+  },
+  {
+    "id": "introduccion-010",
+    "concepto": "introduccion-aplicacion-sin-estado",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué ventaja da que la mayor parte de componentes de una aplicación en la nube no guarden estado?",
+    "correcta": "Se aprovisionan sin pérdida de información",
+    "distractores": [
+      "Se cifran de forma automática en el disco del proveedor",
+      "Se ejecutan en la misma máquina física de forma permanente"
+    ],
+    "explicacion": "✓ Un componente sin estado es independiente, y se aprovisiona sin perder información.\n✗ «Se cifran de forma»: el cifrado no depende de guardar o no el estado.\n✗ «Se ejecutan en la»: un componente sin estado puede crearse en cualquier máquina."
+  },
+  {
+    "id": "introduccion-011",
+    "concepto": "introduccion-aplicacion-sin-estado",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "Una instancia de una aplicación en la nube se destruye y no se pierde ningún dato de sus usuarios. ¿Qué propiedad lo explica?",
+    "correcta": "Sus componentes no guardan estado",
+    "distractores": [
+      "Sus componentes están muy acoplados",
+      "Su escalado es vertical"
+    ],
+    "explicacion": "✓ Los componentes sin estado se crean y destruyen sin perder información.\n✗ «Muy acoplados»: la nube pide un acoplamiento bajo entre componentes.\n✗ «Su escalado es vertical»: el escalado vertical no evita la pérdida de datos de una instancia."
+  },
+  {
+    "id": "introduccion-012",
+    "concepto": "introduccion-aplicacion-sin-estado",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué relación tiene el diseño sin estado con el escalado horizontal?",
+    "correcta": "Permite añadir o quitar componentes independientes sin perder información",
+    "distractores": [
+      "Obliga a que cada componente tenga una copia de todos los datos de usuario",
+      "Impide que la aplicación se reparta entre varias máquinas a la vez"
+    ],
+    "explicacion": "✓ Con componentes independientes y sin estado, añadir o quitar uno no pierde información.\n✗ «Una copia de todos los datos»: el diseño sin estado evita guardar datos en el componente.\n✗ «Impide que la aplicación»: un componente sin estado se reparte con facilidad entre máquinas."
+  },
+  {
+    "id": "introduccion-013",
+    "concepto": "introduccion-aplicacion-distribuida",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué significa que una aplicación en la nube sea distribuida?",
+    "correcta": "Sus componentes interaccionan a través de la red, con bajo acoplamiento",
+    "distractores": [
+      "Sus componentes comparten la memoria de una misma máquina potente",
+      "Sus componentes se copian a cada equipo cliente para ejecutarse allí"
+    ],
+    "explicacion": "✓ Una aplicación distribuida tiene componentes que interaccionan por red y con bajo acoplamiento.\n✗ «Comparten la memoria»: los componentes se comunican por red, y no comparten memoria.\n✗ «Se copian a cada equipo cliente»: los componentes se ejecutan en la infraestructura, y no en el cliente."
+  },
+  {
+    "id": "introduccion-014",
+    "concepto": "introduccion-aplicacion-distribuida",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué automatiza la gestión de una aplicación en la nube?",
+    "correcta": "La monitorización de la carga y el aprovisionamiento con las interfaces del proveedor",
+    "distractores": [
+      "La redacción de los acuerdos de nivel de servicio con el proveedor",
+      "La instalación manual de cada servidor por el equipo de operaciones del cliente"
+    ],
+    "explicacion": "✓ La gestión automatizada vigila la carga y aprovisiona recursos con las interfaces de gestión del proveedor.\n✗ «La redacción de los acuerdos»: los acuerdos de servicio son contratos, y no se automatizan con la gestión.\n✗ «La instalación manual»: la gestión automatizada evita las tareas manuales."
+  },
+  {
+    "id": "introduccion-015",
+    "concepto": "introduccion-aplicacion-distribuida",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué se monitoriza en una aplicación en la nube para escalarla de forma automática?",
+    "correcta": "La carga de trabajo",
+    "distractores": [
+      "El número de usuarios con permiso de administración",
+      "La antigüedad del hardware del proveedor"
+    ],
+    "explicacion": "✓ La gestión automatizada monitoriza la carga de trabajo para decidir cuándo escalar.\n✗ «El número de usuarios»: no indican cuánta carga tiene la aplicación.\n✗ «La antigüedad del hardware»: el cliente no gestiona el hardware, y no decide el escalado."
+  },
+  {
+    "id": "introduccion-016",
+    "concepto": "introduccion-ventajas-gestion-delegada",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "En una nube pública, ¿qué gestión de la ubicación deja el cliente en manos del proveedor?",
+    "correcta": "La climatización, el consumo eléctrico y el acceso físico",
+    "distractores": [
+      "La configuración de las reglas del cortafuegos de la aplicación",
+      "La definición de los roles de los usuarios de la aplicación"
+    ],
+    "explicacion": "✓ El proveedor se encarga de la ubicación: climatización, consumo eléctrico y acceso físico.\n✗ «Las reglas del cortafuegos»: esa configuración sigue en manos del cliente.\n✗ «Los roles de los usuarios»: los usuarios de la aplicación los gestiona el cliente."
+  },
+  {
+    "id": "introduccion-017",
+    "concepto": "introduccion-ventajas-gestion-delegada",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué tarea de gestión de hardware ahorra el cliente al usar la nube?",
+    "correcta": "Adquirir, ampliar, reparar y migrar los equipos",
+    "distractores": [
+      "Escribir el código de la aplicación en cada versión",
+      "Elegir qué datos guarda la aplicación de cada usuario"
+    ],
+    "explicacion": "✓ El proveedor gestiona el hardware: adquisiciones, ampliaciones, reparaciones y migraciones.\n✗ «Escribir el código»: el desarrollo de la aplicación sigue siendo del cliente.\n✗ «Elegir qué datos guarda»: qué datos se guardan es una decisión del cliente."
+  },
+  {
+    "id": "introduccion-018",
+    "concepto": "introduccion-ventajas-gestion-delegada",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué ventaja de gestión de red da la nube al cliente?",
+    "correcta": "El proveedor se ocupa de las líneas, la redundancia y el hardware de red",
+    "distractores": [
+      "El cliente controla las líneas de comunicación de cada centro de datos",
+      "El cliente configura el hardware de red de las instalaciones del proveedor"
+    ],
+    "explicacion": "✓ La gestión de red de la infraestructura (líneas, redundancia y hardware) pasa al proveedor.\n✗ «El cliente controla las líneas»: las líneas de comunicaciones las gestiona el proveedor.\n✗ «El cliente configura el hardware de red»: la configuración de los equipos de red es del proveedor."
+  },
+  {
+    "id": "introduccion-019",
+    "concepto": "introduccion-ventajas-costes",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué cambio de costes trae la nube respecto a tener infraestructura propia?",
+    "correcta": "Costes operativos en lugar de costes inventariables",
+    "distractores": [
+      "Costes inventariables en lugar de costes operativos",
+      "Costes fijos por hardware en lugar de costes por uso"
+    ],
+    "explicacion": "✓ La nube sustituye costes inventariables (compra de equipos) por costes operativos.\n✗ «Costes inventariables en lugar»: es el cambio inverso: la nube evita comprar equipos.\n✗ «Costes fijos por hardware»: la nube cobra por uso, y no por hardware fijo."
+  },
+  {
+    "id": "introduccion-020",
+    "concepto": "introduccion-ventajas-costes",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Por qué en la nube no hay depreciación de los recursos del cliente?",
+    "correcta": "Porque el cliente alquila los recursos y no los compra",
+    "distractores": [
+      "Porque el hardware del proveedor no envejece con el tiempo",
+      "Porque el proveedor repone gratis el equipo averiado"
+    ],
+    "explicacion": "✓ Sin compra no hay activo que pierda valor: el cliente alquila los recursos y paga por uso.\n✗ «Porque el hardware del»: el hardware envejece, pero lo asume el proveedor.\n✗ «Repone gratis»: la reposición es un coste del proveedor, y no una razón contable de depreciación."
+  },
+  {
+    "id": "introduccion-021",
+    "concepto": "introduccion-ventajas-costes",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    },
+    "pregunta": "Una empresa paga solo por las horas de máquina virtual que usa. ¿Qué ventaja de la nube aprovecha?",
+    "correcta": "El pago por uso, sin inversión inicial en equipos",
+    "distractores": [
+      "El pago por adelantado de la capacidad máxima prevista",
+      "La amortización del hardware durante varios años"
+    ],
+    "explicacion": "✓ El pago por uso evita comprar equipos: el cliente solo paga el tiempo de uso.\n✗ «El pago por adelantado»: el pago sigue al uso, y no a una previsión.\n✗ «La amortización del hardware»: el cliente no compra hardware, y no tiene nada que amortizar."
+  },
+  {
+    "id": "introduccion-022",
+    "concepto": "introduccion-inconveniente-lock-in",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué es el lock-in con un proveedor de la nube?",
+    "correcta": "La dificultad de migrar a otro proveedor por los requisitos del actual",
+    "distractores": [
+      "El bloqueo de las cuentas de usuario tras varios intentos fallidos de acceso",
+      "La pérdida de los datos cuando se cancela el contrato con el proveedor"
+    ],
+    "explicacion": "✓ El lock-in es la dependencia que dificulta migrar a otro proveedor, por sus requisitos propios.\n✗ «El bloqueo de las cuentas»: eso es un mecanismo de autenticación, y no una dependencia del proveedor.\n✗ «La pérdida de los datos»: el lock-in impide migrar, y no tiene que destruir los datos."
+  },
+  {
+    "id": "introduccion-023",
+    "concepto": "introduccion-inconveniente-lock-in",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "Una aplicación usa servicios que solo existen en un proveedor, y migrar sale muy caro. ¿Qué inconveniente de la nube sufre?",
+    "correcta": "La dependencia de terceros",
+    "distractores": [
+      "La pérdida de gobernanza",
+      "El borrado inseguro de datos"
+    ],
+    "explicacion": "✓ Los servicios exclusivos de un proveedor crean dependencia de terceros, y migrar cuesta mucho.\n✗ «La pérdida de gobernanza»: es la falta de control sobre decisiones y recursos, y no el coste de migrar.\n✗ «El borrado inseguro»: trata de restos de datos tras eliminarlos, y no de migrar."
+  },
+  {
+    "id": "introduccion-024",
+    "concepto": "introduccion-inconveniente-lock-in",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "Además del lock-in, ¿qué riesgo de la dependencia de terceros cita el temario?",
+    "correcta": "La desaparición o adquisición del proveedor",
+    "distractores": [
+      "El aumento del número de empleados del cliente",
+      "La obsolescencia de los equipos del cliente"
+    ],
+    "explicacion": "✓ El temario cita la desaparición o adquisición del proveedor como riesgo de depender de él.\n✗ «El aumento del número»: no tiene relación con depender de un proveedor.\n✗ «La obsolescencia de los»: el cliente en la nube no tiene equipos propios que se queden obsoletos."
+  },
+  {
+    "id": "introduccion-025",
+    "concepto": "introduccion-inconveniente-perdida-control",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué supone la pérdida de control de recursos al pasar a la nube?",
+    "correcta": "Limitaciones de configuración, de disponibilidad y de gobernanza",
+    "distractores": [
+      "La obligación de comprar el hardware donde se ejecutan los recursos",
+      "La imposibilidad de usar más de un servicio a la vez"
+    ],
+    "explicacion": "✓ El cliente depende del proveedor para configurar los recursos, garantizar su disponibilidad y gobernarlos.\n✗ «Comprar el hardware»: en la nube el cliente no compra el hardware.\n✗ «La imposibilidad de usar»: la nube permite combinar muchos servicios."
+  },
+  {
+    "id": "introduccion-026",
+    "concepto": "introduccion-inconveniente-perdida-control",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "Un cliente no puede cambiar un ajuste del servicio porque el proveedor no lo permite. ¿Qué inconveniente de la nube sufre?",
+    "correcta": "La pérdida de control de recursos",
+    "distractores": [
+      "La dependencia de terceros",
+      "El incumplimiento de la legislación"
+    ],
+    "explicacion": "✓ Un ajuste que el proveedor no permite es una limitación de configuración, y entra en la pérdida de control.\n✗ «La dependencia de terceros»: se refiere a la dificultad de cambiar de proveedor.\n✗ «El incumplimiento de la legislación»: trata de la ubicación de los datos y de las normas nacionales."
+  },
+  {
+    "id": "introduccion-027",
+    "concepto": "introduccion-inconveniente-perdida-control",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué es la pérdida de gobernanza en la nube?",
+    "correcta": "El cliente deja de decidir sobre parte de los recursos y servicios",
+    "distractores": [
+      "El cliente deja de recibir las facturas de los servicios que contrató",
+      "El cliente deja de poder elegir el lenguaje de programación de su aplicación"
+    ],
+    "explicacion": "✓ La pérdida de gobernanza es la falta de capacidad del cliente para decidir sobre recursos que gestiona el proveedor.\n✗ «Deja de recibir las facturas»: no tiene relación con el control de los recursos.\n✗ «Deja de poder elegir el lenguaje»: el lenguaje lo elige el cliente."
+  },
+  {
+    "id": "introduccion-028",
+    "concepto": "introduccion-inconveniente-seguridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué riesgo de seguridad tiene la nube al borrar datos?",
+    "correcta": "El borrado puede ser incompleto o inseguro",
+    "distractores": [
+      "El borrado exige permiso de las autoridades",
+      "El borrado se hace con cifrado de los datos"
+    ],
+    "explicacion": "✓ El temario cita el borrado incompleto o inseguro de datos como riesgo de seguridad en la nube.\n✗ «Exige permiso de las autoridades»: no es un riesgo de seguridad.\n✗ «El borrado se hace»: no es un riesgo, y el temario no lo afirma."
+  },
+  {
+    "id": "introduccion-029",
+    "concepto": "introduccion-inconveniente-seguridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Por qué el análisis forense es más difícil en la nube?",
+    "correcta": "El cliente no controla la infraestructura física donde ocurrió el incidente",
+    "distractores": [
+      "Los datos de la nube no dejan ningún registro de la actividad del cliente",
+      "El proveedor tiene prohibido colaborar con el cliente en una investigación"
+    ],
+    "explicacion": "✓ El cliente no accede a la infraestructura que gestiona el proveedor, y por eso el análisis forense se complica.\n✗ «No dejan ningún registro»: la nube genera registros, aunque el cliente no accede a todos.\n✗ «Tiene prohibido colaborar»: eso no es una regla de la nube."
+  },
+  {
+    "id": "introduccion-030",
+    "concepto": "introduccion-inconveniente-seguridad",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué inconveniente de seguridad nace de repartir tareas entre cliente y proveedor?",
+    "correcta": "La responsabilidad compartida",
+    "distractores": [
+      "El escalado horizontal",
+      "El pago por uso"
+    ],
+    "explicacion": "✓ Repartir la seguridad entre proveedor y cliente es la responsabilidad compartida.\n✗ «El escalado horizontal»: es una propiedad de las aplicaciones y no un inconveniente de seguridad.\n✗ «El pago por uso»: es un modo de cobro, y no un reparto de seguridad."
+  },
+  {
+    "id": "introduccion-031",
+    "concepto": "introduccion-legislacion-ubicacion-datos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué aspecto legal importa del lugar donde el proveedor guarda los datos en la nube?",
+    "correcta": "La regulación nacional de cada país donde se almacenan",
+    "distractores": [
+      "El idioma de los centros de datos de ese país",
+      "El precio de la energía en cada centro de datos"
+    ],
+    "explicacion": "✓ La ubicación de los datos los somete a la legislación y las regulaciones nacionales del lugar donde estén.\n✗ «El idioma»: el idioma no afecta a la legislación sobre datos.\n✗ «El precio de la energía»: es un coste de operación, y no un aspecto legal."
+  },
+  {
+    "id": "introduccion-032",
+    "concepto": "introduccion-legislacion-ubicacion-datos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    },
+    "pregunta": "Una empresa europea guarda datos personales en un centro de datos de otro continente. ¿Qué inconveniente de la nube sufre?",
+    "correcta": "Legislación: la ubicación de los datos y las regulaciones nacionales",
+    "distractores": [
+      "Lock-in: los datos se leen con las herramientas del proveedor",
+      "Escalado: los datos tardan más en copiarse entre regiones"
+    ],
+    "explicacion": "✓ Dónde se guardan los datos determina qué regulaciones nacionales se aplican.\n✗ «Lock-in»: trata de la dificultad de migrar de proveedor.\n✗ «Escalado»: trata de ajustar recursos a la carga, y no de la normativa."
+  },
+  {
+    "id": "introduccion-033",
+    "concepto": "introduccion-legislacion-ubicacion-datos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "En los servicios en la nube, ¿qué abarca el apartado de legislación y regulaciones?",
+    "correcta": "Seguridad de los datos, su localización, la privacidad y la jurisprudencia",
+    "distractores": [
+      "Precio de los servicios, descuentos y condiciones de facturación del proveedor",
+      "Elección del hipervisor, de la red y del sistema operativo de los servidores"
+    ],
+    "explicacion": "✓ El apartado de legislación incluye seguridad y localización de los datos, privacidad y jurisprudencia.\n✗ «Precio de los servicios»: son aspectos comerciales, y no legales.\n✗ «Elección del hipervisor»: son decisiones técnicas del proveedor."
+  },
+  {
+    "id": "introduccion-034",
+    "concepto": "introduccion-virtualizacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué es la virtualización?",
+    "correcta": "La abstracción de los recursos de un ordenador real",
+    "distractores": [
+      "La emulación de las llamadas al sistema operativo",
+      "La copia de un ordenador a otro por la red"
+    ],
+    "explicacion": "✓ La virtualización abstrae los recursos de un ordenador real (CPU, memoria, almacenamiento y red).\n✗ «La emulación de las llamadas»: los emuladores de llamadas al SO, como Wine, son otra cosa.\n✗ «La copia de un ordenador»: copiar un equipo no abstrae sus recursos."
+  },
+  {
+    "id": "introduccion-035",
+    "concepto": "introduccion-virtualizacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Por qué una máquina virtual es portable?",
+    "correcta": "Su estado puede guardarse en un fichero, para moverla o hacer una copia",
+    "distractores": [
+      "Su hardware es físico y se transporta junto con la máquina virtual",
+      "Su sistema operativo se ejecuta sin necesidad de un hipervisor intermedio"
+    ],
+    "explicacion": "✓ El estado de una máquina virtual cabe en un fichero, y eso permite su movilidad y su backup.\n✗ «Su hardware es físico»: el hardware es virtual, y no se transporta.\n✗ «Su sistema operativo se»: el hipervisor permite la abstracción del hardware."
+  },
+  {
+    "id": "introduccion-036",
+    "concepto": "introduccion-virtualizacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿En qué se diferencia la virtualización de un emulador de llamadas al sistema operativo, como Wine?",
+    "correcta": "La virtualización abstrae el hardware, y el emulador imita llamadas del sistema operativo",
+    "distractores": [
+      "La virtualización imita llamadas del sistema operativo, y el emulador abstrae el hardware",
+      "La virtualización requiere más hardware físico que el emulador, sin otra diferencia"
+    ],
+    "explicacion": "✓ La virtualización abstrae recursos de hardware. Wine, WSL1 y Bochs actúan a nivel de llamadas del sistema operativo.\n✗ «La virtualización imita llamadas»: es la descripción cambiada de los dos.\n✗ «Requiere más hardware»: la diferencia es el nivel de abstracción, y no la cantidad de hardware."
+  },
+  {
+    "id": "introduccion-037",
+    "concepto": "introduccion-tipos-de-hipervisor",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué es un hipervisor de tipo 1 (bare metal)?",
+    "correcta": "Una capa con acceso directo al hardware",
+    "distractores": [
+      "Un programa que corre sobre un sistema operativo anfitrión",
+      "Un emulador de llamadas del sistema operativo"
+    ],
+    "explicacion": "✓ El tipo 1 accede de forma directa al hardware, y por eso requiere soporte del procesador.\n✗ «Corre sobre un sistema operativo anfitrión»: es el hipervisor de tipo 2.\n✗ «Un emulador de llamadas»: un emulador no es un hipervisor."
+  },
+  {
+    "id": "introduccion-038",
+    "concepto": "introduccion-tipos-de-hipervisor",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Cómo accede al hardware un hipervisor de tipo 2?",
+    "correcta": "Colabora con el sistema operativo anfitrión sobre el que trabaja",
+    "distractores": [
+      "Tiene acceso directo y exclusivo, sin ningún otro sistema en medio",
+      "Lo hace con un controlador de red que le proporciona el proveedor"
+    ],
+    "explicacion": "✓ El tipo 2 trabaja sobre un anfitrión y colabora con él para acceder al hardware (VirtualBox, VMware Player, QEMU).\n✗ «Acceso directo y exclusivo»: es el tipo 1.\n✗ «Un controlador de red»: no es el mecanismo de acceso del hipervisor."
+  },
+  {
+    "id": "introduccion-039",
+    "concepto": "introduccion-tipos-de-hipervisor",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué requiere un hipervisor de tipo 1 al procesador?",
+    "correcta": "Instrucciones específicas de virtualización, como Intel VT-x o AMD-V",
+    "distractores": [
+      "Un número mínimo de núcleos de procesamiento por cada máquina",
+      "Una arquitectura distinta de la del sistema operativo anfitrión instalado"
+    ],
+    "explicacion": "✓ El tipo 1 usa instrucciones del procesador para controlar la virtualización: Intel VT-x o AMD-V.\n✗ «Un número mínimo de núcleos»: el temario pide instrucciones específicas, y no un número de núcleos.\n✗ «Una arquitectura distinta»: no hay una exigencia de arquitectura distinta."
+  },
+  {
+    "id": "introduccion-040",
+    "concepto": "introduccion-clustering-y-computacion-distribuida",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué es el clustering de equipos?",
+    "correcta": "Equipos similares con tareas comunes y reparto transparente de carga",
+    "distractores": [
+      "Equipos distintos unidos por red, con servicios intermedios entre ellos",
+      "Un único equipo dividido en varias máquinas virtuales independientes"
+    ],
+    "explicacion": "✓ El clustering une equipos similares para tareas comunes, con un reparto transparente de la carga.\n✗ «Equipos distintos unidos por red»: es la computación distribuida.\n✗ «Un único equipo dividido»: es virtualización, y no clustering de equipos."
+  },
+  {
+    "id": "introduccion-041",
+    "concepto": "introduccion-clustering-y-computacion-distribuida",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué hace el middleware en la computación distribuida?",
+    "correcta": "Ofrece servicios intermedios para que los componentes interaccionen",
+    "distractores": [
+      "Reparte la carga entre los equipos idénticos de un clúster",
+      "Abstrae el hardware de un equipo para crear máquinas virtuales"
+    ],
+    "explicacion": "✓ El middleware es el servicio intermedio con el que interaccionan los componentes de equipos diferentes.\n✗ «Reparte la carga entre»: es el clustering.\n✗ «Abstrae el hardware»: es la virtualización."
+  },
+  {
+    "id": "introduccion-042",
+    "concepto": "introduccion-clustering-y-computacion-distribuida",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué tipo de equipos conecta la computación distribuida?",
+    "correcta": "Equipos diferentes conectados a través de red",
+    "distractores": [
+      "Equipos similares con tareas comunes",
+      "Máquinas virtuales de un mismo equipo físico"
+    ],
+    "explicacion": "✓ La computación distribuida conecta equipos diferentes por red.\n✗ «Equipos similares»: es el clustering.\n✗ «Máquinas virtuales de un mismo equipo»: eso es virtualización."
+  },
+  {
+    "id": "introduccion-043",
+    "concepto": "introduccion-tipos-de-nube",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué es una nube compartida?",
+    "correcta": "Una nube de gestión y uso comunes a varias organizaciones, como RedIRIS",
+    "distractores": [
+      "Una nube de gestión y uso exclusivos de una sola organización",
+      "Una nube ofrecida como servicio al público en general, de pago"
+    ],
+    "explicacion": "✓ La nube compartida la gestionan y usan varias organizaciones o unidades, como RedIRIS o la Red SARA.\n✗ «Una sola organización»: es la nube privada.\n✗ «Al público en general»: es la nube pública."
+  },
+  {
+    "id": "introduccion-044",
+    "concepto": "introduccion-tipos-de-nube",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué es una nube híbrida?",
+    "correcta": "Sistemas desplegados entre tipos de nubes distintos que interaccionan",
+    "distractores": [
+      "Una nube privada con varios centros de proceso de datos propios",
+      "Un servicio público con precios distintos según el tipo de cliente"
+    ],
+    "explicacion": "✓ La híbrida combina sistemas desplegados en tipos de nubes distintos que interaccionan entre ellos.\n✗ «Una nube privada con varios centros»: sigue siendo una nube privada.\n✗ «Un servicio público con precios»: los precios no definen el tipo de nube."
+  },
+  {
+    "id": "introduccion-045",
+    "concepto": "introduccion-tipos-de-nube",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "Una administración usa sus propios centros de proceso de datos, de uso exclusivo. ¿Qué tipo de nube es?",
+    "correcta": "Privada",
+    "distractores": [
+      "Compartida",
+      "Pública"
+    ],
+    "explicacion": "✓ La nube privada es de gestión y uso exclusivos de una organización, como los centros de datos de una entidad.\n✗ «Compartida»: la usan varias organizaciones.\n✗ «Pública»: se ofrece como servicio al público en general."
+  },
+  {
+    "id": "introduccion-046",
+    "concepto": "introduccion-disponibilidad-multiplicativa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Cómo se calcula la disponibilidad global de un conjunto de componentes en serie?",
+    "correcta": "Se multiplican las disponibilidades, y el resultado es menor",
+    "distractores": [
+      "Se suman las disponibilidades, y el resultado es mayor",
+      "Se toma la mayor de las disponibilidades de los componentes"
+    ],
+    "explicacion": "✓ La disponibilidad global es multiplicativa, y por eso decrece al sumar componentes.\n✗ «Se suman»: la suma no se usa, y la disponibilidad global baja.\n✗ «La mayor»: el conjunto es menos disponible que su mejor componente."
+  },
+  {
+    "id": "introduccion-047",
+    "concepto": "introduccion-disponibilidad-multiplicativa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "Una aplicación depende de una máquina virtual y de una base de datos, con un 99,9 % de disponibilidad cada una. ¿Qué disponibilidad global tiene?",
+    "correcta": "Menos del 99,9 %, porque se multiplican",
+    "distractores": [
+      "Exactamente el 99,9 %, porque es la de cada componente",
+      "Más del 99,9 %, porque un componente respalda al otro"
+    ],
+    "explicacion": "✓ 0,999 × 0,999 da menos de 0,999: la disponibilidad global decrece.\n✗ «Exactamente el 99,9 %»: un valor multiplicado por otro menor que 1 baja.\n✗ «Más del 99,9 %»: no hay respaldo entre ellos, y los fallos se acumulan."
+  },
+  {
+    "id": "introduccion-048",
+    "concepto": "introduccion-disponibilidad-multiplicativa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué significa que un recurso esté disponible?",
+    "correcta": "Que es accesible y realiza su función",
+    "distractores": [
+      "Que está encendido, aunque nadie pueda usarlo",
+      "Que tiene copia de seguridad en otra zona"
+    ],
+    "explicacion": "✓ Un recurso disponible es accesible y realiza su función.\n✗ «Encendido, aunque nadie pueda usarlo»: un recurso que no es accesible no está disponible.\n✗ «Copia de seguridad en otra zona»: eso es resiliencia, y no define la disponibilidad."
+  },
+  {
+    "id": "introduccion-049",
+    "concepto": "introduccion-disponibilidad-modalidades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "En un SLA con disponibilidad por componente, ¿a qué se aplica el porcentaje garantizado?",
+    "correcta": "A un recurso concreto, como una máquina virtual o una base de datos",
+    "distractores": [
+      "Al entorno, como poder lanzar máquinas o replicar entre zonas",
+      "Al conjunto de todos los servicios que contrata el cliente"
+    ],
+    "explicacion": "✓ La modalidad por componente garantiza disponibilidad de un recurso concreto, como una máquina virtual.\n✗ «Al entorno»: es la disponibilidad por entorno.\n✗ «Al conjunto de todos»: el SLA fija el porcentaje por componente o por entorno."
+  },
+  {
+    "id": "introduccion-050",
+    "concepto": "introduccion-disponibilidad-modalidades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué garantiza la disponibilidad por entorno de un SLA?",
+    "correcta": "Poder lanzar nuevas máquinas o replicar en varias zonas",
+    "distractores": [
+      "Que cada máquina virtual funciona un porcentaje fijo del tiempo",
+      "Que la aplicación del cliente no falla por sus propios errores"
+    ],
+    "explicacion": "✓ La disponibilidad por entorno cubre la capacidad de lanzar máquinas o replicar entre zonas.\n✗ «Cada máquina virtual»: es la disponibilidad por componente.\n✗ «Que la aplicación del»: la aplicación del cliente no entra en el SLA del proveedor."
+  },
+  {
+    "id": "introduccion-051",
+    "concepto": "introduccion-disponibilidad-modalidades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué se dice de aumentar el factor de disponibilidad por entorno?",
+    "correcta": "Es costoso",
+    "distractores": [
+      "Es gratuito para el proveedor",
+      "Es imposible"
+    ],
+    "explicacion": "✓ Aumentar la disponibilidad por entorno es costoso.\n✗ «Gratuito»: tiene un coste alto.\n✗ «Imposible»: es posible, pero costoso."
+  },
+  {
+    "id": "introduccion-052",
+    "concepto": "introduccion-responsabilidad-compartida",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "En la responsabilidad compartida, ¿cuáles son aspectos de seguridad que se reparten entre proveedor y cliente?",
+    "correcta": "La red, el balanceo de carga, la detección de fallos y las claves de cifrado",
+    "distractores": [
+      "El diseño de las instalaciones del cliente y el personal que las atiende",
+      "Las leyes del país donde reside el cliente y las de su proveedor"
+    ],
+    "explicacion": "✓ Entre proveedor y cliente se reparten la red, el balanceo, la detección de fallos y la seguridad de las claves de cifrado.\n✗ «El diseño de las instalaciones»: el cliente de la nube no tiene instalaciones que reparta.\n✗ «Las leyes del país»: la legislación no se reparte por contrato."
+  },
+  {
+    "id": "introduccion-053",
+    "concepto": "introduccion-responsabilidad-compartida",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 13
+    },
+    "pregunta": "En IaaS, ¿qué gestiona el cliente hacia arriba desde la virtualización?",
+    "correcta": "El sistema operativo y todo lo que corre encima",
+    "distractores": [
+      "Las funciones de la aplicación",
+      "El hardware y la virtualización"
+    ],
+    "explicacion": "✓ En IaaS el proveedor gestiona hardware y virtualización, y el cliente gestiona el sistema operativo y lo que hay encima.\n✗ «Las funciones de la»: en IaaS el cliente también gestiona sistema operativo, ejecución y aplicación.\n✗ «El hardware y la virtualización»: los gestiona el proveedor."
+  },
+  {
+    "id": "introduccion-054",
+    "concepto": "introduccion-responsabilidad-compartida",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 13
+    },
+    "pregunta": "En FaaS, ¿qué gestiona el cliente?",
+    "correcta": "Solo la función",
+    "distractores": [
+      "La aplicación y el entorno de ejecución",
+      "El sistema operativo y el contenedor"
+    ],
+    "explicacion": "✓ En FaaS el cliente solo gestiona su función, y el proveedor gestiona el resto de capas.\n✗ «La aplicación y el entorno de ejecución»: en FaaS los gestiona el proveedor.\n✗ «El sistema operativo y el contenedor»: en FaaS los gestiona el proveedor."
+  },
+  {
+    "id": "introduccion-055",
+    "concepto": "introduccion-iaas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Qué ofrece el proveedor en IaaS?",
+    "correcta": "Máquinas virtuales genéricas, almacenamiento y redes virtuales",
+    "distractores": [
+      "Un sistema operativo configurado con herramientas de desarrollo",
+      "Una aplicación lista, accesible por Internet"
+    ],
+    "explicacion": "✓ IaaS ofrece máquinas virtuales genéricas, almacenamiento virtual y redes virtuales.\n✗ «Un sistema operativo configurado»: es PaaS.\n✗ «Una aplicación lista»: es SaaS."
+  },
+  {
+    "id": "introduccion-056",
+    "concepto": "introduccion-iaas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 10
+    },
+    "pregunta": "En IaaS, ¿qué debe hacer el cliente?",
+    "correcta": "Instalar y gestionar el sistema y las aplicaciones",
+    "distractores": [
+      "Configurar funcionalidades y gestionar usuarios",
+      "Subir el código de sus funciones"
+    ],
+    "explicacion": "✓ En IaaS el cliente instala y gestiona el sistema y sus aplicaciones, y configura los recursos.\n✗ «Configurar funcionalidades y gestionar»: es SaaS.\n✗ «Subir el código de»: es FaaS."
+  },
+  {
+    "id": "introduccion-057",
+    "concepto": "introduccion-iaas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Cuál es un ejemplo de IaaS?",
+    "correcta": "Amazon EC2",
+    "distractores": [
+      "Heroku",
+      "Google Workspace"
+    ],
+    "explicacion": "✓ Amazon EC2 es IaaS: ofrece máquinas virtuales genéricas.\n✗ «Heroku»: es PaaS.\n✗ «Google Workspace»: es SaaS."
+  },
+  {
+    "id": "introduccion-058",
+    "concepto": "introduccion-paas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué ofrece el proveedor en PaaS?",
+    "correcta": "Máquinas virtuales con el sistema operativo preconfigurado y herramientas de desarrollo",
+    "distractores": [
+      "Máquinas virtuales genéricas, sin sistema operativo ni herramientas de desarrollo",
+      "Una aplicación completa, lista para usar por Internet desde cualquier navegador"
+    ],
+    "explicacion": "✓ En PaaS el proveedor gestiona la infraestructura y ofrece el sistema preconfigurado con herramientas de desarrollo.\n✗ «Máquinas virtuales genéricas, sin»: es IaaS.\n✗ «Una aplicación completa»: es SaaS."
+  },
+  {
+    "id": "introduccion-059",
+    "concepto": "introduccion-paas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "En PaaS, ¿qué gestiona el cliente?",
+    "correcta": "La instalación y gestión de sus aplicaciones",
+    "distractores": [
+      "La infraestructura y las actualizaciones del sistema",
+      "Los usuarios de una aplicación del proveedor"
+    ],
+    "explicacion": "✓ En PaaS el cliente instala y gestiona sus aplicaciones, y ajusta el entorno.\n✗ «La infraestructura»: la gestiona el proveedor en PaaS.\n✗ «Los usuarios de una»: es SaaS."
+  },
+  {
+    "id": "introduccion-060",
+    "concepto": "introduccion-paas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué servicios complementarios suele ofrecer un PaaS?",
+    "correcta": "Bases de datos, colas de mensajes y balanceadores de carga",
+    "distractores": [
+      "Líneas de comunicaciones, climatización y acceso físico a los equipos",
+      "Aplicaciones de ofimática y correo electrónico para los empleados"
+    ],
+    "explicacion": "✓ Un PaaS añade servicios como bases de datos, colas de mensajes y balanceadores.\n✗ «Líneas de comunicaciones»: son gestión de infraestructura, y no servicios de plataforma.\n✗ «Ofimática y correo»: son SaaS."
+  },
+  {
+    "id": "introduccion-061",
+    "concepto": "introduccion-caas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué proporciona el cliente en CaaS?",
+    "correcta": "Un contenedor con el programa y sus recursos",
+    "distractores": [
+      "Una función que se ejecuta ante eventos",
+      "Una máquina virtual completa con su sistema"
+    ],
+    "explicacion": "✓ En CaaS el cliente aporta un contenedor con su programa y sus bibliotecas.\n✗ «Una función»: es FaaS.\n✗ «Una máquina virtual completa»: es IaaS."
+  },
+  {
+    "id": "introduccion-062",
+    "concepto": "introduccion-caas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Dónde se ejecuta un contenedor en CaaS?",
+    "correcta": "De forma restringida sobre el núcleo del sistema operativo anfitrión",
+    "distractores": [
+      "Sobre su propio núcleo, dentro de una máquina virtual dedicada al contenedor",
+      "Directamente sobre el hardware del proveedor, sin sistema anfitrión"
+    ],
+    "explicacion": "✓ Los contenedores comparten el núcleo del sistema operativo anfitrión, con restricciones.\n✗ «Su propio núcleo»: un contenedor usa el núcleo del anfitrión.\n✗ «Directamente sobre el hardware»: el contenedor usa el sistema anfitrión."
+  },
+  {
+    "id": "introduccion-063",
+    "concepto": "introduccion-caas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué ventaja tienen los contenedores como servicio entre proveedores?",
+    "correcta": "Son compatibles entre proveedores",
+    "distractores": [
+      "Exigen usar el mismo proveedor",
+      "Eliminan el escalado de la aplicación"
+    ],
+    "explicacion": "✓ CaaS ofrece compatibilidad entre proveedores.\n✗ «El mismo proveedor»: no es una ventaja y es falso.\n✗ «Eliminan el escalado»: no lo elimina."
+  },
+  {
+    "id": "introduccion-064",
+    "concepto": "introduccion-faas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué hace el cliente en FaaS?",
+    "correcta": "Proporciona código que se ejecuta ante eventos, mensajes o peticiones HTTP",
+    "distractores": [
+      "Administra el sistema operativo de las máquinas virtuales que contratan",
+      "Proporciona un contenedor con todas sus bibliotecas y servicios incluidos"
+    ],
+    "explicacion": "✓ En FaaS el cliente aporta código que se ejecuta ante eventos, mensajes o peticiones HTTP.\n✗ «Administra el sistema operativo»: es IaaS.\n✗ «Un contenedor»: es CaaS."
+  },
+  {
+    "id": "introduccion-065",
+    "concepto": "introduccion-faas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Cómo se cobra FaaS?",
+    "correcta": "Por tiempo de cómputo, número de ejecuciones o memoria usada",
+    "distractores": [
+      "Por máquina virtual reservada al mes, con independencia del uso",
+      "Por usuario registrado en la aplicación, con independencia del uso"
+    ],
+    "explicacion": "✓ En FaaS se paga por tiempo de cómputo, ejecuciones o memoria.\n✗ «Máquina virtual reservada»: no es el modelo de FaaS.\n✗ «Por usuario registrado»: no es el modelo de FaaS."
+  },
+  {
+    "id": "introduccion-066",
+    "concepto": "introduccion-faas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Cuál es un ejemplo de FaaS?",
+    "correcta": "Amazon Lambda",
+    "distractores": [
+      "Docker",
+      "Amazon RDS"
+    ],
+    "explicacion": "✓ Amazon Lambda es FaaS: ejecuta funciones bajo demanda.\n✗ «Docker»: es CaaS.\n✗ «Amazon RDS»: es SaaS en el temario."
+  },
+  {
+    "id": "introduccion-067",
+    "concepto": "introduccion-saas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué gestiona el cliente en SaaS?",
+    "correcta": "La configuración de funcionalidades y de usuarios",
+    "distractores": [
+      "La instalación de aplicaciones sobre el sistema",
+      "El código de sus funciones"
+    ],
+    "explicacion": "✓ En SaaS el cliente configura funcionalidades y gestiona usuarios.\n✗ «La instalación de aplicaciones»: es PaaS o IaaS.\n✗ «El código de sus funciones»: es FaaS."
+  },
+  {
+    "id": "introduccion-068",
+    "concepto": "introduccion-saas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué ofrece el proveedor en SaaS?",
+    "correcta": "Infraestructura, plataforma, aplicación o API, seguridad y alta disponibilidad",
+    "distractores": [
+      "Máquinas virtuales genéricas con su almacenamiento virtual",
+      "Un entorno de ejecución con herramientas de desarrollo"
+    ],
+    "explicacion": "✓ El proveedor de SaaS gestiona infraestructura y plataforma, y ofrece la aplicación accesible por Internet.\n✗ «Máquinas virtuales genéricas con»: es IaaS.\n✗ «Un entorno de ejecución»: es PaaS."
+  },
+  {
+    "id": "introduccion-069",
+    "concepto": "introduccion-saas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Cuál es un ejemplo de SaaS?",
+    "correcta": "Office 365",
+    "distractores": [
+      "OpenStack",
+      "Google App Engine"
+    ],
+    "explicacion": "✓ Office 365 es SaaS: una aplicación accesible por Internet.\n✗ «OpenStack»: es IaaS.\n✗ «Google App Engine»: es PaaS."
+  },
+  {
+    "id": "introduccion-070",
+    "concepto": "introduccion-vulnerabilidad-y-amenaza",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué es una vulnerabilidad?",
+    "correcta": "Un fallo o debilidad de un sistema que se podría explotar para violar su política de seguridad",
+    "distractores": [
+      "Un posible peligro que podría ocasionar la explotación de una debilidad del sistema por alguien",
+      "Un acto deliberado para evadir la seguridad de un sistema que ya está protegido"
+    ],
+    "explicacion": "✓ Una vulnerabilidad es un fallo o debilidad en el diseño, la implementación, el funcionamiento o la gestión de un sistema.\n✗ «Un posible peligro»: es la amenaza, que podría explotar la vulnerabilidad.\n✗ «Un acto deliberado»: es el ataque, y es un acto y no una debilidad."
+  },
+  {
+    "id": "introduccion-071",
+    "concepto": "introduccion-vulnerabilidad-y-amenaza",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué es una amenaza de seguridad?",
+    "correcta": "Un posible peligro por la explotación, intencionada o accidental, de una vulnerabilidad",
+    "distractores": [
+      "Un fallo del diseño de un sistema que permite violar su política de seguridad",
+      "La probabilidad de que un fallo cause una pérdida o un impacto en el sistema"
+    ],
+    "explicacion": "✓ Una amenaza es un posible peligro que causaría la explotación, intencionada o accidental, de una vulnerabilidad.\n✗ «Un fallo del diseño»: es la vulnerabilidad, la debilidad que la amenaza explota.\n✗ «La probabilidad de que un fallo cause una pérdida»: es el riesgo."
+  },
+  {
+    "id": "introduccion-072",
+    "concepto": "introduccion-vulnerabilidad-y-amenaza",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "Un servidor tiene una versión de software con un fallo conocido. ¿Qué elemento de seguridad es ese fallo?",
+    "correcta": "Una vulnerabilidad",
+    "distractores": [
+      "Una amenaza",
+      "Un ataque"
+    ],
+    "explicacion": "✓ Un fallo o debilidad del sistema es una vulnerabilidad. Todavía no hay un peligro ni un acto contra él.\n✗ «Una amenaza»: es el posible peligro que explotaría el fallo, y no el fallo.\n✗ «Un ataque»: es un acto deliberado, y el fallo por sí solo no lo es."
+  },
+  {
+    "id": "introduccion-073",
+    "concepto": "introduccion-riesgo-y-ataque",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué es el riesgo en seguridad?",
+    "correcta": "La probabilidad de que una amenaza explote una vulnerabilidad y cause una pérdida",
+    "distractores": [
+      "Un acto deliberado para evadir la seguridad de un sistema con una política",
+      "Un fallo del diseño de un sistema que podría ser explotado por alguien"
+    ],
+    "explicacion": "✓ El riesgo es la probabilidad de que una amenaza se materialice al explotar una vulnerabilidad, con pérdida o impacto.\n✗ «Un acto deliberado»: es el ataque.\n✗ «Un fallo del diseño»: es la vulnerabilidad."
+  },
+  {
+    "id": "introduccion-074",
+    "concepto": "introduccion-riesgo-y-ataque",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué es un ataque en seguridad?",
+    "correcta": "Un acto deliberado para evadir la seguridad de un sistema",
+    "distractores": [
+      "La probabilidad de que una amenaza produzca un impacto",
+      "Un posible peligro que podría ocurrir de forma accidental"
+    ],
+    "explicacion": "✓ Un ataque es un acto deliberado para evadir la seguridad de un sistema.\n✗ «La probabilidad»: es el riesgo, un valor y no un acto.\n✗ «Un posible peligro que»: es la amenaza, y un ataque siempre es deliberado."
+  },
+  {
+    "id": "introduccion-075",
+    "concepto": "introduccion-riesgo-y-ataque",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "Un atacante ejecuta un exploit contra un servidor para saltarse su autenticación. ¿Qué elemento de seguridad es esa acción?",
+    "correcta": "Un ataque",
+    "distractores": [
+      "Un riesgo",
+      "Una vulnerabilidad"
+    ],
+    "explicacion": "✓ Ejecutar un exploit para evadir la seguridad es un acto deliberado, o sea, un ataque.\n✗ «Un riesgo»: es la probabilidad de que algo así ocurra, y no la acción.\n✗ «Una vulnerabilidad»: es la debilidad que el ataque explota."
+  },
+  {
+    "id": "introduccion-076",
+    "concepto": "introduccion-integridad-en-tres-estados",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué estados de los datos debe proteger la integridad?",
+    "correcta": "Almacenados, en memoria y en transmisión",
+    "distractores": [
+      "Almacenados en disco y en copias de seguridad",
+      "Cifrados y firmados"
+    ],
+    "explicacion": "✓ La integridad exige que los datos no se alteren en ningún momento: almacenados (DIR), en memoria (DIM) y al transmitirse (DIT).\n✗ «Almacenados en disco y»: la integridad incluye también memoria y transmisión.\n✗ «Cifrados y firmados»: son mecanismos, y no estados de los datos."
+  },
+  {
+    "id": "introduccion-077",
+    "concepto": "introduccion-integridad-en-tres-estados",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué es la integridad de los datos?",
+    "correcta": "Que no puedan ser alterados en ningún momento",
+    "distractores": [
+      "Que accedan a ellos las personas autorizadas",
+      "Que estén disponibles cuando se requieren"
+    ],
+    "explicacion": "✓ La integridad garantiza que los datos no se alteran en ningún momento.\n✗ «Que accedan a ellos»: es la confidencialidad.\n✗ «Estén disponibles»: es la disponibilidad."
+  },
+  {
+    "id": "introduccion-078",
+    "concepto": "introduccion-integridad-en-tres-estados",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "Un atacante modifica un mensaje mientras viaja por la red. ¿Qué propiedad rompe?",
+    "correcta": "La integridad de los datos en tránsito",
+    "distractores": [
+      "La confidencialidad de los datos almacenados",
+      "La disponibilidad del servicio"
+    ],
+    "explicacion": "✓ Alterar un mensaje en tránsito rompe la integridad de los datos al transmitirse (DIT).\n✗ «La confidencialidad»: alterar un dato no lo revela a nadie.\n✗ «La disponibilidad»: el servicio sigue accesible."
+  },
+  {
+    "id": "introduccion-079",
+    "concepto": "introduccion-autoria-no-repudio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué garantiza la autoría en seguridad informática?",
+    "correcta": "Que una entidad no pueda negar su participación en una operación",
+    "distractores": [
+      "Que los datos los lea quien está autorizado",
+      "Que una entidad demuestre quién es antes de operar"
+    ],
+    "explicacion": "✓ La autoría impide que una entidad repudie, o niegue, su participación en una operación.\n✗ «Que los datos los»: es la confidencialidad.\n✗ «Que una entidad demuestre quién es»: es la identificación y autenticación."
+  },
+  {
+    "id": "introduccion-080",
+    "concepto": "introduccion-autoria-no-repudio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "En STRIDE, ¿qué propiedad protege frente al repudio?",
+    "correcta": "El no repudio",
+    "distractores": [
+      "La autenticidad",
+      "La autorización"
+    ],
+    "explicacion": "✓ Repudiation afecta al no repudio.\n✗ «La autenticidad»: es lo que se pone en riesgo con la suplantación.\n✗ «La autorización»: es lo que se pone en riesgo con la elevación de privilegios."
+  },
+  {
+    "id": "introduccion-081",
+    "concepto": "introduccion-autoria-no-repudio",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "Un usuario niega haber hecho una transferencia que el sistema registró. ¿Qué propiedad falta?",
+    "correcta": "La autoría",
+    "distractores": [
+      "La integridad",
+      "La disponibilidad"
+    ],
+    "explicacion": "✓ Si el usuario puede negar su participación, falta la autoría (no repudio).\n✗ «La integridad»: trata de que los datos no cambien, y no de negar una participación.\n✗ «La disponibilidad»: trata del acceso al servicio."
+  },
+  {
+    "id": "introduccion-082",
+    "concepto": "introduccion-identificacion-y-autenticacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué garantiza la identificación y autenticación?",
+    "correcta": "La identidad y los privilegios de quien realiza una operación",
+    "distractores": [
+      "Que los datos no se modifiquen mientras se transmiten por la red",
+      "Que quien opera no pueda negar después lo que hizo en el sistema"
+    ],
+    "explicacion": "✓ Garantiza la identidad y los privilegios de la entidad que realiza una operación.\n✗ «Que los datos no se modifiquen»: es la integridad.\n✗ «Que quien opera no»: es la autoría."
+  },
+  {
+    "id": "introduccion-083",
+    "concepto": "introduccion-identificacion-y-autenticacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "En STRIDE, ¿qué amenaza ataca la autenticidad?",
+    "correcta": "La suplantación de identidad",
+    "distractores": [
+      "La manipulación de datos",
+      "La revelación de información"
+    ],
+    "explicacion": "✓ Spoofing es suplantar la identidad, y afecta a la autenticidad.\n✗ «La manipulación de datos»: afecta a la integridad.\n✗ «La revelación de información»: afecta a la confidencialidad."
+  },
+  {
+    "id": "introduccion-084",
+    "concepto": "introduccion-identificacion-y-autenticacion",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué propiedad de seguridad garantiza que los datos y servicios están accesibles cuando se requieren?",
+    "correcta": "La disponibilidad",
+    "distractores": [
+      "La autoría",
+      "La confidencialidad"
+    ],
+    "explicacion": "✓ La disponibilidad asegura el acceso a datos y servicios cuando hacen falta.\n✗ «La autoría»: impide negar una participación.\n✗ «La confidencialidad»: limita los datos a personas autorizadas."
+  },
+  {
+    "id": "introduccion-085",
+    "concepto": "introduccion-seguridad-especifica-nube",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Cuál de estos es un aspecto de seguridad específico de la nube?",
+    "correcta": "El control de costes por utilización",
+    "distractores": [
+      "El cifrado de datos con un algoritmo simétrico",
+      "El uso de una contraseña por cada usuario"
+    ],
+    "explicacion": "✓ El control de costes por utilización es específico de la nube.\n✗ «El cifrado de datos»: es un aspecto clásico de la seguridad en ordenadores.\n✗ «El uso de una»: es autenticación clásica, y no es propia de la nube."
+  },
+  {
+    "id": "introduccion-086",
+    "concepto": "introduccion-seguridad-especifica-nube",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué aspecto de seguridad deriva de compartir recursos en la nube?",
+    "correcta": "Los riesgos derivados del uso de recursos compartidos",
+    "distractores": [
+      "La protección física de la sala de servidores del cliente",
+      "La instalación de antivirus en el equipo de cada empleado"
+    ],
+    "explicacion": "✓ Entre los aspectos específicos de la nube están los derivados del uso de recursos compartidos.\n✗ «La sala de servidores del cliente»: el cliente no tiene sala propia.\n✗ «La instalación de antivirus»: es seguridad de equipos y no depende de compartir recursos."
+  },
+  {
+    "id": "introduccion-087",
+    "concepto": "introduccion-seguridad-especifica-nube",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué aspecto específico de seguridad hay en la gestión de la nube desde la red?",
+    "correcta": "El control de la gestión de recursos y el acceso compartido",
+    "distractores": [
+      "La elección del procesador de los servidores del proveedor y su coste",
+      "El diseño de la climatización del centro de datos del proveedor"
+    ],
+    "explicacion": "✓ La gestión de recursos y el acceso compartido por la red son aspectos específicos de la nube.\n✗ «El procesador»: es una decisión del proveedor.\n✗ «La climatización»: es gestión de la ubicación del proveedor."
+  },
+  {
+    "id": "introduccion-088",
+    "concepto": "introduccion-vulnerabilidades-famosas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué software afectaba la vulnerabilidad Heartbleed?",
+    "correcta": "OpenSSL",
+    "distractores": [
+      "GNU Bash",
+      "Apache Struts"
+    ],
+    "explicacion": "✓ Heartbleed (CVE-2014-0160) afectaba a OpenSSL.\n✗ «GNU Bash»: es el de Shellshock.\n✗ «Apache Struts»: es el de la CVE-2017-5638."
+  },
+  {
+    "id": "introduccion-089",
+    "concepto": "introduccion-vulnerabilidades-famosas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué software afectaba la vulnerabilidad Shellshock?",
+    "correcta": "GNU Bash",
+    "distractores": [
+      "OpenSSL",
+      "Log4j"
+    ],
+    "explicacion": "✓ Shellshock (CVE-2014-6271) afectaba a GNU Bash.\n✗ «OpenSSL»: es el de Heartbleed.\n✗ «Log4j»: es el de Log4Shell."
+  },
+  {
+    "id": "introduccion-090",
+    "concepto": "introduccion-vulnerabilidades-famosas",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué componente afectaba la vulnerabilidad Venom?",
+    "correcta": "El controlador de disquete de QEMU",
+    "distractores": [
+      "El gestor de contenedores Docker",
+      "La biblioteca de registro Log4j"
+    ],
+    "explicacion": "✓ Venom (CVE-2015-3456) afectaba al controlador de disquete de QEMU.\n✗ «Docker»: Venom afectaba a QEMU.\n✗ «Log4j»: es el de Log4Shell."
+  },
+  {
+    "id": "introduccion-091",
+    "concepto": "introduccion-clasificacion-de-vulnerabilidades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué criterio de clasificación de vulnerabilidades usa STRIDE?",
+    "correcta": "Los efectos o áreas de actuación",
+    "distractores": [
+      "El riesgo o impacto en el sistema",
+      "La probabilidad de que se exploten"
+    ],
+    "explicacion": "✓ STRIDE clasifica por efectos o áreas de actuación.\n✗ «El riesgo o impacto»: es el criterio de DREAD y CVSS.\n✗ «La probabilidad»: es el criterio de EPSS."
+  },
+  {
+    "id": "introduccion-092",
+    "concepto": "introduccion-clasificacion-de-vulnerabilidades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué criterio de clasificación usan DREAD y CVSS?",
+    "correcta": "El riesgo o impacto en el sistema",
+    "distractores": [
+      "Los efectos o áreas de actuación",
+      "La probabilidad de que se exploten"
+    ],
+    "explicacion": "✓ DREAD y CVSS clasifican por riesgo o impacto.\n✗ «Los efectos»: es el criterio de STRIDE y ASF.\n✗ «La probabilidad»: es el criterio de EPSS."
+  },
+  {
+    "id": "introduccion-093",
+    "concepto": "introduccion-clasificacion-de-vulnerabilidades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué criterio de clasificación usa EPSS?",
+    "correcta": "La probabilidad de que se exploten",
+    "distractores": [
+      "El riesgo o impacto en el sistema",
+      "Los efectos o áreas de actuación"
+    ],
+    "explicacion": "✓ EPSS estima la probabilidad de que se exploten.\n✗ «El riesgo o impacto»: es el criterio de DREAD y CVSS.\n✗ «Los efectos»: es el criterio de STRIDE."
+  },
+  {
+    "id": "introduccion-094",
+    "concepto": "introduccion-fuentes-de-vulnerabilidades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué es OSV (Open Source Vulnerabilities)?",
+    "correcta": "Un agregador de vulnerabilidades de proyectos de software libre",
+    "distractores": [
+      "Una base de datos de código para reproducir ataques ya conocidos",
+      "Un registro de las vulnerabilidades que ya se están explotando"
+    ],
+    "explicacion": "✓ OSV agrega las vulnerabilidades de organizaciones y proyectos libres, como GitHub o Ubuntu.\n✗ «Código para reproducir ataques»: es Exploit Database.\n✗ «Un registro de las»: es el KEV de CISA."
+  },
+  {
+    "id": "introduccion-095",
+    "concepto": "introduccion-fuentes-de-vulnerabilidades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué ofrece Exploit Database?",
+    "correcta": "Una base de datos de ataques conocidos, con código para reproducirlos",
+    "distractores": [
+      "Una agregación de vulnerabilidades de proyectos de software libre",
+      "Una puntuación de la severidad de cada vulnerabilidad conocida"
+    ],
+    "explicacion": "✓ Exploit Database es una base de datos compatible con CVE sobre ataques conocidos, con su código.\n✗ «Una agregación de vulnerabilidades»: es OSV.\n✗ «Una puntuación de la»: es CVSS."
+  },
+  {
+    "id": "introduccion-096",
+    "concepto": "introduccion-fuentes-de-vulnerabilidades",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "Además de las bases generales, ¿dónde se consultan las vulnerabilidades de un producto concreto?",
+    "correcta": "En los sitios y las listas de seguridad de cada producto",
+    "distractores": [
+      "En el registro de CVE, que da la ficha de cada producto",
+      "En la ficha técnica del proveedor de la nube"
+    ],
+    "explicacion": "✓ Cada producto tiene su propio sitio de seguridad, como el de Apache httpd o Tomcat, y sus listas de distribución.\n✗ «El registro de CVE»: hay sitios específicos de cada producto.\n✗ «En la ficha técnica»: no es una fuente de seguridad."
+  },
+  {
+    "id": "introduccion-097",
+    "concepto": "introduccion-stride-y-propiedad-afectada",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "En STRIDE, ¿qué propiedad afecta la manipulación de datos (Tampering)?",
+    "correcta": "La integridad",
+    "distractores": [
+      "La confidencialidad",
+      "La disponibilidad"
+    ],
+    "explicacion": "✓ Tampering afecta a la integridad.\n✗ «La confidencialidad»: la afecta la revelación de información.\n✗ «La disponibilidad»: la afecta la denegación de servicio."
+  },
+  {
+    "id": "introduccion-098",
+    "concepto": "introduccion-stride-y-propiedad-afectada",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "En STRIDE, ¿qué propiedad afecta la denegación de servicio?",
+    "correcta": "La disponibilidad",
+    "distractores": [
+      "La integridad",
+      "La autorización"
+    ],
+    "explicacion": "✓ Denial afecta a la disponibilidad.\n✗ «La integridad»: la afecta la manipulación de datos.\n✗ «La autorización»: la afecta la elevación de privilegios."
+  },
+  {
+    "id": "introduccion-099",
+    "concepto": "introduccion-stride-y-propiedad-afectada",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "En STRIDE, ¿qué propiedad afecta la elevación de privilegios?",
+    "correcta": "La autorización",
+    "distractores": [
+      "La autenticidad",
+      "El no repudio"
+    ],
+    "explicacion": "✓ Elevation afecta a la autorización.\n✗ «La autenticidad»: la afecta la suplantación.\n✗ «El no repudio»: lo afecta el repudio."
+  },
+  {
+    "id": "introduccion-100",
+    "concepto": "introduccion-organizacion-de-cada-base",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué organización mantiene la base de datos CVE?",
+    "correcta": "MITRE",
+    "distractores": [
+      "FIRST",
+      "NIST"
+    ],
+    "explicacion": "✓ MITRE mantiene CVE, y también CWE, CAPEC y ATT&CK.\n✗ «FIRST»: mantiene CVSS y EPSS.\n✗ «NIST»: mantiene la NVD."
+  },
+  {
+    "id": "introduccion-101",
+    "concepto": "introduccion-organizacion-de-cada-base",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué organización mantiene CVSS y EPSS?",
+    "correcta": "FIRST",
+    "distractores": [
+      "MITRE",
+      "OWASP"
+    ],
+    "explicacion": "✓ FIRST mantiene CVSS y EPSS.\n✗ «MITRE»: mantiene CVE, CWE y CAPEC.\n✗ «OWASP»: difunde buenas prácticas de seguridad."
+  },
+  {
+    "id": "introduccion-102",
+    "concepto": "introduccion-organizacion-de-cada-base",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué organización mantiene la base de datos nacional de vulnerabilidades (NVD)?",
+    "correcta": "NIST",
+    "distractores": [
+      "MITRE",
+      "FIRST"
+    ],
+    "explicacion": "✓ El NIST mantiene la NVD.\n✗ «MITRE»: mantiene CVE.\n✗ «FIRST»: mantiene CVSS y EPSS."
+  },
+  {
+    "id": "introduccion-103",
+    "concepto": "introduccion-csa-amenazas-principales",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué amenaza encabeza el informe de amenazas principales de la nube de la CSA?",
+    "correcta": "La gestión deficiente de identidades y acceso",
+    "distractores": [
+      "Las interfaces y las APIs inseguras de los servicios del proveedor",
+      "Los errores de configuración y el control de cambios inadecuado"
+    ],
+    "explicacion": "✓ En el informe, la primera amenaza es la gestión deficiente de identidades y acceso (IAM).\n✗ «Las interfaces y las APIs»: ocupan otra posición.\n✗ «Los errores de configuración»: ocupan otra posición."
+  },
+  {
+    "id": "introduccion-104",
+    "concepto": "introduccion-csa-amenazas-principales",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué amenaza trata de servicios de otros proveedores que la aplicación integra?",
+    "correcta": "Los recursos de terceros inseguros",
+    "distractores": [
+      "La divulgación accidental de datos",
+      "El desarrollo inseguro de software"
+    ],
+    "explicacion": "✓ El informe cita los recursos de terceros inseguros.\n✗ «La divulgación accidental»: son datos expuestos por error.\n✗ «El desarrollo inseguro»: son fallos en el código propio."
+  },
+  {
+    "id": "introduccion-105",
+    "concepto": "introduccion-csa-amenazas-principales",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué amenaza del informe incluye al crimen organizado?",
+    "correcta": "Crimen organizado, hackers y APT",
+    "distractores": [
+      "Ataques mejorados con IA",
+      "Vulnerabilidades del sistema"
+    ],
+    "explicacion": "✓ El informe agrupa crimen organizado, hackers y APT en una amenaza.\n✗ «Ataques mejorados con IA»: trata del uso de la IA.\n✗ «Vulnerabilidades del sistema»: son fallos técnicos."
+  },
+  {
+    "id": "introduccion-106",
+    "concepto": "introduccion-csa-guidance",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué es la guía de seguridad de la CSA para áreas críticas?",
+    "correcta": "Un conjunto de buenas prácticas organizadas en dominios de seguridad",
+    "distractores": [
+      "Una lista de controles de seguridad para auditar a un proveedor de la nube",
+      "Un informe de las amenazas más frecuentes de la nube, ordenadas"
+    ],
+    "explicacion": "✓ La guía recoge buenas prácticas en dominios de seguridad.\n✗ «Una lista de controles»: es la CCM.\n✗ «Un informe de las»: es el Top Threats."
+  },
+  {
+    "id": "introduccion-107",
+    "concepto": "introduccion-csa-guidance",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Cuál de estos es un dominio de seguridad de la guía de la CSA?",
+    "correcta": "La gestión de identidad y acceso",
+    "distractores": [
+      "El diseño de interfaces",
+      "La gestión de compras"
+    ],
+    "explicacion": "✓ La gestión de identidad y acceso es el dominio 5.\n✗ «El diseño de interfaces»: no es un dominio.\n✗ «La gestión de compras»: no es un dominio."
+  },
+  {
+    "id": "introduccion-108",
+    "concepto": "introduccion-csa-guidance",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Con qué recomendaciones armoniza la guía de la CSA?",
+    "correcta": "NIST SP 800-145 e ISO/IEC 17788 y 17789",
+    "distractores": [
+      "OWASP Top 10, CWE y las guías de desarrollo seguro de la OWASP",
+      "CVSS, EPSS y las métricas de severidad y probabilidad de FIRST"
+    ],
+    "explicacion": "✓ La guía se armoniza con NIST SP 800-145, ISO/IEC 17788 y 17789.\n✗ «OWASP Top 10, CWE»: no son su referencia.\n✗ «CVSS, EPSS y las»: son métricas."
+  },
+  {
+    "id": "introduccion-109",
+    "concepto": "introduccion-ccm-prefijos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "En la CCM, ¿qué agrupan los controles LOG?",
+    "correcta": "El registro y la monitorización",
+    "distractores": [
+      "La gestión de identidades y accesos",
+      "La gestión de amenazas y vulnerabilidades"
+    ],
+    "explicacion": "✓ LOG agrupa los controles de registro y monitorización.\n✗ «Identidades y accesos»: es IAM.\n✗ «Amenazas y vulnerabilidades»: es TVM."
+  },
+  {
+    "id": "introduccion-110",
+    "concepto": "introduccion-ccm-prefijos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "En la CCM, ¿qué agrupan los controles IAM?",
+    "correcta": "La gestión de identidades y accesos",
+    "distractores": [
+      "El registro y la monitorización",
+      "La seguridad de la infraestructura y la virtualización"
+    ],
+    "explicacion": "✓ IAM agrupa los controles de gestión de identidades y accesos.\n✗ «El registro»: es LOG.\n✗ «La infraestructura»: es IVS."
+  },
+  {
+    "id": "introduccion-111",
+    "concepto": "introduccion-ccm-prefijos",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "En la CCM, ¿qué agrupan los controles TVM?",
+    "correcta": "La gestión de amenazas y vulnerabilidades",
+    "distractores": [
+      "La gestión de la cadena de suministro",
+      "La gestión de dispositivos terminales"
+    ],
+    "explicacion": "✓ TVM agrupa los controles de gestión de amenazas y vulnerabilidades.\n✗ «La cadena de suministro»: es STA.\n✗ «La gestión de dispositivos»: es UEM."
+  },
+  {
+    "id": "introduccion-112",
+    "concepto": "introduccion-ccm-controles-iam",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué exige el control IAM-05 de la CCM?",
+    "correcta": "Políticas de mínimo privilegio",
+    "distractores": [
+      "Restricción de acceso a agentes de IA",
+      "Revisión anual de las políticas IAM"
+    ],
+    "explicacion": "✓ IAM-05 pide políticas de mínimo privilegio.\n✗ «Agentes de IA»: es IAM-18.\n✗ «Revisión anual»: es IAM-01."
+  },
+  {
+    "id": "introduccion-113",
+    "concepto": "introduccion-ccm-controles-iam",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué exige el control IAM-18 de la CCM?",
+    "correcta": "Restringir el acceso de los agentes de IA",
+    "distractores": [
+      "Políticas de mínimo privilegio",
+      "Segmentar y segregar aplicaciones"
+    ],
+    "explicacion": "✓ IAM-18 restringe el acceso de agentes de IA.\n✗ «Mínimo privilegio»: es IAM-05.\n✗ «Segmentar y segregar»: es I&S-06."
+  },
+  {
+    "id": "introduccion-114",
+    "concepto": "introduccion-ccm-controles-iam",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué exige el control IAM-01 de la CCM?",
+    "correcta": "Establecer políticas IAM y revisarlas al menos cada año",
+    "distractores": [
+      "Auditar el acceso a los registros del sistema cada trimestre",
+      "Formar al personal en seguridad de la información cada año"
+    ],
+    "explicacion": "✓ IAM-01 pide documentar, aplicar, revisar y evaluar las políticas IAM al menos anualmente.\n✗ «Auditar el acceso a los registros»: es LOG-04.\n✗ «Formar al personal»: es GRC-05."
+  },
+  {
+    "id": "introduccion-115",
+    "concepto": "introduccion-amenaza-iam",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué consecuencia tiene la mala gestión de identidades y acceso?",
+    "correcta": "El acceso no autorizado a recursos críticos en la nube",
+    "distractores": [
+      "La pérdida de disponibilidad del proveedor durante varias horas",
+      "El fallo del cifrado de los datos almacenados en la nube"
+    ],
+    "explicacion": "✓ La falta de control en las cuentas puede ocasionar acceso no autorizado a recursos críticos.\n✗ «La pérdida de disponibilidad»: no es su consecuencia directa.\n✗ «El fallo del cifrado»: no es su consecuencia directa."
+  },
+  {
+    "id": "introduccion-116",
+    "concepto": "introduccion-amenaza-iam",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué son las identidades no humanas (NHI)?",
+    "correcta": "Cuentas de servicios, claves de API y agentes de IA",
+    "distractores": [
+      "Cuentas de usuarios anónimos de la aplicación y de sus invitados",
+      "Cuentas de empleados de baja que siguen activas en el sistema"
+    ],
+    "explicacion": "✓ Las NHI son servicios, claves de API y agentes de IA.\n✗ «Usuarios anónimos»: son personas.\n✗ «Empleados de baja»: son personas."
+  },
+  {
+    "id": "introduccion-117",
+    "concepto": "introduccion-amenaza-iam",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué categorías STRIDE señala el informe para la mala gestión de IAM?",
+    "correcta": "Revelación de información, denegación de servicio y elevación de privilegios",
+    "distractores": [
+      "Suplantación, manipulación y repudio",
+      "La elevación de privilegios y la manipulación de datos"
+    ],
+    "explicacion": "✓ El informe marca I, D y E.\n✗ «Suplantación, manipulación y repudio»: son S, T y R.\n✗ «La elevación de privilegios»: el informe señala tres categorías, y esa lista no coincide."
+  },
+  {
+    "id": "introduccion-118",
+    "concepto": "introduccion-recomendaciones-generales",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué se recomienda hacer con las claves y configuraciones por defecto de un servicio?",
+    "correcta": "Cambiarlas",
+    "distractores": [
+      "Conservarlas",
+      "Documentarlas"
+    ],
+    "explicacion": "✓ Se recomienda cambiar las claves y configuraciones por defecto.\n✗ «Conservarlas»: son conocidas.\n✗ «Documentarlas»: no las protege."
+  },
+  {
+    "id": "introduccion-119",
+    "concepto": "introduccion-recomendaciones-generales",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué se recomienda hacer con los servicios que la aplicación no usa?",
+    "correcta": "Desactivarlos",
+    "distractores": [
+      "Dejarlos activos",
+      "Monitorizarlos"
+    ],
+    "explicacion": "✓ Se recomienda desactivar los servicios no utilizados.\n✗ «Dejarlos activos»: aumenta la superficie.\n✗ «Monitorizarlos»: no los desactiva."
+  },
+  {
+    "id": "introduccion-120",
+    "concepto": "introduccion-recomendaciones-generales",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    },
+    "pregunta": "¿Qué se recomienda hacer con las cuentas de un empleado que deja la organización?",
+    "correcta": "Revocarlas",
+    "distractores": [
+      "Cambiar su contraseña",
+      "Reasignarlas"
+    ],
+    "explicacion": "✓ Se recomienda revocar las cuentas de ex-empleados.\n✗ «Cambiar su contraseña»: la cuenta sigue activa.\n✗ «Reasignarlas»: reutiliza la cuenta."
+  },
+  {
+    "id": "introduccion-s01",
+    "concepto": "sigla-cve",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué significa la sigla CVE?",
+    "correcta": "Common Vulnerabilities and Exposures",
+    "distractores": [
+      "Common Vulnerability Evaluation",
+      "Critical Vulnerability Enumeration"
+    ],
+    "explicacion": "✓ CVE es el estándar que da un identificador único a cada vulnerabilidad conocida.\n✗ «Common Vulnerability Evaluation»: CVE identifica y no evalúa.\n✗ «Critical Vulnerability Enumeration»: la C no es de critical."
+  },
+  {
+    "id": "introduccion-s02",
+    "concepto": "sigla-nvd",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué significa la sigla NVD?",
+    "correcta": "National Vulnerability Database",
+    "distractores": [
+      "Network Vulnerability Detection",
+      "National Verification Directory"
+    ],
+    "explicacion": "✓ NVD es la base de datos nacional de vulnerabilidades del NIST.\n✗ «Network Vulnerability Detection»: no es una herramienta de detección.\n✗ «National Verification Directory»: no es un directorio."
+  },
+  {
+    "id": "introduccion-s03",
+    "concepto": "sigla-osv",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué significa la sigla OSV?",
+    "correcta": "Open Source Vulnerabilities",
+    "distractores": [
+      "Open Security Verification",
+      "Online System Validation"
+    ],
+    "explicacion": "✓ OSV agrega vulnerabilidades de software libre.\n✗ «Open Security Verification»: no verifica.\n✗ «Online System Validation»: no valida sistemas."
+  },
+  {
+    "id": "introduccion-s04",
+    "concepto": "sigla-cwe",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué significa la sigla CWE?",
+    "correcta": "Common Weakness Enumeration",
+    "distractores": [
+      "Common Web Exploits",
+      "Critical Weakness Evaluation"
+    ],
+    "explicacion": "✓ CWE enumera debilidades y malas prácticas habituales en software.\n✗ «Common Web Exploits»: no es de exploits web.\n✗ «Critical Weakness Evaluation»: no evalúa."
+  },
+  {
+    "id": "introduccion-s05",
+    "concepto": "sigla-capec",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué significa la sigla CAPEC?",
+    "correcta": "Common Attack Pattern Enumeration and Classification",
+    "distractores": [
+      "Common Application Protection Evaluation Criteria",
+      "Cloud Attack Prevention and Control"
+    ],
+    "explicacion": "✓ CAPEC es la base de datos de patrones de ataque para explotar debilidades.\n✗ «Common Application Protection Evaluation Criteria»: no son criterios de protección.\n✗ «Cloud Attack Prevention and Control»: no es de prevención."
+  },
+  {
+    "id": "introduccion-s06",
+    "concepto": "sigla-cvss",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué significa la sigla CVSS?",
+    "correcta": "Common Vulnerability Scoring System",
+    "distractores": [
+      "Critical Vulnerability Security Standard",
+      "Cloud Vulnerability Severity Scale"
+    ],
+    "explicacion": "✓ CVSS puntúa la severidad de una vulnerabilidad.\n✗ «Critical Vulnerability Security Standard»: no es un estándar crítico.\n✗ «Cloud Vulnerability Severity Scale»: no es solo de la nube."
+  },
+  {
+    "id": "introduccion-s07",
+    "concepto": "sigla-epss",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué significa la sigla EPSS?",
+    "correcta": "Exploit Prediction Scoring System",
+    "distractores": [
+      "Exposure Priority Security Standard",
+      "Enterprise Protection Scoring Service"
+    ],
+    "explicacion": "✓ EPSS estima la probabilidad de que una vulnerabilidad se explote.\n✗ «Exposure Priority Security Standard»: no es un estándar.\n✗ «Enterprise Protection Scoring Service»: no es un servicio."
+  },
+  {
+    "id": "introduccion-s08",
+    "concepto": "sigla-stride",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿Qué significa la sigla STRIDE?",
+    "correcta": "Spoofing, Tampering, Repudiation, Information disclosure, Denial of service y Elevation of privilege",
+    "distractores": [
+      "Security, Trust, Risk, Integrity, Disclosure y Encryption",
+      "Spoofing, Theft, Replay, Interception, Deletion y Exploitation"
+    ],
+    "explicacion": "✓ STRIDE es una metodología de Microsoft que clasifica las amenazas por su impacto.\n✗ «Security, Trust, Risk, Integrity, Disclosure y Encryption»: no son sus categorías.\n✗ «Spoofing, Theft, Replay, Interception, Deletion y Exploitation»: no son sus categorías."
+  },
+  {
+    "id": "introduccion-s09",
+    "concepto": "sigla-csa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué significa la sigla CSA?",
+    "correcta": "Cloud Security Alliance",
+    "distractores": [
+      "Cyber Security Agency",
+      "Computer Safety Association"
+    ],
+    "explicacion": "✓ La CSA emite guías y certificaciones sobre seguridad en la nube.\n✗ «Cyber Security Agency»: no es una agencia.\n✗ «Computer Safety Association»: no es de safety."
+  },
+  {
+    "id": "introduccion-s10",
+    "concepto": "sigla-ccm",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué significa la sigla CCM?",
+    "correcta": "Cloud Controls Matrix",
+    "distractores": [
+      "Common Compliance Model",
+      "Cloud Configuration Manager"
+    ],
+    "explicacion": "✓ La CCM de la CSA es una matriz de controles de seguridad.\n✗ «Common Compliance Model»: no es un modelo.\n✗ «Cloud Configuration Manager»: no es un gestor."
+  },
+  {
+    "id": "introduccion-s11",
+    "concepto": "sigla-nhi",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué significa la sigla NHI?",
+    "correcta": "Non-Human Identities",
+    "distractores": [
+      "Network Host Interfaces",
+      "New Hardware Installations"
+    ],
+    "explicacion": "✓ Las NHI son identidades no humanas.\n✗ «Network Host Interfaces»: no son interfaces.\n✗ «New Hardware Installations»: no son hardware."
+  },
+  {
+    "id": "introduccion-s12",
+    "concepto": "sigla-csp",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué significa la sigla CSP?",
+    "correcta": "Cloud Service Provider",
+    "distractores": [
+      "Cloud Security Policy",
+      "Customer Support Platform"
+    ],
+    "explicacion": "✓ CSP es el proveedor de servicios en la nube.\n✗ «Cloud Security Policy»: no es una política.\n✗ «Customer Support Platform»: no es soporte."
+  },
+  {
+    "id": "introduccion-s13",
+    "concepto": "sigla-sla",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué significa la sigla SLA?",
+    "correcta": "Service Level Agreement",
+    "distractores": [
+      "Secure Login Authority",
+      "System Load Analysis"
+    ],
+    "explicacion": "✓ SLA es el acuerdo de nivel de servicio.\n✗ «Secure Login Authority»: no es de acceso.\n✗ «System Load Analysis»: no es un análisis."
+  },
+  {
+    "id": "introduccion-s14",
+    "concepto": "sigla-first",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué significa la sigla FIRST?",
+    "correcta": "Forum of Incident Response and Security Teams",
+    "distractores": [
+      "Federal Institute for Risk and Security Testing",
+      "Framework for Information Risk and Security Tools"
+    ],
+    "explicacion": "✓ FIRST es un foro de respuesta a incidentes.\n✗ «Federal Institute for Risk and Security Testing»: no es un instituto federal.\n✗ «Framework for Information Risk and Security Tools»: no es un framework."
+  },
+  {
+    "id": "introduccion-s15",
+    "concepto": "sigla-ccsk",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué significa la sigla CCSK?",
+    "correcta": "Certificate of Cloud Security Knowledge",
+    "distractores": [
+      "Cloud Compliance and Security Key",
+      "Certified Cloud Systems Kit"
+    ],
+    "explicacion": "✓ El CCSK es la certificación de la CSA.\n✗ «Cloud Compliance and Security Key»: no es una clave.\n✗ «Certified Cloud Systems Kit»: no es un kit."
+  },
+  {
+    "id": "introduccion-s16",
+    "concepto": "sigla-enisa",
+    "tema": "introduccion",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué significa la sigla ENISA?",
+    "correcta": "European Union Agency for Network and Information Security",
+    "distractores": [
+      "European Network for Internet Security Alliance",
+      "Emergency Network Incident Security Authority"
+    ],
+    "explicacion": "✓ ENISA es la agencia de la UE para la seguridad de redes y de la información.\n✗ «European Network for Internet Security Alliance»: no es una alianza.\n✗ «Emergency Network Incident Security Authority»: no es una autoridad."
+  }
+]
