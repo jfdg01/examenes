@@ -1,0 +1,1637 @@
+                  LEGISLACIÓN, NORMATIVA,
+                         AUDITORIA Y
+                       CERTIFICACIONES
+
+     PARTE 2-B. SEGURIDAD EN LOS SISTEMAS
+         DE INFORMACIÓN E ISO 27001
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   1
+
+
+
+
+                                                               Índice
+       ISO 27001
+       • Introducción
+       • Especificación de la norma
+       • Implementación
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   2
+                                                    Introducción
+       • Un SGSI (sistema de gestión de seguridad de la información) es:
+             – Beneficioso para grandes, medianas y pequeñas empresas
+             – Aporta un conjunto de conocimiento y normas
+             – Necesario conocer la organización y el contexto (objetivos de negocio)
+             – Para cumplir la Norma UNE-ISO/IEC 27001 debe cumplir los requisitos
+               (apartados 4-10) referentes a:
+                    1.    Contexto de la organización
+                    2.    Liderazgo
+                    3.    Planificación
+                    4.    Soporte
+                    5.    Operación
+                    6.    Evaluación del desempeño
+                    7.    Mejora
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   3
+
+
+
+
+                                                    Introducción
+       • Se requiere documentación por niveles:
+              – Políticas: líneas generales de actuación
+              – Procesos (normas y procedimientos): descripción de las
+                actividades a ejecutar
+              – Evidencias (o registros): demuestra que se han llevado a
+                cabo las actividades previstas
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   4
+                                                    Introducción
+       • La norma ISO/IEC 27001
+              – Nos da una pauta estandarizada internacionalmente
+              – ISO/IEC 27002
+                      • Código de buenas prácticas
+                      • Sistema de Gestión orientado a negocio
+                      • Repositorio de controles
+                      • Salvaguarda de nuestros activos
+                      • Nos dice qué deberíamos hacer para proteger nuestro negocio
+              – ISO/IEC 27001: Es una norma certificable
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)        5
+
+
+
+
+                             Especificación de la norma
+       1. Contexto de la organización
+              – Objetivo: que el sistema de gestión favorezca el desempeño
+                de la organización.
+              – Conocer los objetivos de negocio y cuestiones:
+                     • Internas: ej. Recursos financieros, humanos, competencias
+                     • Externas: aspectos políticos, culturales, socioeconómicos, legales,
+                       requisitos, etc.
+              – A veces, se conoce el nivel de seguridad que se requiere, pero
+                no se encuentra formalizado
+              – Se requiere establecer las necesidades, para comenzar con el
+                diseño del SGSI, para valorar alternativas y tomar las mejores
+                decisiones
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)        6
+                             Especificación de la norma
+       • Alcance del SGSI
+              – La organización debe identificar los límites y aplicabilidad
+                del SGSI
+              – Tener en cuenta
+                      • Los recursos de los que se dispone
+                      • Los recursos más importantes de la organización
+                      • Utilizar procesos de ciclos de mejora continua para incorporar los
+                        recursos en función de su relevancia
+              – Es importante dimensionar adecuadamente para tener
+                éxito
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)        7
+
+
+
+
+                             Especificación de la norma
+       2. Liderazgo:
+       La dirección deberá demostrar su compromiso de forma:
+             – Establecer la política u objetivos de seguridad de la información
+             – Asegurar que los requisitos de seguridad se integran con los procesos
+               de la organización
+             – Proporcionar los recursos (económicos y humanos) necesarios
+             – Comunicar la importancia de gestionar eficazmente la seguridad de la
+               información, de acuerdo con los requisitos del sistema
+             – Asegurar que el sistema de gestión consigue los resultados previstos
+             – Dirigir y apoyar a las personas contribuyendo a la eficacia del SGSI
+             – Promover la mejora continua
+             – Apoyar a los roles pertinentes de la dirección
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)        8
+                             Especificación de la norma
+       • Política:
+              – Es la información documentada en que se reflejan:
+                      • los objetivos de la organización en materia de seguridad de la
+                        información
+                      • las principales líneas de acción que permitan proteger su
+                        información frente a pérdidas de confidencialidad, integridad y
+                        disponiblidad
+              – Compromiso de implantar y mejorar de manera continua
+                el Sistema de Gestión.
+              – Comunicación a todos los empleados y partes interesadas
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)          9
+
+
+
+
+                             Especificación de la norma
+       • Roles y Responsabilidades:
+              – Deben ser designados por la dirección
+              – Deben contemplarse en un SGSI (es opcional)
+                      • Responsable de seguridad: coordinar las actividades de seguridad
+                        y reportar a la dirección
+                      • Comité de Seguridad: busca soluciones a los temas de seguridad,
+                        resuelve asuntos interdisciplinarios y aprueba directrices y normas
+              – No se recomienda personal informático para ocupar los
+                roles de responsabilidad  Las áreas de negocio deben
+                determinar los requisitos de seguridad (serán implantados
+                por el personal informático)
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         10
+                             Especificación de la norma
+       3. Planificación
+       • Acciones para tratar los riesgos y oportunidades (en línea con
+         la Norma UNE-ISO 31000):
+             – Determinar los criterios de aceptación de riesgo y la metodología
+               para llevar a cabo la evaluación del riesgo
+             – Identificación de riesgos, asociados a la pérdida de
+               confidencialidad, integridad y disponibilidad de la información
+             – Análisis de riesgos. Evaluación de consecuencias y probabilidades
+               de materialización de riesgos, obteniendo los niveles de riesgo
+             – Evaluación de riesgos. Comparación de los resultados con los
+               criterios de aceptación del riesgo para determinar las medidas de
+               tratamiento y prioridad.
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   11
+
+
+
+
+                                         Ejercicio de clase 6
+       • ¿En qué consiste la norma UNE-ISO 31000?
+       • ¿Qué norma se debe implantar para crear un SGSI?
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   12
+                             Especificación de la norma
+       • La norma ISO 27001 establece que se utilice una
+         metodología de evaluación de riesgos, donde los
+         resultados sean consistentes, válidos y comparables.
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   13
+
+
+
+
+                             Especificación de la norma
+       • Objetivos de Seguridad de la información:
+              – Deben ser
+                      • Coherentes con la política de seguridad
+                      • Medibles
+              – La organización tiene que documentar estos objetivos
+              – La norma establece que la organización debe determinar:
+                      • Lo que se va a hacer
+                      • Qué recursos requerirá
+                      • Quién será responsable
+                      • Cuándo se finalizará
+                      • Cómo se evaluarán los resultados
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   14
+                             Especificación de la norma
+       • Pasos en el Análisis de Riesgos
+              – Identificar los activos
+              – Identificar amenazas y vulnerabilidades
+              – Calcular el riesgo: mitigar, asumir, transferir o evitar (según
+                la apreciación de riesgos realizada por la organización)
+              – Seleccionar los controles adecuados (ISO/IEC 27002 o
+                Anexo I) valorando:
+                      • Medida en que reduce el riesgo
+                      • Coste de su implementación y mantemiento
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)            15
+
+
+
+
+                             Especificación de la norma
+       • Pasos en el Análisis de Riesgos
+              –…
+              – Gestionar el riesgo:
+                     • Repetir el análisis de riesgos (teniendo en cuenta el riesgo actual +
+                       Riesgo Residual )
+                     • El propietario debe aprobar el valor del riesgo aceptable, asumir el
+                       riesgo residual y aprobar el plan de tratamiento de riesgos
+                     • Deben de figurar en el Plan de tratamiento de Riesgo toda esta
+                       información.
+                     • Elaborar una “Declaración de Aplicabilidad”
+                          – Los controles que se han determinado como necesarios
+                          – La justificación de las inclusiones y exclusiones de los controles
+                            incluidos en la norma (AnexoI o ISO27002)
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)            16
+                             Especificación de la norma
+       4. Soporte
+       • La organización debe determinar y proporcionar los
+         recursos necesarios (humanos y económicos) para:
+              – Implementación,
+              – Mantenimiento,
+              – Mejora continua del SGSI
+       • Permite al responsable y al comité de seguridad,
+         realizar un seguimiento de:
+              – La evolución del plan
+              – Identificar desviaciones
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   17
+
+
+
+
+                             Especificación de la norma
+       • Competencia.
+         La organización debe asegurarse de:
+              – Definir las competencias asociadas a cada perfil o puesto
+              – Identificar las necesidades de formación en base a los perfiles
+                 definidos
+              – Llevar a cabo acciones de formación en casos necesarios, y
+                 actualizaciones de manera periódica
+              – Mantener evidencias de la realización de las acciones de
+                 formación
+              – Valorar la eficacia de las acciones formativas
+              Ej. de acciones: formación, tutorías, reasignación de empleaos,
+              contratación de personal, etc.
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   18
+                             Especificación de la norma
+       • Comunicación:
+              – La organización debe determinar la necesidad de comunicaciones:
+                    • El contenido
+                    • Cuándo
+                    • A quién
+                    • Quien debe comunicar
+                    • Los procesos por los que debe efectuarse la comunicación
+                    Ejemplo: ¿quién comunica a clientes, proveedores y otras partes interesadas,
+                    un incidente grave de seguridad? ¿qué información se facilita y en qué
+                    términos?
+              – Las comunicaciones podrán establecerse en la propia
+                documentación de los procesos de seguridad de la información (o
+                en un plan de comunicación de la org.)
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                   19
+
+
+
+
+                             Especificación de la norma
+       • Información documentada
+             – La UNE ISO/IEC 27001 requiere que el SGSI incluya:
+                   • La política y los objetivos del SGSI
+                   • El alcance del SGSI
+                   • Los procesos de evaluación y tratamiento de riesgos y sus resultados
+                   • Los resultados de los procesos de seguimiento, medición, análisis y evaluación
+                   • La implementación del proceso de auditoría y sus resultados
+                   • Las no conformidades y acciones correctivas
+                   • Los procesos y sus evidencias, para los que la organización haya determinado que
+                     es necesario mantener información documentada
+             – Debe hallarse protegida y controlada.
+             – Debe contemplar su identificación, los cambios y su estado de forma
+               clara, almacenamiento y preservación.
+             – Debe estar disponible y accesible
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                   20
+                             Especificación de la norma
+       5. Operación
+          La organización deberá:
+              – Poner en práctica del plan de tratamiento de riesgos y los
+                procesos anteriormente definidos
+              – Aprovisionar de los recursos necesarios identificados en el
+                Plan de Tratamiento de Riesgos
+              – Realizar un seguimiento de las acciones previstas (bajo la
+                supervisión de un responsable de seguridad)
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   21
+
+
+
+
+                             Especificación de la norma
+       6. Evaluación del desempeño
+             –  Evaluación periódica del funcionamiento para asegurar su
+                eficacia
+             – Se usan indicadores/métricas asociadas a los objetivos de
+                seguridad de la organización
+             – Otros mecanismos de evaluación del funcionamiento
+               exigidas por la norma:
+                      • Auditoría interna
+                      • Revisión por la dirección
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   22
+                             Especificación de la norma
+       • Auditoría Interna:
+             – Permite identificar problemas en el diseño y en el funcionamiento del
+               sistema
+             – Pueden detectarse:
+                   • En el cumplimiento de algún requisito de la norma, de negocio, legal o
+                     contractual
+                   • En la implantación de los procesos definidos
+                   • En la efectividad y eficacia de los controles implantados
+             – Deben llevarse a cabo periódicamente (anualmente), o si se producen
+               cambios en el negocio, sistemas, etc. En el plan de auditorías se
+               determina:
+                   • Frecuencia (en un ciclo de 3 años debe ser auditada toda la actividad)
+                   • El alcance (parciales, o de todo el SGSI)
+                   • Los recursos necesarios
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         23
+
+
+
+
+                             Especificación de la norma
+       • Auditoría Interna:
+              –…
+              – El equipo puede ser interno o externo, pero deberá:
+                     • Ser independiente de la actividad que está siendo auditada
+                     • Disponer de conocimientos de auditoría y gestión de seguridad de la
+                       información
+              – El resultado es un informe que determine :
+                     • La evidencias recogidas,
+                     • Las deficiencias detectadas
+                     • Las oportunidades de mejora
+              – Se debe información a las personas implicadas los resultados,
+                para diseñarse las acciones correctivas oportunas
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         24
+                             Especificación de la norma
+       • Revisión por la dirección
+             – Ofrece a la dirección una visión global del funcionamiento del SGSI para
+               valorar la conveniencia, adecuación y eficacia del sistema.
+             – La revisión se realiza a intervalos planificados (1 año) y deben considerarse:
+                   • El estado de las acciones de anteriores revisiones
+                   • Los cambios (cuestiones externas o internas) que sean pertinentes
+                   • Información sobre el comportamiento de la seguridad de la información, incluidas:
+
+                       – No conformidades y acciones correctivas
+                       – Seguimiento de los resultados de las mediciones
+                       – Resultados de auditoría
+                       – Cumplimiento de los objetivos de seguridad
+                   • Comentarios provenientes de las partes interesadas
+                   • Resultados y estado del plan de tratamiento de riesgos
+                   • Oportunidades de mejora continua
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                    25
+
+
+
+
+                             Especificación de la norma
+       • Revisión por la dirección
+              –…
+              – Información será presentada, por el responsable de
+                seguridad
+              – Resultado: decidir sobre las necesidades de cambios en el
+                sistema y compromiso por parte de la dirección a aportar
+                recursos necesarios
+              – Se requiere la generación de documentación de esta
+                revisión (ej. Actas de las reuniones)
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                    26
+                             Especificación de la norma
+       7. Mejora
+             Dado el constante cambio (novedades en el negocio,
+             tecnologías, amenazas, etc.) se necesita mantener el riesgo
+             controlado, mediante:
+             – Acciones Correctivas:
+                    •       Dan solución a las no conformidades relacionadas con los
+                            requisitos del SGSI, o con incidentes repetitivos o muy graves.
+                    •       Solucionar desde el origen.
+                    •       Se definen las acciones necesarias para su subsanación
+                            (considerando el impacto)
+             –          Mejora continua
+                    •       Actividad recurrente para incrementar la capacidad del SGSI
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         27
+
+
+
+
+                             Especificación de la norma
+       • Categorías principales de Seguridad (NORMA
+         UNE-ISO/IEC 27002 o ANEXO 1 de UNE-ISO/IEC 27001)
+         Cada categoría contiene:
+              – Objetivos de control: establece qué es lo que se quiere
+                conseguir
+              – Uno o más controles que pueden ser aplicados para conseguir el
+                objetivo del control
+              – Una guía de implantación, con información más detallada que
+                de apoyo a la implantación del control y consecución del
+                objetivo de control
+              – Algunas directrices pueden no ser apropiadas o suficientes para
+                todos los casos
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         28
+                             Especificación de la norma
+                    Categorías principales de seguridad en la norma UNE-ISO/IEC 27002
+       1. Políticas de seguridad (1)                                     7. Seguridad física y del entorno (2)
+       2. Organización de la seguridad de la                             8. Seguridad de las operaciones (7)
+       información (2)
+       3. Seguridad relativa a los recursos                              9. Seguridad de las comunicaciones(2)
+       humanos (3)
+       4. Gestión de activos (3)                                         10. De sistemas de información(3)
+       5. Control de acceso (5)                                          11. Relación con proveedores (2)
+       6. Criptografía (1)                                               12. Gestión de incidentes de seguridad de
+                                                                         la información (1)
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                29
+
+
+
+
+                             Especificación de la norma
+       • EJEMPLO: Seguridad Física y del Entorno
+       La seguridad de la información y activos dependen de una
+       adecuada protección física que proteja de accesos, interferencias
+       o daños. Habrá que determinar un perímetro de seguridad.
+       Se desarrollan dos objetivos de control:
+       - (11.1.)Áreas Seguras: Prevenir el acceso físico no autorizado,
+         los daños e interferencia a la información de la organización y
+         a los recursos de tratamiento de la información
+       - (11.2) Seguridad de los Equipos: Evitar la pérdida, daño, robo o
+         el compromiso de los activos y la interrupción de las
+         operaciones de la organización
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                30
+       11.1. ÁREAS SEGURAS
+       Perímetro de                     Deliminar el perímetro mediante medidas proporcionadas a la
+       seguridad física                 criticidad del contenido. Instalación de barreras, puestos de
+                                        control, etc. Importancia de no facilitar al público información
+                                        sobre las instalaciones
+       Controles físicos de             Restringir el acceso a zonas identificadas al personal autorizado.
+       entrada                          Aplicar sistemas de registro de entrada. Ej. CPD, o recepción.
+       Seguridad de                     Identificación y aplicación de mediadas para la seguridad en los
+       oficinas, despachos              lugares de trabajo. Ej. Pantalla e impresoras situadas en lugares
+       y recursos                       solo accesibles por personal autorizado
+       Protección contra                Disponer de planes de acción para responder a este tipo de
+       las amenazas                     amenazas. La legislación obliga a disponer de planes de
+       externas y                       autoprotección o emergencias.
+       ambientales
+       El trabajo en áreas              Se definirán e implantarán procedimientos para el trabajo a
+       seguras                          desarrollar en las áreas seguras. Ej. Supervisión de visitantes,
+                                        prohibición de tomar imágenes, etc.
+       Áreas de carga y                 Deben controlarse zonas de carga y descarga. Valorar la
+       descarga                         necesidad de inventariar y revisar los materiales entregados
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                        31
+
+
+
+
+       11.2. SEGURIDAD DE LOS EQUIPOS
+       Emplazamiento y                          Debe ser tal que se eviten daños por amenazas
+       protección de equipos                    ambientales o accesos no autorizados
+       Instalaciones de                         Disponer de quipos que prevengan daños o alteraciones
+       suministro                               en el suministro eléctrico(al menos en los más sensibles)
+       Seguridad del cableado                   Proteger el cableado de suministro y transporte de datos
+       Mantenimiento de                         Desarrollar tareas períodicas de mantenimiento
+       equipos                                  preventivos para mantener rendimiento y evitar
+                                                incidentes. Seguir las recomendaciones de fábrica.
+       Retirada de materiales                   Evitar la salida de activos, y cuando es necesario, debe
+       propiedad de la empresa                  disponer de la debida autorización y control
+       Seguridad de los equipos                 Sera necesario identificar e implantar medidas de
+       fuera de las instalaciones               seguridad para los equipos que abandonan el perímetro
+       Reutilización o                          Debe eliminarse la información de forma segura cuando
+       eliminación segura de                    los equipos son retirados o se van a reutilizar
+       equipos
+       Equipo de usuario                        Deben aplicarse medidas de bloqueo de puesto de trabajo
+       desatendido                              y cierre de sesiones abiertas
+       Política de puesto de                    Deberán permanecer despejados de materiales de trabajo
+       trabajo despejado y                      que no se usen. Debe haber armarios o cajoneras con
+       pantalla limpia                          cierre
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                        32
+                                    ISO/IEC 27001 - 27002
+
+
+
+
+                                                       EJEMPLO
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                    33
+
+
+
+
+                                              Implementación
+       • Fases de creación de un proyecto SGSI siguiendo
+         recomendaciones de ISO/IEC 27001
+          0. Posible Evaluación del estado inicial de la                                    Documentar la información
+          organización con respecto a la ISO/IEC 27001                                  0   del SGSI (políticas,
+                                                                                            procedimientos,           4
+                                                                                            instrucciones)
+         • Lanzamiento y análisis del contexto de la
+           organización.                                                                1
+         • Definición del alcance                                                                                        5
+                                                                                            Implementación del SGSI
+
+          Elaboración de la política y propuesta de objetivos
+                                                                                        2
+                                                                                            • Auditoría interna
+                                                                                                                         6
+         • Evaluación de riesgos                                                            • Revisión del sistema
+         • Tratamiento de riesgos
+         • Selección de controles y declaración de
+                                                                                        3   Auditoría de certificación   7
+           aplicabilidad
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                    34
+                                              Implementación
+       • 1. Lanzamiento y análisis del contexto de la organización:
+              – Circunstancias
+              – Funcionamiento
+              – Implicaciones
+              – Dependencias
+              – Requisitos internos
+              – Requisitos externos
+              – Motivaciones para la implantación
+       • Definición del alcance
+              – Determinar los elementos que formarán parte del SGSI
+                (procesos de negocio sobre los que se aplicará el sistema)
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   35
+
+
+
+
+                                              Implementación
+       • Ejemplo: Organización que se plantea un SGSI según la
+         norma UNE ISO/IEC27001:
+              – Iberica RT empresa dedicada a la prestación de servicios de venta
+                y alquiler de vehículos a empresas y particulares
+              – Ha firmado acuerdos con gasolineras para ofrecer ventajas a sus
+                clientes
+              – Se ha unido a una promoción de puntos de una cadena de
+                gasolineras que tiene establecimientos en varios países
+              – También ofrece sus servicio a través de la web
+              – Los clientes esperan protección de confidencialidad
+              – Las estaciones de servicio exigen buen funcionamiento en el
+                sistema de puntos
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   36
+                                              Implementación
+       • Ejemplo: Estructura de la empresa, 4 departamentos:
+             – Alquiler y venta: gestiona estas operaciones, directamente o a través
+               de la web. También gestiona un conjunto de ventajas a los clientes,
+               contratando una gestoría que se comparte con otras cadenas de
+               gasolineras y supermercados
+             – Comercial: capta nuevos clientes. Gestiona los avisos de novedades a
+               los clientes
+             – RRHH: gestión de los datos de clientes y proveedores para llevar la
+               contabilidad y obligaciones fiscales. Aplicaciones usadas: CPLUS y
+               FPLUS, y Microsoft Office. Los usuarios guardan los documentos de
+               ofimática de forma local
+             – Departamento Técnico: instala, mantiene y gestiona los sistemas de
+               información, incluyendo relaciones con proveedores tecnológicos.
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)             37
+
+
+
+
+                                              Implementación
+       • Ejemplo: Aspectos técnicos
+            – La red local está formada por 15 ordenadores personales y un servidor de dominio
+            – El servidor centraliza toda la información necesaria para el funcionamiento de la
+              empresa y las aplicaciones para su tratamiento. En el mismo se gestionan los
+              acceso a la red de la empresa (cuentas de usuario, correo electrónico, etc.)
+            – Cada usuario dispone de usuario y contraseña (que no caduca), salvo en el
+              departamento comercial que existe una contraseña común
+            – La web ha sido desarrollada por una empresa externa
+            – Los equipos del sistema disponen de antivirus que se actualiza automáticamente
+            – Los equipos disponen de conexión a internet ADSL a través de un router con
+              funciones de cortafuegos
+            – Se realizan copias de seguridad semanalmente en cinta magnética. Hay 4 cintas
+              que se rotan. Las copias se almacenan en una caja fuerte en la empresa.
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)             38
+                                              Implementación
+       • Ejemplo: Alcance:
+              – Los sistemas de información de los procesos de alquiler y
+                venta y financiero, prestados desde sus oficinas ubicadas en la
+                dirección C/General 2, Jaén.
+              – Las pautas descritas en el presente documento serán efectivas
+                para el conjunto de la empresa, sus instalaciones y activos de
+                información
+              – Asimismo, se aplica a todos los empleados que seguirán las
+                directrices en la medida que afecte a su trabajo. También se
+                aplica a los contratistas, clientes o cualquier otra tercera parte
+                que tenga acceso a la información o los sistemas de RTT
+                Ibérica.
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)            39
+
+
+
+
+                                              Implementación
+       • 2. Definición de objetivos y política de seguridad
+              – Líneas generales de actuación que manifiesta el compromiso de
+                la dirección de velar por la confidencialidad, integridad y
+                disponibilidad de los activos de información.
+              – Documentos que pueden incluirse en la política de seg.:
+                     • El alcance del sistema: qué partes de la organización se aplicarán los
+                       procesos de gestión del SGSI
+                     • Los objetivos de seguridad: descripción de qué persigue la organización
+                       con la implantación del SGSI
+                     • La estructura de la empresa: organigrama de áreas, responsables y sus
+                       relaciones internas y externas
+                     • El marco organizativo: roles y responsabilidades
+                     • Enfoque y metodología de evaluación de riesgos
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)            40
+                                              Implementación
+       • Ejemplo: Política de seguridad
+             – El propósito de esta política de seguridad de la información es
+               proteger los activos de información de IBERICA RT
+             – Es la política de la organización asegurar que
+                    • La información está protegida contra pérdidas de disponibilidad,
+                      confidencialidad e integridad
+                    • Se cumplen los requisitos legales aplicables
+                    • Se cumplen los requisitos del negocio respecto a la seguridad de la información
+                      y los sistemas de información
+                    • Cada empleado es responsable de cumplir esta política y sus procedimientos
+                      según aplique a su puesto de trabajo
+                    • El política implementar, mantener y realizar un seguimiento del SGSI
+             – Esta política ha sido aprobada por la dirección y se revisará
+               anualmente
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                   41
+
+
+
+
+                                              Implementación
+       • Ejemplo: Objetivos
+              – Asegurar la confidencialidad de la información que
+                nuestros asociados depositan y que la organización
+                almacena en los sistemas de información
+              – Maximizar la disponibilidad y calidad de los servicios
+                prestados a nuestros clientes
+              – Garantizar que nuestras operaciones y procesos actuales y
+                futuros cumplan con la legislación vigente en materia de
+                seguridad de la información
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                   42
+                                              Implementación
+       • Ejemplo: Requisitos legales
+              – Reglamento general de protección de datos (RGPD) RG
+                2016/679
+              – Real Decreto Legislativo 1/1996, d 12 abril (Ley de la
+                Propiedad Intelectual)
+              – Ley 34/2002 de 11 de Julio (LSSI)
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   43
+
+
+
+
+                                              Implementación
+       • Ejemplo: Revisiones y auditorías (política de seguridad y
+         auditorías)
+             – El responsable de seguridad revisará esta política anualmente o
+               cuando haya cambios significativos que así lo aconsejen y la
+               someterá de nuevo a aprobación por la dirección. Las revisiones
+               comprobarán la efectividad de la política valorando los efectos de los
+               cambios tecnológicos y de negocio
+             – La dirección será responsable de aprobar las modificaciones
+               necesarias en el texto cuando se produzca un cambio que afecte a
+               las situaciones de riesgo establecidas en el presente documento
+             – El sistema de gestión de seguridad se auditará completamente cada
+               año, según un plan de auditorías desarrollado por el responsable de
+               seguridad
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   44
+                                              Implementación
+       • Ejemplo: Compromiso de la dirección
+              – La dirección expresa su compromiso total con la presente
+                política de seguridad manteniendo las directrices fijadas en
+                el presente documento y proporcionando los recursos
+                necesarios para ello. Asimismo, publicará y entregará a
+                todos los empleados y contratistas el presente documento
+                para que todos conozcan los objetivos establecidos por la
+                dirección, las políticas y principios y normas adoptadas y su
+                importancia para la seguridad de la organización, las
+                responsabilidades generales y específicas en materia de
+                seguridad y otras referencias para la documentación que
+                puedan ser útiles
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)          45
+
+
+
+
+                                              Implementación
+       • Ejemplo: Marco Organizativo de la seguridad
+         (responsabilidades)
+              – Dirección:
+                     • Facilitar los recursos necesarios para el funcionamiento y mejora del
+                       SGSI
+                     • Asignar las responsabilidades en materia de seguridad de información
+                     • Participar en el proceso de revisión por la dirección
+              – Responsable de seguridad
+                     • Velar por la efectiva implantación de las medidas de seguridad
+                       seleccionadas
+                     • Detectar necesidades de formación y emprender acciones adecuadas
+                     • Mantener actualizados los elementos que dan soporte al SGSI
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)          46
+                                              Implementación
+       • Ejemplo: Marco Organizativo de la seguridad
+         (responsabilidades)
+              – Propietario de los riesgos:
+                     • Aprobar los niveles de riesgo residual, obtenidos a través del proceso de
+                       evaluación de riesgos
+                     • Aprobar los planes de tratamiento de riesgos necesarios para reducir los
+                       riesgos a un nivel aceptable
+              – Responsable de sistemas
+                     • Implantar las medidas de seguridad seleccionadas para mitigar los riesgos
+                     • Supervisar el funcionamiento de los activos de información y de las
+                       medidas de seguridad aplicadas sobre los mismos
+              – Personal
+                     • Conocer y cumplir con los términos establecidos en la política de seguridad
+                     • Notificar las incidencias de seguridad
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                47
+
+
+
+
+                                              Implementación
+       • 3. Evaluar los riesgos de la organización
+
+           A. Desarrollar un inventario de activos: elementos
+           indispensables para el funcionamiento de la organización
+             – Recoge la siguiente información:
+                   • El nombre
+                   • La descripción
+                   • Categoría: software, hardware, personal
+                   • Ubicación
+                   • Activos de los que depende
+                   • Valor de activo en cada dimensión:
+                        – Confidencialidad
+                        – Disponibilidad
+                        – Integridad
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                48
+                                                Implementación
+        • Ejemplo: Usar una escala cualitativa para valorar los
+          activos
+                  Valor        Descripción
+                  0            No aplicable
+                  1            La pérdida de seguridad en la dimensión no impediría la actividad
+                               normal de la organización
+                  2            La pérdida de seguridad en la dimensión causaría trastornos
+                               leves en la actividad normal de la organización
+                  3            La pérdida de seguridad en la dimensión causaría trastornos
+                               graves en la actividad normal de la organización
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                                 49
+
+
+
+
+                                                Implementación
+        • Ejemplo: Activo: “Nóminas” de tipo “Datos” en el
+          servidor “NominaServer”
+              – Cada parámetro se valorará de 0-3 según su relevancia
+                en la organización
+            Activo        Confidencialidad              Integridad          Disponibilidad             Valoración
+                                                                                                          total
+            Nóminas                   1                       3                       2                     6
+
+
+
+
+    Valor              Descripción
+    0                  No aplicable
+    1                  La pérdida de seguridad en la dimensión no impediría la actividad normal de la organización
+    2                  La pérdida de seguridad en la dimensión causaría trastornos leves en la actividad normal de la organización
+    3                  La pérdida de seguridad en la dimensión causaría trastornos graves en la actividad normal de la organización
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                                 50
+                                              Implementación
+              B. Identificar y valorar amenazas
+              – Dependiendo de la naturaleza del activo, se asigna para
+                cada dimensión el valor:
+                      •     de probabilidad de ocurrencia
+                      •     de degradación del activo en caso de materialización de la misma
+                            en cada dimensión
+              – Existen catálogos de amenazas:
+                      •     National Institute of Standards and Technology
+                      •     MAGERIT
+                      •     ISO/IEC 2005
+                      •     Amenazas específicas en normas sectoriales (ISO/IEC 27011,
+                            ISO/IEC 27799)
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                               51
+
+
+
+
+                                              Implementación
+       • Ejemplo: Usar una escala cualitativa para valorar la
+         vulnerabilidad de los activos frente amenazas
+                  Valor Descripción
+                  0          Sin degradación
+                  1          Degradación baja
+                  2          Degradación media
+                  3          Degradación alta
+                                                                                 Amenazas:
+                                                                                 - Fuego
+                                                                                 - Inundación
+                                                                                 - Corte suministro eléctrico
+                                                                                 - Fallo del suministro eléctrico
+                                                                                 - Errores de usuario
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                               52
+                                              Implementación
+       • Ejemplo: Probabilidad de que ocurra una amenaza
+
+                  Probabilidad              Guía
+                  de ocurrencia
+                  1 Muy baja                Una media de una vez cada 5 años
+                  2 Baja                    Una media de una vez cada 2 años
+                  3 Media                   Una media de una vez cada año
+                  4 Alta                    Una media de 3 veces al año
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                  53
+
+
+
+
+                                              Implementación
+       • Ejemplo: Para el activo: “Nóminas”, la amenaza “Fuego” tendrá
+         una degradación “Alta”, si están en papel y “Media”, si están
+         digitalizadas
+       • Una posible valoración amenazas para el activo “Nominas”
+
+                  Amenaza                  Probabi  Degradación                         Degradación    Degradación
+                                            lidad confidencialidad                       integridad   disponibilidad
+                    Fuego                      1         0                                    0             3
+                Inundación                      1                    0                      1               2
+                Corte del                       2                    0                      2               1
+          suministro eléctrico
+          Fallo del suministro                  3                    0                      0               1
+          de comunicaciones
+           Errores de usuario                   3                    2                      2               1
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                  54
+                                              Implementación
+              C. Calcular el impacto, para cada activo y dimensión, de
+                 las amenazas identificadas.
+              – Se calcula en función del valor del activo y la degradación
+                que produciría la amenaza si se materializa
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                               55
+
+
+
+
+                                              Implementación
+       • Ejemplo: Cálculo de impacto (especificación de la
+         escala)
+           Degradación de la                    0                     1                     2             3
+              amenaza o                       (no              (no impide               (trastornos   (trastornos
+                                           aplicable)      actividad normal)               leves)       graves)
+               impacto
+                                                                             Valor del activo
+
+
+           0 Sin degradación                    0                     0                     0             0
+           1 Degradación Baja                   0                     1                     2             3
+             2 Degradación                      0                     2                     3             4
+                 media
+           3 Degradación alta                   0                     3                     4             5
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                               56
+                                              Implementación
+       • Ejemplo: Para el activo: “Nóminas”, los niveles de
+         impacto serían:
+                         Amenaza                               Impacto                   Impacto        Impacto
+                                                           confidencialidad             integridad   disponibilidad
+                            Fuego                                 0                          0             4
+                        Inundación                                    0                     3              3
+          Corte del suministro eléctrico                              0                     4              2
+               Fallo del suministro de                                0                     0              2
+                   comunicaciones
+                 Errores de usuario                                   2                     4              2
+
+       Valoración sin considerar las posibles medidas de seguridad
+       que actualmente se estén aplicando. Se quiere calcular el
+       riesgo máximo para cada activo
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                 57
+
+
+
+
+                                              Implementación
+       • Ejemplo: Para el activo: “Nóminas”, los niveles de impacto
+         serían:
+                         Amenaza                               Impacto                   Impacto        Impacto
+                                                           confidencialidad             integridad   disponibilidad
+                            Fuego                                 0                          0             4
+                        Inundación                                    0                     3              3
+          Corte del suministro eléctrico                              0                     4              2
+                                                                                                 CÁLCULO
+               Fallo del suministro de                                0                     0              2
+                   comunicaciones
+                 Errores de usuario                                   2                     4              2
+
+       Valoración sin considerar las posibles medidas de seguridad que
+       actualmente se estén aplicando. Se quiere calcular el riesgo máximo para
+       cada activo
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                 58
+                                              Implementación
+                      Valor Amenazas
+
+
+
+
+                                                                  1º- BUSCO EL VALOR DE LA DEGRADACIÓN
+                                                                  DE LA AMENAZA = 1
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                    59
+
+
+
+
+                                              Implementación
+                      Valor de los activos
+
+
+
+
+          2º- BUSCO EL VALOR DEL ACTIVO = 3
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                    60
+                                              Implementación
+
+
+
+
+          3º- CALCULO EL IMPACTO = VALOR o DEGRADACIÓN
+          DE LA AMENAZA (1) ; VALOR DEL ACTIVO (3) = 3
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   61
+
+
+
+
+                                              Implementación
+              D. Calcular el riesgo,
+                 para cada amenaza, en función del impacto (anterior) y la
+                 probabilidad de ocurrencia
+              – Objetivo: cuantificar el nivel de riesgo para establecer una
+                comparación entre los activos y calcular el riesgo para el
+                servicio de negocio o interno
+              – Es importante que los criterios usados estén establecidos
+                correctamente y se apliquen de la misma manera
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   62
+                                              Implementación
+       • Ejemplo: Cálculo de riesgo
+           Probabilidad             0               1               2           3           4                   5
+              de la                                            Valor del impacto del activo
+             amenaza
+
+            1 Muy baja              0               1                  2                3            4          5
+                2 Baja              0               2                  3                4            5          6
+              3 Media               0               3                  4                5            6          7
+                4 Alta              0               4                  5                6            7          8
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                 63
+
+
+
+
+                                              Implementación
+       • Ejemplo: Para el activo: “Nóminas”, los niveles de riesgo serían:
+
+                         Amenaza                                Riesgo                    Riesgo         Riesgo
+                                                           confidencialidad             integridad   disponibilidad
+                            Fuego                                  0                         0              4
+                        Inundación                                    0                     3              3
+          Corte del suministro eléctrico                              0                     5              3
+               Fallo del suministro de                                0                     0              4
+                   comunicaciones
+                 Errores de usuario                                   4                     6              4
+         Aplicando este método al resto de activos se obtiene un “mapa de
+         riesgos”, que permite identificar los que tienen mayor riesgo
+       • Los métodos de cálculo deben quedar documentados
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                 64
+                                              Implementación
+       • Ejemplo: Para el activo: “Nóminas”, los niveles de riesgo serían:
+
+                         Amenaza                                Riesgo                    Riesgo         Riesgo
+                                                           confidencialidad             integridad   disponibilidad
+                            Fuego                                  0                         0              4
+                        Inundación                                    0                     3              3
+          Corte del suministro eléctrico                              0                     5              3
+                                                                                                 CÁLCULO
+               Fallo del suministro de                                0                     0              4
+                   comunicaciones
+                 Errores de usuario                                   4                     6              4
+         Aplicando este método al resto de activos se obtiene un “mapa de
+         riesgos”, que permite identificar los que tienen mayor riesgo
+       • Los métodos de cálculo deben quedar documentados
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                 65
+
+
+
+
+                                              Implementación
+
+
+
+                                                                  1º- BUSCO PROBABILIDAD DE LA AMENAZA = 1
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                 66
+                                              Implementación
+
+
+
+
+                                                             2º- BUSCO IMPACTO DE LA AMENAZA = 3
+                                                             (CALCULADO ANTES)
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)              67
+
+
+
+
+                                              Implementación
+
+
+
+    3º- CALCULO EL RIESGO = PROBABILIDAD
+    AMENAZA (1) ; IMPACTO (3) = 3
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)              68
+                                              Implementación
+              E. Identificar a los propietarios de los riesgos:
+                      Responsables de tomar la decisión de tratamiento del
+                      riesgo y aprobar los planes de mitigación de los mismos
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   69
+
+
+
+
+                                              Implementación
+       • Ejemplo: En nuestro ejemplo, se determina que existe
+         un único propietario del riesgo, será la dirección de la
+         organización.
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   70
+                                              Implementación
+              F. Tratamiento de Riesgos:
+                    Determina las estrategias a aplicar sobre los riesgos
+                    identificados
+                    •     Asumir
+                    •     Transferir
+                    •     Eliminar
+                    •     Mitigar
+              – Decisión del propietario del riesgo
+              – En base a un criterio determinarán el máximo riesgo asumible
+              – Siempre habrá un grupo de controles que reducirán los riesgos
+                de todos los activos. Ej: política de seguridad, inventario,
+                formación, o realización de auditorías
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   71
+
+
+
+
+                                              Implementación
+       • La información documentada del análisis de riesgos
+         será:
+              – Todas las valoraciones realizadas
+              – Los valores de riesgo intrínseco
+              – La identificación del propietario del riesgo
+              – Cual es el riesgo asumible
+              – Las decisiones tomadas respecto a cada uno de los riesgos
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   72
+                                              Implementación
+       • Ejemplo:
+              – El valor de riesgo asumible lo establecemos en 4
+              – Se aplicarán los controles para reducir (mitigar) el riesgo
+                producido por:
+                      • Amenazas de corte del suministro eléctrico
+                      • Errores de usuario
+              En las dimensiones afectadas
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)             73
+
+
+
+
+                                              Implementación
+         G. Medidas de seguridad a implementar,
+                establecimiento de las medidas de seguridad más adecuadas
+                (controles):
+                • Organizativos y técnicos para reducir los riesgos a un nivel aceptable
+                • Se recomienda utilizar el Anexo I de la ISO/IEC 27001 o la ISO/IEC 27002
+                • Es conveniente revisar uno por uno los controles y considerar
+                    – Si ya está implementado
+                    – Si ayudaría a reducir los riesgos identificados
+                    – Si el coste de implementarlo es aceptable
+                    – Si el coste de la operación y el mantenimiento del control serán
+                       aceptables
+                • Existen controles obligatorios (Ej. Políticas de seguridad, auditorías, etc.)
+                • Deberá documentarse la selección de controles en el documento de
+                  aplicabilidad
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)             74
+                                              Implementación
+       • Ejemplo: Para el activo “Nóminas” se pueden establecer
+         los siguientes controles:
+              – Definir una clasificación de la información. De manera que se
+                conozca qué nivel de seguridad se debe aplicar sobre las
+                nóminas
+              – Controles de acceso a la información. No todo el mundo tendrá
+                acceso a ella
+              – Copias de seguridad. Para garantizar la disponibilidad de la
+                información
+              – Procedimientos de intercambio de información. Cómo se van a
+                hacer llegar de manera segura a los empleados o a los asesores
+                garantizando su integridad y confidencialidad
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   75
+
+
+
+
+                                              Implementación
+              H. Evaluar los riesgos residuales:
+                      • Tras la selección de los controles a implantar
+                      • Realización del cálculo de riesgo tras su implantación
+                      • Nunca será cero
+                      • Se debe usar la misma metodología
+                      • El propietario tiene que conocer este riesgo y aceptarlo
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   76
+                                              Implementación
+       • Ejemplo: Sobre el ejemplo “Nóminas” se ha implantado:
+             – Archivo bajo llave de las nóminas
+             – Sistema de extinción de incendios en el lugar de archivo
+             – Digitalización y archivo digital de las nóminas
+             – Instalación de un sistema de alimentación ininterrumpida para el
+               servidor NominaServer
+             – Aislamiento físico del servidor NominaServer
+             – Realización de copias de seguridad diarias de las bases de datos de
+               nóminas y de la aplicación
+             – Envío periódico de nóminas a asesoría, es decir, copia en segunda
+               ubicación
+             – Formación par el personal en materia de seguridad
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                  77
+
+
+
+
+                                              Implementación
+       • Ejemplo: Repetimos la valoración de las amenazas,
+         con estos factores.
+                  Amenaza                  Probabi  Degradación                         Degradación    Degradación
+                                            lidad confidencialidad                       integridad   disponibilidad
+                     Fuego                     1         0                                    0             1
+                 Inundación                     1                     0                     1               2
+                Corte del                       2                     0                     1               1
+          suministro eléctrico
+          Fallo del suministro                  3                     0                     0               1
+          de comunicaciones
+           Errores de usuario                   1                     2                     1               1
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                  78
+                                               Implementación
+               Amenaza            Probabi     Degradación        Degradación    Degradación
+                                   lidad    confidencialidad      integridad   disponibilidad
+                                                                                                    COMPARATIVA:
+                 Fuego              1              0                 0                  3
+              Inundación            1              0                 1                  2
+          Corte del suministro      2              0                 2                  1           INICIAL
+                eléctrico
+
+          Fallo del suministro      3              0                 0                  1
+          de comunicaciones
+
+           Errores de usuario       3              2                 2                  1
+
+
+
+
+          ACTUAL TRAS LA
+          IMPLANTACION DE
+          LOS CONTROLES
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                     79
+
+
+
+
+                                               Implementación
+       • Ejemplo: Resultado de recalcular los riesgos
+                           Amenaza                                  Riesgo                    Riesgo         Riesgo
+                                                               confidencialidad             integridad   disponibilidad
+                                Fuego                                  0                         0              2
+                         Inundación                                      0                      3              3
+          Corte del suministro eléctrico                                 0                      4              3
+                Fallo del suministro de                                  0                      0              4
+                    comunicaciones
+                  Errores de usuario                                     2                      2              2
+
+
+              – Los riesgos tienen valores iguales o inferiores al riesgo
+                asumible determinado por la organización (4). No hay que
+                añadir más controles.
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                     80
+                                              Implementación
+                    Amenaza                     Riesgo           Riesgo          Riesgo
+                                           confidencialidad    integridad    disponibilidad       COMPARATIVA:
+                     Fuego                        0                 0               4
+                   Inundación                     0                 3               3
+                                                                                                  INICIAL
+          Corte del suministro eléctrico          0                 5               3
+             Fallo del suministro de              0                 0               4
+                 comunicaciones
+               Errores de usuario                 4                 6               4
+
+
+                                                           Amenaza                     Riesgo           Riesgo         Riesgo
+                                                                                  confidencialidad    integridad   disponibilidad
+
+                                                              Fuego                           0           0              2
+          ACTUAL TRAS LA
+                                                          Inundación                          0           3              3
+          IMPLANTACION DE
+          LOS CONTROLES                               Corte del suministro                    0           4              3
+                                                            eléctrico
+                                                   Fallo del suministro de                    0           0              4
+                                                       comunicaciones
+                                                      Errores de usuario                      2           2              2
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                           81
+
+
+
+
+                                              Implementación
+       • Se generará documentación como resultado:
+              – Valoraciones y valores de riesgo resultantes tras la
+                aplicación de los controles
+              – La aceptación de los riesgos residuales por parte del
+                propietario del riesgo
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                           82
+                                              Implementación
+              I. Plan de tratamiento de riesgos:
+              – Definición de las tareas a realizar y controles a implantar
+              – Establecer la trazabilidad entre las medidas a implantar y
+                los riesgos que cada una de ellas pretende mitigar
+              – Debe contemplar también:
+                      • Responsabilidades de cada acción
+                      • Mecanismo para medir la eficacia de los controles a implantar
+                      • Definir la métricas en las diferentes dimensiones de seguridad
+                      • Plazos
+                      • Etc.
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                  83
+
+
+
+
+                                              Implementación
+       • Ejemplo: Plan de Tratamiento de Riesgo
+             – Objetivo: Este plan de tratamiento de riesgos tiene como objetivo
+               implantar en IBERICA RT los procesos que permitan reducir los riesgos
+               a los niveles considerados en el proceso de evaluación de riesgos, y
+               mejorar la organización de la seguridad de la información
+             – Alcance: Este plan afecta a IBERICA RT durante el año siguiente tras
+               su aprobación
+             – Responsabilidades:
+                    • El responsable de sistemas se encargará de la implantación y ejecución de las
+                      tareas técnicas previstas
+                    • El responsable de seguridad se encargará de la implantación y ejecución de las
+                      distintas actividades
+                    • La dirección se encargará de hacer efectivas las medidas organizativas y
+                      revisará y aprobará el plan y los objetivos marcados en el plan
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                  84
+                                              Implementación
+       • Ejemplo: Plan de Tratamiento de Riesgo
+              – Tareas:
+          Acción                         Control                       Responsable      Plazo      Activos    Recursos
+                                                                                                   afectads
+          Llevar acciones de             A.7.2.2.                      Responsable      3 meses    Todos      Horas de
+          formación y                    Concienciación,               de seguridad                           responsable
+          concienciación del             educación y                                                          seguridad
+          personal                       capacitación en                                                      /Horas de
+                                         seguridad de la                                                      personal
+                                         información
+
+          Contratar una auditoría        A.18.2.1 Revisión             Responsable      12 meses   Todos      Coste de
+          SGSI                           independiente de la           SGSI                                   contratación
+                                         seguridad de la
+                                         información
+          Implantar requisitos de        A.9.4.3 Sistema de            Responsable      12 meses   Informac   Horas
+          complejidad de las             gestión de                    de                          ión/       responsable de
+          contraseñas                    contraseñas                   informática                 Aplicaci   informática
+                                                                                                   ones
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                          85
+
+
+
+
+                                              Implementación
+       • Ejemplo: Plan de Tratamiento de Riesgo
+              – Seguimiento: Se verificará el cumplimiento del plan
+                trimestralmente por parte del responsable de seguridad. En caso
+                de desviaciones se abrirán las acciones correctivas necesarias,
+                actualizando, en su caso el plan para reflejar los cambios.
+              – Ejemplo de Indicadores
+               Objetivo                                   Mejorar la formación del personal (disponibilidad, integridad y
+                                                          conf.)
+               Métrica                                    Empleados que han recibido formación en el área de seguridad
+               Indicador                                  Al menos un 80%
+               Frecuencia                                 Anual
+               Fórmula                                    Número de empleados con formación en seguridad/ Total de
+                                                          empleados
+
+               Mediciones         Fecha:                  Valor:
+                                  Fecha:                  Valor:
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                          86
+                                              Implementación
+       • 4. Elaboración de Documentación:
+         Documentos a elaborar:
+              – Política de seguridad y los objetivos del SGSI
+              – El alcance del SGSI
+              – Proceso de evaluación de riesgos y sus resultados
+              – Proceso de tratamiento de riesgos y sus resultados
+              – La declaración de aplicabilidad
+              – Los procedimientos que la organización haya determinado
+                que es necesario mantener documentados
+              – Otros documentos: planes de seguridad, instrucciones
+                técnicas
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   87
+
+
+
+
+                                              Implementación
+       • Podemos distinguir 4 tipos de documentos:
+              – Políticas: documentos de alto nivel, establecen objetivos y
+                criterios generales de la organización
+              – Normas: conjunto de reglas para el buen uso de los medios
+                disponibles y su aplicación servirá como medida preventiva
+              – Procedimientos: tareas a desarrollar y los responsables de
+                la ejecución de un determinado proceso.
+              – Instrucciones técnicas: casos en que sea necesario
+                profundizar en determinados aspectos de los
+                procedimientos, donde se describe con todo detalle los
+                pasos para ejecutar un proceso. No conviene abusar.
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   88
+                                              Implementación
+                                                                                        Políticas
+             Nivel 1                                       Política(s),
+                                                            alcances,
+                                                      evaluación de riesgo,
+             Nivel 2                               declaración de aplicabilidad
+                                                                                        Normas
+                                               Normas específicas de seguridad
+                                                          ¿cómo?
+             Nivel 3
+                                       Procedimientos para llevarlo a cabo ¿Quién,      Procedimientos
+                                                 qué, cuándo, dónde?
+
+             Nivel 4                   Describe con detalle los pasos para ejecutar     Instrucciones
+                                                      un proceso.                       Técnicas y
+                                         Proporciona las pruebas objetivas del          Registros
+                                        cumplimiento con las exigencias del SGSI
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                    89
+
+
+
+
+                                              Implementación
+       • Ejemplo:
+              – Política: es política de la organización velar por que la información
+                no sea conocida por más personal que el estrictamente necesario,
+                estableciendo para ello medidas de control de acceso
+              – Norma: Los datos de acceso a los sistemas son personales e
+                intransferibles. Los usuarios no los comunicarán a otras personas
+                bajo ningún concepto
+              – Procedimiento: los sistemas solicitarán a todos los usuarios cada
+                90 días y de manera automática, que cambien su contraseña
+              – Instrucción técnica: en este caso se describiría paso a paso cómo
+                configurar las políticas de contraseñas para que se solicite el
+                cambio automático
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                    90
+                                              Implementación
+       • 5. Implementación de los controles y procedimientos:
+              – De manera organizada y planificada
+              – Suele comenzarse con las acciones que con menor esfuerzo
+                aporten un gran valor
+       • Formar y concienciar al personal
+              – Necesario para todas las personas implicadas
+              – Debe ser acorde con las funciones que desempeña
+              – Todas las acciones deben reflejarse en un plan de formación
+                (para hacer un seguimiento de su eficacia)
+              – Ej. Envío de recordatorios por correo electrónico
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   91
+
+
+
+
+                                              Implementación
+       • 6. Realizar una auditoría interna
+              – Permite comprobar el grado de ajuste del SGSI a
+                    • Los requisitos de la norma
+                    • La alineación con los objetivos de la organización
+              – Se debe garantizar la independencia sobre las actividades a
+                auditar
+              – Deben tener experiencia y formación necesarias
+              – Obtención de un informe de auditoría
+       • Revisión del sistema por la dirección:
+              – Responsable de seguridad recopila toda la información y realiza
+                un informe de alto nivel (no detalles técnicos)
+              – Refleja la situación actual y planes de mejora.
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   92
+                                              Implementación
+       • Evidencias que prueba que se han ejecutado los
+         procedimientos planificados:
+             – Actas del comité de seguridad
+             – Informe de la revisión por la dirección
+             – Informes de auditoría
+             – Registros de formación
+             – Perfiles profesionales
+             – Acciones correctivas
+             – Solicitudes de acceso de usuarios
+             – Registros de los sistemas
+             – Compromisos de confidencialidad firmados por los empleaods
+             – Acceso a la publicación de las normas y políticas
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         93
+
+
+
+
+                                                       Actividad 5                      A05
+
+       • Realiza el cálculo de riesgos y el análisis de controles
+         descrito en el ejercicio disponible en la Plataforma.
+         Los archivos necesarios para su resolución:
+              – Actividad RIESGOS.docx (archivo a resolver)
+              – 27002_recortada.pdf
+       • Sube el archivo .docx o pdf resultante a la Actividad
+         05.
+
+       Nota 1: Si algún alumno necesita el documento en otro formato que no
+       sea .docx, que se ponga en contacto con el profesor.
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         94
+

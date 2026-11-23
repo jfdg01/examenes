@@ -1,0 +1,875 @@
+                  LEGISLACIÓN, NORMATIVA,
+                         AUDITORIA Y
+                       CERTIFICACIONES
+
+     PARTE 2-A. SEGURIDAD EN LOS SISTEMAS
+         DE INFORMACIÓN E ISO 27001
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   1
+
+
+
+
+                                                               Índice
+       Seguridad en los sistemas de Información e ISO 27001
+       • SGSI
+       • Esquema Nacional de Seguridad
+       • Análisis y Gestión de Riesgos
+       • ISO 27001
+       • Auditoría
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   2
+                                                                  SGSI
+       • Información: “Conjunto organizado de datos que constituyen
+         un mensaje sobre un determinado fenómeno”
+       • La información activo
+         importante de una
+         organización
+       • Requiere una
+         protección adecuada
+       • Aspectos que
+         comprometen la
+         seguridad 
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   3
+
+
+
+
+                                                                  SGSI
+       • Amenazas
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   4
+                                                                  SGSI
+       • Las medidas de seguridad de la información deben proteger
+         (Dimensiones de Seguridad):
+             – Disponibilidad: Asegurar que loso sistemas funcionen puntualmente
+               y que los servicios no sean denegados a los usuarios autorizados
+             – Integridad:
+                    • De la información: asegura que la información no haya sido alterada de
+                      manera no autorizada durante el almacenamiento, tratamiento o tránsito
+                    • De los sistemas: calidad intrínseca de un sistema para cumplir una función
+                      definida de manera inequívoca, libre de cualquier manipulación no autorizada
+             – Confidencialidad: asegura que una información privada o
+               confidencial no esté comunicada a personas no autorizadas,
+               aplicándose durante el almacenamiento, tratamiento o tránsito
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                  5
+
+
+
+
+                                                                  SGSI
+       • Las medidas de seguridad de la información deben proteger
+         (Dimensiones de Seguridad):
+             – Disponibilidad: Asegurar que loso sistemas funcionen puntualmente
+               y que los servicios no sean denegados a los usuarios autorizados
+                           • Resilencia (RGPD) : entendida como la capacidad
+             – Integridad:
+                                   de unasegura
+                    • De la información:    sistemaque lade  información
+                                                          información  no hayade
+                                                                               sidosobreponerse
+                                                                                    alterada de    a
+                                   un ciberincidente
+                      manera no autorizada   durante el almacenamiento, tratamiento o tránsito
+                                • Autenticidad
+                    • De los sistemas:                 (ENS)
+                                       calidad intrínseca  de un sistema para cumplir una función
+                      definida de manera inequívoca, libre de cualquier manipulación no autorizada
+                                     • Trazabilidad (ENS)
+             – Confidencialidad: asegura que una información privada o
+                          • Acceso (ENS)
+               confidencial no esté comunicada a personas no autorizadas,
+               aplicándose• durante
+                             Conservación    (ENS)
+                                    el almacenamiento, tratamiento o tránsito
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                  6
+                                                                  SGSI
+       • Beneficios de una correcta seguridad de la
+         información:
+              – Garantizar el cumplimiento de la legislación vigente y las
+                normas internacionales, con ausencia de dolo en caso de
+                infringir inadvertidamente alguna
+              – Reducir costes mediante la prevención, eliminación o
+                reducción eficaz del nivel de riesgo
+              – Garantizar la continuidad del negocio
+              – Aumentar el grado de confianza en su seguridad
+              – Mantener y mejorar la imagen pública
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                  7
+
+
+
+
+                                                                  SGSI
+     • IDEAS erróneas:
+                                                                    El riesgo de
+       Los ordenadores y                                            incendio y robo
+       programas son tan                                            no nos afecta
+       complejos que nadie los va                                                       Los sistemas no pueden
+       a entender (de fuera de la                                                       ser violados si no se atacan
+       empresa)                  El fraude interno no                                   los servidores (los
+                                 existe o no pasa en mi                                 terminales no se
+                                 organización                                           consideran)
+     • Consecuencias:
+             – Litigios civiles y laborales.
+             – Denuncias de las autoridades y multas.
+             – Daño a la imagen de la organización.
+             – Interrupción de las operaciones.
+             – Pérdidas financieras y/o sobre costes operativos.
+             – Coste de recuperación para volver a la situación inicial.
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                                  8
+                                                                  SGSI
+       • Sistema de Gestión de Seguridad de la Información
+         (SGSI)
+             “Conjunto de procesos que permiten establecer, implementar,
+             mantener y mejorar de manera continua la seguridad de la
+             información, tomando como base para ello los riesgos a los
+             que se enfrenta la organización”
+       • Implantación:
+              – Establecimiento de procesos formales
+              – Definición de responsabilidades
+              – Información documentada de políticas, planes y
+                procedimientos
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)    9
+
+
+
+
+                                                                  SGSI
+       • Tipos de procesos del SGSI
+              – Procesos de gestión: Controlan el funcionamiento del
+                propio sistema de gestión y su mejora continua
+              – Procesos de seguridad: Se centran en los aspectos
+                relativos a la propia seguridad de la información
+
+
+        Se recomienda: Integrar los distintos sistemas de
+        gestión implantados en la organización (Ej. UNE-EN ISO
+        9001 , 14001 con la ISO/IEC 27001)
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   10
+                                                                  SGSI
+       • El ENS (Esquema Nacional de Seguridad)
+              – Desarrollado para dar confianza y proteger los sistemas
+                de información en el ámbito de la administración
+                Electrónica
+              – SGSI (ISO 27001) en el ámbito de la Administración Pública
+              – Esta norma está orientada a garantizar:
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   11
+
+
+
+
+                                                                  SGSI
+       • La norma ISO/IEC 27001
+              – Ha sido desarrollada con la intención de servir como
+                modelo para el establecimiento, implementación,
+                operación, monitorización y mejora de un SGSI en
+                cualquier organización
+              – Esta norma está orientada
+                para “Gestionar la Seguridad
+                de la Información” (SGSI)
+              – Desde las 3 dimensiones de
+                seguridad de la información:
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   12
+                                              Fases de un SGSI
+       FASES DE UN SGSI: Ciclo PDCA (Planificar-Hacer-Verificar-Actuar”)
+       Marco obligatorio para la gestión de mejora continua:
+       “la organización debe mejorar de manera continua la
+       idoneidad, adecuación y eficacia del SGSI”
+                                                                           Identificar objetivos de negocio
+                                                                           Obtener apoyo de la dirección
+ Aplicar mejora continua                                                   Definir política
+ Acciones correctivas                                                      Establecer alcance
+                                                                           Análisis de riesgos
+                                                                           Seleccionar procesos/procedimientos
+
+ Monitorizar                                                               Implantar el plan de gestión
+ Auditorías internas                                                       Implantar el sistema de gestión
+ Medir                                                                     Implantar procesos/procedimientos/controles
+ Revisión por la dirección                                                 Asignar recursos
+                                                                           Formación y concienciación
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                               13
+
+
+
+
+                                                                  SGSI
+       • PLAN (Fase Planificar)
+                                                    Análisis
+                 Definición                            de                        Análisis de
+                                                                                                   Gestión de
+                  del SGSI                          Riesgos                        Riesgos
+                                                                                                    Riesgos
+                                                    (global)                      (detalle)
+
+
+       Objetivos:
+              – Definir las área del SGSI, alcance y política de seguridad
+              – Identificar: procesos, servicios, activos incluidos en el alcance
+              – Identificar los activos de información y riesgos relacionados
+              – Posicionar los riesgos y su nivel de control
+              – Analizar y sacar las conclusiones
+              Ver dónde estamos y cómo podemos llegar a la meta marcada
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                               14
+                                                                  SGSI
+       • DO (Fase Hacer)
+            Definición
+                                               Gestión                                                   Gestión
+            del plan de                                                          Implantación
+                                             proyectos de                                                  de
+            implantaci                                                            de controles
+                                             implantación                                              incidentes
+                ón
+
+
+       Objetivos:
+              – Obtener la implantación de las medidas que mejoran el
+                control, de acuerdo con el plan
+              – Disponer de indicadores de seguimiento
+              – Gestión de incidentes de seguridad
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                               15
+
+
+
+
+                                                                  SGSI
+       • CHECK (Fase Comprobar)
+                                                               Revisión de                  Auditoría y
+                       Revisión de
+                                                             efectividad de                 revisión del
+                     procedimientos
+                                                              los controles                     SGSI
+
+
+       • Objetivos:
+              – Verificación que el SGSI se ejecuta
+              – Verificar la efectividad del SGSI
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                               16
+                                                                  SGSI
+       • ACT (Fase Actuar)
+                     Implementar                             Comunicar                   Asegurar la
+                       planes de                             planes de                  consecución
+                        mejora                                mejora                    de objetivos
+
+       • Objetivos:
+              – Determinar las acciones de mejora a implementar
+              – Acciones correctivas frente a no conformidades detectadas en las
+                auditorías
+              – Acciones preventivas frente a no conformidades potenciales en
+                función de los requisitos del SGSI
+              – Comunicar las acciones de mejora a implantar
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                  17
+
+
+
+
+                                                               Índice
+       Seguridad en los sistemas de Información e ISO 27001
+       • SGSI
+       • Esquema Nacional de Seguridad
+       • Análisis y Gestión de Riesgos
+       • ISO 27001
+       • Auditoría
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                  18
+                    Esquema Nacional de Seguridad
+       • Ley 11/2007 de Acceso Electrónico de los ciudadanos a los Servicios Públicos
+            – Establece y regula el derecho de los ciudadanos a comunicarse con las Administraciones
+              Públicas a través de medios telemáticos
+            – Regula los aspectos básicos de uso de las tecnologías de la información en la actividad
+              administrativa, en las relaciones entre las AAPP (A2A) y en las relaciones C2A
+            – (Falta la confianza necesaria a los usuarios para que la implantación sea efectiva:)
+       • Real Decreto 3/2010 de 8 de Enero regula el Esquema Nacional de Seguridad
+         en el ámbito de la Administración Electrónica (ENS)
+            – Entró en vigor el 30 enero de 2010
+            – Crea las condiciones necesarias para la confianza en el uso de los medios electrónicos
+            – Introduce los elementos comunes que han de guiar a las AAPP en materia de seguridad
+              de la información
+            – Este Real Decreto fue modificado por el Real Decreto 951/2015, para actualizarlo en base
+              al conocimiento adquirido y la situación actual, incluido un nuevo escenario de ciber
+              amenazas.
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                    19
+
+
+
+
+                    Esquema Nacional de Seguridad
+       • Se han tenido en cuenta:
+             – Recomendaciones y normas de la Unión Europea en materia de seguridad de la
+               información
+             – La situación tecnológica de las diferentes Administraciones Públicas
+             – Los servicios electrónicos existentes en las AAPP
+       • Normativa generada a partir de las siguientes legislaciones:
+             – Administración electrónica, Ley 11/2007, de 22 de junio (en la actualidad derogada
+               por 39/2015)
+             – Protección de datos personales, Ley Orgánica 15/1999, de 13 de diciembre
+               (en la actualidad derogada por (RGPD) y LOPDGDD)
+             – Sociedad de la información y reutilización de la información en el sector público, Ley
+               37/2007, de 16 de noviembre
+       • Estrategia Nacional de Ciberseguridad (actualizada en abril 2019):
+         prevención, defensa, detección y respuesta frente a ciberamenazas.
+             – Garantiza en el capítulo 4, la implantación del ENS
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                    20
+                    Esquema Nacional de Seguridad
+       • Se han tenido en cuenta:
+             – Recomendaciones y normas de la Unión Europea en materia de seguridad de la
+               información
+             – La situación tecnológica de las diferentes Administraciones Públicas
+             – Los servicios electrónicos existentes en las AAPP
+       • Normativa generada a partir de las siguientes legislaciones:
+                                                                      RGPD: El ENS ha incluido una serie de
+             – Administración electrónica, Ley 11/2007, de 22 de junio
+                                                modificaciones para adaptarse al RGPD
+             – Protección de datos personales, Ley Orgánica 15/1999, de 13 de diciembre
+             – Firma electrónica, Ley 30/1992, de 26 de noviembre
+             – Sociedad de la información y reutilización de la información en el sector público,
+               Ley 37/2007, de 16 de noviembre
+       • Estrategia Nacional de Ciberseguridad (5 dic 2013): prevención, defensa,
+         detección y respuesta frente a ciberamenazas.
+             – Garantiza en el capítulo 4, la implantación del ENS
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                         21
+
+
+
+
+                    Esquema Nacional de Seguridad
+       • Objeto del ENS
+         “Determinar la política de seguridad que se ha de aplicar
+         en la utilización de los medios electrónicos a los que se
+         refiere la citada ley”
+       • Establece unos requisitos mínimos de aplicación a las
+         AAPP, para asegurar (datos, informaciones y servicios):
+              – Integridad
+              – Disponibilidad
+              – Autenticidad
+              – Confidencialidad
+              – Trazabilidad
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                         22
+                    Esquema Nacional de Seguridad
+       • Beneficios del ENS
+              – Define objetivos y metas que permiten aumentar el grado de
+                confianza en la seguridad
+              – Aporta valor añadido, generando confianza en los ciudadanos
+              – Permite a la organización conocer sus riesgos (amenazas,
+                vulnerabilidades e impactos)
+              – Permite prevenir, eliminar o reducir los riesgos, mediante
+                controles adecuados
+              – Aporta un valor añadido en cuanto a planificación, organización
+                y estructuración de los recursos TIC
+              – Establece procesos de revisión, mejora continua, sistemas de
+                verificación y auditoría de las medidas de seguridad
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                            23
+
+
+
+
+                    Esquema Nacional de Seguridad
+       • Ámbito de aplicación del ENS: La administración española
+             – A las AAPP                                                               Aplicable a:
+                   • Administración General del Estado,                                 • Sedes electrónicas
+                                                                                        • Registros electrónicos
+                   • Administraciones de las Comunidades Autónomas
+                                                                                        • SI accesibles
+                   • Administración Local                                                  electrónicamente por los
+                   • Ayuntamientos,                                                        ciudadanos
+                   • Diputaciones,                                                      • SI para el ejercicio de
+                   • Empresas o Sociedades públicas,                                       derechos
+                   • Fundaciones públicas,                                              • SI para el cumplimento de
+                                                                                           deberes
+                   • Universidades, etc.
+                                                                                        • SI para recabar información
+             – A los ciudadanos, en sus relaciones con las AAPP
+             – A las relaciones entre las diferentes AAPP
+       • No es obligatoria en administraciones que realicen actividades en
+         régimen de derecho privado
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                            24
+                    Esquema Nacional de Seguridad
+       CCN-CERT (Centro Criptológico
+       Nacional-Computer
+       Emergency Reaction Team):
+              – Depende del CCN (Centro Criptológico Nacional)
+              – Estructura responsable de la respuesta ante incidentes de
+                seguridad de la información
+              – Sin perjuicio a las capacidades de respuesta de la propia
+                AP y de la coordinación a nivel nacional e internacional del
+                CCN
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                   25
+
+
+
+
+                    Esquema Nacional de Seguridad
+       • Servicios del CCN-CERT.
+              – Soporte y coordinación para el tratamiento de vulnerabilidades y la
+                resolución de incidentes
+                    • Actuando con la máxima celeridad ante cualquier agresión
+                    • El CCN podrá solicitar a las administraciones los informes de las auditorías de
+                      seguridad realizados y exigidos por el propio ENS.
+              – Investigación y divulgación de las mejores prácticas sobre seguridad
+                de la información.
+                    • Elabora normas, instrucciones, guías y recomendaciones
+                    • Documentos CCN-STIC (Centro Criptológico Nacional-Seguridad de las
+                      Tecnologías de Información y Comunicaciones).
+              – Formación destinada al personal de la Administración
+              – Información sobre vulnerabilidades, alertas y avisos de nuevas
+                amenazas.
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                   26
+                                          Ejercicio de clase 1
+       Acceded a la plataforma del CCN-CERT
+       - ¿A qué cursos podemos acceder gratuitamente? ¿El resto de
+         cursos a quién van dirigidos?
+       - ¿Se pueden notificar incidentes de seguridad a través de esta
+         plataforma? ¿Cómo?
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)       27
+
+
+
+
+                    Esquema Nacional de Seguridad
+       • Instituto Nacional de
+         CiberSeguridad
+              – Anteriormente conocido como INTECO
+              – Trabaja para afianzar la confianza digital, elevar la ciberseguridad y la
+                resiliencia y contribuir al mercado digital de manera que se impulse el
+                uso seguro del ciberespacio en España
+              – Promovido por el Ministerio de Industria, Turismo y Comercio,
+              – Desarrolla proyectos de innovación y programas de investigación  para
+                mejorar la implantación de las medidas de seguridad contempladas en el
+                presente real decreto
+       • Las Administraciones públicas pueden disponer de entidades
+         análogas (esto es: CNN-CERT)
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)       28
+                                          Ejercicio de clase 2
+       Acceded a la plataforma del INCIBE
+       ¿qué es un Plan Director de Seguridad?
+       https://www.incibe.es/protege-tu-empresa/que-te-inte
+       resa/plan-director-seguridad
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         29
+
+
+
+
+                                                         Actividad                      A01
+
+
+       El INCIBE tiene un proceso de análisis de riesgos
+       simplificado. Indica de forma resumida en qué consiste
+       cada una de sus fases.
+
+       • https://www.incibe.es/protege-tu-empresa/blog/ana
+         lisis-riesgos-pasos-sencillo
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         30
+                    Esquema Nacional de Seguridad
+       • Principios básicos del ENS para cumplir con los
+         objetivos establecidos:
+              1.      La seguridad como un proceso integral
+              2.      Gestión de la seguridad basada en los riesgos
+              3.      Prevención, reacción y recuperación
+              4.      Líneas de defensa
+              5.      Reevaluación periódica
+              6.      La seguridad como función diferenciadora
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   31
+
+
+
+
+                    Esquema Nacional de Seguridad
+       • La seguridad como un proceso integral
+              – La seguridad es un proceso integral constituido por todos los
+                elementos técnicos, humanos, materiales y organizativos,
+                relacionados con el sistema
+              – No consiste en implantar controles puntuales (copias de
+                seguridad, contraseñas, . . . )
+              – Debe incluir multitud de aspectos:
+                    • Organizativos
+                    • Operacionales
+              – Máxima atención a la concienciación
+              – Implicación de toda la organización
+              – Definición de responsabilidades
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   32
+                    Esquema Nacional de Seguridad
+       1. Gestión de la seguridad basada en los riesgos
+              – El análisis de riesgos es una parte fundamental dentro de
+                la gestión de la seguridad de la información y deberá de
+                permanecer actualizado
+              – La gestión de riesgos permite:
+                      • Mantener el entorno controlado
+                      • Minimizar los riesgos (los riesgos no se anulan)
+              – Hay que mantener un equilibrio entre:
+                      • Naturaleza de los datos <–> tratamiento.
+                      • Riesgos <–> medidas de seguridad.
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)        33
+
+
+
+
+                    Esquema Nacional de Seguridad
+       2. Prevención, reacción y recuperación
+              – Las medidas de prevención deben: Reducir la posibilidad
+                de que las amenazas que pueden afectar a los sistemas
+                lleguen a materializarse
+              – Las medidas de detección deben:
+                      • Permitir detectar los incidentes o eventos que puedan afectar a la
+                        seguridad de la información.
+                      • Estar acompañadas de medidas de reacción.
+              – Las medidas de recuperación: Permitirán la restauración
+                de la información y la continuidad de los servicios y los
+                procesos.
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)        34
+                    Esquema Nacional de Seguridad
+       3. Líneas de defensa
+              – El sistema ha de disponer de una estrategia de protección
+                constituida por múltiples capas de seguridad
+              – Las capas deben diseñarse de manera que:
+                      • Se pueda ganar tiempo para una reacción adecuada frente a los
+                        incidentes.
+                      • Se reduzca la probabilidad de que el sistema sea comprometido en
+                        su conjunto.
+              – Se minimice el impacto final sobre el mismo
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)      35
+
+
+
+
+                    Esquema Nacional de Seguridad
+       4. Reevaluación periódica
+              – Evaluar y actualizar periódicamente las medidas y riesgos
+              – Al menos de forma anual
+              – Adecuar su eficiencia a la evolución de los riesgos
+              – Replantear la seguridad si es necesario
+              – Realizar auditorías de seguridad
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)      36
+                    Esquema Nacional de Seguridad
+       5. La seguridad como función diferenciadora
+              – Detallar las atribuciones de cada responsable:
+                      • Responsable de la Información: determinará los requisitos de la
+                        información tratada
+                      • Responsable del Servicio: determinará los requisitos de los
+                        servicios prestados
+                      • Responsable de Seguridad: determinará las decisiones para
+                        satisfacer los requisitos de seguridad la información y los servicios
+              – La seguridad de los sistemas de información está
+                diferenciada de la política de prestación de servicios
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)           37
+
+
+
+
+                    Esquema Nacional de Seguridad
+
+
+
+
+https://www.ccn-cert.cni.es/ens.html
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)           38
+                    Esquema Nacional de Seguridad
+       • Requisitos mínimos con los que se desarrollan los principios básicos:
+            1. Organización e implantación del proceso de seguridad
+            2. Análisis y gestión de riesgos
+            3. Gestión del personal
+            4. Profesionalidad
+            5. Autorización y control de los accesos
+            6. Protección de las instalaciones
+            7. Adquisición de productos de seguridad
+            8. Seguridad por defecto
+            9. Integridad y actualización del sistema
+            10. Protección de información almacenada y en tránsito
+            11. Prevención ante otros sistemas de información interconectados
+            12. Registro de actividad
+            13. Incidentes de seguridad
+            14. Continuidad de la actividad
+            15. Mejora continúa del proceso de seguridad
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   39
+
+
+
+
+                    Esquema Nacional de Seguridad
+       1. Organización e implantación del proceso de seguridad.
+              – Involucrar a la totalidad del personal.
+              – Dar a conocer la política de seguridad a todos los miembros.
+              – Sensibilizar y educar
+       2. Análisis y gestión de riesgos.
+              – El análisis de riesgos permite seleccionar las medidas de
+                seguridad necesarias
+              – Toda organización debería analizar y gestionar los riesgos
+              – Hay que utilizar metodologías reconocidas internacionalmente
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   40
+                    Esquema Nacional de Seguridad
+       3. Gestión del personal
+             El personal debe:
+             – Estar formado
+             – Conocer sus deberes y obligaciones
+             – Estar identificado de forma única
+             – Ser supervisado y auditado periódicamente
+       4. Profesionalidad
+             – La seguridad ha de ser controlada por personal cualificado
+             – El personal de las administraciones debe recibir formación
+             – Las Administraciones Públicas pueden exigir que las organizaciones
+               que les presten servicios de seguridad cuenten con una gestión y
+               nivel de madurez de la seguridad idónea en los servicios prestados.
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         41
+
+
+
+
+                    Esquema Nacional de Seguridad
+       5. Autorización y control de los accesos
+             – Sólo acceden usuarios autorizados.
+             – Los accesos se concederán sólo para las funciones permitidas.
+       6. Protección de las instalaciones
+             – Las instalaciones dispondrán de controles de acceso físico.
+             – Deberán estar cerradas cuando no sean supervisadas.
+             – Existirá un control de llaves/credenciales.
+       7. Adquisición de productos de seguridad
+             – Se valorarán los productos certificados: Con normas y estándares de
+               reconocimiento mundial.
+             – El criterio lo determina el Organismo de Certificación del Esquema
+             – Existe el Esquema Nacional de Evaluación y Certificación de Seguridad de las
+               Tecnologías de la Información.
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)         42
+                    Esquema Nacional de Seguridad
+       8. Seguridad por defecto
+              La seguridad debe garantizar:
+              – La mínima funcionalidad requerida
+              – Funciones de operación, administración y auditoría
+                mínimas necesarias
+              – Se eliminarán o desactivarán las funciones que no sean de
+                interés o inadecuadas
+              – El uso ordinario del sistema ha de ser sencillo y seguro
+              – No pondrá en peligro la integridad del sistema
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   43
+
+
+
+
+                    Esquema Nacional de Seguridad
+       9. Integridad y actualización del sistema
+              – Para instalar nuevos elementos de seguridad:
+                      • Se necesita autorización formal
+                      • Se instalará bajo las debidas medidas de seguridad
+              – La actualización será permanente:
+                      • Por razones de seguridad
+                      • Para mejorar la integridad
+              – Siguiendo las especificaciones de los fabricantes
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   44
+                    Esquema Nacional de Seguridad
+       10. Protección de información almacenada y en tránsito
+              – Especial atención con:
+                    • Dispositivos inseguros: portátiles, tablets, móviles, . . .
+                    • Soportes inseguros: memorias USB, DVD’s, . . .
+                    • Comunicaciones abiertas o con cifrado débil.
+              – Soportes no electrónicos: Proveer de seguridad equiparable a la
+                electrónica.
+       11. Prevención ante otros sistemas de información
+       interconectados.
+              – Se deberá de analizar y gestionar los riesgos derivados de la
+                interconexión de los sistemas de cada administración a redes
+                públicas
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   45
+
+
+
+
+                    Esquema Nacional de Seguridad
+       12. Registro de actividad.
+              – Debe registrarse toda la actividad de los usuarios.
+              – Estos logs se utilizarán para:
+                      • Monitorizar
+                      • Analizar
+                      • Investigar y documentar actividades no autorizadas
+              – Hay que garantizar (según la LOPD):
+                      • El derecho al honor
+                      • La intimidad personal
+                      • La propia imagen de los afectados
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   46
+                    Esquema Nacional de Seguridad
+       13. Incidentes de seguridad
+              – Es necesario que los equipos o sistemas informáticos
+                dispongan, sin excepción, de un sistema de detección y
+                reacción frente a código dañino
+              – Sistemas antivirus, permanentemente actualizados
+              – Procedimiento ante incidencias:
+                      • Notificación
+                      • Gestión
+                      • Registro de las acciones realizadas por los responsables
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)     47
+
+
+
+
+                    Esquema Nacional de Seguridad
+       14. Continuidad de la actividad
+             – Las Administraciones Públicas deberán de establecer los mecanismos
+               necesarios para garantizar la continuidad de la actividad en caso de
+               incidencia grave o contingencia que impida el uso de los mecanismos
+               habituales de trabajo
+                   • Copias de seguridad
+                   • Proceso de restauración de datos
+                   • Ubicaciones alternativas
+                   • Equipos de respaldo
+                   • Copias del software
+                   • ...
+       15. Mejora continua del proceso de seguridad
+             – Realización de auditorías (cada 2 años/cambios relevantes en el sistema)
+             – Correcta gestión de las incidencias
+             – Establecimiento de acciones de mejora (o correctivas)
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)     48
+                    Esquema Nacional de Seguridad
+       • El ENS establece una serie de medidas que deben
+         aplicarse sobre los SI, teniendo en cuenta
+                     • La categoría del sistema (Alta, media o baja) en función de la
+                       criticidad de la información manejada
+                     • Otras medidas obtenidas a partir del análisis de riesgos
+                     • Características específicas de cada activo del sistema:
+                          – Estado de la tecnología
+                          – Naturaleza de los servicios prestados
+                          – Información manejada
+                          – Riesgos a los que se expone
+       • También tiene en cuenta la Normativa de Datos de
+         carácter personal
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                      49
+
+
+
+
+                                                       Actividad 2                                   A02
+
+                  Dimensiones de seguridad:
+                  1. Disponibilidad [D]                                                 Categorías
+                  2. Autenticidad [A]                                                   - Alta
+                  3.   Integridad [I]                                                   - Media
+                  4. Confidencialidad [C]                                               - Baja
+                  5. Trazabilidad [T]
+
+   El ENS, establece su Anexo II una serie de Medidas de Seguridad, que serán
+   proporcionales a las dimensiones de seguridad y categorías de la información a proteger.
+   https://ens.ccn.cni.es/es/soporte-ens
+
+   ¿Qué medidas de seguridad, dimensiones y categoría
+   se aplican a:
+   1. Normativa de Seguridad (marco organizativo)
+   2. Control de Acceso-Acceso Remoto- (marco operacional)
+   3. Protección de los Equipos -bloqueo del puesto de trabajo (medidas de protección)?
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)                      50
+                                              Agradecimientos
+
+
+
+       Se agradece al profesorado anterior de la asignatura
+       por la elaboración a lo largo del tiempo del material, en
+       especial a la profesora Carmen Martínez Cruz.
+
+
+
+
+Legislación, Normativa, Auditoría y Certificaciones (Máster en Seguridad Informática)   51
+

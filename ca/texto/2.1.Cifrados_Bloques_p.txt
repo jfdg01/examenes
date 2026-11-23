@@ -1,0 +1,137 @@
+   Criptografía Avanzada
+Tema 2: Cifrados de bloques
+
+     Manuel J. Lucena López
+    Departamento de Informática
+        Universidad de Jaén
+        mlucena@ujaen.es
+
+
+
+      10 de octubre de 2026
+Cifrados de bloques
+Introducción
+
+
+   Cifrado por bloques
+    ▶ Dividen el mensaje en bloques de igual tamaño, y los cifran por
+      separado.
+    ▶ La sustitución sería suficiente, pero las tablas serían enormes.
+    ▶ Mezclan sustituciones y transposiciones.
+
+   Cifrados de producto
+    ▶ Combinación más o menos compleja de sustituciones y
+      transposiciones.
+    ▶ Redes de sustitución-permutación.
+Rondas y subclaves
+
+   Rondas:
+    ▶ Una ronda es un conjunto de operaciones que se repite de
+      forma cíclica.
+    ▶ Los algoritmos de cifrado constan de un número fijo o variable
+      de rondas.
+    ▶ Cada ronda toma como entrada el resultado de la ronda
+      anterior, más alguna información adicional.
+
+   Subclaves:
+    ▶ Son una serie de valores extraídos a partir de la clave de
+      cifrado.
+    ▶ Se usan como información adicional en cada ronda del
+      algoritmo.
+Cajas de sustitución (s-boxes)
+
+    ▶ Unidad básica de sustitución.
+    ▶ Notación: m × n
+        ▶ m: bits de entrada.
+        ▶ n: bits de salida.
+    ▶ m puede ser menor, igual o mayor que n.
+Algoritmo DES
+
+
+
+
+    ▶ Adoptado en 1976 como estándar de cifrado.
+    ▶ Bloques de 64 bits.
+    ▶ Claves de 56 bits.
+    ▶ Diseñado para funcionar por hardware.
+    ▶ Red de Feistel con 16 rondas.
+    ▶ Tiene claves débiles.
+Algoritmo AES
+
+
+    ▶ Sucesor de DES
+    ▶ Emplea una única S-caja 8 × 8, calculada en GF (28 ).
+  Estructura de AES:
+    ▶ Diseñado expresamente para resistir los criptoanálisis lineal y
+      diferencial.
+    ▶ Longitudes variables de clave y bloque, entre 128 y 256 bits.
+         ▶ Estructurados como matrices de bytes de cuatro filas.
+    ▶ Cada ronda: cuatro funciones invertibles, organizadas en tres
+      capas:
+         ▶ Mezcla lineal: DesplazarFila y MezclarColumnas.
+         ▶ Capa no lineal: S-caja (función ByteSub).
+         ▶ Adición de clave: or-exclusivo.
+Elementos de AES
+
+
+
+    ▶ Estado S: matriz de bytes de cuatro filas y Nb columnas.
+    ▶ Subclave Ki : mismo tamaño que S.
+  Cifrado y descifrado
+    ▶ Se generan las Ki a partir de la clave K (expansión de clave).
+    ▶ Se aplican las rondas con los Ki
+    ▶ El descifrado se hace aplicando la inversa de cada función, en
+      orden inverso.
+Modos de operación
+Los modos de operación
+
+
+
+    ▶ Un mensaje suele ser más largo que un bloque, por lo que es
+      necesario:
+        ▶ Rellenarlo (padding).
+        ▶ Trocearlo antes de cifrar.
+        ▶ Ensamblar los bloques cifrados.
+    ▶ Si ciframos los bloques por separado (modo ECB), un atacante
+      puede eliminar, permutar y duplicar bloques.
+    ▶ Además, determinados patrones quedan preservados.
+Cifrado ECB de una imagen
+Modo CBC
+
+   ▶ Antes de cifrar cada bloque, se combina (or exclusivo) con el
+     anterior bloque cifrado.
+   ▶ Se usa un vector de inicialización para el primer bloque.
+   ▶ Permite verificar la integridad del mensaje.
+Modo CFB
+
+   ▶ Cada bloque primero se cifra y luego se combina con el
+     siguiente.
+   ▶ Se usa la función de cifrado tanto para cifrar como para
+     descifrar.
+   ▶ Permite enviar el mensaje en paquetes más pequeños que el
+     tamaño de bloque.
+Modo OFB
+
+
+
+   ▶ Genera una secuencia de forma independiente al mensaje.
+   ▶ La secuencia puede ser combinada mediante or exclusivo con el
+     mensaje dando lugar a un cifrado de flujo.
+Modo CTR
+
+
+   ▶ Al igual que OFB, genera una secuencia de forma
+     independiente al mensaje.
+   ▶ En lugar de emplear el bloque anterior, incorpora un contador.
+   ▶ Permite generar los bloques de la secuencia
+     independientemente, o en paralelo.
+Ataques basados en los modos de operación: POODLE
+
+    ▶ SSL 3.0 rellena con bytes aleatorios y al final pone el número de
+      bytes que sobran. Solo comprueba el último byte (que debe ser 7 en
+      este caso).
+    ▶ Alineamos el mensaje y cambiamos el último bloque Bn por Bi
+    ▶ Si lo acpeta (el MAC no afecta al relleno):
+        ▶ Salió un 7 al final, el valor del último byte de Bi es Y ⊕ 7 ⊕ X .
+    ▶ Si falla, se vuelve a enviar el mismo mensaje, con otro V.I.
+

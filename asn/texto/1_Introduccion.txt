@@ -1,0 +1,759 @@
+        Tema 1. Introducción y Conceptos
+                     Básicos
+                 Aplicaciones Seguras en la Nube
+                                                                                      José Ramón Balsas Almagro
+                                                                                      Departamento de Informática
+                                                                                             Universidad de Jaén
+                                            http://tiny.cc/asnuja                              jrbalsas@ujaen.es
+
+                                  Este obra está bajo una Licencia Creative Commons
+                                      Atribución-CompartirIgual 4.0 Internacional.
+                                                                                                                v 2.3.1
+                    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+¿Aplicaciones seguras en la nube?
+“By 2028, modernization efforts will culminate in 70% of workloads running in a cloud
+environment, up from 25% in 2023.”
+                                                                                       Gartner. The Future of Cloud. Noviembre, 2023
+
+"129 New vulnerabilities every day in 2025 (20% over 2024) ... your organisation needs to
+check and [perhaps] patch"
+                                                                                                                securityvulnerability.io
+
+ "...61% of organizations reporting breaches within the last year, marking a significant
+ increase from 24% the year before"
+ "96% of cybersecurity professionals confirm they are very concerned about public cloud
+ security and their capacity to manage these risks"
+ "73% of security teams receive 10 or more alerts per day"
+ "... [the] challenge many organizations face in recruiting new cybersecurity expertise with a
+ significant 76% of respondents reporting a shortage of skilled cybersecurity professionals"
+                                                                                  Cybersecurity Insiders. Cloud Security Report, 2024
+
+   2                Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+La importancia del conocimiento
+
+
+    Conoce a tu enemigo y conócete a ti mismo,
+    y en cien batallas nunca saldrás derrotado
+                                  Sun Tzu, El Arte de la Guerra. Siglo V a.C.
+
+
+
+
+3           Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+    ¿Por dónde empezar?
+
+
+
+
+                                                    Boromir, Consejo de Elrond
+4           Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Objetivos
+● Comprender las ventajas y posibles inconvenientes de las
+  aplicaciones en la nube
+● Conocer y comprender los elementos básicos constituyentes de la
+  nube y sus modalidades de servicio
+● Conocer algunos conceptos básicos sobre seguridad informática
+● Comprender el concepto de amenaza de seguridad y saber cómo
+  clasificarlas atendiendo a sus posibles riesgos
+● Conocer enfoques de planificación de estrategias de protección
+● Conocer las amenazas más habituales de aplicaciones en la nube,
+  sus riesgos y algunas recomendaciones y técnicas genéricas para
+  prevenirlas o mitigarlas
+5            Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+     ¿Dónde va a desplegarse
+         la aplicación?
+              Conociendo el terreno de juego
+
+
+
+
+                                                                  Fuente: Wikimedia
+             Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+¿Qué es la nube?
+"... computing may someday be organized as a public utility just as the
+telephone system is a public utility".
+                                                              John McCarthy, MIT, 1961
+
+" ... a model for enabling ubiquitous, convenient, on-demand network
+access to a shared pool of configurable computing resources (e.g.,
+networks, servers, storage, applications and services) that can be
+rapidly provisioned and released with minimal management effort
+or service provider interaction".
+           National Institute of Standards and Technologies, NIST, 2012
+ 7             Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Propiedades de la nube
+● Repositorio de recursos homogéneos compartidos
+● Autoservicio bajo demanda
+● Acceso universal a través de la red
+● Medición y pago por uso
+● Aprovisionamiento rápido de recursos. Escalabilidad y elasticidad
+
+
+¿Cómo influyen en las aplicaciones?
+   ○ Diseño e implementación adaptados para sacar provecho de estas
+      características
+     ○ Aspectos de seguridad específicos
+ 8             Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Propiedades de las aplicaciones en la nube
+● Distribuidas
+        ■   componentes que interaccionan a través de la red
+        ■   Acoplamiento bajo de componentes
+● Elásticas
+        ■   Escalado horizontal (frente a escalado vertical) para atender al incremento de
+            carga de trabajo: aumento del número de componentes
+        ■   Aprovisionamiento o liberación de recursos para ajustarse a la demanda
+            (elasticidad)
+● Sin estado
+        ■   (la mayor parte de) componentes independientes que pueden aprovisionarse
+            sin pérdidas de información
+● Gestión automatizada
+        ■   Monitorización de la carga de trabajo para escalar la aplicación
+        ■   Aprovisionamiento automatizado utilizando las interfaces de gestión del
+            proveedor
+ 9             Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Ventajas de aplicaciones en la nube
+ ● Gestión hardware
+        ■   adquisiciones, ampliaciones, reparaciones, actualizaciones, migraciones, ...
+ ● Gestión red de comunicaciones
+        ■   líneas de comunicaciones, redundancia, hardware de red, configuración de equipos,
+            gestión de servicios de red...
+ ● Gestión ubicación
+        ■   climatización, consumo eléctrico, acceso físico, protección frente a elementos, ...
+ ● Administración de sistemas
+        ■   instalación, actualizaciones, configuración, migraciones, seguridad, ...
+ ● Reducción de costes
+        ■   Costes operativos frente a costes inventariables
+        ■   No hay depreciación de los recursos
+        ■   Pago por uso
+ ● Alta disponibilidad
+ ● Escalabilidad y flexibilidad
+10             Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Posibles inconvenientes de aplicaciones
+en la nube
+● Adaptación de aplicaciones existentes
+             ■   ¿Cualquier aplicación puede/debe adaptarse a la nube?
+             ■   Costes y riesgos derivados
+● Pérdida de control de recursos
+             ■   Limitaciones en configuración de recursos
+             ■   Disponibilidad de los servicios
+             ■   Pérdida de gobernanza
+● Dependencia de terceros
+             ■   Los requisitos del proveedor pueden dificultar migrar a otros proveedores, lock-in
+             ■   Confianza en el proveedor de servicios
+             ■   Desaparición o adquisición del proveedor de servicios
+● Seguridad
+             ■   Responsabilidad compartida
+             ■   Borrado incompleto o inseguro de datos
+             ■   Dificultad para en análisis forense
+● Legislación
+             ■   Ubicación de los datos, regulaciones nacionales ...
+11                    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+¿Cómo funciona la nube?
+● ¿Cómo compartir eficientemente recursos TIC?
+  ○ Procesamiento CPU/GPU
+  ○ Almacenamiento                   Economía de escala
+  ○ Red
+
+
+
+
+                                                                 Hainan, Sur de China. 2023
+     Contenedores de componentes pre-instalados, Microsoft
+                                                                 Cápsula con 400 servidores. CCTV
+12                    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+     Tecnologías detrás de la nube
+    ● Virtualización de hardware
+      ○ hipervisores
+    ● Clustering de equipos
+      ○ Equipos similares
+      ○ Tareas comunes
+      ○ Reparto transparente de carga
+    ● Computación distribuida
+         ○ Equipos diferentes conectados a través de red
+         ○ Servicios intermedios (middleware) para interacción de los
+           componentes de aplicaciones
+13                 Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+     Virtualización
+●    Abstracción de los recursos de un ordenador real
+●    Ventajas:
+      ○ Homogeneización y uso compartido de recursos hardware: cpu, memoria,
+         almacenamiento, red. Bajo acoplamiento con hardware
+     ○    Aprovechamiento de los recursos
+     ○    Portabilidad: El estado de una máquina virtual puede almacenarse en un
+          fichero lo que permite su movilidad y backup
+●    Hipervisor
+     ○    Elemento que permite la abstracción del hardware
+     ○    En ocasiones puede permitir el acceso directo al hardware, para-virtualización
+●    No confundir con emuladores a nivel de llamadas al SO, e.g. WSL1, Wine, Bochs…
+
+
+14                 Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Tipos de Hipervisores
+● Tipo 1 (Bare metal): capa de acceso directo al hardware.
+     ○ Requiere instrucciones específicas en procesador, CPU, GPU
+       Chipset para control de la virtualización
+          ■   Ejemplos: Intel VT-x o AMD-V
+
+     ○ Capa especializada de un sistema operativo,
+          ■   Ejemplos: Hyper-V (Win, WSL), AVF (Mac), VMWare ESXi, Xen, KVM (Linux, Proxmox)...
+
+● Tipo 2 (hospedado): trabaja sobre un sistema operativo anfitrión (host)
+  colaborando con él para acceder al hardware.
+     ○ Pueden requerir o utilizar soporte tipo 1.
+          ■   Ejemplos: VirtualBox, VMWare player, Qemu, OpenVZ, …
+
+15                 Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Tipos de Hipervisores (II)
+
+
+
+
+     Fuente: http://www.cloudcomputingpatterns.org/hypervisor/
+16                 Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Tipos de nubes
+     ● Privada
+       ○ Gestión y uso exclusivos de una organización, e.g. centros de
+           proceso de datos de entidades públicas o privadas
+     ● Compartida
+       ○ Gestión y uso compartidos por varias organizaciones o unidades
+           organizativas, e.g. Red Sara, RedIris, ...
+     ● Pública
+       ○ Gestión privada de recursos ofrecida como servicios al público en
+           general. e.g. , Microsoft Azure, Amazon Web Services, Google
+           Cloud, IBM Cloud ...
+     ● Híbrida
+       ○ Sistemas desplegados entre diferentes tipos de nubes que
+           interaccionan entre ellos
+17                   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Conceptos sobre servicios en la nube
+     ●   Proveedor de Servicios en la nube (CSP)
+     ●   Acuerdo de Nivel de Servicio, SLA
+          ○ Nivel de Disponibilidad
+               ■   Recurso disponible: accesible y realizando su función
+               ■   Porcentaje garantizado de tiempo disponible. e.g. 99,9%
+                    ●   La disponibilidad global de un conjunto de componentes es multiplicativa (decrece)
+                    ●  Modalidad 1: disponibilidad por componente, e.g. máquina virtual, base de
+                       datos…
+                    ● Modalidad 2: disponibilidad por entorno, e.g. posibilidad de lanzar nuevas
+                       máquinas, replicación en varias zonas
+               ■   Aumentar este factor es costoso
+          ○   Responsabilidad Compartida
+                    ●   Aspectos de la seguridad de la red
+                    ●   Balanceo de carga
+                    ●   Detección de fallos
+                    ●   Seguridad de las claves de cifrado ...
+          ○   Legislación y regulaciones
+                    ●   Seguridad de los datos, localización de datos, privacidad, jurisprudencia...
+18                   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Modelos de servicios en la nube
+ ● Infraestructura como Servicio, IaaS
+ ● Plataforma como Servicio, PaaS
+    ○ Contenedores como Servicio, CaaS
+    ○ Funciones como Servicio, FaaS (aplicaciones sin servidor)
+ ● Software como Servicio, SaaS
+
+
+
+
+                                             Fuente: http://www.cloudcomputingpatterns.org/
+19                Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Infraestructura como Servicio, IaaS
+● Proveedor
+     ○   Máquinas virtuales genéricas (VPS)
+     ○   Almacenamiento virtual, e.g dispositivos de bloques,
+     ○   Redes virtuales, e.g. vlan, firewall, …
+     ○   Panel de control y API de acceso
+     ○   Alta disponibilidad
+     ○   Aprovisionamiento bajo demanda
+● Cliente
+                                             Fuente: http://www.cloudcomputingpatterns.org/
+   ○ Instalación y gestión del sistema
+   ○ Configuración de recursos del proveedor
+   ○ Instalación y gestión de aplicaciones
+● Ejemplos: Amazon EC2, Microsoft Azure, Google CE, OpenStack
+20                Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+     Plataforma como Servicio, PaaS
+● Proveedor
+             ■   Gestión de la infraestructura
+             ■   Máquinas virtuales con sistema operativo preconfigurado
+             ■   Herramientas software de desarrollo, e.g compiladores
+             ■   Servicios complementarios: BBDD, colas de mensajes, balanceadores de carga, ...
+             ■   Actualizaciones software
+             ■   Alta disponibilidad y aprovisionamiento bajo demanda
+● Cliente
+             ■   Instalación y gestión de aplicaciones
+             ■   Posibilidad de ajustes del entorno, e.g. memoria, red, BBDD …
+● Ejemplos:
+     ○   Amazon Beanstalk,
+     ○   Microsoft Azure,
+     ○   Heroku,
+     ○   Google App Engine…
+     ○   OpenShift
+     ○   Cloudfoundry
+                                                                   Fuente: http://www.cloudcomputingpatterns.org/
+21                    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Plataforma como Servicio, alternativas
+ ● Contenedores como Servicio, CaaS
+         ○   El cliente proporciona un contenedor que contiene el programa y conjunto de
+             recursos: bibliotecas, servicios, etc que se ejecutarán de forma restringida
+             sobre el núcleo del SO anfitrión
+         ○   Tamaño óptimo según elementos utilizados
+         ○   Compatibilidad entre proveedores de servicio
+         ○   Ejemplos: LXC/LXD, Docker, Podman, Rocket (rkt), Windows containers...
+
+
+
+
+                                                                                                      Fuente:
+                                                                                                      Docker.com
+22                    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+     Funciones como Servicio
+●    Funciones como Servicio, FaaS (Serverless, aplicaciones sin servidor)
+      ○   El cliente proporciona código que se ejecuta en atención a eventos, mensajes o peticiones
+          HTTP
+      ○   Escalado de funciones automático según demanda
+      ○   Pago por tiempo de cómputo / número de ejecuciones / memoria utilizada
+      ○   Ejemplos: Amazon Lambda, Microsoft Azure Functions, Google Cloud Functions, OpenWhisk,
+          OpenFaaS
+
+
+
+
+23                  Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+     Software como Servicio, SaaS
+ ●    Proveedor
+       ○ Gestión de infraestructura y plataforma
+       ○ Aplicación/API accesible a través de Internet
+       ○ Seguridad
+       ○ Alta disponibilidad
+       ○ Acceso bajo demanda
+ ●    Cliente
+       ○ Configuración de funcionalidades
+       ○ Gestión usuarios
+ ●    Ejemplos:
+       ○ AWS RDS, Google CloudSQL
+       ○ Office 365, Google Workspace,
+       ○ SAP,
+       ○ Wordpress,                                Fuente: http://www.cloudcomputingpatterns.org/
+       ○ Amazon, Ebay,..
+24                  Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Resumen de tipos de servicios en la nube
+                                                            Responsabilidad
+
+
+
+
+                                                          Fuente, alibabacloud.com
+25       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+        Conceptos sobre
+      seguridad en la nube
+       Recopilación de información sobre
+                   seguridad
+
+         Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Conceptos básicos de seguridad
+● Vulnerabilidad: "fallo o debilidad en el diseño, implementación,
+  funcionamiento o gestión de un sistema que podría ser explotado
+  para violar su política de seguridad"
+● Amenaza (Threat ): "Posible peligro que podría ocasionar la
+  explotación de una vulnerabilidad de forma intencionada o
+  accidental"
+● Riesgo: Probabilidad de que una amenaza se materialice
+  explotando una vulnerabilidad que produzca normalmente una
+  pérdida o impacto en el sistema
+● Ataque: acto deliberado para evadir la seguridad de un sistema
+                                              Shirley R. Internet Security Glossary, RFC 2828. IETF, 2001
+27                   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Principales aspectos de seguridad en la nube
+Todas las capas de un servicio en la nube están expuestas a amenazas debidas a las
+vulnerabilidades que pueden presentar:
+ ●   Seguridad en ordenadores
+            ■   Confidencialidad, datos solo disponibles a personas autorizadas
+            ■   Integridad, los datos no pueden ser alterados en ningún momento: ni almacenados
+                (DIR), ni en memoria (DIM), ni al transmitirse (DIT)
+            ■   Identificación y autenticación, garantizar la identidad y privilegios de la entidad que
+                realiza una operación
+            ■   Disponibilidad de los datos y servicios cuando son requeridos
+            ■   Autoría, una entidad no puede negar (repudiar) su participación en una operación
+● Seguridad en la red
+            ■   Capas: protocolos de seguridad,
+            ■   Seguridad perimetral (firewalls, IDS, IPS...), autenticación y autorización
+● Específicos de seguridad en la nube
+            ■   Control de gestión de recursos
+            ■   Acceso/gestión compartida a través de la red
+            ■   Control de costes por utilización
+            ■   Derivados del uso de recursos compartidos
+            ■   Nivel de disponibilidad, escalabilidad o elasticidad
+                                                                                   Fuente: http://www.cloudcomputingpatterns.org/
+28                   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Identificación y categorización de vulnerabilidades
+ ● CVE, Common Vulnerabilities and Exposures
+            ■       Estándar para identificación de vulnerabilidades conocidas en
+                    ciberseguridad. https://www.cve.org
+            ■       CVE ID único para referenciar cada amenaza
+            ■       Descripción estandarizada CVE-YYYY-NNNN
+            ■       Ejemplos:
+                     ●     OpenSSL "Heartbleed", CVE-2014-0160
+                     ●     Gnu bash "Shellsock", CVE-2014-6271
+                     ●     Qemu floppy disk controller "Venom", CVE-2015-3456
+                     ●     JavaEE, Struts, CVE-2017-5638
+                     ●     "Log4Shell" , CVE-2021-44228
+
+  ● Clasificación, varios criterios:
+               ■     Efectos o áreas de actuación, e.g. STRIDE, ASF, ...
+               ■     Riesgo o impacto en el sistema e.g. DREAD, CVSS,...
+               ■     Probabilidad de que se exploten: EPSS
+ 29                      Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Consulta y Seguimiento de vulnerabilidades
+ ● NVD, National Vulnerability Database, https://nvd.nist.gov/
+           ■       Seguimiento periódico y consulta de vulnerabilidades
+ ● OSV, Open Source Vulnerabilities https://osv.dev/
+      ○   Agregador de vulnerabilidades de diferentes organizaciones y proyectos de software libre, e.g.
+          Github Security Advisors (CHSA), RedHat, Ubuntu…
+ ● https://vuldb.com/, https://securityvulnerability.io
+           ■       Seguimiento diario de vulnerabilidades e impacto
+ ● https://www.cvedetails.com/
+           ■       Diversos criterios de búsqueda e información: proveedor, producto,
+           ■       e.g https://www.cvedetails.com/vendor/74/PHP.html
+ ● Exploit Database, https://www.exploit-db.com/
+           ■       Mantenida por la empresa de ciberseguridad Offensive Security
+           ■       Base de datos compatible CVE sobre ataques conocidos y código para reproducirlos…
+ ● Sitios específicos de cada producto
+           ■       https://httpd.apache.org/security_report.html
+           ■       https://tomcat.apache.org/security.html
+           ■       listas de distribución de seguridad …
+ 30                      Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Actividad 1.1
+● Análisis de seguridad de la cadena de suministro de una aplicación
+  en la nube
+     ○ Seleccionar una pila de desarrollo para aplicación web
+        ■   Sistema Operativo
+                                                           Debian 13
+        ■   Framework de desarrollo                        NextJS 12.1
+        ■   Lenguaje/Entorno de Ejecución          Ejemplo Javascript/NodeJS 24.21.0 LTS
+        ■   Base de datos                                  MongoDB 8.3.11
+        ■   Proveedor de servicios                         Amazon Web Services EC2
+
+     ○ Identificar recursos en Internet donde consultar información
+       vulnerabilidades concretas sobre cada elemento
+     ○ Comentar la última vulnerabilidad conocida de cada uno
+● Más detalles en guión de actividades del tema 1
+31             Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+       Amenazas de seguridad
+            en la nube
+                          ¿Cómo prepararse?
+
+
+
+
+               Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Motivación
+● Conocer amenazas habituales que ayuden a priorizar y prevenir
+  riesgos
+● Conocer fuentes de información sobre seguimiento, planificación y
+  mitigación de amenazas
+● Conocer enfoques habituales para mitigar las amenazas
+● Tipos de amenazas en aplicaciones en la nube
+     ○ Amenazas de elementos constituyentes de la nube
+     ○ Amenazas propias de la aplicación
+
+     Nos centraremos por ahora en amenazas genéricas que afectan a servicios en la nube
+33                Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Categorías de amenazas
+Metodología STRIDE:
+     ●   Microsoft, clasificar amenazas desde el punto de vista del impacto
+                                                                            Afecta a
+
+● (Spoofing)            Suplantación de identidad                     → Autenticidad
+● (Tampering) Manipulación de datos                                   → Integridad
+● (Repudiation) Repudio de datos                                      → No repudio
+● (Information) Revelación de información → Confidencialidad
+● (Denial)              Denegación de Servicio                        → Disponibilidad
+● (Elevation)           Elevación de privilegios                      → Autorización
+34                Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Algunas organizaciones que tratan
+aspectos de seguridad en la nube
+● The MITRE Corporation, USA, https://mitre.org
+     ○   Sin ánimo de lucro, encargada asesoramiento en sistemas de ingeniería y defensa nacional
+     ○   Base de datos de vulnerabilidades conocidas, CVE
+     ○   BD de debilidades y malas prácticas habituales en software, CWE
+     ○   BD de patrones de ataque para explotación de debilidades en software, CAPEC
+     ○   ATT&CK Cloud Matrix sobre tácticas, técnicas y procedimientos de atacantes en la nube
+
+● Forum of Incident Response and Security Teams, FIRST, https://first.org/
+     ○   Intercambio de información y buenas prácticas para respuesta inmediata frente a amenazas
+     ○   Diferentes instituciones nacionales, internacionales y empresas
+     ○   Common Vulnerability Score System, CVSS, estimación del impacto de la vulnerabilidad
+     ○   Exploit Prediction Scoring System, EPSS, probabilidad de que se explote la vulnerabilidad
+
+● National Institute of Standards and Technology, NIST. USA https://www.nist.gov
+     ○   Departamento de Comercio. Apartado de ciberseguridad
+     ○   Promueve la ciberseguridad y privacidad mediante estándares y buenas prácticas
+     ○   Base de datos Nacional de seguimiento de vulnerabilidades e impacto
+35                 Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Otras organizaciones relacionadas con
+seguridad en la nube
+● Otras organizaciones para asesoramiento, formación, coordinación
+  y/o certificación
+   ○ ENISA, European Union Agency for Network and Information
+      Security https://www.enisa.europa.eu/
+   ○ Cloud Security Alliance,CSA, https://cloudsecurityalliance.org
+               ●   Certificación CCSK (Certificate of Cloud Security Knowledge)
+     ○ SANS institute, https://www.sans.org/
+     ○ CERT Software Engineering Institute http://www.cert.org/
+     ○ CERT Centro Criptológico Nacional, https://www.ccn-cert.cni.es
+● Open Web Application Security Project, OWASP https://owasp.org
+     ○   Difusión de información y buenas prácticas sobre seguridad en la nube
+     ○   Proyectos abiertos relacionados con la seguridad en la nube
+36                 Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Amenazas de seguridad en la nube
+ ●        Específicas debido a las características propias de la nube
+ ●        Ejemplo: Bhatt, A. Brook, J.. et al. Top Threads to Cloud
+          Computing. CSA, Agosto,2026. Disponible en
+          https://cloudsecurityalliance.org/group/top-threats
+
+     1.     Gestión deficiente de Identidades y Acceso (IAM) (^)    7.   Crimen organizado, Hackers y APT (^^)
+     2.     Ataques mejorados con IA                                8.   Falta estrategia y gobierno de la seguridad en la
+                                                                         nube(vv)
+     3.     Recursos de terceros inseguros (^)
+                                                                    9.   Desarrollo inseguro de software (v)
+     4.     Interfaces y APIs inseguras (^)
+                                                                   10.   Divulgación accidental de datos en la nube (v)
+     5.     Errores en configuración y control de cambios
+            inadecuados (vv)                                       11.   Vulnerabilidades del sistema (v)
+  6.        Compromiso de sistemas de AI
+ 37                         Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+¿Cómo protegerse? Enfoque CSA (I)
+Buenas prácticas en seguridad en la nube
+     ●     Mogull, Rich et al. CSA Security Guidance for Critical Areas of Focus in
+           Cloud Computing. CSA, 2024. Disponible en
+           https://cloudsecurityalliance.org/research/guidance
+     ●     Armonización con otras recomendaciones, e.g. NIST Special Publication
+           800-145, ISO/IEC 17788 e ISO/IEC 17789
+Dominios de seguridad
+                                                        7.           Infraestructura y Redes
+1.        Conceptos y arquitecturas
+                                                        8.           Seguridad de la carga de trabajo
+2.        Gobernanza
+                                                        9.           Seguridad de los datos
+3.        Gestión de riesgos, cumplimiento y auditoría
+                                                       10.           Seguridad en la aplicación
+4.        Gestión de la Organización
+                                                       11.           Respuesta a incidentes y resiliencia
+5.        Gestión de identidad y acceso
+                                                       12.           Tecnologías y estrategias relacionadas
+6.        Monitorización de la seguridad
+ 38                         Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+¿Cómo protegerse? Enfoque CSA (II)
+Controles de seguridad para implementación o auditoría
+ ●   Mogull, Rich et al. CSA The CSA Cloud Controls Matrix (CCM) v4. CSA, 2017. Disponible en
+     https://cloudsecurityalliance.org
+ ●   Equivalencias con controles en otras iniciativas, e.g. ISO, NIST, CIS, ENS. Consultar otras en
+     proyecto OWASP Open Common Requirements Enumeration, OCRP
+Tipos de controles (algunos)
+       ●   DSP, Ciclo de vida de la seguridad y privacidad de los datos
+       ●   GRC, Gobernanza, Gestión de Riesgos y Cumplimiento
+       ●   HRS, Recursos Humanos
+       ●   IAM, Gestión de identidades y accesos
+       ●   IPY, Interoperabilidad y portabilidad
+       ●   IVS, Seguridad de infraestructura y virtualización
+       ●   LOG, Registro y Monitoreo
+       ●   SEF, Gestión de Incidentes de Seguridad, E-Discovery y Forense en nube
+       ●   STA, Gestión de la Cadena de Suministro, Transparencia y Trazabilidad
+       ●   TVM, Gestión de Amenazas y Vulnerabilidades
+       ●   UEM, Gestión global de dispositivos terminales ('Endpoint')
+39                  Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Amenaza 1. Mala gestión de identidades y acceso (IAM)
+Descripción
+●    Falta de controles exhaustivos en el ciclo de vida de las cuentas de acceso (humanas o no),
+     verificación de credenciales y en el establecimiento de restricciones acceso a recursos en
+     la nube
+●    La falta de control puede ocasionar acceso no autorizado a recursos críticos en la nube
+
+Posibles causas
+ ●   Complejidad y contínua evolución y amenazas de los sistemas de autenticación y autorización,
+     e.g. SSO, MFA
+ ●   Falta de monitorización del ciclo de vida de las credenciales
+ ●   Diferencias e interacción entre IAMs de diferentes proveedores al integrar servicios
+ ●   Aumento exponencial de credenciales para Identidades No-Humanas NHIs, e.g. servicios, API
+     keys, agentes IA
+ ●   Dificultad para establecer ciclos de vida y restricciones en NHIs
+40                  Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Amenaza 1. Mala gestión de identidades y acceso (II)
+Categorización STRIDE según posibles impactos en informe (- - - I D E)
+Posibles controles de seguridad (CCM, Cloud Control Matrix )
+ ● AIS: Application and Interface Security
+      ○ AIS-8 Establecer, implementar y revisar mecanismos de seguridad en APIs
+ ● GRC: Gestión de Gobernanza, Riesgos y Aspectos legales
+       ○   GRC-05, Programa de información/formación en seguridad
+ ●    IAM: Gestión de identidad y Acceso
+       ○   IAM-01 Establecer políticas IAM: documentar, aplicar, revisar, evaluar al menos anualmente
+       ○   IAM-18 Restricción de acceso a agentes IA
+ ●    I&S: Infrastructure Security
+       ○ I&S-01 Establecer, aplicar y evaluar procedimientos de seguridad de Infraestructura y
+           Virtualización
+       ○ I&S-06 Establecer y aplicar políticas y mecanismos que permitan segmentar y segregar
+           aplicaciones y recursos atendiendo a sus necesidades
+ ●    LOG: Registro y monitorización
+       ○   LOG-03, dentificar, alertar y auditar posibles eventos de seguridad
+       ○   LOG-04, restringir y auditar el acceso autorizado a registros de accesos del sistema
+ 41                  Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Ejemplo de uso de CCM
+● Revisar los siguientes controles CCM
+      ○    IAM-05 Políticas de mínimo privilegio
+      ○    GRC-05 Desarrollar e implementar un Programa de Seguridad de la
+           Información
+      ○    AIS-04 Diseño y desarrollo de aplicaciones seguras (en la nube)
+● Aspectos a observar
+       ○ Clasificación e impacto en modelo de servicio, aplicación y
+         organización
+       ○ Recomendaciones de implementación y auditoría
+       ○ Equivalencias con otras recomendaciones
+       ○ Equivalencia con Esquema Nacional de Seguridad, ENS
+ 42                  Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Actividad 1.3
+● El resto de amenazas del informe se analizarán y expondrán
+  por equipos utilizando el foro de análisis de noticias de
+  seguridad
+● Se valorarán tanto los informes de cada amenaza presentados
+  por cada equipo como las aportaciones y debate posterior
+  realizados por el resto de estudiantes
+● Más detalles en guión de actividades del tema 1
+● Los informes resultantes formarán parte del material de
+  estudio del tema de cara a la prueba de evaluación final de la
+  asignatura
+43              Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Recomendaciones generales de
+seguridad
+ ●   Aplicaciones adaptadas a las características de la nube
+ ●   Estudiar los acuerdos de nivel de servicio (SLA)
+ ●   Evitar "nubes" propias
+ ●   Cambiar las claves y configuraciones por defecto
+ ●   Desactivar servicios no utilizados
+ ●   Seguimiento de vulnerabilidades y actualizaciones periódicas de software
+ ●   Control de acceso en la red: WAF, firewall, IDP, ZTN,...
+ ●   Monitorización exhaustiva
+ ●   Proteger las claves de cifrado
+ ●   Revocación de cuentas de ex-empleados
+44              Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Conclusiones
+● Las características de los servicios en la nube influyen en la
+  forma de desarrollar las aplicaciones que los utilicen
+● La seguridad de aplicaciones en la nube debe tener en cuenta los
+  aspectos específicos de seguridad derivados de los servicios en
+  la nube, además de los aspectos clásicos de seguridad informática
+● La identificación y el seguimiento de amenazas son importantes
+  para determinar las medidas de protección
+● Las recomendaciones y buenas prácticas de organizaciones y
+  empresas especializadas contribuyen a mejorar la seguridad de las
+  aplicaciones en la nube
+45                 Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Bibliografía
+●    Alani, M. Elements of Cloud Computing Security. Springer, 2016. Recurso electrónico UJA
+●    Fehling, C., Leymann, F., Retter, R. et al. Cloud Computing Patterns: Fundamentals to
+     Design, Build, and Manage Cloud Applications. Springer, 2014. Recurso electrónico UJA
+●    Bhatt, A. Brook, J.. et al. Top Threads to Cloud Computing. CSA, Agosto,2026. Disponible en
+     https://cloudsecurityalliance.org/group/top-threats
+●    Mogull, Rich et al. CSA Security Guidance for Critical Areas of Focus in Cloud Computing.
+     CSA, 2014. Disponible en https://cloudsecurityalliance.org/research/guidance
+●    Kraus, A., The Official (ISC)2 CCSP CBK Reference, 4ª edición 4, ed. John Wiley & Sons
+     Inc, 2022. Recurso electrónico UJA
+●    Brook J., Getsin, A. et al. Top Threads to Cloud Computing. Choose your Fighter!. CSA,
+     2024. Disponible en https://cloudsecurityalliance.org/group/top-threats
+
+
+
+46                 Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+

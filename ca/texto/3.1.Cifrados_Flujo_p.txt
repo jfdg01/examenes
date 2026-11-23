@@ -1,0 +1,145 @@
+  Criptografía Avanzada
+Tema 3: Cifrados de Flujo
+
+    Manuel J. Lucena López
+   Departamento de Informática
+       Universidad de Jaén
+       mlucena@ujaen.es
+
+
+
+     21 de octubre de 2022
+Introducción
+Cifrados inexpugnables
+
+
+    ▶ En 1917, Mauborgne y Vernam inventan el cifrado OTP (One
+      Time Pad).
+    ▶ Este cifrado es perfecto según el criterio de Shannon.
+    ▶ Es poco útil por varias razones:
+        ▶ La clave ha de ser al menos tan larga como el mensaje.
+        ▶ La clave tiene que ser perfectamente aleatoria.
+        ▶ La clave no se puede reutilizar.
+    ▶ Podemos simular este esquema empleando un generador
+      pseudoaleatorio.
+        ▶ La semilla será la clave.
+        ▶ Combinamos el mensaje con la secuencia mediante or-exclusivo.
+        ▶ El sistema será tan seguro como sea el generador.
+¿Por qué no se puede reutilizar una clave?
+
+
+    ▶ Supongamos que ciframos dos mensajes m1 y m2 con la misma
+      secuencia ok .
+    ▶ Los criptogramas serán:
+
+                             c1 = m1 ⊕ ok
+
+                             c2 = m2 ⊕ ok
+    ▶ Se puede ver que x = c1 ⊕ c2 = m1 ⊕ m2 .
+    ▶ Si tenemos una buena suposición para m1 , podemos deducir
+      m2 calculando
+                             m2 = x ⊕ m1
+Nonces
+
+
+
+
+   ▶ Los incorporan muchos algoritmos y protocolos que usan
+     cifrados de flujo.
+   ▶ Son aleatorios y se usan solo una vez.
+   ▶ Garantizan que no se genera dos veces la misma secuencia.
+Generadores de secuencia
+Generadores síncronos y asíncronos
+
+   Generadores síncronos
+    ▶ La secuencia se calcula de forma independiente del texto claro.
+    ▶ Son los más utilizados, con diferencia.
+    ▶ Si se pierde la sincronización entre emisor y receptor, el
+      mensaje se corrompe.
+    ▶ Modificar bits del mensaje cifrado modifica también los del
+      texto claro al descifrar. Podemos modificar bits si sabemos su
+      posición.
+
+   Generadores asíncronos
+    ▶ La secuencia emplea, además de la semilla, una cantidad de los
+      bits anteriores del mensaje cifrado.
+    ▶ Son resistentes a pérdidas e inserción de información.
+Generadores síncronos y asíncronos
+
+
+
+
+               Figura 1: A: Síncrono - B: Asíncrono
+Generadores basados en modos de operación
+Modo de operación CFB
+
+
+
+    ▶ Produce un generador asíncrono.
+Modo de operación OFB
+
+
+
+
+    ▶ Produce un generador síncrono.
+Modo de operación CTR
+
+
+
+    ▶ Generador síncrono.
+    ▶ Permite generar bloques de la secuencia de forma
+      independiente.
+Algoritmos de generación de secuencia
+RC4
+
+
+
+
+      ▶ Creado por R. Rivest en 1987.
+      ▶ Su uso hoy está desaconsejado.
+      ▶ Una S-Caja dinámica 8 × 8.
+      ▶ Es un algoritmo muy sencillo y eficiente.
+      ▶ Para valores parecidos de clave, genera secuencias de inicio
+        similar.
+Cifrado RC4
+
+
+    ▶ Inicialización de la S-Caja:
+         1. Si = i, ∀0 ≤ i ≤ 255
+         2. Rellenar el array K0 a K255 repitiendo la clave tantas veces
+            como sea necesario.
+         3. j = 0
+         4. Para i = 0 hasta 255 hacer:
+              ▶ j = (j + Si + Ki ) mod 256
+              ▶ Intercambiar Si y Sj .
+    ▶ Generación de la secuencia:
+         1. i = (i + 1) mod 256
+         2. j = (j + Si ) mod 256
+         3. Intercambiar los valores de Si y Sj
+         4. t = (Si + Sj ) mod 256
+         5. Or = St
+Salsa20
+
+    ▶ Propuesto por Daniel Bernstein en 2005.
+    ▶ Usa solo funciones sencillas (suma, rotación y or-exclusivo),
+      con palabras de 32 bits.
+    ▶ Incluye en la clave de forma explícita un índice y un nonce de
+      64 bits.
+    ▶ A partir de la clave de 256 bits, más el índice y el nonce,
+      genera un bloque de 512 bits.
+    ▶ El vector de estado se compone de 16 palabras de 32 bits,
+      organizadas en una matriz 4x4. Se inicializa a partir de la clave.
+    ▶ Se realizan 10 rondas en las que se aplica una transformación
+      al vector de estado y luego se combina con su valor anterior
+      mediante or-exclusivo.
+          ▶ La transformación se hace en dos fases: una por filas y otra por
+            columnas.
+ChaCha20
+
+
+
+
+   ▶ Es una variación de Salsa20.
+   ▶ Se modifica la función realizada dentro de las rondas.
+   ▶ Es algo más eficiente.
+

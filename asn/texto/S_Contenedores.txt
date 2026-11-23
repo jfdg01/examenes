@@ -1,0 +1,339 @@
+Creación y Ejecución de Contenedores
+               Aplicaciones Seguras en la Nube
+                                                                                      José Ramón Balsas Almagro
+                                                                                      Departamento de Informática
+                                                                                             Universidad de Jaén
+                                            http://tiny.cc/asnuja                              jrbalsas@ujaen.es
+
+                                  Este obra está bajo una Licencia Creative Commons
+                                      Atribución-CompartirIgual 4.0 Internacional.                                  v 1.9
+    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+
+
+
+
+    Objetivos
+● Conocer el concepto de contenedor y saber los
+  fundamentos para su ejecución
+● Saber cómo empaquetar aplicaciones en imágenes
+  de contenedores para desplegarlas en servicios en la
+  nube
+● Conocer el concepto de registro de imágenes de
+  contenedores y saber publicar imágenes en registros
+● Saber desplegar un contenedor en equipo local o en
+  algún proveedor de servicios de la nube
+2
+    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+Qué es un contenedor
+●    Un contenedor es un proceso ordinario del sistema operativo anfitrión que ejecuta una
+     aplicación en un entorno aislado y delimitado mediante mecanismos nativos del kernel
+     (como Namespaces, cgroups y políticas de seguridad).
+
+
+
+
+3
+     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+
+
+
+
+Consideraciones de uso
+    ● Duración: vinculados a la
+      ejecución de una aplicación
+    ● Contienen sólo elementos
+      necesarios para ejecutar la
+      aplicación
+    ● Se deben considerar inmutables
+        ○ ficheros, datos o logs deben ubicarse
+          en volúmenes o servicios externos
+4
+     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+Gestión de Contenedores
+● Herramientas
+     ○   Permiten la gestión y aprovisionamiento de contenedores sobre un SO anfitrión ( linux en
+         docker for Windows/Mac )
+          ■ Ejemplos: docker, podman, lxd …
+     ○   Utilidades visuales:
+          ■ docker desktop, extensiones para vscode, lazydocker, …
+
+● Instalación
+     ○   Ver opciones en documento de software para prácticas
+
+● Catálogo de contenedores disponibles
+  ○ https://hub.docker.com/
+● Recomendaciones
+     ○ Usar contenedores oficiales, e.g. ubuntu, php, tomcat…
+     ○ Mejor si tienen muchas estrellas y descargas
+     ○ Revisar la documentación del contenedor para conocer los detalles de uso
+ 5
+     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+
+
+
+
+Lanzar el primer contenedor
+1.- Abrir un terminal (wsl, cmd, powershell en Windows o incluso cloud power shell en GCP)
+2.- Localizar nombre del contenedor en https://hub.docker.com o en línea de comandos:
+$ docker search ubuntu
+2.- Lanzar shell en contenedor temporal (se elimina al finalizar)
+$ docker run -it --rm ubuntu:26.04 /bin/bash                    #-it para habilitar terminal
+3.- Ejecución permanente de contenedores (opción detach, -d)
+$ docker run -d -it --name myserver ubuntu:26.04 # asignamos un nombre fijo
+$ docker ps               # lista contenedores en ejecución
+$ docker attach myserver # conectarse terminal (Ctrl+PQ para desconectar)
+$ docker stop/start myserver
+4.- Gestión de imágenes y contenedores disponibles                        También se puede usar el cliente
+$ docker images                                                           gráfico de Docker Desktop o la
+                                                                          extensión de docker en VScode
+$ docker ps -a               # lista todos los contenedores               para gestionar el estado de los
+                                                                          contenedores
+$ docker rm myserver # borrar contenedor parado
+ 6
+     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+    Estructura de un contenedor
+● Composición: imagen inmutable común + capa de ejecución modificable
+  única para cada contenedor
+● Modelo de capas inmutables con diferencias: control de versiones,
+  etiquetado, ...
+● Las imágenes se almacenan/recuperan en repositorios denominados
+  Registros,
+     ○     Ejemplos: docker hub, Amazon ECR, Google Cloud Registry GCR, Azure Container Registry, etc
+● Para lanzar un contenedor se debe crear o recuperar la imagen (pull) de
+  un registro
+    Host
+            Contenedor 1 (r/w)          Contenedor 2 (r/w)                    Registro
+
+                                                                                   Imagen (ro)
+                    Imagen (ro)
+                          Capa 3                                                          Capa 3
+                          Capa 2                                                          Capa 2
+                                                             pull/push                    Capa 1
+7                         Capa 1                               images
+    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+
+
+
+
+Desarrollando sobre contenedores
+● Crear una imagen del contenedor cada vez que queremos probar un
+  cambio en el código es un proceso costoso
+● Durante el desarrollo se suele mapear (mount, bind) una carpeta del
+  host (mutable) sobre una carpeta del contenedor (inmutable)
+      ○    Ejemplo: (windows powershell/cmd)
+                 docker run -v c:\Users\usuario\appweb\html:/var/www/html …
+      ○    Nota: La ruta en host debe ser absoluta. Se puede utilizar $(pwd) en unix/powershell, o %cd%
+           (windows cmd) para referirse al directorio actual, e.g. -v $(pwd)\appweb\html
+
+● Cuando la aplicación está desarrollada, entonces sí se puede crear la
+  imagen inmutable con una copia de la aplicación.
+● Es necesario publicar los puertos del contenedor en el host para acceder
+  al servicio
+   ○ Ejemplo
+8          docker run -p 8080:80 ...
+    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+        Esquema de funcionamiento
+                                                     Host      Red NAT virtual
+Para desarrollar en el
+contenedor necesitamos:                                             SO anfitrión virtualizado (opcional)
+                                                  localhost:8080
+●       Acceder host anfitrión (o SO                                                      Contenedor
+        virtualizado)                                         tcp/8080                tcp/80
+                                                                                             /var/www/html
+         ○   1.- Redirección a puerto en              1
+             contenedor, 8080→80                      Redirección        containerd
+                                                        puertos
+         ○   2.- Mapeado (mount) de carpeta                                             Carpetas
+                                                                                        mapeadas
+             local en carpeta de contenedor
+                                                        cliente docker        2
+●       Realizar cambios en ficheros locales,            en host, e.g.            c:\Users\usuario\appweb\html
+        e.g. index.html                                   $ docker ...
+
+●       Los cambios serán accesibles desde           Nota: docker expone los puertos en las IPs del host, e.g. 127.0.0.1.
+        el contenedor                                Si está instalado en un SO virtualizado, e.g. Docker en VM Linux,
+                                                     habrá que acceder a la ip interna de dicha máquina virtual
+    9
+         Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+
+
+
+
+ Acceso a recursos en contenedores
+ 1.- Lanzar contenedor: abrir su puerto 80 y compartirle carpeta en VM docker
+ $ git clone https://github.com/jrbalsas/asnwebapps.git; cd htmlsite ; tree
+ $ docker run -d -p 8080:80 -v $(pwd)/html:/var/www/html \
+                 --name www-server php:8-apache
+ $ docker ps
+                                                       ver detalles de uso del contenedor y variantes del
+ 2.- Programar y probar…                               contenedor en https://hub.docker.com/_/php/
+
+ Editar contenidos en carpeta html y probar en http://localhost:8080
+ 3.- Comprobar logs de contenedor
+ $ docker logs www-server
+
+ 4.- Acceder a contenedor en ejecución (e.g. ejecutar consola bash)
+ $ docker exec -it www-server /bin/bash
+
+ 5.- Parar/arrancar/borrar contenedor
+ $ docker stop/start/rm www-server
+  10
+         Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+Automatización de lanzamiento de
+contenedores locales
+●      docker compose facilita las tareas de creación y ejecución local de contenedores
+        ○ Docker lo tiene integrado en versiones modernas, e.g. $ docker compose …
+●      Utiliza un fichero docker-compose.yml con detalles de despliegue
+●      Ejemplo:
+    services:                                              Declaración de contenedores a lanzar
+        wwwserver:                                         Nombre del contenedor
+           build: .                                              Cómo construir la imagen (dónde está Dockerfile)
+           image: asn/phpwebapp                                  Nombre de la imagen a utilizar
+           environment:                                          Variables de entorno
+                PORT: 80
+           ports:                                                    Puertos que se publicarán
+                - "8080:80"
+           volumes:
+                                                                     Volúmenes/carpetas a compartir en contenedor
+                - ./html:/var/www/html
+ ●     Uso
+       $ docker compose up -d #en versiones antiguas utilizar la herramienta docker-compose.sh
+       $ docker compose ps
+       $ docker compose stop/start/down
+11
+      Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+
+
+
+
+     Creación de una imagen
+●     Se crean a partir de ficheros Dockerfile que definen su composición:
+       ○   Imagen base (opcional :version)
+       ○   Modificaciones sobre la imagen, e.g. instalación de paquetes adicionales, código de la
+           aplicación, etc.
+       ○   Elementos de configuración: puertos, volúmenes adicionales, entorno, etc.
+       ○   Aplicación a ejecutar en el contenedor
+●     Ejemplo de fichero Dockerfile
+             FROM node:latest                       Imagen base
+             LABEL maintainer="jrbalsas@ujaen.es"   Metadatos para registro
+
+             WORKDIR /app                           Directorio por defecto de app del contenedor
+
+             COPY src/package*.json ./              Fichero de configuración de proyecto node
+
+             RUN npm install                        Descargar dependencias necesarias en contenedor
+             COPY src/ ./                           Copiar fuentes proyecto
+
+             #ENV PORT=4000                         Opcional: variable de entorno para aplicación
+             EXPOSE 3000                            Metadatos (solo información): puerto accesible en contenedor
+
+             ENTRYPOINT ["node","app.js"]           Aplicación a ejecutar (si no existe utiliza la de la imagen base)
+●     Construcción de la imagen
+   $ docker build -t asn/htmlsite . # utiliza Dockerfile en carpeta actual
+   $ docker images asn/htmlsite               # Listar detalles de la imagen
+   $ docker rmi asn/htmlsite                  # Borrar imagen
+12
+   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+     Publicación en un registro
+Pasos generales
+       1.- Añadir una etiqueta a la imagen que contenga el nombre host:puerto del registro, ID
+       del repositorio y nombre de imagen
+       $ docker tag asn/phpwebapp host_registro:5000/ID_REPO/phpwebapp
+       2.- Enviar imagen al registro (puede ser necesaria identificación previa)
+       $ docker push host_registro:5000/ID_REPO/phpwebapp
+       3.- Descargar imagen desde registro remoto
+       $ docker pull host_registro:5000/ID_REPO/phpwebapp
+Ejemplo:
+    Registros en Docker hub https://hub.docker.com
+      1.- Registrar usuario en Docker hub y crear repositorio público para imagen, e.g.
+      phpwebapp
+       2.- Identificarse en local con credenciales
+             $ docker login
+       3.- Etiquetar imagen y enviar
+             $ docker tag asn/phpwebapp usuario/phpwebapp             Consultar detalles de imagen en
+             $ docker images                                          https://hub.docker.com/u/usuario
+             $ docker push usuario/phpwebapp
+13
+       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+
+
+
+
+Publicación de un contenedor en Google
+Artifact Registry
+●     GCP permite lanzar contenedores desde registros públicos (docker hub) o privados
+      (Google Artifact Registry)
+
+●     Gestionar repositorio privado en Google Artifact Registry
+       ○ Habilitar API de Artifact Registry en consola de Google Cloud
+       ○ Crear repositorio desde consola Google Cloud, e.g. nombre: images, formato:
+           docker, modo: estándar, región: us-central1                 Recomendaciones:
+
+       ○ Autorizar cliente local docker para acceder al registro        1. Si utilizas windows es preferible
+                                                                           instalar las herramientas de gcloud
+            ■ requisito: instalar herramienta de gestión CLI gcloud        desde una distribución linux (e.g.
+                                                                           ubuntu) en WSL2
+           $ gcloud auth login
+           $ gcloud auth configure-docker us-central1-docker.pkg.dev    2. Si utilizas Google Cloud Shell las
+                                                                           herramientas gcloud ya están
+       ○   Etiquetar imagen como zona-docker.pkg.dev/proyecto/repo/imagen instaladas
+           $ docker tag asn/phpwebapp us-central1-docker.pkg.dev/mast-sec/images/phpwebapp
+       ○   Enviar imagen y consultar
+           $ docker push us-central1-docker.pkg.dev/mast-sec/images/phpwebapp
+           $ gcloud artifacts docker images list us-central1-docker.pkg.dev/mast-sec/images/
+
+14
+       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+Lanzar contenedores en Cloud Run
+ ● Ventajas
+       ○    Arquitectura Serverless (basada en cluster Kubernetes)
+       ○    Pago por uso de recursos: pago por memoria y cpu consumida
+       ○    Escalado elástico de contenedores según conexiones simultaneas (por
+            defecto de 0 a 1000 contenedores)
+       ○    Soporte integrado TLS, monitorización y registro
+       ○    Permite desplegar desde repositorios públicos (docker hub) y privados
+ ● Inconvenientes
+       ○    Contenedores sin estado (i.e. se puede borrar el disco local). Necesitan
+            servicios externos, e.g. db
+       ○    El servicio del contenedor debe escuchar en un puerto definido por la
+            variable de entorno PORT
+       ○    Por cuestiones de seguridad, puede haber limitaciones extra en los permisos
+            de los contenedores respecto a una ejecución local del contenedor
+  15
+       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+
+
+
+
+ Despliegue en Cloud Run
+
+
+
+
+$ gcloud run deploy phpwebapp --region=us-central1 –project=mast-sec \
+     --image=us-central1-docker.pkg.dev/mast-sec/images/phpwebapp \
+     --max-instances=2 --memory=256Mi --allow-unauthenticated         Opciones: desde interfaz web o CLI
+$ gcloud run services list –project=mast-sec
+$ gcloud run services delete phpwebapp –region=us-central1      Más detalles sobre uso de CLI
+
+  16
+       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+Referencias
+[1] Contenedores con app webs de ejemplo. Disponible en https://github.com/jrbalsas/asnwebapps
+[2] Best practices for writing Dockerfiles. Docker, 2026. Disponible en
+https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+[3] Docker Compose. Docker, 2026. Disponible en https://docs.docker.com/compose/
+[4] Dockerfile reference. Docker, 2026. Disponible en https://docs.docker.com/engine/reference/builder
+[5] Manage Repositories on Docker Hub. Docker, 2026. Disponible en
+https://docs.docker.com/docker-hub/repos/
+[6] Almacenar imágenes de contenedores en Artifact Registry. Google, 2026. Disponible en
+https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images
+[7] Guía de inicio rápido: compila e implementa. Cloud Run. Google Cloud, 2026. Disponible en
+https://cloud.google.com/run/docs/quickstarts/build-and-deploy#php
+
+
+
+
+17
+     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. https://tiny.cc/asnuja. 2026
+

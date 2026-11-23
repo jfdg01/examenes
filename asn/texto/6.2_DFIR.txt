@@ -1,0 +1,199 @@
+                 Análisis de Seguridad en
+                    Aplicaciones Web:
+                  Respuesta a Incidentes
+            Aplicaciones Seguras en la Nube
+                                                                                  Raimundo Alcázar Quesada
+                                                                                      <ralcazq@gmail.com>
+
+
+
+
+                              Este obra está bajo una Licencia Creative Commons
+                                  Atribución-CompartirIgual 4.0 Internacional.
+                                                                                                             v 1.0
+Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+      DEFINICIÓN DE LA RESPUESTA A INCIDENTES
+
+
+      La respuesta ante incidentes es el proceso mediante el cual una
+      organización reacciona ante amenazas de TI, como es el caso de
+      los ciberataques, las vulneraciones de seguridad y el tiempo de
+      inactividad de los servidores.
+
+      El ciclo de vida de la respuesta ante incidentes es el marco de
+      trabajo pormenorizado de tu organización para identificar y
+      reaccionar ante una interrupción del servicio o ante una amenaza
+      de seguridad.
+FASES DE LA RESPUESTA A INCIDENTES
+Fase 1: Preparación
+
+La fase de preparación abarca el trabajo que lleva a cabo una
+organización para prepararse para la respuesta ante incidentes, lo
+cual incluye el establecimiento de las herramientas y recursos
+adecuados y la capacitación del equipo. Esta fase también incluye
+el trabajo efectuado para evitar que se produzcan incidentes.
+
+Fase 2: Detección y análisis
+
+Según el NIST, detectar y evaluar los incidentes con exactitud suele
+ser la parte más difícil de la respuesta ante incidentes para muchas
+organizaciones.
+
+
+
+
+FASES DE LA RESPUESTA A INCIDENTES
+Fase 3: Contención, erradicación y recuperación
+
+Esta fase se centra en tomar medidas que en primer momento
+puedan reducir al máximo las consecuencias del incidente y a
+partir de ahí empezar a erradicar la amenaza y comenzar con la
+recuperación del entorno (de red) y los equipos.
+
+Fase 4: Actividades post-incidente
+
+Aprender y mejorar después de un incidente es uno de los
+componentes más importantes de la respuesta ante incidentes y el
+que más se suele pasar por alto. En esta fase se analizan el
+incidente y los esfuerzos de respuesta correspondientes. Los
+objetivos aquí son limitar las posibilidades de que el incidente
+vuelva a producirse e identificar formas de mejorar la actividad
+futura de respuesta ante incidentes.
+ROLES DE LA RESPUESTA A INCIDENTES
+
+Gestor del incidente (Incident Handler): Figura que gestiona el
+extremo a extremo del incidente (con un equipo que colabora) y
+principal interlocutor con el cliente y otras terceras partes
+(proveedores,etc). Su objetivo es avanzar en cada una de las fases
+con las tareas que conlleva cada una de ellas.
+
+Especialista analista forense: Obtiene las evidencias forenses
+digitales de los medios tecnológicos (sistemas perimetrales,
+servidores, equipos de trabajo, etc) para su investigación y posterior
+informe de lo acontecido.
+
+Analista de malware: Encargado de analizar el comportamiento del
+malware, cuales son sus capacidades y de extraer indicadores de
+compromiso con los que detectar y prevenir nuevos ataques.
+
+
+
+
+TAREAS/FASE DE LA RESPUESTA A INCIDENTES
+
+Iniciación (Precualificación):
+
+ -   Lista de activos total y afectados.
+ -   Mapa de redes.
+ -   Determinar interlocutores adecuados de la empresa,
+     proveedores de servicios, etc
+ -   Entender cuáles son los procesos de negocio más críticos.
+ -   Entender que sistemas de seguridad están disponibles: SIEM, FW,
+     EDR, …etc
+
+En casos de ransomware, se suele pedir ya de entrada para la
+investigación una copia virtualizada de los controladores de
+dominio. También se suele preguntar por las copias de seguridad y
+si existen ponerlas a buen recaudo.
+TAREAS/FASE DE LA RESPUESTA A INCIDENTES
+
+Contención:
+
+ -   Tomar medidas que puedan parar la amenaza (parar servicios,
+     restringir comunicaciones de red, apagar o aislar sistemas, etc)
+
+Erradicación:
+
+ -   Tomar medidas que puedan eliminar la amenaza
+     definitivamente (reinstalar de nuevo los sistemas, instalación de
+     un software EDR, eliminación de cuentas de usuario usadas por
+     el atacante, rotado de credenciales de los usuarios, etc)
+
+Recuperación:
+
+ -   Tomar medidas que puedan recuperar el funcionamiento
+     normal, puede tardar incluso meses.
+
+
+
+Cortar las comunicaciones con el exterior y con redes de cualquier
+tercero , de forma que el atacante no se pueda conectar con la
+infraestructura.
+Eliminar cuentas de administración creadas recientemente.
+Rotar la cuenta KRBTGT dos veces.
+Desplegar EDR en todos los equipos posibles empezando por los
+TAREAS/FASE
+más críticos.      DE LA RESPUESTA A INCIDENTES
+Investigación:
+  - Crear desde cero un entorno seguro o desde una copia de
+Analizar   los logs,
+      seguridad   dede  VPN,
+                      una     FW,en
+                          fecha   SIEM  o cualquier
+                                     la que         otrocompromiso.
+                                            no hubiera    que aporte Se
+información.
+      pueden recuperar segmentos o redes completas, reinstalar
+Analizar   el malware
+      servidores        y verde
+                  o equipos   lasusuario,
+                                  capacidades.
+                                          promocionar nuevos
+Causa    raíz de entrada,
+      controladores        ejecuciones,
+                      de dominio          persistencia,
+                                   “limpios”,           file system,
+                                              etc. Habilitar MFA. etc.
+Analizar si hay exfiltracion de datos al exterior.
+Investigación:
+Tomar un adquisición o un clonado de disco/maquina virtual.
+  - Analizar los logs, de VPN, FW,o cualquier otro sistema
+Recuperación:
+      relacionado.
+  - Analizar los eventos o alertas del SIEM o cualquier otro que
+Recuperar
+      aporte una   copia de seguridad del DC previa al inocente según
+              información.
+la- investigación,   podemos
+      Analizar el malware      pasarle
+                            y ver       unas Yara también.
+                                  las capacidades   que tiene.
+  - Determinar la causa raíz de entrada,
+  - Precisar las acciones realizadas por el atacante (Timeline).
+  - Analizar si hay exfiltración de datos al exterior.
+     ANÁLISIS FORENSE DIGITAL en WINDOWS
+Lista de artefactos de un sistema Windows:
+ ●    Logs o ficheros de sistema
+ ●    Tabla maestra de archivos MFT
+ ●    El registro de Windows
+ ●    El visor de Eventos
+ ●    Los ficheros Prefetch
+ ●    Los accesos directos
+ ●    La papelera
+ ●    Metadatos en imágenes y documentos
+ ●    Ficheros de hibernación y memoria
+ ●    Copias de seguridad
+ ●    Volume Shadow
+
+Permiten tener visión de las ejecuciones de comandos, persistencia en
+el sistema y otra actividad desarrollada por el atacante.
+
+
+
+
+     REFERENCIAS
+
+     - NIST Incident Response:
+         https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-61r2.pdf
+
+     - ISO/IEC 27043:2016:
+         https://www.une.org/encuentra-tu-norma/busca-tu-norma/norma?c=N0057477
+
+     - CCN-Cert (Jornadas STIC): Ransomware ate my network
+         https://www.ccn-cert.cni.es/es/pdf/documentos-publicos/xiv-jornadas-stic-ccn-cert/
+         ponencias-1/5497-s18-d30-01-ransomware-ate-my-network/
+

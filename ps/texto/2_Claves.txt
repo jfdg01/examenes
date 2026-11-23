@@ -1,0 +1,325 @@
+TEMA 2:
+ADMINISTRACIÓN Y
+DISTRIBUCIÓN DE CLAVES
+Introducción
+• Necesidad de distribuir claves simétricas o asimétricas
+  para sesiones, conexiones, … de intercambio de datos
+• Necesidad de una administración adecuada de claves en
+  protocolos de seguridad
+• La fortaleza de un sistema criptográfico depende
+  técnica de distribución de claves
+Contenidos
+• Distribución de claves simétricas usando criptografía
+  simétrica
+• Distribución de claves simétricas usando criptografía
+  asimétrica
+• Distribución de claves públicas
+• Certificados X.509
+• PKI (Infraestructura de clave pública)
+Distribución de claves simétricas en
+criptografía simétrica
+• En criptografía simétrica hay que proveer a ambas partes
+  de la misma clave
+• Esta provisión de claves debe ser segura
+• Las claves simétricas en este caso se suelen llamar
+  claves de sesión ya que suelen cambiarse a nivel de
+  sesión para aumentar la seguridad.
+Distribución de claves
+• Ejemplo de jerarquía de
+ claves de dos niveles:
+  • Clave de sesión: clave
+    usada para el intercambio
+    de datos durante una
+    conexión
+  • Clave master: clave para
+    encriptar la distribución de
+    las claves de sesión
+Distribución de claves. Opciones:
+1. A determina la clave y se la hace llegar “físicamente” a
+   B
+2. Una entidad externa puede seleccionar la clave y
+   enviársela “físicamente” a A y a B
+3. Si A y B poseen una clave simétrica compartida, A, por
+   ejemplo, puede generar una nueva clave y enviársela a
+   B encriptada
+4. Si A y B disponen de una conexión encriptada con C, C
+   puede generar la clave y enviarla por la citada
+   conexión a A y B
+Distribución de claves
+• Hoy en día
+  potencialmente se
+  suele generar una
+  clave sesión entre
+  cualquier par de
+  interlocutores en
+  Internet
+• Las opciones 1 y 2 no
+  son prácticas en la
+  actualidad con
+  comunicaciones
+  orientadas a sesiones
+Distribución de claves descentralizada
+• Solo para contextos locales donde se pueda disponer de
+ una clave maestra entre equipos (A y B)
+
+
+
+
+Nx: Núnico (nonce), número que se genera aleatoriamente y se usa
+solo una vez
+f (N): función establecida en el protocolo. Ejemplo. f(N) = N+1
+Km: Clave máster simétrica
+Ks: Clave de sesión
+Distribución de claves
+• Variaciones de la opción 4 son las más usadas.
+• En este entorno (opción 4) se establece un KDC (Key
+  Distribution Center).
+• Los usuarios tienen una clave maestra con respecto a
+  este KDC.
+Centro de distribución de claves
+Centro de distribución de claves
+IDA: Identidad de A
+IDB: Identidad de B
+N1, N2: Identificador único (núnico) para la transacción:
+sello de tiempo, contador, número aleatorio
+Ka: Clave máster simétrica entre A y KDC
+Kb: Clave máster simétrica entre B y KDC
+Ks: Clave de sesión (solo válida para sesión en curso)
+E(K, M): encriptación del mensaje M con clave K
+f(N): transformación del núnico (normalmente simple, por
+ejemplo sumar 1)
+||: concatenación
+Tiempo de vida de una clave de sesión
+• Solución de compromiso:
+  • Mientras más a menudo se cambie una clave de sesión más
+    seguridad hay
+  • La generación y establecimiento de una clave de sesión consume
+    tiempo
+• En protocolos orientados a conexión es habitual que la
+  clave de sesión se mantenga durante una conexión
+  (salvo que esta sea muy larga)
+• En protocolos no orientados a conexión depende. Por
+  defecto se cambia cada cierto número de transacciones
+Distribución de clave simétrica con
+criptografía asimétrica
+• Un primer ejemplo
+• A comienza generando la pareja de claves
+  pública/privada
+• Después del intercambio de datos cifrado, A desecha la
+  pareja y B desecha la clave pública. Es muy seguro en
+  este sentido
+Problema Man in the Middle
+Distribución de clave con autenticación y
+cifrado
+• Suponiendo que las claves públicas de A y B se han
+ distribuido con seguridad
+Distribución de claves públicas
+
+                  Tipos:
+                  • Anuncio público
+
+                  • Directorio de claves
+                    públicas
+                  • Autoridad de claves
+                    públicas
+                  • Certificados de
+                    claves públicas
+Distribución de claves públicas:
+Anuncio público
+
+
+
+
+• Distribución sin control de la clave pública ya que es
+  pública
+• Problema: apropiación y uso indebido de claves públicas
+  de otros propietarios
+Distribución de claves públicas:
+Directorio de claves públicas
+• Mantenimiento y distribución de un directorio de claves
+ públicas por parte de una empresa/autoridad responsable
+  • Una entrada en el directorio contiene: [nombre, clave pública]
+  • Cada usuario debe registrarse ante la autoridad siguiendo un
+    protocolo
+  • Cada usuario puede reemplazar su clave cuando lo crea
+    conveniente
+  • Los participantes que accedan al servicio deben hacerlo de forma
+    autenticada y segura
+Distribución de claves públicas:
+Autoridad de claves públicas
+Distribución de claves públicas:
+Certificados de clave pública
+Certificados X.509
+• X.500: serie de recomendaciones de la ITU-T que definen
+  un servicio de directorio (base de datos de información
+  sobre usuarios)
+• X.509 define un entorno para la provisión de servicios de
+  autentificación.
+• Básicamente contiene una clave pública firmada con un
+  clave privada perteneciente a una autoridad de
+  certificación
+• Se especifica un formato de certificado. Usado en
+  • SSL/TLS
+  • S/MIME
+  • IP Security
+  • …
+Generación de un certificado X.509
+Contenido de un certificado X.509 según
+formatos
+Obteniendo un certificado
+• Características de un certificado
+  • Cualquier usuario con la clave pública de la CA puede verificar un
+    usuario y su clave pública
+  • Nadie más que la CA puede modificar un certificado
+• Con estas características
+  • Los certificados se pueden poner libremente en un directorio
+    público
+  • Un usuario puede transmitir su certificado directamente a otros
+    usuarios
+• Jerarquías
+   • Se pueden obtener cadenas de firmas de certificados
+  Revocación de certificados
+• Cada certificado dispone de una fecha de
+  caducidad
+• Además podemos querer revocar un certificado si:
+  • La clave privada se ha visto comprometida
+  • El usuario no sigue estando certificado por una CA
+  • El certificado de la CA se ha visto comprometido
+• CRLs: Certificate Revocation List.
+  • Cada CA debe mantener una lista de certificados
+    revocados pero no expirados
+  • Puede ser consultada por los clientes y se las pueden
+    descargar
+• OCSP: Online Certificate Status Protocol
+  • Protocolo online para comprobar el estado de un
+    certificado
+  • Ventaja: puedes preguntar por un solo certificado
+Problemas de revocación de certificados
+• Problemas CRLs
+  • Listas demasiado largas a mantener y a descargar
+  • Disponibilidad del servidor
+• Problemas OCSP
+  • Latencia de una consulta a servidor con TLS.
+  • Poco confiable. Propenso a problemas de disponibilidad con
+    servidores objetivo de ataques DoS.
+  • Compromiso de privacidad. El navegador filtra a qué sitio web se
+    está accediendo y quién accede a los servidores de CA
+Respuesta ante problemas de revocación
+• Comportamiento “soft-fail” de clientes Web. Si no se recibe
+  respuesta se da por bueno el certificado.
+• Navegadores que no implementan estos sistemas:
+  • Chrome no implementa OSCP, ni CRL
+  • Firefox utiliza OCSP pero no CRL
+• Navegadores que implementan soluciones propietarias
+  • Chrome CLRSet o FireFox OneCRL: lista de certificados revocados de
+    las principales CAs integrados internamente en el propio navegador
+• OCSP Stapling
+  • Ahora es el servidor (Web, etc) el que consulta el estado de sus
+    propios certificados
+  • El servidor recibe una respuesta firmada por la CA con una validez de
+    corta duración. Esta respuesta es adjuntada a las peticiones de los
+    clientes.
+  • Se mitigan problemas citados
+  • El uso de OCSP Stapling no es obligatorio hoy en día
+X.509 Version 3
+• Para cubrir las nuevas necesidades en vez de seguir
+  insertando campos en un formato fijado, aparece el
+  concepto de extensiones opcionales
+• Una extensión consiste en:
+  • Identificador de extensión
+  • Valor de extensión
+  • Indicador crítico
+• Las extensiones de certificados se clasifican en:
+   • Información de clave y política de certificado
+   • Atributos del certificado y del emisor
+   • Restricciones de camino de certificación
+Información de clave y política de
+certificado
+• Estas extensiones transmiten información adicional
+  sobre el sujeto y sus claves más indicadores de la
+  política de certificados
+• Una política de certificado es un conjunto de reglas que
+  indica la aplicabilidad de un certificado a una
+  comunidad y/o clase de aplicación con requisitos de
+  seguridad comunes
+• Ejemplos:
+  • Identificador de clave de autoridad: para administración de claves de CA
+  • Identificador de clave de sujeto: para administración de claves de sujeto
+  • Uso de la clave: firma digital, encriptación (clave o datos), no repudio, …
+  • Período de uso de la clave privada
+  • Políticas de certificado: es persona física, empresa, EV, …
+  • Asignaciones de políticas: de una CA que certifica a otra CA
+Atributos del certificado y del emisor
+• Transmten información adicional sobre el certificado
+  sujeto a aumentar la confianza del usuario de un
+  certificado de que el sujeto del certificado es una persona
+  o entidad en particular
+• Estas extensiones admiten nombres alternativos, en
+  formatos alternativos, para una entidad de certificado o
+  un emisor de certificados
+• Los campos de extensión en esta área incluyen:
+  • Nombre alternativo del sujeto (Subject Alternative Name)
+  • Nombre alternativo del emisor (Issuer Alternative Name)
+  • Atributos del directorio del sujeto en X.500: almacenan información
+   personal, profesional o geográfica adicional sobre el titular del
+   certificado
+Restricciones de camino de certificación
+• Estas extensiones permiten incluir especificaciones de
+  restricciones en certificados emitidos para CA por
+  otras CA
+• Las restricciones pueden restringir los tipos de
+  certificados que pueden ser emitidos por la CA en
+  cuestión o que pueden ocurrir posteriormente en una
+  cadena de certificación
+• Los campos de extensión en esta área incluyen:
+  • Limitaciones básicas: indica si el sujeto puede actuar como CA
+  • Limitaciones de nombres: a usar en certificados siguientes
+  • Limitaciones de la política
+PKI (Public Key Infrastructure)
+• Conjunto de hardware, software, gente, políticas y
+  procedimientos para crear, administrar, distribuir y revocar
+  certificados digitales.
+• El Internet Engineering Task Force (IETF) Public Key
+  Infrastructure X.509 (PKIX) working group ha establecido
+  un modelo genérico y global basado en X.509 que es
+  recommendable para desplegar una arquitectura basada
+  en certificado en Internet.
+Modelo de arquitectura PKI
+                       • End entity: usuario que
+                         pide certificado
+                       • Registration authority
+                         • Opcional
+                         • Ayuda a una CA en ciertas
+                           labores de publicación o
+                           comprobación de datos
+                       • CRL issuer
+                         • Opcional
+                         • Ayuda a CA en la
+                           publicación de las CRLs
+Más conceptos de certificados (a
+desarrollar de forma autónoma)
+• Diferentes tipos de certificados
+  • EV/OV/DV/…
+• Jerarquía de certificados
+   • ¿Por qué?
+   • Niveles y funciones
+   • Safe the root
+   • Certificación cruzada
+• Let’s Encript
+   • ¿Qué es?
+   • Automatización de certificados con certbot
+
+• Formatos de almacenamiento de certificados
+  • Enumerar y comprender su contenido
+• Herramienta para administrar “secretos”
+• Un “secreto” puede ser:
+  • Claves API
+  • Contraseñas
+  • Certificados
+• Permite administrarlos y gestionarlos
+  • Generación de claves para distintos de sistemas
+  • Almacenamiento
+  • Encriptación de datos sin almacenarlos
+  • Definición de tiempos de caducidad y renovación
+  • Revocación
+

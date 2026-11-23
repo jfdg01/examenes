@@ -1,0 +1,886 @@
+     Tema 5. Monitorización, Detección y
+       Respuesta frente a Amenazas
+               Aplicaciones Seguras en la Nube
+                                                                                      José Ramón Balsas Almagro
+                                                                                      Departamento de Informática
+                                                                                             Universidad de Jaén
+                                                                                               jrbalsas@ujaen.es
+
+                                  Este obra está bajo una Licencia Creative Commons
+                                      Atribución-CompartirIgual 4.0 Internacional.                            v 1.4.4
+    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+La seguridad en el desarrollo
+software en la nube
+●  Análisis:
+    ○ Identificación de amenazas
+    ○ Análisis de riesgos                                                                                       Tema 2
+    ○ Requisitos de seguridad: funcionales y no funcionales
+● Diseño
+    ○ Patrones de diseño seguros en la nube                                                                     Temas 3 y 4
+● Implementación y despliegue
+    ○ Buenas prácticas y técnicas de protección
+    ○ Herramientas y bibliotecas de seguridad para minimizar vulnerabilidades
+    ○ Configuración de servicios
+● Seguimiento y evaluación contínua de seguridad
+    ○ Monitorización y respuesta                                                                                    Temas 3 y 5
+    ○ Evaluación del rendimiento y alta disponibilidad
+    ○ Métodos y Herramientas de verificación de seguridad:
+          ■ Análisis estático de código                                                                             Tema 6
+          ■ Análisis dinámico: herramientas de análisis automatizado y pentesting
+ 2 Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Monitorización de aplicaciones
+en la nube
+
+
+     Sólo cuando conoces cada detalle de la
+     condición del terreno puedes maniobrar y luchar.
+                                          Sun Tzu, El Arte de la Guerra. Siglo V a.C.
+
+
+
+
+3   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Objetivos
+●   Conocer los conceptos y aspectos generales sobre monitorización de
+    aplicaciones en la nube
+●   Conocer algunas tecnologías y herramientas relacionadas con la
+    monitorización, comprender su utilidad y sus aspectos básicos de utilización
+    en arquitecturas distribuidas.
+●   Conocer y comprender el concepto de nivel de respuesta frente a amenazas
+●   Conocer tecnologías y herramientas de ayuda a la detección y respuesta
+    frente a amenazas en la nube
+●   Conocer y comprender el concepto de cortafuegos de aplicación web, WAF,
+    sus características, ventajas que aporta en la monitorización y prevención de
+    amenazas en aplicaciones en la nube
+4   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Motivación
+         ¿Cómo monitorizar adecuadamente el estado y la seguridad de una aplicación
+                 distribuida para detectar y responder frente a problemas?
+Objetivos de la monitorización
+●        Planificar escalado del sistema
+●        Optimizar arquitectura y recursos
+●        Detección de errores o funcionamientos anómalos, e.g. tiempos de respuesta
+         bajos
+●        Información de negocio
+●        Detección de amenazas
+●        Respuesta frente a amenazas
+
+Relevancia
+●        Site Reliability Engineering, SRE. Google
+●        Logging as a Service (LaaS), e.g Splunk, Logz.io, Loggly, Papertrail, Logmatic,
+         AWS cloudwatch, Azure Log Analytics, GCP Logging and Monitoring
+ 5       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Técnicas de Monitorización
+ Tradicional                                                                           Actual
+
+ Blackbox                                                                              Whitebox
+                                                                                                   Inside Out, Walt Disney Studios, 2015
+                                 Pirates of the Caribbean, Walt Disney Studios, 2007
+
+
+ Estado de los servicios sin conocer                                                   Análisis del funcionamiento para
+ los detalles de funcionamiento                                                        detectar, corregir y prevenir
+                                                                                       problemas. Análisis forense.
+     ●     Consulta (Polling)
+     ●     Tiempo operación (uptime)                                                   ●   Métricas
+     ●     Monitorización de gráficas                                                  ●   Logs
+                                                                                       ●   Trazas ejecución
+ Ejemplos: Nagios
+                                                                                       Ejemplos: Prometheus, ELK,
+                                                                                       Opentelemetry
+ 6       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Tipos de herramientas para la
+monitorización
+ ●   Monitorización de estado
+       ○   Recopilación centralizada de métricas de funcionamiento: cpu, memoria, red, latencia, número de peticiones...
+       ○   Gestión de series temporales, e.g. agregación por años, meses, días...
+       ○   Agregación de resultados, e.g. peticiones por servicios o nodos replicados
+       ○   Visualización
+
+ ●   Gestión centralizada de logs
+       ○   Almacenamiento centralizado de toda la información de la evolución del estado de los sistemas y de ejecución de
+           la aplicación y servicios
+       ○   Análisis de información: consulta, visualización, minería de datos
+
+ ●   Gestores de trazas
+       ○   Correlación de tareas en operaciones distribuidas
+       ○   Identificación de problemas de ejecución, latencias y reproducción de operaciones erróneas
+
+ ●   Ejemplos
+       ○   Monitorización: Nagios, Collectd, Graphite, Prometheus, ...
+       ○   Gestión logs: ELK, Graylog…
+       ○   Gestores de Trazas, Dapper (Google), Jaeger (Uber), Zipkin (Twitter), …
+       ○   Es habitual encontrar funcionalidades agrupadas: Elastic Stack, Google Cloud Logging, …
+ 7   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Sistemas especializados en
+seguridad
+Combinan aspectos de monitorización, gestión de logs, detección de problemas y generación de
+alertas:
+ ● Security Information Management, SIM
+       ○ Sistemas especializados en detección de amenazas
+       ○ Auditoría y análisis forense
+ ● System Event Management, SEM
+       ○ Monitorización en tiempo real
+       ○ Notificaciones: mails, sms, mvl push, web hooks, slack, irc...
+ ● Pueden aparecer combinados, SIEM
+ ●   Ejemplos
+      ○    Comercial: Splunk, HP ArcSight, IBM QRadar, McAfee Enterprise Security Manager, AlienVault USM, InsightER,
+           Solarwinds …
+      ○    Open Source: AlientVault OSSIM, ELK, Wazuh, SIEMonster, …
+
+ ●   Suelen aparecer englobados como parte de soluciones más generales en modalidad de
+     Seguridad como Servicio, SeCaaS
+ 8   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Consideraciones sobre monitorización
+en la nube (I)
+●       Las aplicaciones deben adaptarse para generar información → Instrumentación
+●       Información de actividad de cada componente individual
+         ○   Los componentes se pueden crear y destruir dinámicamente
+         ○   Pueden no conservar sus registros de actividad
+         ○   Rotación y backup de logs en nodos
+         ○   Los atacantes pueden tratar de ocultar su actividad
+●       Cada componente puede generar múltiples tipos de información:
+         ○   Métricas: Estado de los recursos de la VM donde se ejecuta el componente: cpu, ram,
+             disco, red…
+         ○   Registros de actividad, información sobre ejecución de la aplicación:
+              ■ Peticiones, errores de ejecución/excepciones, latencia ...
+              ■ Información de negocio: operaciones de clientes, estado de stocks, ventas, …
+              ■ Información de seguridad: operaciones críticas (e.g, cambio de credenciales, conexión
+                  de administradores...), amenazas, ...
+         ○   Alertas: caídas de nodos, posibles amenazas (DoS, intentos de inyección…)
+    9   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Consideraciones sobre
+monitorización en la nube(II)
+●       Formatos diferentes según el tipo de host y pila de desarrollo
+●       Diferentes fuentes: ficheros de logs, entrada/salida estándar, syslog, snmp, mensajes…
+●       Agregación de datos (series temporales) de fuentes heterogéneas y dinámicas
+●       Volumen y continuidad (streaming) de datos de monitorización
+●       Seguridad en la transmisión, autoría y acceso, logs tóxicos/saneados
+●       Registro de operaciones distribuidas (correlación de logs) ¿qué registros en diferentes
+        nodos se corresponden a una petición específica del cliente?
+●       Consulta y visualización centralizada de diferentes fuentes
+●       Backup de registros y facilitar procedimientos de auditoría y legislación
+●       Los sistemas de monitorización de aplicaciones en la nube constituyen por sí solos
+        aplicaciones distribuidas con necesidades específicas de alta disponibilidad y tolerancia a
+        fallos (consideraciones CAP)
+10      Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Recopilación de métricas
+ Conceptos
+
+     ●     Métricas: valores numéricos sobre un proceso o actividad
+     ●     Series temporales: secuencia de valores numéricos obtenida en intervalos regulares de
+           tiempo para su estudio
+
+ Objetivos:
+  ● Recolectar (pull) información de nodos y/o servicios que ejecuta
+  ● Reenviar (push) esa información a un servicio centralizado (o fichero)
+  ● Emisión de alertas, e.g. mail, sms…
+  ● Consulta de la información
+
+ Tipos de información:
+
+     ●     Carga de cpu, uso de memoria, ancho de banda, latencias, ...
+
+ Herramientas (recopilación y/o visualización)
+  ● Clásicas: Nagios, Munin, Collectd,...
+  ● Actuales: StatsD, Prometheus, ...
+11       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Ejemplo de sistema de
+monitorización de métricas
+ Prometheus + Grafana
+
+
+
+
+                                                                             Fuente: prometheus.io
+12       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+ Visualización de métricas
+ Ejemplo de panel de monitorización Grafana en Prometheus
+                                                                       Grafana utiliza un lenguaje de consulta,
+                                                                       PromQL, para definir el contenido de
+                                                                       cada métrica, e.g.
+                                                                       avg(container_memory_usage_bytes
+                                                                           {namespace="front-end"}
+                                                                       ) by (pod)
+
+                                                                        Despliegue de ejemplo en repositorio
+                                                                        github asnwebapps.git
+                                                                        $ cd k8s/prometheus-service
+                                                                        $ source ./helm_install.sh
+
+                                                                        Acceder desde ip pública del clúster,
+                                                                        e.g. con DKS
+  https://play.grafana.org/a/grafana-k8s-app/home
+                                                                        https://localhost/grafana
+                                                                        credenciales: admin/prom-operator
+ 13   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Sistemas de gestión de logs
+Definición:     historial o registro de la secuencia de los
+                acontecimientos (eventos) que afectan a un
+                proceso
+Syslog
+ ● Protocolo de gestión de logs. 1980, Eric Allman (Sendmail), RFC 3164, RFC 5424
+ ● Utilizado por gran cantidad de dispositivos y servicios en red
+Arquitectura cliente-servidor
+ ● Clientes, utilizan APIs de sistema disponibles en todos los sistemas Unix
+ ● Servidor syslog local
+     ○ Recibe mensajes de clientes locales
+     ○ Decide dónde van los mensajes: fichero (/var/log/), consola, mail, servidor remoto.
+         e.g. /etc/rsyslog.conf
+     ○ Reglas: servicio.prioridad.acción
+ ● Servidores syslog remotos, e.g. UDP/514, TCP/6514
+ ● Utilidades: logrotate, logger, …
+ 14   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+ Información de eventos en Syslog
+Información del cliente
+ ● Origen (Facility) ID (0..23), e.g. 0 kernel, 1 User, 11 ftp, local0...local7…
+ ● Nivel severidad (0..7): emerg (0), alert, crit, err, warning, notice, info, debug (7)
+ ● Mensaje
+ ● El sistema añade información adicional: prioridad (Facility*8+severidad), fecha, host, pid
+     ...
+Formato de mensaje, RFC 5424
+<priority>VERSION ISOTIMESTAMP HOSTNAME APPLICATION PID MESSAGEID STRUCTURED-DATA MSG
+Ejemplo: <34>1 2017-10-11T22:14:15.003Z localhost http 3400 ID47 - Server halted
+Inconvenientes: (versiones originales)
+ ●   No hay un formato definido para los mensajes (texto o binario), tamaño limitado
+ ●   Sin tolerancia frente a fallos en la red (udp) o alta disponibilidad
+ ●   Sin autoría (posible recepción de mensajes falsos)
+ ●   Necesita de herramientas adicionales para el análisis de los registros
+Herramientas
+ ● syslogd → rsyslogd, syslog-ng (AMQP, IMDG, Bigdata...)
+15   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Sistemas de gestión de logs: ELK
+Elastic Stack o ELK
+
+ ●   ElasticSearch, BD NoSQL con HA basada en
+     motor de búsqueda Apache Lucene
+
+ ●   Logstash, servicio en alta disponibilidad para
+     recepción, transformación y almacenamiento de
+     logs de diferentes fuentes. Envía los logs
+     procesados a ElasticSearch
+
+ ●   Beats, agentes para recolección de datos de
+     servicios
+
+ ●   Kibana, visualización centralizada de la
+     información de ElasticSearch
+
+16   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+  Arquitectura ELK
+
+
+
+  Ventajas
+    ● Diferentes fuentes de información (logstash/elastic beats plugins)
+    ● Arquitectura distribuida con alta disponibilidad y tolerancia a fallos, e.g. uso de colas de mensajes de
+       logs, cluster de nodos logstash, replicación ElasticSearch …
+    ● Herramientas de consulta y visualización centralizadas
+    ● Open Source
+    ● Amplia utilización: Facebook, Netflix, Microsoft, Ebay, Github, …
+  Inconvenientes Aspectos a considerar:
+    ● Gestión de la infraestructura distribuida y volumen de datos
+    ● Configuración de filtros y gráficas
+    ● Existen proveedores de servicio especializados, e.g. Elastic, Logz.io, AWS, ...
+ 17   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+ Sistemas de recopilación de logs
+Recolectores de logs (log shippers)
+                                                     Ejemplos
+Objetivos:                                             ●  Logstash (java)
+                                                            ○    Sistema de plugins (ruby)
+ ● Recolectar información de diferentes fuentes:            ○    Parte de arquitectura Elastic Stack (ELK)
+                                                            ○    Alta disponibilidad utilizando redis
+       ○ Métricas SO, dispositivos en red, syslog,
+                                                            ○    Consumo elevado de recursos
+       ○ Logs de servicios, e.g. syslog, http, AWS,
+                                                       ●  Elastic Beats (Go):
+           ….                                               ○    Sustituto ligero de logstash en ELK
+       ○ Logs de aplicación, e.g .NET, Java, Node ...       ○    Posibilidad de envíos directos a Elasticsearch o
+ ● Procesar, unificar formato, añadir                            Logstash
+                                                            ○    Plugins: Filebeat, Metricbeat, Packetbeat, Winlogbeat,
+     información, e.g. geoip...
+                                                                 ...
+ ● Filtrar, seleccionar la información relevante       ●  Fluentd
+ ● Redirigir información a diferentes destinos:             ○    Sistema de plugins (ruby)
+     almacenamiento, BD, eventos, colas, SIEM...            ○    Pocos recursos (servicio C o ruby)
+                                                            ○    Formato unificado JSON
+                                                            ○    Alta disponibilidad nativa
+Configuraciones en alta disponibilidad                      ○    Proyecto Fundación Cloud Native https://www.cncf.io
+
+
+ 18   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+      Visualización de datos con Kibana
+                       Interfaz gráfica de Elastic Stack
+
+                       Algunas funciones:
+
+                         ●    Logs: Consulta centralizada de logs sobre elasticsearch
+
+                         ●    Discover: Asistente de consultas interactivo sobre índices de ES
+
+                         ●    Visualize: Asistente para visualización gráfica de datos de consultas, e.g. gráficos de área,
+                              barras, líneas, sectores, tablas…
+
+                         ●    Canvas: asistente para manipulación y visualización de series temporales (para utilizar con
+                              visualize)
+
+                         ●    Dashboard: Creación y visualización de colecciones de gráficas
+
+                         ●    DevTools: Asistente interactivo para interacción JSON con ES
+
+                         ●    Management: Gestión de datos y opciones de configuración
+
+
+                       Gráficas y tableros preconfigurados para servicios habituales: Métricas de sistema, Apache,
+                       Mysql, Redis, Syslog, MongoDB, ...
+ 19   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Ejemplos de visualización con Kibana
+
+
+
+
+Kibana utiliza consultas KQL para filtrado de logs, e.g
+      apache2.access.response_code:404
+      AND apache2.access.url:\/admin*
+      AND @timestamp:[* TO 2017-10-10]
+
+Instalación de pruebas: https://demo.elastic.co/
+ 20   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+ Monitorización de eventos de
+ aplicaciones
+Motivación:
+           ¿Cómo recolectar información del funcionamiento interno de las aplicaciones?
+ ● Los logs de servicios no reflejan información del funcionamiento interno de la aplicación
+    como: operaciones relevantes, información de depuración, amenazas detectadas, comunicaciones
+    entre componentes, etc.
+                                                                                       App
+Opciones                                                                            Logger API
+ ● Clásicas: Salida estándar/error, fichero de log específico                   Logger      Logger
+ ● Bibliotecas especializadas (loggers) o facilidades del lenguaje             Transport    syslog
+       ○   Java, Especificación SLF4J, implementaciones Java logging API, Logback, Log4j, Jakarta Commons
+           Logging..
+       ○   PHP, Especificación PS3-2, implementación Monolog...
+       ○   .Net, frameworks Nlog, log4net...
+Recolectores de logs en aplicaciones distribuídas
+ ● Los mensajes deben enviarse a un repositorio centralizado de logs:
+       ○ Syslog
+       ○ Bibliotecas o servicios que analicen y envíen de forma transparente los Logs (log shippers)
+  21   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+ Ejemplo de generación de eventos en
+ aplicaciones: Syslog
+            <?php
+            // abre syslog (opcional) incluyendo el ID del proceso. Envía al
+            // log el error estándar y el mecanismo de logging
+            // definido por el usuario
+            openlog ("WEB_APP_SECURITY_EVENTS", LOG_PID, LOG_USER);
+
+            if ( authorized_client() ) {
+                // hacer algo
+            } else {
+                // Cliente no autorizado! Respuesta pasiva: Se registra el intento
+                $access = date("Y/m/d H:i:s");
+                syslog (LOG_WARNING, "Cliente no autorizado: $access
+                        {$_SERVER['REMOTE_ADDR']} ({$_SERVER['HTTP_USER_AGENT']})");
+            }
+            closelog ();
+            ?>
+ No obstante, es preferible utilizar bibliotecas generales de Logging, como Monolog, que internamente
+ permitan seleccionar el método de propagación, syslog en este caso
+
+  22   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Ejemplo de generación de eventos en aplicaciones:
+Syslog, Logstash                                        Configuración logback.xml
+                                                        <configuration>
+Java SLF4J (Implementación Logback con                    <appender name="SYSLOG "
+procesadores para syslog y logstash)                    class="ch.qos.logback.classic.net.SyslogAppender">
+                                                            <syslogHost>syslog_host </syslogHost>
+import org.slf4j.Logger;                                    <syslogPort>514</syslogHost>
+import org.slf4j.LoggerFactory;                             <facility>LOCAL0</facility>
+                                                            <!-- prevent multiline stack trace -->
+@RestController                                                <throwableExcluded>true</throwableExcluded>
+public class ClientSrv {                                    <suffixPattern>[WebService] %msg Thread:%t Priority:%p
+                                                        exception:%exception</suffixPattern>
+ static final Logger logger =                             </appender >
+     LoggerFactory.getLogger(ClientSrv.class);            <appender name="STASH "
+
+                                                        class="net.logstash.logback.appender.LogstashTcpSocketAppender"
+@Getmapping("/cliente/{id_cliente}                      >
+public Cliente getCliente(Integer id_cliente) {               <remoteHost>logstash_host </remoteHost>
+                                                              <port>5044</port>
+    try {                                                     <encoder
+       ...                                              class="net.logstash.logback.encoder.LogstashEncoder" />
+      logger.warning("Client {} not found",               </appender >
+                       id_cliente);
+                                                          <root level="DEBUG ">
+    } catch (Exception e) {                                 <appender-ref ref="SYSLOG " />
+      logger.error("ClientSrv connection fail", e);         <appender-ref ref="STASH " />
+    }                                                     </root>
+ }                                                      </configuration>
+}         <135>Oct 17 06:37:55 myhost [WebService] Client 23 not found Thread:main priority:WARNING exception:
+     23   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+    Monitorización de registros de
+    actividad distribuidos (Trazas)
+Motivación
+  ¿Cómo identificar y secuenciar los registros de los nodos que han
+     participado en una operación sobre un sistema distribuido?
+Problemáticas:
+ ● Los logs de servicios no contienen información sobre la lógica de funcionamiento
+ ● Dificultad para establecer la correlación entre tareas de una misma operación
+Consideraciones
+ ● Detección de elementos funcionales que han intervenido
+ ● Identificación de latencias en las operaciones
+ ● Recuperación de información relevante procesada en la transacción
+ ● Visualización de la correlación y dependencias de tareas en el tiempo
+Herramientas
+ ● Dapper (Google) HTrace, X-Trace, AWS X-Ray, …
+ ● Especificación: http://opentelemetry.io
+      ○ Soportado por: AWS, Azure, GCP, OpenZipkin (Twitter), Jaeger (Uber), Elastic APM, Logz.io,
+          Splunk…
+ 24 Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+     Ejemplo de traza distribuida
+
+
+
+
+                                                                          Fuente: http://opentracing.io
+ Cuestiones
+  ●    ¿Qué tarea es la más costosa?
+  ●    Si una petición falla, ¿en qué tarea ocurrió el problema?
+  ●    ¿Qué información ocasionó el error?
+  ●    ¿Qué valores tenían las variables o qué excepciones se lanzaron?
+  ●    ¿Es posible reproducir paso a paso la ejecución?
+25    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+                Opentelemetry
+ ● Iniciativa Cloud Native Computing Foundation, CNCF http://www.cncf.io
+Arquitectura:
+ ● API de programación (instrumentor) para envío de eventos desde aplicación
+      ○ SDK Multilenguaje: C#, Java, Php, Javascript, Python,...
+ ● Gestor de eventos (collector), recepción, distribución y gestión de información
+      ○ Múltiples métodos de transporte: HTTP, Colas de mensajes, Kafka, ...
+Conceptos:
+ ● Traza (trace), contenedor de información de la operación que se propaga a través de diferentes
+    nodos. Formado por una colección de Spans
+ ● Span, subtarea específica dentro de la operación que se desea monitorizar.
+      ○ Dispone de un inicio, final e información relacionada: equipaje, etiquetas, logs, ….
+      ○ Pueden anidarse para definir dependencias
+      ○ Se introducen (inject) en la traza para su propagación
+      ○ Se extraen (extract) de la traza para añadir información adicional
+ ● Carrier, mecanismo de propagación de la Traza, HTTP, thrift, ...
+26    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Instrumentación con Opentelemetry
+ ●   Modalidades de instrumentación
+     ○ Automática: los SDKs disponen de mecanismos para extracción de
+        información de frameworks, bibliotecas y servidores de aplicaciones
+        habituales
+         ■ e.g. peticiones REST, accesos JPA, etc.
+     ○ Manual: permite controlar el ámbito de los Spans y de la información que
+        aportan
+         ■ Ejemplo en Java: control programado y/o con anotaciones
+     @WithSpan("getProducts")
+     private Collection<Product> getProductByCategory(@SpanAttribute("app.product.cat") String category) {
+
+
+         Collection<Product> products = productService.getByCategory(category);
+         Span.current().setAttribute("app.product.count", products.size());
+         return products;
+     }
+
+27   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+     Visualización de Trazas
+Jaeger dispone de una interfaz de monitorización e.g. http://jaeguerhost:16686/
+
+
+
+
+28   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+      Detección y respuesta
+       frente a amenazas
+             Aplicaciones Seguras en la Nube
+
+
+
+Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+        ¿Cómo responder ante
+           una amenaza?
+
+
+
+
+Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+ Respuesta frente a amenazas
+Iniciativas
+ ●    Runtime Application Self-Protection (RASP), Gartner, 2012
+ ●    OWASP AppSensor, https://owasp.org/www-project-appsensor/
+      Metodología para la detección de ataques y respuesta automática
+
+Objetivos AppSensor
+ ●    Reducir riesgos detectando y evitando actividades maliciosas: ataques y pentestings
+ ●    Unificación del proceso de respuesta mediante un API centralizada (ESAPI)
+
+Elementos clave
+ ●    Puntos de detección, e.g. validación de un campo de usuario          if ( username.length > 30 ) {
+
+ ●    Umbrales de activación, e.g. longitud(nombre)>30                     # "AE4" detection point identifier
+                                                                           appSensor.addEvent ( logged_in_user, "AE4")
+ ●    Respuestas, e.g. aviso de operación sospechosa                       }
+
+ 31    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+      Tipos de respuesta en AppSensor
+
+
+Los tipos de respuesta
+se definen mediante
+reglas de activación a
+partir de los eventos
+detectados
+
+
+
+
+                                                                           Fuente: OWASP Appsensor
+ 32    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+                   ¿Cómo detectar
+                 amenazas en la nube?
+
+
+
+                                                        Ghostbusters. Columbia Pictures, 1984
+         Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Sistemas de detección y respuesta
+frente a amenazas
+     ● Las soluciones existentes combinan varias funcionalidades
+     ● Permite generación de eventos (logs, alertas) y, opcionalmente, medidas
+       de respuesta
+     ● Pueden ser obligatorios según regulaciones o definidos en requisitos
+ Tipos de sistemas de detección:
+     ●     A nivel de componentes
+            ○ Como parte del sistema operativo o del propio código de la aplicación
+     ●     A nivel de red
+            ○ Monitorizando el tráfico público y entre componentes
+     ●     Soluciones híbridas
+            ○ Recopilando información de diferentes fuentes para análisis y eventual
+               respuesta
+34       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Sistemas de detección de
+amenazas en componentes
+●    Antivirus
+      ○ Detección de malware en componentes de la aplicación o ficheros enviados por
+          usuarios, e.g. ClamAV...
+●    File Integrity Monitoring, FIM
+      ○       Detección de alteraciones en archivos o configuración de la aplicación o sistema operativo mediante
+              checksum de comprobación.
+      ○       Ejemplos: tripwire, Mcafee change control, … Iniciativa The Update Framework, TUF, e.g. Docker Notary
+●    Host-based Intrusion Detection System, HIDS
+      ○       Detección mediante análisis de logs, políticas de seguridad, integridad de ficheros, análisis de procesos, etc.
+      ○       Suelen permitir respuestas activas y estar vinculados a gestores de logs y NIDS
+      ○       Ejemplos: Linux AuditD, Solarwind SolarWinds Security Event Manager, Splunk, OSSEC, Samhain…
+●    Runtime Application Self-Protection, RASP
+      ○       Bibliotecas o agentes para monitorización y protección frente a actividades no adecuadas en la aplicación
+      ○       Actúan de forma transparente o integrada en código interceptando y analizando operaciones sentibles
+      ○       Ejemplos: AppSensor, OpenRasp, Sqreen, Hdiv, imperva, AppSealing, Falco (k8s)...
+35    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Sistemas de detección de amenazas a
+nivel de red (I)
+    ● Anti-DDoS
+          ○     Requieren de grandes recursos para ser efectivos, e.g. balanceadores multi-regionales
+          ○     Normalmente en modalidad SaaS, e.g. Cloudflare, Amazon Shield, Google Cloud Armor
+    ● (Network) Intrusion Detection/Prevention Systems, IDS/IPS
+          ○     Detección/bloqueo de tráfico atendiendo a reglas. En general requieren canales no
+                cifrados. Actúan a Nivel L4
+          ○     Pueden suponer problemas de escalado al tener que centralizar tráfico de componentes
+                distribuidos en la nube
+          ○     Más apropiados para detección de amenazas en componentes internos
+          ○     Ejemplos: Snort, Suricata, Trend Micro Deep Security, Alert Logic...
+    ● Egress Filtering, EF
+          ○     Control de conexiones L3, L4 de salida de los componentes: destinos, ancho de banda,
+                contenidos, e.g. Aviatrix, AWS Egress-Only Internet Gateways, mitmproxy, squid, ...
+          ○     Complementan al control por ip, e.g. reglas de cortafuegos
+36    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+ Sistemas de detección de amenazas a
+ nivel de red (II)
+●     Data Loss Prevention, DLP
+       ○   Prevención de exfiltración de información a nivel de red L7 o incluso de almacenamiento
+       ○   Requieren canales no cifrados
+       ○   Suelen formar parte de otras soluciones, e.g. Egress Filtering, IDS/IPS
+             ■    Ejemplos: Symantec Data Loss Protection and McAfee Total Protection for DLP, Google Data Loss Prevention,...
+●     Web Application Firewalls, WAF
+       ○ Actúan a Nivel L7
+       ○   Especializados en control de amenazas en aplicaciones web
+
+Sistemas híbridos
+●     (eXtended) Endpoint (Threat) Detection and Response, EDR o ETDR, XDR
+       ○   Los EDR monitorizan equipos (ordenadores, portátiles, móviles...). Los XDR también otros elementos en la nube (red, servicios,
+           SaaS…) tanto para detección como análisis forense
+       ○   Reglas para detección y respuesta frente a amenazas o comportamientos anómalos.
+       ○   Utilizados en hosts o aplicaciones, e.g. Palo Alto Network Cortex, Crowdstrike Falcon, Falco (K8s), Sysdig
+●     Security Information and Event Management, SIEM
+       ○   Sistemas integrales de recopilación, análisis, monitorización y generación de alertas
+             ■ Ejemplos: Splunk, ELK, SumoLogic, LogRhythm, ArcSigh
+ 37    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+      Web Application Firewalls (WAF)
+●     Servicios especializados para controlar la comunicación (peticiones/respuestas http) entre un
+      cliente y una aplicación web (L7)
+●     Tipos
+       ○ Habitualmente localizados como proxy-inverso entre cliente y servidor
+       ○ Bibliotecas o filtros utilizados en la propia aplicación
+●     Capacidad para:
+       ○ Finalizar el canal TLS
+       ○ Analizar tráfico de entrada/salida
+       ○ Filtrar contenido específico de entrada/salida
+       ○ Definir reglas de personalizadas o de terceros
+       ○ Seguimiento de la actividad (sesión) del usuario
+       ○ Respuestas frente a amenazas:
+             ■ Registrar detalles operaciones sospechosas
+             ■ Emitir alertas
+             ■ Bloquear operación                                                       Conte Magnus, 2012
+             ■ Iniciar una respuesta...: proxy, honey-pot, seguimiento...
+ 38    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Consideraciones de seguridad sobre
+WAF
+  ●   Son complementarios a otros sistemas de defensa como Firewalls o IDS/IPS, incluso
+      podrían interactuar
+  ●   Permiten analizar la interacción del usuario y modificar mensajes
+  ●   Usos
+       ○ Monitorización eventos de seguridad
+       ○ Detección y filtrado de ataques habituales, e.g. inyección, XSS, …
+       ○ Detección de actividades no convencionales, e.g. tasas de error elevadas, filtrado
+           de información de error (stack trace), tasa de peticiones de una ip no habitual, ...
+       ○ Virtual patching: mitigación temporal de vulnerabilidades detectadas mientras se
+           solucionan en la aplicación
+  ●   Ejemplos:
+       ○ OSS: ModSecurity, Coraza, Open App-sec, SafeLine,
+       ○ Comerciales: Fortiweb, F5 Advanced WAF
+       ○ Específicos de servicios en la nube: AWS, Azure, CloudFlare, GCP, Incapsula,...
+ 39   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+ OWASP Modsecurity
+http://www.modsecurity.org
+ ● Instalación
+        ○ Desde v.3, biblioteca especializada en WAF. Dispone de conectores para diferentes servidores web,
+           e.g. Apache, Nginx o balanceadores, e.g. Nginx, Traefik, Haproxy, …
+ ● Modos de operación
+        ○ Conector con servidor web (proxy-inverso), biblioteca independiente, módulo de servidor (v.2)
+ ● Reglas de seguridad
+        ○ Sintaxis para definir reglas personalizadas
+        ○ Soporte adicional de reglas con módulos binarios o Lua
+        ○ Repositorios de reglas
+            ■ Core Rule Set, CRS (OWASP) prevención ataques habituales
+            ■ Comerciales: Malware expert, ..., e.g. detection of malware, DoS, webshell, antivirus, …
+ ● Aspectos generales de funcionamiento
+        ○ Las reglas se evalúan en diferentes contextos (phases):
+                 request headers→request body→response headers→response body→server log
+        ○ Fichero con detalles de amenazas detectadas
+        ○ Mensajes de amenazas simplificados en log del servidor, e.g. error.log
+
+ 40   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+  Configuración de Modsecurity
+  Instalación:
+        Modsecurity y CRS suelen estar disponibles como paquetes de distribución o contenedores
+  Configuración: e.g. /etc/modsecurity.d/modsecurity.conf
+
+        SecRuleEngine     DetectionOnly | On |Off         #Desactivar bloqueo o no de positivos
+        SecResponseBodyAccess On | Off                    #Revisar contenido de respuestas
+       #Otras opciones de configuración
+       …
+  Configuración de reglas CRS: activación/desactivación, ajustes generales y excepciones a reglas
+       e.g. /opt/owasp-crs/crs-setup.conf
+
+  Colección de reglas
+       e.g. /opt/owasp-crs/rules/*.conf
+
+  Fichero de actividad: e.g. /var/log/modsecurity/audit/modsec_audit.log (o stdout en contenedor)
+   ● Detalles de petición: body, args, headers… (diferentes formatos, syslog, JSON, …
+   ● Información sobre el tipo de ataque
+ 41   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Ejemplos de reglas en Modsecurity
+Ejemplos básicos de reglas
+     e.g. /etc/modsecurity.d/mis_reglas.conf
+     Utilizar con: Include mis_reglas.conf en /etc/modsecurity.d/setup.conf
+Formato:
+                                           VARIABLES COMPROBACIÓN ACCIONES
+
+#Rechazar atributos y encabezados con <script>                #Acceso total ip de administración
+SecRule ARGS|REQUEST_HEADERS “@rx <script>” \                 SecRule REMOTE_ADDR “@ipMatch 150.214.170.15” \
+id:101,msg:‘XSS Attack’,severity:ERROR,deny ,status:404       id:102,phase:1,t:none,nolog,pass ,ctl:ruleEngine=off
+
+
+#Prevención de cadena de ataque CVE-2014-6271
+SecRule REQUEST_LINE|REQUEST_HEADERS|REQUEST_HEADERS_NAMES \ "@contains () {" "phase:1,id:'2100080',block ,t:none,\
+msg:'Bash ENV Injection Attack',tag:'CVE-2014-6271'"
+
+#Prevención de cadena de ataque CVE-2021-44228 log4shell
+SecRule ARGS|REQUEST_HEADERS|REQUEST_URI|REQUEST_BODY|REQUEST_COOKIES|REQUEST_LINE|QUERY_STRING \
+      "jndi:ldap:|jndi:dns:|jndi:rmi:|jndi:rni:|\${jndi:" \
+      "phase:1,t:none,block ,log,auditlog,msg:'Block CVE-2021-44228 log4shell"',severity:'5'"
+
+#Mitigación de cadena de ataque CVE-2026-109618 php2shell
+SecRule ARGS_POST_NAMES|FILES_NAMES "@streq PHP_SESSION_UPLOAD_PROGRESS" \
+  "id:2026106183,phase:2,block ,status:403,log,msg:'Bloqueo preventivo CVE-2026-109618 php2shell '"
+
+ 42   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+  Reglas CRS en Modsecurity
+Organizadas en ficheros con nombres: <<FASE-999-TIPO_REGLAS.conf>>
+Algunas pueden configurarse o activarse en crs-setup.conf
+Permiten ajustar su nivel de sensibilidad, e.g. Paranoia Level 1 - 4
+Familias incluidas                                                               https://coreruleset.org/
+  ● REQUEST
+       ○ COMMON-EXCEPTIONS, para evitar falsos positivos habituales
+       ○ IP-REPUTATION, tráfico de ips relacionadas con actividad sospechosa (IP reputation, GeoIP, …)
+       ○ DoS-PROTECTION, detección de algunos tipos de ataque DoS (nivel 7)
+       ○ SCANNER-DETECTION, detección de herramientas habituales de seguridad y scanners
+       ○ PROTOCOL-ENFORCEMENT, violaciones del protocolo http en navegadores modernos, e.g. Falta
+            encabezado user-agent, Origin...
+       ○ PROTOCOL-ATTACK, e.g. división de respuesta
+       ○ APPLICATION-ATTACK-(LFI,RFI,SQLI,SESSION-FIXATION), detección de inclusiones de recursos
+            locales, remotos, inyección sql y fijación de sesiones
+       ○ BLOCKING-EVALUATION, bloqueo predictivo
+  ● RESPONSE
+       ○ DATA-LEAKAGES-(IIS,JAVA,PHP,SQL), filtrado de información de error
+
+  43   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+       Efectividad CRS
+
+
+
+
+       Fuente: https://coreruleset.org
+  44   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Aplicaciones Seguras en la Nube
+
+
+       El supremo arte de la guerra es
+       someter al enemigo sin luchar.
+                                            Sun Tzu, El Arte de la Guerra. Siglo V a.C.
+
+
+
+
+45    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+     Conclusiones
+●    Las aplicaciones en la nube tienen necesidades específicas en cuanto a monitorización de su
+     actividad.
+
+●    La monitorización de aplicaciones es básica para garantizar la detección y prevención de
+     situaciones que afecten a su disponibilidad y seguridad
+
+●    Los tipos de información que se puede monitorizar en una aplicación son: métricas de
+     funcionamiento de sistemas y servicios, registros de actividad de servicios (logs)y eventos
+     generados por la propia aplicación (trazas)
+
+●    Los sistemas de monitorización de aplicaciones en la nube son a su vez sistemas distribuidos y
+     debe garantizarse su alta disponibilidad y tolerancia a fallos
+
+●    Los sistemas de traza de eventos son fundamentales en aplicaciones en la nube para conocer el
+     funcionamiento interno de operaciones realizadas en un conjunto de componentes distribuidos
+
+●    Los cortafuegos de aplicaciones web o WAF complementan la seguridad de una aplicación web
+     ayudando a monitorizar y responder frente a ataques bloqueando temporalmente o
+     permanentemente posibles amenazas
+46    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Bibliografía y referencias
+●    Chris Dotson, “Network Security”, in Practical Cloud Security, 1st edition. O’Reilly
+     Media, Inc, 2019 [on-line]. Disponible en Recurso electrónico UJA
+●    S. Newman, Building microservices: designing fine-grained systems. First edition.
+     [online] Sebastopol, CA: O’Reilly Media, 2015. Disponible en Recurso electrónico UJA
+●    Fehling, C., Leymann, F., Retter, R. et al. Cloud Computing Patterns: Fundamentals to
+     Design, Build, and Manage Cloud Applications. Springer, 2014. Disponible en Recurso
+     electrónico UJA
+●    Betsy Beyer, Chris Jones et al., Google - Site Reliability Engineering. O’Reilly Media,
+     2017 [on-line]. Disponible en https://landing.google.com/sre/sre-book/toc
+●    Magnus Mischel. ModSecurity 2.5 : Securing Your Apache Installation and Web
+     Applications. Packt Publishing Ltd., 2009. Disponible en Recurso-electrónico-UJA
+●    OpenTelemetry, http://opentelemetry.io/
+
+47   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+

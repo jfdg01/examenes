@@ -1,0 +1,661 @@
+CAPA DE TRANSPORTE
+ SSL /TLS
+ (Secure Sockets Layer) / (Transport Layer Security)
+• Capa de seguridad que provee:
+  • Autenticación                                         Application
+  • Criptografía                                           SSL/TLS
+  • Integridad
+                                                             TCP
+• TLS
+   • Desarrollado inicialmente por Netscape.                  IP
+   • Evolución de SSL                                        LAN
+   • Versión actual 1.2/1.3 (protocolo IETF - RFC 8446)
+   • Utilizado ampliamente para asegurar comunicaciones Web, correo, etc.
+Contenidos
+• TLS v1.2
+  • Arquitectura
+  • Conexiones y sesiones
+  • Record Protocol
+  • Otros protocolos
+  • Handshake Protocol
+  • Cálculos critográficos
+• TLS v1.3
+• OpenSSL
+TLS v1.2
+Arquitectura
+Sesiones y conexiones en TLS
+                     • Una asociación entre un cliente y un servidor
+
+   TLS               • Creada por el protocolo Handshake
+                     • Definen un conjunto de parámetros de seguridad
+                       criptográficos que pueden ser compartidos entre
+
+ session               múltiples conexiones
+                     • Se utilizan para evitar la costosa negociación de
+                       nuevos parámetros de seguridad para cada conexión
+
+
+
+
+                     • Un marco de transporte concreto que
+
+   TLS                 proporciona un tipo de servicio adecuado
+                     • En el caso de TLS, estas conexiones son
+
+connection
+                       relaciones entre pares
+                     • Las conexiones son transitorias
+                     • Cada conexión está asociada a una sesión
+
+
+
+     En una sesión se pueden definir varias conexiones
+  El estado de una sesión está definido por:
+
+  Session          Peer           Compression         Cipher          Master            Is
+ identifier      certificate        method             spec           secret        resumable
+
+
+
+
+                                                     Especifica el
+                                                    algoritmo de
+                                                    encriptación
+     Una
+                                                      de datos
+secuencia de
+                 Un certificado                     masivos y un                     Una bandera
+    bytes                                                            Clave de 48
+                  X509.v3 del       El algoritmo    algoritmo de                     que indica si
+  arbitraria                                                            bytes
+                  interlocutor;    utilizado para   hash utilizado                     la sesión
+elegida por el                                                       compartida
+                 este elemento     comprimir los        para el                        puede ser
+servidor para                                                          entre el
+                   del estado       datos antes      cálculo de la                  utilizada para
+identificar un                                                       cliente y el
+                   puede ser        del cifrado     MAC; también                    iniciar nuevas
+  estado de                                                            servidor
+                      nulo                              define                        conexiones
+sesión activo
+                                                       atributos
+o reanudable
+                                                    criptográficos
+                                                       como el
+                                                      hash_size
+ Estado de una conexión definido por:
+Server and     • Secuencias de bytes que son
+  client         generadas por el servidor y el                         • Cuando se utiliza un cifrado por
+                                                                          bloques en modo CBC, se
+                 cliente para cada conexión
+ random                                                                   mantiene un vector de
+                                                                          inicialización (IV) para cada clave
+                                                       Initialization   • Este campo se inicializa primero
+Server write   • La clave secreta utilizada en las       Vectors          por el protocolo TLS Handshake
+                 operaciones MAC sobre los datos                        • El último bloque de texto cifrado
+MAC secret       enviados por el servidor                                 de cada registro se conserva para
+                                                                          utilizarlo como IV con el siguiente
+                                                                          registro
+
+
+Client write   • La clave secreta utilizada en las
+                 operaciones MAC sobre los datos
+MAC secret       enviados por el cliente
+
+                                                                        • Cada parte mantiene números de
+                                                                          secuencia separados para los
+Server write   • La clave secreta de cifrado de los
+                 datos cifrados por el servidor y
+                                                                          mensajes transmitidos y recibidos
+                                                                          para cada conexión
+    key          descifrados por el cliente            Sequence         • Cuando una parte envía o recibe
+                                                       numbers            un mensaje de cambio de cifrado,
+                                                                          el número de secuencia
+                                                                          correspondiente se pone a cero
+Client write   • La clave de cifrado simétrica para
+                 los datos cifrados por el cliente y
+                                                                        • Los números de secuencia no
+                                                                          pueden ser superiores a 264 - 1
+    key          descifrados por el servidor
+TLS Record Protocol
+                           El protocolo de
+                             registro TLS
+                           proporciona dos
+                          servicios para las
+                           conexiones TLS
+
+
+
+
+          Confidentiality             Message integrity
+
+
+
+
+         El protocolo Handshake         El protocolo Handshake
+         define una clave secreta      también define una clave
+        compartida que se utiliza     secreta compartida que se
+              para el cifrado            utiliza para formar un
+        convencional de los datos       código de autenticación
+                 de TLS                   de mensajes (MAC)
+Funcionamiento genérico del TLS Record
+Protocol v1.2
+
+
+
+
+     TLS
+Formato del registro TLS
+
+
+
+
+                           // Max length 2^14+2018
+MAC en TLS
+• Genéricamente la función definida en RFC 2104:
+
+
+
+
+• Concretamente M es:
+Encriptación en TLS
+• Tipos:
+   • Flujo o bloque (Stream or Block)
+• Para encriptación de flujo se va procesando el flujo byte
+ a byte, se calcula MAC y se aplica encriptación
+Encriptación en TLS
+• En encriptación de bloque se
+  divide la información a enviar en
+  bloques de tamaño fijo.
+• Si no hay suficientes datos se
+  añade un relleno después del
+  cálculo del MAC y antes de la
+  encriptación:
+  • El relleno está compuesto de unos
+    bytes de relleno más un byte que indica
+    la longitud del relleno
+  • El relleno puede ser un múltiplo de la
+    longitud del bloque de cifrado hasta un
+    máximo de 255
+  • Se pueden usar rellenos variables para
+    impedir ataques
+Datos transportados por TLS Record
+Protocol
+• Depende del protocolo de capa superior que esté
+ transportando (especificado en ContentType)
+Protocolos TLS
+
+  Change Cipher Spec Protocol
+
+  • Su único propósito es anunciar si se va a cambiar
+    la suite de cifrado y por defecto se ejecuta
+    después del Handshake protocol
+
+  Alert Protocol
+
+  • Se utiliza para anunciar alertas a tu interlocutor
+    • Primer byte: Warning o Fatal
+    • Segundo byte: bad record mac,
+      handshake_failure, ilegal_parameter, …
+Protocolo Heartbeat
+(RFC 6250)
+• Tiene dos misiones:
+   • Asegurar que el interlocutor está activo
+   • Generar actividad en la conexión para evitar que esta conexión
+     sea cerrada por cortafuegos que no toleren conexiones sin
+     actividad
+• Consta de dos tipos de mensajes:
+  • heartbeat_request
+  • heartbeat_response
+
+• Su uso se establece en la parte 1 del protocolo
+ Handshake
+Handshake protocol
+• Es el más complejo
+• Funciones:
+  • Autenticación de interlocutores
+  • Negociación de la suite de cifrado:
+    • Algoritmos y claves de cifrado
+    • Algoritmos y claves MAC
+
+• Campos del mensaje
+  • Type: Tipo de mensaje (siguiente transparencia)
+  • Length
+  • Content: parámetros asociados al tipo de mensaje (siguiente
+    transparencia)
+Tipos de mensajes en el protocolo
+Handshake de TLS v1.2
+Fases del
+protocolo
+Handshake
+TLS v1.2
+client_hello
+• Versión: La versión más alta de TLS entendida por el cliente.
+• Random: Una estructura aleatoria generada por el cliente que
+  consiste en una marca de tiempo de 32 bits y 28 bytes
+  generados por un generador de números aleatorios seguro.
+  Estos valores sirven como nonces.
+• SessionID: Un identificador de sesión de longitud variable.
+  • Si es distinto de cero indica que el cliente desea actualizar los
+    parámetros de una conexión existente o crear una nueva conexión en
+    esta sesión.
+  • Si es cero indica que el cliente desea establecer una nueva conexión
+    en una nueva sesión.
+• CipherSuite: Lista de combinaciones de algoritmos
+  criptográficos soportados por el cliente, en orden
+  decreciente de preferencia. Cada elemento de la lista (cada
+  conjunto de cifrado) define un algoritmo de intercambio de
+  claves y un CipherSpec
+• Compresión: Métodos de compresión que el cliente soporta
+server_hello
+• Versión: contiene la versión más baja de la versión sugerida
+  por el cliente y la más alta soportada por el servidor.
+• Random: es generado por el servidor y es independiente del
+  campo Random del cliente.
+• SessionID
+  • Si el del cliente no era cero, el servidor utiliza el mismo valor
+  • Si era cero el campo SessionID del servidor contiene el valor para una
+   nueva sesión.
+• CipherSuite: contiene el conjunto de cifrado único
+  seleccionado por el servidor entre los propuestos por el
+  cliente.
+• Compresión: contiene el método de compresión seleccionado
+  por el servidor entre los propuestos por el cliente.
+Parámetro CipherSuite
+• El primer elemento del parámetro Ciphersuite es el método de
+ intercambio de claves para el cifrado y MAC. Se soportan los
+ siguientes:
+  • RSA: La clave secreta se cifra con la clave pública RSA del receptor. Debe estar
+    disponible un certificado de clave pública para la clave del receptor.
+  • Fixed Diffie-Hellman: el certificado del servidor contiene los parámetros públicos
+    Diffie-Hellman de los que se derivará las claves. El cliente enviará sus parámetros
+    Diffie-Hellman en su certificado o en el mensaje Client-key-Exchange.
+  • Ephemeral Diffie-Hellman: Las claves públicas Diffie-Hellman se intercambian y
+    firman utilizando la clave privada RSA o DSS. Es la más segura de las opciones
+    Diffie-Hellman porque da como resultado una clave temporal y autenticada.
+  • Anonymous Diffie-Hellman: Cada extremo envía sus parámetros Diffie-Hellman.
+    sin autenticación, por lo que es vulnerable a los ataques de hombre en el medio.
+• El segundo elemento es el CipherSpec, que incluye los campos:
+   • CipherAlgorithm: RC4, RC2, DES, 3DES, DES40, o IDEA
+   • MACAlgorithm: MD5 o SHA-1
+   • CipherType: Stream or Block
+   • HashSize: 0, 16 (para MD5), o 20 (para SHA-1) bytes
+   • Key Material: Una secuencia de bytes para generar claves de escritura
+   • IV Tamaño: El tamaño del valor de inicialización para el cifrado CBC
+server_key_exchange
+• No es necesario en dos casos:
+   • El servidor ha enviado un certificado con parámetros Fixed Diffie-Hellman
+   • Se utiliza el intercambio de claves RSA.
+• El mensaje server_key_exchange es necesario para:
+   • Anonymous Diffie-Hellman: El contenido del mensaje consiste en los dos
+     valores globales de Diffie-Hellman (un número primo y una raíz primitiva de
+     ese número) más la clave pública Diffie-Hellman del servidor.
+   • Ephemeral Diffie-Hellman: El contenido del mensaje incluye los tres
+     parámetros anteriores más una firma de esos parámetros.
+   • Intercambio de claves RSA (en el que el servidor utiliza RSA pero tiene una
+     clave RSA sólo de firma): Por consiguiente, el cliente no puede enviar una
+     clave secreta cifrada con la clave pública del servidor. En su lugar, el servidor
+     debe crear un par de claves públicas/privadas RSA temporales y utilizar el
+     mensaje server_key_exchange para enviar la clave pública. El contenido
+     del mensaje incluye los dos parámetros de la clave pública RSA temporal
+     (exponente y módulo) más una firma de esos parámetros.
+certificate_request
+• A continuación, un servidor no anónimo (servidor que no utiliza Diffie-
+  Hellman anónimo) puede solicitar un certificado al cliente.
+• El mensaje certificate_request incluye dos parámetros:
+  tipo_de_certificado y autoridades_de_certificado
+  (aceptables).
+• El tipo de certificado indica el algoritmo de clave pública y su uso:
+  • RSA, firma sólo
+  • DSS, firma sólo
+  • RSA para Diffie-Hellman fijo; en este caso la firma se utiliza sólo para la
+    autenticación del certificado, enviando un certificado firmado con RSA
+  • DSS para Diffie-Hellman fijo; de nuevo, se utiliza sólo para la autenticación.
+• Después se envía el mensaje server_done, que es obligatorio para
+  indicar el final del saludo del servidor y los mensajes asociados.
+• Si el servidor ha solicitado un certificado, el cliente comienza esta
+  fase enviando un mensaje de certificado. Si no hay ningún certificado
+  adecuado disponible, el cliente envía una alerta de
+  no_certificado en su lugar.
+client_key_exchange
+• El contenido del mensaje depende del tipo de intercambio
+ de claves
+ • RSA: El cliente genera una clave pre-master de 48 bytes y encripta
+   con la clave pública desde el certificado del servidor o la clave RSA
+   temporal desde un mensaje server_key_exchange. Su uso
+   para calcular un secreto maestro se explica más adelante.
+ • Diffie-Hellman efímero o anónimo: Se envían los parámetros
+   Diffie-Hellman públicos del cliente.
+ • Fixed Diffie-Hellman: Si los parámetros públicos de Diffie-Hellman
+   del cliente se enviaron en un mensaje de certificado, el contenido
+   de este mensaje es nulo.
+certificate_verify
+• Verificación explícita de un certificado de cliente.
+• Este mensaje sólo se envía después de cualquier
+  certificado de cliente que tenga capacidad de firma
+  (es decir, todos los certificados excepto los que contienen
+  parámetros Diffie-Hellman fijos).
+• Se firma (con la clave privada del certificado) un código
+  hash basado en los mensajes anteriores,
+ CertificateVerify.signature.hash(handshake_messages);
+• handshake_messages se refiere a todos los mensajes
+ del protocolo Handshake enviados o recibidos a partir de
+ client_hello pero sin incluir este mensaje.
+ change_cipher_spec
+ finished_message
+• Este mensaje se envía utilizando el protocolo
+  ChangeCipherSpec.
+• El mensaje final verifica que el intercambio de claves y los
+  procesos de autenticación se han realizado correctamente.
+  El contenido de finished_message es:
+
+PRF(master_secret, finished_label, MD5(handshake_messages)||SHA(handshake_messages))
+
+
+
+donde finished_label es la cadena "client finished" para
+el cliente y "server finished" para el servidor.
+• Para terminar el servidor envía su propio mensaje
+  change_ cipher_ spec, y envía su
+  finished_message.
+Calculo de parámetros criptográficos
+• La mayoría de claves y parámetros utilizados para
+ encriptar se establecen y calculan durante el protocolo
+ Handshake. Concretamente:
+ • Una clave maestra compartida
+ • Los parámetros criptográficos (key_block) a obtener partir de esta
+   clave maestra son
+   • Client write MAC secret
+   • Server write MAC secret
+   • Client write key
+   • Server write key
+   • Client write IV
+   • Server write IV
+PseudoRandom Function (PRF)
+• Generación de bloques de números aleatorios para
+ generación o validación de claves
+
+
+
+
+                                     Se itera las veces que haga falta
+                                     hasta conseguir la longitud deseada
+Obtención de la clave maestra
+• Tiene 48 bytes y es única para la sesión
+• Se crea en dos fases.
+  • Primero se intercambia una pre_clave_maestra. Dos opciones:
+    • RSA: Se genera por el cliente, se encripta con la clave pública RSA
+      del servidor y se envía al servidor.
+    • Diffie-Hellman: Tanto el cliente como el servidor generan una clave
+      pública Diffie-Hellman. Una vez intercambiados, cada bando realiza el
+      cálculo Diffie-Hellman para crear el pre_master_secret compartido.
+  • Después, ambas partes generan la clave_maestra
+key_block
+
+
+
+
+• A partir de aquí podemos obtener:
+  • Client write MAC secret
+  • Server write MAC secret
+  • Client write key
+  • Server write key
+  • Client write IV
+  • Server write IV
+Suite de cifrado
+• Establecimiento tras Handshake
+  • KeyExchangeMethod: RSA, Diffie-Hellman
+  • CipherAlgorithm: RC4, RC2, DES, 3DES, DES40, or IDEA
+  • MACAlgorithm: MD5 or SHA-1
+  • CipherType: Stream or Block
+  • HashSize: 0, 16 (for MD5), or 20 (for SHA-1) bytes
+  • Key Material: A sequence of bytes that contain data used in
+    generating the write keys
+  • IV Size: The size of the Initialization Value for Cipher Block
+    Chaining (CBC) encryption
+• Construcción del nombre de una suite de cifrado:
+Renegociación
+• Durante una conexión TLS se puede solicitar una
+  renegociación de los parámetros de seguridad
+• Esto implica una nueva ejecución del protocolo Handshake
+• La renegociación puede ser iniciada por cliente o servidor:
+  • El cliente enviara un típico mensaje ClientHello
+  • El servidor enviaría un mensaje HelloRequest (perteneciente al
+   protocolo Handshake)
+• Escenarios para solicitar renegociación
+  • Solicitar el certificado del cliente a partir de un momento determinado
+  • Incrementar la seguridad cuando se navega por una determinada
+    zona de un sitio web
+  • Ocultar información de la suite de cifrado a utilizar. El establecimiento
+    de la nueva suite de cifrado ya se realizará bajo encriptación
+Extensiones
+• Mecanismo de propósito general para añadir
+  funcionalidades al protocolo TLS sin cambiar el protocolo
+  en sí.
+• Se añaden en un bloque especial al final de los mensajes
+  ClientHello y ServerHello
+• Se pueden meter distintas extensiones con la estructura:
+Extensiones típicas
+Cierre de la conexión
+• Se emiten paquetes especiales para cerrar la conexión.
+• El objetivo es evitar un “truncation attack”, o un cierre de
+  la conexión no autorizado, utilizando TCP
+• El interlocutor que quiere cortar la conexión emite una
+  alerta close_notify
+• El otro interlocutor al recibir este paquete descarta
+ cualquier envío y emite así mismo un close_notify
+Ejemplo práctico de TLS v1.2 en
+https://tls.ulfheim.net/
+Problemas en TLS v1.2
+• Demasiados pasos (RTTs) en el protocolo Handshake
+• Demasiados CipherSuites, decenas de combinaciones
+  que dificultan la elección de las mejores
+• Elección de parámetros para ciertos algoritmos en
+  manos de usuarios que configuran servidores
+• Algunas partes del protocolo no se incluyen en la firma
+  digital que genera el servidor con su clave privada. Esto
+  deja la puerta abierta a ataques “downgrade” que
+  permiten establecer cifrados débiles
+TLS v1.3
+• Publicado en agosto 2018
+• El objetivo es aumentar la seguridad y la eficiencia
+• Con respecto al protocolo Handshake de TLS v1.2
+  • Se prohíbe el uso de intercambio de claves RSA y otros elementos
+    considerados pocos seguros (los veremos más adelante).
+  • Se elimina el uso del protocolo ChangeCipherSpec.
+  • Se eliminan los mensajes sever_key_Exchange y
+    client_key_Exchange. Adjunto al mensaje Hello (de cliente o
+    servidor) se envían los parámetros necesarios para la compartición
+    de clave (KeyShare Extensions)
+  • Se introducen EncryptedExtensions: extensiones del mensaje
+    server_hello que deben cifrarse
+  • De hecho cada mensaje enviado después de server_hello se
+    cifra -> Se adelanta el cifrado de la conexión
+TLS v1.3
+• Se reduce al máximo la negociación al elegir
+ individualmente cada elemente
+
+
+
+
+                         TLS v1.2
+
+
+
+
+                         TLS v1.3
+
+
+
+                                    Fuente:https://blog.cloudflare.com/rfc-8446-aka-tls-1-3/
+TLS v1.2 (EPHEMERAL DH)
+2 RTT
+TLS v1.3
+   0 – RTT Handshake
+   Reanudación de la sesión
+• Para ahorrar tiempo: Se
+  puede enviar datos
+  desde el primer paquete
+  utilizando una clave pre-
+  compartida (PSK)
+  antigua.
+• Se utilizan las
+  extensiones
+  pre_shared_key y
+  early_data.
+• Problemas de
+  seguridad por
+  ataque de
+  reproducción
+Otras eliminaciones en TLS v1.2
+• Se eliminan elementos inseguros y se reducen (se
+ simplifican) opciones para aumentar la seguridad:
+ • Cifrados autenticados CBC-then-MAC
+ • Algoritmos básicos como RC4, SHA1, MD5
+ • Compresión
+ • Renegociación
+ • Ciertos nonces (por ejemplo aquellos que incluyen un timestamp
+   de 32 bits)
+• En cualquier caso también se van a añadiendo otros
+ algoritmos y elementos que aumentan la seguridad:
+ • Protección ante Downgrade
+ • Algoritmos criptográficos más seguros, …
+Encriptación autenticada
+• Opciones:
+  • Primero autenticación, luego encriptación
+     • Usado hasta ahora en SSL/TLS
+     1. T = MAC(K1 , M )
+     2. E(K2 , [M || T ])
+  • Primero encriptación, luego autenticación
+     • Usado en IPSec
+     1. C = E(K2 , M ).
+     2. T = MAC(K1 , C )
+     3. Se envía (C, T)
+  • Encriptar y autenticar paralelamente
+     • Usado en SSH
+     • C = E(K2 , M ).
+     • T = MAC(K1 , M )
+     • Se envía (C, T)
+  • En TLS v1.3 se proponen usar algoritmos basados en las dos últimas opciones
+    como GCM, CCM o ChaCha20-Poly1305.
+  • Authenticated Encryption with Associated Data (AEAD): término para indicar
+    que no solo se realiza la autenticación de los datos del paquete de datos a enviar
+    sino que también se autentican datos adicionales (Associated Data) como por
+    ejemplo, longitudes de paquetes, números de secuencia, …
+Galois/Counter Mode (GCM)
+
+
+
+
+GCTR: función de encriptación
+GHASH: función de hashing
+Una ilustración del funcionamiento de
+TLS 1.3 en https://tls13.ulfheim.net/
+OpenSSL
+• Proyecto open source que implementa un conjunto de
+ herramientas SSL/TLS
+Obteniendo información básica
+$ openssl version
+OpenSSL 1.0.1 14 Mar 2017
+
+$ openssl version -a
+OpenSSL 1.0.1 14 Mar 2017
+built on: Fri Jun 20 18:54:15 UTC 2014
+platform: debian-amd64
+options: bn(64,64) rc4(8x,int) des(idx,cisc,16,int) blowfish(idx)
+compiler: cc -fPIC -DOPENSSL_PIC -DZLIB -DOPENSSL_THREADS -
+D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H -m64 -DL_ENDIAN -
+DTERMIO -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-
+security -Werror=format-security -D_FORTIFY_SOURCE=2 -Wl,-Bsymbolic-
+functions -Wl,-z,relro -Wa,--noexecstack -Wall -DOPENSSL_NO_TLS1_2_CLIENT -
+DOPENSSL_MAX_TLS1_2_CIPHER_LENGTH=50 -DMD32_REG_T=int -
+DOPENSSL_IA32_SSE2 -DOPENSSL_BN_ASM_MONT -
+DOPENSSL_BN_ASM_MONT5 -DOPENSSL_BN_ASM_GF2m -DSHA1_ASM -
+DSHA256_ASM -DSHA512_ASM -DMD5_ASM -DAES_ASM -DVPAES_ASM -
+DBSAES_ASM -DWHIRLPOOL_ASM -DGHASH_ASM
+OPENSSLDIR: "/usr/lib/ssl"
+Obteniendo ayuda
+$ openssl help
+
+Standard commands
+asn1parse    ca          ciphers    cms
+crl          crl2pkcs7   dgst       dh
+dhparam      dsa         dsaparam   ec
+ecparam      enc         engine     errstr
+gendh        gendsa      genpkey    genrsa
+nseq         ocsp        passwd     pkcs12
+pkcs7        pkcs8       pkey       pkeyparam
+pkeyutl      prime       rand       req
+rsa          rsautl      s_client   s_server
+s_time       sess_id     smime      speed
+spkac        srp         ts         verify
+version      x509
+Obteniendo ayuda (II)
+Message Digest commands (see the `dgst' command for more details)
+md4        md5         rmd160         sha
+sha1
+
+Cipher commands (see the `enc' command for more details)
+aes-128-cbc        aes-128-ecb        aes-192-cbc           aes-192-ecb
+aes-256-cbc        aes-256-ecb        base64                bf
+bf-cbc             bf-cfb             bf-ecb                bf-ofb
+camellia-128-cbc   camellia-128-ecb   camellia-192-cbc      camellia-192-ecb
+camellia-256-cbc   camellia-256-ecb   cast                  cast-cbc
+cast5-cbc          cast5-cfb          cast5-ecb             cast5-ofb
+des                des-cbc            des-cfb               des-ecb
+des-ede            des-ede-cbc        des-ede-cfb           des-ede-ofb
+des-ede3           des-ede3-cbc       des-ede3-cfb          des-ede3-ofb
+des-ofb            des3               desx                  rc2
+rc2-40-cbc         rc2-64-cbc         rc2-cbc               rc2-cfb
+rc2-ecb            rc2-ofb            rc4                   rc4-40
+seed               seed-cbc           seed-cfb              seed-ecb
+seed-ofb           zlib
+   Listando suites de cifrado
+$ openssl ciphers -v 'ALL:COMPLEMENTOFALL'
+ECDHE-RSA-AES256-GCM-SHA384 TLSv1.2          Kx=ECDH   Au=RSA     Enc=AESGCM(256)   Mac=AEAD
+ECDHE-ECDSA-AES256-GCM-SHA384 TLSv1.2        Kx=ECDH   Au=ECDSA   Enc=AESGCM(256)   Mac=AEAD
+ECDHE-RSA-AES256-SHA384            TLSv1.2   Kx=ECDH   Au=RSA     Enc=AES(256)      Mac=SHA384
+ECDHE-ECDSA-AES256-SHA384          TLSv1.2   Kx=ECDH   Au=ECDSA   Enc=AES(256)      Mac=SHA384
+ECDHE-RSA-AES256-SHA               SSLv3     Kx=ECDH   Au=RSA     Enc=AES(256)      Mac=SHA1
+[106 more lines...]
+
+
+• Información mostrada
+   • Suite name
+   • Required minimum protocol version
+   • Key exchange algorithm
+   • Authentication algorithm
+   • Cipher algorithm and strength
+   • MAC (integrity) algorithm
+Opciones visualización
+Pruebas de rendimiento
+$ openssl speed rsa
+Doing 512 bit private rsa's for 10s: 96375 512 bit private RSA's in 10.00s
+Doing 512 bit public rsa's for 10s: 1431452 512 bit public RSA's in 10.00s
+Doing 1024 bit private rsa's for 10s: 37121 1024 bit private RSA's in 9.98s
+Doing 1024 bit public rsa's for 10s: 584328 1024 bit public RSA's in 10.02s
+Doing 2048 bit private rsa's for 10s: 5449 2048 bit private RSA's in 10.00s
+Doing 2048 bit public rsa's for 10s: 180572 2048 bit public RSA's in 10.02s
+Doing 3072 bit private rsa's for 10s: 1747 3072 bit private RSA's in 10.00s
+Doing 3072 bit public rsa's for 10s: 83918 3072 bit public RSA's in 10.00s
+Doing 4096 bit private rsa's for 10s: 754 4096 bit private RSA's in 10.02s
+Doing 4096 bit public rsa's for 10s: 47741 4096 bit public RSA's in 10.00s
+Doing 7680 bit private rsa's for 10s: 93 7680 bit private RSA's in 10.00s
+Doing 7680 bit public rsa's for 10s: 14031 7680 bit public RSA's in 9.98s
+Doing 15360 bit private rsa's for 10s: 16 15360 bit private RSA's in 10.27s
+Doing 15360 bit public rsa's for 10s: 3633 15360 bit public RSA's in 10.00s
+OpenSSL 1.1.0f 25 May 2017
+built on: reproducible build, date unspecified
+options:bn(64,64) rc4(16x,int) des(long) aes(partial) idea(int) blowfish(ptr)
+compiler: cl " "VC-WIN64A
+            sign verify sign/s verify/s
+rsa 512 bits 0.000104s 0.000007s 9637.5 143145.2
+rsa 1024 bits 0.000269s 0.000017s 3717.9 58341.6
+rsa 2048 bits 0.001835s 0.000055s 544.9 18029.0
+rsa 3072 bits 0.005724s 0.000119s 174.7 8391.8
+rsa 4096 bits 0.013283s 0.000209s 75.3 4774.1
+rsa 7680 bits 0.107527s 0.000712s        9.3 1405.3
+rsa 15360 bits 0.641602s 0.002753s        1.6 363.3
+OpenSSL
+• Más en: https://www.madboa.com/geek/openssl/
+

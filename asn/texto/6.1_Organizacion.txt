@@ -1,0 +1,368 @@
+         Organización de Seguridad en la
+                    empresa
+               Aplicaciones Seguras en la Nube
+
+                                                                                      Raimundo Alcázar Quesada
+                                                                                          <ralcazq@gmail.com>
+
+
+
+
+                                  Este obra está bajo una Licencia Creative Commons
+                                      Atribución-CompartirIgual 4.0 Internacional.
+                                                                                                                 v 1.0
+    Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+Objetivos
+    • Comprender cómo se organiza la seguridad
+      física y digital dentro de una organización.
+
+    • Conocer los roles de seguridad y
+      responsabilidades dentro una empresa.
+
+    • Discernir entre la gobernanza de la seguridad
+      y la operación de seguridad
+
+    • Conocer los diferentes CERT estatales que
+      dan servicio a las empresas españolas
+2
+    Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+Roles de seguridad (CEO)
+    • Director ejecutivo de una empresa.
+
+    • Vela junto al comité ejecutivo por el negocio y
+      lleva a cabo la toma de decisiones al más
+      alto nivel dentro de la compañía.
+
+    • Junto al comité ejecutivo y asesorado por el
+      personal de seguridad de su empresa deben
+      definir los riesgos de seguridad que pueden
+      afectar a los procesos de negocio de su
+      empresa.
+3
+    Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+Roles de seguridad (CFO)
+    • Es el responsable financiero de una
+      empresa. Planifica los recursos de la
+      compañía incluyendo el gasto en seguridad.
+
+    • En los presupuestos que se soliciten de
+      seguridad explicar el ROI (retorno de la
+      inversión) que se tendrá, por ejemplo un
+      anti-DDOS evitará parar de dar servicio o un
+      WAF dificultará que nos roben la base de
+      datos.
+
+4
+    • Objetivo de spear phishing, como el CEO.
+    Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+Roles de seguridad (CIO)
+    • Encargado de seleccionar la tecnología que
+      se usará dentro de la empresa.
+
+    • Decide que productos usar no solo para los
+      procesos de negocio sino también el
+      workplace para empleados.
+
+    • Es el que se relaciona con los proveedores
+      de tecnología.
+
+
+5
+    Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+Roles de seguridad (CSO)
+    • Director de seguridad de la compañía.
+
+    • Durante años ha sido tradicionalmente física
+      (provenientes de fuerzas seguridad del
+      estado), aunque la seguridad digital queda
+      incluida.
+
+
+
+
+6
+    Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+Roles de seguridad (CISO)
+    • Responsable de la seguridad de la información.
+      Reporta al CSO.
+
+    • Define los riesgos de seguridad que afectan al
+      negocio y ayuda a implantar los controles de
+      seguridad necesarios en la compañía.
+
+    • Su labor implica la gobernanza de seguridad de la
+      información (normativa y buenas prácticas) y la
+      operación de seguridad (definir alertas, casos de
+      uso, etc).
+
+  • Reporta los incidentes de seguridad a la autoridad
+7   competente.
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+Roles de seguridad (DPO)
+    • Responsable de la privacidad en la
+      compañía, encargado de notificar casos
+      relacionados con los datos de carácter
+      personal a las autoridades competentes.
+
+
+
+
+8
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+  Security operation center (SOC)
+                    SOC = Personas + Herramientas + Procesos
+                                                              Incident
+                                                             responder
+                                      Incident
+ Analyst                              handler                                      Hunting
+
+
+
+
+    Analyst
+                                                                Malware            SOC
+                                                                reverser          Manager    Forensic
+
+
+
+
+Analyst
+
+                                                                                   Threat
+                                                                                    intel
+
+
+   Analyst                         Incident
+                                   handler
+
+
+
+    9
+           Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+  Security operation center (SOC)
+    Analista de Monitorización de Nivel 1: Monitoring Analyst
+
+    • Monitoriza continuamente la cola de alertas provenientes del SIEM, TI o 3ª
+      partes.
+    • Registra las alertas reales (excluyendo falsos positivos o alertas no
+      relacionadas con seguridad) abriendo un caso en la herramienta de ticketing.
+    • Triaje de las Alertas de seguridad (Análisis inicial).
+    • Resolución de casos sencillos.
+    • Escalado del ticket del caso al nivel 2 si no lo puede resolver directamente.
+
+    Analista de Monitorización de Nivel 2: Incident handler
+
+    • Realiza análisis de incidentes de inmersión profunda correlacionando datos de
+      varias fuentes.
+    • Determina si un sistema o conjunto de datos crítico ha sido impactado.
+    • Contener y Remediar evento para recuperar.
+    • Escalar a Nivel 3 de Respuesta a Incidentes por criticidad.
+
+
+  10
+           Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+Security operation center (SOC)
+ Analista de Monitorización de Nivel 3: Incident responder
+
+ • Analizar el incidente y llevar a cabo el triaje
+ • Contener y remediar el incidente a recuperar
+ • Llevar a cabo la investigación de incidentes (forense, análisis de malware,
+   etc.)
+ • Identificar la causa raíz del incidente y aconsejar sobre la reparación del
+   incidente.
+
+ SOC Manager:
+
+ • Desarrollar un modelo de flujo de trabajo e implementar procedimientos
+   operativos estandarizados (Playbooks) para una gestión efectiva de los
+   incidentes.
+ • Gestionar los recursos para incluir el personal, el presupuesto, la
+   programación de turnos y la estrategia tecnológica para cumplir con el acuerdo
+   de nivel de servicio.
+ • Comunicar la debilidad identificada al CISO
+ • Reportar incidentes a un grupo de interés especial
+11
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+Security operation center (SOC)
+ Componentes principales de la arquitectura de un SOC moderno
+
+                                                   TIP
+
+
+
+
+                      SIEM                        SOAR                     TICKETING
+
+
+
+
+                                   Dispositivos de red, endpoint, cloud
+
+
+
+     SIEM (security information and event management): Monitorización y correlación de eventos en base
+     a las fuentes de logs que integra.
+     SOAR (Security Orchestration, Automation and Response): Orquestación y automatización de
+     algunos tipos de respuesta contra la TIP, ticketing o elementos de red.
+     TIP (Threat Intelligence Platform): Aporta la inteligencia a la operación por medio de indicadores de
+     compromiso (IoCs).
+     Ticketing: Herramienta para el seguimiento y trazabilidad de un incidente.
+
+12
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+Computer emergency response team (CERT)
+     • Realizan la gestión de incidentes que afectan
+       a ciudadanos, administración y empresas.
+
+     • Elaboran alertas y avisos sobre campañas
+       para mejorar la protección de ciberamenazas
+       y notificar los incidentes a los afectados.
+
+     • Ponen a disposición de sus públicos la
+       capacidad tecnológica y de coordinación
+       que permita ofrecer un apoyo operativo ante
+       las ciberamenazas.
+
+13
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+CERT Españoles
+     • CCN-CERT: Realizan la gestión de incidentes
+       que afectan a las administraciones públicas,
+       las cuales rigen su seguridad por el Esquema
+       Nacional de Seguridad (ENS).
+
+     • INCIBE-CERT: Realizan la gestión de
+       incidentes que afectan a las empresas como
+       servicios a los cuidadanos.
+
+     • CNPIC- CERT: Dan servicio a empresas
+       calificadas como infraestructura crítica que
+       prestan servicios esenciales a la ciudadanía.
+14
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+Tipos de inteligencia de amenazas
+
+Inteligencia de amenazas estratégica:
+ • Análisis de alto nivel pensado para un público
+   no técnico, por ejemplo, el comité de
+   dirección.
+ • Trata sobre amenazas de ciberseguridad que
+   pueden afectar las decisiones empresariales
+   más globales y tiene en cuenta las tendencias
+   y las motivaciones generales.
+
+
+15
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+Tipos de inteligencia de amenazas
+
+Inteligencia de amenazas táctica:
+ • Se centra en las campañas o ataques
+   actuales y se dirige a un público más técnico.
+   Identifica indicadores de compromiso (IOCs).
+ • La inteligencia táctica es la forma de
+   inteligencia más sencilla de generar y suele
+   estar automatizada. En general, tiene una vida
+   útil corta, ya que muchos IOC se vuelven
+   obsoletos al poco tiempo.
+
+16
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+Tipos de inteligencia de amenazas
+
+Inteligencia de amenazas operativa:
+ • Se centra en el estudio de los ciberataques
+   anteriores y sacando conclusiones sobre la
+   intención, el momento y la sofisticación del
+   ataque.
+ • La inteligencia de amenazas operativas se
+   centra más en estudiar las tácticas, técnicas y
+   procedimientos (TTPs) de los atacantes.
+
+
+17
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+Tipos de inteligencia de amenazas
+
+Pirámide del dolor de David Bianco:
+
+
+
+
+18
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+Tipos de inteligencia de amenazas
+
+Framework de MITRE ATTACK
+
+
+
+
+                                           https://attack.mitre.org/
+
+19
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+
+
+
+
+Bibliografía
+     • Libro blanco del CISO:
+        https://www.ismsforum.es/ficheros/descargas/ellibroblancodelciso154037717
+        1.pdf
+
+
+     • How to build a SOC:
+        https://learn.alienvault.com/c/security-operations-?utm_internal=soc-irlookbo
+        ok&x=5v9G6V&xs=917
+
+
+     • Setting up a CSIRT:
+        https://www.enisa.europa.eu/topics/trainings-for-cybersecurity-specialists/onli
+        ne-training-material/setting-up-a-csirt#developing-cert-infrastructure
+
+
+     • Inteligencia de amenazas:
+        https://latam.kaspersky.com/resource-center/definitions/threat-intelligence
+
+
+
+20
+     Aplicaciones Seguras en la Nube. ralcazq@gmail.com. http://tiny.cc/asnuja. 2025
+

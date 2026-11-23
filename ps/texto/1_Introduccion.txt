@@ -1,0 +1,452 @@
+TEMA 1:
+INTRODUCCIÓN
+   Contenidos
+• Conceptos básicos en Protocolos de Seguridad
+  • Capas y protocolos
+  • Introduciendo seguridad en capas
+  • Conceptos básicos de seguridad
+  • Arquitectura de seguridad OSI
+• Diseño de un protocolo seguro
+  • Introducción
+  • Propiedades de un protocolo seguro
+  • Mensajes y flujos
+  • Identificación de protocolo y mensajes
+  • Numeración de los mensajes
+  • Codificación, integridad y entramado
+  • Estados en la ejecución de un protocolo
+  • Tratamiento de errores
+  • Reproducción y reenvíos
+  • Ejemplo básico
+Modelos de capas
+
+  Aplicación
+                                              HTTP, FTP,
+  Presentación                                SMTP, DNS,
+  Sesión          Aplicación   Aplicación        …
+  Transporte      Transporte   Transporte     TCP ó UDP
+  Red             Red          Red            IP, ICMP, …
+  Enlace          Enlace                          ARP,
+                               Host – Red
+  Física          Física                        Ethernet,
+                                                  WiFi
+  Modelo OSI     Capas más     Capas TCP/IP
+                                              Típicos
+                 usadas
+                                              protocolos
+Relaciones entre capas
+Protocolos
+• Un protocolo humano y otro de Internet
+
+
+
+         Hola                    Get /becas/index.html HTTP1.1
+
+
+         Hola                         <file>
+
+       ¿Qué                       Get /becas/logo.jpg HTTP1.1
+      hora es?
+        2:00                           <file>
+
+                       tiempo
+Protocolos
+• Definen las reglas de conversación (sintaxis, semántica,
+  temporización, …) entre pares de capas, es decir: qué
+  mensajes se envían, quién los envía, cuándo, …
+• Los mensajes enviados se denominan PDUs (Unidades
+  de Datos del Protocolo)
+• Estos mensajes además de los datos (SDU – Unidad de
+  datos del servicio) a enviar contienen información de
+  control en la cabecera
+• Dependiendo de la capa en la que nos encontremos:
+ • NPDU: (NetworkPDU): PDU de la capa de red
+ • TPDU: (TransportPDU): PDU de la capa de transporte
+La capa de Transporte en Internet
+• Proporciona una                application
+  comunicación lógica            transport
+
+  extremo a extremo a
+                                 network
+                                 data link
+
+  procesos de aplicación que     physical
+
+
+  se ejecutan en diferentes
+  hosts.
+• Hace transparente para
+  estos procesos las
+  distintas redes (y sus
+  características)
+  atravesadas
+• Protocolos usados:                           application
+                                               transport
+  • TCP: Ofrece un servicio                    network
+    orientado a conexión                       data link
+                                               physical
+  • UDP: Ofrece un servicio no
+    orientado a conexión
+Protocolo de seguridad
+• Es un protocolo que define alguna funcionalidad
+ relacionada con la seguridad:
+  • Autenticación
+  • Distribución de claves
+  • Definición de un canal seguro
+  • …
+• Suelen usar algún tipo de criptografía
+Introduciendo protocolos de seguridad
+
+
+HTTP, SMTP,
+                HTTP, SMTP,       HTTP, SMTP,       HTTPS, PGP,
+…
+                …                 ….                S/MIME, Tor
+TCP
+                TCP               SSL/TLS (TCP)     TCP
+IP
+                IPSec (IP)        IP                IP
+WPA (Ethernet
+/ WiFi)         Ethernet / WiFi   Ethernet / WiFi   Ethernet / WiFi
+
+En la capa      En la capa de     En la capa de      En la capa de
+host-red        red               transporte         aplicación
+Roles
+• A pesar de que la mayoría de las conexiones son
+ bidireccionales, suele ser necesario identificar algún rol:
+ cliente/servidor, iniciador/respondedor
+Propiedades para una comunicación
+segura
+• Confidencialidad: únicamente el emisor y el receptor deseado
+ deben “entender” el contenido del mensaje.
+  • Emisor encripta/cifra el mensaje.
+  • Receptor desencripta/descifra el mensaje.
+
+• Autenticación: emisor y receptor quieren confirmar la
+ identidad de cada uno.
+• Integridad del mensaje: emisor y receptor quieren estar
+ seguros de que el contenido de sus comunicaciones no es
+ alterado (durante la transmisión o después) sin detección.
+• Disponibilidad y acceso: los servicios deben ser accesibles y
+ deben estar disponibles para los usuarios. Se debe estar
+ preparados ante ataques de denegación del servicio
+Criptografía
+• La criptografía permite codificar un mensaje para que un intruso
+  no pueda desencriptarlo.
+• Tipos de criptografía:
+  • Criptografía de clave simétrica: claves emisor y receptor idénticas.
+    Clave solo conocida por ellos. Ejemplos de algorimos: DES, AES, …
+  • Criptografía de clave pública: encriptación con clave pública,
+    desencriptación con clave privada (secreta). Ejemplos: RSA, DSA …
+
+                      Clave de                         Clave de
+               KA     encriptación                     encriptación
+                                                    KB de Roberto
+                      de Alicia
+
+                                                     Algoritmo
+Texto plano Algoritmo de      Texto cifrado                           Texto
+                                                        de
+            encriptación                           desencriptación    plano
+Autenticación
+• Proceso por el cual se demuestra que un
+  interlocutor es quién realmente dice que es
+• Para esto se utiliza lo que se llama un protocolo de
+  autenticación donde se intercambiarán unos mensajes
+                  Contraseña
+        ….                     “Soy Alicia”
+                   De Alicia
+
+
+
+                               Dirección IP
+                                              OK
+                                 de Alicia
+Integridad
+• Debe de existir un método que permita verificar que los
+  datos que se envían no se modifican
+• Paralelamente surge el concepto de firma digital
+• Emisor (Roberto) firma digitalmente un documento y
+  establece que es su propietario/creador.
+• Esta firma digital debe ser:
+ • verificable: se puede probar que corresponde a una persona sin
+   ambigüedad.
+ • no falsificable
+ • no repudiable: el emisor no podrá decir que no es su firma
+Integridad de datos:
+Código de Autentificación de mensaje (MAC)
+
+    s
+            s = shared secret                 Receiver appends s
+            H() = Message digest
+  message
+
+
+
+
+                                      s
+
+
+
+
+                                    message
+              message
+
+
+                                                H( )
+                        Internet
+
+
+  H( )                                                  compare
+
+
+
+
+ Sender                            Receiver
+Firma digital
+
+Mensaje                                                                Resumen
+ largo      H: función                                                del mensaje
+   m            de           H(m)                                       firmado
+            dispersión                                                 -
+                                                                      KB(H(m))
+         Clave               Firma          Mensaje
+       privada               digital        extenso
+                  -                                       Clave         Firma
+            de   KB       (encriptada)
+                                                        pública
+      Roberto                                                           digital
+                                                             de K +
+                          Resumen        H: función de Roberto B      (desencrip)
+                                          dispersión
+                         del mensaje
+  +                        firmado
+                         KB-(H(m))            H(m)                      H(m)
+
+                                                          igual
+                                                            ?
+Ataques y amenazas (RFC 4949)
+• Amenaza: Potencial violación de la seguridad, que existe
+  cuando hay una circunstancia, capacidad, acción o
+  evento que podría violar la seguridad y causar daño. Es
+  decir, una amenaza es un posible peligro que puede
+  explotar una vulnerabilidad.
+• Ataque: Un ataque a la seguridad del sistema que se
+  deriva de una amenaza inteligente; es decir, un acto
+  inteligente que es un intento deliberado (especialmente
+  en el sentido de un método o técnica) de evadir los
+  servicios de seguridad y violar la política de seguridad
+  de un sistema.
+Tipos de ataques
+• Un ataque pasivo intenta
+  aprender o hacer uso de la
+  información del sistema
+  pero no afecta a los
+  recursos del sistema.
+• Un ataque activo intenta
+  alterar los recursos del
+  sistema o afectar su
+  funcionamiento.
+Ataques pasivos
+• Escuchar a escondidas, o monitorear las
+  transmisiones
+• El objetivo del oponente es obtener información que se
+  está transmitiendo
+• Dos tipos de ataques pasivos:
+ • Acceso a contenido de los mensajes
+ • Análisis de tráfico
+Ataques activos              Enmascaramiento
+                                                • Tiene lugar cuando una entidad
+                                                  finge ser una entidad diferente
+                                                • Normalmente incluye una de las
+                                                  otras formas de ataque activo
+ • Implican alguna
+   modificación del flujo
+   de datos o la creación                       • Implica la captura pasiva de una
+                                                  unidad de datos y su posterior
+                                Repetición
+   de un flujo falso.                             retransmisión para producir un
+                                                  efecto no autorizado.
+ • Difícil de prevenir
+   debido a la amplia
+   variedad de                Modificación de
+                                                • Alguna parte de un mensaje
+                                                  legítimo se altera, o los mensajes
+   vulnerabilidades             mensajes          se retrasan o se reordenan para
+                                                  producir un efecto no autorizado.
+   potenciales físicas, de
+   software y de red.
+ • Tipos:                     Denegación de
+                                                • Impide o inhibe el uso o la
+                                 servicio         gestión normal de las
+                                                  instalaciones de comunicaciones
+Arquitectura de seguridad OSI
+• Recomendación X.800 (ITU-T) define un camino sistemático
+ para:
+  • Definir requerimientos de seguridad
+  • Caracterizar aproximaciones que satisfagan estos requerimientos
+• Conceptos:
+  • Ataque de seguridad: Cualquier acción que comprometa la
+    seguridad de la información que pertenece a una organización.
+  • Mecanismo de seguridad: Proceso (o un dispositivo que incorpore
+    tal proceso) que está diseñado para detectar, prevenir o recuperarse
+    de un ataque a la seguridad.
+  • Servicio de seguridad: Servicio de procesamiento o comunicación
+    que mejora la seguridad de los sistemas de procesamiento de datos y
+    las transferencias de información de una organización. Destinados a
+    contrarrestar los ataques de seguridad, y que utilizan uno o más
+    mecanismos de seguridad para proporcionar el servicio
+Mecanismos
+de
+seguridad
+(X.800)
+Servicios
+de
+seguridad
+(X.800)
+Diseño de un protocolo de seguro
+• Propiedades básicas de un canal seguro
+• Mensajes o flujos
+• Identificación de protocolo
+• Numeración de los paquetes
+• Perfect Forward Secrecy
+• Codificación, integridad y entramado
+• Estados en la ejecución de un protocolo
+• Tratamiento de errores
+• Ataques de oráculo
+• Reproducción y reenvíos
+• Ejemplo básico
+• Ataques de degradación
+Propiedades básicas de un canal seguro
+
+• Suponiendo que Alice envía m1, m2, …, mk
+ mensajes, Bob recibe m’1, m’2, …, m’k .
+ Las propiedades de un canal seguro
+ deben garantizar:
+ • Eve (hacker) solo puede conocer de la
+   secuencia de mensajes, datos de
+   temporización y tamaño
+ • El receptor debe recibir como mucho una
+   subsecuencia de mensajes iniciales. No se
+   puede impedir que se borren mensajes pero
+   este borrado o cualquier otra perturbación
+   (inserción, cambio, etc) será detectado.     Integridad
+Mensajes o flujos
+• Hay que analizar si se está transmitiendo un fichero con
+  una longitud determinada o un flujo con una longitud
+  indeterminada
+• En cualquier caso este se suele dividir en paquetes que
+  hay que transportar
+• Además en seguridad siempre se parte de que el
+  protocolo de transporte subyaciente es no confiable.
+  Incluso aunque se use TCP
+  • TCP NO está preparado para ataques de activos cuyo objetivo es
+   cambiar, insertar, borrar paquetes
+Identificación del protocolo
+• Hay que insertar campos para la identificación del
+  protocolo y sus distintos mensajes
+• Ayuda a detectar errores u otros problemas
+• El identificador del protocolo típicamente contiene dos
+  partes:
+  • Versión
+  • Subprotocolo criptográfico al que pertenece
+Numeración de los paquetes
+• Es necesario introducir un mecanismo que numere los
+ paquetes para tenerlos controlados detectando:
+  • Faltas
+  • Desordenes
+  • Repeticiones
+• Este sistema de numeración:
+  • Aumenta monotónicamente
+  • No debe permitir que se repitan los números
+Perfect Forward Secrecy
+• Propiedad criptográfica que garantiza que las claves de
+  sesión pasadas no se puedan reutilizar, incluso si un
+  atacante roba la clave principal o privada del servidor en
+  el futuro
+• Claves
+  • Temporales
+  • No reutilizables
+   Orden en el proceso de integridad -
+   encriptar mensajes
+   • Normalmente los mensajes/paquetes que forman parte
+     de una conexión se encriptan y se firman/autentican
+   • ¿Qué es mejor?
+
+
+
+
+Encriptar, luego integridad   Integridad, luego encriptar   Hacerlo en paralelo
+Tratamiento de errores
+• Siempre que llega un nuevo mensaje se
+ realizan diferentes chequeos
+  • Cifrado
+  • Integridad
+  • Identificadores de protocolo y mensaje, …
+• El tratamiento de errores es crucial para
+  prevenir ataques
+• El tratamiento más seguro ante un error es:
+  • no enviar, no responder e inmediatamente
+   eliminar el estado del protocolo
+• Al menos hay que volcar en algún log
+ interno que ha habido un error
+Ataques de Oráculo
+• El atacante aprovecha un sistema legítimo (el
+ "oráculo") que responde a sus solicitudes aportando
+ pistas indirectas. Al analizar estas respuestas
+ (mensajes de error, tiempos de procesamiento, etc.), el
+ atacante deduce información confidencial
+ • Oráculo de Tiempo (Timing Oracle): Medir cuánto tarda el
+   protocolo en responder. Si verificar una contraseña incorrecta tarda
+   2ms cuando la primera letra es incorrecta, pero tarda 4ms cuando
+   la primera letra es correcta (porque pasó al siguiente paso de
+   verificación), se puede adivinar la clave carácter por carácter.
+ • Oráculo de Relleno (Padding Oracle): El atacante modifica el
+   texto cifrado y lo envía al servidor. Si el servidor responde con un
+   error indicando que el padding (relleno) es incorrecto, el atacante
+   sabe que la estructura falló; si no da ese error, sabe que el relleno
+   coincide, permitiéndole descifrar el mensaje byte a byte
+Reproducción y reenvíos
+• Ejemplo básico
+
+
+     Dirección IP Contraseña    “Soy                  Eve graba el paquete de
+      de Alicia    de Alicia
+                               Alicia”                 Alicia y más tarde se lo
+                                                       reproduce a Roberto.
+                   Dirección IP
+                                    OK
+                     de Alicia
+
+
+
+                               Dirección IP   Password
+                                                            “Soy Alicia”
+                                 de Alicia    de Alicia
+Reproducción y reenvíos
+• Los reenvíos suelen formar parte de cualquier
+  protocolo
+• Se producen cuando se envía algo y no se recibe
+  respuesta
+• Este hecho suele implicar que cumpla algún temporizador
+  y que se reenvíe el paquete original
+• Puede ser complicado distinguir una reproducción de
+  un reenvío
+Ataques de degradación
+• El atacante obliga a dos partes a negociar el uso de una
+  versión del protocolo más antigua, débil o vulnerable
+  (o algoritmos criptográficos obsoletos) en lugar de la
+  versión más segura disponible.
+• Ejemplos
+  • Poodle
+  • Freak
+  • …
+Ejemplo básico de protocolo de seguridad
+Inicialización
+     Ejemplo básico de protocolo de seguridad
+     Envío
+l(x) = longitud de x
+|| = concatenar
+⊕ = xor
+Ejemplo básico de protocolo de seguridad
+Recepción
+

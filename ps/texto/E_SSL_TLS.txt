@@ -1,0 +1,1585 @@
+Seguridad en SSL / TLS
+Historia de un Protocolo
+Presentación
+Experiencia Profesional:
+
+    Elastic – Cybersecurity Solutions Architect
+
+    TCCT – Product Manager
+    Portcullis Computer Security Ltd. – Pentester
+    S21sec – Pentester
+
+                                                       Julio Gómez Ortega
+
+                                                    linkedin.com/in/juliogomezortega
+Objetivo
+           https://www.ssllabs.com/ssltest/analyze.html?d=www.ujaen.es
+Contenido
+
+                    Historia del Protocolo SSL / TLS
+
+         SSLv2   SSLv3   TLS v1       TLS v1.1 TLS v1.2   TLS v1.3
+ SSLv1
+
+
+
+
+1994 1995 1996           1999         2006    2008        2018
+1994   SSL v1
+
+         - Primer borrador del protocolo SSL realizado por Netscape
+
+         - Nunca llegó a publicarse, se quedó como proyecto de laboratorio
+
+         - Tenía problemas graves de diseño:
+              - No proporcionaba control sobre cambios en el mensaje (integridad)
+              - No evitaba re-envío de paquetes (replay attacks)
+
+         - Posteriormente, añadieron comprobación CRC, que es débil desde el
+           punto de vista criptográfico.
+Febrero 1995   SSL v2
+                 - Netscape publica la primera versión oficial del protocolo SSL, la v2.
+
+                 - Esta versión cuenta con graves problemas de diseño que hacen que el
+                   protocolo no sea del todo bien recibido por la comunidad y obliga a
+                   empezar a trabajar en la siguiente versión.
+
+                 - Algunos de estos problemas son:
+
+                      - Se utiliza MD5 como algoritmo de Hash para verificar la
+                        integridad de los mensajes (HMAC).
+
+                      - Se pueden realizar ataques Man-in-the-Middle (MitM) durante el
+                        intercambio de claves (handshake) para forzar la elección de un
+                        algoritmo de cifrado más débil al que se elegiría normalmente.
+
+                      - Es posible inyectar paquetes TCP FIN en sesiones establecidas,
+                        forzando el cierre de la sesión.
+Noviembre 1996   SSL v3
+                   - RFC 6101
+
+                   - Los problemas de seguridad de SSL v2 obligan a rediseñar el
+                     protocolo desde cero.
+
+                   - Fue desarrollado por Paul Kocher y Taher Elgamal, al que se le
+                     considera el padre de SSL. Ambos trabajaban en Netscape.
+
+                   - Esta versión se convirtió en el estándar de seguridad (RFC) y permitió el
+                     desarrollo de la web. Todas las versiones posteriores del protocolo se
+                     basarán en SSLv3.
+
+                   - A pesar de las vulnerabilidades / fallos de diseño que se le irán
+                     descubriendo, su uso se prolongará durante los siguientes 18 años
+                     (hasta 2014).
+Enero 1999   TLS v1
+               - RFC 2246
+
+               - Diseñada por Christopher Allen y Tim Dierks.
+
+               - Aunque tan sólo introduce mejoras menores respecto a SSLv3, no se
+                 permite la interoperabilidad con esta versión. No obstante, TLSv1 ofrece
+                 una opción para realizar un downgrade a SSLv3.
+
+               - El cambio de nombre se debe a que Microsoft entró a colaborar en el
+                 proyecto y sugirieron el cambio para que dejara de ser “el protocolo de
+                 Netscape”. Su nombre original iba a ser SSL v3.1.
+Abril 2006   TLS v1.1
+               - RFC 4346
+
+               - Las principales mejoras añadidas consisten en protección para ciertos
+                 ataques contra el modo de cifrado CBC:
+
+                    - Se modifica el vector de inicialización, pasando de uno implícito
+                      a uno explícito.
+
+                    - Se eliminan los errores generados por padding.
+
+               - Estas mejoras resuelven problemas de seguridad que todavía no han
+                 sido descubiertos.
+Agosto 2008   TLS v1.2
+                - RFC 5246
+
+                - Entre las mejoras introducidas destacan:
+
+                     - Se introduce soporte para el uso de algoritmos de cifrado
+                       autenticado (Authenticated Encryption with Associated Data,
+                       AEAD), aportando simultáneamente confidencialidad, integridad y
+                       autenticidad.
+
+                     - Se abandona el uso de MD5 y SHA1 a favor de SHA-256 en
+                       diferentes funciones, como la generación de números
+                       pseudo-aleatorios.
+
+                - El soporte de AEAD permite evitar el uso de algoritmos de cifrado por
+                  bloques y/o de streaming.
+                             Insecure Renegotiation                                 Agosto 2009
+
+
+Se descubren 2 vulnerabilidades que afectan a la Renegociación del protocolo
+SSL:
+
+   - CVE-2009-3555: Permite inyectar contenido en una sesión HTTPS a
+     través de un ataque Man-in-the-Middle (MitM), realizando peticiones en
+     nombre de la víctima.
+
+   - Denial of Service (DoS): Establecer una conexión a través de SSL
+     requiere alrededor de 15 veces más capacidad de procesamiento en el
+     servidor que en el cliente. Esto permitiría a un atacante realizar múltiples
+     renegociaciones para saturar el servidor.
+
+Solución:
+   - Deshabilitar la renegociación
+   - Usar tan sólo Secure Renegotiation (a partir de Febrero 2010)
+                                     SSL Handshake
+
+                                                                                                 Sesión TCP
+
+                                                                                                 Sesión SSL/TLS
+
+
+
+
+Infografía: https://www.manageengine.com/network-monitoring/how-to/images/ssltls-handshake.png
+                                     SSL Handshake
+
+                                                 rar
+                                         sin cif                                                 Sesión TCP
+
+                                                                                                 Sesión SSL/TLS
+
+
+
+
+                                                       o
+                                               cifrad
+
+
+Infografía: https://www.manageengine.com/network-monitoring/how-to/images/ssltls-handshake.png
+Ataque Man-in-the-Middle (MitM)
+   en un protocolo sin cifrado
+Ataque Man-in-the-Middle (MitM)
+     en un protocolo cifrado
+
+
+
+
+                                  Tráfico cifrado
+Ataque Man-in-the-Middle
+(Insecure Renegotiation)
+         CVE-2009-3555
+(MitM)
+
+
+
+          GET /index.jsp HTTP/1.0
+          Cookie: cookie=Token
+          User-Agent: Firefox v2
+          Other-Header: value of the header
+         Petición Original
+         CVE-2009-3555
+(MitM)
+
+
+
+          GET /attacked.jsp
+               /index.jsp HTTP/1.0
+                            HTTP/1.0
+          Dummy:
+          Cookie: cookie=Token
+          User-Agent: Firefox v2
+          Other-Header: value of the header
+         Inyección del atacante
+         CVE-2009-3555
+(MitM)
+
+
+
+          GET /attacked.jsp
+               /index.jsp HTTP/1.0
+                             HTTP/1.0
+          Dummy:
+          Cookie: cookie=Token
+                    GET /index.jsp HTTP/1.0
+          Cookie:
+          User-Agent:
+                   cookie=Token
+                       Firefox v2
+          User-Agent:
+          Other-Header:Firefox
+                          valuev2
+                                of the header
+          Other-Header: value of the header
+         Petición final
+         CVE-2009-3555
+(MitM)
+
+
+
+          GET /attacked.jsp
+               /index.jsp HTTP/1.0
+                             HTTP/1.0
+          Dummy:
+          Cookie: cookie=Token
+                    GET /index.jsp HTTP/1.0
+          Cookie:
+          User-Agent:
+                   cookie=Token
+                       Firefox v2
+          User-Agent:
+          Other-Header:Firefox
+                          valuev2
+                                of the header
+          Other-Header: value of the header
+         Lo que interpreta el servidor
+                                                                sslstrip    Agosto 2009
+
+
+   - Moxie Marlinspike presenta sslstrip en la Black Hat 2009
+
+   - sslstrip es una herramienta que permite forzar el uso de HTTP en
+     navegadores web que creen estar usando HTTPS (SSL). Este tipo de
+     ataque se conoce como HTTPS Stripping.
+
+   - Para realizar el ataque, el atacante necesita estar situado entre la
+     víctima y el servidor. Es decir, debe de haber realizado un ataque
+     Man-in-the-Middle (MitM).
+
+Solución:
+
+   - Forzar el uso de SSL mediante HTTP Strict Transport Security (HSTS).
+     Todavía por llegar…
+Ataque Man-in-the-Middle
+       (sslstrip)
+https://www.youtube.com/watch?time_continue=1&v=BfvoONHXuQA
+                                      NUL byte attacks                        Agosto 2009
+
+
+- Moxie Marlinspike y Dan Kaminsky presentan (por separado) cómo
+  aprovechar un problema en la gestión de los certificados por parte de los
+  navegadores web para realizar ataques MitM de manera totalmente
+  invisible.
+
+- El bug se basa en la gestión que se hace de los campos del certificado
+  por parte de las CAs y por parte de los navegadores.
+
+- Las CAs usan el estándar ASN.1, almacenando tanto las cadenas de
+  texto como la longitud de la cadena.
+
+- Muchos navegadores, escritos en C/C++, gestionan las cadenas de la
+  manera que lo hace C, utilizando el carácter NUL como final de cadena:
+El ataque consiste en:
+
+   - Crear un certificado con un nombre de host que contenga el carácter NUL
+     en mitad del certificado:
+
+
+
+
+   - Para la CA, el carácter NUL se “ignora” y el certificado está emitido para
+     una máquina del dominio: thoughtcrime.org
+
+   - Para el navegador web, el certificado está emitido para: www.paypal.com
+
+   - De este modo, se podían registrar certificados válidos (firmados por CAs de
+     confianza) y ser utilizados para suplantar sitios web.
+                         Ataque Man-in-the-Middle
+                            (NUL Byte Attack)
+
+
+                                      www.paypal.com
+
+
+
+
+www.paypal.com\0.thoughtcrime.org
+Mayo 2010   HSTS Precargado
+             - Google incluye HTTP Strict Transport Security (HSTS) en un listado
+               de sitios precargados dentro de Chrome.
+
+             - Para estos sitios, cualquier intento de conexión llevado a cabo desde
+               Chrome, se realiza a través de HTTPS, incluso aunque se haya
+               especificado HTTP como protocolo de conexión.
+
+             - El resto de sitios web necesitarán esperar todavía 2 años hasta que
+               HSTS se convierta en un estándar y pueda ser utilizado.
+
+             - Con esta medida, Google demuestra su implicación en la seguridad de la
+               información de sus usuarios.
+                                                      Firesheep                Octubre 2010
+
+
+- Eric Butler desarrolla un plugin para Firefox que permite realizar ataques
+  de Sidejacking de manera trivial por cualquier persona.
+
+- Un ataque de Sidejacking es un tipo particular de Robo de Sesión
+  (Session Hijacking) que consiste en recuperar los identificadores de
+  sesión de un medio que no utiliza cifrado.
+
+- Este tipo de ataque es particularmente fácil de realizar en redes
+  inalámbricas.
+
+- En redes cableadas, suele requerir realizar un ataque de tipo MitM
+  primero.
+
+- Rápidamente surgieron diferentes herramientas basadas en Firesheep,
+  incluido una para Android: Droidsheep.
+https://www.youtube.com/watch?v=hIwfgnUGOys
+https://www.youtube.com/watch?v=yxy4VtKXXtU
+Requisitos necesarios para realizar el ataque:
+
+                                                 SÍ   NO
+
+   - MitM
+
+   - Descifrar tráfico cifrado
+
+   - Tráfico sin cifrar
+Requisitos necesarios para realizar el ataque:
+
+                                                 SÍ   NO
+
+   - MitM                                        X    X
+
+   - Descifrar tráfico cifrado                        X
+
+   - Tráfico sin cifrar                          X
+Marzo 2011   “Prohibiting” SSL Version 2.0
+               - RFC 6176: Prohibiting SSL Version 2.0
+
+               - Especifica que NO se debe continuar usando la versión 2 del protocolo.
+
+               - También determina cambios menores en TLS:
+
+                    - Los clientes de TLS NO deben indicar la compatibilidad con SSLv2
+                      en el mensaje ClientHello.
+
+                    - Los servidores de TLS pueden continuar aceptando el mensaje
+                      ClientHello de SSLv2, pero no incluirán SSLv2 en el mensaje
+                      ServerHello.
+
+               - De este modo, la versión SSLv2 queda oficialmente prohibido.
+                                                           BEAST            Junio 2011
+
+
+- Juliano Rizzo y Thai Duong presentan BEAST: Browser Exploit Against
+  SSL/TLS Tool.
+
+- El ataque, que afecta a SSLv3 y TLSv1, se basa en una debilidad ya
+  conocida (desde 1999) del protocolo consistente en utilizar vectores de
+  inicialización (IV) predecibles.
+
+- La vulnerabilidad no había sido tenida en cuenta hasta este momento
+  porque se consideraba inexplotable en la práctica. Rizzo y Duong
+  demuestran que no es así con una prueba de concepto real.
+
+- Gracias a este ataque, se consigue “pasar” (downgrade) del modo
+  Cipher Block Chaining (CBC) a Electronic Code Book (ECB).
+
+- BEAST utiliza Javascript (o un applet de Java) para inyectar bloques de
+  texto conocido a través de la conexión entre el cliente y el servidor.
+ECB
+CBC
+         BEAST
+Requisitos para el Ataque
+                                 El Ataque
+
+
+
+
+Objetivo: M2
+Conocido por el atacante: C1 (IV2), C2 (IV3), M3, C3
+ BEAST
+El Ataque
+ BEAST
+El Ataque
+
+
+            ?
+Notas:
+
+Objetivo: M2
+
+Conocido por el
+atacante:
+ ● C1 == IV2
+ ● C2 == IV3
+ ● M3
+ ● C3
+- BEAST se aprovecha de:
+
+     - En la mayoría de los casos, no es necesario descifrar toda la
+       comunicación entre el cliente y servidor, sino que basta con
+       conseguir la cookie de sesión o el usuario/contraseña.
+
+     - La información sensible suele estar limitado en el conjunto de
+       caracteres a utilizar. Por ejemplo, las cookies de sesión suelen ser
+       caracteres hexadecimales: 0-9A-F (16 caracteres)
+
+     - Las peticiones HTTP tienen una estructura predefinida, por lo
+       que parte del mensaje ya es conocido. Por ejemplo, antes del valor
+       de la cookie de sesión va la cadena “Cookie: “.
+Mitigación:
+
+   - BEAST es una vulnerabilidad del lado de cliente que además requiere
+     de un ataque previo que permita al atacante inyectar código en la sesión
+     SSL.
+
+   - Tras la publicación de BEAST, la mayor parte de navegadores web
+     empiezan a incluir un mecanismo llamado 1/n-1 split que, sin evitar la
+     vulnerabilidad, evita que se pueda descifrar la comunicación byte a byte.
+     La aproximación consiste en dividir cada bloque en 2, dejando 1 byte en
+     el primero y el resto en el segundo y rellenando el resto de los bloques
+     con valores aleatorios. En la práctica, se traduce en que simula IVs
+     aleatorios para cada bloque.
+
+              P[0-15]              P[0]                            P[1-15]
+
+   - En el lado del servidor, se comienza a dar preferencia al algoritmo de
+     cifrado RC4 frente a cualquier otro algoritmo que utilice cifrado simétrico
+     por bloques.
+https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml
+Agosto 2011   (Static) Public Key Pinning
+                - Google comienza a utilizar Static Public Key Pinning en Chrome
+                  para evitar ataques de MitM contra sus servicios.
+
+                - Esto destapa numerosos certificados no autorizados que estaban siendo
+                  utilizados por diversos proveedores.
+
+                - Public Key Pinning consiste en incluir la clave pública de los certificados
+                  digitales en los clientes (navegadores web), evitando tener que confiar
+                  en CAs de terceros.
+
+                - Poco a poco, otras empresas (Facebook, Twitter...) comienzan a hacer
+                  uso de esta práctica, evitando que puedan ser víctimas de un ataque.
+
+                - Otros navegadores también comienzan a implementar esta práctica:
+                  Firefox, Opera
+
+                - Ni Internet Explorer, ni Edge ni Safari implementan Public Key Pinning.
+¿Qué ataque / vulnerabilidad se corrige con Public Key Pinning?
+¿Qué ataque / vulnerabilidad se corrige con Public Key Pinning?
+
+
+   - Ataques Man-in-the-Middle (MitM)
+Noviembre 2011   Google Utiliza Forward Secrecy
+                   - La mayoría de sitios web hasta la fecha utilizan algoritmos que no
+                     proporcionan Forward Secrecy. Es decir, si se filtra (o se consigue
+                     romper) la clave privada del servidor, se puede descifrar todo el tráfico
+                     que haya sido capturado hasta la fecha (“store-now-decrypt-later”).
+
+                   - Forward Secrecy utiliza una clave diferente para cada conexión con
+                     el servidor, lo que evita que la filtración de una clave pueda servir para
+                     descifrar tráfico que haya sido capturado anteriormente.
+
+                   - Google comienza a utilizar Forward Secrecy para proteger sus servicios,
+                     con el algoritmo ECDHE_RSA.
+
+                   - En este momento, tan sólo Chrome y Firefox comienzan a soportar
+                     Forward Secrecy, aunque la colaboración de Google con OpenSSL hace
+                     que su despliegue se realice rápidamente.
+
+                     https://security.googleblog.com/2011/11/protecting-data-for-long-term-with.html
+                                                              Flame           Mayo 2012
+
+
+- El CERT iraní revela la existencia de Flame, una de las primeras
+  “ciber-armas” utilizada por un gobierno.
+
+- Flame es un APT (Advance Persistent Threat) utilizado para espionaje
+  cuyo objetivo eran diferentes países de Oriente Medio (Irán, Israel,
+  Sudán, Siria, Líbano, Arabia Saudí y Egipto).
+
+- Flame utilizaba un certificado falso que colisionaba (MD5) con un
+  certificado oficial de Microsoft que era utilizado para firmar código. De
+  este modo, el APT podía firmar código que se hacía pasar por software
+  con origen Microsoft.
+
+- Este tipo de ataque de colisión MD5 contra certificados digitales había
+  sido demostrado en 2008.
+
+- Flame acabó por demostrar la debilidad del algoritmo MD5.
+                                                          CRIME          Septiembre 2012
+
+
+- Un año después, Juliano Rizzo y Thai Duong vuelven a asustar al
+  mundo con CRIME (Compression Ratio Info-leak Made Easy).
+
+- En este caso, aprovechan la capacidad de compresión del protocolo
+  TLS para descifrar porciones de las peticiones HTTPS. La compresión
+  en TLS justo estaba empezando a ser soportada por los navegadores.
+
+- CRIME se presenta como una PoC que funciona sobre HTTPS y SPDY
+  y, aunque el código fuente nunca es publicado, aseguran que es capaz
+  de recuperar un carácter con tan sólo 6 peticiones.
+
+- Este nuevo ataque, podría ser utilizado, por tanto, para recuperar
+  información sensible de cabeceras HTTPS como identificadores de
+  sesión en cookies.
+Requisitos:
+
+
+
+
+Solución (workaround):
+Requisitos:
+
+   - El atacante necesita tener la capacidad de inyectar texto claro en la
+     petición. Esto puede lograrse a través de un iframe incluido en cualquier
+     web, un XSS, etc.
+
+   - El atacante necesita tener la capacidad de medir el tamaño de los
+     paquetes enviados. Esto puede lograrse por medio de un ataque MitM.
+
+Solución (workaround):
+
+   - Los fabricantes responden a CRIME eliminando la funcionalidad de
+     compresión de sus navegadores web.
+Noviembre 2012   HTTP Strict Transport Security
+                   - RFC 6797
+
+                   - HSTS se convierte en un estándar, permitiendo a cualquier sitio web
+                     forzar el uso de HTTPS desde el lado del servidor.
+
+                   - El uso de HSTS tiene 2 efectos:
+
+                        - Cuando un navegador intenta acceder a un sitio a través de HTTP,
+                          por ejemplo siguiendo un enlace (http://www.example.com), el
+                          navegador modificará el enlace para que desde el primer acceso
+                          se utilice SSL/TLS.
+
+                        - Si hubiera algún problema con el certificado, el navegador
+                          mostrará un error y no permitirá al usuario acceder a la
+                          aplicación.
+
+                   - HSTS se convierte, por tanto, en la mejor opción para prevenir ataques
+                     MitM, aunque requiere haber tenido una conexión previa bajo SSL.
+¿Qué ataques / vulnerabilidades se corrigen con HSTS?
+¿Qué ataques / vulnerabilidades se corrigen con HSTS?
+
+
+   - Ataques Man-in-the-Middle (MitM)
+
+
+   - ¿HTTPS Stripping (sslstrip)?
+                                                       Lucky 13        Febrero 2013
+
+
+- AlFardan y Paterson publican un nuevo ataque contra suites de
+  cifrado que utilizan CBC en TLS: Lucky 13.
+
+- Como ataques anteriores, el objetivo es recuperar cookies y otras
+  porciones del mensaje.
+
+- El problema en este caso es que, en una sesión TLS, el servidor se
+  comporta de manera diferente cuando los bytes de relleno
+  (padding) son alterados respecto a los que se esperaba.
+
+- Esto permite a un atacante percibir una diferencia de tiempo en la
+  respuesta al modificar el padding de los mensajes (error vs no):
+  Time-based Padding Oracle Attack
+
+- Este ataque tan sólo puede ser explotado en redes locales.
+
+- Lucky 13 permite recuperar 1 byte con 8.192 peticiones HTTP.
+                                                                BIAS       Marzo 2013
+
+
+- AlFardan publica un paper en donde describe una (nueva) debilidad
+  que afecta al algoritmo RC4 relacionada con diferentes sesgos
+  estadísticos del algoritmo.
+
+- Un primer ataque explota sesgos en los primeros 256 valores. En la
+  práctica, esto se traduce en tener la capacidad de recuperar secretos
+  enviados en cabeceras HTTP con “tan sólo” 228 versiones cifradas del
+  mismo texto. RC4, en teoría, promete 2128 combinaciones diferentes
+  para un ataque de fuerza bruta.
+
+- Un segundo ataque publicado en el paper se aprovecha de sesgos
+  encontrados en pares de bytes consecutivos. En este caso, para
+  recuperar 16 bytes se necesitarían 13 x 230 muestras de texto cifrado.
+
+- Esta publicación supone la “muerte” de RC4.
+Consideraciones sobre los ataques:
+
+   - Ambos ataques fueron demostrados en la práctica en entornos
+     controlados, pero requieren tal cantidad de tráfico que son
+     extremadamente difíciles de explotar.
+
+   - En el primer caso, el atacante requiere controlar el tráfico desde la
+     víctima para poder inyectar numerosas veces el mismo mensaje.
+
+   - Además, está limitado a los primeros 256 caracteres, lo que hace que
+     sea difícil de explotar para recuperar cookies de sesión, que suelen
+     aparecer a partir del carácter 220 de las peticiones HTTP. Nota: los
+     primeros 32 caracteres se usan para el protocolo TLS. La autenticación
+     BASIC sí sería recuperable al estar ubicada en torno al carácter 100.
+
+   - En el segundo ataque, no es necesario tener versiones cifradas con
+     diferentes claves, pero sigue requiriendo tener versiones cifradas
+     diferentes del mismo texto. Esto significa que el atacante necesitaría
+     control total sobre el tráfico generado y unas cantidades de tráfico de
+     entorno a 3.2 TB en ambos sentidos; es decir, el equivalente a generar
+     tráfico durante unos 83 días en un entorno controlado.
+       BIAS Attacks                 vs          BEAST Attack
+          (RC4)                                    (CBC)
+
+- BIAS afecta a todas las                - BEAST afecta tan sólo a
+  versiones de SSL/TLS que                 SSLv3 y TLSv1.
+  utilicen RC4.
+                                         - Requiere control parcial del
+- Requiere control casi total del          navegador de la víctima.
+  navegador de la víctima.
+                                         - Es rápido.
+- Requiere grandes cantidades
+  de tráfico.                            - Gran parte de los clientes ya
+                                           han sido parcheados.
+- La única solución es dejar de
+  utilizar RC4.                          - TLS v1.1 y v1.2 no son
+                                           vulnerables.
+En la práctica (marzo 2013):
+
+   - Google utiliza RC4 cuando no es posible utilizar TLSv1.1 o TLSv1.2.
+
+   - Microsoft rechaza el uso de RC4 con la única excepción de que el
+     servidor no soporte ningún otro algoritmo. Es decir, da preferencia a
+     CBC.
+
+   - Firefox también opta por la opción de Microsoft.
+
+
+La mejor solución:
+
+   - Utilizar TLSv1.2, en donde existen suites de cifrado que no usan RC4 ni
+     algoritmos con CBC. Pero todavía es demasiado pronto...
+                                     Edward Snowden                        Mayo 2013
+
+
+- Edward Snowden filtra miles de documentos clasificados de la NSA.
+
+- Entre otras cosas, da a conocer la estrategia de monitorización pasiva
+  de las comunicaciones por parte de la NSA:
+
+     La NSA lleva monitorizando las conversaciones no cifradas
+     durante años.
+                                                     BREACH                Agosto 2013
+
+
+- Aparece otro ataque que se aprovecha de la compresión: BREACH
+  (Browser Reconnaissance and Exfiltration via Adaptive Compression of
+  Hypertext).
+
+- BREACH aprovecha la compresión proporcionada de HTTP (gzip /
+  Deflate) en lugar de la compresión de SSL/TLS. Por lo que no puede ser
+  evitado deshabilitando la compresión a nivel SSL/TLS.
+
+- En este caso, el ataque se centra en descifrar “secretos” que se
+  almacenan en el cuerpo de la respuesta HTTP.
+
+- BREACH se presenta con una prueba de concepto que es capaz de
+  descifrar tokens CSRF de la aplicación web de Microsoft Outlook (OWA)
+  en unos 30 segundos.
+ Petición HTTP
+
+
+
+
+Respuesta HTTP
+Requisitos necesarios para realizar el ataque:
+
+                                                 SÍ   NO
+
+   - MitM
+
+   - Inyectar peticiones en el cliente
+
+   - Compresión SSL/TLS
+
+   - Compresión en la petición HTTP
+
+   - Compresión en la respuesta HTTP
+
+   - Secreto en la cabecera HTTP (respuesta)
+
+   - Secreto en el cuerpo HTTP (respuesta)
+Requisitos necesarios para realizar el ataque:
+
+                                                 SÍ   NO
+
+   - MitM                                        X    X
+
+   - Inyectar peticiones en el cliente           X
+
+   - Compresión SSL/TLS                               X
+
+   - Compresión en la petición HTTP                   X
+
+   - Compresión en la respuesta HTTP             X
+
+   - Secreto en la cabecera HTTP (respuesta)          X
+
+   - Secreto en el cuerpo HTTP (respuesta)       X
+Soluciones:
+Soluciones:
+
+   - Controlar el número de peticiones al servidor por minuto a nivel de WAF:
+     ataques como CRIME o BREACH requieren inyectar tantas peticiones
+     que podrían ser fácilmente detectados.
+
+   - Crear respuestas con cuerpos aleatorios: esto no evitaría el problema
+     del todo, pero aumentaría la dificultad de éxito del ataque (o al menos lo
+     retarda).
+
+   - Deshabilitar la compresión a nivel HTTP en aquellas peticiones con
+     Referer inválido, así tan sólo se penalizan aquellas peticiones que
+     podrían estar tratando de realizar el ataque.
+Agosto 2013   TLS v1.3
+                - Aunque la versión 1.2 de TLS sigue demostrando su fortaleza frente a
+                  todos los intentos de ataque sobre el protocolo, se comienza a trabajar
+                  en una nueva versión del protocolo TLS, la versión 1.3.
+
+                - El motivo principal es que se sospecha que la versión TLS v1.2 no podrá
+                  sobrevivir la siguiente década y todos los futuros ataques que se puedan
+                  desarrollar.
+                                                   Heartbleed               Abril 2014
+
+
+- Un bug en la implementación de la extensión Heartbeat de la biblioteca
+  OpenSSL (versiones 1.0.1 - 1.0.1f) provoca el que quizá sea el fallo de
+  seguridad más grave del protocolo TLS.
+
+- Su explotación permite recuperar parte de la memoria del sistema
+  afectado (cliente o servidor), permitiendo recuperar:
+
+     - Claves privadas de certificados.
+     - Cookies de sesión de otros usuarios.
+     - Contraseñas y otra información sensible.
+
+- Consecuencias:
+
+     - Diferentes empresas comienzan a apoyar el proyecto OpenSSL
+     - Google revela BoringSSL
+     - Se crea el proyecto LibreSSL (OpenBSD)
+https://xkcd.com/1354/
+https://xkcd.com/1354/
+https://xkcd.com/1354/
+https://www.youtube.com/watch?v=3CTtc8gvXwE&t=104
+                                                       POODLE              Octubre 2014
+
+
+- Google Security Team publica POODLE (Padding Oracle On
+  Downgraded Legacy Encryption).
+
+- POODLE se aprovecha del mecanismo de padding utilizado en
+  SSLv3.
+
+- Como resultado, los algoritmos de cifrado por bloques con CBC no
+  pueden seguir utilizándose en SSLv3. De igual manera que tampoco los
+  basados en RC4 (a causa de BIAS).
+
+- Por “suerte”, SSLv3 ya tiene 20 años y la mayor parte de servidores ya
+  soportan TLSv1.
+
+- En resumen: POODLE supone la “muerte” de SSLv3.
+                                            POODLE TLS                     Diciembre 2014
+
+
+- Aunque TLSv1 mejora el mecanismo de padding respecto a SSLv3,
+  pocos meses después del primer POODLE se demuestra que esta
+  versión del protocolo también es vulnerable al ataque.
+
+- El ataque no se debe al protocolo en sí, sino a varias
+  implementaciones de los fabricantes que hacen que se pueda replicar el
+  ataque cuando se pasa de SSLv3 a TLSv1 durante una sesión.
+
+- Se calcula que aproximadamente el 10% de los servidores actuales
+  (diciembre 2014) son vulnerables a POODLE TLS.
+Ejemplo de cifrado CBC con bloques de 8 bytes en TLS
+
+
+                                               Bloque 1                                                 Bloque 2
+
+                         1      2      3      4       5      6      7      8      1      2      3      4       5      6      7      8
+
+Vector Inicialización   0x7B   0x21   0x6A   0x63    0x49   0x51   0x17   0x0F   0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37
+
+
+
+                         ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕      ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+Texto claro (padded)     B      R      I      A       N      ;      1      2      ;      1      ;     0x05   0x05    0x05   0x05   0x05
+
+
+                         =      =      =      =       =      =      =      =      =      =      =      =       =      =      =      =
+
+ Valor intermedio       0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D   0xC3   0x60   0xED   0xC9   0x6D    0xF9   0x90   0x32
+
+
+                                             TRIPLE DES                                               TRIPLE DES
+
+
+   Salida cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   0x85   0x87   0x95   0xA2    0x8E   0xD4   0xAA   0xC6
+
+
+
+
+El primer vector de inicialización es explícito (se envía por la red), por lo que será
+conocido por el servidor (y el atacante…).
+El resto de vectores son implícitos (y también conocidos por todos).
+Ejemplo de descifrado CBC del mensaje anterior
+
+
+                                               Bloque 1                                                 Bloque 2
+
+                         1      2      3      4       5      6      7      8      1      2      3      4       5      6      7      8
+
+  Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   0x85   0x87   0x95   0xA2    0x8E   0xD4   0xAA   0xC6
+
+
+
+                                             TRIPLE DES                                               TRIPLE DES
+
+
+                         ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕      ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+ Valor intermedio       0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D   0xC3   0x60   0xED   0xC9   0x6D    0xF9   0x90   0x32
+
+
+                         ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕      ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+Vector Inicialización   0x7B   0x21   0x6A   0x63    0x49   0x51   0x17   0x0F   0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37
+
+
+
+                         =      =      =      =       =      =      =      =      =      =      =      =       =      =      =      =
+
+ Salida descifrada       B      R      I      A       N      ;      1      2      ;      1      ;     0x05   0x05    0x05   0x05   0x05
+
+
+
+El primer vector de inicialización que se usó para cifrar                                                      ¡Padding correcto!
+Proceso de Ataque
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+
+
+
+                                                        Bloque 1
+
+                                  1      2      3      4       5      6      7      8
+
+           Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                      TRIPLE DES
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D   → Este es nuestro objetivo
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+         Vector Inicialización   0x00   0x00   0x00   0x00    0x00   0x00   0x00   0x00   → Aquí es donde vamos a rotar / atacar
+
+                                  =      =      =      =       =      =      =      =
+
+          Salida descifrada      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+1. Se envía el mensaje cifrado: 0000000000000000 F851D6CC68FC9537 → 500 Error
+
+                                                        Bloque 1
+
+                                  1      2      3      4       5      6      7      8
+
+           Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                      TRIPLE DES
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D   → Este es nuestro objetivo
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+         Vector Inicialización   0x00   0x00   0x00   0x00    0x00   0x00   0x00   0x00   → Aquí es donde vamos a rotar / atacar
+
+                                  =      =      =      =       =      =      =      =
+
+          Salida descifrada      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D   → ¡Padding incorrecto!
+                                                                                            (buscábamos un 0x01)
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+2. Se envía el mensaje cifrado: 0000000000000001 F851D6CC68FC9537 → 500 Error
+
+                                                        Bloque 1
+
+                                  1      2      3      4       5      6      7      8
+
+           Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                      TRIPLE DES
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D   → Este es nuestro objetivo
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+         Vector Inicialización   0x00   0x00   0x00   0x00    0x00   0x00   0x00   0x01   → 0x01 tampoco da el padding esperado
+
+                                  =      =      =      =       =      =      =      =
+
+          Salida descifrada      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3C   → ¡Padding incorrecto!
+                                                                                            (buscábamos un 0x01)
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+3. Se envía el mensaje cifrado: 0000000000000002 F851D6CC68FC9537 → 500 Error
+
+                                                        Bloque 1
+
+                                  1      2      3      4       5      6      7      8
+
+           Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                      TRIPLE DES
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D   → Este es nuestro objetivo
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+         Vector Inicialización   0x00   0x00   0x00   0x00    0x00   0x00   0x00   0x02   → 0x02 tampoco da el padding esperado
+
+                                  =      =      =      =       =      =      =      =
+
+          Salida descifrada      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3F   → ¡Padding incorrecto!
+                                                                                            (buscábamos un 0x01)
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+
+
+
+              Varias iteraciones después…
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+N. Se envía el mensaje cifrado: 000000000000003C F851D6CC68FC9537 → 200 OK
+
+                                                        Bloque 1
+
+                                  1      2      3      4       5      6      7      8
+
+           Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                      TRIPLE DES
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+         Vector Inicialización   0x00   0x00   0x00   0x00    0x00   0x00   0x00   0x3C
+
+
+
+                                  =      =      =      =       =      =      =      =
+
+          Salida descifrada      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x01   → ¡Padding correcto! ¡Ahora sí!
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+0x3C XOR 0x01 = 0x3D → ¡Ya conocemos el primer byte del valor intermedio!
+
+                                                         Bloque 1
+
+                                   1      2      3      4       5      6      7      8
+
+            Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                       TRIPLE DES
+
+
+                                   ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio       0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D          → ¡Ya conocemos el primer byte!
+
+                                   ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+          Vector Inicialización   0x00   0x00   0x00   0x00    0x00   0x00   0x00   0x3C
+                                                                                              ⊕
+                                   =      =      =      =       =      =      =      =
+
+           Salida descifrada      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x01
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+… Ahora a por el segundo byte: 000000000000003F F851D6CC68FC9537 → 500 Error
+
+                                                        Bloque 1
+
+                                  1      2      3      4       5      6      7      8
+
+           Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                      TRIPLE DES
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D   → Lo usamos para deducir 0x3F
+                                                                                                0x3D ⊕ 0x02 = 0x3F
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+         Vector Inicialización   0x00   0x00   0x00   0x00    0x00   0x00   0x00   0x3F   → 0x00 0x3F no da el padding esperado
+
+                                  =      =      =      =       =      =      =      =
+
+          Salida descifrada      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x02   → ¡Padding incorrecto!
+                                                                                            (buscábamos: 0x02 0x02)
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+… Ahora a por el segundo byte: 000000000000013F F851D6CC68FC9537 → 500 Error
+
+                                                        Bloque 1
+
+                                  1      2      3      4       5      6      7      8
+
+           Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                      TRIPLE DES
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+         Vector Inicialización   0x00   0x00   0x00   0x00    0x00   0x00   0x01   0x3F   → 0x01 0x3F no da el padding esperado
+
+                                  =      =      =      =       =      =      =      =
+
+          Salida descifrada      0x39   0x73   0x23   0x22    0x07   0x6A   0x27   0x02   → ¡Padding incorrecto!
+                                                                                            (buscábamos: 0x02 0x02)
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+… Ahora a por el segundo byte: 000000000000023F F851D6CC68FC9537 → 500 Error
+
+                                                        Bloque 1
+
+                                  1      2      3      4       5      6      7      8
+
+           Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                      TRIPLE DES
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio      0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+         Vector Inicialización   0x00   0x00   0x00   0x00    0x00   0x00   0x02   0x3F   → 0x02 0x3F no da el padding esperado
+
+                                  =      =      =      =       =      =      =      =
+
+          Salida descifrada      0x39   0x73   0x23   0x22    0x07   0x6A   0x24   0x02   → ¡Padding incorrecto!
+                                                                                            (buscábamos: 0x02 0x02)
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+
+
+
+              Varias iteraciones después…
+Proceso de ataque basado en errores de padding (padding oracle attack)
+000000000000243F F851D6CC68FC9537 → 200 OK
+0x24 XOR 0x02 = 0x26 → ¡Ya conocemos el segundo byte del valor intermedio!
+                                                         Bloque 1
+
+                                   1      2      3      4       5      6      7      8
+
+            Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                       TRIPLE DES
+
+
+                                   ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio       0x39   0x73   0x23   0x22    0x07   0x6A   0x26   0x3D        → ¡Ya conocemos el segundo byte!
+
+                                   ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+          Vector Inicialización   0x00   0x00   0x00   0x00    0x00   0x00   0x24   0x3F
+                                                                                              ⊕ 0x24 ⊕ 0x02 = 0x26
+                                   =      =      =      =       =      =      =      =
+
+           Salida descifrada      0x39   0x73   0x23   0x22    0x07   0x6A   0x02   0x02
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+
+
+
+    Después de las suficientes iteraciones…
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+¡Logramos el último byte!: 317B2B2A0F622E35 F851D6CC68FC9537 → 200 OK
+
+                                                        Bloque 1
+
+                                  1      2      3      4       5      6      7      8
+
+           Entrada cifrada       0xF8   0x51   0xD6   0xCC    0x68   0xFC   0x95   0x37   → Esto lo conocemos, se envió por la red
+
+                                                      TRIPLE DES
+
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+           Valor intermedio      0x39   0x73   0x23   0x22   0x07    0x6A   0x26   0x3D        → ¡Ya conocemos el último byte!
+
+                                  ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+         Vector Inicialización   0x31   0x7B   0x2B   0x2A    0x0F   0x62   0x2E   0x35
+                                                                                             ⊕ 0x31 ⊕ 0x08 = 0x39
+                                  =      =      =      =       =      =      =      =
+
+          Salida descifrada      0x08   0x08   0x08   0x08   0x08    0x08   0x08   0x08
+Proceso de ataque basado en errores de padding (padding oracle attack)
+
+Ya sólo queda hacer el XOR entre el vector de inicialización inicial (explícito y
+enviado por la red) y el valor intermedio descubierto…
+
+
+                                                         Bloque 1
+
+                                   1      2      3      4       5      6      7      8
+
+
+
+           Valor intermedio       0x39   0x73   0x23   0x22   0x07    0x6A   0x26   0x3D
+
+
+                                   ⊕      ⊕      ⊕      ⊕       ⊕      ⊕      ⊕      ⊕
+
+          Vector Inicialización   0x7B   0x21   0x6A   0x63    0x49   0x51   0x17   0x0F
+
+
+
+                                   =      =      =      =       =      =      =      =
+
+           Salida descifrada       B      R      I      A       N      ;      1      2     → ¡Hemos descifrado el mensaje!
+Febrero 2015   Prohibiting RC4 Cipher Suites
+                 - RFC 7465: Prohibiting RC4 Cipher Suites
+
+                 - Especifica que NO se deben continuar usando las suites de cifrado
+                   que utilizan RC4 en ninguna versión de TLS.
+
+                 - Los cambios en TLS son:
+
+                      - Los clientes de TLS NO deben incluir suites que incluyan el
+                        algoritmo RC4 en el mensaje ClientHello.
+
+                      - Los servidores de TLS NO deben elegir suites que incluyan el
+                        algoritmo RC4.
+
+                      - Los servidores deben rechazar la conexión en caso de que el
+                        cliente tan sólo soporte suites que utilicen RC4.
+
+                 - De este modo, el algoritmo RC4 queda oficialmente prohibido.
+                                                             FREAK        Marzo 2015
+
+
+- Se descubre que ciertas implementaciones de OpenSSL son
+  vulnerables a un ataque que permite forzar el uso de claves de
+  cifrado débiles (40 bits): FREAK (Factoring RSA Export Keys)
+
+- FREAK requiere que el servidor tenga habilitada la opción
+  RSA_EXPORT, que permite el uso de claves de cifrado débiles en RSA.
+
+- Un ataque satisfactorio, permitiría a un atacante descifrar las
+  comunicaciones en tiempo real.
+
+- Posteriormente se descubre que Schannel y Secure Transport
+  también son vulnerables, lo que expande los afectados a los universos
+  de Microsoft y Apple.
+
+- Se recomienda dejar de soportar RSA_EXPORT y actualizar las
+  versiones de las librerías de cifrado utilizadas.
+Abril 2015   HTTP Public Key Pinning
+                - RFC 7469
+
+                - HPKP se convierte en un estándar, permitiendo a todos los sitios web
+                  proteger a sus usuarios del uso de certificados fraudulentos por
+                  terceros.
+
+                - HPKP se implementa por medio de una cabecera HTTP en la que el
+                  servidor indica el fingerprint del certificado y la duración del mismo.
+
+                - Es soportado por Chrome, Firefox y Opera.
+
+             Public-Key-Pins:
+               pin-sha256="cUPcTAZWKaASuYWhhneDttWpY3oBAkE3h2+soZS7sWs=";
+               max-age=5184000; includeSubDomains;
+               report-uri="https://www.example.org/hpkp-report"
+                                                          Logjam            Mayo 2015
+
+
+- Se publica otro ataque que permite forzar el uso de claves débiles (por
+  ejemplo de 512 bits) durante un intercambio de claves por
+  Diffie-Hellman: Logjam
+
+- Una vez realizado el ataque (que requiere de un MitM previo), el
+  atacante puede descifrar las comunicaciones en tiempo real.
+
+- Todos los servidores que soportan DHE_EXPORT son vulnerables a
+  este ataque, aunque otros con longitudes de clave mayores (768 bits,
+  1024 bits) también podrían serlo.
+
+- Como solución se propone dejar de soportar DHE_EXPORT y forzar el
+  uso de claves de 2048 bits.
+Ejemplo de Factorización con Msieve
+Junio 2015   Deprecating SSL Version 3.0
+               - RFC 7568: Deprecating Secure Sockets Layer Version 3.0
+
+               - Especifica que NO se debe utilizar la versión 3 de SSL, recomendando
+                 el uso de cualquier versión de TLS.
+
+               - Los cambios en TLS son:
+
+                    - Los clientes de TLS NO deben incluir la versión 3 entre las
+                      soportadas en el mensaje ClientHello.
+
+                    - Los servidores de TLS NO deben incluir la versión 3 entre las
+                      soportadas en el mensaje ServerHello.
+
+                    - Los servidores deben rechazar la conexión en caso de que el
+                      cliente tan sólo soporte la versión 3 del protocolo.
+
+               - De este modo, la versión 3 de SSL queda oficialmente obsoleta.
+Junio 2015   crt.sh
+               - Comodo lanza crt.sh, la primera base de datos pública para buscar
+                 certificados con Transparencia de Certificados (Certificate
+                 Transparency, CT).
+
+               - En mayo de 2015, Chrome ya comenzaba a forzar el uso de CT para
+                 cierto tipo de certificados (Extended Validation Certificate, EV).
+Febrero 2016   TLSv1.3 Workshop
+                - Después de 2 años de desarrollo, TLSv1.3 está listo para ser mostrado y
+                  analizado en un workshop.
+
+                - La idea es evitar los errores con las versiones anteriores del protocolo,
+                  por lo que TLSv1.3 se hace público para que los investigadores y
+                  empresas privadas puedan estudiar los nuevos diseños e identificar
+                  cualquier debilidad antes de publicar la versión definitivamente.
+                                                      DROWN               Marzo 2016
+
+
+- Se publica DROWN (Decrypting RSA with Obsolete and Weakened
+  eNcryption), un nuevo ataque sobre SSLv2 que se estima que afecta a
+  alrededor de un 33% de los servidores a día de hoy (marzo 2016).
+
+- DROWN es relevante porque se demuestra que puede afectar a clientes
+  y servidores que ni siquiera soportan SSLv2, pudiendo aprovechar
+  este ataque para descifrar tráfico TLS.
+
+- El ataque se basa en la capacidad de recuperar la clave privada a
+  partir de la pública en SSLv2 (demostrado en la práctica).
+
+- Posteriormente se comprueba que la implementación de SSLv2 de
+  ciertas versiones de OpenSSL tiene un bug que permite recuperar la
+  clave privada en tiempo real. A esto se le conoce como Special DROWN.
+Enero 2017   SHA1 Certificates Deprecated
+               - En 2005 ya se demostraron ataques teóricos contra SHA1.
+
+               - En 2011, NIST declaró obsoleto el SHA1.
+
+               - En enero de 2016, las CAs dejaron de emitir certificados con SHA1
+
+               - A comienzos de 2017, son los navegadores los que ya no aceptan
+                 certificados emitidos con SHA1, marcando las conexiones como
+                 inseguras.
+
+               - Esto obliga a que todas las empresas que no habían migrado todavía a
+                 certificados más seguros (SHA256) lo acaben haciendo.
+Mayo 2018   Deprecating HPKP (sólo Chrome)
+              - Google anuncia que dejará de soportar HPKP a favor de la
+                Transparencia de Certificados (Certificate Transparency, CT).
+
+              - De este modo, a partir de julio de 2018, Chrome (v68) tan sólo acepta
+                certificados que hayan sido publicados con Transparencia de
+                Certificados.
+
+              - El objetivo es que cualquier pueda darse cuenta de la emisión de
+                certificados no autorizados, lo que en la práctica reduciría el uso de los
+                mismos.
+Julio 2018   Deprecating TLS 1.0
+               - El estándar PCI-DSS prohibe el uso de TLS 1.0 a partir de julio de
+                 2018.
+
+               - Esta prohibición hace que todos los servicios que trabajan con tarjetas
+                 de crédito no puedan seguir utilizando el protocolo: bancos,
+                 e-commerces, pasarelas de pago, etc.
+
+               - No es la primera vez, en julio de 2016 ya se intentó evitar el uso de TLS
+                 1.0 pero no se llegó a aplicar por la falta de clientes que tenían 100%
+                 integradas las versiones 1.1 y 1.2 del protocolo.
+Agosto 2018   TLS v1.3
+                - RFC 8446
+
+                - Mejora en la Seguridad: tan sólo se han incluidos algoritmos SIN
+                  vulnerabilidades conocidas, evitando ataques como Freak o Logjam.
+
+                - Mejora en la Privacidad: se cifra parte del handshake para evitar
+                  análisis de tráfico y proteger las identidades de los participantes.
+                  Además, implementa Forward Secrecy por defecto.
+
+                - Mejora en el Rendimiento: se reducen el número de peticiones en el
+                  handshake, haciendo la conexión más rápida.
+Octubre 2018   DNS over HTTPS (DoH)
+                 - RFC 8484
+
+                 - El proyecto en el que Google y Mozilla llevan trabajando meses se
+                   convierte en estándar. El objetivo es resolver las peticiones DNS a
+                   través de HTTPS.
+
+                 - DoH mejora la seguridad al evitar las escuchas y la posible
+                   manipulación de la resolución DNS (DNS Spoofing) por medio de un
+                   ataque MitM.
+
+                 - Otro objetivo secundario es mejorar el rendimiento, ya que los servidores
+                   DNS de los ISP muchas veces introducen retraso en las resoluciones.
+
+                 - Firefox se convertirá en el primer navegador en soportar DoH a partir de
+                   noviembre de 2018, aunque en modo experimental.
+Septiembre 2018   Encrypted SNI (ESNI)
+                    - DoH “no tiene sentido” mientras el SNI (Server Name Indication) se siga
+                      enviando en claro en el primer paquete de la conexión TLS; por ello, 1
+                      mes antes de la publicación del estándar se comienza a trabajar en el
+                      nuevo estándar ESNI.
+
+                    - La combinación de ambos ¿garantizan? conexiones privadas en
+                      Internet.
+Zombie POODLE y GOLDENDOODLE                                                   Marzo 2019
+
+
+ - Craig Young encuentra 2 vulnerabilidades que afectan a ciertas
+   implementaciones de TLS 1.2 a las que llama Zombie POODLE y
+   GOLDENDOODLE.
+
+ - Ambas son CBC Padding Oracle attacks y se deben a que descubre
+   un mecanismo por el cual es capaz de identificar si la comprobación del
+   padding es correcta o no.
+
+ - Estos ataques afectan principalmente a los dispositivos Citrix NetScaler
+   y a los de la familia Cisco ASA.
+
+ - El objetivo final, como en los POODLE’s anteriores, es descifrar secretos
+   transmitidos en la cabecera de las peticiones HTTP, como cookies de
+   sesión.
+Septiembre 2019   Chrome empieza a soportar DoH
+                    - Después casi un año, Google saca la primera versión de su navegador
+                      con soporte para DNS over HTTPS, en modo experimental.
+
+                    - Esto genera una gran controversia por parte de los ISP y gobiernos (y
+                      empresas) debido a que sus mecanismos de bloqueo de contenido ya
+                      no serán efectivos al estar basados en rechazar las resoluciones DNS
+                      del contenido a bloquear.
+
+
+Noviembre 2019    Microsoft anuncia soporte DoH
+                    - Dos meses después, Microsoft anuncia que Windows 10 también
+                      soportará (en el futuro) DoH de manera nativa
+Ene-Mar 2020   Los navegadores se despiden de TLS
+                 - Google, Mozilla, Microsoft y Apple “se alían” para dejar de soportar las
+                   versiones 1.0 y 1.1 de TLS en sus respectivos navegadores, como ya
+                   habían comunicado en sus respectivos blogs en octubre de 2018.
+
+                 - Las principales razones son:
+                    - PCI-DSS no lo permite desde 2018
+                    - TLS 1.2 ya tiene 10 años y no tiene sentido seguir soportando
+                      versiones con vulnerabilidades conocidas del protocolo
+
+                 - Esto ayuda a “acelerar” la prohibición oficial de dichas versiones bajo
+                   una RFC que llevaba en elaboración desde 2018.
+      Los navegadores vuelven a TLS                                          Marzo 2020
+
+
+- El plan era ambicioso y no salió como se esperaba… existiendo muchos
+  sitios gubernamentales que todavía (marzo 2020) no soportan la versión
+  1.3 de TLS, lo que sólo dejaría como posibilidad el uso de TLS 1.2.
+
+- Eso, sumado a la situación provocada por la COVID-19, hizo que los
+  navegadores se replantearan su postura al haber dejado a multitud de
+  usuarios sin poder acceder a sitios críticos (y sin poder acudir en
+  persona).
+
+- En la práctica, Google retrasa la versión de Chrome en la que se
+  dejaban de soportar las versiones 1.0 y 1.1 del protocolo; Mozilla y
+  Microsoft publican una “actualización” en la que se vuelve a dar soporte
+  a estas versiones.
+      China bloquea el uso de TLS 1.3                                      Julio 2020
+
+
+- El Gran Cortafuegos chino comienza a bloquear los sitios que utilizan
+  TLS 1.3 y ESNI.
+
+
+
+
+               Rusia también se lo plantea                                 Septiembre 2020
+
+- De manera similar, Rusia comienza a hacer cambios en diferentes leyes
+  para, en la práctica, acabar prohibiendo el uso de TLS 1.3, DoH y ESNI
+  con el argumento de poder trabajar en mejorar la seguridad de los
+  ciudadanos.
+                                                         Raccoon                Septiembre 2020
+
+- Se descubre un nuevo ataque basado en tiempo que permitiría
+  recuperar la clave de cifrado negociada durante el handshake, lo que
+  permitiría descifrar la comunicación entre 1 cliente y el servidor: Raccoon
+
+- El ataque explota una característica del intercambio de claves
+  Diffie-Hellman (DH) y afecta a TLS 1.2 y todas las versiones anteriores.
+
+- Como sucedía con otros ataques similares, su explotación es muy
+  compleja en la práctica porque requiere estar muy “próximos” al
+  servidor para poder hacer mediciones de tiempo muy precisas
+Diciembre 2020   Adiós, ESNI, ¡hola, ECH!
+                  -   ESNI sólo cifraba el nombre del host. El resto del ClientHello (ALPN que
+                      delata el protocolo, algoritmos soportados…) viajaba sin cifrar, lo que
+                      permite hacer fingerprinting para inferir el destino.
+
+                  -   Además, era fácil de bloquear (como ya venía haciendo el Gran
+                      Cortafuegos chino), al ser una extensión aislada en texto claro.
+
+                  -   Como alternativa, se presenta ECH (Encrypted Client Hello),
+                      encapsulando todo el mensaje inicial en una estructura de doble
+                      handshake (Outer e Inner):
+
+                        -   ClientHelloOuter: Visible en la red con un SNI público (ej. dominio
+                            de la CDN).
+
+                        -   ClientHelloInner: Cifrado mediante HPKE (Hybrid Public Key
+                            Encryption) con la clave pública del servidor obtenida vía DNS
+                            (registros HTTPS/SVCB).
+Marzo 2021   Deprecating TLS 1.0 y 1.1
+               - RFC 8996: Deprecating TLS 1.0 and TLS 1.1
+
+               - Especifica que NO se deben utilizar las versiones 1.0 y 1.1 de TLS,
+                 recomendando el uso de cualquier versión superior (1.2 ó 1.3).
+
+               - Los cambios en TLS son:
+
+                    - Los clientes de TLS NO deben incluir las versiones prohibidas
+                      entre las soportadas en el mensaje ClientHello.
+
+                    - Los servidores de TLS NO deben incluir las versiones prohibidas
+                      entre las soportadas en el mensaje ServerHello.
+
+                    - Se deben rechazar aquellas conexiones que se intenten establecer
+                      usando cualquiera de las 2 versiones prohibidas (1.0 ó 1.2).
+                                                           ALPACA                Agosto 2021
+
+
+- Se publica ALPACA, un “ataque de confusión de protocolo cruzado”.
+  ALPACA necesita que un servidor web (HTTPS) comparta certificado (con
+  un wildcard) y dirección IP con otro servicio (FTPS, IMAP…).
+
+- El ataque consiste en interceptar la conexión inicial de la víctima hacia el
+  puerto web y redirigirla al puerto del otro servicio (por ejemplo, FTPS).
+
+- Como el certificado es el mismo, el handshake TLS se completa y el
+  servidor FTP recibe la petición HTTP (con las cookies de sesión). Como el
+  servidor FTP no entiende HTTP, devuelve un mensaje de error con parte
+  de la petición de vuelta al atacante, filtrando las cookies al atacante.
+
+- Solución:
+   ○ Separar servicios en IPs / certificados distintos
+   ○ Usar la extensión ALPN (Application-Layer Protocol Negotiation) para
+       que el servidor TLS rechace la conexión si el protocolo solicitado no
+       coincide con el puerto.
+                     Rusia lanza su propia CA                                Marzo 2022
+
+
+- Como parte de las sanciones impuestas a Rusia por el conflicto contra
+  Ucrania, las autoridades de certificación extranjeras dejaron de renovar
+  los certificados digitales de empresas y organismos rusos.
+
+- En respuesta, Rusia lanza su propia CA para que sus ciudadanos
+  puedan seguir accediendo a servicios nacionales bajo TLS.
+
+- El único navegador que la reconoce es Yandex.
+   Agosto 2024    Criptografía Post-Cuántica
+                      - El NIST publica sus tres primeras normas de
+                        criptografía post-cuántica (PCQ): ML-KEM, para el
+                        intercambio de claves; y ML-DSA y SLH-DSA para las
+                        firmas digitales.
+
+Septiembre 2024       - Google anuncia el soporte de ML-KEM
+                        (Module-Lattice-Based Key-Encapsulation Mechanism)
+                        en Chrome a partir de noviembre de 2024.
+
+                      - ML-KEM ayuda a proteger el intercambio de clave
+                        contra posibles ataques “store-now-decrypt-later”.
+
+
+                  -     China logra vulnerar con éxito el cifrado SPN        Octubre 2024
+                        (utilizado en el estándar AES) utilizando un
+                        ordenador cuántico D-Wave.
+      Hito en la computación cuántica                                          Septiembre 2025
+
+
+- El ingeniero Steve Tippeconnic logra descifrar una clave criptográfica de
+  curva elíptica (ECC) de seis bits utilizando una computadora cuántica de
+  133 qubits.
+- La demostración muestra progreso cuántico, no una amenaza inmediata.
+- Este logro reabre el debate sobre el cronograma de las amenazas
+  cuánticas sobre la seguridad de las criptomonedas y fuerza a la SEC
+  (Securities and Exchange Commission) a revisar propuestas para proteger
+  los activos digitales de futuros ataques cuánticos.
+- Como resultado, la SEC presenta el Marco de Infraestructura
+  Financiera Post-Cuántica (PQFIF), en donde se identifica el "Día-Q"
+  (cuando las computadoras cuánticas sean lo suficientemente poderosas
+  como para romper el cifrado actual) como una posibilidad que podría llegar
+  en 2028.
+- Nota: Tanto Bitcoin como Ethereum dependen de ECC-256.
+Verano 2026   TLS Híbrido y Estándar Post-Cuántico
+                - Para mitigar ataques “Store-now-decrypt-later”, los principales
+                  navegadores y servidores llevan a cabo el despliegue masivo de TLS
+                  Híbrido, apoyado en la publicación definitiva de los estándares del NIST.
+
+                - Esta solución modifica el handshake de TLS 1.3 para combinar un
+                  algoritmo clásico de curva elíptica ya probado (como X25519) con el
+                  nuevo mecanismo post-cuántico de encapsulación de claves (ML-KEM).
+
+                - Se aplica este enfoque híbrido por un principio de redundancia: si el día
+                  de mañana se descubre una vulnerabilidad matemática imprevista en el
+                  nuevo ML-KEM, la capa de cifrado clásico seguirá garantizando la
+                  confidencialidad de la sesión histórica (mientras sea antes del Día-Q).
+¿ Fin ?
+“Examen”
+           https://www.ssllabs.com/ssltest/analyze.html?d=www.ujaen.es
+Referencias y Lecturas
+ - Wagner, D. y Schneier, B., “Analysis of the SSL 3.0 protocol”
+   https://www.schneier.com/academic/paperfiles/paper-ssl.pdf
+
+ - Davies, J., “Implementing SSL / TLS Using Cryptography and PKI”
+
+ - Ristic, I., “Bulletproof SSL and TLS”
+
+ - Daoyuan, “Padding Oracle Attack”
+   http://slideplayer.com/slide/4384322/
+
+ - Ristic, I., “Is HTTP Public Key Pinning Dead?”
+   https://blog.qualys.com/ssllabs/2016/09/06/is-http-public-key-pinning-dead
+
+ - “SSL/TLS and PKI History”
+   https://www.feistyduck.com/ssl-tls-and-pki-history/
+

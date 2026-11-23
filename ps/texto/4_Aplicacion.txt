@@ -1,0 +1,537 @@
+CAPA DE APLICACIÓN
+Contenidos
+• HTTPS
+• SSH
+• Correo electrónico
+HTTP
+Hypertext Transfer Protocol
+• Ejemplo de mensaje de petición
+
+
+
+
+• Ejemplo de mensaje de respuesta
+Consideraciones de seguridad en la Web
+• Desde un punto de vista técnico la web es una aplicación
+  cliente/servidor que funciona sobre Internet
+• Tiene una serie de características especiales que
+  sugieren herramientas de seguridad a medida:
+  • Es relativamente fácil poner en marcha un servidor sin
+    embargo el problema viene con las aplicaciones que se pueden
+    ejecutar y sobre las que podemos tener poco control
+  • Los usuarios de un servidor web no tienen porqué tener
+    formación en seguridad
+  • Un servidor web puede ser utilizado para entrar dentro de una
+    subred y por tanto en todos los equipos de ésta
+Resumen de ataques en la Web
+HTTPS
+• Implementación de HTTP sobre SSL/TLS para conseguir
+  comunicaciones seguras cuando se accede a un servidor
+  Web
+• La URL empieza por https:// (puerto estándar: 443)
+• Descrito en el RFC 2818
+• Cuando se usa HTTPS, los siguiente elementos se
+  encriptan:
+ • URL del documento solicitado
+ • Contenidos del documento
+ • Contenidos de los formularios
+ • Cookies
+ • Contenidos del la cabecera HTTP
+Inicio de la conexión
+          Para HTTPS, el agente que
+           actúa como cliente HTTP
+        también actúa como cliente TLS
+            El cliente inicia una conexión con el
+          servidor en el puerto apropiado y luego
+          envía el TLS ClientHello para comenzar
+                      el handshake TLS
+
+               Cuando el handshake TLS ha
+            terminado, el cliente puede iniciar la
+                  primera petición HTTP
+
+
+           Todos los datos HTTP deben enviarse
+              como datos de aplicación TLS
+Cierre de la conexión
+• Un cliente o servidor HTTP indican el cierre de la
+ conexión cuando en la cabecera del mensaje actual
+ incluyen la línea Connection: close
+• Esta indicación de HTTP implicará que en TLS se ponga
+  en acción el mecanismo de cierre seguro de la conexión
+  TLS
+• Otro tipo de cierre puede ser tratado como un posible
+  ataque
+HSTS
+HTTP Strict Transport Security
+• Mecanismo para indicar a los navegadores que solo pueden
+  conectarse al servidor web utilizando HTTPS
+• Estándar de la IETF especificado en el RFC 6797
+• Funcionamiento:
+  • El navegador se conecta a un sitio web por HTTP
+  • El servidor responde y le indica en un campo de la respuesta HTTP:
+    Strict-Transport-Security: max-age=31536000
+  • A partir de este momento el navegador sabe que tiene que anteponer
+    https delante de sus URLs, durante el período indicado
+  • Si no se puede establecer conexión https no se realizará otra
+• Problemas de seguridad
+• Soluciones
+  • Navegadores con especificación de sitios HSTS integrada
+  • hstspreload.org
+HPKP
+HTTP Public Key Pinning
+• Extensión de HTTP por la que se permite definir claves
+  públicas del servidor para futuras conexiones como las
+  que se van a usar en TLS
+• Esta información se introduce en las cabeceras de
+  respuesta HTTP
+• Ejemplo de respuesta ante una petición HTTP:
+Public-Key-Pins: max-age=2592000;
+pin-sha256="E9CZ9INDbd+2eRQozYqqbQ2yXLVKB9+xcprMF+44U1g=";
+pin-sha256="LPJNul+wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ=";
+report-uri="http://example.com/pkp-report
+• Problema: puede contradecir a una autoridad de
+  certificación, a un certificado, …, incluso simplemente
+  porque se produzca un error en su procesamiento
+• Google ha dejado este mecanismo por este problema
+Secure Shell (SSH)
+• Protocolo para establecer conexiones seguras entre
+  equipos
+• Inicialmente concebido para sustituir a utilidades
+  inseguras (telnet, rlogin, …) que permitían ejecutar
+  comandos remotamente o abrir una shell en un servidor
+Secure Shell (SSH)
+• SSH es un estándar propuesto por el IETF
+• Descrito en numerosos RFCs: RFC 4250, RFC 4251,
+  RFC 4252, RFC 4253, RFC 4254, RFC 4255, RFC 4256,
+  RFC 4335, RFC 4344, RFC 4345, RFC 4419, RFC 4432,
+  RFC 4462, RFC 4716, RFC 4819
+• Hoy en día se usa la versión 2 que soluciona debilidades
+  de la versión 1
+• ssh provee:
+  • autenticación
+  • cifrado
+  • integridad
+Funciones de ssh
+• Establecimiento de sesiones remotas
+• Ejecución remota de comandos
+• Copia segura de archivos entre equipos
+• Establecimiento de túneles seguros
+• Ejecución de aplicaciones X11 remotas mediante túneles
+Uso de SSH
+• SSH se utiliza ampliamente hoy en día
+• La implementación más usada de ssh es openSSH
+• Existen versiones para Linux, Mac Os, Windows, …
+Pila de protocolos en SSH
+Transport Layer Protocol
+Transport Layer Protocol
+Autenticación inicial
+• La autenticación ocurre en esta capa basada en la clave
+  pública/privada (Host Keys) del servidor.
+• Un servidor puede tener múltiples claves de hosts
+  pudiendo usar diferentes algoritmos de encriptación
+  asimétrica.
+• Para el proceso de autenticación el cliente debe disponer
+  de la clave pública del host/servidor. Opciones:
+  • El cliente tiene una base de datos local en la que se asocia
+   cada host/servidor con su clave pública (fichero known_hosts)
+  • El servidor y su clave se pueden asociar con un certificado, CA, …
+Transport Layer Protocol
+Transport Layer Protocol
+Fases
+• Identification string Exchange
+  • Formato:
+  SSH-protoversion-softwareversion SP comments CR LF
+  • Ejemplo:
+  SSH-2.0-billsSSH_3.6.3q3<CR><LF>.
+  • Estas cadenas serán usadas en el intercambio de clave Diffie-
+    Hellman
+• Negociación de algoritmos
+  • SSH_MSG_KEXINIT contiene listas de algoritmos soportados en
+    orden de preferencia
+  • El algoritmo escogido será el primero de la lista del cliente que
+    también soporte el servidor
+Transport Layer Protocol
+Transport Layer Protocol
+Fases
+• Intercambio de claves
+   • Actualmente se permiten dos versiones del intercambio de claves
+     Diffie-Hellman (RFC 2409)
+   • Como resultado de este intercambio ambas partes comparten
+     una clave maestra.
+   • Además el servidor ha sido autenticado con el cliente, porque
+     el servidor ha usado su clave privada para firmar su mitad del
+     intercambio D-H
+   • También y procedente del intercambio D-H se calcula el valor
+     Hash (H) que es utilizado como identificador de sesión. Este
+     no se cambiará aunque se refresquen las claves
+Transport Layer Protocol
+Fases
+• Generación de claves
+  • Se generan a partir de la clave secreta compartida K, el valor hash
+    H, el identificador de sesión (suele ser H salvo que se hayan
+    refrescado las claves)
+Transport Layer Protocol
+Fases
+• Fin del intercambio de claves
+  • En este momento ambas partes pueden usar las claves generadas
+• Petición de servicio
+  • El cliente envía un paquete donde se solicita el User Autentication
+    Protocol o el Connection Protocol.
+  • A partir de estos momentos los datos son intercambiados con el
+    formato de mensaje antes expuesto
+User Authentication Protocol
+• Su función es que el cliente sea autenticado por el servidor
+• Pasos:
+   1.  El cliente envía un mensaje SSH_MSG_USERAUTH_REQUEST
+   2.  El servidor chequea si el nombre de usuario es válido.
+       1.     Si no lo es: el servidor responde con un SSH_MSG_USERAUTH_FAILURE con
+              valor del campo Partial Success a False. Se detiene el proceso
+       2.     Si el nombre es válido pasar al paso 3
+  3.        El servidor responde con un SSH_MSG_USERAUTH_FAILURE con una
+            lista de uno o más métodos de autenticación
+  4.        El cliente selecciona un método de autenticación aceptable y envía
+            SSH_MSG_USERAUTH_REQUEST con este método y la información
+            necesaria. Se producen una serie de pasos para realizar la autenticación
+  5.        Si la autenticación tiene éxito y se requieren más métodos de autenticación
+            el servidor vuelve al paso 3 estableciendo el campo Partial Success a True.
+            Si la autenticación falla el servidor el servidor vuelve al paso 3 con el campo
+            Partial Success a False.
+  6.        Cuando todos los métodos de autenticación requeridos tienen éxito el
+            servidor envía un SSH_MSG_USERAUTH_SUCCESS y termina el
+            protocolo
+User Authentication Protocol
+• Métodos disponibles
+  • Publickey: típico algoritmo de autenticación utilizado en clave
+    pública en la que el servidor con la clave pública del cliente (que se
+    encuentra en el fichero AuthorizedKeys) envía un núnico (nonce) al
+    cliente. El cliente deber responder con una firma de ese núnico
+  • Password: se envía una clave encriptada por el protocolo de la
+    capa de transporte.
+  • Hostbased: la autenticación es realizada por el equipo del cliente,
+    antes que por el usuario mismo. En este caso lo que se envía es
+    una firma creada con la clave privada del equipo cliente.
+Connection Protocol
+• Una típica conexión segura, denominada túnel, es usada por el
+  protocolo de conexión para multiplexar canales lógicos
+• Mecanismo de canales
+  • Para cada canal cada parte asigna un número único de canal
+  • Se realiza control de flujo en los canales mediante mecanismos de
+    ventana.
+  • El ciclo de vida de un canal tiene tres etapas: apertura, envío de datos
+    y cierre
+  • …
+• Tipos de canales
+   • Session: para la ejecución de un programa remoto. Por ejemplo una
+     Shell, un comando de sistema, …
+   • x11: transporte de un flujo gráfico
+   • forwarded-tcpip: para hacer port forwarding
+   • direct-tcpip: para implementar port forwarding local
+Connection Protocol
+Port Forwarding
+• Permite convertir una
+  conexión insegura en segura
+  (ssh tunneling)
+• El tráfico es redirigido desde
+  los puertos estándares x e y
+  a puertos de la conexión ssh
+  ayb
+• Dos tipos:
+  • Local
+  • Remoto
+Recomendaciones de seguridad en la
+configuración de ssh
+• No permitir la conexión del usuario root
+• No permitir la autenticación por contraseña (solo por clave
+  pública)
+• No escuchar en cualquier interfaz
+• No usar nombres de usuario típicos
+• Usar “allow lists” que solo permitan la conexión de ciertos
+  usuarios
+• Restringir también usuarios que se pueden conectar vía IP
+• Utiliza software del tipo fail2ban o sshGuard para prevenir
+  ataques de fuerza bruta
+• Mantener el Sistema Operativo y los paquetes actualizados
+Correo electrónico
+• Componentes del correo electrónico
+• SMTP
+• MIME
+• Seguridad en correo electrónico
+• S/MIME
+    Componentes del correo electrónico
+•   Componentes principales:                     user
+                                                 agent
+     – Agentes de usuario
+     – Servidores de correo              mail                         user
+                                        server                       agent
+     – Protocolo de transferencia de
+       correo: SMTP (POP3, IMAP)                   SMTP      mail        user
+•   Agentes de usuario. (Message                            server      agent
+
+    User Agents: MUA)            SMTP
+     – Composición, edición y lectura               SMTP                user
+                                                                       agent
+       de mensajes de correo.            mail
+                                        server
+     – Por ejemplo, Eudora, Outlook,                user
+       elm, ....                                    agent
+     – Envío y petición de mensajes       user                     outgoing
+       al servidor.                       agent               message queue
+                                                                 user mailbox
+Componentes del correo electrónico
+                                                 user
+•   Servidores de correo.                        agent
+    (Message Transfer Agents:
+    MTA).                                mail                         user
+                                        server
+    – Buzón de correo: contiene los                                  agent
+      mensajes de entrada del
+      usuario.                                     SMTP      mail        user
+    – Cola de mensajes: mensajes                            server      agent
+      de correo de salida (para ser   SMTP
+      enviados).
+– Protocolos                                        SMTP                user
+   – SMTP: usado para envío de                                         agent
+                                         mail
+     correo entre servidores y para     server
+     que los MUA envíen el correo                   user
+     a los servidores                               agent
+   – POP3, IMAP: Para que los
+     MUA descarguen el correo              user                    outgoing
+                                          agent               message queue
+                                                                 user mailbox
+SMTP (Simple Mail Transfer Protocol)
+• Encapsula el mensaje de correo en un envoltorio que reenvía desde
+  el origen hasta el destino a través servidores (MTAs)
+• Su funcionamiento se basa en establecer una conexión TCP por el
+  puerto 25
+• Utiliza conexiones persistentes (se mantiene la conexión mientras se
+  envían los mensajes)
+• Las tres fases de la transferencia son:
+   • “Acuerdo” (saludo).
+   • Transferencia de mensajes.
+   • Cierre.
+• Como en otros protocolos la interacción entre cliente y servidor es del
+  tipo comando-respuesta
+  • El cliente envía comandos de tipo ASCII
+  • El servidor con códigos estado frase
+• Por su antigüedad tanto los bits de cabecera como los del cuerpo de
+ un mensaje deben ir codificados en código ASCII de 7 bits
+SMTP
+• Ejemplo de interacción tras establecerse conexión TCP
+Formato de los mensajes (RFC 5322)
+• Tiene dos partes
+   • Cabecera: con los datos administrativos para su
+     envío. Dos grupos:
+     • De transporte: destinatario, remitente,…
+     • Otros datos: fecha, …
+  • Cuerpo (mail body): datos del mensaje de usuario
+                                                       header
+• Ejemplos de campos de cabecera:
+   • From: remitente
+   • To: destinatario
+   • Cc: otros destinatarios
+   • Subject: asunto
+   • Date: fecha de envío                              body
+   • In-Reply-To: si es en respuesta a un mensaje
+   • Message-Id: identificador del mensaje
+   • Return-path: ruta de regreso
+   • etc.
+MIME
+• Limitaciones del protocolo SMTP original derivadas del
+ uso del código ASCII de 7 bits:
+  • No se permite el envío de imágenes, ejecutables, …
+• Se define en los RFCs 2045 a 2049 las extensiones
+  multipropósito de correo Internet (MIME: Multipurpose
+  Internet Mail Extensions)
+• Estas extensiones permiten que:
+  • En los mensajes se puedan enviar caracteres no ASCII
+  • Se defina conjunto extensible de formatos para los mensajes
+  • Los mensajes pueden estar constituidos por varias partes
+   independientes, cada una con su formato
+MIME
+• Nuevos campos MIME en la cabecera del mensaje:
+  • MIME-Version: versión MIME utilizada
+  • Content-Type: formato de los datos del mensaje (imagen, audio, …)
+  • Content-Transfer-Encoding: codificación utilizada para convertir los
+    datos del mensaje ya que estos datos deben ser caracteres ASCII
+  • Content-ID, Content-Description, …
+• Así cuando llega un nuevo mensaje con estos campos
+ MIME hay que:
+  • Decodificarlo a sus caracteres originales a partir del valor de
+    Content-Transfer-Encoding
+  • En función del Content-Type realizar unas acciones u otras para
+    mostrarlo en pantalla (si es imagen, audio,…)
+MIME Content Types
+MIME
+• Ejemplo
+Ataques al
+correo y
+contra-
+medidas
+NIST SP 800-177
+(Trustworthy Email ,
+September 2015)
+Las amenazas se
+clasifican en:
+• Autenticación
+• Integridad
+• Confidencialidad
+• Disponibilidad
+Contra-Medidas recomendadas en
+SP800-177 por el NIST
+• Protocolos de transporte: TLS, STARTTLS, …
+• S/MIME
+• DNSSEC
+• DANE (DNS-based Authentication of Named Entities)
+• SPF (Sender Policy Framework)
+• DKIM (DomainKeys Identified Mail)
+• DMARC (Domain-based Message Authentication,
+ Reporting, and Conformance)
+TLS
+• Inicialmente se definen una serie de puertos seguros para
+ usar TLS para el correo, al estilo HTTPS
+   Protocol       Purpose       Normal port    SSL variant      SSL port
+ SMTP         Send email       25/587         SMTPS          465 (legacy)
+ POP3         Retrieve email   110            POP3S          995
+ IMAP         Read email       143            IMAPS          993
+ NNTP         News reader      119/433        NNTPS          563
+              Directory
+ LDAP                          389            LDAPS          636
+              Access
+ FTP          File transfer    21             FTPS           990
+
+
+• Este mecanismo es considerado en ciertos casos confuso
+ y que puede desperdiciar puertos
+STARTTLS
+• Mecanismo por el cual un servidor indica a un cliente que la
+ conexión en texto plano se convierta a conexión segura
+ manteniendo el puerto de conexión
+
+S: <waits for connection on TCP port 25>
+C: <opens connection>
+S: 220 mail.example.org ESMTP service ready
+C: EHLO client.example.org
+S: 250-mail.example.org offers a warm hug of welcome
+S: 250 STARTTLS
+C: STARTTLS
+S: 220 Go ahead
+C: <starts TLS negotiation>
+C & S: <negotiate a TLS session>
+C & S: <check result of negotiation>
+C: EHLO client.example.org. . .
+Contra-Medidas en SP800-177 (NIST)
+relacionadas con servidores y servicios
+• DNSSEC: Provee autenticación e integridad a los datos DNS
+  mediante la firma de éstos. Introduce para esto registros
+  especiales
+• DANE (DNS-based Authentication of Named Entities): Permite
+  asociar certificados a nombres almacenándolos en servidores
+  DNS. Se utilizará DNSSEC para enviar esta información
+• SPF (Sender Policy Framework): Permite a los dueños de un
+  dominio definir para un dominio, rangos de IPs de emisores
+  autorizados
+• DKIM (DomainKeys Identified Mail): Permite a los MTA firmar
+  cabeceras y el cuerpo de un mensaje
+• DMARC (Domain-based Message Authentication, Reporting,
+  and Conformance): Permite a los emisores conocer la
+  efectividad de sus SPF y DKIM ante ataques
+Uso de los distintos elementos de
+seguridad
+S/MIME (Secure/Multipurpose Internet
+Mail Extension)
+• Una mejora en seguridad para MIME
+• Recomendado por el NIST en SP800-177
+• Descrito en:
+  • RFC 5750, S/MIME Version 3.2 Certificate Handling
+  • RFC 5751, S/MIME Version 3.2 Message Specification
+  • RFC 4134, Examples of S/MIME Messages
+  • RFC 2634, Enhanced Security Services for S/MIME
+  • RFC 5652, Cryptographic Message Syntax (CMS)
+  • RFC 3370, CMS Algorithms
+  • RFC 5752, Multiple Signatures in CMS
+  • RFC 1847, Security Multiparts for MIME –
+    Multipart/Signed and Multipart/Encrypted
+S/MIME
+Integridad y confidencialidad en S/MIME
+Algoritmos criptográficos usados en
+S/MIME
+Tipos de contenidos de mensaje en
+S/MIME
+• Los tipos definidos en el RFC 5652 son:
+   • Data: es el propio tipo contenido MIME codificado
+   • SignedData: usado para aplicar una firma digital a un mensaje
+   • EnvelopedData: para datos encriptados
+   • CompressedData: para datos comprimidos
+• Clear signing:
+  • Procedimiento por el que se firma un mensaje, disponiéndose el
+    mensaje y la firma a continuación, sin ningún formato especial
+  • Lo puede leer cualquier receptor de correo que implemente solo el
+    tipo MIME.
+  • La diferencia con SignedData es que el mensaje y la firma se
+    encapsulan en un formato especial
+Asegurando una entidad MIME
+• Una entidad MIME se puede asegurar firmándola,
+  encriptándola o de ambas formas
+• Tras preparar una entidad MIME normal:
+ • Se procesan por S/MIME
+   • Firmado
+   • Encriptación, …
+ • A la entidad MIME se le añaden datos relacionados con seguridad,
+   identificación de algoritmos y certificados y producen lo que se
+   conoce como objeto PKCS
+ • Este objeto se procesa como un mensaje y se vuelve a generar
+   una entidad MIME, codificándola normalmente como base64
+Preparando un SignedData
+
+
+
+                                                          Prepare a block
+                                                          known as
+                                      Encrypt the         SignerInfo
+                                      message digest      that contains
+                                      with the signer’s   the signer’s
+                                      private key         public-key
+                  Compute the                             certificate, an
+                  message digest                          identifier of the
+                  (hash function)                         message digest
+                  of the content to                       algorithm, an
+                  be signed                               identifier of the
+   Select a                                               algorithm used
+   message                                                to encrypt the
+   digest                                                 message
+   algorithm                                              digest, and the
+   (SHA or MD5)                                           encrypted
+                                                          message digest
+SignedData
+• Ejemplo de entidad MIME que contiene un objeto
+  SignedData
+• La objeto S/MIME generado se introduce en un fichero
+  adjunto denominado smime.p7m
+Preparando un EnvelopedData
+
+Generate a pseudorandom session key for a particular
+symmetric encryption algorithm
+
+
+
+     For each recipient, encrypt the session key with the
+     recipient’s public RSA key
+
+
+          For each recipient, prepare a block known as
+          RecipientInfo that contains an identifier of the
+          recipient’s public-key certificate, an identifier of the
+          algorithm used to encrypt the session key, and the
+          encrypted session key
+
+
+                 Encrypt the message content with the session key
+EnvelopedData
+• Ejemplo de entidad MIME que contiene un
+  EnvelopedData
+• La objeto S/MIME generado se introduce en un fichero
+  adjunto denominado smime.p7m
+Clear Signing
+

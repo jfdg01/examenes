@@ -1,0 +1,877 @@
+          Tema 3. Alta Disponibilidad,
+       Escalabilidad y Tolerancia a Fallos
+                Aplicaciones Seguras en la Nube
+                                                                                      José Ramón Balsas Almagro
+                                                                                      Departamento de Informática
+                                                                                             Universidad de Jaén
+                                                                                               jrbalsas@ujaen.es
+
+                                  Esta obra está bajo una Licencia Creative Commons
+                                      Atribución-CompartirIgual 4.0 Internacional.                              v 1.3.2
+    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+La seguridad en el desarrollo
+software en la nube
+●   Análisis:
+      ○ Identificación de amenazas
+      ○ Análisis de riesgos                                                                                     Tema 2
+      ○ Requisitos de seguridad: funcionales y no funcionales
+●   Diseño
+      ○ Patrones de diseño seguros en la nube                                                                   Temas 3 y 4
+●   Implementación y despliegue
+      ○ Buenas prácticas y técnicas de protección
+      ○ Herramientas y bibliotecas de seguridad para minimizar vulnerabilidades
+      ○ Configuración de servicios
+●   Seguimiento y evaluación contínua de seguridad
+      ○ Monitorización y respuesta                                                                                  Temas 3 y 5
+      ○ Evaluación del rendimiento y alta disponibilidad
+      ○ Métodos y Herramientas de verificación de seguridad:                                                        Tema 6
+            ■ Análisis estático código
+            ■ Análisis dinámico: herramientas de análisis automatizado y pentesting
+2    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Patrones de diseño seguro en la
+nube
+
+     Los que conocen las artes marciales no pierden
+     el tiempo cuando actúan, ni agotan sus fuerzas
+     cuando atacan
+                                          Sun Tzu, El Arte de la Guerra. Siglo V a.C.
+
+
+
+
+3   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Objetivos
+● Conocer los retos técnicos a los que debe dar respuesta
+  una aplicación en la nube
+● Conocer y comprender las arquitecturas y patrones de
+  diseño que den respuesta a las necesidades técnicas de
+  aplicaciones en la nube
+● Conocer, comprender y saber aplicar algunas tecnologías y
+  servicios que faciliten el desarrollo y funcionamiento seguro
+  de aplicaciones en la nube
+
+4   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Motivación
+¿Cómo aprovechar de forma segura las ventajas que nos proporcionan los servicios en la
+                                      nube?
+● Objetivo
+   ○ Conseguir una Alta Disponibilidad (HA) de los servicios
+● Problemas a solucionar
+   ○ Escalabilidad flexible y dinámica de los recursos
+   ○ Tolerancia frente a fallos adecuada de los recursos
+● Propuestas
+   ○ Aplicaciones con arquitecturas distribuidas
+       ○    Aprovisionar de forma flexible los recursos necesarios para atender a la
+            demanda: manual o dinámica (elastic)
+       ○    Uso de técnicas, patrones de diseño y herramientas que solucionen los
+            problemas habituales
+5     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Consideraciones sobre diseño de
+aplicaciones en la nube
+    Falacias de las aplicaciones distribuidas, Peter Deutsch et al., 90s
+
+
+       ○   La red es fiable                                  ○    La topología no cambia
+       ○   La latencia es cero                               ○    Hay un administrador
+       ○   El ancho de banda es infinito                     ○    El costo de transporte es cero
+       ○   La red es segura                                  ○    La red es homogénea
+
+
+
+
+6     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+                 Arquitectura de
+             aplicaciones en la nube
+                               Características generales
+
+
+
+
+                                 Bespin Cloud City. Fuente: https://starwars.fandom.com
+         Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Algunas propuestas en diseño de
+aplicaciones en la nube
+●       Aplicaciones Reactivas https://www.reactivemanifesto.org/
+
+        "...we want systems that are Responsive, Resilient, Elastic and
+        Message Driven. We call these Reactive Systems."
+
+●       The Twelve-Factor App https://12factor.net
+
+        "Methodology form building apps … offering maximum portability
+        between execution environments...suitable for deployment on
+        modern cloud platforms, obviating the need for servers and systems
+        administration...and can scale up without significant changes"
+●       Chaos Engineering, https://principlesofchaos.org/
+        "discipline of experimentation on a distributed system to build
+        confidence in the system's ability to withstand turbulent production
+        conditions."                                                                      Fuente: Netflix Chaos Monkey, github
+
+    8    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Arquitecturas basadas en
+servicios
+ ●   Service-Oriented Architecture, SOA, http://www.soa-manifesto.org 2009
+ ●   Características:
+      ○ Servicios basados en estructura de la organización (ley de Conway)
+      ○ Bajo acoplamiento tecnológico
+      ○ Reusabilidad y composición
+      ○ Autonomía
+      ○ Sin estado
+      ○ Sistemas distribuidos: ubicuidad, autodescubrimiento y autoconfiguración
+ ●   Beneficios
+      ○ Agilidad en el proceso de desarrollo, mantenimiento y evolución del software
+      ○ Arquitectura adaptada a la explotación de las ventajas de la nube
+ ●   Diferentes tecnologías y metodologías para facilitar la independencia y comunicación
+      ○ XML, SOAP, WADL, UDDI, REST, JSON…
+      ○ Web Services Interoperability (WS-I) como iniciativa apoyada por la industria para especificaciones
+           técnicas...
+9    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Microservicios
+Tendencia actual de las arquitecturas basadas en servicios
+
+Definiciones
+
+  "In short, the microservice architectural style is an approach to developing a single application as a suite of
+small services, each running in its own process and communicating with lightweight mechanisms, often
+            an HTTP resource API. These services are built around business capabilities and independently
+deployable by fully automated deployment machinery. There is a bare minimum of centralized management
+  of these services, which may be written in different programming languages and use different data storage
+                                                                                                   technologies."
+
+                                                                       James Lewis and Martin Fowler, 2014
+
+                          "Small, autonomous services that work together"
+                                                        Sam Newman, 2015
+
+10   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Microservicios
+Características
+ ●   Uso óptimo e independiente de recursos: despliegue individual en entornos
+     PaaS, CaaS, FaaS, …
+ ●   Heterogeneidad tecnológica: pueden desarrollarse en diferentes pilas de
+     desarrollo
+ ●   Replicación automatizada: elasticidad bajo demanda, alta disponibilidad y
+     tolerancia a fallos
+ ●   Comunicación síncrona o asíncrona a través de la red utilizando protocolos
+     abiertos
+
+11   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Ejemplos de sistemas basados en
+microservicios
+
+
+
+
+12   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Tipos de comunicación entre
+componentes
+Según el instante en que emisor y receptor interactúan:
+ ● Síncrono: emisor y receptor participan en el mismo instante
+ ● Asíncrono: la participación es en instantes diferentes
+Según la forma en que se produce la comunicación
+ ● Petición/Respuesta
+     ○ El cliente hace una solicitud y espera una respuesta
+          (síncrona o asíncrona)
+     ○ e.g. petición HTTP REST
+ ● Basada en eventos
+     ○ El cliente informa de un evento (mensaje) sin esperar a
+          la respuesta y el receptor decide cuándo y cómo
+          procesarlo
+     ○ e.g. solicitud de cargo de una compra en cuenta
+
+
+13   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Consideraciones sobre protocolos
+para la comunicación
+ ●   Multitud de protocolos… ¿Cuál elegir?
+
+
+
+
+ ●   Aspectos a considerar para su elección                                  Deben contemplarse
+      ○ Tipo de comunicación: síncrona o asíncrona                           aspectos de seguridad del
+      ○ Infraestructura necesaria, e.g. middleware                           propio protocolo o de la
+      ○ Soporte multiplataforma                                              infraestructura y bibliotecas
+      ○ Estandarización
+                                                                             necesarias para su utilización
+      ○ Eficiencia en la comunicación
+      ○ Actualizaciones de bibliotecas, documentación y soporte de la comunidad
+      ○ Facilidad de integración y depuración
+14   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Protocolos para la comunicación: SOAP
+     ●    Simple Object Access Protocol, SOAP
+           ○ Protocolo estándar para la comunicación entre objetos
+           ○ Utiliza XML como representación de los mensajes
+           ○ Independiente del método de transporte: http, jms, …
+     ●    Consideraciones sobre seguridad
+           ○    Utiliza intérpretes para procesar los mensajes: posibles amenazas de XEE
+                (CWE-611), deserialización (CWE-776), inyección...
+           ○    Necesidad de configuración CORS para limitar el origen y tipo de las peticiones
+           ○    Las derivados de información proporcionada por usuario: validación
+ <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                       xmlns:m = "http://www.xyz.org/methods">
+   <soapenv:Header/>
+   <soapenv:Body >
+     <m:getCustomer>
+       <m:id>123</m:id>
+     </m:getCustomer>
+   </soapenv:Body>
+ </soapenv:Envelope>
+15       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Protocolos para la comunicación: REST
+     ●     REpresentational State Transfer
+     ●     Estilo arquitectónico para la comunicación en servicios web
+            ○ Recursos identificados por URIs, e.g. URLs
+            ○ Acceso a recursos multimedia, uso de diferentes representaciones: XML, HTML, JSON,
+                ….
+            ○ Operaciones HTTP sobre recursos web, e.g GET, POST, PUT, DELETE
+            ○ Operaciones sin estado
+     ●     Consideraciones sobre seguridad
+            ○ Prevenir posibles vulnerabilidades de inyección de código a los analizadores de
+                mensajes, e.g. XML, JSON… (CWE-502: Deserialization of Untrusted Data)
+            ○ Las propias de APIs públicas: CORS, validación, codificación, canales seguros, …
+                                                           HTTP/1.1 200 OK
+         POST /app/customer HTTP/1.1
+         Content-Type: application/json                    Content-Type: application/json
+                                                           {
+         {                                                       "id": 456,
+           "name": "John",                                       "name": "John",
+           "surname":"Snow",                                     "links": [ {
+           "house": "Stark",                                          "rel": "self",
+           "age": 31                                                  "href": "http://host:8080/app/customer/456"
+         }                                                       } ]
+16       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es.} http://tiny.cc/asnuja. 2026
+Arquitecturas de aplicaciones en
+la nube
+● Principalmente basadas en el concepto de separación de competencias, habitual en otras
+      arquitecturas, e.g. Modelo-Vista-Controlador, front-end/back-end, Domain Drive Design...
+
+●     Ejemplo de patrón: Aplicación web basada en Modelo-Vista-Controlador
+       ○ Modelo de información
+       ○ Presentación de información
+       ○ Control de la interacción con el "usuario" o del flujo de la información
+●     Ventajas: las derivadas de su implementación cómo microservicios
+       ○   Bajo acoplamiento de los módulos
+       ○   Facilidad para distribución de componentes en la nube
+       ○   Permiten aprovechar las propiedades que ofrece la nube, e.g. elasticidad
+●     Es necesario aplicar patrones de diseño que permiten aprovechar las propiedades de la
+      nube
+17     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Arquitectura de dos capas
+     Peticiones principalmente síncronas
+
+
+
+
+      Fuente: http://cloudcomputingpatterns.org
+
+18     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+     Arquitectura de tres capas
+Peticiones síncronas y asíncronas
+
+
+
+
+     Fuente: http://cloudcomputingpatterns.org
+
+
+
+19   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+                 Patrones de diseño y
+                       técnicas
+                  Alta Disponibilidad, Escalabilidad y
+                          Tolerancia a Fallos
+
+
+
+
+                                  Death Star Blueprints. Fuente: https://starwars.fandom.com
+     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+        Medidas para mitigar retrasos en la
+        comunicación
+●       Motivación:
+        ¿Cómo evitar fallos en cascada del sistema (disponibilidad) debida
+             a bloqueo de los nodos o retrasos en las operaciones?
+ ●      Ajustar el número de conexiones máximas por nodo CWE-410
+         ○ Las conexiones de un nodo consumen recursos: memoria, cpu, red
+         ○ Un nodo debe rechazar "rápidamente" (fail-fast) las peticiones que no pueda atender
+ ●      Reutilización de recursos costosos: conexiones (pool de conexiones), threads… CWE-1072
+         ○ Reutilizar conexiones a la BD para eliminar los retrasos por establecimiento de conexión
+         ○ Se pueden configurar para mantener las conexiones activas
+    ●    Configuración de tiempos de espera (Timeouts) CWE-1088
+          ○ Revisar valores por defecto en componentes del sistema
+          ○ Adaptar timeouts en peticiones, e.g. conexiones del
+             cliente, procesamiento de petición, conexiones sql,
+             operaciones SQL, peticiones/respuestas REST,
+
+21       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Medidas para mitigar cortes en la
+comunicación
+●       Uso de Interruptores (Circuit-breakers)
+         ○ Patrón de diseño que fuerza una
+            respuesta: Fail-Fast o resultados en
+            Caché, si la comunicación falla (e.g. error
+            5xx) o supera un tiempo predeterminado
+         ○ Ejemplos: Netflix Hystrix (Java), Polly
+            (.NET), Phystrix (Php)...
+
+●       Uso de mamparos (Bulkheads)
+         ○ Diseñar zonas o recursos independientes
+            (e.g. microservicios) que no se vean
+            afectadas por errores, e.g. servicios
+            sobre repositorios de datos
+            independientes: usuarios, stock…
+
+22       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+         Ejemplos de configuración de recursos
+         y retrasos en comunicaciones
+Configuración de conexiones de clientes en Apache       Pool de conexiones Tomcat con Mysql desde Spring Boot
+HTTPD
+                                                        spring.datasource.url=jdbc:mysql://dbhost/webdb
+KeepAliveTimeout 5
+                                                        spring.datasource.username=webuser
+<IfModule mpm_prefork_module>
+                                                        spring.datasource.password=webpass
+    MaxRequestWorkers               250
+    StartServers                      10
+                                                        spring.datasource.tomcat.max-wait=10000
+    MinSpareThreads                   75                spring.datasource.tomcat.max-active=20
+    MaxSpareThreads                 150                 spring.datasource.tomcat.max-idle=5
+    MaxConnectionsPerChild 10000                        spring.datasource.tomcat.test-on-borrow=true
+</IfModule>                                             spring.datasource.testWhileIdle = true
+          ¿dispone el servidor de suficiente memoria?   spring.datasource.timeBetweenEvictionRunsMillis = 60000
+                                                        spring.datasource.validationQuery = SELECT 1
+Configuración de timeouts en conexión
+JDBC
+                                    SpringData JPA timeout
+PreparedStatement ps =             # application.properties
+     conn.prepareStatement(query); spring.jpa.properties.jakarta.persistence.query.timeout=5000
+ps.setQueryTimeout(5000);
+ps.setParameter(...)
+    23     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+    Ejemplo de servicio protegido con
+    Netflix Hystrix
+Fragmento de aplicación con Spring Boot
+@Service
+public class StockService {
+    @HystrixCommand(fallbackMethod = "defaultStock")
+    public String getStock (Integer idProduct) {
+         return new RestTemplate()
+           .getForObject ("http://stockservice:9090/product/{id}",                               getStock
+           Integer.class, idProduct);
+    }
+
+         private String defaultStock (Integer idProduct) {
+             return "Unknown";
+         }
+}
+@SpringBootApplication
+@EnableCircuitBreaker
+public class StockApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(StockApplication.class, args);
+    }
+}                                                                                  Fuente: https://github.com/Netflix/Hystrix/
+
+
+    24     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+ Balanceo de Carga
+●     Objetivo:
+       ○    Sub-sistemas para distribución de las peticiones de los "clientes" entre diferentes
+            microservicios que puedan replicarse bajo demanda
+ ●    Competencias:
+       ○    Reparto y control de carga atendiendo a diferentes criterios:
+            round-robin, número de conexiones activas, carga de los servicios (cpu,
+            red…), tiempos de respuesta, ...
+
+       ○    Posibilidad de gestionar el escalado de los servicios para atender a la
+            demanda, e.g. lanzamiento y parada de servicios IaaS o PaaS, i.e.
+            Elastic Load Balancer
+
+       ○    Enrutado de peticiones a nodos en back-end, e.g. API Gateway,
+            múltiples sitios diferentes, control dinámico de destinos, …
+
+       ○    Opcionalmente, caché de elementos estáticos (servidor web):
+            imágenes, JS, CSS, HTML, ... para evitar sobrecarga de componentes
+
+25    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Tipos de Balanceo de Carga
+●    Opciones
+      ○ Basados en nivel OSI: principalmente L4 (tcp, e.g. 25/smtp) o L7 (aplicación, e.g. http)
+          ■ Finalización o no (pass-through) de conexiones TLS
+      ○ Basados en la red, los elementos de la red determinan el destino de cada petición
+              ● DNS
+                  ●   Proxy ARP
+            ■ Dificultad para conocer el estado real de cada nodo
+      ○    Basados en servidor: las peticiones que llegan al balanceador se redirigen al servicio
+           elegido
+            ■   Productos independientes, e.g. nginx, haproxy, traefik,...
+            ■   Servicios propios del proveedor, e.g. Amazon Elastic Load Balancer, ELB; Azure Load
+                Balancer, Google Load Balancer, GLBC, Cloud Flare Load Balancing, …
+      ○    Basados en cliente
+            ■ El cliente consulta al balanceador a qué servicio debe realizar la petición, e.g DNS,
+               Netflix Ribbon, SpringCloud load balancer, gRPC load balancing, …
+26    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+  Consideraciones sobre uso de
+  Balanceo de Carga
+  ●    Gestión de estado de los componentes balanceados
+        ○ Ubicación (IP): fijas o dinámicas
+        ○ Disponibilidad: conexiones (max, ratelimit, burst…), carga (weight),
+          tiempo de respuesta (timeout, retry), respuesta válida (health check)…
+  ●    Seguridad
+         ○    Como punto único de entrada deben complementarse con configuraciones en
+              cluster (HA), activo/pasivo y/o con protecciones/balanceo a nivel de red
+
+         ○    Suelen disponer de ajustes adicionales útiles para mitigar ataques DDoS
+               ■ Control de conexiones simultáneas
+               ■ Latencia de peticiones
+               ■ tamaño de datos, …
+
+
+27     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+      Ejemplos de balanceo de carga
+                                         HA-Proxy (haproxy.cfg)
+                                         defaults
+                                           timeout server 30s
+                                           default-server libc,none
+                                         frontend FE-server
+                                           bind *:80
+NGINX (nginx.conf)                         mode http
+#SSL                                       option forwardfor
+events {}                                  default_backend wwwservers
+http {                                   backend  wwwservers
+                                           mode http #proxy type L7
+  server {                                 balance roundrobin # leastconn...
+    listen 80;                             cookie JSESSIONID prefix
+    server_name www.domain.com;            server srv1 app-wwwserver-1:80 check cookie s1 weight 2 maxconn 50
+    location / {                           server srv2 app-wwwserver-2:80 check cookie s2 fall 3 rise 1
+       proxy_pass http://wwwservers;       server srv3 app-wwwserver-3:80 backup
+       #Active health-check (commercial)                                         TRAEFIK v2+( dynamic-conf.yml)
+       health_check interval=10 fails=3 passes=2;                                http:
+    }                                                                              routers:
+                                                                                     front-end:
+  }                                                                                     rule: "PathPrefix(`/`)"
+  upstream wwwservers {                                                                 service: wwwservers
+    mode http                                                                      services:
+    least_conn; #round_robin                                                         wwwservers:
+    # ip_hash; #Sticky session                                                          loadBalancer:
+    #Passive health-check                                                                 servers:
+    server app-wwwserver-1:80 max_conns=100 weight=2;                                       - url: http://app-wwwserver-1/
+                                                                                            - url: http://app-wwwserver-2/
+    server app-wwwserver-2:80 max_fails=2 fail_timeout=20s;                            healthCheck:
+    server app-wwwserver-3:80 backup;                                                     path: /
+  }                                                                                       interval: 10s
+}                                                                                         timeout: 3s
+28     Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Balanceo de carga con
+contenedores dinámicos en
+Traefik
+ ●    Traefik permite configurar dinámicamente nodos desde diferentes proveedores,
+      e.g. docker, kubernetes, Consul, ECS, etc.
+ ●    En docker compose, los contenedores utilizan etiquetas para indicar su
+      configuración: # file: traefik.yml
+                          providers:
+                           docker: # enable docker dynamic container detection
+                             exposedByDefault: false   # Process only containers with label "traefik.enable=true"
+
+
+ # compose.yml
+ services:
+  wwwserver:
+    image: traefik/whoami
+    ports:
+           - "80"
+    scale:    2 # number of replicas
+
+     labels: # Node dynamic configuration using docker provider and labels
+       - "traefik.enable=true"
+       - "traefik.http.routers.wwwserver.rule=PathPrefix(`/`)"   # route path
+
+29    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+     Componentes sin estado
+●    Motivación
+      ○ ¿Cómo puede cualquier nodo balanceado atender las
+         acciones en curso de un cliente en particular?
+
+ ●    Solución: el estado de peticiones o datos se delega a
+      componentes que garantizan su persistencia
+       ○    Almacenamiento compartido
+       ○    Repositorios especializados NoSQL e.g. Memcached, Redis, …
+       ○    Bases de Datos Relacionales o NoSQL genéricas
+       ○    En el propio cliente, e.g cookies, localstorage… En este caso,
+            utilizar medidas anti-modificación, e.g HMAC, JWT, …
+ ●    Ventajas
+       ○ Desacoplar al cliente del componente que realiza la
+          operación
+       ○ Facilitan la escalabilidad y la tolerancia a fallos de los
+          componentes
+30    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Ejemplos de configuración de
+repositorio común de sesiones
+PHP+Redis
+
+     #php.ini
+     session.save_handler = redis
+     session.save_path = "tcp://10.0.0.2:6379?auth=secret"
+
+Spring+Redis
+
+     @Configuration
+     @EnableRedisHttpSession
+     public class SessionConfig extends AbstractHttpSessionApplicationInitializer {
+
+            @Bean
+            public JedisConnectionFactory connectionFactory() {
+                  JedisConnectionFactory cf = new JedisConnectionFactory();
+                  cf.setHostName("10.0.0.2");
+                  cf.setPassword("secret");
+                return cf;
+            }
+     }
+31   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Gestión de información en entornos
+distribuidos
+Motivación
+  … pero, ¿cómo se garantiza la alta disponibilidad de los
+servicios auxiliares: balanceador, estado, base de datos, …?
+
+Teorema CAP (Conjetura de Brewer, 2000)
+     En un sistema distribuido es imposible garantizar, a la vez, la
+     Consistencia de los datos, su Disponibilidad (Availability) y
+     Tolerancia a desconexiones entre nodos (Partition tolerance)
+Opciones
+ ●   CA, e.g única BD con un único nodo maestro, sistema de archivos compartido clásico, ...
+ ●   CP, mientras los nodos no se sincronicen, la información no estará accesible
+ ●   AP, la información estará eventualmente disponible, pero puede haber inconsistencias
+     hasta entonces: datos obsoletos, duplicados,...
+     Algunos sistemas permiten diferentes configuraciones dependiendo de las necesidades específicas
+32   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+     Alta disponibilidad en BBDD
+ Motivación
+  ● Las bases de datos suelen constituir un punto clave de la infraestructura,
+                ¿Qué patrones o técnicas permiten garantizar su alta disponibilidad?
+
+ Command-Query Responsibility Segregation, CQRS,
+     ●    Separar operaciones que afecten el estado de la información de operaciones de lectura
+     ●    Escalado de lecturas (AP):
+           ○ Escrituras sobre un nodo principal y lecturas sobre nodos réplicas
+     ●    Escalado de escrituras (CP… según la información):
+           ○ Las entidades se reparten entre diferentes nodos (shards), e.g. por zonas, por tipos de usuarios, ...
+
+
+
+
+33       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+     Alta Disponibilidad en BBDD:
+     uso de Cachés de Datos
+Caché temporal de resultados: evitar el acceso reiterado a datos frecuentes
+ ● Reducir la carga de componentes complicados de escalar, e.g. BD relacionales
+ ● Evitar repetir operaciones costosas que generen un mismo contenido e.g. consultas a
+    bases de datos, cálculos complejos, etc.
+
+Tipos de Cachés
+ ● En Servidor: Las BBDD permiten configurar diferentes parámetros para cachear operaciones habituales,
+     e.g. caché de consultas
+ ● En Cliente: en memoria local o utilizar IMDG (In-memory Data Grids) distribuidos (HA) entre diferentes
+     clientes (permiten escalado horizontal)
+Modos de utilización
+          ○   Programático, similar a un Map, e.g. put(clave,valor), get(clave)
+          ○   Integración transparente en resultados, e.g. anotaciones con JSR-107 (JCache), Spring-cache
+Herramientas
+      ○ Servicios de almacenamiento en memoria de clave/valor (IMDG): específicos: memcached, redis o
+          genéricos: Zookeeper, Consul, Hazelcast, …
+      ○ Permiten clustering para alta disponibilidad y tolerancia a fallos
+34       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Ejemplos de uso de Caché
+Spring (anotaciones propias o JSR-107, no mezclar)
+@Repository()
+public class ClienteDAOJPA implements ClienteDAO {
+  @Autowired
+  private EntityManager em;
+
+  @Cacheable("clientes") //@CacheResult() JSR-107
+  public Cliente buscaId(Integer id) {
+     return em.find(Cliente.class,id);
+  }
+  @CachePut(value="clientes", key="#cliente.id")
+    public void guardaCliente(@Valid Cliente cliente) {
+     return em.merge(cliente);
+  }
+}
+PHP
+function getCliente( id ) {
+     $cliente = $mcache->get(id);
+     if (! $cliente) {
+           $sth = $dbh->prepare('SELECT * FROM Clientes where id=?");
+           $sth->execute(array( id ));
+           $cliente = $sth->fetchObject('Cliente');
+           $mcache->set(id,$cliente);
+     }
+     return $cliente;
+}35   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+ Descubrimiento de servicios
+Motivación: Los componentes, servicios o clientes, creados
+dinámicamente deben poder localizarse entre ellos según su disponibilidad
+Alternativas
+ ● DNS
+      ○ Ventajas: distribuido, facilidad de integración (a nivel de SO),
+          balanceo de carga (round-robin, zonas…)
+      ○ Inconvenientes: dificultad para controlar cachés dns intermedias
+          y detección de componentes no disponibles (solo TTL)
+ ●   Servicios específicos
+      ○ Normalmente del tipo IMDG
+      ○ Funcionalidades adicionales: registro, configuración,
+          almacenamiento clave-valor, mensajes…
+      ○ Suelen permitir emular un servicio de DNS
+      ○ Ejemplos:
+             ■   Etcd, Consul, Eureka (Neflix), Apache zookeeper…
+             ■   Integrados en servicios en la nube: AWS ElasticCache,
+                 Azure Cache, Google Memorystore ….
+36    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Ejemplo de servicio de descubrimiento de
+servicios en HA: Consul
+Consul
+ ● Interfaz REST y DNS (transparente)
+ ● Replicación en alta disponibilidad AP
+ ● Servicios:
+      ○   Registro/Descubrimiento
+      ○   chequeo de disponibilidad activo
+      ○   almacenamiento clave-valor
+      ○   Interfaz gráfica de monitorización
+          http://localhost:8500/ui
+
+
+
+
+                                                                  Fuente: https://consul.io
+
+37   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Descubrimiento de servicios
+usando contenedores
+ ●   Los gestores de contenedores, e.g. Docker, Podman, Kubernetes... disponen de un
+     servicio DNS para registrar automáticamente la ip y nombre de cada contenedor o
+     servicio
+ ●   Las aplicaciones en contenedores pueden acceder a otro contenedor o servicio
+     indicando solo su nombre de DNS
+ ● Ejemplo
+     $ docker network create appweb                                                           El descubrimento
+     $ docker run -d --rm --network appweb --name dbhost mysql                                solo está activo entre
+     $ docker run -it --rm --network appweb alpine /bin/sh                                    contenedores
+         # ping dbhost                                                                        vinculados a una
+           PING dbhost (172.17.0.2): 56 data bytes                                            misma red virtual o
+           64 bytes from 172.17.0.2: seq=0 ttl=64 time=0.175 ms
+                                                                                              en proyectos
+ ●   Docker compose automatiza el proceso: red y nombres de                                   docker-compose
+     contenedores/servicios, e.g. proyecto/docker-compose.yml →
+           $ ping proyecto-wwwserver-1             # entrada dns por contenedor
+           $ ping wwwserver                       # entrada dns por servicio (balanceo por DNS)
+38   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+ Configuración externa de servicios
+Motivación:
+ ● Los componentes creados dinámicamente deben recibir parámetros
+    de configuración que definan aspectos de su comportamiento
+ ● Evitar datos estáticos de configuración y claves estáticas en
+    ficheros o código
+Opciones:
+ ● Variables de entorno del SO, definidas al lanzar la instancia, e.g. VM o contenedor y
+    recuperadas del SO por la aplicación
+ ● Ficheros de configuración, copiados a la instancia antes de su lanzamiento
+ ● Servicio de configuración externa
+        ○   La aplicación solicita los valores a un servicio externo
+        ○   La aplicación solo debe conocer la ubicación del servicio de
+            configuración
+        ○   Tipos: cualquier servicio almacenamiento (clave-valor, nosql,
+            db, file), aunque suelen ser servicios especializados con HA:
+            e.g. Eureka, Consul, Vault
+39    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+     Ejemplo de configuración externa con
+     variables de entorno
+Configuración con variables de entorno
+
+      LAMP
+       ● En http.conf,                 Listen ${HTTPD_PORT}
+       ● En php.ini,                   memory_limit = ${PHP_MEMORY_LIMIT}
+       ● Desde el propio código php,   $db_host = getenv('DB_HOST')
+      Java
+           String db_password = System.getenv("DB_PASSWORD");
+      Spring                                    Microprofile
+            @Value("${DB_CONN_URL}")         @Inject
+            String db_url;                   @ConfigValue(name= "${DB_CONN_URL}") String db_url;
+Envío de variables de entorno con Docker
+ ●    Desde CLI
+            $ docker run -e DB_HOST='mariadb' --env DB_PASSWORD='secreto'    phpwebapp
+            $ docker run --env-file ./configvars.env phpwebapp
+ ●    Usando Docker compose    mariadb:
+                                 image: mariadb:latest
+                                 environment:
+                                    - MYSQL_DATABASE=notesdb
+                                    - MYSQL_USER=usuario
+                                 env_file: "configvars.env"
+40    Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Alta disponibilidad en mensajes asíncronos
+Motivación
+  ¿Cómo garantizar el envío de mensajes asíncronos en entornos distribuidos?
+Retos
+ ● Interacción entre microservicios heterogéneos
+ ● Conocer ubicación dinámica de los componentes receptores (clientes)
+ ● Disponibilidad de los mensajes (restricciones CAP)
+Solución
+ ● Utilizar capa intermedia (mesh/middleware) de comunicación asíncrona mediante mensajes
+ ● Los clientes (consumidores/workers) se registran en la malla ( colas, pub/sub... )
+Soluciones:
+ ●   Especificaciones: AMPQ (Advanced Message Queuing Protocol), JMS (Java Message Service,
+     JSR-343), MQTT, STOMP
+ ●   Implementaciones (brokers): RabbitMQ, Apache MQ, Microsoft MQ, Apache Kafka...
+ ●   Proveedores en la nube: AWS Simple Queue Service (SQS), Windows Azure Messaging, Google
+     pub/sub, IBM WebSphere MQ, ...
+41   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+Ejemplo de clúster HA de
+mensajes asíncronos
+
+
+
+
+                                                                    Fuente: emqx.com
+
+42   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Características de las mallas de
+mensajes
+     ●    Varían según la implementación...
+           ○ Configuraciones en cluster para escalado y tolerancia a fallos (variaciones CAP)
+           ○ Enrutado/Filtrado selectivo de mensajes a clientes (workers)
+           ○ Elasticidad: lanzar clientes (workers) según el número de mensajes, e.g AWS SQS
+     ●    Alternativas
+           ○ Entrega al menos una vez. Posibles duplicados (AP)
+           ○ Entrega solo una vez (CA)
+                ■ Entrega transaccional. El mensaje se borra de la cola solo cuando el cliente confirma
+                    la recepción
+                ■ Entrega con tiempo límite. Si el cliente no confirma la recepción en tiempo límite, se
+                    asignan a otro cliente
+     ●    Ejemplo
+           ○ AWS SQS, permite escalar dinámicamente el número de componentes dependiendo del
+               número de mensajes en la cola, repetir la entrega si expira un tiempo máximo o recopilar
+               mensajes no procesados (dead letters)
+43       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
+
+
+
+         Conclusiones
+     ●     La arquitectura de una aplicación en la nube debe estar adaptada para hacer uso de las
+           características específicas de la nube: arquitecturas distribuidas
+
+     ●     La descomposición de una aplicación en microservicios sin estado permite su escalado
+           dinámico para adaptarse a la carga del sistema o a una eventual recuperación frente a fallos
+           de elementos específicos
+
+     ●     Las arquitecturas distribuidas robustas deben tener en cuenta la carga de los nodos y los fallos
+           derivados por retrasos o desconexiones temporales entre sus nodos
+
+     ●     Los componentes elásticos deben obtener de la aplicación su configuración e información de
+           estado
+
+     ●     Un sistema distribuido debe diseñarse considerando que es imposible garantizar CAP a la
+           vez: la consistencia de los datos, su disponibilidad y tolerancia a desconexiones
+
+     ●     El balanceo de carga, el uso de cachés y los mensajes asíncronos facilitan la alta
+           disponibilidad y la tolerancia a fallos
+44       Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+Bibliografía y referencias
+●    Scholl, Boris, Trent Swanson, and Peter Jausovec. Cloud Native. First edition.
+     Beijing: O’Reilly, 2019. Recurso-electrónico-UJA
+●    Fehling, C., Leymann, F., Retter, R. et al. Cloud Computing Patterns:
+     Fundamentals to Design, Build, and Manage Cloud Applications. Springer, 2014.
+     Recurso-electrónico-UJA
+●    Newman S., Building microservices: designing fine-grained systems, First edition.
+     [online] Sebastopol, CA: O’Reilly Media, 2015. Disponible en
+     Recurso-electrónico-UJA
+●    Erl, T., Cope, R. & Naserpour, A. Cloud Computing Design Patterns. Prentice-Hall,
+     2015.
+●    Spring Cloud.[online] VMware, 2026 Disponible en
+     https://spring.io/projects/spring-cloud
+45   Aplicaciones Seguras en la Nube. jrbalsas@ujaen.es. http://tiny.cc/asnuja. 2026
+
