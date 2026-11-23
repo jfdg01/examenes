@@ -98,7 +98,7 @@ El borrador tiene un bloque por pregunta:
 
 ## El flujo de trabajo
 
-1. El agente creador escribe una tanda de 10 preguntas en el borrador.
+1. El agente creador escribe una tanda de unas 10 preguntas en el borrador. Una tanda lleva conceptos enteros, porque `banco importar` no añade preguntas a un concepto del banco.
 2. El agente revisa su tanda: compara cada pregunta con su página y con las reglas.
 3. El agente corre `banco importar` y `banco comprobar`, y arregla los errores y los avisos.
 4. El agente sigue con la siguiente tanda, hasta que el tema acaba.
