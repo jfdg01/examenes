@@ -125,7 +125,7 @@ package nucleo {
     +paso_tras_otra: String
     +fuente: String, "<pdf> · pág. n"
     +pagina: u32
-    +imagen: String, paginas/<pdf sin .pdf>-<n>.png
+    +imagen: String, paginas/<pdf sin .pdf>-<n>.webp
     +pdf: String, pdfs/<pdf>#page=<n>
     +copiar: String, la pregunta y "A) …" por opción, sin la solución
   }
@@ -233,7 +233,7 @@ package servidor {
     GET /:examen/api/notas → leer_notas → id → texto
     POST /:examen/api/notas → anotar(Nota) → 204
     PUT /:examen/api/preguntas → editar(Pregunta) → 204, 404 sin el id, 422 con otro concepto, tema, fuente o número de distractores, o un texto en blanco
-    GET /:examen/paginas/:archivo → servir → image/png
+    GET /:examen/paginas/:archivo → servir → image/webp
     GET /:examen/pdfs/:archivo → servir → application/pdf
     GET /assets/* → dist/assets
     todo va con gzip
@@ -257,7 +257,7 @@ package banco {
     +comprobar(preguntas, examen, carpeta): errores
     +pistas(preguntas): avisos de la regla 6
     +huerfanas(preguntas, historial): id fuera del banco
-    +sacar(carpeta): paginas/<pdf>-<página>.png a 80 ppp
+    +sacar(carpeta): paginas/<pdf>-<página>.webp a 80 ppp y calidad 60
     +paginas(pdf): u32, de pdfinfo
     +revision(carpeta, informes): escribe preguntas.json y los fallos sin aplicar
     +aplicar(banco, fallos): fallos sin aplicar
