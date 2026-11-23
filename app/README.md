@@ -1,6 +1,6 @@
 # La app de práctica
 
-Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están en [el ADR 0001](../docs/adr/0001-la-app-en-rust-y-svelte.md), y dónde corre la lógica está en [el ADR 0002](../docs/adr/0002-el-nucleo-en-wasm.md). Los diagramas de las clases, la ronda y una sesión están en PlantUML, en [el diagrama](../docs/el-diagrama.puml).
+Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están en [el ADR 0001](../docs/adr/0001-la-app-en-rust-y-svelte.md), y dónde corre la lógica está en [el ADR 0002](../docs/adr/0002-el-nucleo-en-wasm.md). Los diagramas están en PlantUML, en [el diagrama](../docs/el-diagrama.puml): el contexto, los contenedores y los componentes del modelo C4, la ronda, la apertura de un examen y una respuesta.
 
 - `nucleo/`: toda la lógica, sin leer archivos ni la red. Corre en el navegador como WASM, y el servidor usa sus tipos para validar.
 - `servidor/`: el servidor de `axum`. Guarda y sirve los archivos de cada examen, con gzip.
