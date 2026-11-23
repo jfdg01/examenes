@@ -2,7 +2,7 @@
 //! de los PDFs y los arreglos de una revisión. Las 3 leen la carpeta del examen. La comprobación y las
 //! imágenes llaman a `pdfinfo` y `pdftoppm` de poppler.
 
-use std::collections::{BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fs;
 use std::path::Path;
 use std::process::Command;
@@ -46,6 +46,12 @@ pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec
         }
         if p.distractores.contains(&p.correcta) {
             errores.push(format!("{id}: un distractor es la respuesta correcta: {}", p.correcta));
+        }
+        let lineas = p.explicacion.lines().filter(|l| l.starts_with('✗'));
+        for (i, (linea, d)) in lineas.zip(&p.distractores).enumerate() {
+            if !clave(linea).is_some_and(|(c, _)| d.to_lowercase().contains(&c.to_lowercase())) {
+                errores.push(format!("{id}: la línea ✗ {} no lleva una clave «…» de su distractor: {d}", i + 1));
+            }
         }
         let nombre = p.fuente.pdf.as_str();
         let pdf = carpeta.join("pdfs").join(nombre);
@@ -138,6 +144,59 @@ pub fn pistas(preguntas: &[Pregunta]) -> Vec<String> {
     avisos
 }
 
+/// La clave `«…»` de una línea `✗` de la explicación, y el matiz que la sigue.
+fn clave(linea: &str) -> Option<(&str, &str)> {
+    let (_, resto) = linea.strip_prefix('✗')?.split_once('«')?;
+    let (clave, matiz) = resto.split_once('»')?;
+    Some((clave, matiz.trim_start_matches(':').trim()))
+}
+
+/// Los avisos de las explicaciones: una línea `✓` de menos de 8 palabras, y una línea `✗` con el matiz de
+/// otra línea `✗` del mismo tema.
+pub fn explicaciones(preguntas: &[Pregunta]) -> Vec<String> {
+    let mut avisos = Vec::new();
+    let mut matices: HashMap<(&str, &str), &str> = HashMap::new();
+    for p in preguntas {
+        if let Some(l) = p.explicacion.lines().find(|l| l.starts_with('✓')) {
+            let n = l.trim_start_matches('✓').split_whitespace().count();
+            if n < 8 {
+                avisos.push(format!("{}: la línea ✓ tiene {n} palabras, menos de 8", p.id));
+            }
+        }
+        for (_, matiz) in p.explicacion.lines().filter_map(clave).filter(|(_, m)| !m.is_empty()) {
+            if let Some(otra) = matices.insert((&p.tema, matiz), &p.id) {
+                avisos.push(format!("{}: la línea ✗ repite el matiz de {otra}: {matiz}", p.id));
+            }
+        }
+    }
+    avisos
+}
+
+/// Los avisos de las páginas de cada PDF con alguna pregunta: una página sin pregunta y sin razón en
+/// `sin_pregunta`, y una página con pregunta y con razón.
+pub fn paginas_sin_pregunta(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec<String> {
+    let mut citadas: BTreeMap<&str, BTreeSet<u32>> = BTreeMap::new();
+    for p in preguntas {
+        citadas.entry(&p.fuente.pdf).or_default().insert(p.fuente.pagina);
+    }
+    let mut avisos = Vec::new();
+    for (pdf, con) in citadas {
+        // Un PDF que pdfinfo no lee ya es un error de `comprobar`.
+        let Ok(n) = paginas(&carpeta.join("pdfs").join(pdf)) else { continue };
+        let razon = |i: &u32| examen.sin_pregunta.get(pdf).is_some_and(|m| m.contains_key(i));
+        let lista = |v: Vec<u32>| v.iter().map(u32::to_string).collect::<Vec<_>>().join(", ");
+        let sin: Vec<u32> = (1..=n).filter(|i| !con.contains(i) && !razon(i)).collect();
+        if !sin.is_empty() {
+            avisos.push(format!("{pdf}: páginas sin pregunta y sin razón en sin_pregunta: {}", lista(sin)));
+        }
+        let las_dos: Vec<u32> = con.iter().copied().filter(razon).collect();
+        if !las_dos.is_empty() {
+            avisos.push(format!("{pdf}: páginas con pregunta y con razón en sin_pregunta: {}", lista(las_dos)));
+        }
+    }
+    avisos
+}
+
 /// Comprueba el banco de la carpeta y escribe el informe. Devuelve `true` si el banco no tiene errores.
 pub fn informe(carpeta: &Path) -> Result<bool, String> {
     let examen: Examen = leer(&carpeta.join("examen.json"))?;
@@ -149,7 +208,8 @@ pub fn informe(carpeta: &Path) -> Result<bool, String> {
     for e in &errores {
         println!("{e}");
     }
-    for aviso in pistas(&preguntas) {
+    let avisos = [pistas(&preguntas), explicaciones(&preguntas), paginas_sin_pregunta(&preguntas, &examen, carpeta)];
+    for aviso in avisos.concat() {
         println!("Aviso: {aviso}");
     }
     let sin_banco = huerfanas(&preguntas, &carpeta.join("respuestas.jsonl"))?;
@@ -281,11 +341,101 @@ pub fn revision(carpeta: &Path, informes: &[String]) -> Result<(), String> {
     Ok(())
 }
 
+/// Una pregunta de un bloque del borrador, sin `id` ni `tema`. `BANCO.md` describe el formato del bloque.
+fn bloque(encabezado: &str, lineas: &[&str], pdf: &str) -> Result<Pregunta, String> {
+    let error = |e: &str| format!("{encabezado}: {e}");
+    let (concepto, pagina) = encabezado
+        .split_once(" · p")
+        .and_then(|(c, n)| Some((c, n.trim().parse().ok()?)))
+        .ok_or_else(|| error("el encabezado no es «## concepto · pN»"))?;
+    let (mut pregunta, mut correcta, mut verdad) = (Vec::new(), Vec::new(), Vec::new());
+    let (mut distractores, mut explicacion) = (Vec::new(), Vec::new());
+    for l in lineas {
+        if let Some(c) = l.strip_prefix("+ ") {
+            correcta.push(c.trim());
+        } else if l.starts_with('✓') {
+            verdad.push(l.trim().to_string());
+        } else if let Some(d) = l.strip_prefix("- ") {
+            let [texto, matiz] = d.split('|').collect::<Vec<_>>()[..] else {
+                return Err(error(&format!("el distractor no tiene un solo «|»: {d}")));
+            };
+            let Some((antes, resto)) = texto.split_once('«') else {
+                return Err(error(&format!("el distractor no marca su clave con «»: {d}")));
+            };
+            let Some((clave, despues)) = resto.split_once('»') else {
+                return Err(error(&format!("el distractor no marca su clave con «»: {d}")));
+            };
+            distractores.push(format!("{antes}{clave}{despues}").trim().to_string());
+            explicacion.push(format!("✗ «{}»: {}", clave.trim(), matiz.trim()));
+        } else {
+            pregunta.push(l.trim());
+        }
+    }
+    let ([pregunta], [correcta], [verdad]) = (&pregunta[..], &correcta[..], &verdad[..]) else {
+        return Err(error("el bloque no tiene una línea ✓, una línea + y una línea de enunciado"));
+    };
+    explicacion.insert(0, verdad.clone());
+    Ok(Pregunta {
+        id: String::new(),
+        concepto: concepto.trim().into(),
+        tema: String::new(),
+        fuente: nucleo::Fuente { pdf: pdf.into(), pagina },
+        pregunta: pregunta.to_string(),
+        correcta: correcta.to_string(),
+        distractores,
+        explicacion: explicacion.join("\n"),
+    })
+}
+
+/// Añade al final de `preguntas.json` las preguntas del borrador, cada una con el siguiente `id` libre del tema.
+/// Un concepto que ya está en el banco da un error, y el banco queda igual. Devuelve los `id` nuevos.
+pub fn importar(carpeta: &Path, tema: &str, borrador: &Path) -> Result<Vec<String>, String> {
+    let examen: Examen = leer(&carpeta.join("examen.json"))?;
+    let archivo = carpeta.join("preguntas.json");
+    let mut banco: Vec<Pregunta> = leer(&archivo)?;
+    let texto = fs::read_to_string(borrador).map_err(|e| format!("{}: {e}", borrador.display()))?;
+    let pdfs: Vec<&String> = examen.pdfs.iter().filter(|(_, t)| t.iter().any(|t| t == tema)).map(|(p, _)| p).collect();
+    let [pdf] = pdfs[..] else {
+        return Err(format!("el tema {tema} tiene {} PDF en examen.json, y no 1", pdfs.len()));
+    };
+    let mut bloques: Vec<(&str, Vec<&str>)> = Vec::new();
+    for l in texto.lines().filter(|l| !l.trim().is_empty()) {
+        match (l.strip_prefix("## "), bloques.last_mut()) {
+            (Some(encabezado), _) => bloques.push((encabezado.trim(), Vec::new())),
+            (None, Some((_, lineas))) => lineas.push(l),
+            (None, None) => return Err(format!("una línea antes del primer «## »: {l}")),
+        }
+    }
+    let siguiente =
+        |prefijo: String| banco.iter().filter_map(|p| p.id.strip_prefix(&prefijo)?.parse::<u32>().ok()).max().unwrap_or(0);
+    let (mut normal, mut de_sigla) = (siguiente(format!("{tema}-")), siguiente(format!("{tema}-s")));
+    let mut nuevas = Vec::new();
+    for (encabezado, lineas) in &bloques {
+        let mut p = bloque(encabezado, lineas, pdf)?;
+        if banco.iter().any(|b| b.concepto == p.concepto) {
+            return Err(format!("el concepto {} ya está en el banco", p.concepto));
+        }
+        p.id = if sigla(&p.concepto) {
+            de_sigla += 1;
+            format!("{tema}-s{de_sigla:02}")
+        } else {
+            normal += 1;
+            format!("{tema}-{normal:03}")
+        };
+        p.tema = tema.into();
+        nuevas.push(p);
+    }
+    let ids = nuevas.iter().map(|p| p.id.clone()).collect();
+    banco.extend(nuevas);
+    let texto = serde_json::to_string_pretty(&banco).map_err(|e| e.to_string())? + "\n";
+    fs::write(&archivo, texto).map_err(|e| format!("{}: {e}", archivo.display()))?;
+    Ok(ids)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use nucleo::Fuente;
-    use std::collections::BTreeMap;
 
     /// Un PDF mínimo con `n` páginas, que poppler lee.
     fn pdf(archivo: &Path, n: u32) {
@@ -316,6 +466,7 @@ mod tests {
                 ("1_Legislacion.pdf".into(), vec!["rgpd".into(), "lssi".into()]),
                 ("2_Teoria.pdf".into(), vec!["ens".into()]),
             ]),
+            sin_pregunta: BTreeMap::new(),
         };
         (dir, examen)
     }
@@ -406,6 +557,115 @@ mod tests {
         let sigla = |id: &str| Pregunta { concepto: "sigla-rgpd".into(), ..pregunta(id) };
         assert!(comprobar(&[sigla("rgpd-001")], &examen, dir.path()).is_empty());
         un_error(&[sigla("rgpd-001"), sigla("rgpd-002")], "sigla-rgpd: 2 preguntas, y no 1");
+    }
+
+    #[test]
+    fn una_clave_que_no_esta_en_su_distractor_falla() {
+        let (dir, examen) = carpeta();
+        let con = |explicacion: &str| con_pareja(Pregunta { explicacion: explicacion.into(), ..pregunta("rgpd-001") });
+        assert!(comprobar(&con("✓ x\n✗ «24 HORAS»: a\n✗ «un mes»: b"), &examen, dir.path()).is_empty());
+        un_error(&con("✓ x\n✗ «24 horas»: a\n✗ «48 horas»: b"), "rgpd-001: la línea ✗ 2");
+        un_error(&con("✓ x\n✗ 24 horas: a"), "rgpd-001: la línea ✗ 1");
+    }
+
+    #[test]
+    fn una_linea_corta_o_un_matiz_repetido_en_el_tema_es_un_aviso() {
+        let con = |id: &str, tema: &str, e: &str| Pregunta { tema: tema.into(), explicacion: e.into(), ..pregunta(id) };
+        let buena = "✓ El responsable notifica la brecha en 72 horas desde que la conoce.\n✗ «24 horas»: el plazo es de 72";
+        assert!(explicaciones(&[con("a", "rgpd", buena), con("b", "lssi", buena)]).is_empty());
+        assert_eq!(explicaciones(&[con("a", "rgpd", "✓ Son 72 horas.")]), ["a: la línea ✓ tiene 3 palabras, menos de 8"]);
+        assert_eq!(
+            explicaciones(&[con("a", "rgpd", buena), con("b", "rgpd", buena)]),
+            ["b: la línea ✗ repite el matiz de a: el plazo es de 72"]
+        );
+    }
+
+    #[test]
+    fn una_pagina_sin_pregunta_ni_razon_o_con_las_dos_es_un_aviso() {
+        let (dir, mut examen) = carpeta();
+        let razones = BTreeMap::from([(1, "portada".into()), (2, "índice".into()), (5, "repetida".into())]);
+        examen.sin_pregunta = BTreeMap::from([("1_Legislacion.pdf".into(), razones)]);
+        let en = |id: &str, pagina| Pregunta { fuente: Fuente { pdf: "1_Legislacion.pdf".into(), pagina }, ..pregunta(id) };
+        assert_eq!(
+            paginas_sin_pregunta(&[en("a", 3), en("b", 5)], &examen, dir.path()),
+            [
+                "1_Legislacion.pdf: páginas sin pregunta y sin razón en sin_pregunta: 4",
+                "1_Legislacion.pdf: páginas con pregunta y con razón en sin_pregunta: 5"
+            ]
+        );
+    }
+
+    const BORRADOR: &str = "\
+## rgpd-brecha-plazo · p5
+¿En qué plazo notifica el responsable una brecha?
++ 72 horas
+✓ El RGPD da 72 horas desde que el responsable conoce la brecha.
+- «24 horas» desde la brecha | es el plazo de otra norma
+- «Un mes» | es el plazo de respuesta al interesado
+- «48 horas» | no es un plazo del RGPD
+
+## sigla-dpd · p2
+¿Qué significa DPD?
++ Delegado de Protección de Datos
+✓ El DPD es la persona que supervisa el cumplimiento del RGPD.
+- «Director» de Protección de Datos | x
+- «Defensor» del Público Digital | y
+- «Delegado de Política» Digital | z
+";
+
+    /// La carpeta con `examen.json`, un banco con `rgpd-007` y `rgpd-s02`, y el borrador dado.
+    fn para_importar(borrador: &str) -> tempfile::TempDir {
+        let (dir, mut examen) = carpeta();
+        examen.pdfs.insert("3_Otro.pdf".into(), vec!["lssi".into()]);
+        fs::write(dir.path().join("examen.json"), serde_json::to_string(&examen).unwrap()).unwrap();
+        let banco = [pregunta("rgpd-007"), Pregunta { concepto: "sigla-aepd".into(), ..pregunta("rgpd-s02") }];
+        fs::write(dir.path().join("preguntas.json"), serde_json::to_string(&banco).unwrap()).unwrap();
+        fs::write(dir.path().join("borrador.md"), borrador).unwrap();
+        dir
+    }
+
+    #[test]
+    fn importar_anade_cada_bloque_con_el_siguiente_id_libre() {
+        let dir = para_importar(&BORRADOR.replace("rgpd-brecha-plazo", "rgpd-brecha-nuevo"));
+        let ids = importar(dir.path(), "rgpd", &dir.path().join("borrador.md")).unwrap();
+        assert_eq!(ids, ["rgpd-008", "rgpd-s03"]);
+        let banco: Vec<serde_json::Value> = leer(&dir.path().join("preguntas.json")).unwrap();
+        assert_eq!(banco.len(), 4);
+        assert_eq!(
+            banco[2],
+            serde_json::json!({
+                "id": "rgpd-008",
+                "concepto": "rgpd-brecha-nuevo",
+                "tema": "rgpd",
+                "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 5 },
+                "pregunta": "¿En qué plazo notifica el responsable una brecha?",
+                "correcta": "72 horas",
+                "distractores": ["24 horas desde la brecha", "Un mes", "48 horas"],
+                "explicacion": "✓ El RGPD da 72 horas desde que el responsable conoce la brecha.\n✗ «24 horas»: es el plazo de otra norma\n✗ «Un mes»: es el plazo de respuesta al interesado\n✗ «48 horas»: no es un plazo del RGPD"
+            })
+        );
+    }
+
+    #[test]
+    fn importar_falla_sin_tocar_el_banco() {
+        let nuevo = BORRADOR.replace("rgpd-brecha-plazo", "rgpd-brecha-nuevo");
+        let casos = [
+            (BORRADOR.to_string(), "rgpd", "el concepto rgpd-brecha-plazo ya está en el banco"),
+            (nuevo.replace("- «Un mes» |", "- Un mes |"), "rgpd", "rgpd-brecha-nuevo · p5: el distractor no marca"),
+            (nuevo.replace("- «Un mes» |", "- «Un mes»"), "rgpd", "rgpd-brecha-nuevo · p5: el distractor no tiene un"),
+            (nuevo.replace("| x", "| x | y"), "rgpd", "sigla-dpd · p2: el distractor no tiene un"),
+            (nuevo.replace("✓ El DPD", "El DPD"), "rgpd", "sigla-dpd · p2: el bloque no tiene una línea ✓"),
+            (nuevo.replace(" · p5", ""), "rgpd", "rgpd-brecha-nuevo: el encabezado no es"),
+            (nuevo.clone(), "lssi", "el tema lssi tiene 2 PDF en examen.json, y no 1"),
+            (nuevo.clone(), "nada", "el tema nada tiene 0 PDF"),
+        ];
+        for (borrador, tema, error) in casos {
+            let dir = para_importar(&borrador);
+            let antes = fs::read_to_string(dir.path().join("preguntas.json")).unwrap();
+            let e = importar(dir.path(), tema, &dir.path().join("borrador.md")).unwrap_err();
+            assert!(e.contains(error), "{e}");
+            assert_eq!(fs::read_to_string(dir.path().join("preguntas.json")).unwrap(), antes);
+        }
     }
 
     #[test]

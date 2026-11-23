@@ -21,6 +21,9 @@ pub struct Examen {
     pub penalizacion: f64,
     /// Los temas de cada PDF de `pdfs/`.
     pub pdfs: std::collections::BTreeMap<String, Vec<String>>,
+    /// Para cada PDF, las páginas sin pregunta y la razón de cada una. `banco comprobar` las lee.
+    #[serde(default)]
+    pub sin_pregunta: std::collections::BTreeMap<String, std::collections::BTreeMap<u32, String>>,
 }
 
 /// Un examen de la lista de la raíz, que abre `/<carpeta>/`.
@@ -665,6 +668,7 @@ mod tests {
         minutos: 25,
         penalizacion: 0.25,
         pdfs: std::collections::BTreeMap::new(),
+        sin_pregunta: std::collections::BTreeMap::new(),
     };
 
     /// Un banco de `n` conceptos `c0`, `c1`…, con una pregunta `q0`, `q1`… cada uno.
