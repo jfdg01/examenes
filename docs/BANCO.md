@@ -70,6 +70,32 @@ Un aviso de una pista o de una explicación lo juzga el revisor: un absoluto que
 
 Un tema acaba cuando `banco comprobar` no da ningún aviso de página de su PDF.
 
+## El borrador
+
+El agente creador escribe las preguntas en un borrador en Markdown, y no en el JSON. `banco importar` añade las preguntas del borrador al final de `preguntas.json`:
+
+```bash
+cargo run --manifest-path app/Cargo.toml -p banco -- importar asn ciclo-de-vida borrador.md
+```
+
+El borrador tiene un bloque por pregunta:
+
+```
+## ciclo-de-vida-defensa-en-profundidad · p3
+¿Qué significa aplicar defensa en profundidad?
++ Aplicar medidas de seguridad en todo el ciclo
+✓ La defensa en profundidad pone controles en cada fase del ciclo, y no en un solo punto.
+- «Un solo control robusto» en el perímetro | una sola barrera es un único punto de fallo
+- «Auditar la seguridad una vez» | la seguridad cubre todo el ciclo
+```
+
+- El encabezado da el `concepto` y la página de la `fuente`. El PDF de la `fuente` es el PDF del tema en `examen.json`. Un tema con varios PDF da un error.
+- La línea sin marca es el enunciado, y la línea `+` es la correcta.
+- La línea `✓` es obligatoria, y es la primera línea de la `explicacion`.
+- Una línea `-` es un distractor, con su clave entre `«»` y su matiz después de un solo `|`. `importar` quita las comillas del distractor y escribe la línea `✗ «clave»: matiz`. Un distractor sin `«»`, o con un `|` que falta o que sobra, da un error.
+- Cada pregunta recibe el siguiente `id` libre del tema: `ciclo-de-vida-127`. Un concepto de sigla recibe la forma `ciclo-de-vida-s15`.
+- `importar` solo añade preguntas. Un concepto del borrador que ya está en el banco da un error, y el banco queda igual. Una edición de una pregunta del banco se hace a mano en el JSON.
+
 ## El flujo de trabajo
 
 1. El agente creador escribe una tanda de 10 preguntas en el borrador.
