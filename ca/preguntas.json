@@ -1,0 +1,418 @@
+[
+  {
+    "id": "bloques-001",
+    "concepto": "bloques-modos-necesidad",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 11
+    },
+    "pregunta": "En un cifrado por bloques, ¿por qué hace falta un modo de operación?",
+    "correcta": "El mensaje suele ser más largo que un bloque, y hay que trocearlo",
+    "distractores": [
+      "La clave suele ser más larga que un bloque, y hay que trocearla",
+      "El bloque cifrado sale más largo que el bloque claro, y hay que recortarlo"
+    ],
+    "explicacion": "✓ El algoritmo cifra un solo bloque. El modo dice cómo rellenar, trocear, cifrar y ensamblar un mensaje más largo.\n✗ «clave»: la clave tiene un tamaño fijo para el algoritmo, y no se trocea.\n✗ «bloque cifrado sale más largo»: un cifrado por bloques da un bloque cifrado del mismo tamaño que el claro."
+  },
+  {
+    "id": "bloques-002",
+    "concepto": "bloques-modos-necesidad",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 11
+    },
+    "pregunta": "Un mensaje de 70 bytes se cifra con un algoritmo de bloques de 16 bytes. ¿Qué pasos aplica el modo de operación?",
+    "correcta": "Rellenar, trocear, cifrar cada bloque y ensamblar el resultado",
+    "distractores": [
+      "Trocear, cifrar cada bloque y descartar los 6 bytes que sobran",
+      "Comprimir el mensaje hasta 16 bytes y cifrar un solo bloque"
+    ],
+    "explicacion": "✓ 70 bytes no llenan 5 bloques de 16. El modo rellena hasta 80 bytes (padding), trocea, cifra y ensambla.\n✗ «descartar»: descartar bytes pierde parte del mensaje. Los bytes que faltan se rellenan.\n✗ «comprimir»: un modo de operación no comprime: trocea el mensaje en tantos bloques como haga falta."
+  },
+  {
+    "id": "bloques-003",
+    "concepto": "bloques-modos-necesidad",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 11
+    },
+    "pregunta": "Para cifrar un mensaje de varios bloques, ¿qué decide el modo de operación?",
+    "correcta": "Cómo se relaciona cada bloque con los demás al cifrarlo",
+    "distractores": [
+      "Qué S-caja usa el algoritmo para sustituir cada bloque",
+      "Cuántas rondas aplica el algoritmo a cada bloque"
+    ],
+    "explicacion": "✓ El algoritmo (AES, DES) cifra un bloque. El modo decide si cada bloque va solo (ECB), encadenado (CBC, CFB) o con una secuencia aparte (OFB, CTR).\n✗ «S-caja»: la S-caja es parte del algoritmo, y es la misma con cualquier modo.\n✗ «rondas»: las rondas son del algoritmo, y no cambian con el modo."
+  },
+  {
+    "id": "bloques-004",
+    "concepto": "bloques-ecb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 11
+    },
+    "pregunta": "En el modo ECB, ¿cómo se cifra cada bloque del mensaje?",
+    "correcta": "Por separado, con la misma clave y sin depender de otros bloques",
+    "distractores": [
+      "Combinado mediante XOR con el bloque cifrado anterior",
+      "Combinado mediante XOR con el cifrado de un contador que cambia en cada bloque"
+    ],
+    "explicacion": "✓ ECB es el modo más simple: Cᵢ = E_K(Pᵢ). Ningún bloque depende de otro.\n✗ «bloque cifrado anterior»: combinar con el bloque cifrado anterior es CBC.\n✗ «contador»: cifrar un contador y combinarlo con el mensaje es CTR."
+  },
+  {
+    "id": "bloques-005",
+    "concepto": "bloques-ecb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 12
+    },
+    "pregunta": "Se cifra en ECB una imagen con grandes zonas de un solo color. ¿Qué se ve en la imagen cifrada?",
+    "correcta": "Las formas de la imagen, porque bloques iguales dan cifrados iguales",
+    "distractores": [
+      "Ruido uniforme, porque cada bloque cifrado parece aleatorio",
+      "El contorno, porque cada error se propaga al bloque siguiente y lo borra"
+    ],
+    "explicacion": "✓ En ECB, dos bloques claros iguales dan siempre el mismo bloque cifrado. Una zona de un color da un patrón repetido, y la forma se sigue viendo. Los patrones quedan preservados.\n✗ «ruido uniforme»: cada bloque suelto parece aleatorio, pero los bloques iguales se repiten, y eso dibuja la imagen.\n✗ «se propaga»: en ECB nada se propaga: cada bloque se cifra por separado."
+  },
+  {
+    "id": "bloques-006",
+    "concepto": "bloques-ecb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 11
+    },
+    "pregunta": "Un atacante intercepta un mensaje cifrado en ECB sin conocer la clave. ¿Qué manipulación hace, de forma que cada bloque se siga descifrando bien?",
+    "correcta": "Eliminar, permutar o duplicar bloques enteros del criptograma",
+    "distractores": [
+      "Cambiar un bit del texto claro al cambiar ese bit del criptograma",
+      "Descifrar los bloques que aparecen repetidos en el criptograma"
+    ],
+    "explicacion": "✓ Cada bloque cifrado en ECB es válido por sí solo. Quitar, reordenar o repetir bloques da un mensaje que se descifra sin errores.\n✗ «cambiar un bit»: eso pasa en OFB y CTR. En ECB, un bit cambiado estropea el bloque entero al descifrar.\n✗ «descifrar»: el atacante ve qué bloques se repiten, pero sin la clave no sabe qué dicen."
+  },
+  {
+    "id": "bloques-007",
+    "concepto": "bloques-cbc",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 13
+    },
+    "pregunta": "En el modo CBC, ¿con qué se combina cada bloque claro antes de cifrarlo?",
+    "correcta": "Con el bloque cifrado anterior, mediante XOR",
+    "distractores": [
+      "Con el bloque claro anterior, mediante XOR",
+      "Con un contador que aumenta en cada bloque, mediante XOR"
+    ],
+    "explicacion": "✓ CBC: Cᵢ = E_K(Pᵢ ⊕ Cᵢ₋₁). Cada bloque cifrado arrastra a todos los anteriores.\n✗ «bloque claro anterior»: CBC usa el bloque ya cifrado, no el claro.\n✗ «contador»: un contador es la entrada de CTR, y CTR lo cifra en vez de combinarlo con el bloque claro."
+  },
+  {
+    "id": "bloques-008",
+    "concepto": "bloques-cbc",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 13
+    },
+    "pregunta": "Dos mensajes cifrados en CBC con la misma clave empiezan por el mismo bloque claro, pero usan vectores de inicialización distintos. ¿Cómo salen sus primeros bloques cifrados?",
+    "correcta": "Distintos, porque el vector cambia la entrada del cifrado",
+    "distractores": [
+      "Iguales, porque el bloque claro y la clave coinciden",
+      "Iguales, y el vector cambia los bloques cifrados posteriores"
+    ],
+    "explicacion": "✓ El primer bloque no tiene bloque cifrado anterior, así que CBC usa el vector de inicialización: C₁ = E_K(P₁ ⊕ IV). Con otro vector, la entrada cambia, y el cifrado también.\n✗ «bloque claro y la clave»: eso vale para ECB. En CBC la entrada es P₁ ⊕ IV, no P₁.\n✗ «bloques cifrados posteriores»: el vector entra ya en el primer bloque, y desde ahí cambia todo."
+  },
+  {
+    "id": "bloques-009",
+    "concepto": "bloques-cbc",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 13
+    },
+    "pregunta": "¿Qué propiedad del modo CBC permite usarlo para verificar la integridad de un mensaje?",
+    "correcta": "Cada bloque cifrado depende de todos los bloques claros anteriores",
+    "distractores": [
+      "Cada bloque cifrado depende de su propio bloque claro y de nada más",
+      "Cada bloque cifrado depende del vector y de su posición en el mensaje"
+    ],
+    "explicacion": "✓ Por el encadenamiento, el último bloque cifrado depende del mensaje entero. Un cambio en cualquier bloque lo cambia, y sirve como MAC.\n✗ «su propio bloque claro»: eso es ECB, que no detecta un bloque eliminado o permutado.\n✗ «vector y de su posición»: eso describe la secuencia de CTR, que no depende del mensaje."
+  },
+  {
+    "id": "bloques-010",
+    "concepto": "bloques-cfb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 14
+    },
+    "pregunta": "En el modo CFB, ¿en qué orden se procesa cada bloque?",
+    "correcta": "Cifra el bloque cifrado anterior, y combina el resultado con el bloque claro",
+    "distractores": [
+      "Combina el bloque claro con el bloque cifrado anterior, y cifra el resultado",
+      "Cifra un contador, y combina el resultado con el bloque claro"
+    ],
+    "explicacion": "✓ CFB: Cᵢ = Pᵢ ⊕ E_K(Cᵢ₋₁). Primero cifra, y después combina mediante XOR.\n✗ «combina el bloque claro»: combinar primero y cifrar después es CBC.\n✗ «contador»: cifrar un contador es CTR."
+  },
+  {
+    "id": "bloques-011",
+    "concepto": "bloques-cfb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 14
+    },
+    "pregunta": "Un receptor descifra un mensaje en CFB con un algoritmo de bloques. ¿Qué función del algoritmo usa?",
+    "correcta": "La de cifrado, la misma que usa el emisor",
+    "distractores": [
+      "La de descifrado, la inversa de la del emisor",
+      "Las dos, una para la secuencia y otra para el bloque"
+    ],
+    "explicacion": "✓ El receptor calcula E_K(Cᵢ₋₁), igual que el emisor, y hace Pᵢ = Cᵢ ⊕ E_K(Cᵢ₋₁). CFB usa la función de cifrado para cifrar y para descifrar.\n✗ «de descifrado»: el bloque claro nunca pasa por el algoritmo, así que no hace falta invertirlo.\n✗ «las dos»: con el XOR basta: la función de descifrado no se usa nunca."
+  },
+  {
+    "id": "bloques-012",
+    "concepto": "bloques-cfb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 14
+    },
+    "pregunta": "Un terminal manda cada pulsación de teclado, de un byte, cifrada con un algoritmo de bloques de 16 bytes. ¿Qué modo manda cada byte sin esperar a llenar un bloque?",
+    "correcta": "CFB, que combina cada paquete con una parte del cifrado",
+    "distractores": [
+      "CBC, que encadena cada paquete con el bloque cifrado anterior",
+      "ECB, que cifra cada paquete como un bloque propio"
+    ],
+    "explicacion": "✓ CFB permite mandar el mensaje en paquetes más pequeños que el bloque: cifra el criptograma anterior y usa solo los bits que necesita para el XOR.\n✗ «CBC»: CBC cifra el bloque claro entero, así que necesita los 16 bytes.\n✗ «ECB»: ECB también cifra bloques enteros: cada byte iría rellenado hasta 16."
+  },
+  {
+    "id": "bloques-013",
+    "concepto": "bloques-ofb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 15
+    },
+    "pregunta": "En el modo OFB, ¿de qué depende la secuencia que se combina con el mensaje?",
+    "correcta": "De la clave y del vector de inicialización",
+    "distractores": [
+      "De la clave y del bloque cifrado anterior",
+      "De la clave y del bloque claro anterior"
+    ],
+    "explicacion": "✓ OFB: Oᵢ = E_K(Oᵢ₋₁), con O₀ = IV. La secuencia se genera de forma independiente al mensaje.\n✗ «bloque cifrado anterior»: usar el bloque cifrado anterior es CFB.\n✗ «bloque claro anterior»: ningún modo del temario mete el bloque claro anterior en la secuencia."
+  },
+  {
+    "id": "bloques-014",
+    "concepto": "bloques-ofb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 15
+    },
+    "pregunta": "Un emisor en OFB conoce la clave y el vector de inicialización antes de tener el mensaje. ¿Qué puede hacer por adelantado?",
+    "correcta": "Calcular la secuencia entera, y guardarla para el XOR",
+    "distractores": [
+      "Cifrar el primer bloque, y esperar al resto del mensaje",
+      "Nada, porque cada bloque de secuencia necesita el mensaje"
+    ],
+    "explicacion": "✓ La secuencia de OFB no depende del mensaje, así que se precalcula. Al llegar el mensaje solo queda el XOR.\n✗ «primer bloque»: sin el mensaje no hay primer bloque, pero la secuencia sí se calcula entera.\n✗ «necesita el mensaje»: eso pasa en CFB, que usa el criptograma anterior."
+  },
+  {
+    "id": "bloques-015",
+    "concepto": "bloques-ofb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 15
+    },
+    "pregunta": "Al combinar mediante XOR la secuencia del modo OFB con el mensaje, ¿qué tipo de cifrado resulta?",
+    "correcta": "Un cifrado de flujo",
+    "distractores": [
+      "Un cifrado de bloques encadenado",
+      "Una función MAC"
+    ],
+    "explicacion": "✓ OFB convierte un cifrado por bloques en un generador de secuencia. Combinado con el mensaje mediante XOR, es un cifrado de flujo.\n✗ «encadenado»: en OFB los bloques claros no se encadenan: el mensaje solo entra en el XOR.\n✗ «MAC»: una MAC verifica la integridad, y OFB no la verifica. CBC sí permite hacerlo."
+  },
+  {
+    "id": "bloques-016",
+    "concepto": "bloques-ctr",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 16
+    },
+    "pregunta": "En el modo CTR, ¿qué entra al cifrado para generar cada bloque de secuencia?",
+    "correcta": "Un contador, que cambia en cada bloque",
+    "distractores": [
+      "El bloque de secuencia anterior, ya cifrado",
+      "El bloque cifrado anterior"
+    ],
+    "explicacion": "✓ CTR: Oᵢ = E_K(nonce ‖ i). En lugar del bloque anterior, incorpora un contador.\n✗ «secuencia anterior»: cifrar el bloque de secuencia anterior es OFB.\n✗ «cifrado anterior»: cifrar el bloque cifrado anterior es CFB."
+  },
+  {
+    "id": "bloques-017",
+    "concepto": "bloques-ctr",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 16
+    },
+    "pregunta": "Un servidor de 8 núcleos cifra un archivo grande con un algoritmo de bloques. ¿Qué modo le deja calcular la secuencia en los 8 núcleos a la vez?",
+    "correcta": "CTR, porque cada bloque de secuencia depende solo de su contador",
+    "distractores": [
+      "OFB, porque la secuencia no depende del mensaje",
+      "CFB, porque usa solo la función de cifrado"
+    ],
+    "explicacion": "✓ CTR genera los bloques de la secuencia de forma independiente, o en paralelo: cada núcleo cifra sus contadores.\n✗ «OFB»: es cierto que la secuencia de OFB no depende del mensaje, pero cada bloque depende del anterior, y va en serie.\n✗ «CFB»: cada bloque de CFB necesita el criptograma anterior, así que va en serie."
+  },
+  {
+    "id": "bloques-018",
+    "concepto": "bloques-ctr",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 16
+    },
+    "pregunta": "Un usuario quiere descifrar solo el bloque 1000 de un archivo cifrado en CTR. ¿Qué tiene que calcular?",
+    "correcta": "El cifrado del contador 1000, y nada más",
+    "distractores": [
+      "Los 999 bloques de secuencia anteriores",
+      "Los 999 bloques claros anteriores"
+    ],
+    "explicacion": "✓ En CTR, P₁₀₀₀ = C₁₀₀₀ ⊕ E_K(nonce ‖ 1000). Es la ventaja de CTR sobre OFB para un generador: acceso directo a cualquier bloque.\n✗ «secuencia anteriores»: eso pasa en OFB, donde cada bloque de secuencia sale del anterior.\n✗ «bloques claros»: en CTR el texto claro no entra en la secuencia."
+  },
+  {
+    "id": "flujo-001",
+    "concepto": "flujo-modos-sincronia",
+    "tema": "flujo",
+    "fuente": {
+      "pdf": "3.1.Cifrados_Flujo_p.pdf",
+      "pagina": 11
+    },
+    "pregunta": "Como generador de secuencia, ¿qué tipo de generador produce el modo CFB?",
+    "correcta": "Asíncrono, porque la secuencia usa el criptograma anterior",
+    "distractores": [
+      "Síncrono, porque la secuencia usa el criptograma anterior",
+      "Síncrono, porque la secuencia depende de la clave y de nada más"
+    ],
+    "explicacion": "✓ Un generador asíncrono usa, además de la semilla, bits anteriores del mensaje cifrado. CFB cifra el criptograma anterior, así que es asíncrono. OFB y CTR son síncronos.\n✗ «Síncrono, porque la secuencia usa el criptograma»: usar el criptograma es justo lo que define al asíncrono.\n✗ «depende de la clave y de nada más»: eso describe a OFB y CTR, no a CFB."
+  },
+  {
+    "id": "flujo-002",
+    "concepto": "flujo-modos-sincronia",
+    "tema": "flujo",
+    "fuente": {
+      "pdf": "3.1.Cifrados_Flujo_p.pdf",
+      "pagina": 12
+    },
+    "pregunta": "En una transmisión cifrada en OFB se pierde un bit por el camino. ¿Qué le pasa al resto del mensaje descifrado?",
+    "correcta": "Se corrompe, porque emisor y receptor pierden la sincronización",
+    "distractores": [
+      "Se recupera tras unos bits, porque la secuencia usa el criptograma",
+      "Falla un bit, porque cada bit se combina por separado"
+    ],
+    "explicacion": "✓ OFB es síncrono: el receptor aplica cada bit de secuencia a una posición. Si se pierde un bit, todo lo demás queda desplazado y se corrompe.\n✗ «se recupera»: resincronizarse con el criptograma es propio de CFB, el asíncrono.\n✗ «falla un bit»: eso pasa si un bit cambia de valor, no si se pierde: una pérdida desplaza todo lo que viene detrás."
+  },
+  {
+    "id": "flujo-003",
+    "concepto": "flujo-modos-sincronia",
+    "tema": "flujo",
+    "fuente": {
+      "pdf": "3.1.Cifrados_Flujo_p.pdf",
+      "pagina": 11
+    },
+    "pregunta": "En una transmisión cifrada en CFB se pierde un bloque por el camino. ¿Qué le pasa al resto del mensaje descifrado?",
+    "correcta": "Falla el bloque siguiente, y después se resincroniza con el criptograma",
+    "distractores": [
+      "Se corrompe entero, porque emisor y receptor pierden la sincronización",
+      "Sale bien, porque cada bloque se descifra de forma independiente"
+    ],
+    "explicacion": "✓ CFB es asíncrono: la secuencia sale del criptograma recibido. El bloque siguiente usa un criptograma equivocado, y luego todo vuelve a cuadrar. Es resistente a pérdidas e inserciones.\n✗ «se corrompe entero»: eso le pasa a un generador síncrono, como OFB o CTR.\n✗ «de forma independiente»: en CFB cada bloque depende del criptograma anterior, así que el siguiente falla."
+  },
+  {
+    "id": "bloques-019",
+    "concepto": "sigla-ecb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué significa la sigla ECB en los modos de operación?",
+    "correcta": "Electronic Codebook",
+    "distractores": [
+      "Encrypted Cipher Block",
+      "Extended Chained Block"
+    ],
+    "explicacion": "✓ ECB es Electronic Codebook: un libro de códigos, donde cada bloque claro tiene siempre el mismo cifrado.\n✗ «Encrypted Cipher Block»: no es su desarrollo.\n✗ «Extended Chained Block»: no es su desarrollo."
+  },
+  {
+    "id": "bloques-020",
+    "concepto": "sigla-cbc",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 13
+    },
+    "pregunta": "¿Qué significa la sigla CBC en los modos de operación?",
+    "correcta": "Cipher Block Chaining",
+    "distractores": [
+      "Cipher Block Counter",
+      "Chained Block Cipher"
+    ],
+    "explicacion": "✓ CBC es Cipher Block Chaining: encadena cada bloque con el cifrado anterior.\n✗ «Cipher Block Counter»: no es su desarrollo.\n✗ «Chained Block Cipher»: no es su desarrollo."
+  },
+  {
+    "id": "bloques-021",
+    "concepto": "sigla-cfb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué significa la sigla CFB en los modos de operación?",
+    "correcta": "Cipher Feedback",
+    "distractores": [
+      "Cipher Forward Block",
+      "Chained Feedback Block"
+    ],
+    "explicacion": "✓ CFB es Cipher Feedback: el criptograma se realimenta como entrada del cifrado.\n✗ «Cipher Forward Block»: no es su desarrollo.\n✗ «Chained Feedback Block»: no es su desarrollo."
+  },
+  {
+    "id": "bloques-022",
+    "concepto": "sigla-ofb",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué significa la sigla OFB en los modos de operación?",
+    "correcta": "Output Feedback",
+    "distractores": [
+      "Output Forward Block",
+      "Offset Feedback Block"
+    ],
+    "explicacion": "✓ OFB es Output Feedback: la salida del cifrado se realimenta como entrada.\n✗ «Output Forward Block»: no es su desarrollo.\n✗ «Offset Feedback Block»: no es su desarrollo."
+  },
+  {
+    "id": "bloques-023",
+    "concepto": "sigla-ctr",
+    "tema": "bloques",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 16
+    },
+    "pregunta": "¿Qué significa la sigla CTR en los modos de operación?",
+    "correcta": "Counter",
+    "distractores": [
+      "Cipher Text Reuse",
+      "Chained Text Register"
+    ],
+    "explicacion": "✓ CTR es Counter: el cifrado recibe un contador.\n✗ «Cipher Text Reuse»: no es su desarrollo.\n✗ «Chained Text Register»: no es su desarrollo."
+  }
+]

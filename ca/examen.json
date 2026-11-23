@@ -1,0 +1,11 @@
+{
+  "titulo": "CA",
+  "preguntas": 26,
+  "opciones": 3,
+  "minutos": 30,
+  "penalizacion": 0.3333333333333333,
+  "pdfs": {
+    "2.1.Cifrados_Bloques_p.pdf": ["bloques"],
+    "3.1.Cifrados_Flujo_p.pdf": ["flujo"]
+  }
+}
