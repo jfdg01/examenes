@@ -56,6 +56,10 @@ cargo run --manifest-path app/Cargo.toml -p banco -- comprobar ps
 
 Un aviso de una pista lo juzga el revisor: un absoluto que no delata al distractor se queda.
 
+## Flujo de trabajo
+
+Para el agente creador: solamente se introduciran tandas de 10 preguntas en el archivo. El mismo agente las revisa si son correctas y se pasa a la siguiente tanda hasta que no se indentifiquen conceptos relevantes.
+
 ## La revisión
 
 Una revisión de agentes que no escribieron las preguntas compara cada pregunta con su página y con las reglas. Cada revisor comprueba también que la `fuente` es la página que explica la idea. Los revisores no cambian `preguntas.json`: cada uno da un informe en JSON, con una lista de fallos.
