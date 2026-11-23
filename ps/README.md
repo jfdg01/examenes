@@ -1,6 +1,6 @@
 # PS: Protocolos de Seguridad
 
-El examen es el lunes 23 de noviembre de 2026, a las 16:30. Tiene 2 partes: un test, seguramente de verdadero o falso, y preguntas cortas. El test de práctica entrena las ideas de las 2 partes con 3 opciones por pregunta y una sola correcta. Un fallo resta 1/3 de un acierto, y una pregunta en blanco no cuenta.
+El examen es el lunes 30 de noviembre de 2026. Tiene 2 partes: un test, seguramente de verdadero o falso, y preguntas cortas. El test de práctica entrena las ideas de las 2 partes con 3 opciones por pregunta y una sola correcta. Un fallo resta 1/3 de un acierto, y una pregunta en blanco no cuenta.
 
 El número de preguntas y la duración faltan. El simulacro usa 20 preguntas y 25 minutos, cifras provisionales de `examen.json`.
 
@@ -32,7 +32,7 @@ Las fechas y los números de RFC no entran en el examen. El resto del temario s�
 
 ## El banco
 
-El banco tiene 662 preguntas: 3 por cada idea de los 5 PDFs, y 1 por cada sigla de seguridad. Una idea que sale en 2 PDFs tiene un solo concepto.
+El banco tiene 752 preguntas: 3 por cada idea de los 5 PDFs, y 1 por cada sigla de seguridad. Una idea que sale en 2 PDFs tiene un solo concepto.
 
 La interfaz está en https://3090.taila51846.ts.net:8601/ps/, en el servidor de `app/`. El servidor sirve todos los exámenes, y la raíz lista cada uno.
 
