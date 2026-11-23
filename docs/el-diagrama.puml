@@ -18,6 +18,7 @@ package nucleo {
     +minutos: u32
     +penalizacion: f64
     +pdfs: pdf → temas
+    +sin_pregunta: pdf → página → razón
   }
   class Pregunta <<preguntas.json, tsify>> {
     +id: String
@@ -256,6 +257,9 @@ package banco {
     +informe(carpeta): bool, sin errores; escribe los errores y los avisos
     +comprobar(preguntas, examen, carpeta): errores
     +pistas(preguntas): avisos de la regla 6
+    +explicaciones(preguntas): avisos de las líneas ✓ y ✗
+    +paginas_sin_pregunta(preguntas, examen, carpeta): avisos de página
+    +importar(carpeta, tema, borrador): añade a preguntas.json, da los id nuevos
     +huerfanas(preguntas, historial): id fuera del banco
     +sacar(carpeta): paginas/<pdf>-<página>.webp a 80 ppp y calidad 60
     +paginas(pdf): u32, de pdfinfo
@@ -266,6 +270,7 @@ package banco {
     banco comprobar <carpeta>
     banco paginas <carpeta>
     banco revision <carpeta> <informe>...
+    banco importar <carpeta> <tema> <borrador>
   }
 }
 
