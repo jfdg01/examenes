@@ -40,7 +40,7 @@ Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002) y la guí
 
 Una pregunta que pasa a preguntar otra idea lleva un `id` nuevo. Una pregunta que cambia de forma o de distractores conserva su `id`, como en una edición a mano del JSON.
 
-El `README.md` de cada examen dice lo que el profesor marcó como importante. Esas ideas tienen su concepto.
+El `README.md` de cada examen dice lo que el profesor marcó como importante. Esas ideas tienen su concepto. Una idea marcada que ningún PDF trae cita la página que más se acerca, y su correcta es cierta según el `README.md`.
 
 ## El comprobador
 
