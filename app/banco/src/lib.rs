@@ -159,7 +159,7 @@ pub fn informe(carpeta: &Path) -> Result<bool, String> {
     Ok(errores.is_empty())
 }
 
-/// Saca `paginas/<pdf sin .pdf>-<página>.png`, a 80 ppp, de cada página de los PDFs de `pdfs/`.
+/// Saca `paginas/<pdf sin .pdf>-<página>.webp`, a 80 ppp y calidad 60, de cada página de los PDFs de `pdfs/`.
 /// Una imagen que ya existe se queda.
 pub fn sacar(carpeta: &Path) -> Result<(), String> {
     let destino = carpeta.join("paginas");
@@ -172,7 +172,7 @@ pub fn sacar(carpeta: &Path) -> Result<(), String> {
         let base = pdf.file_stem().unwrap().to_string_lossy();
         for pagina in 1..=paginas(&pdf)? {
             let nombre = destino.join(format!("{base}-{pagina}"));
-            if nombre.with_added_extension("png").exists() {
+            if nombre.with_added_extension("webp").exists() {
                 continue;
             }
             let n = pagina.to_string();
@@ -184,6 +184,18 @@ pub fn sacar(carpeta: &Path) -> Result<(), String> {
                 .map_err(|e| format!("pdftoppm: {e}"))?;
             if !estado.success() {
                 return Err(format!("pdftoppm falla en la página {pagina} de {}", pdf.display()));
+            }
+            let png = nombre.with_added_extension("png");
+            let estado = Command::new("ffmpeg")
+                .args(["-v", "error", "-y", "-i"])
+                .arg(&png)
+                .args(["-c:v", "libwebp", "-quality", "60"])
+                .arg(nombre.with_added_extension("webp"))
+                .status()
+                .map_err(|e| format!("ffmpeg: {e}"))?;
+            fs::remove_file(&png).map_err(|e| format!("{}: {e}", png.display()))?;
+            if !estado.success() {
+                return Err(format!("ffmpeg falla en la página {pagina} de {}", pdf.display()));
             }
         }
     }
@@ -437,7 +449,7 @@ mod tests {
         pdf(&dir.path().join("pdfs/2 _Teoría.pdf"), 2);
         let paginas = dir.path().join("paginas");
         fs::create_dir(&paginas).unwrap();
-        fs::write(paginas.join("1_Legislacion-1.png"), "ya estaba").unwrap();
+        fs::write(paginas.join("1_Legislacion-1.webp"), "ya estaba").unwrap();
         sacar(dir.path()).unwrap();
         let mut nombres: Vec<String> =
             fs::read_dir(&paginas).unwrap().map(|e| e.unwrap().file_name().into_string().unwrap()).collect();
@@ -445,19 +457,19 @@ mod tests {
         assert_eq!(
             nombres,
             [
-                "1_Legislacion-1.png",
-                "1_Legislacion-2.png",
-                "1_Legislacion-3.png",
-                "1_Legislacion-4.png",
-                "1_Legislacion-5.png",
-                "2 _Teoría-1.png",
-                "2 _Teoría-2.png"
+                "1_Legislacion-1.webp",
+                "1_Legislacion-2.webp",
+                "1_Legislacion-3.webp",
+                "1_Legislacion-4.webp",
+                "1_Legislacion-5.webp",
+                "2 _Teoría-1.webp",
+                "2 _Teoría-2.webp"
             ]
         );
-        assert_eq!(fs::read_to_string(paginas.join("1_Legislacion-1.png")).unwrap(), "ya estaba");
-        // 100 puntos a 80 ppp son 112 píxeles: el ancho va en los bytes 16 a 19 del PNG.
-        let png = fs::read(paginas.join("1_Legislacion-2.png")).unwrap();
-        assert_eq!(u32::from_be_bytes(png[16..20].try_into().unwrap()), 112);
+        assert_eq!(fs::read_to_string(paginas.join("1_Legislacion-1.webp")).unwrap(), "ya estaba");
+        // 100 puntos a 80 ppp son 112 píxeles: el ancho va en los bytes 26 y 27 del WebP con pérdida.
+        let webp = fs::read(paginas.join("1_Legislacion-2.webp")).unwrap();
+        assert_eq!(u16::from_le_bytes(webp[26..28].try_into().unwrap()) & 0x3fff, 112);
     }
 
     #[test]

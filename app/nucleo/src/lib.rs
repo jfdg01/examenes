@@ -323,7 +323,7 @@ fn de_la_ronda(q: &Pregunta, estado: &std::collections::HashMap<&str, (Concepto,
         paso_tras_otra: paso.tras(false, false).to_string(),
         fuente: format!("{} · pág. {}", q.fuente.pdf, q.fuente.pagina),
         pagina: q.fuente.pagina,
-        imagen: format!("paginas/{}-{}.png", q.fuente.pdf.strip_suffix(".pdf").unwrap_or(&q.fuente.pdf), q.fuente.pagina),
+        imagen: format!("paginas/{}-{}.webp", q.fuente.pdf.strip_suffix(".pdf").unwrap_or(&q.fuente.pdf), q.fuente.pagina),
         pdf: format!("pdfs/{}#page={}", q.fuente.pdf, q.fuente.pagina),
     }
 }
@@ -902,7 +902,7 @@ mod tests {
         let q = sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(1)).remove(0);
         assert_eq!(q.fuente, "2A _Teoría.pdf · pág. 7");
         assert_eq!(q.pagina, 7);
-        assert_eq!(q.imagen, "paginas/2A _Teoría-7.png");
+        assert_eq!(q.imagen, "paginas/2A _Teoría-7.webp");
         assert_eq!(q.pdf, "pdfs/2A _Teoría.pdf#page=7");
     }
 

@@ -42,7 +42,7 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
         .route("/{examen}/api/ronda", get(leer_ronda).put(guardar_ronda))
         .route(
             "/{examen}/paginas/{archivo}",
-            get(|e, Path((examen, archivo))| servir(e, examen, "paginas", archivo, "image/png")),
+            get(|e, Path((examen, archivo))| servir(e, examen, "paginas", archivo, "image/webp")),
         )
         .route(
             "/{examen}/pdfs/{archivo}",
