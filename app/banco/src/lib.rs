@@ -47,8 +47,11 @@ pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec
         if p.distractores.contains(&p.correcta) {
             errores.push(format!("{id}: un distractor es la respuesta correcta: {}", p.correcta));
         }
-        let lineas = p.explicacion.lines().filter(|l| l.starts_with('✗'));
-        for (i, (linea, d)) in lineas.zip(&p.distractores).enumerate() {
+        let lineas: Vec<&str> = p.explicacion.lines().filter(|l| l.starts_with('✗')).collect();
+        if lineas.len() > p.distractores.len() {
+            errores.push(format!("{id}: {} líneas ✗, y {} distractores", lineas.len(), p.distractores.len()));
+        }
+        for (i, (linea, d)) in lineas.into_iter().zip(&p.distractores).enumerate() {
             if !clave(linea).is_some_and(|(c, _)| d.to_lowercase().contains(&c.to_lowercase())) {
                 errores.push(format!("{id}: la línea ✗ {} no lleva una clave «…» de su distractor: {d}", i + 1));
             }
@@ -147,7 +150,7 @@ pub fn pistas(preguntas: &[Pregunta]) -> Vec<String> {
 /// La clave `«…»` de una línea `✗` de la explicación, y el matiz que la sigue.
 fn clave(linea: &str) -> Option<(&str, &str)> {
     let (_, resto) = linea.strip_prefix('✗')?.split_once('«')?;
-    let (clave, matiz) = resto.split_once('»')?;
+    let (clave, matiz) = resto.split_once('»').filter(|(c, _)| !c.trim().is_empty())?;
     Some((clave, matiz.trim_start_matches(':').trim()))
 }
 
@@ -359,10 +362,8 @@ fn bloque(encabezado: &str, lineas: &[&str], pdf: &str) -> Result<Pregunta, Stri
             let [texto, matiz] = d.split('|').collect::<Vec<_>>()[..] else {
                 return Err(error(&format!("el distractor no tiene un solo «|»: {d}")));
             };
-            let Some((antes, resto)) = texto.split_once('«') else {
-                return Err(error(&format!("el distractor no marca su clave con «»: {d}")));
-            };
-            let Some((clave, despues)) = resto.split_once('»') else {
+            let marcas = texto.split_once('«').and_then(|(a, r)| Some((a, r.split_once('»')?)));
+            let Some((antes, (clave, despues))) = marcas.filter(|(_, (c, _))| !c.trim().is_empty()) else {
                 return Err(error(&format!("el distractor no marca su clave con «»: {d}")));
             };
             distractores.push(format!("{antes}{clave}{despues}").trim().to_string());
@@ -405,6 +406,9 @@ pub fn importar(carpeta: &Path, tema: &str, borrador: &Path) -> Result<Vec<Strin
             (None, Some((_, lineas))) => lineas.push(l),
             (None, None) => return Err(format!("una línea antes del primer «## »: {l}")),
         }
+    }
+    if bloques.is_empty() {
+        return Err(format!("el borrador no tiene bloques: {}", borrador.display()));
     }
     let siguiente =
         |prefijo: String| banco.iter().filter_map(|p| p.id.strip_prefix(&prefijo)?.parse::<u32>().ok()).max().unwrap_or(0);
@@ -566,6 +570,8 @@ mod tests {
         assert!(comprobar(&con("✓ x\n✗ «24 HORAS»: a\n✗ «un mes»: b"), &examen, dir.path()).is_empty());
         un_error(&con("✓ x\n✗ «24 horas»: a\n✗ «48 horas»: b"), "rgpd-001: la línea ✗ 2");
         un_error(&con("✓ x\n✗ 24 horas: a"), "rgpd-001: la línea ✗ 1");
+        un_error(&con("✓ x\n✗ «»: a"), "rgpd-001: la línea ✗ 1");
+        un_error(&con("✓ x\n✗ «24»: a\n✗ «Un»: b\n✗ «48»: c\n✗ «9»: d"), "rgpd-001: 4 líneas ✗, y 3 distractores");
     }
 
     #[test]
@@ -654,6 +660,8 @@ mod tests {
             (nuevo.replace("- «Un mes» |", "- Un mes |"), "rgpd", "rgpd-brecha-nuevo · p5: el distractor no marca"),
             (nuevo.replace("- «Un mes» |", "- «Un mes»"), "rgpd", "rgpd-brecha-nuevo · p5: el distractor no tiene un"),
             (nuevo.replace("| x", "| x | y"), "rgpd", "sigla-dpd · p2: el distractor no tiene un"),
+            (nuevo.replace("«Director»", "«»Director"), "rgpd", "sigla-dpd · p2: el distractor no marca"),
+            ("\n".into(), "rgpd", "el borrador no tiene bloques"),
             (nuevo.replace("✓ El DPD", "El DPD"), "rgpd", "sigla-dpd · p2: el bloque no tiene una línea ✓"),
             (nuevo.replace(" · p5", ""), "rgpd", "rgpd-brecha-nuevo: el encabezado no es"),
             (nuevo.clone(), "lssi", "el tema lssi tiene 2 PDF en examen.json, y no 1"),
