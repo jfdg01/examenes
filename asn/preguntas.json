@@ -2174,5 +2174,2245 @@
       "Emergency Network Incident Security Authority"
     ],
     "explicacion": "✓ ENISA es la agencia de la UE para la seguridad de redes y de la información.\n✗ «European Network for Internet Security Alliance»: no es una alianza.\n✗ «Emergency Network Incident Security Authority»: no es una autoridad."
+  },
+  {
+    "id": "ciclo-de-vida-001",
+    "concepto": "ciclo-de-vida-defensa-en-profundidad",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 3
+    },
+    "pregunta": "En el desarrollo de software seguro, ¿qué significa aplicar defensa en profundidad?",
+    "correcta": "Aplicar medidas de seguridad a lo largo de todo el ciclo de desarrollo",
+    "distractores": [
+      "Concentrar la seguridad en un control muy robusto en el perímetro de la aplicación",
+      "Auditar la seguridad una vez, cuando la aplicación está terminada"
+    ],
+    "explicacion": "✓ La defensa en profundidad pide medidas de seguridad en cada fase del ciclo de desarrollo.\n✗ «un control muy robusto en el perímetro»: una sola barrera es un único punto de fallo, y la defensa en profundidad suma capas.\n✗ «Auditar la seguridad una vez»: la seguridad se contempla en todo el ciclo, y no en un único momento."
+  },
+  {
+    "id": "ciclo-de-vida-002",
+    "concepto": "ciclo-de-vida-defensa-en-profundidad",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 3
+    },
+    "pregunta": "¿Con qué principio de seguridad se asocia el modelo del queso suizo de James T. Reason?",
+    "correcta": "La defensa en profundidad, con medidas en cada fase del desarrollo",
+    "distractores": [
+      "El mínimo privilegio, con permisos reducidos en cada cuenta de usuario y de servicio",
+      "La seguridad por oscuridad, con diseños y detalles internos que no se publican"
+    ],
+    "explicacion": "✓ El modelo del queso suizo ilustra la defensa en profundidad.\n✗ «El mínimo privilegio»: limita los permisos, y no es el principio que ilustra el queso suizo.\n✗ «La seguridad por oscuridad»: oculta el diseño, y el queso suizo apila capas de control."
+  },
+  {
+    "id": "ciclo-de-vida-003",
+    "concepto": "ciclo-de-vida-defensa-en-profundidad",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 3
+    },
+    "pregunta": "Un equipo revisa la seguridad de su aplicación solo con un pentest antes del lanzamiento, y no en el resto de fases. ¿Qué principio incumple?",
+    "correcta": "La defensa en profundidad, que exige medidas en todo el ciclo de desarrollo",
+    "distractores": [
+      "El mínimo privilegio, que reduce los permisos de cada cuenta",
+      "La separación de entornos, que aísla el desarrollo y la producción"
+    ],
+    "explicacion": "✓ Un pentest final cubre una sola fase, y la defensa en profundidad pide medidas en todas.\n✗ «El mínimo privilegio»: trata de los permisos, y no de las fases en que se aplica la seguridad.\n✗ «La separación de entornos»: trata del aislamiento de los entornos, y no de las fases de la seguridad."
+  },
+  {
+    "id": "ciclo-de-vida-004",
+    "concepto": "ciclo-de-vida-fases-del-desarrollo-seguro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 3
+    },
+    "pregunta": "En el desarrollo de una aplicación en la nube, ¿qué actividades de seguridad pertenecen a la fase de análisis?",
+    "correcta": "Identificar amenazas, analizar riesgos y fijar requisitos de seguridad",
+    "distractores": [
+      "Configurar los servicios y aplicar buenas prácticas de protección en el código",
+      "Monitorizar la aplicación y verificarla con análisis estático y dinámico"
+    ],
+    "explicacion": "✓ El análisis identifica amenazas, analiza riesgos y fija los requisitos de seguridad, funcionales y no funcionales.\n✗ «Configurar los servicios»: es trabajo de la implementación y el despliegue.\n✗ «Monitorizar la aplicación»: es trabajo del seguimiento y la evaluación continua."
+  },
+  {
+    "id": "ciclo-de-vida-005",
+    "concepto": "ciclo-de-vida-fases-del-desarrollo-seguro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 3
+    },
+    "pregunta": "En el desarrollo de una aplicación en la nube, ¿qué actividades de seguridad forman el seguimiento y la evaluación continua?",
+    "correcta": "Monitorizar, responder a incidentes y verificar con análisis estático y dinámico",
+    "distractores": [
+      "Elegir patrones de diseño seguros para la nube y revisarlos con el equipo de arquitectura",
+      "Identificar amenazas y analizar los riesgos de la aplicación y de sus datos en la nube"
+    ],
+    "explicacion": "✓ El seguimiento monitoriza, responde y verifica la seguridad con análisis estático, dinámico y pentesting.\n✗ «Elegir patrones de diseño seguros»: es trabajo de la fase de diseño.\n✗ «Identificar amenazas»: es trabajo de la fase de análisis."
+  },
+  {
+    "id": "ciclo-de-vida-006",
+    "concepto": "ciclo-de-vida-fases-del-desarrollo-seguro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 3
+    },
+    "pregunta": "Al desarrollar una aplicación segura en la nube, ¿qué se decide en la fase de diseño?",
+    "correcta": "Qué patrones de diseño seguros para la nube se aplican",
+    "distractores": [
+      "Qué amenazas afectan a la aplicación y con qué riesgo",
+      "Qué bibliotecas de seguridad reducen las vulnerabilidades del código"
+    ],
+    "explicacion": "✓ El diseño elige patrones de diseño seguros para la nube.\n✗ «Qué amenazas afectan»: es una decisión del análisis.\n✗ «Qué bibliotecas de seguridad»: es una decisión de la implementación."
+  },
+  {
+    "id": "ciclo-de-vida-007",
+    "concepto": "ciclo-de-vida-elementos-de-una-amenaza",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 4
+    },
+    "pregunta": "¿Qué elementos influyen en una amenaza de seguridad para una aplicación?",
+    "correcta": "El agente, el tipo de ataque, la vulnerabilidad o el control explotado, y el impacto",
+    "distractores": [
+      "El lenguaje, el framework, el servidor web y la base de datos de la aplicación",
+      "El coste, el plazo, el equipo y la metodología del proyecto de desarrollo"
+    ],
+    "explicacion": "✓ Una amenaza combina el agente, el tipo de ataque, la vulnerabilidad o el control explotado, y el impacto.\n✗ «El lenguaje, el framework»: son tecnologías de la aplicación, y no los elementos que definen una amenaza.\n✗ «El coste, el plazo»: son datos de gestión del proyecto, y no de la amenaza."
+  },
+  {
+    "id": "ciclo-de-vida-008",
+    "concepto": "ciclo-de-vida-elementos-de-una-amenaza",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 4
+    },
+    "pregunta": "¿Qué representa cada posible combinación de agente, tipo de ataque, vulnerabilidad e impacto?",
+    "correcta": "Un riesgo potencial para la aplicación",
+    "distractores": [
+      "Una vulnerabilidad que ya se ha explotado con éxito",
+      "Un requisito de seguridad que la aplicación debe implantar"
+    ],
+    "explicacion": "✓ Cada combinación posible es un riesgo potencial.\n✗ «ya se ha explotado con éxito»: una combinación posible es un riesgo, y no un ataque consumado.\n✗ «Un requisito de seguridad»: el requisito es la respuesta a un riesgo, y no la combinación en sí."
+  },
+  {
+    "id": "ciclo-de-vida-009",
+    "concepto": "ciclo-de-vida-elementos-de-una-amenaza",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 4
+    },
+    "pregunta": "¿A qué niveles se mide el posible impacto de una amenaza?",
+    "correcta": "Al nivel técnico y al nivel de negocio",
+    "distractores": [
+      "Al nivel local, en el equipo, y al nivel remoto, en la red",
+      "Al nivel interno de la organización y al nivel externo"
+    ],
+    "explicacion": "✓ El impacto es técnico o de negocio.\n✗ «nivel local»: es una clasificación del vector de ataque, y no del impacto.\n✗ «nivel interno»: clasifica el origen de la amenaza, y no su impacto."
+  },
+  {
+    "id": "ciclo-de-vida-s01",
+    "concepto": "sigla-s-sdlc",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 3
+    },
+    "pregunta": "En seguridad del software, ¿qué significa la sigla S-SDLC?",
+    "correcta": "Security Software Development Life-Cycle",
+    "distractores": [
+      "Static Security Design and Lifecycle Control",
+      "Secure System Deployment Life-Cycle"
+    ],
+    "explicacion": "✓ S-SDLC es el ciclo de vida de desarrollo de software con seguridad, la estrategia proactiva.\n✗ «Static Security Design»: la S inicial no es de static, y no es un control.\n✗ «Secure System Deployment»: no habla de despliegue de sistemas, habla de desarrollo de software."
+  },
+  {
+    "id": "ciclo-de-vida-010",
+    "concepto": "ciclo-de-vida-cvss-calificacion-base",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué mide la puntuación CVSS de una vulnerabilidad?",
+    "correcta": "Su severidad, con un valor numérico de 1 a 10",
+    "distractores": [
+      "Su probabilidad de explotación, con un valor de 0 a 100%",
+      "Su coste de corrección, con un valor en horas de trabajo"
+    ],
+    "explicacion": "✓ CVSS da la severidad de una amenaza como un valor numérico de 1 a 10.\n✗ «Su probabilidad de explotación»: esa es la medida de EPSS, y no la de CVSS.\n✗ «Su coste de corrección»: CVSS no estima el esfuerzo de arreglar la vulnerabilidad."
+  },
+  {
+    "id": "ciclo-de-vida-011",
+    "concepto": "ciclo-de-vida-cvss-calificacion-base",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué peso tienen los indicadores de explotación y los de impacto en la calificación base de CVSS?",
+    "correcta": "Un 40% la explotación y un 60% el impacto",
+    "distractores": [
+      "Un 60% la explotación y un 40% el impacto",
+      "Un 50% la explotación y un 50% el impacto"
+    ],
+    "explicacion": "✓ La calificación base toma un 40% de los indicadores de explotación y un 60% de los de impacto.\n✗ «60% la explotación»: los pesos están al revés.\n✗ «50% la explotación»: los dos grupos no pesan lo mismo."
+  },
+  {
+    "id": "ciclo-de-vida-012",
+    "concepto": "ciclo-de-vida-cvss-calificacion-base",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 5
+    },
+    "pregunta": "En CVSS, ¿qué indica el alcance (Scope) con el valor Changed?",
+    "correcta": "Que el impacto alcanza a otros componentes, además del afectado",
+    "distractores": [
+      "Que el atacante ha cambiado las credenciales de la cuenta atacada",
+      "Que la severidad de la vulnerabilidad ha variado con el tiempo y la organización"
+    ],
+    "explicacion": "✓ Changed significa que el impacto llega a otros componentes, y Unchanged que queda en el componente afectado.\n✗ «cambiado las credenciales»: el alcance no habla de credenciales.\n✗ «ha variado con el tiempo»: la variación temporal no es el alcance."
+  },
+  {
+    "id": "ciclo-de-vida-013",
+    "concepto": "ciclo-de-vida-epss-probabilidad",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué mide el EPSS de una vulnerabilidad?",
+    "correcta": "La probabilidad de que se pueda explotar, de más de 0 a 100%",
+    "distractores": [
+      "La severidad técnica de la vulnerabilidad, de 1 a 10",
+      "El número de sistemas afectados por la vulnerabilidad"
+    ],
+    "explicacion": "✓ EPSS da la probabilidad de explotar una vulnerabilidad, con datos empíricos.\n✗ «La severidad técnica»: esa es la medida de CVSS.\n✗ «número de sistemas afectados»: EPSS no cuenta sistemas, estima una probabilidad."
+  },
+  {
+    "id": "ciclo-de-vida-014",
+    "concepto": "ciclo-de-vida-epss-probabilidad",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Cómo se relaciona el EPSS con CVSS al priorizar la mitigación?",
+    "correcta": "Lo complementa: CVSS mide la severidad y EPSS la probabilidad",
+    "distractores": [
+      "Lo sustituye, porque calcula la severidad con datos empíricos",
+      "Lo precede, porque su resultado es una entrada del cálculo de CVSS"
+    ],
+    "explicacion": "✓ EPSS es complementario a CVSS.\n✗ «Lo sustituye»: EPSS no mide la severidad, y los dos se usan juntos.\n✗ «Lo precede»: los dos se calculan por separado."
+  },
+  {
+    "id": "ciclo-de-vida-015",
+    "concepto": "ciclo-de-vida-epss-probabilidad",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 6
+    },
+    "pregunta": "Un sistema tiene 100 vulnerabilidades independientes, cada una con un EPSS del 5%. ¿Qué probabilidad hay de que se explote alguna?",
+    "correcta": "Cerca del 99%",
+    "distractores": [
+      "Cerca del 5%",
+      "Cerca del 50%"
+    ],
+    "explicacion": "✓ La probabilidad es 1 − 0,95^100 ≈ 0,994.\n✗ «Cerca del 5%»: es la probabilidad de cada una por separado.\n✗ «Cerca del 50%»: la probabilidad de explotar alguna crece con cada vulnerabilidad añadida."
+  },
+  {
+    "id": "ciclo-de-vida-016",
+    "concepto": "ciclo-de-vida-requisitos-de-seguridad",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 7
+    },
+    "pregunta": "En el desarrollo de software, ¿qué definen los requisitos de seguridad?",
+    "correcta": "Los controles y respuestas que el desarrollo debe tener en cuenta",
+    "distractores": [
+      "Las herramientas de monitorización que operaciones instala en producción",
+      "Las pruebas de rendimiento que la aplicación supera antes de desplegarse"
+    ],
+    "explicacion": "✓ Los requisitos de seguridad definen los controles y respuestas que el desarrollo debe tener en cuenta.\n✗ «herramientas de monitorización»: los requisitos guían el diseño, la implementación y las pruebas, y no la operación.\n✗ «pruebas de rendimiento»: el rendimiento no es una propiedad de seguridad."
+  },
+  {
+    "id": "ciclo-de-vida-017",
+    "concepto": "ciclo-de-vida-requisitos-de-seguridad",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Qué puede determinar los requisitos de seguridad de una aplicación?",
+    "correcta": "La legislación, las normativas, las certificaciones y las cláusulas contractuales",
+    "distractores": [
+      "Los resultados del análisis estático y de las pruebas de penetración",
+      "Las incidencias de producción y las vulnerabilidades ya conocidas"
+    ],
+    "explicacion": "✓ Los requisitos pueden venir de la legislación (GDPR), las normativas (ENS, PCI DSS), las certificaciones (ISO 27001) y los contratos.\n✗ «análisis estático»: son resultados de la verificación, y no la fuente de los requisitos.\n✗ «incidencias de producción»: son hallazgos posteriores, y no la fuente de los requisitos."
+  },
+  {
+    "id": "ciclo-de-vida-018",
+    "concepto": "ciclo-de-vida-requisitos-de-seguridad",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 7
+    },
+    "pregunta": "¿Cuál de estos documentos es una guía para el desarrollo seguro de aplicaciones?",
+    "correcta": "ISO/IEC 27034, Application Security Guidelines",
+    "distractores": [
+      "GDPR, reglamento europeo de protección de datos personales",
+      "ISO/IEC 27001, certificación de un sistema de gestión"
+    ],
+    "explicacion": "✓ ISO/IEC 27034 es una guía de seguridad de aplicaciones, junto a CIS 18, NIST SP 800-218 y OWASP ASVS.\n✗ «GDPR»: es legislación que puede imponer requisitos, y no una guía de desarrollo.\n✗ «ISO/IEC 27001»: es una certificación que puede imponer requisitos, y no una guía de desarrollo de aplicaciones."
+  },
+  {
+    "id": "ciclo-de-vida-s02",
+    "concepto": "sigla-dread",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 5
+    },
+    "pregunta": "En el análisis de riesgos de Microsoft, ¿qué significa la sigla DREAD?",
+    "correcta": "Damage, Reproducibility, Exploitability, Affected users, Discoverability",
+    "distractores": [
+      "Damage, Recoverability, Exposure, Affected assets, Disclosure",
+      "Detection, Reproducibility, Exploit chain, Attack surface, Defenses"
+    ],
+    "explicacion": "✓ DREAD puntúa una amenaza con cinco factores: daño, reproducibilidad, explotabilidad, usuarios afectados y facilidad de descubrimiento.\n✗ «Recoverability»: la R es de reproducibility, y las demás letras son otros términos.\n✗ «Detection»: la D inicial es de damage, y no de detection."
+  },
+  {
+    "id": "ciclo-de-vida-019",
+    "concepto": "ciclo-de-vida-asvs-niveles",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 8
+    },
+    "pregunta": "En OWASP ASVS, ¿qué ofrece el nivel L1, el básico?",
+    "correcta": "La mayor reducción del riesgo con el menor esfuerzo",
+    "distractores": [
+      "Todos los controles de ASVS, con defensa en profundidad y el máximo esfuerzo",
+      "Los controles contra los riesgos habituales de hoy, con un esfuerzo medio de implantación"
+    ],
+    "explicacion": "✓ L1 reúne 70 controles, la mayor reducción del riesgo con el menor esfuerzo.\n✗ «Todos los controles»: eso es el nivel L3.\n✗ «riesgos habituales de hoy»: eso es el nivel L2."
+  },
+  {
+    "id": "ciclo-de-vida-020",
+    "concepto": "ciclo-de-vida-asvs-niveles",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 8
+    },
+    "pregunta": "En OWASP ASVS, ¿para qué software se recomienda el nivel L3?",
+    "correcta": "Para software con datos muy sensibles o infraestructuras críticas",
+    "distractores": [
+      "Para cualquier aplicación que empieza a aplicar controles de seguridad",
+      "Para aplicaciones web corrientes con los riesgos habituales de hoy"
+    ],
+    "explicacion": "✓ L3 incluye todos los controles y sirve para datos muy sensibles e infraestructuras críticas.\n✗ «empieza a aplicar controles»: eso es el nivel L1.\n✗ «aplicaciones web corrientes»: eso es el nivel L2."
+  },
+  {
+    "id": "ciclo-de-vida-021",
+    "concepto": "ciclo-de-vida-asvs-niveles",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Cómo se organizan los controles de seguridad de OWASP ASVS 5.0?",
+    "correcta": "350 controles, repartidos en 3 niveles y 17 categorías",
+    "distractores": [
+      "175 controles, repartidos en 2 niveles y 10 categorías",
+      "70 controles, repartidos en 5 niveles y 17 categorías"
+    ],
+    "explicacion": "✓ ASVS 5.0 tiene 350 controles, 3 niveles y 17 categorías.\n✗ «175 controles»: son los controles aproximados del nivel L2, y no el total.\n✗ «70 controles»: son los controles del nivel L1, y no el total."
+  },
+  {
+    "id": "ciclo-de-vida-022",
+    "concepto": "ciclo-de-vida-cwe-debilidades",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 10
+    },
+    "pregunta": "En el desarrollo de software, ¿qué es una debilidad (weakness)?",
+    "correcta": "Una mala práctica de programación que puede conducir a una vulnerabilidad",
+    "distractores": [
+      "Un ataque concreto que explota una vulnerabilidad de la aplicación y compromete sus datos",
+      "Un fallo de configuración que aparece en el servidor de la aplicación en producción"
+    ],
+    "explicacion": "✓ Un mal uso de las características de un lenguaje crea debilidades que pueden conducir a vulnerabilidades.\n✗ «Un ataque concreto»: el ataque explota la vulnerabilidad, y no es la mala práctica que la origina.\n✗ «fallo de configuración»: una debilidad nace de un uso incorrecto del lenguaje de programación."
+  },
+  {
+    "id": "ciclo-de-vida-023",
+    "concepto": "ciclo-de-vida-cwe-debilidades",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Qué aporta el repositorio CWE de cada mala práctica de programación?",
+    "correcta": "Ejemplos, efectos y posibles alternativas seguras",
+    "distractores": [
+      "Un parche oficial para cada fallo y cada lenguaje",
+      "La puntuación de severidad y el vector de ataque de cada caso"
+    ],
+    "explicacion": "✓ CWE aporta ejemplos, efectos y alternativas seguras.\n✗ «parche oficial»: CWE describe la mala práctica, y no publica parches.\n✗ «puntuación de severidad»: esa es la tarea de CVSS."
+  },
+  {
+    "id": "ciclo-de-vida-024",
+    "concepto": "ciclo-de-vida-cwe-debilidades",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 10
+    },
+    "pregunta": "¿Para qué usan CWE las herramientas de análisis estático como Semgrep, Sonarqube o Snyk?",
+    "correcta": "Para indicar al desarrollador cómo resolver cada mala práctica",
+    "distractores": [
+      "Para puntuar con CVSS la severidad de cada hallazgo del análisis",
+      "Para detectar las dependencias con vulnerabilidades conocidas en el proyecto"
+    ],
+    "explicacion": "✓ Las herramientas de análisis estático usan CWE para indicar cómo resolver cada debilidad.\n✗ «puntuar con CVSS»: CWE clasifica malas prácticas, y la severidad la da CVSS.\n✗ «dependencias con vulnerabilidades»: las dependencias se analizan con CVE y OSV, y CWE describe malas prácticas del código."
+  },
+  {
+    "id": "ciclo-de-vida-025",
+    "concepto": "ciclo-de-vida-asvs-ejemplos-v6",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 9
+    },
+    "pregunta": "En ASVS, ¿qué pide el requisito 6.3.3 de autenticación multifactor desde el nivel L2?",
+    "correcta": "Autenticación multifactor, con hardware como FIDO en el nivel L3",
+    "distractores": [
+      "Autenticación con una clave de 15 caracteres, y SMS en el nivel L3",
+      "Autenticación por SMS y por correo, con OTP por SMS en el nivel L3"
+    ],
+    "explicacion": "✓ 6.3.3 exige multifactor desde L2, con hardware como FIDO en L3.\n✗ «clave de 15 caracteres»: una clave larga es un solo factor, y el SMS no se permite en L3.\n✗ «por SMS y por correo»: el SMS no se permite en L3, donde se pide hardware."
+  },
+  {
+    "id": "ciclo-de-vida-026",
+    "concepto": "ciclo-de-vida-asvs-ejemplos-v6",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 9
+    },
+    "pregunta": "En ASVS 6.6.1, ¿qué condición se pone a los OTP enviados por SMS?",
+    "correcta": "Solo a números verificados, y no se permiten en el nivel L3",
+    "distractores": [
+      "A cualquier número, y en el nivel L3 se limitan a uno por usuario",
+      "Solo a números verificados, y en el nivel L3 con doble confirmación"
+    ],
+    "explicacion": "✓ 6.6.1 limita el SMS a números verificados, lo prohíbe en L3 y pide alternativas como T-OTP.\n✗ «A cualquier número»: los números deben estar verificados, y en L3 el SMS no se permite.\n✗ «doble confirmación»: en L3 el SMS no se permite, y no hay confirmación que lo salve."
+  },
+  {
+    "id": "ciclo-de-vida-027",
+    "concepto": "ciclo-de-vida-asvs-ejemplos-v6",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 9
+    },
+    "pregunta": "¿Qué pide ASVS 6.2.11 sobre las claves de los usuarios?",
+    "correcta": "No permitir claves que estén en listas de claves habituales",
+    "distractores": [
+      "Exigir la clave anterior del usuario para poder cambiar la clave",
+      "Obligar a cambiar la clave cada cierto número de días"
+    ],
+    "explicacion": "✓ 6.2.11 prohíbe las claves de las listas de claves habituales.\n✗ «clave anterior»: eso lo pide 6.2.3, y no 6.2.11.\n✗ «cada cierto número de días»: ASVS no pide la caducidad periódica en este requisito."
+  },
+  {
+    "id": "ciclo-de-vida-s03",
+    "concepto": "sigla-asvs",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 8
+    },
+    "pregunta": "En seguridad de aplicaciones, ¿qué significa la sigla ASVS de OWASP?",
+    "correcta": "Application Security Verification Standard",
+    "distractores": [
+      "Automated Security Validation Suite",
+      "Application Security Vulnerability Scoring"
+    ],
+    "explicacion": "✓ ASVS es el estándar de OWASP de verificación de la seguridad de aplicaciones.\n✗ «Automated Security Validation»: no es una suite automatizada, es un estándar de requisitos.\n✗ «Vulnerability Scoring»: no puntúa vulnerabilidades, verifica requisitos de seguridad."
+  },
+  {
+    "id": "ciclo-de-vida-028",
+    "concepto": "ciclo-de-vida-control-de-acceso-fallo",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué es un fallo de control de acceso en una aplicación web?",
+    "correcta": "Un usuario manipula una petición HTTP para llegar a recursos ajenos",
+    "distractores": [
+      "Un atacante roba la contraseña de un usuario para suplantarlo en la aplicación",
+      "Un servidor acepta conexiones sin cifrar desde la red pública"
+    ],
+    "explicacion": "✓ El fallo de control de acceso deja a un usuario manipular una petición para llegar a recursos ajenos.\n✗ «roba la contraseña»: es un fallo de autenticación, y no de control de acceso.\n✗ «sin cifrar»: es un fallo de criptografía, y no de control de acceso."
+  },
+  {
+    "id": "ciclo-de-vida-029",
+    "concepto": "ciclo-de-vida-control-de-acceso-fallo",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 11
+    },
+    "pregunta": "Un usuario ve su pedido en http://host/app/pedido/1 y cambia a mano el 1 por un 2 para ver el pedido de otro cliente. ¿Qué fallo explota?",
+    "correcta": "Un fallo de control de acceso: no se verifican sus privilegios",
+    "distractores": [
+      "Una inyección SQL: el parámetro llega sin validar a la base de datos",
+      "Un CSRF: el navegador envía la petición sin que el usuario lo sepa"
+    ],
+    "explicacion": "✓ Cambiar el id a mano llega a un recurso ajeno porque la aplicación no comprueba los privilegios.\n✗ «inyección SQL»: el cambio del número no inyecta código en un intérprete.\n✗ «Un CSRF»: aquí el propio usuario edita la petición, y no su navegador sin saberlo."
+  },
+  {
+    "id": "ciclo-de-vida-030",
+    "concepto": "ciclo-de-vida-control-de-acceso-fallo",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 11
+    },
+    "pregunta": "En un formulario de edición de usuario, un atacante añade isadmin=true a la petición POST. ¿Qué contramedida lo evita?",
+    "correcta": "Procesar solo los datos esperados, por ejemplo con DTOs",
+    "distractores": [
+      "Cifrar el cuerpo de la petición con TLS entre el cliente y el servidor",
+      "Ocultar el campo isadmin en el HTML del formulario de edición"
+    ],
+    "explicacion": "✓ La aplicación procesa solo la información esperada y de fuentes confiables, por ejemplo con DTOs.\n✗ «Cifrar el cuerpo»: TLS no impide que el atacante envíe el campo desde su propio cliente.\n✗ «Ocultar el campo»: el atacante escribe la petición a mano, y no depende del HTML."
+  },
+  {
+    "id": "ciclo-de-vida-031",
+    "concepto": "ciclo-de-vida-control-de-acceso-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué política de acceso evita que un recurso quede accesible por omisión?",
+    "correcta": "Denegar por defecto y verificar los privilegios en cada recurso",
+    "distractores": [
+      "Permitir por defecto y bloquear las cuentas que abusan del acceso",
+      "Autenticar al usuario una vez y confiar en él durante la sesión"
+    ],
+    "explicacion": "✓ La política deniega por defecto y verifica los privilegios en cada recurso.\n✗ «Permitir por defecto»: un acceso abierto por omisión deja recursos expuestos.\n✗ «confiar en él durante la sesión»: falta verificar los privilegios sobre cada recurso."
+  },
+  {
+    "id": "ciclo-de-vida-032",
+    "concepto": "ciclo-de-vida-control-de-acceso-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 11
+    },
+    "pregunta": "¿Qué se usa en una URL en lugar de la llave primaria de un recurso?",
+    "correcta": "Una referencia temporal asociada a la llave primaria en la sesión",
+    "distractores": [
+      "Un hash de la llave primaria, igual para todos los usuarios del sitio",
+      "Un número secuencial distinto, guardado en la base de datos de la aplicación"
+    ],
+    "explicacion": "✓ La URL lleva una referencia temporal ligada a la llave primaria en el contexto de la sesión.\n✗ «igual para todos los usuarios»: la referencia debe ser temporal y de la sesión, y no un valor fijo y común.\n✗ «número secuencial»: un número secuencial se puede adivinar y cambiar a mano."
+  },
+  {
+    "id": "ciclo-de-vida-033",
+    "concepto": "ciclo-de-vida-control-de-acceso-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 11
+    },
+    "pregunta": "Un sitio publica el listado de sus carpetas y la carpeta .git. ¿Qué contramedida de control de acceso falta?",
+    "correcta": "Restringir el acceso a los metadatos del servidor",
+    "distractores": [
+      "Cifrar con TLS el contenido de los repositorios del servidor",
+      "Usar llaves primarias en las URLs de las carpetas públicas"
+    ],
+    "explicacion": "✓ El control de acceso restringe los metadatos, como el listado de carpetas públicas y las carpetas .git.\n✗ «Cifrar con TLS»: TLS protege el tránsito, y no restringe quién accede a los metadatos.\n✗ «llaves primarias»: las llaves primarias en la URL son lo que el control de acceso evita."
+  },
+  {
+    "id": "ciclo-de-vida-034",
+    "concepto": "ciclo-de-vida-csrf-funcionamiento",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué consigue un atacante con un ataque CSRF?",
+    "correcta": "Que el navegador envíe peticiones no autorizadas en nombre del usuario",
+    "distractores": [
+      "Que el servidor haga peticiones a una red interna sin autorización",
+      "Que el navegador ejecute código JavaScript del atacante en la página"
+    ],
+    "explicacion": "✓ CSRF hace que el navegador de un usuario envíe peticiones no autorizadas a sitios donde ya está identificado.\n✗ «servidor haga peticiones»: eso es un SSRF, y en CSRF la petición sale del navegador.\n✗ «ejecute código JavaScript»: eso es un XSS, y CSRF solo envía peticiones."
+  },
+  {
+    "id": "ciclo-de-vida-035",
+    "concepto": "ciclo-de-vida-csrf-funcionamiento",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    },
+    "pregunta": "En un CSRF, ¿por qué el servidor toma como válida la petición falsificada?",
+    "correcta": "El navegador envía con ella las cookies de sesión del usuario",
+    "distractores": [
+      "El atacante conoce la contraseña del usuario y la incluye en la petición",
+      "La petición viaja sin cifrar y el servidor no puede verificarla"
+    ],
+    "explicacion": "✓ Las peticiones falsificadas llevan las cookies de sesión, y el servidor las toma como del usuario.\n✗ «conoce la contraseña»: el CSRF no necesita las credenciales del usuario.\n✗ «sin cifrar»: el cifrado del canal no cambia la causa: la cookie viaja sola."
+  },
+  {
+    "id": "ciclo-de-vida-036",
+    "concepto": "ciclo-de-vida-csrf-funcionamiento",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Por qué una vulnerabilidad XSS permite saltarse las medidas anti CSRF?",
+    "correcta": "Las peticiones salen de las páginas legítimas del propio sitio",
+    "distractores": [
+      "El XSS desactiva el atributo SameSite de las cookies del navegador",
+      "El XSS deja al atacante leer la contraseña guardada en el servidor"
+    ],
+    "explicacion": "✓ Con XSS las peticiones se hacen desde páginas legítimas, y las medidas anti CSRF las dejan pasar.\n✗ «desactiva el atributo SameSite»: el XSS no cambia las cookies, y SameSite no frena peticiones del propio sitio.\n✗ «leer la contraseña guardada en el servidor»: el XSS se ejecuta en el navegador, y no en el servidor."
+  },
+  {
+    "id": "ciclo-de-vida-s04",
+    "concepto": "sigla-csrf",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    },
+    "pregunta": "En seguridad web, ¿qué significa la sigla CSRF?",
+    "correcta": "Cross-Site Request Forgery",
+    "distractores": [
+      "Cross-Site Resource Filtering",
+      "Client-Side Request Forwarding"
+    ],
+    "explicacion": "✓ CSRF es la falsificación de peticiones entre sitios.\n✗ «Resource Filtering»: no filtra recursos, falsifica peticiones.\n✗ «Request Forwarding»: no reenvía peticiones, las falsifica."
+  },
+  {
+    "id": "ciclo-de-vida-037",
+    "concepto": "ciclo-de-vida-csrf-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Cómo ayuda un nonce, un token no predecible y de un solo uso, a defenderse de un CSRF?",
+    "correcta": "El servidor verifica con él las peticiones que cambian datos",
+    "distractores": [
+      "El navegador lo usa para cifrar las cookies de sesión del usuario",
+      "El atacante no puede leer la respuesta del servidor gracias a él"
+    ],
+    "explicacion": "✓ El nonce permite verificar en el servidor la legitimidad de las peticiones que cambian datos.\n✗ «cifrar las cookies de sesión»: el nonce no cifra nada, y sirve para verificar la petición.\n✗ «no puede leer la respuesta»: eso lo logra la Same-Origin Policy, y no el nonce."
+  },
+  {
+    "id": "ciclo-de-vida-038",
+    "concepto": "ciclo-de-vida-csrf-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué encabezados comprueba el servidor para detectar un CSRF?",
+    "correcta": "Origin, Referer y Host de la petición",
+    "distractores": [
+      "Authorization, Cookie y Accept de la petición",
+      "Content-Type, Cache-Control y ETag de la petición"
+    ],
+    "explicacion": "✓ El servidor comprueba los encabezados Origin, Referer y Host.\n✗ «Authorization, Cookie y Accept»: no indican desde qué sitio sale la petición.\n✗ «Content-Type, Cache-Control y ETag»: describen el contenido y la caché, y no el origen."
+  },
+  {
+    "id": "ciclo-de-vida-039",
+    "concepto": "ciclo-de-vida-csrf-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué medida frente a CSRF se pide para las operaciones críticas?",
+    "correcta": "Una doble autenticación, un captcha o un segundo factor",
+    "distractores": [
+      "Un cifrado más largo de la cookie de sesión y del token",
+      "Un filtro que elimine las etiquetas <script> de la respuesta"
+    ],
+    "explicacion": "✓ Las operaciones críticas piden doble autenticación, captcha o doble factor.\n✗ «cifrado más largo»: la cookie viaja sola, así que su cifrado no frena la petición falsificada.\n✗ «elimine las etiquetas <script>»: es una medida contra XSS, y no contra CSRF."
+  },
+  {
+    "id": "ciclo-de-vida-040",
+    "concepto": "ciclo-de-vida-csrf-token-sincronizado",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 14
+    },
+    "pregunta": "En la defensa CSRF con token sincronizado, ¿qué hace el servidor si el token de la petición no coincide con el esperado?",
+    "correcta": "Rechaza la petición y no la procesa",
+    "distractores": [
+      "La acepta y anota un aviso en el registro",
+      "Pide al usuario que se autentique de nuevo"
+    ],
+    "explicacion": "✓ El servidor rechaza la petición si el token no es el esperado.\n✗ «La acepta»: un token distinto es una petición no legítima, y el servidor la rechaza.\n✗ «se autentique de nuevo»: el servidor rechaza la petición, y no abre un nuevo login."
+  },
+  {
+    "id": "ciclo-de-vida-041",
+    "concepto": "ciclo-de-vida-csrf-token-sincronizado",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Cómo se envía el token CSRF en una petición POST?",
+    "correcta": "Como un campo oculto dentro del formulario",
+    "distractores": [
+      "En el encabezado Referer, que añade el navegador",
+      "En el cuerpo cifrado con la clave pública del servidor"
+    ],
+    "explicacion": "✓ En un POST el token va como campo oculto.\n✗ «encabezado Referer»: el Referer indica el origen y no lo controla la aplicación.\n✗ «clave pública del servidor»: el token viaja en un campo oculto, y no se cifra con una clave pública."
+  },
+  {
+    "id": "ciclo-de-vida-042",
+    "concepto": "ciclo-de-vida-csrf-token-sincronizado",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué características debe tener un token CSRF por sesión para que el atacante no lo adivine?",
+    "correcta": "Ser único, largo y de un generador aleatorio criptográficamente seguro",
+    "distractores": [
+      "Derivarse del identificador de sesión con un hash que el servidor conoce",
+      "Repetirse en todas las sesiones de un mismo usuario para reconocerlo"
+    ],
+    "explicacion": "✓ El token es único por sesión, tiene longitud suficiente y viene de un generador aleatorio criptográficamente seguro.\n✗ «hash que el servidor conoce»: un valor derivable es predecible.\n✗ «Repetirse en todas las sesiones»: un token común lo puede conocer cualquiera."
+  },
+  {
+    "id": "ciclo-de-vida-043",
+    "concepto": "ciclo-de-vida-samesite",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué hace el atributo SameSite=Strict en una cookie?",
+    "correcta": "Hace que el navegador la envíe solo desde el sitio original",
+    "distractores": [
+      "Impide que JavaScript la lea con document.cookie desde la página",
+      "Obliga a enviarla solo por conexiones cifradas con TLS"
+    ],
+    "explicacion": "✓ En modo Strict la cookie solo se envía desde contenidos del sitio original.\n✗ «JavaScript la lea»: eso lo hace HttpOnly.\n✗ «conexiones cifradas con TLS»: eso lo hace el atributo Secure."
+  },
+  {
+    "id": "ciclo-de-vida-044",
+    "concepto": "ciclo-de-vida-samesite",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿En qué se diferencia SameSite=Lax de SameSite=Strict?",
+    "correcta": "Lax también envía la cookie en peticiones seguras, como GET",
+    "distractores": [
+      "Lax deja leer la cookie desde JavaScript, y Strict lo impide",
+      "Lax envía la cookie a cualquier sitio, y Strict a los subdominios"
+    ],
+    "explicacion": "✓ Lax añade el envío en peticiones seguras como GET, y es el modo por defecto desde Chrome 76 y Firefox 70.\n✗ «deja leer la cookie desde JavaScript»: la lectura desde JavaScript la controla HttpOnly.\n✗ «cualquier sitio»: Lax tampoco la envía a cualquier sitio."
+  },
+  {
+    "id": "ciclo-de-vida-045",
+    "concepto": "ciclo-de-vida-samesite",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    },
+    "pregunta": "¿Qué ataque frena activar SameSite en la cookie de sesión?",
+    "correcta": "El CSRF, porque la cookie no viaja en peticiones de otros sitios",
+    "distractores": [
+      "El XSS, porque la cookie queda ilegible para el código inyectado",
+      "La session fixation, porque el identificador cambia en cada petición"
+    ],
+    "explicacion": "✓ SameSite evita CSRF porque la petición falsificada sale de otro sitio y no lleva la cookie.\n✗ «queda ilegible»: eso lo logra HttpOnly, y SameSite no lo evita.\n✗ «cambia en cada petición»: SameSite no renueva identificadores."
+  },
+  {
+    "id": "ciclo-de-vida-s05",
+    "concepto": "sigla-cors",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    },
+    "pregunta": "En seguridad web, ¿qué significa la sigla CORS?",
+    "correcta": "Cross-Origin Resource Sharing",
+    "distractores": [
+      "Cross-Origin Request Signing",
+      "Client-Origin Response Security"
+    ],
+    "explicacion": "✓ CORS es el mecanismo que comparte recursos entre orígenes distintos.\n✗ «Request Signing»: no firma peticiones, comparte recursos entre orígenes.\n✗ «Response Security»: no es una seguridad de respuestas, comparte recursos entre orígenes."
+  },
+  {
+    "id": "ciclo-de-vida-046",
+    "concepto": "ciclo-de-vida-cors-funcionamiento",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    },
+    "pregunta": "Según la Same-Origin Policy, ¿qué hace el navegador con la respuesta de otro sitio que pide el JavaScript de una página?",
+    "correcta": "No da al código de la página acceso a la respuesta",
+    "distractores": [
+      "Bloquea la petición antes de enviarla al otro sitio",
+      "Pide confirmación al usuario para entregarla"
+    ],
+    "explicacion": "✓ Por defecto, las peticiones asíncronas a otros sitios no dan acceso a las respuestas.\n✗ «Bloquea la petición antes de enviarla»: la petición se completa, y lo que el navegador oculta es la respuesta.\n✗ «Pide confirmación al usuario»: la política no consulta al usuario."
+  },
+  {
+    "id": "ciclo-de-vida-047",
+    "concepto": "ciclo-de-vida-cors-funcionamiento",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    },
+    "pregunta": "En CORS, ¿qué responde el servidor a la petición previa (preflight) del navegador?",
+    "correcta": "Qué orígenes, métodos y encabezados admite el servidor",
+    "distractores": [
+      "Un token de un solo uso para la siguiente petición del navegador",
+      "El certificado con el que firma sus respuestas a ese origen"
+    ],
+    "explicacion": "✓ El servidor indica los orígenes, los métodos y los encabezados que acepta.\n✗ «token de un solo uso»: ese token es una defensa CSRF, y no la respuesta de CORS.\n✗ «certificado con el que firma»: CORS no usa certificados, usa encabezados de permiso."
+  },
+  {
+    "id": "ciclo-de-vida-048",
+    "concepto": "ciclo-de-vida-cors-funcionamiento",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    },
+    "pregunta": "Si un servidor no acepta el origen de una petición CORS, ¿qué ocurre?",
+    "correcta": "La petición se completa, pero el navegador no da la respuesta",
+    "distractores": [
+      "El servidor rechaza la petición y devuelve un error de red al navegador",
+      "El navegador la repite automáticamente desde un origen permitido por el servidor"
+    ],
+    "explicacion": "✓ Si el servidor no acepta, la petición se completa pero el navegador no da la respuesta.\n✗ «rechaza la petición»: la petición se completa en el servidor.\n✗ «desde un origen permitido»: el navegador no cambia de origen."
+  },
+  {
+    "id": "ciclo-de-vida-049",
+    "concepto": "ciclo-de-vida-cors-cabeceras",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 16
+    },
+    "pregunta": "En CORS, ¿qué indica el encabezado Access-Control-Allow-Methods que devuelve el servidor?",
+    "correcta": "Los métodos HTTP que el servidor acepta, como GET o POST",
+    "distractores": [
+      "Los orígenes desde los que el servidor acepta las peticiones",
+      "Los encabezados de petición que el servidor admite, como X-APIKEY"
+    ],
+    "explicacion": "✓ Access-Control-Allow-Methods lista los métodos que el servidor acepta.\n✗ «orígenes»: eso lo indica Access-Control-Allow-Origin.\n✗ «encabezados de petición»: eso lo indica Access-Control-Allow-Headers."
+  },
+  {
+    "id": "ciclo-de-vida-050",
+    "concepto": "ciclo-de-vida-cors-cabeceras",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 16
+    },
+    "pregunta": "En CORS, ¿cuándo es aceptable devolver Access-Control-Allow-Origin con el valor *?",
+    "correcta": "Solo en APIs con información pública, de solo consulta",
+    "distractores": [
+      "En cualquier API cuyas cookies tengan activado SameSite",
+      "En las APIs internas que usan credenciales de la sesión"
+    ],
+    "explicacion": "✓ El origen * solo se permite en APIs de información pública y de solo consulta.\n✗ «cuyas cookies tengan activado SameSite»: el origen * sigue siendo una política permisiva (CWE-942).\n✗ «APIs internas»: una API con datos de sesión debe fijar un origen concreto."
+  },
+  {
+    "id": "ciclo-de-vida-051",
+    "concepto": "ciclo-de-vida-cors-cabeceras",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 16
+    },
+    "pregunta": "Una página de attacker.com hace un fetch con credentials: 'include' a una API interna y roba los datos. ¿Qué condiciones lo permiten?",
+    "correcta": "La API envía Allow-Origin: * y las cookies no tienen SameSite",
+    "distractores": [
+      "La API restringe el origen y las cookies no tienen SameSite",
+      "La API envía Allow-Origin: * y las cookies tienen SameSite activo"
+    ],
+    "explicacion": "✓ El robo necesita Access-Control-Allow-Origin: * y cookies sin SameSite.\n✗ «restringe el origen»: con un origen concreto el navegador no entrega la respuesta a attacker.com.\n✗ «tienen SameSite activo»: con SameSite la cookie no viaja en la petición del otro sitio."
+  },
+  {
+    "id": "ciclo-de-vida-052",
+    "concepto": "ciclo-de-vida-ssrf",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿En qué consiste una falsificación de peticiones en servidor (SSRF)?",
+    "correcta": "El servidor accede a URLs que da o genera el usuario",
+    "distractores": [
+      "El navegador envía peticiones que el usuario no autorizó",
+      "El servidor ejecuta comandos del sistema con datos del usuario"
+    ],
+    "explicacion": "✓ En un SSRF el servidor pide URLs que el usuario proporciona o que se generan con sus datos.\n✗ «El navegador envía peticiones»: eso es un CSRF, y en SSRF la petición sale del servidor.\n✗ «ejecuta comandos del sistema»: eso es una inyección de sistema operativo."
+  },
+  {
+    "id": "ciclo-de-vida-053",
+    "concepto": "ciclo-de-vida-ssrf",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 17
+    },
+    "pregunta": "¿Por qué una petición SSRF puede alcanzar recursos que el atacante no ve desde fuera?",
+    "correcta": "Sale del servidor, y los servicios internos pueden aceptarla",
+    "distractores": [
+      "El servidor reenvía al atacante las cookies de sesión de otros usuarios",
+      "El navegador del atacante usa su sesión para entrar en la intranet"
+    ],
+    "explicacion": "✓ La petición sale del servidor, donde las medidas de seguridad son más bajas, y los servicios internos pueden aceptarla.\n✗ «reenvía al atacante las cookies»: las cookies de sesión no son la causa de este ataque.\n✗ «El navegador del atacante»: la petición la hace el servidor, y no el navegador."
+  },
+  {
+    "id": "ciclo-de-vida-054",
+    "concepto": "ciclo-de-vida-ssrf",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 17
+    },
+    "pregunta": "Contra el SSRF, ¿qué estrategia de validación de destinos se recomienda?",
+    "correcta": "Una lista blanca de los destinos que se permiten",
+    "distractores": [
+      "Una lista negra con las direcciones internas conocidas",
+      "Una expresión regular que detecte las URLs válidas"
+    ],
+    "explicacion": "✓ Se recomiendan listas blancas, y se evitan las listas negras y las expresiones regulares.\n✗ «lista negra»: una lista negra deja pasar lo que no conoce.\n✗ «expresión regular»: una expresión regular se puede eludir con formas alternativas de la URL."
+  },
+  {
+    "id": "ciclo-de-vida-s06",
+    "concepto": "sigla-ssrf",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 17
+    },
+    "pregunta": "En seguridad web, ¿qué significa la sigla SSRF?",
+    "correcta": "Server-Side Request Forgery",
+    "distractores": [
+      "Secure Server Request Filtering",
+      "Server-Side Resource Forwarding"
+    ],
+    "explicacion": "✓ SSRF es la falsificación de peticiones en servidor.\n✗ «Request Filtering»: no filtra peticiones, las falsifica.\n✗ «Resource Forwarding»: no reenvía recursos, falsifica peticiones."
+  },
+  {
+    "id": "ciclo-de-vida-055",
+    "concepto": "ciclo-de-vida-configuracion-insegura",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 18
+    },
+    "pregunta": "En un defecto de configuración de seguridad, ¿qué aprovecha el atacante?",
+    "correcta": "Valores por defecto, como credenciales y servicios sin asegurar",
+    "distractores": [
+      "Datos de entrada sin validar que llegan a un intérprete de consultas",
+      "Componentes de terceros con vulnerabilidades conocidas en la aplicación"
+    ],
+    "explicacion": "✓ El atacante se aprovecha de los valores por defecto: credenciales, servicios y puertos sin asegurar, y software sin actualizar.\n✗ «Datos de entrada sin validar»: eso es una inyección, y no un defecto de configuración.\n✗ «Componentes de terceros»: eso es un fallo de la cadena de suministro."
+  },
+  {
+    "id": "ciclo-de-vida-056",
+    "concepto": "ciclo-de-vida-configuracion-insegura",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué se hace con los servicios y puertos que la aplicación no utiliza?",
+    "correcta": "Se desactivan, como parte del hardening del servidor",
+    "distractores": [
+      "Se dejan activos si los protege una contraseña robusta",
+      "Se les cambia el puerto por defecto para que no se encuentren"
+    ],
+    "explicacion": "✓ El hardening desactiva los servicios y puertos que no se usan.\n✗ «Se dejan activos»: un servicio sin uso es superficie de ataque, y debe desactivarse.\n✗ «Se les cambia el puerto»: ocultar un servicio no lo asegura, y debe desactivarse."
+  },
+  {
+    "id": "ciclo-de-vida-057",
+    "concepto": "ciclo-de-vida-configuracion-insegura",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Qué encabezados http seguros se configuran en servidores y frameworks?",
+    "correcta": "Content-Security-Policy, HSTS y Public-Key-Pins (HPKP)",
+    "distractores": [
+      "Origin, Referer y Host, de las peticiones",
+      "Access-Control-Allow-Origin, Methods y Headers"
+    ],
+    "explicacion": "✓ Entre los encabezados http seguros están CSP, HSTS y HPKP.\n✗ «Origin, Referer y Host»: son encabezados de petición que se comprueban en el servidor, y no encabezados de seguridad que se configuran.\n✗ «Access-Control-Allow-Origin»: son encabezados de CORS, y no los encabezados de seguridad del servidor."
+  },
+  {
+    "id": "ciclo-de-vida-058",
+    "concepto": "ciclo-de-vida-errores-y-mensajes",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Por qué no debe mostrarse el volcado de pila (stack trace) de un error en producción?",
+    "correcta": "Da información sensible que ayuda a detectar una vulnerabilidad",
+    "distractores": [
+      "Ocupa ancho de banda y ralentiza las respuestas del servidor",
+      "Impide que el servidor guarde el error en sus ficheros de registro"
+    ],
+    "explicacion": "✓ Un volcado de pila, como el de Tomcat, revela información sensible.\n✗ «ancho de banda»: el riesgo es la información que revela, y no el rendimiento.\n✗ «ficheros de registro»: mostrar el error al usuario no impide registrarlo."
+  },
+  {
+    "id": "ciclo-de-vida-059",
+    "concepto": "ciclo-de-vida-errores-y-mensajes",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 18
+    },
+    "pregunta": "Un servidor envía en cada respuesta la cabecera X-Powered-By: PHP/5.5.9-1ubuntu4.14. ¿Qué riesgo supone?",
+    "correcta": "Revela la versión del software, y se buscan sus vulnerabilidades conocidas",
+    "distractores": [
+      "Deja leer el código fuente PHP de la aplicación a quien la pida",
+      "Permite suplantar al servidor ante los clientes que se conectan"
+    ],
+    "explicacion": "✓ La versión del servidor ayuda a encontrar vulnerabilidades conocidas de esa versión.\n✗ «código fuente PHP»: la cabecera solo da la versión, y no el código.\n✗ «suplantar al servidor»: la cabecera no da credenciales ni claves del servidor."
+  },
+  {
+    "id": "ciclo-de-vida-060",
+    "concepto": "ciclo-de-vida-errores-y-mensajes",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 18
+    },
+    "pregunta": "¿Cómo se evita que un error de ejecución muestre detalles internos?",
+    "correcta": "Se asocia a páginas de error genéricas, como 404 o 500",
+    "distractores": [
+      "Se reinicia el servicio cuando se produce una excepción sin tratar",
+      "Se muestra el código de error con una breve descripción técnica"
+    ],
+    "explicacion": "✓ Los errores de ejecución se asocian a páginas de error genéricas.\n✗ «Se reinicia el servicio»: un reinicio no cambia lo que muestra el error.\n✗ «descripción técnica»: una descripción técnica es información que ayuda al atacante."
+  },
+  {
+    "id": "ciclo-de-vida-061",
+    "concepto": "ciclo-de-vida-xxe",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué ocurre en una vulnerabilidad XXE?",
+    "correcta": "Un procesador XML mal configurado accede a las entidades externas del XML",
+    "distractores": [
+      "Un navegador ejecuta etiquetas script que el atacante colocó en el XML",
+      "Una base de datos ejecuta una consulta con datos del XML concatenados"
+    ],
+    "explicacion": "✓ Un procesador XML vulnerable o mal configurado analiza el contenido XML inseguro, con entidades externas (CWE-611).\n✗ «Un navegador ejecuta»: eso es un XSS, y el XXE ocurre en el procesador XML del servidor.\n✗ «base de datos ejecuta»: eso es una inyección SQL."
+  },
+  {
+    "id": "ciclo-de-vida-062",
+    "concepto": "ciclo-de-vida-xxe",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "Un XML define la entidad <!ENTITY xxe SYSTEM \"file:///etc/passwd\"> y su valor vuelve en la respuesta. ¿Qué consigue el atacante?",
+    "correcta": "Leer sin autorización un fichero del servidor",
+    "distractores": [
+      "Ejecutar comandos del sistema operativo en el servidor",
+      "Inyectar código JavaScript en la página que ve el usuario"
+    ],
+    "explicacion": "✓ La entidad externa lee el fichero /etc/passwd y da acceso a información no autorizada.\n✗ «Ejecutar comandos»: la entidad lee un fichero, y no ejecuta comandos.\n✗ «Inyectar código JavaScript»: eso es un XSS, y la entidad lee ficheros del servidor."
+  },
+  {
+    "id": "ciclo-de-vida-063",
+    "concepto": "ciclo-de-vida-xxe",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Cómo se previene un XXE en un servicio SOAP?",
+    "correcta": "Se configura el procesador XML para desactivar las entidades externas",
+    "distractores": [
+      "Se filtra con una expresión regular la palabra ENTITY del XML",
+      "Se cifra con TLS toda la comunicación con el servicio SOAP"
+    ],
+    "explicacion": "✓ Una configuración adecuada del procesador desactiva las entidades externas si no se necesitan.\n✗ «expresión regular»: un filtro se puede eludir, y la defensa es la configuración.\n✗ «Se cifra con TLS»: TLS protege el tránsito, y el procesador sigue leyendo las entidades."
+  },
+  {
+    "id": "ciclo-de-vida-s07",
+    "concepto": "sigla-xxe",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "En seguridad web, ¿qué significa la sigla XXE?",
+    "correcta": "XML External Entity",
+    "distractores": [
+      "XML Extended Encryption",
+      "eXtensible XML Exchange"
+    ],
+    "explicacion": "✓ XXE es el acceso a entidades externas de un XML.\n✗ «Extended Encryption»: no es un cifrado, es el acceso a entidades externas.\n✗ «XML Exchange»: no es un intercambio de XML, es el acceso a entidades externas."
+  },
+  {
+    "id": "ciclo-de-vida-064",
+    "concepto": "ciclo-de-vida-cadena-de-suministro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "En un fallo de la cadena de suministro del software, ¿qué aprovecha el atacante?",
+    "correcta": "Una vulnerabilidad en un componente propio o de terceros de la aplicación",
+    "distractores": [
+      "Un valor de configuración por defecto, como una credencial sin cambiar",
+      "Una parte del diseño sin requisitos de seguridad en las historias de usuario"
+    ],
+    "explicacion": "✓ La cadena de suministro falla por una vulnerabilidad en un componente propio o de terceros (CWE-1395).\n✗ «valor de configuración por defecto»: eso es un defecto de configuración.\n✗ «sin requisitos de seguridad»: eso es un diseño inseguro."
+  },
+  {
+    "id": "ciclo-de-vida-065",
+    "concepto": "ciclo-de-vida-cadena-de-suministro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Para qué sirve mantener un SBOM de una aplicación?",
+    "correcta": "Para tener un registro actualizado de versiones de componentes y dependencias",
+    "distractores": [
+      "Para firmar y cifrar cada componente antes de desplegarlo en producción",
+      "Para bloquear las peticiones que intentan explotar un componente vulnerable"
+    ],
+    "explicacion": "✓ El SBOM es el registro actualizado de versiones de componentes y dependencias.\n✗ «firmar y cifrar»: un SBOM lista componentes, y no los protege.\n✗ «bloquear las peticiones»: eso lo hacen un WAF o un RASP, y el SBOM solo registra."
+  },
+  {
+    "id": "ciclo-de-vida-066",
+    "concepto": "ciclo-de-vida-cadena-de-suministro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Por qué se recomienda fijar versiones específicas y evitar rangos como ^1.2.3 o ~1.2.3?",
+    "correcta": "Para que las actualizaciones sean controladas y a una versión concreta",
+    "distractores": [
+      "Para que el gestor descargue la versión más reciente que se publique",
+      "Para no tener que revisar los boletines de seguridad de los componentes"
+    ],
+    "explicacion": "✓ Las actualizaciones periódicas se hacen de forma controlada y a versiones específicas.\n✗ «versión más reciente»: un rango deja que entren versiones nuevas sin revisar.\n✗ «no tener que revisar los boletines»: el seguimiento de vulnerabilidades sigue siendo necesario."
+  },
+  {
+    "id": "ciclo-de-vida-s08",
+    "concepto": "sigla-sbom",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "En seguridad de la cadena de suministro, ¿qué significa la sigla SBOM?",
+    "correcta": "Software Bill of Materials",
+    "distractores": [
+      "Secure Binary Origin Manifest",
+      "Software Build Orchestration Model"
+    ],
+    "explicacion": "✓ SBOM es la lista de materiales del software, con sus componentes y versiones.\n✗ «Binary Origin»: no es un manifiesto de binarios, lista componentes de software.\n✗ «Build Orchestration»: no orquesta compilaciones, lista componentes de software."
+  },
+  {
+    "id": "ciclo-de-vida-067",
+    "concepto": "ciclo-de-vida-cifrado-segun-el-estado",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    },
+    "pregunta": "Un backup de una base de datos se guarda cifrado. ¿Qué estado de los datos protege?",
+    "correcta": "Los datos en reposo (DIR), almacenados en el sistema",
+    "distractores": [
+      "Los datos en tránsito (DIT), enviados por la red",
+      "Los datos en uso (DIU), cargados en la memoria"
+    ],
+    "explicacion": "✓ Los datos en reposo (DIR), como un backup o una base de datos, se cifran.\n✗ «tránsito»: los datos del backup están almacenados, y no viajan por la red.\n✗ «en uso»: un backup no se está procesando en memoria."
+  },
+  {
+    "id": "ciclo-de-vida-068",
+    "concepto": "ciclo-de-vida-cifrado-segun-el-estado",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    },
+    "pregunta": "TLS cifra la comunicación entre un navegador y un servidor. ¿Qué estado de los datos protege?",
+    "correcta": "Los datos en tránsito (DIT), enviados por la red",
+    "distractores": [
+      "Los datos en reposo (DIR), guardados en el servidor",
+      "Los datos en uso (DIU), cargados en la memoria"
+    ],
+    "explicacion": "✓ TLS protege los datos en tránsito (DIT).\n✗ «reposo»: TLS no cifra lo que el servidor guarda.\n✗ «en uso»: TLS protege la comunicación, y no la memoria."
+  },
+  {
+    "id": "ciclo-de-vida-069",
+    "concepto": "ciclo-de-vida-cifrado-segun-el-estado",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    },
+    "pregunta": "Una máquina virtual cifra los datos de su memoria RAM. ¿Qué estado de los datos protege?",
+    "correcta": "Los datos en uso (DIU), cargados en la memoria",
+    "distractores": [
+      "Los datos en reposo (DIR), guardados en el disco",
+      "Los datos en tránsito (DIT), enviados por la red"
+    ],
+    "explicacion": "✓ El almacenamiento temporal de claves en memoria o el cifrado de la RAM protegen los datos en uso (DIU).\n✗ «reposo»: la RAM guarda los datos mientras se procesan, y no en reposo.\n✗ «tránsito»: la RAM no es un canal de comunicación."
+  },
+  {
+    "id": "ciclo-de-vida-070",
+    "concepto": "ciclo-de-vida-cifrado-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué hace el encabezado HSTS (HTTP Strict Transport Security)?",
+    "correcta": "Fuerza al navegador a usar TLS para hablar con el sitio",
+    "distractores": [
+      "Verifica el certificado del sitio con una clave pública fijada",
+      "Restringe las fuentes desde las que se cargan los scripts"
+    ],
+    "explicacion": "✓ HSTS fuerza el uso de TLS.\n✗ «clave pública fijada»: eso lo hace HPKP.\n✗ «fuentes desde las que se cargan»: eso lo hace CSP."
+  },
+  {
+    "id": "ciclo-de-vida-071",
+    "concepto": "ciclo-de-vida-cifrado-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué hace el encabezado HPKP (HTTP Public Key Pinning)?",
+    "correcta": "Verifica el certificado del sitio con una clave pública fijada",
+    "distractores": [
+      "Fuerza al navegador a usar TLS para hablar con el sitio",
+      "Impide que el navegador guarde las respuestas en su caché"
+    ],
+    "explicacion": "✓ HPKP verifica los certificados del sitio con claves públicas fijadas.\n✗ «Fuerza al navegador a usar TLS»: eso lo hace HSTS.\n✗ «guarde las respuestas en su caché»: el control de la caché se hace con otros encabezados."
+  },
+  {
+    "id": "ciclo-de-vida-072",
+    "concepto": "ciclo-de-vida-cifrado-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    },
+    "pregunta": "Un sitio muestra la tarjeta de crédito del usuario como ***69**. ¿Qué técnica aplica?",
+    "correcta": "Ofuscar o tokenizar la información sensible",
+    "distractores": [
+      "Cifrar el dato en reposo con una clave de longitud suficiente",
+      "Evitar el autocompletado de los campos del formulario"
+    ],
+    "explicacion": "✓ Ofuscar o tokenizar muestra solo una parte del dato sensible.\n✗ «Cifrar el dato en reposo»: el cifrado protege el almacén, y no lo que se muestra.\n✗ «autocompletado»: el autocompletado trata de lo que guarda el navegador."
+  },
+  {
+    "id": "ciclo-de-vida-073",
+    "concepto": "ciclo-de-vida-diseno-inseguro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué distingue un diseño inseguro de un error de programación?",
+    "correcta": "Falta la seguridad en el diseño, y la buena programación no la cubre",
+    "distractores": [
+      "Se origina en una biblioteca de terceros con vulnerabilidades conocidas",
+      "Se origina en valores por defecto que no se cambiaron al desplegar"
+    ],
+    "explicacion": "✓ Los aspectos de seguridad no contemplados en el diseño no se cubren solo con buenas técnicas de programación.\n✗ «biblioteca de terceros»: eso es un fallo de la cadena de suministro.\n✗ «valores por defecto»: eso es un defecto de configuración."
+  },
+  {
+    "id": "ciclo-de-vida-074",
+    "concepto": "ciclo-de-vida-diseno-inseguro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué requisitos se establecen en el ciclo de vida del software contra un diseño inseguro?",
+    "correcta": "Requisitos de seguridad de estándares como ASVS, CCM o ENS",
+    "distractores": [
+      "Requisitos de rendimiento y disponibilidad, medidos con pruebas de carga",
+      "Requisitos de licencia y mantenimiento de las bibliotecas elegidas"
+    ],
+    "explicacion": "✓ La contramedida establece requisitos de seguridad en el ciclo de vida, por ejemplo con ASVS, CCM o ENS.\n✗ «rendimiento y disponibilidad»: no son requisitos de seguridad.\n✗ «licencia y mantenimiento»: no son requisitos de seguridad."
+  },
+  {
+    "id": "ciclo-de-vida-075",
+    "concepto": "ciclo-de-vida-diseno-inseguro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué se añade a las propias historias de usuario como contramedida de un diseño inseguro?",
+    "correcta": "Controles de comportamientos anómalos de la aplicación",
+    "distractores": [
+      "Reglas de un cortafuegos de aplicación para filtrar las peticiones",
+      "Listas blancas con los destinos que el servidor puede consultar"
+    ],
+    "explicacion": "✓ Las historias de usuario incluyen controles de comportamientos anómalos.\n✗ «cortafuegos de aplicación»: es una contención en tiempo de ejecución, y no un control de las historias de usuario.\n✗ «Listas blancas»: es una defensa contra el SSRF, y no un control de las historias de usuario."
+  },
+  {
+    "id": "ciclo-de-vida-076",
+    "concepto": "ciclo-de-vida-inyeccion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 21
+    },
+    "pregunta": "¿Qué tienen en común las inyecciones SQL, LDAP, de sistema operativo y de Expression Language?",
+    "correcta": "Una aplicación procesa datos manipulados con un intérprete",
+    "distractores": [
+      "Una aplicación devuelve información interna sensible en sus respuestas",
+      "Un navegador envía peticiones que el usuario no autorizó"
+    ],
+    "explicacion": "✓ En una inyección, un intérprete procesa datos manipulados que no se validaron.\n✗ «información interna sensible»: eso es un fallo del control de errores.\n✗ «Un navegador envía peticiones»: eso es un CSRF."
+  },
+  {
+    "id": "ciclo-de-vida-077",
+    "concepto": "ciclo-de-vida-inyeccion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 21
+    },
+    "pregunta": "Contra una inyección, ¿de qué fuentes se revisan los datos de entrada?",
+    "correcta": "De cualquier fuente externa no confiable: usuario, encabezados, ficheros, LLM",
+    "distractores": [
+      "De los formularios que rellena el usuario en la aplicación",
+      "De las peticiones que llegan sin sesión iniciada en la aplicación"
+    ],
+    "explicacion": "✓ Se revisan los datos de cualquier fuente externa no confiable (CWE-20).\n✗ «formularios»: los datos también llegan por encabezados, ficheros o servicios externos.\n✗ «sin sesión iniciada»: un usuario con sesión también envía datos manipulados."
+  },
+  {
+    "id": "ciclo-de-vida-078",
+    "concepto": "ciclo-de-vida-inyeccion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 21
+    },
+    "pregunta": "Un servlet abre new File(FILES_FOLDER + fichero) con el parámetro fichero de la URL. ¿Qué logra el atacante con fichero=../../../etc/passwd?",
+    "correcta": "Leer ficheros fuera de la carpeta de imágenes",
+    "distractores": [
+      "Ejecutar comandos del sistema con el nombre del fichero",
+      "Inyectar una consulta SQL en el acceso a las imágenes"
+    ],
+    "explicacion": "✓ Es un Relative Path Traversal (CWE-23): la ruta sale de la carpeta prevista.\n✗ «Ejecutar comandos»: eso es una inyección de sistema operativo, como la del ejemplo en PHP.\n✗ «consulta SQL»: el parámetro se concatena a una ruta de fichero, y no a una consulta."
+  },
+  {
+    "id": "ciclo-de-vida-079",
+    "concepto": "ciclo-de-vida-sqli-prevencion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 22
+    },
+    "pregunta": "En el ejemplo Java seguro contra SQLi, ¿qué dos contramedidas se combinan?",
+    "correcta": "Validar la entrada con una expresión regular y usar una consulta parametrizada",
+    "distractores": [
+      "Escapar los caracteres especiales y llamar a un procedimiento almacenado",
+      "Validar con una lista negra y reducir los privilegios de la cuenta"
+    ],
+    "explicacion": "✓ El ejemplo valida la entrada con una expresión regular y usa un PreparedStatement parametrizado.\n✗ «procedimiento almacenado»: el ejemplo usa un PreparedStatement parametrizado.\n✗ «lista negra»: el ejemplo valida con una expresión regular de lo permitido."
+  },
+  {
+    "id": "ciclo-de-vida-080",
+    "concepto": "ciclo-de-vida-sqli-prevencion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Por qué una consulta parametrizada evita una inyección SQL?",
+    "correcta": "Separa las instrucciones SQL de los datos",
+    "distractores": [
+      "Cifra los datos antes de enviarlos a la base de datos",
+      "Elimina los caracteres especiales de cada entrada recibida"
+    ],
+    "explicacion": "✓ Las consultas parametrizadas separan las instrucciones de los datos.\n✗ «Cifra los datos»: el cifrado no separa instrucciones de datos.\n✗ «Elimina los caracteres especiales»: eso es el escapado, y la consulta parametrizada no depende de él."
+  },
+  {
+    "id": "ciclo-de-vida-081",
+    "concepto": "ciclo-de-vida-sqli-prevencion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Cuándo se usa el escapado de caracteres especiales contra la inyección SQL?",
+    "correcta": "Como último recurso, por ejemplo para una corrección temporal",
+    "distractores": [
+      "Como medida principal, porque funciona igual en cada base de datos",
+      "Cuando la consulta ya es parametrizada, para reforzarla"
+    ],
+    "explicacion": "✓ El escapado es un último recurso, específico de cada base de datos.\n✗ «porque funciona igual»: el proceso es específico de cada base de datos.\n✗ «ya es parametrizada»: con una consulta parametrizada no hace falta escapar."
+  },
+  {
+    "id": "ciclo-de-vida-s09",
+    "concepto": "sigla-rasp",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 21
+    },
+    "pregunta": "En seguridad de aplicaciones, ¿qué significa la sigla RASP?",
+    "correcta": "Runtime Application Self-Protection",
+    "distractores": [
+      "Remote Application Security Probe",
+      "Runtime Access Security Policy"
+    ],
+    "explicacion": "✓ RASP son bibliotecas o agentes de autoprotección de la aplicación en ejecución.\n✗ «Security Probe»: no es una sonda remota, es una autoprotección en ejecución.\n✗ «Access Security Policy»: no es una política de acceso, es una autoprotección de la aplicación."
+  },
+  {
+    "id": "ciclo-de-vida-082",
+    "concepto": "ciclo-de-vida-xss-tipos",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 24
+    },
+    "pregunta": "En un XSS almacenado, ¿dónde persiste el código malicioso?",
+    "correcta": "Persiste en la aplicación: ficheros, base de datos o cliente",
+    "distractores": [
+      "En la propia petición, y la página lo refleja en la respuesta",
+      "En la caché del navegador del atacante, que lo reenvía a la víctima"
+    ],
+    "explicacion": "✓ En el XSS almacenado, el código o su forma de recuperarlo persiste en la aplicación.\n✗ «refleja en la respuesta»: eso es un XSS reflejado, y no persiste.\n✗ «caché del navegador»: el código persiste en la aplicación, y no en el navegador del atacante."
+  },
+  {
+    "id": "ciclo-de-vida-083",
+    "concepto": "ciclo-de-vida-xss-tipos",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué hace una aplicación vulnerable a un XSS reflejado?",
+    "correcta": "Usa datos del cliente, como un formulario o una URL",
+    "distractores": [
+      "Guarda el script en la base de datos y lo sirve a cada visitante",
+      "Evalúa en el servidor un texto del DOM como si fuera código JS"
+    ],
+    "explicacion": "✓ En el XSS reflejado, los datos del cliente actualizan la página directamente, por ejemplo en un mensaje de error.\n✗ «base de datos»: eso es un XSS almacenado.\n✗ «texto del DOM»: eso es un XSS de cliente, que ocurre en el navegador."
+  },
+  {
+    "id": "ciclo-de-vida-084",
+    "concepto": "ciclo-de-vida-xss-tipos",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué distingue un XSS de cliente (Client XSS) de uno de servidor?",
+    "correcta": "El navegador inserta el código en el DOM, y no el servidor",
+    "distractores": [
+      "El código malicioso persiste en ficheros HTML o JS de la aplicación",
+      "El código funciona si la víctima tiene la sesión de usuario iniciada"
+    ],
+    "explicacion": "✓ En el Client XSS, el navegador inserta el código en el DOM, por ejemplo desde una URL manipulada.\n✗ «persiste en ficheros»: eso depende de la persistencia, y no del punto de entrada.\n✗ «sesión de usuario»: un XSS no exige una sesión iniciada."
+  },
+  {
+    "id": "ciclo-de-vida-085",
+    "concepto": "ciclo-de-vida-xss-proteccion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Cómo se codifica la salida HTML contra un XSS?",
+    "correcta": "Según el contexto: contenido, atributos, URLs, CSS o JS",
+    "distractores": [
+      "Con una sola función de escapado, válida para cualquier contexto",
+      "Con un cifrado de los datos del usuario antes de mostrarlos"
+    ],
+    "explicacion": "✓ La codificación de la salida depende del contexto: contenido, atributos, URLs, CSS o JS.\n✗ «una sola función»: cada contexto necesita su propia codificación.\n✗ «cifrado»: el cifrado no evita que el navegador interprete el código."
+  },
+  {
+    "id": "ciclo-de-vida-086",
+    "concepto": "ciclo-de-vida-xss-proteccion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 25
+    },
+    "pregunta": "¿Qué elementos inseguros de JavaScript se evitan contra un XSS?",
+    "correcta": "Evita eval(cadena), bibliotecas de terceros y acceso a cookies",
+    "distractores": [
+      "Las funciones asíncronas y las peticiones a servicios externos",
+      "Los módulos del propio proyecto y las bibliotecas estándar del navegador"
+    ],
+    "explicacion": "✓ Se evitan eval(cadena), las bibliotecas de terceros y el acceso a cookies.\n✗ «funciones asíncronas»: no son elementos inseguros por sí mismos.\n✗ «módulos del propio proyecto»: no son elementos inseguros por sí mismos."
+  },
+  {
+    "id": "ciclo-de-vida-087",
+    "concepto": "ciclo-de-vida-xss-proteccion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 25
+    },
+    "pregunta": "En el ejemplo JSP, ¿qué evita que value='${param.CC}' ejecute código inyectado?",
+    "correcta": "Escapar el parámetro con fn:escapeXml",
+    "distractores": [
+      "Validar la longitud del parámetro CC en el servidor",
+      "Cambiar el tipo del campo de TEXT a hidden"
+    ],
+    "explicacion": "✓ La versión segura usa fn:escapeXml(param.CC), que escapa los caracteres inseguros.\n✗ «longitud»: la longitud no impide un script corto.\n✗ «hidden»: un campo oculto también refleja el valor sin escapar."
+  },
+  {
+    "id": "ciclo-de-vida-088",
+    "concepto": "ciclo-de-vida-csp-xss",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Qué papel tiene cada parte en una política CSP?",
+    "correcta": "El servidor indica las fuentes confiables y el cliente bloquea el resto",
+    "distractores": [
+      "El cliente indica sus fuentes confiables y el servidor filtra la respuesta",
+      "El servidor bloquea las peticiones del cliente que violan la política"
+    ],
+    "explicacion": "✓ El servidor declara las fuentes confiables, y el cliente bloquea el procesamiento de contenidos no confiables.\n✗ «servidor filtra»: es el servidor quien declara la política.\n✗ «servidor bloquea»: es el cliente quien bloquea el contenido no confiable."
+  },
+  {
+    "id": "ciclo-de-vida-089",
+    "concepto": "ciclo-de-vida-csp-xss",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 26
+    },
+    "pregunta": "¿Cómo envía el servidor una política CSP?",
+    "correcta": "Con el encabezado Content-Security-Policy o una etiqueta meta",
+    "distractores": [
+      "Con una cookie HttpOnly que el navegador lee al cargar la página",
+      "Con un certificado firmado que el navegador verifica en la conexión"
+    ],
+    "explicacion": "✓ Las políticas se envían principalmente con encabezados o con etiquetas meta.\n✗ «cookie HttpOnly»: la política no viaja en una cookie.\n✗ «certificado»: la política no viaja en un certificado."
+  },
+  {
+    "id": "ciclo-de-vida-090",
+    "concepto": "ciclo-de-vida-csp-xss",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Qué hace la política script-src 'self'?",
+    "correcta": "Permite JS solo de ficheros del mismo dominio, no del HTML",
+    "distractores": [
+      "Permite cualquier JS, tanto en ficheros como dentro del HTML",
+      "Bloquea todo el JS de la página, incluido el de ficheros propios"
+    ],
+    "explicacion": "✓ Con script-src 'self' solo se permite el JS de ficheros del mismo dominio.\n✗ «cualquier JS»: eso lo permite unsafe-inline, y no 'self'.\n✗ «Bloquea todo el JS»: los ficheros del mismo dominio sí se permiten."
+  },
+  {
+    "id": "ciclo-de-vida-s10",
+    "concepto": "sigla-xss",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 24
+    },
+    "pregunta": "En seguridad web, ¿qué significa la sigla XSS?",
+    "correcta": "Cross-Site Scripting",
+    "distractores": [
+      "Cross-Server Session",
+      "Extended Script Security"
+    ],
+    "explicacion": "✓ XSS es Cross-Site Scripting (CWE-79).\n✗ «Cross-Server Session»: no es una sesión entre servidores, es una inyección de scripts.\n✗ «Extended Script Security»: no es una seguridad de scripts, es un ataque."
+  },
+  {
+    "id": "ciclo-de-vida-091",
+    "concepto": "ciclo-de-vida-prompt-injection",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Qué logra un atacante con una inyección en el prompt de un LLM?",
+    "correcta": "Manipular el modelo para eludir restricciones o extraer datos",
+    "distractores": [
+      "Alterar los pesos del modelo para que aprenda respuestas falsas",
+      "Agotar los recursos del servicio con peticiones que saturan el modelo"
+    ],
+    "explicacion": "✓ El atacante incluye instrucciones que manipulan el comportamiento del LLM (CWE-1427).\n✗ «pesos del modelo»: el ataque actúa sobre el prompt, y no sobre el entrenamiento.\n✗ «Agotar los recursos»: eso es una denegación de servicio, y no una inyección."
+  },
+  {
+    "id": "ciclo-de-vida-092",
+    "concepto": "ciclo-de-vida-prompt-injection",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Qué es una inyección de prompt indirecta?",
+    "correcta": "Llegan en contenido externo, como una página web",
+    "distractores": [
+      "Las instrucciones se escriben en otro idioma o con letras desordenadas",
+      "El usuario escribe las instrucciones maliciosas en el propio chat"
+    ],
+    "explicacion": "✓ La inyección indirecta o remota usa contenido externo que el modelo consulta, como una web o un RAG.\n✗ «otro idioma»: eso es una técnica de ofuscación, y no una inyección indirecta.\n✗ «en el propio chat»: eso es una inyección directa."
+  },
+  {
+    "id": "ciclo-de-vida-093",
+    "concepto": "ciclo-de-vida-prompt-injection",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 28
+    },
+    "pregunta": "En el ejemplo de prompt con SYSTEM_INSTRUCTIONS y USER_DATA_TO_PROCESS, ¿qué defensa se aplica?",
+    "correcta": "La separación de contexto entre sistema y datos del usuario",
+    "distractores": [
+      "El filtrado de comandos sospechosos con una lista de palabras prohibidas",
+      "La verificación previa del prompt por un segundo modelo"
+    ],
+    "explicacion": "✓ El prompt delimita los datos del usuario y ordena tratarlos como datos, y no como instrucciones.\n✗ «lista de palabras»: el ejemplo no filtra palabras, delimita los datos.\n✗ «segundo modelo»: el ejemplo no usa un segundo modelo, delimita los datos."
+  },
+  {
+    "id": "ciclo-de-vida-094",
+    "concepto": "ciclo-de-vida-prompt-injection-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Qué se aplica a los datos de entrada y al contenido externo consultado por un LLM?",
+    "correcta": "Validación y sanitización: filtrar comandos y limitar longitud",
+    "distractores": [
+      "Cifrado de los datos con una clave que el modelo no conoce",
+      "Compresión del texto para reducir el tamaño del contexto del modelo"
+    ],
+    "explicacion": "✓ La validación y la sanitización incluyen el contenido externo, como un RAG o una web.\n✗ «Cifrado de los datos»: el cifrado no impide que el modelo siga instrucciones inyectadas.\n✗ «Compresión del texto»: reducir el contexto no neutraliza instrucciones inyectadas."
+  },
+  {
+    "id": "ciclo-de-vida-095",
+    "concepto": "ciclo-de-vida-prompt-injection-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Qué política limita el daño de un LLM manipulado con una inyección?",
+    "correcta": "Mínimo privilegio en herramientas, MCP, ficheros y credenciales",
+    "distractores": [
+      "Máximo acceso a las herramientas, para que el modelo se recupere por su cuenta",
+      "Acceso total con registro posterior de cada acción del modelo"
+    ],
+    "explicacion": "✓ Con mínimo privilegio, un LLM manipulado solo accede a lo imprescindible.\n✗ «Máximo acceso»: más acceso aumenta el daño posible.\n✗ «Acceso total»: el registro detecta, pero no limita el daño."
+  },
+  {
+    "id": "ciclo-de-vida-096",
+    "concepto": "ciclo-de-vida-prompt-injection-contramedidas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 28
+    },
+    "pregunta": "¿Para qué sirven un contenedor o una VM con subredes aisladas en una aplicación con LLM?",
+    "correcta": "Aíslan el alcance del modelo y limitan el daño de un ataque",
+    "distractores": [
+      "Aceleran las respuestas del modelo al reducir la latencia de red",
+      "Reentrenan el modelo con ejemplos de ataques para que los rechace"
+    ],
+    "explicacion": "✓ Aislar el alcance (sandbox) limita lo que alcanza un modelo manipulado.\n✗ «Aceleran las respuestas»: el aislamiento es una medida de seguridad, y no de rendimiento.\n✗ «Reentrenan el modelo»: el aislamiento no cambia el modelo."
+  },
+  {
+    "id": "ciclo-de-vida-097",
+    "concepto": "ciclo-de-vida-autenticacion-fallos",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué busca un atacante en un fallo de autenticación?",
+    "correcta": "Hacerse pasar por otro usuario con sus credenciales o su id de sesión",
+    "distractores": [
+      "Leer datos de otro usuario sin pasar por la autenticación del sistema",
+      "Obtener privilegios de administrador desde una cuenta sin privilegios"
+    ],
+    "explicacion": "✓ El atacante obtiene información que lo identifica ante el sistema: credenciales o id de sesión.\n✗ «sin pasar por la autenticación»: eso es un fallo de control de acceso.\n✗ «privilegios de administrador»: eso es una escalada de privilegios, y no un fallo de autenticación."
+  },
+  {
+    "id": "ciclo-de-vida-098",
+    "concepto": "ciclo-de-vida-autenticacion-fallos",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué causa principalmente un fallo de autenticación?",
+    "correcta": "La gestión propia de la autenticación y de las credenciales",
+    "distractores": [
+      "El uso de frameworks y bibliotecas especializadas en autenticación",
+      "La falta de cifrado en la conexión entre el cliente y el servidor"
+    ],
+    "explicacion": "✓ El fallo viene sobre todo de gestionar uno mismo la autenticación y las credenciales.\n✗ «frameworks y bibliotecas»: eso es una contramedida, y no una causa.\n✗ «falta de cifrado»: es un fallo posible, pero no la causa principal."
+  },
+  {
+    "id": "ciclo-de-vida-099",
+    "concepto": "ciclo-de-vida-autenticacion-fallos",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué se hace con las operaciones de cambio o recuperación de clave contra los fallos de autenticación?",
+    "correcta": "Se gestionan con políticas de claves y límite de intentos",
+    "distractores": [
+      "Se permiten sin restricción para que el usuario recupere su acceso",
+      "Se delegan en el cliente, que guarda la clave anterior para validar"
+    ],
+    "explicacion": "✓ Las operaciones sobre credenciales llevan políticas de claves válidas y límite de operaciones fallidas (CWE-287).\n✗ «sin restricción»: la falta de límites facilita el ataque.\n✗ «clave anterior»: el cliente no debe validar credenciales."
+  },
+  {
+    "id": "ciclo-de-vida-s11",
+    "concepto": "sigla-sri",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 30
+    },
+    "pregunta": "En seguridad web, ¿qué significa la sigla SRI?",
+    "correcta": "SubResource Integrity",
+    "distractores": [
+      "Secure Resource Isolation",
+      "Signed Request Identifier"
+    ],
+    "explicacion": "✓ SRI es SubResource Integrity: una especificación del W3C para comprobar la integridad de recursos externos.\n✗ «Secure Resource Isolation»: no es un aislamiento, es una comprobación de integridad.\n✗ «Signed Request Identifier»: no identifica peticiones, comprueba recursos externos."
+  },
+  {
+    "id": "ciclo-de-vida-100",
+    "concepto": "ciclo-de-vida-sesion-insegura",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Por qué es un error que el id de sesión aparezca en la URL?",
+    "correcta": "Queda expuesto en el historial, en registros y en enlaces compartidos",
+    "distractores": [
+      "La URL admite menos caracteres que una cookie, y el id queda truncado",
+      "El navegador cifra la URL y el servidor no puede leer el id recibido"
+    ],
+    "explicacion": "✓ Un id de sesión en la URL se filtra por el historial, los registros y los enlaces compartidos.\n✗ «menos caracteres»: el problema no es la longitud, es la exposición del id.\n✗ «cifra la URL»: el navegador no cifra la URL de una petición."
+  },
+  {
+    "id": "ciclo-de-vida-101",
+    "concepto": "ciclo-de-vida-sesion-insegura",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué riesgo tiene una cookie de sesión persistente si se cierra el navegador sin desconectarse?",
+    "correcta": "El id de sesión sigue válido y otra persona puede reutilizarlo",
+    "distractores": [
+      "El navegador borra la cookie y el usuario pierde los datos de la sesión",
+      "El servidor cierra la sesión y bloquea la cuenta durante unos minutos"
+    ],
+    "explicacion": "✓ Sin cierre de sesión, el id sigue válido hasta que caduca, y otra persona puede usarlo.\n✗ «borra la cookie»: una cookie persistente no se borra al cerrar el navegador.\n✗ «bloquea la cuenta»: el servidor no cierra la sesión por cerrar el navegador."
+  },
+  {
+    "id": "ciclo-de-vida-102",
+    "concepto": "ciclo-de-vida-sesion-insegura",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué rasgos tiene un identificador de sesión bien protegido?",
+    "correcta": "Longitud y aleatoriedad suficientes, caducidad y cierre de sesión",
+    "distractores": [
+      "Un valor corto y legible, que el usuario pueda recordar con facilidad",
+      "Un valor derivado del nombre del usuario, para identificarlo mejor"
+    ],
+    "explicacion": "✓ Un id protegido es largo y aleatorio, caduca y se invalida al cerrar la sesión (CWE-384).\n✗ «corto y legible»: un id predecible facilita su adivinación.\n✗ «derivado del nombre»: un id derivado del usuario es predecible."
+  },
+  {
+    "id": "ciclo-de-vida-103",
+    "concepto": "ciclo-de-vida-almacenamiento-de-claves",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué algoritmos se prefieren a MD5 para guardar claves?",
+    "correcta": "PBKDF2, bcrypt o, mejor, Argon2id, que son hashes lentos",
+    "distractores": [
+      "SHA-256 sin sal, porque es una función de hash más moderna",
+      "AES con una clave fija, porque se puede descifrar al validar"
+    ],
+    "explicacion": "✓ PBKDF2, bcrypt y Argon2id son más lentos y más resistentes a la fuerza bruta que MD5.\n✗ «SHA-256 sin sal»: un hash rápido y sin sal se ataca con fuerza bruta.\n✗ «AES con una clave fija»: una clave debe guardarse con un hash lento, y no cifrada."
+  },
+  {
+    "id": "ciclo-de-vida-104",
+    "concepto": "ciclo-de-vida-almacenamiento-de-claves",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué facilita no usar sal, o usar la misma sal, al guardar claves?",
+    "correcta": "Los ataques de fuerza bruta, como las rainbow tables",
+    "distractores": [
+      "La recuperación de la clave original a partir de su hash guardado",
+      "La colisión de dos usuarios en el mismo identificador de sesión"
+    ],
+    "explicacion": "✓ Sin sal, o con la misma, las claves iguales dan el mismo hash y las rainbow tables funcionan.\n✗ «recuperación de la clave»: un hash no se invierte, se ataca por fuerza bruta.\n✗ «mismo identificador»: la sal no afecta a los identificadores de sesión."
+  },
+  {
+    "id": "ciclo-de-vida-105",
+    "concepto": "ciclo-de-vida-almacenamiento-de-claves",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Cómo se protegen las credenciales del usuario contra el robo?",
+    "correcta": "Se cifran en reposo y en tránsito, y no permanecen en memoria",
+    "distractores": [
+      "Se guardan en texto plano en una base de datos de acceso restringido",
+      "Se envían por HTTP, porque la clave ya va protegida por un hash"
+    ],
+    "explicacion": "✓ Las credenciales se cifran en reposo y en tránsito, y se evita que queden en memoria.\n✗ «texto plano»: una base restringida no protege ante una filtración.\n✗ «por HTTP»: una conexión insegura expone la credencial."
+  },
+  {
+    "id": "ciclo-de-vida-106",
+    "concepto": "ciclo-de-vida-integridad-software",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Qué hace un atacante en un fallo de integridad de software o datos?",
+    "correcta": "Manipula las dependencias de la aplicación o los datos que recibe",
+    "distractores": [
+      "Descubre credenciales débiles y entra con la cuenta de un usuario",
+      "Lee los ficheros de configuración que el servidor deja expuestos"
+    ],
+    "explicacion": "✓ El atacante altera dependencias o datos, y la aplicación ejecuta código malicioso o procesa datos alterados.\n✗ «credenciales débiles»: eso es un fallo de autenticación.\n✗ «ficheros de configuración»: eso es una configuración insegura."
+  },
+  {
+    "id": "ciclo-de-vida-107",
+    "concepto": "ciclo-de-vida-integridad-software",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Qué mecanismos detectan alteraciones en el código de terceros?",
+    "correcta": "Firmas digitales, SRI, CSP o contenedores firmados",
+    "distractores": [
+      "Cortafuegos de red, que bloquean los paquetes de los repositorios",
+      "Escáneres de puertos, que revisan los servicios de los proveedores"
+    ],
+    "explicacion": "✓ Las firmas digitales y mecanismos como SRI, CSP o Notary Project detectan alteraciones (CWE-353).\n✗ «Cortafuegos de red»: un cortafuegos filtra tráfico, y no verifica la integridad.\n✗ «Escáneres de puertos»: un escáner de puertos no verifica el código recibido."
+  },
+  {
+    "id": "ciclo-de-vida-108",
+    "concepto": "ciclo-de-vida-integridad-software",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Dónde se ejecutan los procesos de CI/CD o la deserialización de datos no seguros?",
+    "correcta": "En entornos aislados o con privilegios reducidos",
+    "distractores": [
+      "En el entorno de producción, para que prueben el sistema real",
+      "En el equipo del desarrollador, con sus credenciales personales"
+    ],
+    "explicacion": "✓ Se ejecutan en entornos aislados o con privilegios reducidos (CWE-502).\n✗ «entorno de producción»: un fallo en producción tendría el máximo impacto.\n✗ «equipo del desarrollador»: un equipo personal con credenciales amplía el riesgo."
+  },
+  {
+    "id": "ciclo-de-vida-s12",
+    "concepto": "sigla-siem",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 31
+    },
+    "pregunta": "En seguridad, ¿qué significa la sigla SIEM?",
+    "correcta": "Security Information and Event Management",
+    "distractores": [
+      "Secure Internet Exchange Model",
+      "System Integrity and Error Monitor"
+    ],
+    "explicacion": "✓ SIEM centraliza y custodia los logs y detecta amenazas.\n✗ «Secure Internet Exchange Model»: no es un modelo de intercambio, gestiona logs y eventos.\n✗ «System Integrity and Error Monitor»: no vigila errores del sistema, centraliza eventos de seguridad."
+  },
+  {
+    "id": "ciclo-de-vida-109",
+    "concepto": "ciclo-de-vida-sri",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Qué comprueba SRI en un recurso externo, como un script de un CDN?",
+    "correcta": "Que el recurso no se modificó por un servidor comprometido o un MiTM",
+    "distractores": [
+      "Que el servidor del recurso tiene un certificado válido y no caducado",
+      "Que el recurso procede de un dominio incluido en una lista de permitidos"
+    ],
+    "explicacion": "✓ SRI verifica que los recursos de fuentes externas no se modificaron: por un servidor remoto comprometido o por un MiTM.\n✗ «certificado válido»: eso lo comprueba TLS, y no SRI.\n✗ «lista de permitidos»: eso lo comprueba CSP, y no SRI."
+  },
+  {
+    "id": "ciclo-de-vida-110",
+    "concepto": "ciclo-de-vida-sri",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Qué ocurre cuando el recurso externo no coincide con el hash de SRI?",
+    "correcta": "El recurso no se procesa y se genera un error de red",
+    "distractores": [
+      "Se procesa igualmente y el navegador avisa con una alerta al usuario",
+      "Se descarga de nuevo desde otra fuente alternativa del mismo servidor"
+    ],
+    "explicacion": "✓ Si los datos se alteraron, no se procesan y se genera un error de red.\n✗ «avisa con una alerta»: el recurso alterado no se procesa.\n✗ «otra fuente alternativa»: SRI no busca otra fuente, bloquea el recurso."
+  },
+  {
+    "id": "ciclo-de-vida-111",
+    "concepto": "ciclo-de-vida-sri",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Cómo se usa SRI en una etiqueta script o link?",
+    "correcta": "Con el atributo integrity con el hash, y crossorigin",
+    "distractores": [
+      "Con el atributo nonce con un valor aleatorio, y defer",
+      "Con una cabecera Content-Security-Policy y la directiva sandbox"
+    ],
+    "explicacion": "✓ La etiqueta lleva integrity con el hash del recurso, y crossorigin porque SRI requiere cabeceras CORS.\n✗ «nonce»: nonce es de CSP, y no el atributo de SRI.\n✗ «Content-Security-Policy»: la cabecera es de CSP, y no de SRI."
+  },
+  {
+    "id": "ciclo-de-vida-112",
+    "concepto": "ciclo-de-vida-registro-y-monitorizacion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué facilita a un atacante la falta de monitorización y de respuesta?",
+    "correcta": "Experimentar y explotar vulnerabilidades sin que nadie lo detecte",
+    "distractores": [
+      "Cifrar los datos de la aplicación y pedir un rescate para recuperarlos",
+      "Falsificar su identidad mediante la reutilización de un id de sesión"
+    ],
+    "explicacion": "✓ Sin monitorización, el atacante experimenta y explota las vulnerabilidades del sistema.\n✗ «pedir un rescate»: eso no depende de la falta de monitorización.\n✗ «reutilización de un id»: eso es un fallo de autenticación, y no de monitorización."
+  },
+  {
+    "id": "ciclo-de-vida-113",
+    "concepto": "ciclo-de-vida-registro-y-monitorizacion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué fallos se registran de forma sistemática para el análisis forense?",
+    "correcta": "Fallos de identificación, de acceso y de datos de entrada",
+    "distractores": [
+      "Los de rendimiento, como la latencia y el uso de memoria",
+      "Los de interfaz, como un botón mal alineado o una traducción"
+    ],
+    "explicacion": "✓ Se registran los fallos de identificación, control de acceso y validación de datos de entrada.\n✗ «latencia»: eso es monitorización de rendimiento, y no de seguridad.\n✗ «botón mal alineado»: no son registros de seguridad."
+  },
+  {
+    "id": "ciclo-de-vida-114",
+    "concepto": "ciclo-de-vida-registro-y-monitorizacion",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué sistemas reaccionan ante una amenaza, además de registrarla?",
+    "correcta": "Sistemas de alerta y respuesta como WAF, RASP, IDS/IPS o SIEM",
+    "distractores": [
+      "Sistemas de copia de seguridad, que restauran los datos tras un fallo",
+      "Sistemas de integración continua, que compilan y prueban el código"
+    ],
+    "explicacion": "✓ Alertas y respuesta: WAF, RASP, IDS/IPS, SIEM, bloqueo de cuentas y honeypots.\n✗ «copia de seguridad»: una copia de seguridad restaura, pero no responde a la amenaza.\n✗ «integración continua»: la integración continua no responde a una amenaza."
+  },
+  {
+    "id": "ciclo-de-vida-115",
+    "concepto": "ciclo-de-vida-excepciones",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué consecuencias tiene gestionar mal una situación excepcional?",
+    "correcta": "Caídas, fallos anómalos y revelación de datos sensibles",
+    "distractores": [
+      "Pérdida de la licencia del software y sanciones del proveedor",
+      "Lentitud en la red y falta de espacio en el almacenamiento"
+    ],
+    "explicacion": "✓ El software que falla ante situaciones no habituales cae, se comporta de forma anómala o revela información.\n✗ «licencia»: no es una consecuencia técnica de una excepción mal gestionada.\n✗ «falta de espacio»: no es la consecuencia de una excepción mal gestionada."
+  },
+  {
+    "id": "ciclo-de-vida-116",
+    "concepto": "ciclo-de-vida-excepciones",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué se hace a nivel de código para gestionar errores y excepciones?",
+    "correcta": "Manejadores globales de excepciones y comprobación de null",
+    "distractores": [
+      "Ocultar todas las excepciones para que el usuario no las vea",
+      "Devolver al usuario la traza completa del error para su diagnóstico"
+    ],
+    "explicacion": "✓ A nivel de código se usan validación, manejadores globales de excepciones y Optional en lugar de null.\n✗ «Ocultar todas»: ocultarlas impide detectar y responder a los fallos.\n✗ «traza completa»: la traza revela información sensible."
+  },
+  {
+    "id": "ciclo-de-vida-117",
+    "concepto": "ciclo-de-vida-excepciones",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 32
+    },
+    "pregunta": "¿Qué se elimina de la información que se devuelve al usuario ante un error?",
+    "correcta": "Las trazas de error del sistema, que revelan datos internos",
+    "distractores": [
+      "Todo texto del mensaje de error, incluso el código de estado",
+      "El identificador de sesión que el servidor envía en la respuesta"
+    ],
+    "explicacion": "✓ Las trazas de error revelan información sensible (CWE-200).\n✗ «código de estado»: el usuario necesita algún mensaje genérico, sin trazas.\n✗ «identificador de sesión»: el problema de la traza es la información interna que revela."
+  },
+  {
+    "id": "ciclo-de-vida-s13",
+    "concepto": "sigla-hitl",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 28
+    },
+    "pregunta": "En seguridad de LLM, ¿qué significa la sigla HITL?",
+    "correcta": "Human In The Loop",
+    "distractores": [
+      "High Integrity Token Layer",
+      "Host Isolation Trust Level"
+    ],
+    "explicacion": "✓ HITL es la validación humana en operaciones críticas de un sistema con LLM.\n✗ «High Integrity Token Layer»: no es una capa de tokens, es una validación humana.\n✗ «Host Isolation Trust Level»: no es un nivel de confianza, es una validación humana."
+  },
+  {
+    "id": "ciclo-de-vida-118",
+    "concepto": "ciclo-de-vida-vulnerabilidades-explotadas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué establece el catálogo KEV de la CISA para las agencias federales?",
+    "correcta": "Fechas obligatorias de mitigación de vulnerabilidades explotadas",
+    "distractores": [
+      "Una puntuación de gravedad para cada vulnerabilidad nueva publicada",
+      "Una probabilidad de explotación que prioriza las vulnerabilidades"
+    ],
+    "explicacion": "✓ El catálogo KEV lista las vulnerabilidades explotadas y fija fechas obligatorias de mitigación.\n✗ «puntuación de gravedad»: la gravedad la da CVSS, y no el catálogo KEV.\n✗ «probabilidad de explotación»: esa probabilidad la da EPSS, y no el catálogo KEV."
+  },
+  {
+    "id": "ciclo-de-vida-119",
+    "concepto": "ciclo-de-vida-vulnerabilidades-explotadas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Qué se logra con la base de datos europea de vulnerabilidades de la ENISA?",
+    "correcta": "Intercambiar información de seguridad entre países europeos",
+    "distractores": [
+      "Publicar fechas obligatorias de mitigación para las agencias federales",
+      "Detectar ataques en tiempo real con una red de honeypots propia"
+    ],
+    "explicacion": "✓ La EUVD de la ENISA intercambia información de seguridad entre los servicios de los países europeos.\n✗ «fechas obligatorias»: esas fechas son del catálogo KEV de la CISA.\n✗ «honeypots»: los honeypots son de la Fundación Shadowserver."
+  },
+  {
+    "id": "ciclo-de-vida-120",
+    "concepto": "ciclo-de-vida-vulnerabilidades-explotadas",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    },
+    "pregunta": "¿Cómo obtiene la Fundación Shadowserver sus datos sobre ataques?",
+    "correcta": "Monitoriza los intentos de ataque en una red de honeypots",
+    "distractores": [
+      "Analiza el código de las aplicaciones con herramientas de análisis estático",
+      "Recoge los informes que envían las agencias federales de cada país"
+    ],
+    "explicacion": "✓ Shadowserver monitoriza intentos de ataque en una red de honeypots.\n✗ «análisis estático»: Shadowserver observa ataques reales, y no analiza código.\n✗ «informes que envían»: Shadowserver mide ataques en sus honeypots."
+  },
+  {
+    "id": "ciclo-de-vida-121",
+    "concepto": "ciclo-de-vida-httponly",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Qué impide la propiedad HttpOnly de una cookie?",
+    "correcta": "Que el código JS lea la cookie con document.cookie",
+    "distractores": [
+      "Que el navegador envíe la cookie a sitios de otro dominio",
+      "Que la cookie viaje por una conexión HTTP sin cifrar"
+    ],
+    "explicacion": "✓ Con HttpOnly, el código JS no lee la cookie, ni siquiera el código inyectado por un XSS.\n✗ «sitios de otro dominio»: eso lo controla SameSite, y no HttpOnly.\n✗ «HTTP sin cifrar»: eso lo controla la propiedad Secure, y no HttpOnly."
+  },
+  {
+    "id": "ciclo-de-vida-122",
+    "concepto": "ciclo-de-vida-httponly",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 27
+    },
+    "pregunta": "Con HttpOnly activo y un XSS, ¿qué sigue pudiendo hacer el atacante?",
+    "correcta": "Que el navegador envíe la cookie con las peticiones del script",
+    "distractores": [
+      "Leer la cookie de sesión con document.cookie y enviarla a su servidor",
+      "Nada, porque HttpOnly bloquea por completo la ejecución del script"
+    ],
+    "explicacion": "✓ El navegador sigue enviando la cookie a sus destinos, salvo que se active SameSite.\n✗ «document.cookie»: HttpOnly impide esa lectura.\n✗ «bloquea por completo»: HttpOnly no bloquea el script, solo protege la cookie."
+  },
+  {
+    "id": "ciclo-de-vida-123",
+    "concepto": "ciclo-de-vida-httponly",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 27
+    },
+    "pregunta": "¿Cómo se activa HttpOnly en la cookie de sesión de una aplicación web Java?",
+    "correcta": "Con http-only en la configuración de cookies de web.xml",
+    "distractores": [
+      "Con una directiva script-src en el encabezado de la respuesta",
+      "Con el atributo integrity en la etiqueta de cada script de la página"
+    ],
+    "explicacion": "✓ Se configura http-only en web.xml o en application.properties, o con cookie.setHttpOnly(true).\n✗ «script-src»: script-src es de CSP, y no activa HttpOnly.\n✗ «integrity»: integrity es de SRI, y no activa HttpOnly."
+  },
+  {
+    "id": "ciclo-de-vida-124",
+    "concepto": "ciclo-de-vida-guias-de-desarrollo-seguro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué ofrece el proyecto CWE para el desarrollo seguro?",
+    "correcta": "Un repositorio de malas prácticas con ejemplos y alternativas",
+    "distractores": [
+      "Un catálogo de vulnerabilidades con su puntuación de gravedad",
+      "Una guía de requisitos de seguridad con tres niveles de verificación"
+    ],
+    "explicacion": "✓ El CWE agrupa malas prácticas por criterios, y aporta ejemplos, efectos y alternativas seguras.\n✗ «puntuación de gravedad»: la puntuación es de CVSS, y el CWE cataloga debilidades.\n✗ «tres niveles»: esos niveles son de ASVS, y no del CWE."
+  },
+  {
+    "id": "ciclo-de-vida-125",
+    "concepto": "ciclo-de-vida-guias-de-desarrollo-seguro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué diferencia hay entre OWASP Pro-Active Controls y los Secure Coding Cheat Sheets?",
+    "correcta": "Los primeros dan técnicas generales y los segundos técnicas específicas",
+    "distractores": [
+      "Los primeros son técnicas específicas y los segundos técnicas generales",
+      "Los primeros cubren la web y los segundos cubren las aplicaciones móviles"
+    ],
+    "explicacion": "✓ Pro-Active Controls son técnicas generales, y los Cheat Sheets son técnicas específicas.\n✗ «primeros son técnicas específicas»: están al revés: las Pro-Active Controls son generales.\n✗ «cubren las aplicaciones móviles»: la diferencia es el nivel de detalle, no la plataforma."
+  },
+  {
+    "id": "ciclo-de-vida-126",
+    "concepto": "ciclo-de-vida-guias-de-desarrollo-seguro",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    },
+    "pregunta": "¿Qué herramientas usan el CWE para indicar cómo resolver un problema?",
+    "correcta": "Las de análisis estático, como Semgrep, SonarQube o Snyk",
+    "distractores": [
+      "Los cortafuegos de aplicación, como un WAF con reglas del OWASP",
+      "Los escáneres de red, como Nmap con sus scripts de detección"
+    ],
+    "explicacion": "✓ Las herramientas de análisis estático, como Semgrep, SonarQube o Snyk, usan el CWE.\n✗ «cortafuegos de aplicación»: un WAF filtra tráfico, y no analiza el código.\n✗ «escáneres de red»: un escáner de red no analiza el código."
+  },
+  {
+    "id": "ciclo-de-vida-s14",
+    "concepto": "sigla-kev",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    },
+    "pregunta": "En gestión de vulnerabilidades, ¿qué significa la sigla KEV?",
+    "correcta": "Known Exploited Vulnerabilities",
+    "distractores": [
+      "Key Encryption Vector",
+      "Kernel Exposure Value"
+    ],
+    "explicacion": "✓ KEV es el catálogo de la CISA de vulnerabilidades conocidas en explotación.\n✗ «Key Encryption Vector»: no es un vector de cifrado, es un catálogo de vulnerabilidades.\n✗ «Kernel Exposure Value»: no mide la exposición de un kernel, cataloga vulnerabilidades explotadas."
   }
 ]
