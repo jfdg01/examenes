@@ -12030,5 +12030,53 @@
       "Una versión propia de cada fabricante, con claves de exportación"
     ],
     "explicacion": "✓ La obsolescencia de SSL v3 recomienda pasar a TLS, en cualquiera de sus versiones.\n✗ «SSL v2»: SSL v2 está prohibida, y no es una alternativa\n✗ «Una versión propia»: no existe esa recomendación"
+  },
+  {
+    "id": "ssl-tls-112",
+    "concepto": "ssl-tls-sslstrip-dominio-parecido",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 23
+    },
+    "pregunta": "En un MITM de sslstrip con bettercap, ¿por qué la víctima acaba en un dominio parecido al real, como wwwww-facebook.com?",
+    "correcta": "Porque el navegador no tiene una política HSTS para el dominio parecido",
+    "distractores": [
+      "Un certificado válido del atacante para el dominio parecido",
+      "El DNS de la víctima no resuelve el dominio real"
+    ],
+    "explicacion": "✓ El navegador obliga a usar HTTPS con el dominio real que tiene HSTS, y el dominio parecido escapa a esa política.\n✗ «Un certificado válido»: el atacante sirve el dominio parecido en HTTP, y no necesita certificado\n✗ «El DNS de la víctima»: el dominio real resuelve bien, y el cambio de dominio esquiva HSTS"
+  },
+  {
+    "id": "ssl-tls-113",
+    "concepto": "ssl-tls-sslstrip-dominio-parecido",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 23
+    },
+    "pregunta": "Durante un MITM de sslstrip, ¿qué ve la víctima en la barra de direcciones del navegador?",
+    "correcta": "La dirección del sitio con http://, sin el candado de HTTPS",
+    "distractores": [
+      "La dirección con https:// y un aviso de certificado no válido",
+      "La dirección con https:// y el candado del certificado real"
+    ],
+    "explicacion": "✓ El atacante entrega la página en HTTP, así que la barra muestra http:// y no muestra el candado.\n✗ «un aviso de certificado»: ese aviso es del MITM con certificado falso, y sslstrip no usa certificados\n✗ «el candado del certificado real»: el candado sale solo en una conexión HTTPS, y la víctima habla HTTP"
+  },
+  {
+    "id": "ssl-tls-114",
+    "concepto": "ssl-tls-sslstrip-dominio-parecido",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 23
+    },
+    "pregunta": "En un MITM de sslstrip con bettercap, ¿cómo llega la víctima al dominio parecido sin escribirlo?",
+    "correcta": "El atacante reescribe los enlaces de las páginas que reenvía al dominio parecido",
+    "distractores": [
+      "El atacante registra el dominio parecido y aloja una copia del sitio",
+      "El atacante pide a una CA un certificado para el dominio parecido"
+    ],
+    "explicacion": "✓ El atacante hace de proxy, y cambia cada enlace al dominio real por el dominio parecido en las páginas que reenvía.\n✗ «registra el dominio parecido»: no hay copia, el contenido sale del servidor real a través del proxy\n✗ «pide a una CA un certificado»: el dominio parecido va por HTTP, y no lleva certificado"
   }
 ]
