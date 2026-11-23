@@ -30,7 +30,6 @@
     },
     "2_Claves.pdf": {
       "1": "portada",
-      "2": "introducción: la necesidad de distribuir y administrar claves, sin mecanismo; lo desarrollan las páginas siguientes",
       "3": "índice de contenidos",
       "34": "lista de temas a desarrollar de forma autónoma, sin explicación en la página"
     },
@@ -60,12 +59,9 @@
       "3": "portada, presentación, objetivo, cronología, cierre y referencias",
       "4": "portada, presentación, objetivo, cronología, cierre y referencias",
       "7": "datos históricos de SSLv3 y TLS 1.0 (autores y nombre) sin una idea de seguridad",
-      "8": "datos históricos de SSLv3 y TLS 1.0 (autores y nombre) sin una idea de seguridad",
       "10": "AEAD en TLS 1.2 lo explica el tema 3",
       "12": "diagrama del handshake, que explica el tema 3",
       "13": "diagrama del handshake, que explica el tema 3",
-      "14": "diagramas del Man-in-the-Middle, que explica el tema 1",
-      "15": "diagramas del Man-in-the-Middle, que explica el tema 1",
       "16": "diagramas del Man-in-the-Middle, que explica el tema 1",
       "17": "ejemplo de la inyección de CVE-2009-3555; la idea general está en la página 11",
       "18": "ejemplo de la inyección de CVE-2009-3555; la idea general está en la página 11",
@@ -95,10 +91,8 @@
       "57": "página de transición o de diagrama sin contenido propio",
       "58": "HSTS y HPKP los explica el tema 4",
       "59": "HSTS y HPKP los explica el tema 4",
-      "64": "datos de la práctica de Google, Microsoft y Firefox en 2013",
       "65": "anécdota de las filtraciones de Snowden, sin una idea del protocolo",
       "67": "diagrama de la petición y la respuesta de BREACH; la idea está en las páginas 66 y 68",
-      "69": "tabla de requisitos de BREACH; la idea está en las páginas 66 y 68",
       "70": "título de las soluciones de BREACH; el contenido está en la página 71",
       "74": "viñeta de xkcd o enlace a un vídeo sobre Heartbleed",
       "75": "viñeta de xkcd o enlace a un vídeo sobre Heartbleed",
@@ -130,12 +124,13 @@
       "118": "decisiones de PCI-DSS y de los navegadores sobre TLS 1.0 y 1.1, fechas y política",
       "119": "decisiones de PCI-DSS y de los navegadores sobre TLS 1.0 y 1.1, fechas y política",
       "120": "bloqueos y decisiones políticas de China y Rusia",
-      "123": "decisiones de PCI-DSS y de los navegadores sobre TLS 1.0 y 1.1, fechas y política",
+      "123": "sigue la idea de la página 105 (RFC 8996 prohíbe TLS 1.0 y 1.1)",
       "125": "bloqueos y decisiones políticas de China y Rusia",
       "127": "hito cuántico anecdótico, sin una idea del protocolo",
       "129": "portada, presentación, objetivo, cronología, cierre y referencias",
       "130": "portada, presentación, objetivo, cronología, cierre y referencias",
-      "131": "portada, presentación, objetivo, cronología, cierre y referencias"
+      "131": "portada, presentación, objetivo, cronología, cierre y referencias",
+      "68": "tabla de requisitos de BREACH; la idea está en las páginas 66 y 68"
     }
   }
 }

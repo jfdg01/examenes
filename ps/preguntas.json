@@ -279,13 +279,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 10
     },
-    "pregunta": "¿Cuál es un ejemplo de pareja de roles de una conexión?",
-    "correcta": "Cliente y servidor",
+    "pregunta": "En una conexión, ¿qué rol tiene la parte que empieza la comunicación?",
+    "correcta": "El iniciador",
     "distractores": [
-      "Firmante y verificador de cada mensaje enviado",
-      "Emisor y espía del tráfico que circula por la red"
+      "El respondedor",
+      "El servidor"
     ],
-    "explicacion": "✓ Cliente y servidor es un ejemplo de pareja de roles que identifica un protocolo.\n✗ «Firmante y verificador»: son papeles de una firma digital, no roles de la conexión\n✗ «Emisor y espía»: el espía es el atacante, no un rol del protocolo"
+    "explicacion": "✓ La parte que empieza la comunicación es el iniciador, y la otra parte es el respondedor.\n✗ «El respondedor»: responde a la parte que empieza\n✗ «El servidor»: el servidor espera a que el cliente empiece"
   },
   {
     "id": "introduccion-019",
@@ -407,10 +407,10 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 13
     },
-    "pregunta": "En un protocolo de autenticación de ejemplo, ¿qué envía quien dice «Soy Alicia» para demostrarlo?",
+    "pregunta": "En el ejemplo básico de autenticación de la diapositiva, Alicia le dice «Soy Alicia» a Roberto. ¿Qué envía además en ese mensaje para demostrarlo?",
     "correcta": "La contraseña de Alicia o su dirección IP",
     "distractores": [
-      "Un resumen firmado de la contraseña con su clave privada, como prueba ante el servidor de la identidad",
+      "Un resumen firmado de su contraseña con su clave privada",
       "Un certificado emitido por una autoridad de confianza"
     ],
     "explicacion": "✓ En el ejemplo, quien dice ser Alicia manda su contraseña o su dirección IP como prueba de identidad.\n✗ «Un resumen firmado»: el ejemplo no usa firmas digitales\n✗ «Un certificado emitido»: el ejemplo solo usa datos del propio interlocutor"
@@ -423,13 +423,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 13
     },
-    "pregunta": "¿Qué se intercambia en un protocolo de autenticación?",
-    "correcta": "Unos mensajes con los que el interlocutor demuestra su identidad",
+    "pregunta": "Un servidor pide a un usuario su contraseña antes de darle acceso. ¿Qué propiedad busca?",
+    "correcta": "La autenticación del usuario",
     "distractores": [
-      "Una clave de sesión que sustituye a la identidad de las partes",
-      "Un resumen del texto para detectar su alteración posterior"
+      "La confidencialidad de los datos",
+      "La integridad del mensaje"
     ],
-    "explicacion": "✓ Un protocolo de autenticación consiste en un intercambio de mensajes con los que se demuestra la identidad.\n✗ «Una clave de sesión»: la clave no es la prueba de identidad\n✗ «Un resumen del texto»: eso sirve para la integridad"
+    "explicacion": "✓ La contraseña demuestra que el usuario es quien dice ser, y eso es la autenticación.\n✗ «La confidencialidad»: oculta el contenido, y no prueba la identidad\n✗ «La integridad»: comprueba que el mensaje no cambió, y no prueba la identidad"
   },
   {
     "id": "introduccion-028",
@@ -570,8 +570,8 @@
     "pregunta": "¿Cómo verifica el receptor la firma digital de Roberto sobre un mensaje?",
     "correcta": "Desencripta la firma con la clave pública de Roberto y compara el resultado con el H(m) que calcula",
     "distractores": [
-      "Desencripta la firma con su propia clave privada y la compara con el mensaje, como si fuese un mensaje cifrado para él",
-      "Encripta de nuevo el mensaje con la clave pública de Roberto y compara, y compara el resultado con la firma"
+      "Desencripta la firma con su propia clave privada y compara el resultado con el mensaje",
+      "Encripta de nuevo el mensaje con la clave pública de Roberto y compara el resultado con la firma"
     ],
     "explicacion": "✓ El receptor desencripta la firma con la clave pública de Roberto y comprueba que coincide con su H(m).\n✗ «Desencripta la firma con su propia clave privada»: la clave del receptor no interviene\n✗ «Encripta de nuevo el mensaje»: la firma se abre con la pública, y no se rehace"
   },
@@ -1031,13 +1031,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 21
     },
-    "pregunta": "¿Qué permite hacer la recomendación X.800 respecto a los requerimientos de seguridad?",
-    "correcta": "Definirlos de forma sistemática",
+    "pregunta": "Según X.800, ¿cómo se pueden definir los requerimientos de seguridad de una organización?",
+    "correcta": "Definiéndolos de forma sistemática, con un camino ordenado",
     "distractores": [
-      "Cifrarlos antes de entregarlos a la organización que los pide",
-      "Delegarlos en un tercero de confianza que los aplica por ella"
+      "Cifrándolos antes de entregarlos a la organización que los pide",
+      "Delegándolos en un tercero de confianza que los aplica"
     ],
-    "explicacion": "✓ La recomendación X.800 ofrece un camino sistemático para definir los requerimientos de seguridad.\n✗ «Cifrarlos»: los requerimientos no se cifran\n✗ «Delegarlos»: X.800 los define, y no los delega"
+    "explicacion": "✓ X.800 ofrece un camino sistemático para definir los requerimientos de seguridad.\n✗ «Cifrándolos»: los requerimientos no se cifran\n✗ «Delegándolos»: X.800 los define, y no los delega"
   },
   {
     "id": "introduccion-066",
@@ -1130,10 +1130,10 @@
     "pregunta": "¿Qué tres cosas puede hacer un mecanismo de seguridad frente a un ataque?",
     "correcta": "Detectarlo, prevenirlo o recuperarse de él",
     "distractores": [
-      "Detectarlo, perdonarlo o recuperarse de él una vez ocurrido",
-      "Prevenirlo, imitarlo o recuperarse de él tras sufrirlo"
+      "Prevenirlo, registrarlo o castigar a su autor",
+      "Detectarlo, ocultarlo o compensar a la víctima"
     ],
-    "explicacion": "✓ Un mecanismo está diseñado para detectar un ataque, prevenirlo o recuperarse de él.\n✗ «Detectarlo, perdonarlo»: perdonar un ataque no es una función del mecanismo\n✗ «Prevenirlo, imitarlo»: imitar un ataque no es una función del mecanismo"
+    "explicacion": "✓ Un mecanismo está diseñado para detectar un ataque, prevenirlo o recuperarse de él.\n✗ «Prevenirlo, registrarlo»: registrar un ataque y castigar a su autor no son funciones del mecanismo\n✗ «Detectarlo, ocultarlo»: ocultar el ataque y compensar a la víctima no son funciones del mecanismo"
   },
   {
     "id": "introduccion-072",
@@ -1479,13 +1479,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 23
     },
-    "pregunta": "En X.800, ¿qué protege la integridad de campos seleccionados?",
-    "correcta": "La integridad de campos concretos dentro de los datos de usuario",
+    "pregunta": "En X.800, ¿qué datos protege el servicio de integridad de campos seleccionados?",
+    "correcta": "Solo algunos campos de un bloque de datos de usuario",
     "distractores": [
-      "La integridad de todos los datos de una conexión completa",
-      "La integridad de las claves que cifran los datos de usuario"
+      "Todos los datos de usuario de una conexión completa",
+      "Las claves y las cabeceras con que se cifran los datos"
     ],
-    "explicacion": "✓ La integridad de campos seleccionados protege campos concretos dentro de los datos de usuario.\n✗ «La integridad de todos los datos»: comprobar toda la secuencia es la integridad de conexión\n✗ «La integridad de las claves»: las claves no son datos de usuario"
+    "explicacion": "✓ La integridad de campos seleccionados protege solo algunos campos dentro de los datos de usuario.\n✗ «Todos los datos de usuario»: comprobar toda la secuencia es la integridad de conexión\n✗ «Las claves y las cabeceras»: las claves y las cabeceras no son datos de usuario"
   },
   {
     "id": "introduccion-094",
@@ -1623,13 +1623,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 26
     },
-    "pregunta": "¿Qué diferencia hay entre un fichero y un flujo al diseñar un protocolo seguro?",
-    "correcta": "El fichero tiene una longitud determinada, y el flujo la tiene indeterminada",
+    "pregunta": "Un protocolo seguro recibe datos de longitud indeterminada, como una transmisión continua. ¿Cómo se clasifican esos datos?",
+    "correcta": "Como un flujo",
     "distractores": [
-      "El fichero es de longitud indeterminada, y el flujo tiene una longitud fija",
-      "El fichero se cifra con clave simétrica, y el flujo con clave pública"
+      "Como un fichero, que se envía de principio a fin",
+      "Como un paquete, que la red entrega ya completo"
     ],
-    "explicacion": "✓ Un fichero tiene una longitud determinada, y un flujo tiene una longitud indeterminada.\n✗ «El fichero es de longitud indeterminada»: invierte la longitud de los dos\n✗ «El fichero se cifra con clave simétrica»: la longitud no decide el tipo de clave"
+    "explicacion": "✓ Unos datos de longitud indeterminada son un flujo, y un fichero tiene longitud determinada.\n✗ «Como un fichero»: el fichero tiene una longitud determinada\n✗ «Como un paquete»: el paquete es la unidad en que se divide un fichero o un flujo"
   },
   {
     "id": "introduccion-103",
@@ -1704,7 +1704,7 @@
       "pagina": 27
     },
     "pregunta": "¿Para qué se insertan campos de identificación del protocolo y de sus mensajes?",
-    "correcta": "Ayudan a detectar errores u otros problemas",
+    "correcta": "Para detectar errores u otros problemas",
     "distractores": [
       "Para numerar los paquetes y detectar repeticiones y desórdenes",
       "Para autenticar al emisor ante el receptor en cada mensaje"
@@ -1719,13 +1719,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 27
     },
-    "pregunta": "¿Qué hay que insertar en los mensajes de un protocolo seguro para identificarlos?",
-    "correcta": "Campos que identifican el protocolo y sus distintos mensajes",
+    "pregunta": "¿Qué dos partes contiene típicamente el identificador de un protocolo?",
+    "correcta": "La versión y el subprotocolo criptográfico al que pertenece",
     "distractores": [
-      "Un contador de mensajes que no repite sus valores",
-      "Una firma digital de cada mensaje con la clave del emisor"
+      "La dirección del emisor y la del receptor del mensaje",
+      "La clave de sesión y la fecha en la que caduca"
     ],
-    "explicacion": "✓ Hay que insertar campos que identifiquen el protocolo y cada uno de sus distintos mensajes.\n✗ «Un contador de mensajes»: eso es la numeración, y no la identificación\n✗ «Una firma digital»: la firma da autenticidad, y no identifica el protocolo"
+    "explicacion": "✓ El identificador del protocolo suele llevar la versión y el subprotocolo criptográfico.\n✗ «La dirección del emisor»: las direcciones son de la red, y no identifican el protocolo\n✗ «La clave de sesión»: una clave no va en el identificador del protocolo"
   },
   {
     "id": "introduccion-109",
@@ -2135,13 +2135,13 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 34
     },
-    "pregunta": "¿Qué dificultad plantea distinguir una reproducción de un reenvío?",
-    "correcta": "Puede ser complicado, porque en ambos se repite un paquete ya enviado",
+    "pregunta": "¿Por qué puede ser complicado distinguir una reproducción de un reenvío?",
+    "correcta": "Porque en ambos casos el receptor ve repetirse un paquete ya enviado",
     "distractores": [
-      "Ninguna, porque el reenvío lleva un número de paquete nuevo",
-      "Ninguna, porque la reproducción sale de otra dirección IP"
+      "Porque el reenvío lleva un número de paquete nuevo que confunde al receptor",
+      "Porque la reproducción sale de otra dirección IP que el receptor no conoce"
     ],
-    "explicacion": "✓ Distinguirlos puede ser complicado, porque en los dos casos el receptor ve un paquete ya enviado.\n✗ «Ninguna, porque el reenvío»: un reenvío repite el paquete original\n✗ «Ninguna, porque la reproducción»: el atacante puede usar la misma dirección"
+    "explicacion": "✓ Distinguirlos puede ser complicado, porque en los dos casos el receptor ve un paquete ya enviado.\n✗ «Porque el reenvío lleva»: un reenvío repite el paquete original\n✗ «Porque la reproducción sale»: el atacante puede usar la misma dirección"
   },
   {
     "id": "introduccion-135",
@@ -2186,8 +2186,8 @@
     "pregunta": "¿Qué ataques cita el temario como ejemplos de ataque de degradación?",
     "correcta": "Poodle y Freak",
     "distractores": [
-      "Heartbleed y CRIME, dos ataques que no negocian una versión",
-      "Poodle y Heartbleed, con uno que explota una fuga de memoria"
+      "Heartbleed y CRIME",
+      "Poodle y Heartbleed"
     ],
     "explicacion": "✓ Poodle y Freak son los ejemplos de ataques de degradación del temario.\n✗ «Heartbleed y CRIME»: no se citan como ataques de degradación\n✗ «Poodle y Heartbleed»: Heartbleed no es una degradación"
   },
@@ -2215,7 +2215,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 36
     },
-    "pregunta": "En el protocolo de ejemplo, ¿cuántas claves se derivan de la clave K del canal y para qué sirven?",
+    "pregunta": "En el protocolo de ejemplo de canal seguro entre Alice y Bob, que comparten una clave K al crear el canal, ¿cuántas claves se derivan de K y para qué sirven?",
     "correcta": "Cuatro: de cifrado y de autenticación, una de cada para cada sentido de la comunicación",
     "distractores": [
       "Dos: una de cifrado y otra de autenticación, usadas por ambos sentidos",
@@ -2231,7 +2231,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 36
     },
-    "pregunta": "En la inicialización del ejemplo, ¿para qué sirve el rol R, que indica si la parte es Alice o Bob?",
+    "pregunta": "En la inicialización del protocolo de ejemplo entre Alice y Bob, que recibe la clave K y un rol R, ¿para qué sirve R, que indica si la parte es Alice o Bob?",
     "correcta": "Para intercambiar las claves de envío y de recepción si la parte es Bob",
     "distractores": [
       "Para elegir la clave pública con la que firma cada mensaje enviado",
@@ -2247,7 +2247,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 36
     },
-    "pregunta": "En el protocolo de ejemplo, ¿cómo se obtiene cada una de las cuatro claves a partir de K?",
+    "pregunta": "En la inicialización del protocolo de ejemplo entre Alice y Bob, que parte de una clave K ya acordada, ¿cómo se obtiene cada una de las claves derivadas de K?",
     "correcta": "Con SHA-d-256 de K concatenada con una cadena que indica su uso y su sentido",
     "distractores": [
       "Con un intercambio Diffie-Hellman nuevo para cada una de las claves",
@@ -2263,7 +2263,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 37
     },
-    "pregunta": "En el envío del protocolo de ejemplo, ¿qué datos autentica el HMAC-SHA-256?",
+    "pregunta": "En el envío del protocolo de ejemplo entre Alice y Bob, que añade un MAC al mensaje, ¿qué datos autentica el HMAC-SHA-256?",
     "correcta": "El número de mensaje, la longitud de x, los datos adicionales x y el mensaje m",
     "distractores": [
       "El mensaje m, sin su número ni los datos adicionales de x",
@@ -2279,7 +2279,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 37
     },
-    "pregunta": "¿Cómo se cifra el mensaje en el envío del protocolo de ejemplo?",
+    "pregunta": "En el envío del protocolo de ejemplo entre Alice y Bob, que cifra los datos del mensaje antes de enviarlos, ¿cómo se cifra el mensaje?",
     "correcta": "Con un XOR de los datos con un flujo de claves que genera AES con un contador",
     "distractores": [
       "Con AES en modo CBC, cifrando cada bloque encadenado con el anterior",
@@ -2295,7 +2295,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 37
     },
-    "pregunta": "En el envío del protocolo de ejemplo, ¿qué hace el emisor con el contador de mensajes?",
+    "pregunta": "En el envío del protocolo de ejemplo entre Alice y Bob, que numera los mensajes con un contador, ¿qué hace el emisor con ese contador?",
     "correcta": "Comprueba su límite, lo incrementa y envía su valor i con el mensaje",
     "distractores": [
       "Lo reinicia a cero tras cada mensaje y lo envía cifrado",
@@ -2311,7 +2311,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 38
     },
-    "pregunta": "En la recepción del protocolo de ejemplo, ¿qué hace el receptor si el MAC que recalcula no coincide con el recibido?",
+    "pregunta": "En la recepción del protocolo de ejemplo entre Alice y Bob, que recalcula el MAC del mensaje recibido, ¿qué hace el receptor si no coincide con el recibido?",
     "correcta": "Destruye la clave generada y el mensaje, y devuelve un fallo de autenticación",
     "distractores": [
       "Devuelve el mensaje descifrado junto con un aviso de integridad",
@@ -2327,7 +2327,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 38
     },
-    "pregunta": "En la recepción del protocolo de ejemplo, ¿cuándo devuelve el receptor un error de orden de mensaje?",
+    "pregunta": "En la recepción del protocolo de ejemplo entre Alice y Bob, que compara el número i del mensaje con un contador de recepción, ¿cuándo devuelve el receptor un error de orden?",
     "correcta": "Cuando el número i recibido es menor o igual que el contador de recepción",
     "distractores": [
       "Cuando el número i es mayor que el contador de recepción",
@@ -2343,7 +2343,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 38
     },
-    "pregunta": "En la recepción del ejemplo, ¿por qué se exige que el mensaje recibido mida al menos 36 bytes?",
+    "pregunta": "En la recepción del protocolo de ejemplo entre Alice y Bob, que separa el mensaje recibido en número, datos y MAC, ¿por qué se exige que mida al menos 36 bytes?",
     "correcta": "Para contener el número de 4 bytes y el MAC de 32 bytes que se separan después",
     "distractores": [
       "Para que quepa la clave de sesión de 256 bits que viaja en el mensaje",
@@ -2382,86 +2382,6 @@
       "Protected File Storage"
     ],
     "explicacion": "✓ PFS significa Perfect Forward Secrecy, la propiedad de que las claves de sesión pasadas no se reutilicen.\n✗ «Private Forward Signature»: no es una firma, sino una propiedad de las claves de sesión\n✗ «Protected File Storage»: no es un almacenamiento de ficheros, sino una propiedad de las claves"
-  },
-  {
-    "id": "introduccion-s03",
-    "concepto": "sigla-introduccion-des",
-    "tema": "introduccion",
-    "fuente": {
-      "pdf": "1_Introduccion.pdf",
-      "pagina": 12
-    },
-    "pregunta": "¿Qué significa la sigla DES en criptografía?",
-    "correcta": "Data Encryption Standard",
-    "distractores": [
-      "Digital Encryption System",
-      "Data Exchange Security"
-    ],
-    "explicacion": "✓ DES es el Data Encryption Standard, un algoritmo de cifrado de clave simétrica.\n✗ «Digital Encryption System»: el nombre del estándar habla de datos, y no de un sistema digital\n✗ «Data Exchange Security»: es un estándar de cifrado, y no de seguridad del intercambio"
-  },
-  {
-    "id": "introduccion-s04",
-    "concepto": "sigla-introduccion-aes",
-    "tema": "introduccion",
-    "fuente": {
-      "pdf": "1_Introduccion.pdf",
-      "pagina": 12
-    },
-    "pregunta": "¿Qué significa la sigla AES en criptografía?",
-    "correcta": "Advanced Encryption Standard",
-    "distractores": [
-      "Asymmetric Encryption Standard",
-      "Authenticated Encryption System"
-    ],
-    "explicacion": "✓ AES es el Advanced Encryption Standard, un algoritmo de cifrado de clave simétrica.\n✗ «Asymmetric Encryption Standard»: AES es un algoritmo de clave simétrica, y no asimétrica\n✗ «Authenticated Encryption System»: no es un sistema de cifrado autenticado, sino un estándar de cifrado"
-  },
-  {
-    "id": "introduccion-s05",
-    "concepto": "sigla-introduccion-dsa",
-    "tema": "introduccion",
-    "fuente": {
-      "pdf": "1_Introduccion.pdf",
-      "pagina": 12
-    },
-    "pregunta": "¿Qué significa la sigla DSA en criptografía de clave pública?",
-    "correcta": "Digital Signature Algorithm",
-    "distractores": [
-      "Data Security Algorithm",
-      "Distributed Signature Authority"
-    ],
-    "explicacion": "✓ DSA es el Digital Signature Algorithm, un algoritmo de clave pública para firmar.\n✗ «Data Security Algorithm»: su función es firmar, y no es un algoritmo general de seguridad de datos\n✗ «Distributed Signature Authority»: es un algoritmo, y no una autoridad de firma"
-  },
-  {
-    "id": "introduccion-s06",
-    "concepto": "sigla-introduccion-ipsec",
-    "tema": "introduccion",
-    "fuente": {
-      "pdf": "1_Introduccion.pdf",
-      "pagina": 9
-    },
-    "pregunta": "¿Qué significa la sigla IPSec, el protocolo de seguridad de la capa de red?",
-    "correcta": "Internet Protocol Security",
-    "distractores": [
-      "Internet Packet Secure Channel",
-      "Integrated Protocol for Secure Connections"
-    ],
-    "explicacion": "✓ IPSec es Internet Protocol Security, la seguridad que se añade sobre IP en la capa de red.\n✗ «Internet Packet Secure Channel»: habla de la seguridad del protocolo IP, y no de un canal de paquetes\n✗ «Integrated Protocol for Secure Connections»: la sigla se refiere al protocolo IP, y no a un protocolo integrado"
-  },
-  {
-    "id": "introduccion-s07",
-    "concepto": "sigla-introduccion-wpa",
-    "tema": "introduccion",
-    "fuente": {
-      "pdf": "1_Introduccion.pdf",
-      "pagina": 9
-    },
-    "pregunta": "¿Qué significa la sigla WPA, el protocolo de seguridad de la capa host-red en WiFi?",
-    "correcta": "Wi-Fi Protected Access",
-    "distractores": [
-      "Wireless Packet Authentication",
-      "Wide-area Private Access"
-    ],
-    "explicacion": "✓ WPA es Wi-Fi Protected Access, el protocolo que protege el acceso a las redes inalámbricas.\n✗ «Wireless Packet Authentication»: protege el acceso a la red, y no autentica cada paquete\n✗ «Wide-area Private Access»: WPA es de redes WiFi, y no de redes de área extensa"
   },
   {
     "id": "introduccion-148",
@@ -2743,7 +2663,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 8
     },
-    "pregunta": "En la distribución de claves descentralizada, ¿quién genera la clave de sesión y con qué clave la protege al enviarla?",
+    "pregunta": "En la distribución de claves descentralizada, donde un iniciador A y un respondedor B comparten una clave maestra, ¿quién genera la clave de sesión y con qué clave la protege al enviarla?",
     "correcta": "El Responder B, que la cifra con la clave maestra",
     "distractores": [
       "El iniciador A, que la cifra con la clave pública de B",
@@ -3063,7 +2983,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 13
     },
-    "pregunta": "En ese primer ejemplo, ¿cómo envía B la clave de sesión a A?",
+    "pregunta": "En el primer ejemplo de distribución de una clave simétrica con criptografía asimétrica, donde A empieza enviando a B su clave pública y su identidad, ¿cómo envía B la clave de sesión a A?",
     "correcta": "Cifrada con la clave pública de A",
     "distractores": [
       "Cifrada con la clave privada de B",
@@ -3079,7 +2999,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 13
     },
-    "pregunta": "En ese primer ejemplo, ¿por qué es muy seguro desechar las claves al terminar el intercambio?",
+    "pregunta": "En el primer ejemplo de distribución de una clave simétrica con criptografía asimétrica, donde A genera un par de claves y se lo envía a B, ¿por qué es muy seguro desechar las claves al terminar el intercambio?",
     "correcta": "Porque A desecha el par de claves y B la clave pública, y no queda nada reutilizable",
     "distractores": [
       "Porque B autentica a A con un certificado antes de enviar la clave",
@@ -3095,7 +3015,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 14
     },
-    "pregunta": "En el intercambio de clave con cifrado asimétrico sin autenticar las claves, ¿qué hace Darth cuando A envía su clave pública a B?",
+    "pregunta": "En el intercambio de clave con cifrado asimétrico sin autenticar las claves, ¿qué hace el atacante Darth cuando A envía su clave pública a B?",
     "correcta": "La intercepta y envía a B su propia clave pública con la identidad de A",
     "distractores": [
       "La cifra con su clave privada y la reenvía a B",
@@ -3111,7 +3031,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 14
     },
-    "pregunta": "En ese ataque del intermediario, ¿cómo consigue Darth la clave de sesión?",
+    "pregunta": "En el ataque del intermediario sobre el intercambio de clave con cifrado asimétrico sin autenticar las claves, ¿cómo consigue el atacante Darth la clave de sesión?",
     "correcta": "B la cifra con la clave pública de Darth, y Darth la descifra con su clave privada",
     "distractores": [
       "La deduce de la clave pública de A que interceptó",
@@ -3127,7 +3047,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 14
     },
-    "pregunta": "¿Qué permite el ataque del intermediario en el intercambio de clave con cifrado asimétrico?",
+    "pregunta": "¿Qué debilidad del intercambio de clave con cifrado asimétrico hace posible el ataque del intermediario?",
     "correcta": "Que las claves públicas no están autenticadas, y B no sabe de quién es la que recibe",
     "distractores": [
       "Que la clave de sesión se envía en claro entre A y B",
@@ -3159,7 +3079,7 @@
       "pdf": "2_Claves.pdf",
       "pagina": 15
     },
-    "pregunta": "¿Qué logra A al cifrar la clave de sesión con su propia clave privada antes de enviarla?",
+    "pregunta": "En la distribución de clave con autenticación y cifrado asimétricos, ¿qué logra A al cifrar la clave de sesión con su propia clave privada antes de enviarla?",
     "correcta": "Que B compruebe que la clave de sesión procede de A",
     "distractores": [
       "Que B sea quien pueda leer la clave de sesión",
@@ -3205,7 +3125,7 @@
     "tema": "claves",
     "fuente": {
       "pdf": "2_Claves.pdf",
-      "pagina": 16
+      "pagina": 20
     },
     "pregunta": "¿Qué tipo de distribución de claves públicas reparte la clave en un documento firmado por una CA que cualquiera puede verificar?",
     "correcta": "Los certificados",
@@ -3221,7 +3141,7 @@
     "tema": "claves",
     "fuente": {
       "pdf": "2_Claves.pdf",
-      "pagina": 16
+      "pagina": 17
     },
     "pregunta": "¿Qué tipo de distribución de claves públicas carece de cualquier control sobre quién publica la clave?",
     "correcta": "El anuncio público",
@@ -4795,9 +4715,9 @@
     "correcta": "El texto en claro, opcionalmente comprimido, junto con su MAC",
     "distractores": [
       "Todo el registro, incluida la cabecera con el tipo y la versión",
-      "El texto en claro únicamente, y el MAC viaja aparte sin cifrar"
+      "El texto en claro, y el MAC viaja aparte sin cifrar"
     ],
-    "explicacion": "✓ El cifrado cubre el fragmento y su MAC, y la cabecera del registro queda sin cifrar.\n✗ «Todo el registro»: la cabecera viaja en claro\n✗ «El texto en claro»: el MAC también se cifra, con el fragmento"
+    "explicacion": "✓ El cifrado cubre el fragmento y su MAC, y la cabecera del registro queda sin cifrar.\n✗ «Todo el registro, incluida la cabecera con el tipo y la versión»: la cabecera viaja en claro\n✗ «El texto en claro, y el MAC viaja aparte sin cifrar»: el MAC también se cifra, con el fragmento"
   },
   {
     "id": "transporte-020",
@@ -4861,7 +4781,7 @@
       "Los números aleatorios del cliente y del servidor",
       "El vector de inicialización y el relleno del bloque"
     ],
-    "explicacion": "✓ El HMAC cubre el número de secuencia, el tipo, la versión y la longitud, además del fragmento.\n✗ «Los números aleatorios»: los random del hello no entran en el MAC de cada registro\n✗ «El vector de inicialización»: el relleno se añade después de calcular el MAC"
+    "explicacion": "✓ El HMAC cubre el número de secuencia, el tipo, la versión y la longitud, además del fragmento.\n✗ «Los números aleatorios»: los random del hello no entran en el MAC de cada registro\n✗ «El vector de inicialización»: el IV no es un campo del MAC, y el relleno se añade después de calcularlo"
   },
   {
     "id": "transporte-024",
@@ -4877,7 +4797,7 @@
       "20 bytes",
       "32 bytes"
     ],
-    "explicacion": "✓ El MAC ocupa 0, 16 o 20 bytes, y con MD5 son 16 bytes.\n✗ «20 bytes»: esa es la longitud con SHA-1\n✗ «32 bytes»: ninguno de los hashes del temario da un MAC de ese tamaño"
+    "explicacion": "✓ El MAC ocupa 0, 16 o 20 bytes, y con MD5 son 16 bytes.\n✗ «20 bytes»: esa es la longitud con SHA-1\n✗ «32 bytes»: la página da solo 0, 16 y 20 bytes, y el hash MD5 produce 16"
   },
   {
     "id": "transporte-025",
@@ -4987,9 +4907,9 @@
     "correcta": "Authenticated Encryption with Associated Data",
     "distractores": [
       "Authenticated Exchange with Asymmetric Digests",
-      "Advanced Encryption with Algorithm Detection"
+      "Asymmetric Encryption with Authenticated Data"
     ],
-    "explicacion": "✓ AEAD es el cifrado autenticado con datos asociados, que autentica también datos como longitudes.\n✗ «Authenticated Exchange with Asymmetric Digests»: no es un intercambio de claves, es cifrado autenticado\n✗ «Advanced Encryption with Algorithm Detection»: no detecta algoritmos, autentica datos asociados"
+    "explicacion": "✓ AEAD es el cifrado autenticado con datos asociados, que autentica también datos como longitudes.\n✗ «Authenticated Exchange with Asymmetric Digests»: no es un intercambio de claves, es cifrado autenticado\n✗ «Asymmetric Encryption with Authenticated Data»: el cifrado es simétrico, y los datos asociados no se cifran, solo se autentican"
   },
   {
     "id": "transporte-s02",
@@ -5927,13 +5847,13 @@
       "pdf": "3_Transporte.pdf",
       "pagina": 30
     },
-    "pregunta": "¿Qué longitud tiene la clave maestra (master secret) de TLS 1.2 y qué alcance tiene?",
-    "correcta": "48 bytes, y es única para la sesión",
+    "pregunta": "¿Qué alcance tiene la clave maestra (master secret) de TLS 1.2?",
+    "correcta": "Es única para toda la sesión",
     "distractores": [
-      "32 bytes, y es única para cada conexión abierta",
-      "48 bytes, pero se calcula de nuevo para cada registro"
+      "Es única para cada conexión abierta dentro de la sesión",
+      "Se calcula de nuevo para cada registro"
     ],
-    "explicacion": "✓ El master secret mide 48 bytes y es único para la sesión, de la que derivan las claves de cada conexión.\n✗ «32 bytes»: tiene 48 bytes, y la comparten las conexiones de la sesión\n✗ «48 bytes»: no cambia por registro, es una clave por sesión"
+    "explicacion": "✓ El master secret es único para la sesión, y de él salen las claves de las conexiones de esa sesión.\n✗ «Es única para cada conexión abierta»: la clave maestra es de la sesión, y no cambia con cada conexión\n✗ «Se calcula de nuevo para cada registro»: no cambia por registro, es una clave por sesión"
   },
   {
     "id": "transporte-086",
@@ -6005,7 +5925,7 @@
     "tema": "transporte",
     "fuente": {
       "pdf": "3_Transporte.pdf",
-      "pagina": 28
+      "pagina": 7
     },
     "pregunta": "¿Qué parámetro del key_block usa el servidor para calcular el MAC de lo que envía?",
     "correcta": "El server write MAC secret",
@@ -6122,8 +6042,8 @@
     "pregunta": "¿Qué comando de OpenSSL lista las suites de cifrado con su información detallada?",
     "correcta": "openssl ciphers -v",
     "distractores": [
-      "openssl enc -v con la lista de algoritmos de cifrado",
-      "openssl speed -v sobre las suites de la máquina"
+      "openssl enc -v",
+      "openssl speed -v"
     ],
     "explicacion": "✓ El comando openssl ciphers con -v lista cada suite de cifrado con su información.\n✗ «openssl enc -v»: enc sirve para cifrar y descifrar datos, y no lista suites\n✗ «openssl speed -v»: speed mide el rendimiento, y no lista suites"
   },
@@ -6170,8 +6090,8 @@
     "pregunta": "¿Qué comando de OpenSSL mide el rendimiento de las operaciones RSA?",
     "correcta": "openssl speed rsa",
     "distractores": [
-      "openssl ciphers rsa sobre las suites con RSA",
-      "openssl rsa -speed sobre una clave concreta"
+      "openssl ciphers rsa",
+      "openssl rsa -speed"
     ],
     "explicacion": "✓ El comando openssl speed rsa ejecuta pruebas de firma y de verificación RSA para varios tamaños.\n✗ «openssl ciphers rsa»: ciphers lista suites, y no mide tiempos\n✗ «openssl rsa -speed»: no es una opción de rsa"
   },
@@ -6218,8 +6138,8 @@
     "pregunta": "¿Qué comando de OpenSSL da la versión y las opciones con las que se compiló?",
     "correcta": "openssl version -a",
     "distractores": [
-      "openssl help -a con todos los datos de compilación",
-      "openssl speed -a con todos los datos del compilador"
+      "openssl help -a",
+      "openssl speed -a"
     ],
     "explicacion": "✓ El comando openssl version -a muestra la versión, la fecha de compilación, la plataforma y las opciones.\n✗ «openssl help -a»: help lista los comandos disponibles\n✗ «openssl speed -a»: speed mide el rendimiento"
   },
@@ -6234,8 +6154,8 @@
     "pregunta": "¿Qué comando de OpenSSL muestra la lista de sus comandos estándar?",
     "correcta": "openssl help",
     "distractores": [
-      "openssl version con la opción de listar",
-      "openssl ciphers sin opciones adicionales"
+      "openssl version",
+      "openssl ciphers"
     ],
     "explicacion": "✓ El comando openssl help lista los comandos estándar, como s_client, s_server, x509 o speed.\n✗ «openssl version»: version muestra la versión, y no lista comandos\n✗ «openssl ciphers»: ciphers lista suites de cifrado, y no comandos"
   },
@@ -6250,8 +6170,8 @@
     "pregunta": "¿Con qué comando de OpenSSL se usan cifrados como aes-128-cbc, des3 o rc4?",
     "correcta": "openssl enc",
     "distractores": [
-      "openssl dgst con el nombre del cifrado",
-      "openssl ciphers con el nombre del cifrado"
+      "openssl dgst",
+      "openssl ciphers"
     ],
     "explicacion": "✓ Los comandos de cifrado, como aes-128-cbc, se usan con el comando enc, y los resúmenes con dgst.\n✗ «openssl dgst»: dgst es para los resúmenes (hash) como md5 o sha1\n✗ «openssl ciphers»: ciphers lista suites, y no cifra datos"
   },
@@ -6394,10 +6314,10 @@
     "pregunta": "¿Cómo permite la renegociación ocultar la suite de cifrado que se va a usar?",
     "correcta": "Porque la nueva suite se establece ya bajo cifrado",
     "distractores": [
-      "Porque la suite se envía en un extension cifrada con la clave del certificado",
+      "Porque la suite se envía en una extensión cifrada con la clave del certificado",
       "Porque la suite se calcula con la PRF a partir del master secret"
     ],
-    "explicacion": "✓ La renegociación se hace dentro de la conexión cifrada, así que la nueva suite no viaja en claro.\n✗ «Porque la suite»: la suite se acuerda en el Handshake, no en una extensión\n✗ «Porque la suite»: la suite se negocia, no se calcula"
+    "explicacion": "✓ La renegociación se hace dentro de la conexión cifrada, así que la nueva suite no viaja en claro.\n✗ «Porque la suite se envía»: la suite se acuerda en el Handshake, y no en una extensión\n✗ «Porque la suite se calcula»: la suite se negocia, y no se calcula"
   },
   {
     "id": "transporte-115",
@@ -6795,9 +6715,9 @@
     "correcta": "Cada mensaje enviado después de server_hello",
     "distractores": [
       "Todos los mensajes, incluido el client_hello",
-      "Los mensajes del cliente únicamente"
+      "Los mensajes del cliente, y no los del servidor"
     ],
-    "explicacion": "✓ Cada mensaje que sigue al server_hello va cifrado en TLS 1.3.\n✗ «Todos los mensajes»: los hello iniciales viajan en claro\n✗ «Los mensajes del cliente»: también se cifran los del servidor tras su hello"
+    "explicacion": "✓ Cada mensaje que sigue al server_hello va cifrado en TLS 1.3.\n✗ «Todos los mensajes, incluido el client_hello»: los hello iniciales viajan en claro\n✗ «Los mensajes del cliente, y no los del servidor»: también se cifran los del servidor tras su hello"
   },
   {
     "id": "transporte-140",
@@ -6957,7 +6877,7 @@
       "key_share y server_name del primer mensaje",
       "session_ticket y heartbeat del primer mensaje"
     ],
-    "explicacion": "✓ El 0-RTT utiliza las extensiones pre_shared_key y early_data.\n✗ «key_share y server_name»: key_share es del intercambio normal, y server_name indica el host\n✗ «session_ticket y heartbeat»: session_ticket es de TLS 1.2, y heartbeat comprueba actividad"
+    "explicacion": "✓ El 0-RTT utiliza las extensiones pre_shared_key y early_data.\n✗ «key_share y server_name»: key_share es del intercambio normal, y server_name indica el host\n✗ «session_ticket y heartbeat»: session_ticket indica reanudación sin estado, y heartbeat comprueba actividad"
   },
   {
     "id": "transporte-150",
@@ -7287,7 +7207,7 @@
       "pdf": "4_Aplicacion.pdf",
       "pagina": 6
     },
-    "pregunta": "Cuando se usa HTTPS, ¿cuál de estos elementos viaja cifrado?",
+    "pregunta": "Con HTTPS, ¿qué elemento del acceso a una página viaja cifrado, pese a ir en la petición?",
     "correcta": "La URL del documento solicitado",
     "distractores": [
       "El nombre del puerto TCP al que se conecta el cliente",
@@ -7687,7 +7607,7 @@
       "pdf": "4_Aplicacion.pdf",
       "pagina": 13
     },
-    "pregunta": "¿Cuál de estas es una función de SSH, además del acceso remoto?",
+    "pregunta": "Además del acceso remoto, ¿qué función ofrece SSH para mover archivos entre equipos?",
     "correcta": "La copia segura de archivos entre equipos",
     "distractores": [
       "El envío de correo firmado entre servidores de dominios distintos",
@@ -7886,54 +7806,6 @@
       "Las mitades del intercambio Diffie-Hellman firmadas por el servidor"
     ],
     "explicacion": "✓ Lo primero que se intercambia son las cadenas de identificación, con la versión del protocolo y del software.\n✗ «Las listas de algoritmos»: la negociación de algoritmos viene después de las cadenas de identificación\n✗ «Las mitades»: el intercambio de claves viene después de negociar los algoritmos"
-  },
-  {
-    "id": "aplicacion-046",
-    "concepto": "aplicacion-ssh-algoritmos",
-    "tema": "aplicacion",
-    "fuente": {
-      "pdf": "4_Aplicacion.pdf",
-      "pagina": 20
-    },
-    "pregunta": "¿Qué algoritmos de compresión define el Transport Layer Protocol de SSH?",
-    "correcta": "none, sin compresión, y zlib",
-    "distractores": [
-      "gzip y bzip2, dos formatos de compresión de archivos habituales",
-      "ZIP, como en el correo S/MIME, y none"
-    ],
-    "explicacion": "✓ SSH define dos opciones de compresión: none, que no comprime, y zlib.\n✗ «gzip y bzip2»: no son los algoritmos que define SSH\n✗ «ZIP»: ZIP es la compresión de S/MIME, y SSH usa zlib"
-  },
-  {
-    "id": "aplicacion-047",
-    "concepto": "aplicacion-ssh-algoritmos",
-    "tema": "aplicacion",
-    "fuente": {
-      "pdf": "4_Aplicacion.pdf",
-      "pagina": 20
-    },
-    "pregunta": "En la lista de MAC de SSH, ¿qué es hmac-sha1-96?",
-    "correcta": "HMAC-SHA1 truncado a los 96 primeros bits",
-    "distractores": [
-      "HMAC-SHA1 con una clave de 96 bits en lugar de 20 bytes",
-      "Una variante de HMAC-MD5 con un resumen de 96 bytes"
-    ],
-    "explicacion": "✓ hmac-sha1-96 es HMAC-SHA1 cuyo resumen se trunca a los 96 primeros bits.\n✗ «HMAC-SHA1 con una clave»: los 96 bits son la longitud del resumen y no la de la clave\n✗ «Una variante de HMAC-MD5»: el hmac-md5 es otro algoritmo, y el truncado a 96 bits es de SHA1"
-  },
-  {
-    "id": "aplicacion-048",
-    "concepto": "aplicacion-ssh-algoritmos",
-    "tema": "aplicacion",
-    "fuente": {
-      "pdf": "4_Aplicacion.pdf",
-      "pagina": 20
-    },
-    "pregunta": "En la lista de cifrados de SSH, ¿qué algoritmo es arcfour?",
-    "correcta": "RC4 con una clave de 128 bits",
-    "distractores": [
-      "Twofish en modo CBC con una clave de 128 bits",
-      "AES en modo CBC con una clave de 128 bits"
-    ],
-    "explicacion": "✓ arcfour es RC4 con una clave de 128 bits en la lista de cifrados de SSH.\n✗ «Twofish en modo CBC»: Twofish se llama twofish128-cbc, y arcfour es RC4\n✗ «AES en modo CBC»: AES se llama aes128-cbc, y arcfour es RC4"
   },
   {
     "id": "aplicacion-049",
@@ -8874,10 +8746,10 @@
     "pregunta": "¿Qué ventaja da MIME para el formato de los mensajes de correo?",
     "correcta": "Define un conjunto extensible de formatos para los mensajes",
     "distractores": [
-      "Define un único formato cerrado que todos los clientes están obligados a usar",
+      "Define un formato fijo de mensaje para los clientes de correo",
       "Sustituye a SMTP por un protocolo binario para transferir mensajes"
     ],
-    "explicacion": "✓ MIME define un conjunto extensible de formatos para los mensajes, además de admitir caracteres no ASCII.\n✗ «Define un único formato»: los formatos de MIME son extensibles y no un único formato cerrado\n✗ «Sustituye a SMTP»: MIME extiende los mensajes, y SMTP sigue transfiriéndolos"
+    "explicacion": "✓ MIME define un conjunto extensible de formatos para los mensajes, además de admitir caracteres no ASCII.\n✗ «Define un formato fijo»: los formatos de MIME son extensibles y no un formato fijo\n✗ «Sustituye a SMTP»: MIME extiende los mensajes, y SMTP sigue transfiriéndolos"
   },
   {
     "id": "aplicacion-108",
@@ -8893,7 +8765,7 @@
       "Por una cabecera cifrada y un cuerpo firmado en un único bloque",
       "Por un único bloque de texto ASCII de 7 bits con extensiones"
     ],
-    "explicacion": "✓ Con MIME un mensaje puede constar de varias partes independientes, cada una con su propio formato.\n✗ «Por una cabecera cifrada»: eso es lo que añade S/MIME y no la estructura de MIME\n✗ «Por un único bloque»: MIME permite partes con distintos formatos, y no solo ASCII"
+    "explicacion": "✓ Con MIME un mensaje puede constar de varias partes independientes, cada una con su propio formato.\n✗ «Por una cabecera cifrada»: el cifrado y la firma son cosa de S/MIME, y MIME solo estructura el mensaje en partes\n✗ «Por un único bloque»: MIME permite partes con distintos formatos, y no solo ASCII"
   },
   {
     "id": "aplicacion-109",
@@ -9015,13 +8887,13 @@
       "pdf": "4_Aplicacion.pdf",
       "pagina": 40
     },
-    "pregunta": "¿Cuál de estas es una categoría de amenazas al correo electrónico en el NIST SP 800-177?",
+    "pregunta": "Además de autenticación, integridad y confidencialidad, ¿qué cuarta categoría de amenazas al correo distingue el NIST SP 800-177?",
     "correcta": "La disponibilidad",
     "distractores": [
       "El control de acceso a los buzones de los usuarios",
       "El no repudio del emisor de cada mensaje enviado"
     ],
-    "explicacion": "✓ La disponibilidad es una categoría de amenazas al correo en el documento del NIST.\n✗ «El control de acceso»: el control de acceso es una medida de protección y no una categoría de amenaza\n✗ «El no repudio»: el no repudio no figura entre las cuatro categorías del NIST"
+    "explicacion": "✓ La disponibilidad es la cuarta categoría de amenazas al correo en el documento del NIST.\n✗ «El control de acceso»: el control de acceso es una medida de protección y no una categoría de amenaza\n✗ «El no repudio»: el no repudio no figura entre las cuatro categorías del NIST"
   },
   {
     "id": "aplicacion-117",
@@ -9031,13 +8903,13 @@
       "pdf": "4_Aplicacion.pdf",
       "pagina": 40
     },
-    "pregunta": "¿Cuántas categorías de amenazas distingue el NIST SP 800-177 para el correo, y cuál incluye la pérdida de acceso al servicio?",
-    "correcta": "Cuatro, y la pérdida de acceso entra en la disponibilidad",
+    "pregunta": "Según el NIST SP 800-177, ¿en qué categoría de amenazas al correo entra un ataque DoS/DDoS contra los servidores de correo de una empresa?",
+    "correcta": "En la disponibilidad",
     "distractores": [
-      "Tres, y la pérdida de acceso entra en la integridad del servicio",
-      "Cinco, y la pérdida de acceso entra en el no repudio del emisor"
+      "En la integridad",
+      "En la confidencialidad"
     ],
-    "explicacion": "✓ El NIST distingue cuatro categorías, y la pérdida de acceso al servicio es de disponibilidad.\n✗ «Tres»: son cuatro categorías, y la integridad trata de la modificación\n✗ «Cinco»: son cuatro categorías y el no repudio no es una de ellas"
+    "explicacion": "✓ Un DoS/DDoS contra los servidores de correo impide enviar y recibir correo, y es una amenaza de disponibilidad.\n✗ «En la integridad»: la integridad trata de la modificación del mensaje en tránsito\n✗ «En la confidencialidad»: la confidencialidad trata de la revelación de información sensible"
   },
   {
     "id": "aplicacion-118",
@@ -9066,10 +8938,10 @@
     "pregunta": "¿Qué crítica recibe el uso de puertos seguros distintos para el correo con TLS?",
     "correcta": "Se considera confuso y desperdicia puertos",
     "distractores": [
-      "Cifran únicamente la cabecera de los mensajes y no el cuerpo",
-      "Obligan al cliente a presentar un certificado para autenticarse"
+      "Deja en claro las cabeceras de cada mensaje de correo",
+      "Obliga al cliente a presentar un certificado para autenticarse"
     ],
-    "explicacion": "✓ Los puertos seguros se consideran en ciertos casos confusos, y desperdician puertos.\n✗ «Cifran»: los puertos seguros cifran toda la conexión con TLS\n✗ «Obligan»: no es la crítica del temario, que se refiere al desperdicio de puertos"
+    "explicacion": "✓ Los puertos seguros se consideran en ciertos casos confusos, y desperdician puertos.\n✗ «Deja en claro las cabeceras»: los puertos seguros cifran toda la conexión con TLS\n✗ «Obliga»: no es la crítica del temario, que se refiere al desperdicio de puertos"
   },
   {
     "id": "aplicacion-120",
@@ -9626,10 +9498,10 @@
     "pregunta": "¿Qué algoritmo de resumen debe soportar obligatoriamente S/MIME para formar una firma digital?",
     "correcta": "SHA-256",
     "distractores": [
-      "SHA-1, el resumen de las firmas más antiguas y extendidas",
-      "MD5, que el receptor soporta por compatibilidad con mensajes antiguos"
+      "SHA-512",
+      "SHA-3"
     ],
-    "explicacion": "✓ S/MIME exige soportar SHA-256 para el resumen de la firma, y SHA-1 es solo recomendable.\n✗ «SHA-1»: SHA-1 es recomendable (SHOULD), y no obligatorio\n✗ «MD5»: MD5 es recomendable para el receptor y no es el obligatorio"
+    "explicacion": "✓ S/MIME exige soportar SHA-256 para el resumen de la firma.\n✗ «SHA-512»: es otro tamaño de SHA-2, y S/MIME exige el de 256 bits\n✗ «SHA-3»: es otra familia de resumen, y S/MIME exige SHA-256"
   },
   {
     "id": "aplicacion-155",
@@ -9642,10 +9514,10 @@
     "pregunta": "¿Qué algoritmo debe soportar obligatoriamente S/MIME para cifrar un mensaje con una clave de sesión de un solo uso?",
     "correcta": "AES-128 en modo CBC",
     "distractores": [
-      "AES-256 en modo CBC, con la clave más larga de la familia",
-      "Triple DES en modo CBC, con tres claves de cifrado"
+      "AES-256 en modo CBC",
+      "Twofish en modo CBC"
     ],
-    "explicacion": "✓ S/MIME exige soportar AES-128 en modo CBC, y recomienda AES-192, AES-256 y Triple DES.\n✗ «AES-256»: AES-256 es recomendable (SHOULD), y el obligatorio es AES-128\n✗ «Triple DES»: Triple DES es recomendable (SHOULD) y no obligatorio"
+    "explicacion": "✓ S/MIME exige soportar AES-128 en modo CBC para cifrar el mensaje.\n✗ «AES-256»: AES-256 es recomendable (SHOULD) y no obligatorio\n✗ «Twofish»: Twofish no es un algoritmo de cifrado de mensajes de S/MIME"
   },
   {
     "id": "aplicacion-156",
@@ -9658,10 +9530,10 @@
     "pregunta": "¿Qué algoritmo debe soportar obligatoriamente S/MIME para cifrar la clave de sesión que viaja con el mensaje?",
     "correcta": "RSA",
     "distractores": [
-      "Diffie-Hellman en modo efímero-estático con la clave del destinatario",
+      "ElGamal con la clave pública del destinatario",
       "AES-128 en modo CBC con una clave de un solo uso del remitente"
     ],
-    "explicacion": "✓ Para cifrar la clave de sesión, S/MIME exige soportar el cifrado RSA, y recomienda otros modos.\n✗ «Diffie-Hellman»: es recomendable (SHOULD) y no obligatorio\n✗ «AES-128»: es el algoritmo obligatorio para cifrar el mensaje, y no la clave de sesión"
+    "explicacion": "✓ Para cifrar la clave de sesión, S/MIME exige soportar el cifrado RSA.\n✗ «ElGamal»: no es el algoritmo que S/MIME exige para cifrar la clave de sesión\n✗ «AES-128»: es el algoritmo obligatorio para cifrar el mensaje, y no la clave de sesión"
   },
   {
     "id": "aplicacion-157",
@@ -10327,13 +10199,13 @@
       "pdf": "E_SSL_TLS.pdf",
       "pagina": 23
     },
-    "pregunta": "En un ataque sslstrip, ¿qué tramo de la conexión de la víctima viaja sin cifrar?",
-    "correcta": "El tramo entre la víctima y el atacante",
+    "pregunta": "En un ataque sslstrip, ¿qué ve en claro el atacante?",
+    "correcta": "Todo lo que la víctima envía, como sus contraseñas",
     "distractores": [
-      "El tramo entre el atacante y el servidor real",
-      "Los dos tramos de la conexión, con el atacante en medio"
+      "Las cabeceras HTTP, sin el contenido de los formularios",
+      "Ningún dato, porque el servidor real cifra la conexión"
     ],
-    "explicacion": "✓ La víctima habla HTTP con el atacante, y es el único tramo sin cifrar.\n✗ «El tramo entre el atacante y el servidor»: ese tramo va por HTTPS\n✗ «Los dos tramos»: el tramo con el servidor sigue cifrado"
+    "explicacion": "✓ La víctima habla HTTP con el atacante, así que el atacante lee todo lo que envía, contraseñas incluidas.\n✗ «Las cabeceras HTTP»: el tramo va entero en HTTP, con los formularios\n✗ «Ningún dato»: el cifrado cubre el tramo con el servidor, y no el tramo con la víctima"
   },
   {
     "id": "ssl-tls-019",
@@ -10853,7 +10725,7 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 68
+      "pagina": 69
     },
     "pregunta": "¿Qué debe poder hacer el atacante en el cliente de la víctima para ejecutar BREACH?",
     "correcta": "Inyectar peticiones, cuya suposición aparece reflejada en la respuesta",
@@ -10903,13 +10775,13 @@
       "pdf": "E_SSL_TLS.pdf",
       "pagina": 60
     },
-    "pregunta": "¿Por qué Lucky 13 se limita a las redes locales?",
-    "correcta": "Porque necesita medir diferencias de tiempo muy pequeñas",
+    "pregunta": "¿En qué tipo de red puede explotarse Lucky 13?",
+    "correcta": "En redes locales",
     "distractores": [
-      "Porque exige un MitM que únicamente es posible en una LAN",
-      "Porque el padding únicamente se envía sin cifrar cuando la red es local"
+      "En redes inalámbricas sin cifrar",
+      "En cualquier red, incluida Internet"
     ],
-    "explicacion": "✓ La diferencia entre error y no error es mínima, y solo se mide con precisión cerca del servidor.\n✗ «Porque exige»: el requisito es la medida del tiempo, y no el MitM\n✗ «Porque el padding»: el padding va cifrado en cualquier red"
+    "explicacion": "✓ Lucky 13 se explota en redes locales, y no a través de Internet.\n✗ «En redes inalámbricas»: el ataque no depende de que la red sea inalámbrica ni de que esté sin cifrar\n✗ «En cualquier red»: el ataque se limita a redes locales"
   },
   {
     "id": "ssl-tls-055",
@@ -11447,13 +11319,13 @@
       "pdf": "E_SSL_TLS.pdf",
       "pagina": 126
     },
-    "pregunta": "¿Para qué se usa ML-KEM en la criptografía post-cuántica del NIST?",
-    "correcta": "Para el intercambio de claves",
+    "pregunta": "¿Qué amenaza justifica que Chrome use ML-KEM antes de que haya ordenadores cuánticos capaces de romper TLS?",
+    "correcta": "Guardar hoy el tráfico cifrado y descifrarlo cuando haya esos ordenadores",
     "distractores": [
-      "Para la firma digital de certificados y mensajes",
-      "Para el hash de los certificados X.509"
+      "Romper hoy las firmas RSA de los certificados con un ordenador cuántico",
+      "Suplantar hoy al servidor con un certificado post-cuántico falso"
     ],
-    "explicacion": "✓ ML-KEM es un mecanismo de encapsulación de claves, y sirve para acordar una clave compartida.\n✗ «Para la firma digital»: la firma es el papel de ML-DSA y SLH-DSA\n✗ «Para el hash»: ML-KEM no es una función hash"
+    "explicacion": "✓ Es el ataque store-now-decrypt-later: el atacante guarda hoy el tráfico, y lo descifra con un ordenador cuántico futuro.\n✗ «Romper hoy las firmas»: ML-KEM protege el intercambio de clave, y no las firmas\n✗ «Suplantar hoy al servidor»: ML-KEM no autentica al servidor"
   },
   {
     "id": "ssl-tls-089",
@@ -11480,12 +11352,12 @@
       "pagina": 126
     },
     "pregunta": "¿Qué parte de una conexión TLS protege Chrome al usar ML-KEM?",
-    "correcta": "El intercambio de clave, frente a los ataques store-now-decrypt-later",
+    "correcta": "El intercambio de clave de la conexión",
     "distractores": [
       "La firma del certificado del servidor, para detectar un MitM que suplanta al servidor",
       "El cifrado de registros con claves simétricas, que los ordenadores cuánticos romperían"
     ],
-    "explicacion": "✓ Chrome usa ML-KEM en el intercambio de clave, para que el tráfico guardado hoy no se descifre mañana.\n✗ «La firma del certificado»: las firmas son ML-DSA y SLH-DSA\n✗ «El cifrado de registros»: el cifrado simétrico no es lo que ML-KEM sustituye"
+    "explicacion": "✓ Chrome usa ML-KEM en el intercambio de clave, y no en las firmas ni en el cifrado de registros.\n✗ «La firma del certificado»: las firmas son ML-DSA y SLH-DSA\n✗ «El cifrado de registros»: el cifrado simétrico no es lo que ML-KEM sustituye"
   },
   {
     "id": "ssl-tls-091",
@@ -11687,13 +11559,13 @@
       "pdf": "E_SSL_TLS.pdf",
       "pagina": 114
     },
-    "pregunta": "¿Qué hace DNS over HTTPS (DoH)?",
-    "correcta": "Resuelve las peticiones DNS a través de HTTPS",
+    "pregunta": "¿Qué tráfico del navegador cifra DoH?",
+    "correcta": "Las consultas de resolución DNS",
     "distractores": [
-      "Firma las respuestas DNS con claves de zona, para que el resolutor valide su origen",
-      "Cifra el SNI del ClientHello para que el nombre del sitio no viaje en claro"
+      "El nombre del servidor que viaja en el ClientHello de TLS",
+      "El certificado que el servidor presenta en el handshake"
     ],
-    "explicacion": "✓ DoH envía las consultas DNS por HTTPS, y así quedan cifradas.\n✗ «Firma las respuestas»: eso es DNSSEC, y no DoH\n✗ «Cifra el SNI»: eso es ESNI o ECH"
+    "explicacion": "✓ DoH envía las consultas DNS dentro de HTTPS, y así quedan cifradas.\n✗ «El nombre del servidor»: el SNI va en el ClientHello, y lo cifran ESNI y ECH\n✗ «El certificado que el servidor»: viaja en el handshake de TLS, que DoH no toca"
   },
   {
     "id": "ssl-tls-104",
@@ -11815,7 +11687,7 @@
       "pdf": "E_SSL_TLS.pdf",
       "pagina": 66
     },
-    "pregunta": "¿Qué significa BREACH, el ataque que usa la compresión HTTP para filtrar secretos del cuerpo de la respuesta?",
+    "pregunta": "¿Qué significa BREACH, el ataque contra HTTPS que filtra secretos del cuerpo de la respuesta?",
     "correcta": "Browser Reconnaissance and Exfiltration via Adaptive Compression of Hypertext",
     "distractores": [
       "Browser Recovery of Encrypted Authentication Credentials in HTTP",
@@ -11975,13 +11847,13 @@
       "pdf": "E_SSL_TLS.pdf",
       "pagina": 51
     },
-    "pregunta": "¿Qué significa APT, el tipo de amenaza de espionaje al que pertenecía Flame?",
+    "pregunta": "¿Qué significa APT, la sigla con la que se describe a Flame?",
     "correcta": "Advanced Persistent Threat",
     "distractores": [
-      "Automated Packet Tracing",
-      "Anonymous Proxy Tunnel"
+      "Advanced Packet Tracking",
+      "Automated Persistent Tunnel"
     ],
-    "explicacion": "✓ Una APT es una amenaza avanzada y persistente, usada aquí para espionaje a gobiernos.\n✗ «Automated Packet»: APT es una amenaza, y no un rastreo de paquetes\n✗ «Anonymous Proxy»: APT es una amenaza, y no un túnel proxy"
+    "explicacion": "✓ Una APT es una amenaza avanzada y persistente, y Flame se usó contra varios países de Oriente Medio.\n✗ «Advanced Packet Tracking»: no es una sigla de seguridad, y APT no habla de seguir paquetes\n✗ «Automated Persistent Tunnel»: el ataque no es un túnel, sino una amenaza sostenida en el tiempo"
   },
   {
     "id": "ssl-tls-109",
@@ -12037,15 +11909,15 @@
     "tema": "ssl-tls",
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
-      "pagina": 23
+      "pagina": 21
     },
     "pregunta": "En un MITM de sslstrip con bettercap, ¿por qué la víctima acaba en un dominio parecido al real, como wwwww-facebook.com?",
     "correcta": "Porque el navegador no tiene una política HSTS para el dominio parecido",
     "distractores": [
-      "Un certificado válido del atacante para el dominio parecido",
-      "El DNS de la víctima no resuelve el dominio real"
+      "Porque el atacante tiene un certificado válido para el dominio parecido",
+      "Porque el DNS de la víctima no resuelve el dominio real"
     ],
-    "explicacion": "✓ El navegador obliga a usar HTTPS con el dominio real que tiene HSTS, y el dominio parecido escapa a esa política.\n✗ «Un certificado válido»: el atacante sirve el dominio parecido en HTTP, y no necesita certificado\n✗ «El DNS de la víctima»: el dominio real resuelve bien, y el cambio de dominio esquiva HSTS"
+    "explicacion": "✓ El navegador obliga a usar HTTPS con el dominio real que tiene HSTS, y el dominio parecido escapa a esa política.\n✗ «Porque el atacante tiene un certificado válido»: el atacante sirve el dominio parecido en HTTP, y no necesita certificado\n✗ «Porque el DNS de la víctima»: el dominio real resuelve bien, y el cambio de dominio esquiva HSTS"
   },
   {
     "id": "ssl-tls-113",
@@ -12078,5 +11950,341 @@
       "El atacante pide a una CA un certificado para el dominio parecido"
     ],
     "explicacion": "✓ El atacante hace de proxy, y cambia cada enlace al dominio real por el dominio parecido en las páginas que reenvía.\n✗ «registra el dominio parecido»: no hay copia, el contenido sale del servidor real a través del proxy\n✗ «pide a una CA un certificado»: el dominio parecido va por HTTP, y no lleva certificado"
+  },
+  {
+    "id": "claves-115",
+    "concepto": "claves-fortaleza-distribucion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿De qué depende la fortaleza de un sistema criptográfico?",
+    "correcta": "De la técnica con la que distribuye sus claves",
+    "distractores": [
+      "Del secreto del algoritmo de cifrado que usa",
+      "De la longitud del texto que cifra en cada sesión"
+    ],
+    "explicacion": "✓ La fortaleza de un sistema criptográfico depende de su técnica de distribución de claves.\n✗ «Del secreto del algoritmo»: el algoritmo puede ser público, y lo que cuenta es cómo llegan las claves\n✗ «De la longitud del texto»: la longitud del texto no da fortaleza al sistema"
+  },
+  {
+    "id": "claves-116",
+    "concepto": "claves-fortaleza-distribucion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿Qué claves hay que distribuir para las sesiones y conexiones de intercambio de datos?",
+    "correcta": "Claves simétricas o asimétricas, según el sistema",
+    "distractores": [
+      "Claves simétricas, porque las asimétricas son públicas",
+      "Contraseñas de usuario en lugar de claves"
+    ],
+    "explicacion": "✓ Las sesiones y conexiones necesitan claves simétricas o asimétricas, y las dos hay que distribuirlas.\n✗ «Claves simétricas»: una clave pública también hay que distribuirla\n✗ «Contraseñas de usuario»: el tema trata la distribución de claves, y no de contraseñas"
+  },
+  {
+    "id": "claves-117",
+    "concepto": "claves-fortaleza-distribucion",
+    "tema": "claves",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿Qué necesitan los protocolos de seguridad, además de distribuir las claves?",
+    "correcta": "Una administración adecuada de las claves",
+    "distractores": [
+      "Un algoritmo de cifrado secreto para cada sesión",
+      "Un canal físico aislado entre las dos partes"
+    ],
+    "explicacion": "✓ Los protocolos de seguridad necesitan distribuir las claves y también administrarlas bien.\n✗ «Un algoritmo de cifrado secreto»: el problema es la gestión de las claves, y no el secreto del algoritmo\n✗ «Un canal físico aislado»: la administración de claves es el requisito, y no un canal físico"
+  },
+  {
+    "id": "transporte-s06",
+    "concepto": "sigla-ssl",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿Qué significa SSL, la capa de seguridad entre la aplicación y TCP?",
+    "correcta": "Secure Sockets Layer",
+    "distractores": [
+      "Secure Session Layer",
+      "Standard Security Layer"
+    ],
+    "explicacion": "✓ SSL significa Secure Sockets Layer, la capa de seguridad que TLS sustituye.\n✗ «Secure Session Layer»: la segunda S es de sockets, y no de sesión\n✗ «Standard Security Layer»: la primera S es de secure, y la segunda de sockets"
+  },
+  {
+    "id": "transporte-s07",
+    "concepto": "sigla-tls",
+    "tema": "transporte",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 2
+    },
+    "pregunta": "¿Qué significa TLS, la evolución de SSL?",
+    "correcta": "Transport Layer Security",
+    "distractores": [
+      "Transfer Layer Security",
+      "Trusted Link Service"
+    ],
+    "explicacion": "✓ TLS significa Transport Layer Security, la capa de seguridad que va sobre TCP.\n✗ «Transfer Layer Security»: la T es de transporte, y no de transferencia\n✗ «Trusted Link Service»: TLS es una capa de seguridad, y no un servicio de enlace"
+  },
+  {
+    "id": "aplicacion-172",
+    "concepto": "aplicacion-ssh-cifrados",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué tamaños de clave ofrece AES en la lista de cifrados de SSH?",
+    "correcta": "128, 192 y 256 bits",
+    "distractores": [
+      "64, 128 y 192 bits",
+      "56, 112 y 168 bits"
+    ],
+    "explicacion": "✓ La lista de cifrados de SSH trae aes128-cbc, aes192-cbc y aes256-cbc.\n✗ «64, 128 y 192 bits»: AES no usa claves de 64 bits, y sí de 256\n✗ «56, 112 y 168 bits»: son tamaños de DES y de 3DES, y no de AES"
+  },
+  {
+    "id": "aplicacion-173",
+    "concepto": "aplicacion-ssh-cifrados",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué modo usan casi todos los cifrados de la lista de SSH?",
+    "correcta": "CBC, como en aes128-cbc o 3des-cbc",
+    "distractores": [
+      "ECB, como en aes128-ecb o 3des-ecb",
+      "GCM, como en aes128-gcm o aes256-gcm"
+    ],
+    "explicacion": "✓ Casi todos los cifrados de la lista acaban en -cbc, y arcfour es la excepción.\n✗ «ECB»: la lista no trae ningún cifrado en ECB\n✗ «GCM»: la lista de SSH no trae ningún cifrado en GCM"
+  },
+  {
+    "id": "aplicacion-174",
+    "concepto": "aplicacion-ssh-cifrados",
+    "tema": "aplicacion",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 20
+    },
+    "pregunta": "¿Qué diferencia a arcfour de los demás cifrados de la lista de SSH?",
+    "correcta": "Es RC4 con una clave de 128 bits, un cifrado de flujo",
+    "distractores": [
+      "Es un cifrado de bloque en CBC, como cast128-cbc",
+      "Es el cifrado obligatorio de SSH, con asterisco"
+    ],
+    "explicacion": "✓ arcfour es RC4 con 128 bits, un cifrado de flujo, y los demás son cifrados de bloque en CBC.\n✗ «Es un cifrado de bloque»: arcfour es RC4, un cifrado de flujo\n✗ «Es el cifrado obligatorio»: el obligatorio es 3des-cbc"
+  },
+  {
+    "id": "ssl-tls-115",
+    "concepto": "ssl-tls-tls10-ssl3",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 8
+    },
+    "pregunta": "Un cliente TLS 1.0 conecta con un servidor que solo soporta SSLv3. ¿Qué ofrece TLS 1.0 en ese caso?",
+    "correcta": "Una opción para hacer un downgrade de la conexión a SSLv3",
+    "distractores": [
+      "Una pasarela que traduce los mensajes de SSLv3 a TLS 1.0",
+      "Un error de handshake, sin ninguna alternativa"
+    ],
+    "explicacion": "✓ TLS 1.0 no interopera con SSLv3, pero ofrece una opción para bajar la conexión a SSLv3.\n✗ «Una pasarela»: TLS 1.0 no traduce, sino que baja a SSLv3\n✗ «Un error de handshake»: TLS 1.0 ofrece un downgrade a SSLv3"
+  },
+  {
+    "id": "ssl-tls-116",
+    "concepto": "ssl-tls-tls10-ssl3",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué alcance tienen los cambios de TLS 1.0 respecto a SSLv3?",
+    "correcta": "Son mejoras menores sobre SSLv3",
+    "distractores": [
+      "Un rediseño completo del protocolo y de su handshake",
+      "La eliminación del modo CBC y de RC4"
+    ],
+    "explicacion": "✓ TLS 1.0 tan solo introduce mejoras menores respecto a SSLv3.\n✗ «Un rediseño completo»: TLS 1.0 parte de SSLv3 con cambios pequeños\n✗ «La eliminación del modo CBC»: TLS 1.0 conserva CBC, y BEAST le afecta por eso"
+  },
+  {
+    "id": "ssl-tls-117",
+    "concepto": "ssl-tls-tls10-ssl3",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 8
+    },
+    "pregunta": "¿Qué dice TLS 1.0 sobre la interoperabilidad con SSLv3?",
+    "correcta": "No la permite, aunque sus cambios sobre SSLv3 son menores",
+    "distractores": [
+      "La permite sin cambios, porque es SSLv3 con otro nombre",
+      "La exige en todo servidor, que acepta las dos versiones"
+    ],
+    "explicacion": "✓ TLS 1.0 no permite interoperar con SSLv3, aunque sus mejoras sobre esa versión son menores.\n✗ «La permite sin cambios»: TLS 1.0 no interopera con SSLv3\n✗ «La exige en todo servidor»: TLS 1.0 no permite esa interoperabilidad"
+  },
+  {
+    "id": "ssl-tls-118",
+    "concepto": "ssl-tls-rc4-o-cbc",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 64
+    },
+    "pregunta": "En 2013, ¿cuál era la mejor solución frente a los ataques a RC4 y a CBC?",
+    "correcta": "Usar TLS 1.2, con suites de cifrado sin RC4 ni CBC",
+    "distractores": [
+      "Usar TLS 1.0 con RC4, que esquiva el ataque BEAST",
+      "Usar SSLv3 con CBC y el parche del navegador"
+    ],
+    "explicacion": "✓ TLS 1.2 tiene suites de cifrado que no usan RC4 ni CBC, y esquiva los dos ataques.\n✗ «Usar TLS 1.0 con RC4»: RC4 sufre los ataques BIAS\n✗ «Usar SSLv3 con CBC»: SSLv3 con CBC sigue expuesto a BEAST"
+  },
+  {
+    "id": "ssl-tls-119",
+    "concepto": "ssl-tls-rc4-o-cbc",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 64
+    },
+    "pregunta": "En 2013, ¿qué cifrado usaba Google cuando no podía usar TLS 1.1 ni TLS 1.2?",
+    "correcta": "RC4, un cifrado de flujo",
+    "distractores": [
+      "AES, un cifrado en modo CBC",
+      "3DES, un cifrado en modo CBC"
+    ],
+    "explicacion": "✓ Google usaba RC4 cuando no era posible usar TLS 1.1 o TLS 1.2.\n✗ «AES»: Microsoft y Firefox preferían CBC, y Google usaba RC4\n✗ «3DES»: Google no recurría a CBC, que BEAST ataca en TLS 1.0"
+  },
+  {
+    "id": "ssl-tls-120",
+    "concepto": "ssl-tls-rc4-o-cbc",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 64
+    },
+    "pregunta": "En 2013, ¿qué preferían Microsoft y Firefox entre RC4 y CBC?",
+    "correcta": "CBC, y RC4 para un servidor sin otro algoritmo",
+    "distractores": [
+      "RC4 frente a CBC, como Google sin TLS 1.1",
+      "Ninguno de los dos, y exigían TLS 1.2"
+    ],
+    "explicacion": "✓ Microsoft rechazaba RC4 salvo en un servidor sin otro algoritmo, y Firefox seguía esa opción.\n✗ «RC4 frente a CBC»: Google usaba RC4, y Microsoft y Firefox preferían CBC\n✗ «Ninguno de los dos»: en 2013 era pronto para exigir TLS 1.2"
+  },
+  {
+    "id": "ssl-tls-121",
+    "concepto": "ssl-tls-mitm-con-y-sin-cifrado",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 14
+    },
+    "pregunta": "En un Man-in-the-Middle contra un protocolo sin cifrado, ¿qué puede hacer el atacante con el tráfico?",
+    "correcta": "Leerlo y cambiarlo, porque pasa en claro por él",
+    "distractores": [
+      "Leerlo pero no cambiarlo, por la integridad",
+      "Cambiarlo pero no leerlo, por la codificación"
+    ],
+    "explicacion": "✓ El atacante está en medio y el tráfico va en claro, así que lo lee y lo cambia.\n✗ «Leerlo pero no cambiarlo»: sin protección, el atacante también lo cambia\n✗ «Cambiarlo pero no leerlo»: sin cifrado, el tráfico va en claro"
+  },
+  {
+    "id": "ssl-tls-122",
+    "concepto": "ssl-tls-mitm-con-y-sin-cifrado",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 15
+    },
+    "pregunta": "En un Man-in-the-Middle contra un protocolo cifrado, ¿cómo va el tráfico?",
+    "correcta": "Cifrado en el tramo de la víctima al atacante, y en el tramo del atacante al servidor",
+    "distractores": [
+      "Cifrado de extremo a extremo, sin pasar por el atacante",
+      "En claro en los dos tramos, porque el atacante quita el cifrado"
+    ],
+    "explicacion": "✓ El atacante corta el enlace directo, y cada tramo va cifrado hasta él.\n✗ «Cifrado de extremo a extremo»: el atacante está en medio y corta el enlace directo\n✗ «En claro en los dos tramos»: los dos tramos van cifrados"
+  },
+  {
+    "id": "ssl-tls-123",
+    "concepto": "ssl-tls-mitm-con-y-sin-cifrado",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Dónde se coloca el atacante en un ataque Man-in-the-Middle?",
+    "correcta": "Entre los dos extremos, y corta el enlace directo entre ellos",
+    "distractores": [
+      "Junto a uno de los extremos, con una copia del tráfico",
+      "Dentro del servidor, con acceso a su clave privada"
+    ],
+    "explicacion": "✓ El atacante se pone entre los dos extremos, y todo el tráfico pasa por él.\n✗ «Junto a uno de los extremos»: eso es una escucha, y el MitM corta el enlace directo\n✗ «Dentro del servidor»: el atacante está en la red, entre los extremos"
+  },
+  {
+    "id": "ssl-tls-s14",
+    "concepto": "sigla-ssl-tls-mitm",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 14
+    },
+    "pregunta": "¿Qué significa MitM, el ataque en el que el atacante corta el enlace entre los dos extremos?",
+    "correcta": "Man-in-the-Middle",
+    "distractores": [
+      "Malware in the Machine",
+      "Message in the Middle"
+    ],
+    "explicacion": "✓ MitM significa Man-in-the-Middle: el atacante se pone en medio de la comunicación.\n✗ «Malware in the Machine»: no es un malware del equipo, sino un atacante en medio\n✗ «Message in the Middle»: lo que está en medio es el atacante, y no un mensaje"
+  },
+  {
+    "id": "ssl-tls-s15",
+    "concepto": "sigla-ssl-tls-ecb",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 35
+    },
+    "pregunta": "¿Qué significa ECB, el modo de cifrado al que BEAST hace pasar desde CBC?",
+    "correcta": "Electronic Code Book",
+    "distractores": [
+      "Encrypted Cipher Block",
+      "Extended Chain Block"
+    ],
+    "explicacion": "✓ ECB significa Electronic Code Book, el modo al que BEAST degrada el cifrado desde CBC.\n✗ «Encrypted Cipher Block»: la E es de electronic, y no de encrypted\n✗ «Extended Chain Block»: el modo con cadena es CBC, y no ECB"
+  },
+  {
+    "id": "ssl-tls-s16",
+    "concepto": "sigla-ssl-tls-ct",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 111
+    },
+    "pregunta": "¿Qué significa CT, el sistema que Chrome exige a los certificados desde julio de 2018?",
+    "correcta": "Certificate Transparency",
+    "distractores": [
+      "Certificate Trust",
+      "Cipher Transport"
+    ],
+    "explicacion": "✓ CT significa Certificate Transparency: los certificados se publican, y cualquiera ve una emisión no autorizada.\n✗ «Certificate Trust»: la idea es publicar los certificados, y no confiar en ellos\n✗ «Cipher Transport»: CT trata los certificados, y no el cifrado"
+  },
+  {
+    "id": "ssl-tls-s17",
+    "concepto": "sigla-ssl-tls-doh",
+    "tema": "ssl-tls",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 114
+    },
+    "pregunta": "¿Qué significa DoH, el estándar del RFC 8484?",
+    "correcta": "DNS over HTTPS",
+    "distractores": [
+      "DNS over HTTP",
+      "Domain over HTTPS"
+    ],
+    "explicacion": "✓ DoH significa DNS over HTTPS, y resuelve las peticiones DNS a través de HTTPS.\n✗ «DNS over HTTP»: DoH usa HTTPS, y no HTTP en claro\n✗ «Domain over HTTPS»: la D es de DNS, el sistema de nombres"
   }
 ]
