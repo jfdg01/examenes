@@ -70,13 +70,18 @@ Un aviso de una pista o de una explicación lo juzga el revisor: un absoluto que
 
 Un tema acaba cuando `banco comprobar` no da ningún aviso de página de su PDF.
 
-## Flujo de trabajo
+## El flujo de trabajo
 
-Para el agente creador: solamente se introduciran tandas de 10 preguntas en el archivo. El mismo agente las revisa si son correctas y se pasa a la siguiente tanda hasta que no se indentifiquen conceptos relevantes.
+1. El agente creador escribe una tanda de 10 preguntas en el borrador.
+2. El agente revisa su tanda: compara cada pregunta con su página y con las reglas.
+3. El agente corre `banco importar` y `banco comprobar`, y arregla los errores y los avisos.
+4. El agente sigue con la siguiente tanda, hasta que el tema acaba.
 
-## La revisión
+Al acabar el tema 3 de ASN, una prueba única revisa 1 de cada 3 conceptos. La hace un solo revisor que no escribió las preguntas, y cuenta solo los fallos graves: la regla 3 y una `fuente` equivocada. Con 1 fallo grave o más cada 10 preguntas revisadas, cada tema siguiente lleva una revisión completa al acabar. Con menos fallos, la revisión del agente creador queda sola.
 
-Una revisión de agentes que no escribieron las preguntas compara cada pregunta con su página y con las reglas. Cada revisor comprueba también que la `fuente` es la página que explica la idea. Los revisores no cambian `preguntas.json`: cada uno da un informe en JSON, con una lista de fallos.
+## La revisión completa
+
+Un agente que no escribió las preguntas revisa el tema entero: compara cada pregunta con su página y con las reglas. El revisor comprueba también que la `fuente` es la página que explica la idea. El revisor de la revisión completa y el de la prueba del tema 3 no cambian `preguntas.json`: cada uno da un informe en JSON, con una lista de fallos.
 
 ```json
 {
@@ -92,7 +97,7 @@ Una revisión de agentes que no escribieron las preguntas compara cada pregunta 
 - `gravedad` es `grave` para un fallo de la regla 3, y `leve` para el resto.
 - `arreglo` da los campos nuevos de la pregunta, o `null` para un fallo sin arreglo claro. Un arreglo cambia solo `pregunta`, `correcta`, `distractores`, `explicacion` y `fuente`.
 
-Un solo agente aplica los informes:
+Un agente aplica los informes:
 
 ```bash
 cargo run --manifest-path app/Cargo.toml -p banco -- revision ps revision-*.json
