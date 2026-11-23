@@ -72,9 +72,8 @@ pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec
         }
     }
     for (concepto, n) in cuenta {
-        let validos: &[usize] = if sigla(concepto) { &[1] } else { &[2, 3] };
-        if !validos.contains(&n) {
-            let esperado = validos.iter().map(usize::to_string).collect::<Vec<_>>().join(" o ");
+        let esperado = if sigla(concepto) { 1 } else { 3 };
+        if n != esperado {
             let s = if n == 1 { "" } else { "s" };
             errores.push(format!("{concepto}: {n} pregunta{s}, y no {esperado}"));
         }
@@ -322,9 +321,9 @@ mod tests {
         }
     }
 
-    /// La pregunta cambiada, con otra del mismo concepto para que el concepto tenga 2.
+    /// La pregunta cambiada, con otras 2 del mismo concepto para que el concepto tenga 3.
     fn con_pareja(p: Pregunta) -> Vec<Pregunta> {
-        vec![p, pregunta("rgpd-002")]
+        vec![p, pregunta("rgpd-002"), pregunta("rgpd-003")]
     }
 
     fn un_error(preguntas: &[Pregunta], texto: &str) {
@@ -342,7 +341,7 @@ mod tests {
 
     #[test]
     fn un_id_repetido_falla() {
-        un_error(&[pregunta("rgpd-001"), pregunta("rgpd-001")], "rgpd-001: id repetido");
+        un_error(&[pregunta("rgpd-001"), pregunta("rgpd-001"), pregunta("rgpd-002")], "rgpd-001: id repetido");
     }
 
     #[test]
@@ -381,11 +380,11 @@ mod tests {
     }
 
     #[test]
-    fn un_concepto_con_1_o_con_4_preguntas_falla() {
+    fn un_concepto_con_2_o_con_4_preguntas_falla() {
         let (dir, examen) = carpeta();
         let tres = vec![pregunta("rgpd-001"), pregunta("rgpd-002"), pregunta("rgpd-003")];
         assert!(comprobar(&tres, &examen, dir.path()).is_empty());
-        un_error(&[pregunta("rgpd-001")], "rgpd-brecha-plazo: 1 pregunta, y no 2 o 3");
+        un_error(&tres[..2], "rgpd-brecha-plazo: 2 preguntas, y no 3");
         un_error(&[tres, vec![pregunta("rgpd-004")]].concat(), "rgpd-brecha-plazo: 4 preguntas");
     }
 
