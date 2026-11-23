@@ -1,428 +1,173 @@
-' Los diagramas de app/: las clases de nucleo, el servidor, banco y la interfaz, la ronda y el viaje de una sesión.
-' Un cambio de un tipo, una función, una ruta o una dependencia entre las 4 partes actualiza este archivo en el mismo commit.
+' Los diagramas de app/, con el modelo C4: el contexto, los contenedores y los componentes, de menos a más zoom.
+' Cada diagrama responde a una pregunta. Las clases y los campos viven en el código, y no van aquí.
+' Un cambio de un contenedor, un componente o una flecha actualiza este archivo en el mismo commit.
 ' En VS Code, la extensión jebbs.plantuml abre la vista previa del diagrama bajo el cursor con Alt+D.
-' `smetana` dibuja el diagrama sin Graphviz.
+' `smetana` dibuja el diagrama sin Graphviz. Las macros de C4 vienen dentro de PlantUML, sin red.
 
-@startuml las-clases
+@startuml 1-el-contexto
 !pragma layout smetana
-skinparam classAttributeIconSize 0
-skinparam shadowing false
-title Las clases de app/\n+ es público, - es privado, <<tsify>> sale a interfaz/src/nucleo/ como tipo de TypeScript
-left to right direction
+!include <C4/C4_Context>
+title 1. El contexto: quién usa la app
 
-package nucleo {
-  class Examen <<examen.json, tsify>> {
-    +titulo: String
-    +preguntas: u32
-    +opciones: u32
-    +minutos: u32
-    +penalizacion: f64
-    +pdfs: pdf → temas
-    +sin_pregunta: pdf → página → razón
-  }
-  class Pregunta <<preguntas.json, tsify>> {
-    +id: String
-    +concepto: String
-    +tema: String
-    +fuente: Fuente
-    +pregunta: String
-    +correcta: String
-    +distractores: Vec<String>
-    +explicacion: String
-  }
-  class Fuente <<tsify>> {
-    +pdf: String
-    +pagina: u32
-  }
-  class Respuesta <<una línea de respuestas.jsonl, tsify>> {
-    +id: String
-    +ts: Timestamp, en ISO 8601 con Z
-    +resultado: Resultado
-    +seguro: bool
-  }
-  class Nota <<un par de notas.json, tsify>> {
-    +id: String
-    +texto: String, en blanco la borra
-  }
-  class ExamenDeLaLista <<tsify>> {
-    +carpeta: String
-    +titulo: String
-  }
-  class Datos <<tsify>> {
-    +examen: Examen
-    +banco: Vec<Pregunta>
-    +historial: Vec<Respuesta>
-  }
-  enum Concepto {
-    SinVer
-    Paso(u32)
-    --
-    +tras(acierto, seguro): Concepto
-    +hueco(): i64
-    +to_string(): "sin ver" o "paso n"
-  }
-  class Azar {
-    -semilla: u64
-    +new(semilla): Azar
-    -hasta(n): usize
-    -barajar(lista)
-  }
-  enum Inicio <<tsify>> {
-    BancoVacio { titulo }
-    Listo { titulo, sesion, simulacro, tarjeta }
-  }
-  class Simulacro <<tsify>> {
-    +segundos: u32
-    +preguntas: Vec<PreguntaDeSesion>
-  }
-  enum Resultado <<tsify>> {
-    Acierto
-    Fallo
-    Blanco
-  }
-  class Cierre <<tsify>> {
-    +preguntas: u32
-    +resultados: Vec<Resultado>
-  }
-  class Correccion <<tsify>> {
-    +respuesta: Respuesta
-    +paso: String, el del concepto tras la respuesta
-    +aviso: Option<String>, con un fallo con «seguro» o un acierto con «dudo»
-  }
-  class NotaDelSimulacro <<tsify>> {
-    +aciertos: u32
-    +fallos: u32
-    +en_blanco: u32
-    +nota: String
-  }
-  class Tarjeta <<tsify>> {
-    +sabes: u32
-    +no_sabes: u32
-    +sin_ver: u32
-    +hoy: u32
-    +meta: u32
-    +sesiones: String
-    +consejo: String
-    +si_contestas: u32
-    +en_blanco: u32
-    +dudas: Vec<Dudas>
-  }
-  class Dudas <<tsify>> {
-    +texto: String
-    +conceptos: u32
-    +porcentaje: u32
-    +detalle: Option<String>
-  }
-  class PreguntaDeSesion <<tsify>> {
-    +id: String
-    +tema: String
-    +concepto: String
-    +pregunta: String
-    +opciones: Vec<String>
-    +correcta: u32
-    +explicacion: String
-    +paso: String
-    +paso_tras_seguro: String
-    +paso_tras_otra: String
-    +fuente: String, "<pdf> · pág. n"
-    +pagina: u32
-    +imagen: String, paginas/<pdf sin .pdf>-<n>.webp
-    +pdf: String, pdfs/<pdf>#page=<n>
-    +copiar: String, la pregunta y "A) …" por opción, sin la solución
-  }
-  class Columnas <<localStorage <examen>-columnas, tsify>> {
-    +l: f64, el borde izquierdo
-    +s: f64, el separador
-    +r: f64, el borde derecho
-    las 3, en fracción del ancho
-  }
-  enum Tirador <<tsify>> {
-    L
-    S
-    R
-  }
-  class Guardado <<ronda.json, localStorage <examen>-ronda, tsify>> {
-    +guardada: Timestamp, en ISO 8601 con Z
-    +ronda: Option<RondaGuardada>
-  }
-  class RondaGuardada <<tsify>> {
-    +ids: Vec<String>
-    +resultados: Vec<Option<Resultado>>, en el orden de ids, null sin contestar
-    +simulacro: bool
-    +limite: Option<u64>, en ms
-  }
-  class RondaAMedias <<tsify>> {
-    +preguntas: Vec<PreguntaDeSesion>
-    +resultados: Vec<Option<Resultado>>
-    +simulacro: bool
-    +limite: Option<u64>, en ms
-  }
-  class Edicion <<tsify>> {
-    +pregunta: String
-    +opciones: Vec<String>, en el orden de la ronda
-    +explicacion: String
-  }
-  class Editada <<tsify>> {
-    +banco: Pregunta
-    +ronda: PreguntaDeSesion
-  }
-  enum Ronda <<tsify>> {
-    Inicio
-    Pregunta { contestada }
-    Final
-  }
-  class "nucleo (funciones)" as funciones <<lib.rs>> {
-    -TAMANO_SESION = 12
-    -HUECOS_SIN_VER = 4
-    -META = 0.95
-    -VENTANA = 60
-    +inicio(examen, banco, historial, objetivo): Inicio
-    +tarjeta(examen, banco, historial, objetivo): Tarjeta
-    +sesion(banco, historial, ahora, azar): Vec<PreguntaDeSesion>
-    +simulacro(examen, banco, historial, azar): Simulacro
-    +nota_del_simulacro(cierre, penalizacion): NotaDelSimulacro
-    +corregir(pregunta, opcion, seguro, ahora): Correccion
-    +restante(limite, ahora): segundos
-    +gana(a, b): Guardado
-    +unir(a, b): Vec<Respuesta>, en orden de hora y sin repetir id y ts
-    +restaurar(banco, historial, guardado, azar): Option<RondaAMedias>
-    +mover(columnas, tirador, x): Columnas, con cada columna de 0,15 como mínimo
-    +editar(banco, pregunta, edicion): Option<Editada>, cada opción a su sitio del banco
-    -estados(banco, historial): concepto → (Concepto, vence)
-    -de_la_ronda(pregunta, estados, azar): PreguntaDeSesion
-    -sube(acierto, seguro): bool, solo con un acierto con «seguro»
-    -cuenta(banco, historial): (sabes, no sabes, sin ver)
-    -probabilidad(sabes, acierto, objetivo, examen): f64
-    -binomial(n, k, p): f64
-  }
-  class "wasm.rs" as wasm <<wasm-bindgen>> {
-    las horas van en ms, como Date.now()
-    --
-    +inicio(datos, objetivo): Inicio
-    +sesion(datos, ahora): PreguntaDeSesion[]
-    +simulacro(datos, ahora): Simulacro
-    +corregir(pregunta, opcion, seguro, ahora): Correccion
-    +restante(limite, ahora): segundos
-    +gana(a, b): Guardado
-    +unir(a, b): Respuesta[]
-    +restaurar(datos, guardado, ahora): RondaAMedias o undefined
-    +nota(cierre, penalizacion): NotaDelSimulacro
-    +columnas(): Columnas, las de partida
-    +mover(columnas, tirador, x): Columnas
-    +editar(datos, pregunta, edicion): Editada o undefined
-    -azar(ahora): Azar, con la hora de semilla
-  }
+Person(estudiante, "Estudiante", "Practica un examen en el móvil o en el PC")
+Person(agente, "Agente creador o revisor", "Escribe y revisa el banco de un examen desde los PDFs")
+System(app, "Los exámenes", "Sesiones de repaso y simulacros con un banco de preguntas por examen")
+System_Ext(tailscale, "Tailscale", "Sirve la app por HTTPS en la tailnet")
+
+Rel(estudiante, tailscale, "Abre la app", "HTTPS")
+Rel(tailscale, app, "Pasa cada petición")
+Rel(agente, app, "Escribe el banco", "banco importar, comprobar, revision")
+@enduml
+
+@startuml 2-los-contenedores
+!pragma layout smetana
+!include <C4/C4_Container>
+title 2. Los contenedores: qué corre dónde
+
+Person(estudiante, "Estudiante")
+Person(agente, "Agente creador o revisor")
+
+System_Boundary(app, "Los exámenes") {
+  Container(interfaz, "interfaz", "Svelte 5, en el navegador", "Las pantallas, la ronda en curso y las llamadas al API")
+  Container(nucleo, "nucleo", "Rust, como WASM en el navegador", "Toda la lógica: el paso, la sesión, el simulacro, la nota. Sin archivos ni red")
+  ContainerDb(local, "localStorage", "navegador", "Las respuestas pendientes, la ronda a medias y las preferencias")
+  Container(servidor, "servidor", "Rust, axum", "Guarda y sirve los archivos de cada examen")
+  Container(banco, "banco", "Rust, CLI", "Comprueba e importa el banco, y saca las páginas de los PDFs")
+  ContainerDb(carpetas, "Carpetas de examen", "archivos: asn/, ln/, ps/…", "examen.json, preguntas.json, respuestas.jsonl, ronda.json, notas.json, pdfs/, paginas/")
 }
 
-package servidor {
-  class Carpetas {
-    -raiz: PathBuf
-    -interfaz: PathBuf
-    -cerrojo: Mutex, del banco, el historial, la ronda y las notas
-  }
-  class "rutas (axum)" as rutas {
-    +app(raiz, interfaz): Router
-    --
-    GET / → la_interfaz → index.html
-    GET /api/examenes → examenes → Vec<ExamenDeLaLista>, en orden alfabético por título
-    GET /:examen → 308 /:examen/
-    GET /:examen/ → pagina → index.html, si existe examen.json
-    GET /:examen/api/inicio → inicio → Datos
-    POST /:examen/api/respuestas → responder → 204
-    GET /:examen/api/ronda → leer_ronda → Guardado
-    PUT /:examen/api/ronda → guardar_ronda → 204
-    GET /:examen/api/notas → leer_notas → id → texto
-    POST /:examen/api/notas → anotar(Nota) → 204
-    PUT /:examen/api/preguntas → editar(Pregunta) → 204, 404 sin el id, 422 con otro concepto, tema, fuente o número de distractores, o un texto en blanco
-    GET /:examen/paginas/:archivo → servir → image/webp
-    GET /:examen/pdfs/:archivo → servir → application/pdf
-    GET /assets/* → dist/assets
-    todo va con gzip
-  }
-  class "lectura" as lectura {
-    -leer_examen(carpetas, examen): Examen
-    -leer_banco(carpetas, examen): Vec<Pregunta>
-    -leer_historial(carpetas, examen): Vec<Respuesta>
-    -un_nombre(nombre): bool, un nombre sin / ni punto delante
-    -servir(carpetas, examen, carpeta, archivo, tipo): el archivo o 404
-    -leer_si_existe(ruta): bytes
-    -leer_archivo_de_notas(ruta): id → texto
-    -clave_alfabetica(texto): sin diacríticos y en minúsculas
-    -error_interno(e): 500
-  }
+Rel(estudiante, interfaz, "Contesta preguntas")
+Rel(interfaz, nucleo, "Llama", "wasm-bindgen")
+Rel(interfaz, local, "Guarda lo que no llegó al servidor")
+Rel(interfaz, servidor, "api/inicio, respuestas, ronda, notas, preguntas", "JSON/HTTP")
+Rel(servidor, carpetas, "Lee y escribe")
+Rel(agente, banco, "Corre")
+Rel(banco, carpetas, "Lee y escribe preguntas.json y paginas/")
+Rel_U(servidor, nucleo, "Usa sus tipos y gana()", "crate de Rust")
+Rel_U(banco, nucleo, "Usa sus tipos", "crate de Rust")
+@enduml
+
+@startuml 3-los-componentes-de-la-interfaz
+!pragma layout smetana
+!include <C4/C4_Component>
+title 3. Los componentes de la interfaz: qué pantalla hace qué
+
+Container(servidor, "servidor", "axum")
+Container(nucleo, "nucleo", "WASM")
+
+Container_Boundary(interfaz, "interfaz") {
+  Component(main, "main.ts", "", "Carga nucleo y monta Lista en / o App en /<carpeta>/")
+  Component(lista, "Lista.svelte", "", "La lista de exámenes")
+  Component(app, "App.svelte", "", "La ronda: carga, guarda, corrige y envía. Todo el estado vive aquí")
+  Component(inicio, "Inicio.svelte", "", "La tarjeta de la nota y los botones de empezar")
+  Component(pregunta, "Pregunta.svelte", "", "Una pregunta, su solución y su edición")
+  Component(final, "Final.svelte", "", "La nota del simulacro y la cuadrícula en verde y rojo")
+  Component(cuadricula, "Cuadricula.svelte", "", "Los números de la ronda, para saltar a una pregunta")
+  Component(hoja, "Hoja.svelte", "", "La página del PDF junto a la pregunta, en el PC")
+  Component(pagina, "PaginaCompleta.svelte", "", "La página del PDF a pantalla completa")
+  Component(tiradores, "Tiradores.svelte", "", "Los separadores de las 2 columnas del PC")
 }
 
-package banco {
-  class "banco (funciones)" as herramientas <<lib.rs>> {
-    +informe(carpeta): bool, sin errores; escribe los errores y los avisos
-    +comprobar(preguntas, examen, carpeta): errores
-    +pistas(preguntas): avisos de la regla 6
-    +explicaciones(preguntas): avisos de las líneas ✓ y ✗
-    +paginas_sin_pregunta(preguntas, examen, carpeta): avisos de página
-    +importar(carpeta, tema, borrador): añade a preguntas.json, da los id nuevos
-    +huerfanas(preguntas, historial): id fuera del banco
-    +sacar(carpeta): paginas/<pdf>-<página>.webp a 80 ppp y calidad 60
-    +paginas(pdf): u32, de pdfinfo
-    +revision(carpeta, informes): escribe preguntas.json y los fallos sin aplicar
-    +aplicar(banco, fallos): fallos sin aplicar
-  }
-  class "main.rs" as ordenes {
-    banco comprobar <carpeta>
-    banco paginas <carpeta>
-    banco revision <carpeta> <informe>...
-    banco importar <carpeta> <tema> <borrador>
-  }
+Rel(main, lista, "Monta en /")
+Rel(main, app, "Monta en /<carpeta>/")
+Rel(lista, servidor, "api/examenes")
+Rel(app, inicio, "")
+Rel(app, pregunta, "")
+Rel(app, final, "")
+Rel(app, hoja, "")
+Rel(app, pagina, "")
+Rel(app, tiradores, "")
+Rel(pregunta, cuadricula, "")
+Rel(final, cuadricula, "")
+Rel(app, nucleo, "Cada cálculo")
+Rel(app, servidor, "Cada lectura y escritura")
+@enduml
+
+@startuml 3-los-componentes-de-nucleo
+!pragma layout smetana
+!include <C4/C4_Component>
+title 3. Los componentes de nucleo: dónde vive cada regla\nTodo está en lib.rs, y wasm.rs lo publica al navegador
+
+Container(interfaz, "interfaz", "Svelte")
+Container(servidor, "servidor", "axum")
+Container(banco, "banco", "CLI")
+
+Container_Boundary(nucleo, "nucleo") {
+  Component(wasm, "wasm.rs", "wasm-bindgen, tsify", "Las funciones del navegador, y los tipos de TypeScript")
+  Component(tipos, "Los datos", "", "Examen, Pregunta, Respuesta, Datos, Guardado, Nota")
+  Component(paso, "El paso", "", "Concepto, el vencimiento y corregir()")
+  Component(ronda, "La ronda", "", "sesion(), simulacro(), restante() y Azar")
+  Component(guardado, "El guardado", "", "gana(), unir() y restaurar()")
+  Component(nota, "La nota", "", "inicio(), tarjeta() y nota_del_simulacro()")
+  Component(edicion, "La edición", "", "editar(): los textos de una pregunta desde el test")
+  Component(columnas, "Las columnas", "", "columnas() y mover()")
 }
 
-package interfaz {
-  class "App.svelte" as App {
-    -datos: Datos
-    -inicio: Inicio, de nucleo.inicio(datos, objetivo)
-    -objetivo: number, en localStorage <examen>-objetivo
-    -ronda: Ronda
-    -preguntas: PreguntaDeSesion[]
-    -i: number
-    -elecciones: { opcion o null, correccion } o null, por posición
-    -error: string
-    -simulacro: boolean
-    -resultados: Resultado o undefined, por posición
-    -revisando: boolean, una pregunta del final
-    -marcas: Marca[], de resultados
-    -nota: NotaDelSimulacro
-    -limite: ms
-    -restante: segundos
-    -columnas: Columnas, en localStorage <examen>-columnas
-    -abiertas: boolean, las opciones plegadas del móvil
-    -pagina: boolean, la página a pantalla completa del móvil
-    -notas: id → texto, de GET api/notas
-    -notasVisibles: boolean, en localStorage <examen>-notas-visibles
-    --
-    -arrancar(), al cargar la página
-    -enviar(guardado), a localStorage <examen>-ronda y a PUT api/ronda
-    -pendientes(): Respuesta[], de localStorage <examen>-pendientes
-    -enviarPendientes(): error o "", en cola, a POST api/respuestas
-    -guardar(), de empezar, contestar, terminar y volver
-    -empezar(comoSimulacro)
-    -seguir(), en la primera pregunta sin resultado
-    -ir(k), de la cuadrícula
-    -contar(), cada segundo
-    -contestar(opcion o null, seguro)
-    -siguiente(): ir(i + 1), intentarTerminar() o vuelta al final desde la revisión
-    -intentarTerminar(): terminar(), o la primera pregunta sin contestar y el aviso
-    -verPagina(), con una entrada del historial; atrás la cierra
-    -terminar()
-    -cargarInicio(), al cargar, al volver y al volver la red
-    -volver()
-    -abandonar()
-    -alternarNotas()
-    -anotar(texto), a POST api/notas medio segundo después de la última tecla
-    -editar(edicion): error o "", a PUT api/preguntas, y cambia el banco y la ronda
-  }
-  class "main.ts" as MainTs {
-    monta Lista en / y App en /:examen/
-  }
-  class "Lista.svelte" as Lista {
-    -examenes: ExamenDeLaLista[], de GET /api/examenes
-    un enlace a /:examen/ por examen, o "No hay exámenes"
-  }
-  class "Inicio.svelte" as InicioSvelte {
-    inicio, objetivo, error
-    onobjetivo(objetivo), onempezar(simulacro)
-    el enlace «← Exámenes» a /
-  }
-  class "Pregunta.svelte" as PreguntaSvelte {
-    la cabecera, la barra, las opciones y el pie
-    q, i, total, simulacro, restante, eleccion, contestada, corregida, revision, marcas, etiqueta, abiertas, nota, notasVisibles, error
-    children: la hoja
-    onabandonar(), oncontestar(opcion o null, seguro), onabiertas(), onnota(texto), onnotasvisibles(), onverpagina(), onsiguiente(), onir(k), onterminar(), oneditar(edicion): error o ""
-    -borrador: Edicion o null, oculta la nota y la hoja
-    -copiar(), q.copiar al portapapeles
-  }
-  class "Hoja.svelte" as Hoja {
-    la explicación, la fuente, la imagen de la página y el Siguiente del PC
-    q, paso: el de la corrección, etiqueta
-    onsiguiente()
-  }
-  class "Tiradores.svelte" as Tiradores {
-    los 3 tiradores del PC
-    onmover(tirador, x), onsoltar()
-  }
-  class "PaginaCompleta.svelte" as PaginaCompleta {
-    la página a pantalla completa del móvil
-    q, oncerrar()
-    -zoom: boolean
-  }
-  class "Final.svelte" as Final {
-    simulacro, nota, preguntas, marcas, error
-    onvolver(), onrevisar(k)
-  }
-  class "Cuadricula.svelte" as Cuadricula {
-    un botón por pregunta, casi cuadrada
-    marcas: falta, contestada, acierto, fallo o blanco; i
-    onir(k)
-  }
-  class "nucleo/nucleo.js y nucleo.d.ts" as generado <<generado>> {
-    las funciones de wasm.rs
-    los tipos <<tsify>>
-  }
+Rel(interfaz, wasm, "Llama")
+Rel(wasm, paso, "")
+Rel(wasm, ronda, "")
+Rel(wasm, guardado, "")
+Rel(wasm, nota, "")
+Rel(wasm, edicion, "")
+Rel(wasm, columnas, "")
+Rel(ronda, paso, "Elige por vencimiento")
+Rel(nota, paso, "Cuenta los conceptos en «sabes»")
+Rel(servidor, tipos, "Valida con")
+Rel(servidor, guardado, "gana()")
+Rel(banco, tipos, "Valida con")
+@enduml
+
+@startuml 3-los-componentes-del-servidor-y-banco
+!pragma layout smetana
+!include <C4/C4_Component>
+title 3. Los componentes del servidor y de banco: quién toca cada archivo
+
+Container(interfaz, "interfaz", "Svelte")
+Person(agente, "Agente creador o revisor")
+
+Container_Boundary(servidor, "servidor") {
+  Component(paginas_web, "/ y /<examen>/", "GET", "El index.html de la interfaz, y sus assets")
+  Component(api_examenes, "api/examenes", "GET", "La lista de exámenes")
+  Component(api_inicio, "api/inicio", "GET", "Datos: el examen, el banco y el historial")
+  Component(api_respuestas, "api/respuestas", "POST", "Añade las respuestas que faltan")
+  Component(api_ronda, "api/ronda", "GET, PUT", "La ronda a medias; gana la más nueva")
+  Component(api_notas, "api/notas", "GET, POST", "La nota de cada pregunta")
+  Component(api_preguntas, "api/preguntas", "PUT", "Cambia los textos de una pregunta")
+  Component(estaticos, "pdfs/ y paginas/", "GET", "Los PDFs y sus páginas en WebP")
 }
 
-funciones ..> Examen : lee
-funciones ..> Pregunta : lee
-funciones ..> Respuesta : lee
-funciones ..> Concepto : calcula el paso
-funciones ..> Azar : baraja
-funciones --> Inicio : devuelve
-Inicio *-- Tarjeta
-Tarjeta *-- Dudas
-funciones --> PreguntaDeSesion : devuelve
-Pregunta *-- Fuente
-funciones --> Columnas : mover()
-funciones ..> Tirador : lee
-funciones --> Simulacro : devuelve
-Simulacro *-- PreguntaDeSesion
-funciones ..> Cierre : lee
-Cierre *-- Resultado
-Respuesta *-- Resultado
-Correccion *-- Respuesta
-funciones --> Correccion : corregir()
-Datos *-- Examen
-Datos *-- Pregunta
-Datos *-- Respuesta
-funciones --> NotaDelSimulacro : devuelve
-funciones ..> Guardado : elige el más nuevo
-Guardado *-- RondaGuardada
-funciones --> RondaAMedias : devuelve
-RondaAMedias *-- PreguntaDeSesion
-funciones ..> Edicion : lee
-funciones --> Editada : editar()
-ordenes ..> herramientas : llama
-herramientas ..> Examen : lee examen.json
-herramientas ..> Pregunta : lee preguntas.json
-rutas *-- Carpetas : estado
-rutas ..> lectura : lee la carpeta
-rutas ..> Datos : devuelve
-rutas ..> ExamenDeLaLista : devuelve
-rutas ..> Respuesta : valida
-rutas ..> Guardado : valida y guarda el más nuevo
-rutas ..> Nota : valida y guarda
-rutas ..> Pregunta : valida y guarda en preguntas.json
-rutas ..> funciones : gana()
-wasm ..> funciones : llama
-wasm ..> generado : wasm-bindgen genera
-MainTs *-- Lista
-MainTs *-- App
-Lista ..> rutas : HTTP
-App ..> generado : importa y llama
-App ..> rutas : HTTP
-App *-- InicioSvelte : props y callbacks
-App *-- PreguntaSvelte
-App *-- Hoja
-App *-- Tiradores
-App *-- PaginaCompleta
-App *-- Final
-PreguntaSvelte *-- Cuadricula
-Final *-- Cuadricula
+Container_Boundary(banco, "banco") {
+  Component(comprobar, "banco comprobar", "", "Las reglas de BANCO.md, y el informe de errores y avisos")
+  Component(importar, "banco importar", "", "Un borrador en Markdown al final de preguntas.json")
+  Component(revision, "banco revision", "", "Aplica los informes de un revisor")
+  Component(sacar, "banco paginas", "pdftoppm, ffmpeg", "Cada página de pdfs/ como WebP")
+}
+
+ContainerDb(carpeta, "Carpeta de examen", "archivos")
+
+Rel(interfaz, paginas_web, "")
+Rel(interfaz, api_examenes, "")
+Rel(interfaz, api_inicio, "")
+Rel(interfaz, api_respuestas, "")
+Rel(interfaz, api_ronda, "")
+Rel(interfaz, api_notas, "")
+Rel(interfaz, api_preguntas, "")
+Rel(interfaz, estaticos, "")
+Rel(api_examenes, carpeta, "examen.json de cada carpeta")
+Rel(api_inicio, carpeta, "examen.json, preguntas.json, respuestas.jsonl")
+Rel(api_respuestas, carpeta, "respuestas.jsonl")
+Rel(api_ronda, carpeta, "ronda.json")
+Rel(api_notas, carpeta, "notas.json")
+Rel(api_preguntas, carpeta, "preguntas.json")
+Rel(estaticos, carpeta, "pdfs/, paginas/")
+Rel(agente, comprobar, "")
+Rel(agente, importar, "")
+Rel(agente, revision, "")
+Rel(agente, sacar, "")
+Rel(comprobar, carpeta, "Lee todo")
+Rel(importar, carpeta, "preguntas.json")
+Rel(revision, carpeta, "preguntas.json")
+Rel(sacar, carpeta, "paginas/")
 @enduml
 
 @startuml la-ronda
@@ -452,59 +197,53 @@ Final --> Final : onrevisar(k) y siguiente(), la revisión de una pregunta
 Final --> Inicio : volver()
 @enduml
 
-@startuml el-viaje-de-una-sesion
+@startuml abrir-un-examen
 skinparam shadowing false
-title El viaje de una sesión
+title Abrir un examen: arrancar() en App.svelte\nEl dispositivo y el servidor acaban con el mismo historial y la misma ronda
 
 participant "App.svelte" as App
+database localStorage as L
 participant "nucleo (WASM)" as N
 participant servidor as S
-database "carpeta del examen" as C
 
+App -> S : POST api/respuestas, con las pendientes de L
 App -> S : GET api/inicio
-S -> C : examen.json, preguntas.json, respuestas.jsonl
 S --> App : Datos { examen, banco, historial }
 App -> N : unir(historial, pendientes)
-N --> App : el historial de la pantalla
-App -> N : inicio(datos, objetivo)
-N --> App : Inicio (BancoVacio o Listo)
-
-App -> N : sesion(datos, Date.now())
-N --> App : 12 PreguntaDeSesion
-
-loop cada pregunta
-  App -> N : corregir(pregunta, opcion, seguro, Date.now())
-  N --> App : Correccion, con la respuesta en blanco sin opción
-  note over App : la respuesta entra en localStorage <examen>-pendientes,\ny datos.historial = unir(historial, [respuesta])
-  App -> S : POST api/respuestas, con todas las pendientes
-  alt con red
-    S -> C : añade a respuestas.jsonl las que no están
-    S --> App : 204
-    note over App : las enviadas salen de las pendientes
-  else sin red
-    note over App : las pendientes esperan al evento online o a la carga siguiente
-  end
-  note over App : muestra el paso y el aviso de la corrección
+App -> S : GET api/ronda
+App -> L : la ronda de este dispositivo
+App -> N : gana(servidor, local)
+N --> App : el guardado más nuevo
+App -> S : PUT api/ronda, con el guardado que gana
+App -> L : el guardado que gana
+App -> N : restaurar(datos, guardado)
+alt con una ronda a medias
+  N --> App : RondaAMedias: sigue en la primera sin contestar
+else sin ronda
+  N --> App : null: la pantalla del inicio
 end
 @enduml
 
-@startuml el-final-de-un-simulacro
+@startuml contestar-una-pregunta
 skinparam shadowing false
-title El final de un simulacro
+title Contestar una pregunta: contestar() en App.svelte\nUna respuesta sin red espera en localStorage, y no se pierde
 
 participant "App.svelte" as App
 participant "nucleo (WASM)" as N
+database localStorage as L
 participant servidor as S
 
-App -> N : simulacro(datos, Date.now())
-N --> App : Simulacro { segundos, preguntas }
-note over App : limite = Date.now() + segundos × 1000, y vive en el guardado de la ronda
-loop cada segundo, contar()
-  App -> N : restante(limite, Date.now())
-  N --> App : segundos que quedan; a 0, terminar()
+App -> N : corregir(pregunta, opcion, seguro, ahora)
+N --> App : Correccion: el resultado, el paso nuevo y el aviso
+App -> L : guardar(): la ronda
+App -> S : guardar(): PUT api/ronda
+App -> L : añade la respuesta a las pendientes
+App -> N : unir(historial, [respuesta])
+App -> S : POST api/respuestas, con todas las pendientes
+alt con red
+  S --> App : 204
+  App -> L : quita las enviadas
+else sin red
+  note over App : las pendientes salen con el evento online o en la carga siguiente
 end
-note over App : cada respuesta va a POST api/respuestas, como en la sesión;\nuna pregunta sin contestar al pasar el límite no va
-App -> N : nota({ preguntas, resultados }, penalizacion)
-note over N : cada pregunta sin resultado cuenta en blanco;\nel final muestra la cuadrícula en verde y rojo
-N --> App : NotaDelSimulacro
 @enduml
