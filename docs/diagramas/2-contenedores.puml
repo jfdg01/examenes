@@ -1,0 +1,27 @@
+@startuml 2-contenedores
+!pragma layout smetana
+!include <C4/C4_Container>
+title 2. Los contenedores: qué corre dónde
+
+Person(estudiante, "Estudiante")
+Person(agente, "Agente creador o revisor")
+
+System_Boundary(app, "Los exámenes") {
+  Container(interfaz, "interfaz", "Svelte 5, en el navegador", "Las pantallas, la ronda en curso y las llamadas al API")
+  Container(nucleo, "nucleo", "Rust, como WASM en el navegador", "Toda la lógica: el paso, la sesión, el simulacro, la nota. Sin archivos ni red")
+  ContainerDb(local, "localStorage", "navegador", "Las respuestas pendientes, la ronda a medias y las preferencias")
+  Container(servidor, "servidor", "Rust, axum", "Guarda y sirve los archivos de cada examen")
+  Container(banco, "banco", "Rust, CLI", "Comprueba e importa el banco, y saca las páginas de los PDFs")
+  ContainerDb(carpetas, "Carpetas de examen", "archivos: asn/, ln/, ps/…", "examen.json, preguntas.json, respuestas.jsonl, ronda.json, notas.json, pdfs/, paginas/")
+}
+
+Rel(estudiante, interfaz, "Contesta preguntas")
+Rel(interfaz, nucleo, "Llama", "wasm-bindgen")
+Rel(interfaz, local, "Guarda lo que no llegó al servidor")
+Rel(interfaz, servidor, "api/inicio, respuestas, ronda, notas, preguntas", "JSON/HTTP")
+Rel(servidor, carpetas, "Lee y escribe")
+Rel(agente, banco, "Corre")
+Rel(banco, carpetas, "Lee y escribe preguntas.json y paginas/")
+Rel_U(servidor, nucleo, "Usa sus tipos y gana()", "crate de Rust")
+Rel_U(banco, nucleo, "Usa sus tipos", "crate de Rust")
+@enduml

@@ -1,0 +1,26 @@
+@startuml ronda
+!pragma layout smetana
+skinparam shadowing false
+title La ronda en App.svelte\nCada flecha lleva la función que hace el cambio\nempezar, contestar, terminar y volver llaman a guardar()
+
+state Inicio
+state "Pregunta { contestada: false }" as SinContestar
+state "Pregunta { contestada: true }" as Contestada
+state Final
+
+[*] --> Inicio
+[*] --> SinContestar : arrancar() → seguir(), con una ronda a medias
+[*] --> Final : arrancar() → seguir() → terminar(), sin preguntas por contestar
+Inicio --> SinContestar : empezar(comoSimulacro)
+SinContestar --> Contestada : contestar(opcion, seguro)
+SinContestar --> Contestada : contestar(null), "En blanco" del simulacro
+Contestada --> SinContestar : siguiente() o ir(k), a una sin contestar
+SinContestar --> Contestada : ir(k), a una contestada
+Contestada --> Final : intentarTerminar() → terminar(), todas contestadas
+SinContestar --> Final : contar() → terminar(), el límite del simulacro
+Contestada --> Final : contar() → terminar(), el límite del simulacro
+SinContestar --> Inicio : abandonar(), el botón ✕
+Contestada --> Inicio : abandonar(), el botón ✕
+Final --> Final : onrevisar(k) y siguiente(), la revisión de una pregunta
+Final --> Inicio : volver()
+@enduml

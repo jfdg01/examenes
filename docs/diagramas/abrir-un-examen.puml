@@ -1,0 +1,26 @@
+@startuml abrir-un-examen
+skinparam shadowing false
+title Abrir un examen: arrancar() en App.svelte\nEl dispositivo y el servidor acaban con el mismo historial y la misma ronda
+
+participant "App.svelte" as App
+database localStorage as L
+participant "nucleo (WASM)" as N
+participant servidor as S
+
+App -> S : POST api/respuestas, con las pendientes de L
+App -> S : GET api/inicio
+S --> App : Datos { examen, banco, historial }
+App -> N : unir(historial, pendientes)
+App -> S : GET api/ronda
+App -> L : la ronda de este dispositivo
+App -> N : gana(servidor, local)
+N --> App : el guardado más nuevo
+App -> S : PUT api/ronda, con el guardado que gana
+App -> L : el guardado que gana
+App -> N : restaurar(datos, guardado)
+alt con una ronda a medias
+  N --> App : RondaAMedias: sigue en la primera sin contestar
+else sin ronda
+  N --> App : null: la pantalla del inicio
+end
+@enduml

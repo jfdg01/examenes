@@ -1,0 +1,14 @@
+@startuml 1-contexto
+!pragma layout smetana
+!include <C4/C4_Context>
+title 1. El contexto: quién usa la app
+
+Person(estudiante, "Estudiante", "Practica un examen en el móvil o en el PC")
+Person(agente, "Agente creador o revisor", "Escribe y revisa el banco de un examen desde los PDFs")
+System(app, "Los exámenes", "Sesiones de repaso y simulacros con un banco de preguntas por examen")
+System_Ext(tailscale, "Tailscale", "Sirve la app por HTTPS en la tailnet")
+
+Rel(estudiante, tailscale, "Abre la app", "HTTPS")
+Rel(tailscale, app, "Pasa cada petición")
+Rel(agente, app, "Escribe el banco", "banco importar, comprobar, revision")
+@enduml

@@ -1,0 +1,35 @@
+@startuml 3-interfaz
+!pragma layout smetana
+!include <C4/C4_Component>
+title 3. Los componentes de la interfaz: qué pantalla hace qué
+
+Container(servidor, "servidor", "axum")
+Container(nucleo, "nucleo", "WASM")
+
+Container_Boundary(interfaz, "interfaz") {
+  Component(main, "main.ts", "", "Carga nucleo y monta Lista en / o App en /<carpeta>/")
+  Component(lista, "Lista.svelte", "", "La lista de exámenes")
+  Component(app, "App.svelte", "", "La ronda: carga, guarda, corrige y envía. Todo el estado vive aquí")
+  Component(inicio, "Inicio.svelte", "", "La tarjeta de la nota y los botones de empezar")
+  Component(pregunta, "Pregunta.svelte", "", "Una pregunta, su solución y su edición")
+  Component(final, "Final.svelte", "", "La nota del simulacro y la cuadrícula en verde y rojo")
+  Component(cuadricula, "Cuadricula.svelte", "", "Los números de la ronda, para saltar a una pregunta")
+  Component(hoja, "Hoja.svelte", "", "La página del PDF junto a la pregunta, en el PC")
+  Component(pagina, "PaginaCompleta.svelte", "", "La página del PDF a pantalla completa")
+  Component(tiradores, "Tiradores.svelte", "", "Los separadores de las 2 columnas del PC")
+}
+
+Rel(main, lista, "Monta en /")
+Rel(main, app, "Monta en /<carpeta>/")
+Rel(lista, servidor, "api/examenes")
+Rel(app, inicio, "")
+Rel(app, pregunta, "")
+Rel(app, final, "")
+Rel(app, hoja, "")
+Rel(app, pagina, "")
+Rel(app, tiradores, "")
+Rel(pregunta, cuadricula, "")
+Rel(final, cuadricula, "")
+Rel(app, nucleo, "Cada cálculo")
+Rel(app, servidor, "Cada lectura y escritura")
+@enduml

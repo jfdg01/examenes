@@ -1,0 +1,52 @@
+@startuml 3-servidor-y-banco
+!pragma layout smetana
+!include <C4/C4_Component>
+title 3. Los componentes del servidor y de banco: quién toca cada archivo
+
+Container(interfaz, "interfaz", "Svelte")
+Person(agente, "Agente creador o revisor")
+
+Container_Boundary(servidor, "servidor") {
+  Component(paginas_web, "/ y /<examen>/", "GET", "El index.html de la interfaz, y sus assets")
+  Component(api_examenes, "api/examenes", "GET", "La lista de exámenes")
+  Component(api_inicio, "api/inicio", "GET", "Datos: el examen, el banco y el historial")
+  Component(api_respuestas, "api/respuestas", "POST", "Añade las respuestas que faltan")
+  Component(api_ronda, "api/ronda", "GET, PUT", "La ronda a medias; gana la más nueva")
+  Component(api_notas, "api/notas", "GET, POST", "La nota de cada pregunta")
+  Component(api_preguntas, "api/preguntas", "PUT", "Cambia los textos de una pregunta")
+  Component(estaticos, "pdfs/ y paginas/", "GET", "Los PDFs y sus páginas en WebP")
+}
+
+Container_Boundary(banco, "banco") {
+  Component(comprobar, "banco comprobar", "", "Las reglas de BANCO.md, y el informe de errores y avisos")
+  Component(importar, "banco importar", "", "Un borrador en Markdown al final de preguntas.json")
+  Component(revision, "banco revision", "", "Aplica los informes de un revisor")
+  Component(sacar, "banco paginas", "pdftoppm, ffmpeg", "Cada página de pdfs/ como WebP")
+}
+
+ContainerDb(carpeta, "Carpeta de examen", "archivos")
+
+Rel(interfaz, paginas_web, "")
+Rel(interfaz, api_examenes, "")
+Rel(interfaz, api_inicio, "")
+Rel(interfaz, api_respuestas, "")
+Rel(interfaz, api_ronda, "")
+Rel(interfaz, api_notas, "")
+Rel(interfaz, api_preguntas, "")
+Rel(interfaz, estaticos, "")
+Rel(api_examenes, carpeta, "examen.json de cada carpeta")
+Rel(api_inicio, carpeta, "examen.json, preguntas.json, respuestas.jsonl")
+Rel(api_respuestas, carpeta, "respuestas.jsonl")
+Rel(api_ronda, carpeta, "ronda.json")
+Rel(api_notas, carpeta, "notas.json")
+Rel(api_preguntas, carpeta, "preguntas.json")
+Rel(estaticos, carpeta, "pdfs/, paginas/")
+Rel(agente, comprobar, "")
+Rel(agente, importar, "")
+Rel(agente, revision, "")
+Rel(agente, sacar, "")
+Rel(comprobar, carpeta, "Lee todo")
+Rel(importar, carpeta, "preguntas.json")
+Rel(revision, carpeta, "preguntas.json")
+Rel(sacar, carpeta, "paginas/")
+@enduml
