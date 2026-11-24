@@ -48,7 +48,7 @@ El `README.md` de cada examen dice lo que el profesor marcó como importante. Es
 cargo run --manifest-path app/Cargo.toml -p banco -- comprobar ps
 ```
 
-`banco comprobar` recibe la carpeta del examen, y falla con cada pregunta que rompe el formato: un `id` repetido, un `apartado` que no es de su PDF, un apartado sin nombre, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 3 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. Falla también con una línea `✗` cuya clave `«…»` no está en su distractor, en el orden de `distractores`, sin distinguir mayúsculas. También avisa, sin fallar, de estas cosas:
+`banco comprobar` recibe la carpeta del examen, y falla con cada pregunta que rompe el formato: un `id` repetido, un `apartado` que no es de su PDF, un apartado sin nombre, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 3 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. Falla también con una línea `✗` cuya clave `«…»` no está en su distractor, en el orden de `distractores`, sin distinguir mayúsculas, y con dos líneas `✗` de una pregunta con la misma clave. También avisa, sin fallar, de estas cosas:
 
 - un "siempre", un "nunca" o un "solo" de un distractor que la correcta no dice;
 - una correcta que es la opción más larga en más de 1 de cada 3 preguntas, sin contar las siglas;
@@ -92,7 +92,7 @@ El borrador tiene un bloque por pregunta:
 - El encabezado da el `concepto` y la página de la `fuente`. El PDF de la `fuente` es el PDF del tema del apartado en `examen.json`. Un apartado de varios temas da un error.
 - La línea sin marca es el enunciado, y la línea `+` es la correcta.
 - La línea `✓` es obligatoria, y es la primera línea de la `explicacion`.
-- Una línea `-` es un distractor, con su clave entre `«»` y su matiz después de un solo `|`. `importar` quita las comillas del distractor y escribe la línea `✗ «clave»: matiz`. Un distractor sin `«»`, o con un `|` que falta o que sobra, da un error.
+- Una línea `-` es un distractor, con su clave entre `«»` y su matiz después de un solo `|`. La clave es la parte que separa el distractor de los demás, y no el arranque que comparten. `importar` quita las comillas del distractor y escribe la línea `✗ «clave»: matiz`. Un distractor sin `«»`, o con un `|` que falta o que sobra, da un error.
 - Cada pregunta recibe el siguiente `id` libre del apartado: `ciclo-de-vida-127`. Un concepto de sigla recibe la forma `ciclo-de-vida-s15`.
 - `importar` solo añade preguntas. Un concepto del borrador que ya está en el banco da un error, y el banco queda igual. Una edición de una pregunta del banco se hace a mano en el JSON.
 
