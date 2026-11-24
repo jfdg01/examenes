@@ -102,22 +102,22 @@ pub enum Estado {
 
 impl Estado {
     /// Un acierto con "seguro" sube el paso, aunque la pregunta no haya vencido. Otra respuesta lo pone a 0.
+    /// Una pregunta sin ver acertada con "seguro" salta al paso 3, que vence después de la semana del examen.
     pub fn tras(self, acierto: bool, seguro: bool) -> Estado {
         match (self, sube(acierto, seguro)) {
-            (Estado::SinVer, true) => Estado::Paso(1),
+            (Estado::SinVer, true) => Estado::Paso(3),
             (Estado::Paso(n), true) => Estado::Paso(n.saturating_add(1)),
             (_, false) => Estado::Paso(0),
         }
     }
 
-    /// El hueco en segundos, como en SM-2: 10 minutos con el paso 1, 1 día con el paso 2, y después ×2,5 por paso.
+    /// El hueco en segundos: 1 día con el paso 1, y después ×2,5 por paso.
     /// Con el paso a 0, el hueco es 0.
     pub fn hueco(self) -> i64 {
         match self {
             Estado::SinVer | Estado::Paso(0) => 0,
-            Estado::Paso(1) => 600,
             // Un `f64` demasiado grande pasa a `i64::MAX`.
-            Estado::Paso(n) => (86_400.0 * 2.5f64.powf(n as f64 - 2.0)) as i64,
+            Estado::Paso(n) => (86_400.0 * 2.5f64.powf(n as f64 - 1.0)) as i64,
         }
     }
 }
@@ -931,7 +931,7 @@ mod tests {
         let historial = [respuesta("a1", &minuto(0, 0), true, true)];
         let s = simulacro(&LN, &banco, &historial, &mut Azar::new(1));
         let paso = |id: &str| s.preguntas.iter().find(|q| q.id == id).unwrap().paso.clone();
-        assert_eq!((paso("a1").as_str(), paso("a2").as_str()), ("paso 1", "sin ver"));
+        assert_eq!((paso("a1").as_str(), paso("a2").as_str()), ("paso 3", "sin ver"));
     }
 
     pub(crate) fn pregunta(id: &str, concepto: &str) -> Pregunta {
@@ -1075,8 +1075,11 @@ mod tests {
     #[test]
     fn un_acierto_con_seguro_sube_el_paso_aunque_no_haya_vencido() {
         let banco = [pregunta("a1", "a")];
-        let historial =
-            [respuesta("a1", "2026-11-04T12:00:00Z", true, true), respuesta("a1", "2026-11-04T12:01:00Z", true, true)];
+        let historial = [
+            respuesta("a1", "2026-11-04T12:00:00Z", false, false),
+            respuesta("a1", "2026-11-04T12:01:00Z", true, true),
+            respuesta("a1", "2026-11-04T12:02:00Z", true, true),
+        ];
         assert_eq!(paso(&banco, &historial), "paso 2");
         assert_eq!(paso(&banco, &[]), "sin ver");
     }
@@ -1092,9 +1095,9 @@ mod tests {
     }
 
     #[test]
-    fn los_huecos_son_10_minutos_1_dia_y_despues_por_2_y_medio() {
-        let minutos = |n| Estado::Paso(n).hueco() / 60;
-        assert_eq!([0, 1, 2, 3, 4].map(minutos), [0, 10, 24 * 60, 60 * 60, 150 * 60]);
+    fn los_huecos_son_1_dia_y_despues_por_2_y_medio() {
+        let horas = |n| Estado::Paso(n).hueco() / 3600;
+        assert_eq!([0, 1, 2, 3].map(horas), [0, 24, 60, 150]);
         assert_eq!(Estado::Paso(u32::MAX).hueco(), i64::MAX);
     }
 
@@ -1147,9 +1150,14 @@ mod tests {
         let fallados = conceptos("f", 3);
         let vencidos = conceptos("v", 20);
         let sin_ver = conceptos("s", 5);
-        // Los vencidos con paso 1 vencieron antes que los fallos, y aun así los fallados entran primero.
-        let mut historial: Vec<Respuesta> =
-            vencidos.iter().enumerate().map(|(i, q)| respuesta(&q.id, &minuto(0, i as i64), true, true)).collect();
+        // Los vencidos con paso 1, fallados y acertados el día antes, vencieron antes que los fallos, y aun así los fallados entran primero.
+        let mut historial: Vec<Respuesta> = vencidos
+            .iter()
+            .enumerate()
+            .flat_map(|(i, q)| {
+                [respuesta(&q.id, &format!("2026-11-03T11:{i:02}:00Z"), false, false), respuesta(&q.id, &format!("2026-11-03T11:{i:02}:30Z"), true, true)]
+            })
+            .collect();
         historial.extend(fallados.iter().enumerate().map(|(i, q)| respuesta(&q.id, &minuto(40, i as i64), false, false)));
         let banco = [fallados.clone(), vencidos.clone(), sin_ver].concat();
         assert_eq!(de_la_sesion(&banco, &historial), ids(&[fallados, vencidos[..9].to_vec()].concat()));
@@ -1232,9 +1240,9 @@ mod tests {
         let mut opciones = q.opciones.clone();
         opciones.sort();
         assert_eq!(opciones, ["a veces", "no", "nunca", "sí"]);
-        assert_eq!((q.paso.as_str(), q.paso_tras_seguro.as_str(), q.paso_tras_otra.as_str()), ("paso 1", "paso 2", "paso 0"));
+        assert_eq!((q.paso.as_str(), q.paso_tras_seguro.as_str(), q.paso_tras_otra.as_str()), ("paso 3", "paso 4", "paso 0"));
         let sin_ver = &sesion(&LN, &[pregunta("b1", "b")], &[], 0, &mut Azar::new(3))[0];
-        assert_eq!((sin_ver.paso.as_str(), sin_ver.paso_tras_seguro.as_str()), ("sin ver", "paso 1"));
+        assert_eq!((sin_ver.paso.as_str(), sin_ver.paso_tras_seguro.as_str()), ("sin ver", "paso 3"));
     }
 
     #[test]
@@ -1261,7 +1269,7 @@ mod tests {
         let q = &sesion(&LN, &[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
         let otra = (q.correcta + 1) % 4;
         let fila = |c: Correccion| (c.paso, c.aviso);
-        assert_eq!(fila(corregir(q, Some(q.correcta), true, Timestamp::UNIX_EPOCH)), ("paso 1".into(), None));
+        assert_eq!(fila(corregir(q, Some(q.correcta), true, Timestamp::UNIX_EPOCH)), ("paso 3".into(), None));
         assert_eq!(
             fila(corregir(q, Some(q.correcta), false, Timestamp::UNIX_EPOCH)),
             ("paso 0".into(), Some("Acierto con «dudo»: cuenta como un fallo.".into()))
