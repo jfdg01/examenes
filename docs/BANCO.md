@@ -105,31 +105,31 @@ Cada PDF de un examen tiene su texto y sus imágenes, que da `banco paginas`:
 
 ## El flujo de trabajo
 
-Un agente creador escribe un tema en su carpeta de trabajo, `<examen>/trabajo/<tema>/`. La carpeta tiene una copia de `examen.json`, su propio `preguntas.json` y un enlace `pdfs` a los PDFs del examen. Así `banco importar` y `banco comprobar` corren sin tocar el banco del examen.
+Un agente creador escribe un apartado en su carpeta de trabajo, `<examen>/trabajo/<apartado>/`. La carpeta tiene una copia de `examen.json`, su propio `preguntas.json` y un enlace `pdfs` a los PDFs del examen. Así `banco importar` y `banco comprobar` corren sin tocar el banco del examen.
 
 1. El agente escribe una tanda de unas 10 preguntas en un borrador de su carpeta. Una tanda lleva conceptos enteros, porque `banco importar` no añade preguntas a un concepto del banco.
 2. El agente revisa su tanda: compara cada pregunta con su página y con las reglas.
 3. El agente corre `banco importar` y `banco comprobar` en su carpeta, y arregla los errores y los avisos. Una pregunta ya importada se arregla a mano en el `preguntas.json` de la carpeta.
 4. El agente marca cada página sin pregunta en el `sin_pregunta` de su copia de `examen.json`, con su razón.
-5. El agente sigue con la siguiente tanda. El tema acaba cuando cada página de su PDF tiene un concepto o una razón en `sin_pregunta`, y `banco comprobar` no da ningún aviso de su PDF. Los avisos de los otros PDFs son de otros temas.
+5. El agente sigue con la siguiente tanda. El apartado acaba cuando cada página de su PDF tiene un concepto o una razón en `sin_pregunta`, y `banco comprobar` no da ningún aviso de su PDF. Los avisos de los otros PDFs son de otros apartados.
 
-Cada archivo del creador vive en su carpeta de trabajo, también los borradores, porque otros creadores escriben otros temas a la vez. El creador usa el binario `app/target/debug/banco`, y deja `cargo` al agente principal: varios `cargo` a la vez se bloquean.
+Cada archivo del creador vive en su carpeta de trabajo, también los borradores, porque otros creadores escriben otros apartados a la vez. El creador usa el binario `app/target/debug/banco`, y deja `cargo` al agente principal: varios `cargo` a la vez se bloquean.
 
 Al acabar, el creador devuelve en pocas líneas el número de conceptos y de preguntas, cada aviso que dejó a propósito con su razón, y cada duda sobre una regla.
 
-Los nombres evitan los choques entre temas:
+Los nombres evitan los choques entre apartados:
 
-- Un `concepto` empieza por su tema: `transporte-mac-hmac`.
-- Un concepto de sigla es `sigla-` y la sigla en minúsculas, sin el tema: `sigla-aead`. Así, una sigla de dos temas choca en el montaje, y `banco comprobar` la ve.
-- Una idea que vive sobre todo en otro PDF es de ese tema. Este tema la pregunta solo desde lo que su PDF explica.
+- Un `concepto` empieza por su apartado: `transporte-mac-hmac`.
+- Un concepto de sigla es `sigla-` y la sigla en minúsculas, sin el apartado: `sigla-aead`. Así, una sigla de dos apartados choca en el montaje, y `banco comprobar` la ve.
+- Una idea que vive sobre todo en otro PDF es de su apartado. Este apartado la pregunta solo desde lo que su PDF explica.
 
-Cada tema que escribe un agente lleva una revisión completa al acabar. La revisión del propio creador y el comprobador dejan fallos que solo ve otro agente.
+Cada apartado que escribe un agente lleva una revisión completa al acabar. La revisión del propio creador y el comprobador dejan fallos que solo ve otro agente.
 
 ## La revisión completa
 
-Un agente que no escribió las preguntas revisa el tema entero: compara cada pregunta con su página y con las reglas. El revisor comprueba también que la `fuente` es la página que explica la idea, y juzga cada razón de `sin_pregunta` de su PDF. El revisor acaba cuando juzgó cada pregunta del tema y cada razón de `sin_pregunta` de su PDF. Un fallo señala la página o la regla que rompe la pregunta.
+Un agente que no escribió las preguntas revisa el apartado entero: compara cada pregunta con su página y con las reglas. El revisor comprueba también que la `fuente` es la página que explica la idea, y juzga cada razón de `sin_pregunta` de su PDF. El revisor acaba cuando juzgó cada pregunta del tema y cada razón de `sin_pregunta` de su PDF. Un fallo señala la página o la regla que rompe la pregunta.
 
-El revisor deja el banco como está, y escribe un informe en JSON con una lista de fallos, en `<examen>/trabajo/revision-<tema>.json`. Al acabar, devuelve en pocas líneas el número de fallos graves y leves, y los 3 fallos más importantes.
+El revisor deja el banco como está, y escribe un informe en JSON con una lista de fallos, en `<examen>/trabajo/revision-<apartado>.json`. Al acabar, devuelve en pocas líneas el número de fallos graves y leves, y los 3 fallos más importantes.
 
 ```json
 {
@@ -154,6 +154,6 @@ cargo run --manifest-path app/Cargo.toml -p banco -- revision ps ps/trabajo/revi
 
 `banco revision` lista los fallos sin aplicar con `A mano:`, y ese agente los arregla a mano. Un concepto nuevo entra con un borrador y `banco importar`. Un borrado o un cambio de idea se hacen en el JSON. Después corre el comprobador.
 
-## Un lote de temas
+## Un lote de apartados
 
-Un agente principal que escribe varios temas a la vez, o que rehace un examen entero, sigue [`LOTE.md`](LOTE.md).
+Un agente principal que escribe varios apartados a la vez, o que rehace un examen entero, sigue [`LOTE.md`](LOTE.md).
