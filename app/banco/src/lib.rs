@@ -15,6 +15,11 @@ fn leer<T: serde::de::DeserializeOwned>(archivo: &Path) -> Result<T, String> {
     serde_json::from_str(&texto).map_err(|e| format!("{}: {e}", archivo.display()))
 }
 
+fn escribir<T: serde::Serialize>(archivo: &Path, datos: &T) -> Result<(), String> {
+    let texto = serde_json::to_string_pretty(datos).map_err(|e| e.to_string())? + "\n";
+    fs::write(archivo, texto).map_err(|e| format!("{}: {e}", archivo.display()))
+}
+
 /// Un concepto de una sigla, que tiene una sola pregunta.
 fn sigla(concepto: &str) -> bool {
     concepto.starts_with("sigla-")
@@ -336,13 +341,75 @@ pub fn revision(carpeta: &Path, informes: &[String]) -> Result<(), String> {
     }
     let total = fallos.len();
     let pendientes = aplicar(&mut banco, fallos);
-    let texto = serde_json::to_string_pretty(&banco).map_err(|e| e.to_string())? + "\n";
-    fs::write(&archivo, texto).map_err(|e| format!("{}: {e}", archivo.display()))?;
+    escribir(&archivo, &banco)?;
     println!("{} arreglos aplicados.", total - pendientes.len());
     for f in pendientes {
         println!("A mano: {} ({}): {}", f.id.as_deref().unwrap_or("sin id"), f.gravedad, f.fallo);
     }
     Ok(())
+}
+
+/// Prepara un lote de temas: quita del banco sus preguntas y de `sin_pregunta` sus PDFs, y crea la carpeta
+/// de trabajo de cada tema. Falla sin cambiar nada con un historial o una ronda que usan los `id` del lote,
+/// porque los `id` nuevos los reusan.
+pub fn preparar(carpeta: &Path, temas: &[String]) -> Result<(), String> {
+    let mut examen: Examen = leer(&carpeta.join("examen.json"))?;
+    let archivo = carpeta.join("preguntas.json");
+    let banco: Vec<Pregunta> = leer(&archivo)?;
+    if let Some(t) = temas.iter().find(|t| !examen.pdfs.values().any(|ts| ts.contains(t))) {
+        return Err(format!("el tema {t} no está en examen.json"));
+    }
+    let historial = carpeta.join("respuestas.jsonl");
+    let resto: Vec<Pregunta> = banco.iter().filter(|p| !temas.contains(&p.tema)).cloned().collect();
+    let del_lote = huerfanas(&resto, &historial)?.len() - huerfanas(&banco, &historial)?.len();
+    if del_lote > 0 {
+        return Err(format!("respuestas.jsonl tiene {del_lote} id de los temas del lote: el dueño decide antes qué pasa con ellas"));
+    }
+    if carpeta.join("ronda.json").exists() {
+        return Err("ronda.json existe: una ronda a medias usa los id del banco".into());
+    }
+    let trabajo = carpeta.join("trabajo");
+    if let Some(t) = temas.iter().find(|t| trabajo.join(t).exists()) {
+        return Err(format!("{} ya existe", trabajo.join(t).display()));
+    }
+    examen.sin_pregunta.retain(|pdf, _| !examen.pdfs[pdf].iter().any(|t| temas.contains(t)));
+    escribir(&archivo, &resto)?;
+    escribir(&carpeta.join("examen.json"), &examen)?;
+    for t in temas {
+        let dir = trabajo.join(t);
+        fs::create_dir_all(&dir).map_err(|e| format!("{}: {e}", dir.display()))?;
+        escribir(&dir.join("examen.json"), &examen)?;
+        escribir(&dir.join("preguntas.json"), &Vec::<Pregunta>::new())?;
+        std::os::unix::fs::symlink("../../pdfs", dir.join("pdfs")).map_err(|e| format!("{}: {e}", dir.display()))?;
+    }
+    Ok(())
+}
+
+/// Une al banco las preguntas y el `sin_pregunta` de la carpeta de trabajo de cada tema del lote. Falla sin
+/// cambiar nada con una pregunta de otro tema o con un `id` que ya está en el banco. Devuelve las preguntas
+/// añadidas.
+pub fn montar(carpeta: &Path, temas: &[String]) -> Result<usize, String> {
+    let mut examen: Examen = leer(&carpeta.join("examen.json"))?;
+    let archivo = carpeta.join("preguntas.json");
+    let mut banco: Vec<Pregunta> = leer(&archivo)?;
+    let antes = banco.len();
+    for t in temas {
+        let dir = carpeta.join("trabajo").join(t);
+        let nuevas: Vec<Pregunta> = leer(&dir.join("preguntas.json"))?;
+        if let Some(p) = nuevas.iter().find(|p| &p.tema != t || banco.iter().any(|b| b.id == p.id)) {
+            return Err(format!("{}: {} no es del tema {t}, o ya está en el banco", dir.display(), p.id));
+        }
+        let copia: Examen = leer(&dir.join("examen.json"))?;
+        for (pdf, ts) in &examen.pdfs {
+            if let (true, Some(razones)) = (ts.contains(t), copia.sin_pregunta.get(pdf)) {
+                examen.sin_pregunta.insert(pdf.clone(), razones.clone());
+            }
+        }
+        banco.extend(nuevas);
+    }
+    escribir(&archivo, &banco)?;
+    escribir(&carpeta.join("examen.json"), &examen)?;
+    Ok(banco.len() - antes)
 }
 
 /// Una pregunta de un bloque del borrador, sin `id` ni `tema`. `BANCO.md` describe el formato del bloque.
@@ -432,8 +499,7 @@ pub fn importar(carpeta: &Path, tema: &str, borrador: &Path) -> Result<Vec<Strin
     }
     let ids = nuevas.iter().map(|p| p.id.clone()).collect();
     banco.extend(nuevas);
-    let texto = serde_json::to_string_pretty(&banco).map_err(|e| e.to_string())? + "\n";
-    fs::write(&archivo, texto).map_err(|e| format!("{}: {e}", archivo.display()))?;
+    escribir(&archivo, &banco)?;
     Ok(ids)
 }
 
@@ -759,5 +825,35 @@ mod tests {
         assert_eq!(pendientes, ["y", "z", "w", "v", "u"]);
         assert_eq!(banco[0].correcta, "3 días");
         assert_eq!(banco[0].id, "rgpd-001");
+    }
+
+    #[test]
+    fn preparar_vacia_el_lote_y_montar_lo_devuelve() {
+        let (dir, mut examen) = carpeta();
+        let c = dir.path();
+        examen.sin_pregunta.insert("1_Legislacion.pdf".into(), BTreeMap::from([(1, "portada".into())]));
+        escribir(&c.join("examen.json"), &examen).unwrap();
+        let mut otra = pregunta("e1");
+        otra.tema = "ens".into();
+        escribir(&c.join("preguntas.json"), &vec![pregunta("r1"), otra]).unwrap();
+        let temas = vec!["rgpd".to_string()];
+        fs::write(c.join("respuestas.jsonl"), "{\"id\":\"r1\",\"ts\":1,\"resultado\":\"Acierto\",\"seguro\":true}\n").unwrap();
+        assert!(preparar(c, &temas).unwrap_err().contains("respuestas.jsonl"));
+        fs::remove_file(c.join("respuestas.jsonl")).unwrap();
+
+        preparar(c, &temas).unwrap();
+        let banco: Vec<Pregunta> = leer(&c.join("preguntas.json")).unwrap();
+        assert_eq!(banco.iter().map(|p| p.id.as_str()).collect::<Vec<_>>(), ["e1"]);
+        assert!(leer::<Examen>(&c.join("examen.json")).unwrap().sin_pregunta.is_empty());
+        let t = c.join("trabajo/rgpd");
+        assert!(t.join("pdfs/1_Legislacion.pdf").exists());
+        assert!(preparar(c, &temas).unwrap_err().contains("ya existe"));
+
+        escribir(&t.join("preguntas.json"), &vec![pregunta("r2")]).unwrap();
+        escribir(&t.join("examen.json"), &examen).unwrap();
+        assert_eq!(montar(c, &temas).unwrap(), 1);
+        assert_eq!(leer::<Vec<Pregunta>>(&c.join("preguntas.json")).unwrap().len(), 2);
+        assert_eq!(leer::<Examen>(&c.join("examen.json")).unwrap().sin_pregunta, examen.sin_pregunta);
+        assert!(montar(c, &temas).unwrap_err().contains("r2"));
     }
 }
