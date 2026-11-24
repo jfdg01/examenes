@@ -191,7 +191,7 @@ pub fn paginas_sin_pregunta(preguntas: &[Pregunta], examen: &Examen, carpeta: &P
     for (pdf, con) in citadas {
         // Un PDF que pdfinfo no lee ya es un error de `comprobar`.
         let Ok(n) = paginas(&carpeta.join("pdfs").join(pdf)) else { continue };
-        let razon = |i: &u32| examen.sin_pregunta.get(pdf).is_some_and(|m| m.contains_key(i));
+        let razon = |i: &u32| examen.sin_pregunta.get(pdf).is_some_and(|m| m.contains_key(&i.to_string()));
         let lista = |v: Vec<u32>| v.iter().map(u32::to_string).collect::<Vec<_>>().join(", ");
         let sin: Vec<u32> = (1..=n).filter(|i| !con.contains(i) && !razon(i)).collect();
         if !sin.is_empty() {
@@ -656,7 +656,7 @@ mod tests {
     #[test]
     fn una_pagina_sin_pregunta_ni_razon_o_con_las_dos_es_un_aviso() {
         let (dir, mut examen) = carpeta();
-        let razones = BTreeMap::from([(1, "portada".into()), (2, "índice".into()), (5, "repetida".into())]);
+        let razones = BTreeMap::from([("1".into(), "portada".into()), ("2".into(), "índice".into()), ("5".into(), "repetida".into())]);
         examen.sin_pregunta = BTreeMap::from([("1_Legislacion.pdf".into(), razones)]);
         let en = |id: &str, pagina| Pregunta { fuente: Fuente { pdf: "1_Legislacion.pdf".into(), pagina }, ..pregunta(id) };
         assert_eq!(
@@ -831,7 +831,7 @@ mod tests {
     fn preparar_vacia_el_lote_y_montar_lo_devuelve() {
         let (dir, mut examen) = carpeta();
         let c = dir.path();
-        examen.sin_pregunta.insert("1_Legislacion.pdf".into(), BTreeMap::from([(1, "portada".into())]));
+        examen.sin_pregunta.insert("1_Legislacion.pdf".into(), BTreeMap::from([("1".into(), "portada".into())]));
         escribir(&c.join("examen.json"), &examen).unwrap();
         let mut otra = pregunta("e1");
         otra.tema = "ens".into();

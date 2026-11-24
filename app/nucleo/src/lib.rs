@@ -21,9 +21,9 @@ pub struct Examen {
     pub penalizacion: f64,
     /// Los temas de cada PDF de `pdfs/`.
     pub pdfs: std::collections::BTreeMap<String, Vec<String>>,
-    /// Para cada PDF, las páginas sin pregunta y la razón de cada una. `banco comprobar` las lee.
+    /// Para cada PDF, las páginas sin pregunta y la razón de cada una. `banco comprobar` las lee. La página es texto, como cada clave de un objeto de JSON: el WASM no convierte `"1"` en un número.
     #[serde(default)]
-    pub sin_pregunta: std::collections::BTreeMap<String, std::collections::BTreeMap<u32, String>>,
+    pub sin_pregunta: std::collections::BTreeMap<String, std::collections::BTreeMap<String, String>>,
 }
 
 /// Un examen de la lista de la raíz, que abre `/<carpeta>/`.
