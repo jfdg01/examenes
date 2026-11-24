@@ -5,10 +5,23 @@
   "minutos": 25,
   "penalizacion": 0.25,
   "pdfs": {
-    "1_Legislacion.pdf": ["rgpd", "lssi", "software", "propiedad", "delitos", "etica"],
-    "2A _Teoría.pdf": ["iso27001", "ens"],
-    "2B _Teoría.pdf": ["iso27001", "riesgos"],
-    "2C _Teoría.pdf": ["auditoria"],
-    "3 _Teoría.pdf": ["certificaciones"]
+    "1_Legislacion.pdf": {"nombre": "1. Legislación y normativa", "apartados": ["rgpd", "lssi", "software", "propiedad", "delitos", "etica"]},
+    "2A _Teoría.pdf": {"nombre": "2A. Seguridad e ISO 27001", "apartados": ["iso27001", "ens"]},
+    "2B _Teoría.pdf": {"nombre": "2B. ISO 27001 y riesgos", "apartados": ["iso27001", "riesgos"]},
+    "2C _Teoría.pdf": {"nombre": "2C. Auditoría", "apartados": ["auditoria"]},
+    "3 _Teoría.pdf": {"nombre": "3. Certificaciones", "apartados": ["certificaciones"]}
+  },
+  "apartados": {
+    "rgpd": "RGPD",
+    "lssi": "LSSI",
+    "software": "Software",
+    "propiedad": "Propiedad intelectual",
+    "delitos": "Delitos informáticos",
+    "etica": "Ética",
+    "iso27001": "ISO 27001",
+    "ens": "ENS",
+    "riesgos": "Riesgos",
+    "auditoria": "Auditoría",
+    "certificaciones": "Certificaciones"
   }
 }

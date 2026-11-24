@@ -19,11 +19,21 @@ pub struct Examen {
     pub minutos: u32,
     /// La parte de un acierto que resta un fallo.
     pub penalizacion: f64,
-    /// Los temas de cada PDF de `pdfs/`.
-    pub pdfs: std::collections::BTreeMap<String, Vec<String>>,
+    /// Los temas, por el nombre de su PDF de `pdfs/`.
+    pub pdfs: std::collections::BTreeMap<String, Tema>,
+    /// El nombre de cada apartado, por su clave. Un apartado tiene un solo nombre, aunque salga en 2 temas.
+    pub apartados: std::collections::BTreeMap<String, String>,
     /// Para cada PDF, las páginas sin pregunta y la razón de cada una. `banco comprobar` las lee. La página es texto, como cada clave de un objeto de JSON: el WASM no convierte `"1"` en un número.
     #[serde(default)]
     pub sin_pregunta: std::collections::BTreeMap<String, std::collections::BTreeMap<String, String>>,
+}
+
+/// Un tema: un PDF del temario, con su nombre y las claves de sus apartados.
+#[derive(Deserialize, Serialize, Tsify, Clone)]
+#[serde(deny_unknown_fields)]
+pub struct Tema {
+    pub nombre: String,
+    pub apartados: Vec<String>,
 }
 
 /// Un examen de la lista de la raíz, que abre `/<carpeta>/`.
@@ -39,7 +49,8 @@ pub struct ExamenDeLaLista {
 pub struct Pregunta {
     pub id: String,
     pub concepto: String,
-    pub tema: String,
+    /// La clave del apartado, uno de los apartados del tema de `fuente.pdf`.
+    pub apartado: String,
     pub fuente: Fuente,
     pub pregunta: String,
     pub correcta: String,
@@ -179,13 +190,54 @@ pub enum Inicio {
     BancoVacio {
         titulo: String,
     },
-    /// `sesion` y `simulacro` son el número de preguntas de cada ronda.
+    /// `sesion` y `simulacro` son el número de preguntas de cada ronda con la selección, y la tarjeta usa solo la selección.
+    /// `parte` dice "con 3 de 5 temas" cuando falta algún par.
     Listo {
         titulo: String,
         sesion: u32,
         simulacro: u32,
         tarjeta: Tarjeta,
+        temas: Vec<TemaDelInicio>,
+        parte: Option<String>,
     },
+}
+
+/// Un par de la selección: un apartado dentro de un tema, por el PDF del tema.
+#[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct Par {
+    pub pdf: String,
+    pub apartado: String,
+}
+
+/// Un tema en el inicio, con su número de conceptos y sus apartados.
+#[derive(Serialize, Tsify, PartialEq, Debug)]
+pub struct TemaDelInicio {
+    pub pdf: String,
+    pub nombre: String,
+    pub conceptos: u32,
+    pub apartados: Vec<ApartadoDelInicio>,
+}
+
+#[derive(Serialize, Tsify, PartialEq, Debug)]
+pub struct ApartadoDelInicio {
+    pub apartado: String,
+    pub nombre: String,
+    pub conceptos: u32,
+    pub marcado: bool,
+}
+
+/// Las preguntas de los pares marcados. Sin selección, todo el banco.
+pub fn de_la_seleccion(banco: &[Pregunta], seleccion: Option<&[Par]>) -> Vec<Pregunta> {
+    banco.iter().filter(|q| marcado(seleccion, &q.fuente.pdf, &q.apartado)).cloned().collect()
+}
+
+fn marcado(seleccion: Option<&[Par]>, pdf: &str, apartado: &str) -> bool {
+    seleccion.is_none_or(|s| s.iter().any(|p| p.pdf == pdf && p.apartado == apartado))
+}
+
+fn conceptos<'a>(preguntas: impl Iterator<Item = &'a Pregunta>) -> u32 {
+    preguntas.map(|q| q.concepto.as_str()).collect::<std::collections::HashSet<_>>().len() as u32
 }
 
 /// La pantalla de la ronda. Del inicio sale una sesión, cada pregunta pasa de sin contestar a contestada,
@@ -199,15 +251,38 @@ pub enum Ronda {
 }
 
 /// El inicio, con la tarjeta de la nota para sacar más de `objetivo` sobre 10.
-pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], objetivo: f64) -> Inicio {
+/// Sin selección, todo está marcado. Un par de la selección que no existe no cuenta.
+pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], seleccion: Option<&[Par]>, objetivo: f64) -> Inicio {
     let titulo = examen.titulo.clone();
     if banco.is_empty() {
         return Inicio::BancoVacio { titulo };
     }
-    let tarjeta = tarjeta(examen, banco, historial, objetivo);
+    let temas: Vec<TemaDelInicio> = examen
+        .pdfs
+        .iter()
+        .map(|(pdf, tema)| TemaDelInicio {
+            pdf: pdf.clone(),
+            nombre: tema.nombre.clone(),
+            conceptos: conceptos(banco.iter().filter(|q| q.fuente.pdf == *pdf)),
+            apartados: tema
+                .apartados
+                .iter()
+                .map(|a| ApartadoDelInicio {
+                    apartado: a.clone(),
+                    nombre: examen.apartados.get(a).unwrap_or(a).clone(),
+                    conceptos: conceptos(banco.iter().filter(|q| q.fuente.pdf == *pdf && q.apartado == *a)),
+                    marcado: marcado(seleccion, pdf, a),
+                })
+                .collect(),
+        })
+        .collect();
+    let con = temas.iter().filter(|t| t.apartados.iter().any(|a| a.marcado)).count();
+    let parte = temas.iter().any(|t| t.apartados.iter().any(|a| !a.marcado)).then(|| format!("con {con} de {} temas", temas.len()));
+    let banco = de_la_seleccion(banco, seleccion);
+    let tarjeta = tarjeta(examen, &banco, historial, objetivo);
     let sesion = (tarjeta.sabes + tarjeta.no_sabes + tarjeta.sin_ver).min(TAMANO_SESION as u32);
     let simulacro = examen.preguntas.min(banco.len() as u32);
-    Inicio::Listo { titulo, sesion, simulacro, tarjeta }
+    Inicio::Listo { titulo, sesion, simulacro, tarjeta, temas, parte }
 }
 
 const TAMANO_SESION: usize = 12;
@@ -242,7 +317,8 @@ impl Azar {
 #[derive(Serialize, Deserialize, Tsify, Clone)]
 pub struct PreguntaDeSesion {
     pub id: String,
-    pub tema: String,
+    /// El nombre del apartado.
+    pub apartado: String,
     pub concepto: String,
     pub pregunta: String,
     pub opciones: Vec<String>,
@@ -268,7 +344,7 @@ pub struct PreguntaDeSesion {
 
 /// La sesión de 12: los vencidos, 4 huecos para los conceptos sin ver, y el relleno con los que vencen antes.
 /// `ahora` va en segundos desde 1970.
-pub fn sesion(banco: &[Pregunta], historial: &[Respuesta], ahora: i64, azar: &mut Azar) -> Vec<PreguntaDeSesion> {
+pub fn sesion(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], ahora: i64, azar: &mut Azar) -> Vec<PreguntaDeSesion> {
     let estado = estados(banco, historial);
     let mut ultima: std::collections::HashMap<&str, Timestamp> = std::collections::HashMap::new();
     for r in historial {
@@ -304,17 +380,17 @@ pub fn sesion(banco: &[Pregunta], historial: &[Respuesta], ahora: i64, azar: &mu
     let mut elegidos: Vec<&str> =
         vistos[..vencidos].iter().chain(&sin_ver).chain(&vistos[vencidos..]).take(TAMANO_SESION).copied().collect();
     azar.barajar(&mut elegidos);
-    elegidos.into_iter().map(|c| de_la_ronda(pregunta[c], &estado, azar)).collect()
+    elegidos.into_iter().map(|c| de_la_ronda(examen, pregunta[c], &estado, azar)).collect()
 }
 
 /// La pregunta con sus opciones al azar y el paso de su concepto.
-fn de_la_ronda(q: &Pregunta, estado: &std::collections::HashMap<&str, (Concepto, i64)>, azar: &mut Azar) -> PreguntaDeSesion {
+fn de_la_ronda(examen: &Examen, q: &Pregunta, estado: &std::collections::HashMap<&str, (Concepto, i64)>, azar: &mut Azar) -> PreguntaDeSesion {
     let paso = estado.get(q.concepto.as_str()).map_or(Concepto::SinVer, |e| e.0);
     let mut opciones: Vec<String> = std::iter::once(&q.correcta).chain(&q.distractores).cloned().collect();
     azar.barajar(&mut opciones);
     PreguntaDeSesion {
         id: q.id.clone(),
-        tema: q.tema.clone(),
+        apartado: examen.apartados.get(&q.apartado).unwrap_or(&q.apartado).clone(),
         concepto: q.concepto.clone(),
         pregunta: q.pregunta.clone(),
         correcta: opciones.iter().position(|o| *o == q.correcta).unwrap() as u32,
@@ -380,7 +456,7 @@ pub fn editar(banco: &[Pregunta], q: &PreguntaDeSesion, e: &Edicion) -> Option<E
     Some(Editada { banco: editada, ronda })
 }
 
-/// El simulacro: las preguntas del examen, al azar de todo el banco, y su duración.
+/// El simulacro: las preguntas del examen, al azar del banco que recibe, y su duración. Un banco más pequeño da un simulacro más corto.
 #[derive(Serialize, Tsify)]
 pub struct Simulacro {
     pub segundos: u32,
@@ -394,11 +470,11 @@ pub fn simulacro(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], a
     barajado.truncate(examen.preguntas as usize);
     Simulacro {
         segundos: examen.minutos.saturating_mul(60),
-        preguntas: barajado.into_iter().map(|q| de_la_ronda(q, &estado, azar)).collect(),
+        preguntas: barajado.into_iter().map(|q| de_la_ronda(examen, q, &estado, azar)).collect(),
     }
 }
 
-/// `ronda.json`, y la ronda de `localStorage`: la ronda a medias y la hora del guardado, en ISO 8601 con `Z`.
+/// `ronda.json`, y la ronda de `localStorage`: la ronda a medias, la selección y la hora del guardado, en ISO 8601 con `Z`.
 /// Sin ronda a medias, `ronda` es `None`.
 #[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
 #[serde(deny_unknown_fields)]
@@ -406,6 +482,9 @@ pub struct Guardado {
     #[tsify(type = "string")]
     pub guardada: Timestamp,
     pub ronda: Option<RondaGuardada>,
+    /// Los pares marcados. Sin selección, todo está marcado.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub seleccion: Option<Vec<Par>>,
 }
 
 /// Una ronda a medias: sus preguntas, el resultado de cada una y el límite del simulacro, en milisegundos.
@@ -444,11 +523,11 @@ pub struct RondaAMedias {
 
 /// Una ronda con un id que no está en el banco, o con más resultados que preguntas, no se restaura.
 /// Una lista de resultados más corta que `ids` acaba en preguntas sin contestar.
-pub fn restaurar(banco: &[Pregunta], historial: &[Respuesta], guardado: &Guardado, azar: &mut Azar) -> Option<RondaAMedias> {
+pub fn restaurar(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], guardado: &Guardado, azar: &mut Azar) -> Option<RondaAMedias> {
     let r = guardado.ronda.as_ref()?;
     let estado = estados(banco, historial);
     let preguntas: Vec<_> =
-        r.ids.iter().map(|id| Some(de_la_ronda(banco.iter().find(|q| q.id == *id)?, &estado, azar))).collect::<Option<_>>()?;
+        r.ids.iter().map(|id| Some(de_la_ronda(examen, banco.iter().find(|q| q.id == *id)?, &estado, azar))).collect::<Option<_>>()?;
     if r.resultados.len() > preguntas.len() {
         return None;
     }
@@ -669,6 +748,7 @@ mod tests {
         penalizacion: 0.25,
         pdfs: std::collections::BTreeMap::new(),
         sin_pregunta: std::collections::BTreeMap::new(),
+        apartados: std::collections::BTreeMap::new(),
     };
 
     /// Un banco de `n` conceptos `c0`, `c1`…, con una pregunta `q0`, `q1`… cada uno.
@@ -852,7 +932,7 @@ mod tests {
         Pregunta {
             id: id.into(),
             concepto: concepto.into(),
-            tema: "rgpd".into(),
+            apartado: "rgpd".into(),
             pregunta: format!("¿{id}?"),
             correcta: "sí".into(),
             distractores: vec!["no".into(), "a veces".into(), "nunca".into()],
@@ -863,7 +943,7 @@ mod tests {
 
     #[test]
     fn el_texto_para_copiar_lleva_la_pregunta_y_sus_opciones_en_orden_sin_la_solucion() {
-        let q = sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(1)).remove(0);
+        let q = sesion(&LN, &[pregunta("a1", "a")], &[], 0, &mut Azar::new(1)).remove(0);
         assert_eq!(q.opciones, ["a veces", "sí", "nunca", "no"]);
         assert_eq!(q.copiar, "¿a1?\n\nA) a veces\nB) sí\nC) nunca\nD) no");
     }
@@ -883,7 +963,7 @@ mod tests {
     #[test]
     fn una_pregunta_editada_lleva_cada_opcion_a_su_sitio_del_banco_y_la_ronda_conserva_su_orden() {
         let banco = [pregunta("a1", "a")];
-        let q = sesion(&banco, &[], 0, &mut Azar::new(1)).remove(0);
+        let q = sesion(&LN, &banco, &[], 0, &mut Azar::new(1)).remove(0);
         assert_eq!(q.opciones, ["a veces", "sí", "nunca", "no"]);
         let e = Edicion {
             pregunta: "¿a1 bien?".into(),
@@ -903,7 +983,7 @@ mod tests {
 
     #[test]
     fn la_pregunta_da_su_fuente_la_imagen_de_la_pagina_y_el_pdf_en_la_pagina() {
-        let q = sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(1)).remove(0);
+        let q = sesion(&LN, &[pregunta("a1", "a")], &[], 0, &mut Azar::new(1)).remove(0);
         assert_eq!(q.fuente, "2A _Teoría.pdf · pág. 7");
         assert_eq!(q.pagina, 7);
         assert_eq!(q.imagen, "paginas/2A _Teoría-7.webp");
@@ -919,14 +999,71 @@ mod tests {
     fn el_inicio_da_el_titulo_y_las_preguntas_de_la_sesion() {
         let banco = [pregunta("a1", "a"), pregunta("a2", "a"), pregunta("b1", "b")];
         let examen = Examen { titulo: "LN".into(), ..LN };
-        let Inicio::Listo { titulo, sesion, simulacro, .. } = inicio(&examen, &banco, &[], 5.0) else { panic!() };
+        let Inicio::Listo { titulo, sesion, simulacro, .. } = inicio(&examen, &banco, &[], None, 5.0) else { panic!() };
         assert_eq!((titulo.as_str(), sesion, simulacro), ("LN", 2, 3));
-        assert_eq!(inicio(&examen, &[], &[], 5.0), Inicio::BancoVacio { titulo: "LN".into() });
+        assert_eq!(inicio(&examen, &[], &[], None, 5.0), Inicio::BancoVacio { titulo: "LN".into() });
+    }
+
+    fn par(pdf: &str, apartado: &str) -> Par {
+        Par { pdf: pdf.into(), apartado: apartado.into() }
+    }
+
+    /// 2 temas: «Uno» con RGPD, y «Dos» con ENS y Riesgos. Un concepto por apartado, y 2 preguntas en ENS.
+    fn temario() -> (Examen, Vec<Pregunta>) {
+        let tema = |nombre: &str, apartados: &[&str]| Tema { nombre: nombre.into(), apartados: apartados.iter().map(|a| a.to_string()).collect() };
+        let examen = Examen {
+            pdfs: [("1.pdf".into(), tema("Uno", &["rgpd"])), ("2.pdf".into(), tema("Dos", &["ens", "riesgos"]))].into(),
+            apartados: [("rgpd", "RGPD"), ("ens", "ENS"), ("riesgos", "Riesgos")].map(|(a, n)| (a.into(), n.into())).into(),
+            ..LN
+        };
+        let q = |id: &str, concepto: &str, pdf: &str, apartado: &str| Pregunta {
+            apartado: apartado.into(),
+            fuente: Fuente { pdf: pdf.into(), pagina: 1 },
+            ..pregunta(id, concepto)
+        };
+        let banco = vec![q("a1", "a", "1.pdf", "rgpd"), q("b1", "b", "2.pdf", "ens"), q("b2", "b", "2.pdf", "ens"), q("c1", "c", "2.pdf", "riesgos")];
+        (examen, banco)
+    }
+
+    #[test]
+    fn sin_seleccion_todo_esta_marcado() {
+        let (examen, banco) = temario();
+        let Inicio::Listo { sesion, temas, parte, .. } = inicio(&examen, &banco, &[], None, 5.0) else { panic!() };
+        assert_eq!((sesion, parte), (3, None));
+        let resumen: Vec<_> = temas.iter().map(|t| (t.nombre.as_str(), t.conceptos, t.apartados.iter().all(|a| a.marcado))).collect();
+        assert_eq!(resumen, [("Uno", 1, true), ("Dos", 2, true)]);
+        assert_eq!(temas[1].apartados.iter().map(|a| (a.nombre.as_str(), a.conceptos)).collect::<Vec<_>>(), [("ENS", 1), ("Riesgos", 1)]);
+    }
+
+    #[test]
+    fn la_seleccion_marca_sus_pares_y_las_rondas_salen_de_ella() {
+        let (examen, banco) = temario();
+        let seleccion = [par("2.pdf", "ens"), par("9.pdf", "viejo")];
+        let Inicio::Listo { sesion, simulacro, tarjeta, temas, parte, .. } = inicio(&examen, &banco, &[], Some(&seleccion), 5.0) else { panic!() };
+        assert_eq!((sesion, simulacro, tarjeta.sin_ver), (1, 2, 1));
+        assert_eq!(parte.as_deref(), Some("con 1 de 2 temas"));
+        assert_eq!(temas[1].apartados.iter().map(|a| a.marcado).collect::<Vec<_>>(), [true, false]);
+        assert!(!temas[0].apartados[0].marcado);
+        let ids: Vec<_> = de_la_seleccion(&banco, Some(&seleccion)).into_iter().map(|q| q.id).collect();
+        assert_eq!(ids, ["b1", "b2"]);
+    }
+
+    #[test]
+    fn la_pregunta_de_la_ronda_lleva_el_nombre_del_apartado() {
+        let (examen, banco) = temario();
+        assert_eq!(sesion(&examen, &banco[..1], &[], 0, &mut Azar::new(1))[0].apartado, "RGPD");
+    }
+
+    #[test]
+    fn una_seleccion_vacia_da_rondas_de_0_preguntas() {
+        let (examen, banco) = temario();
+        let Inicio::Listo { sesion, simulacro, parte, .. } = inicio(&examen, &banco, &[], Some(&[]), 5.0) else { panic!() };
+        assert_eq!((sesion, simulacro, parte.as_deref()), (0, 0, Some("con 0 de 2 temas")));
     }
 
     /// El paso del concepto de la única pregunta del banco, como lo muestra la sesión.
     fn paso(banco: &[Pregunta], historial: &[Respuesta]) -> String {
-        sesion(banco, historial, 0, &mut Azar::new(1)).remove(0).paso
+        sesion(&LN, banco, historial, 0, &mut Azar::new(1)).remove(0).paso
     }
 
     #[test]
@@ -966,7 +1103,7 @@ mod tests {
     }
 
     fn de_la_sesion(banco: &[Pregunta], historial: &[Respuesta]) -> Vec<String> {
-        let mut ids: Vec<String> = sesion(banco, historial, AHORA.parse::<Timestamp>().unwrap().as_second(), &mut Azar::new(1))
+        let mut ids: Vec<String> = sesion(&LN, banco, historial, AHORA.parse::<Timestamp>().unwrap().as_second(), &mut Azar::new(1))
             .into_iter()
             .map(|q| q.id)
             .collect();
@@ -1014,7 +1151,7 @@ mod tests {
     #[test]
     fn la_sesion_lleva_una_pregunta_por_concepto() {
         let banco = [pregunta("a1", "a"), pregunta("a2", "a"), pregunta("a3", "a"), pregunta("b1", "b")];
-        let sesion = sesion(&banco, &[], 0, &mut Azar::new(1));
+        let sesion = sesion(&LN, &banco, &[], 0, &mut Azar::new(1));
         let mut conceptos: Vec<&str> = sesion.iter().map(|q| q.concepto.as_str()).collect();
         conceptos.sort();
         assert_eq!(conceptos, ["a", "b"]);
@@ -1026,9 +1163,9 @@ mod tests {
         let viejas = [respuesta("a1", &minuto(2, 0), false, false), respuesta("a3", &minuto(1, 0), false, false)];
         for semilla in 0..20 {
             let mut azar = Azar::new(semilla);
-            assert_eq!(sesion(&banco, &viejas, 0, &mut azar)[0].id, "a2");
+            assert_eq!(sesion(&LN, &banco, &viejas, 0, &mut azar)[0].id, "a2");
             let todas = [&viejas[..], &[respuesta("a2", &minuto(3, 0), false, false)]].concat();
-            assert_eq!(sesion(&banco, &todas, 0, &mut azar)[0].id, "a3");
+            assert_eq!(sesion(&LN, &banco, &todas, 0, &mut azar)[0].id, "a3");
         }
     }
 
@@ -1038,7 +1175,7 @@ mod tests {
         let historial: Vec<Respuesta> =
             banco.iter().enumerate().map(|(i, q)| respuesta(&q.id, &minuto(0, i as i64 / 5), true, true)).collect();
         let ahora = minuto(5, 0).parse::<Timestamp>().unwrap().as_second();
-        let sesion = sesion(&banco, &historial, ahora, &mut Azar::new(1));
+        let sesion = sesion(&LN, &banco, &historial, ahora, &mut Azar::new(1));
         let mut indices: Vec<usize> = sesion.iter().map(|q| q.concepto[1..].parse().unwrap()).collect();
         indices.sort();
         assert_eq!(indices.len(), 12);
@@ -1050,7 +1187,7 @@ mod tests {
     fn la_misma_semilla_da_siempre_el_mismo_orden() {
         let banco = conceptos("c", 30);
         let orden =
-            |semilla| sesion(&banco, &[], 0, &mut Azar::new(semilla)).into_iter().map(|q| (q.id, q.opciones)).collect::<Vec<_>>();
+            |semilla| sesion(&LN, &banco, &[], 0, &mut Azar::new(semilla)).into_iter().map(|q| (q.id, q.opciones)).collect::<Vec<_>>();
         assert_eq!(orden(7), orden(7));
         assert_ne!(orden(7), orden(8));
     }
@@ -1059,19 +1196,19 @@ mod tests {
     fn la_pregunta_da_las_opciones_al_azar_la_correcta_y_el_paso() {
         let banco = [pregunta("a1", "a")];
         let historial = [respuesta("a1", &minuto(0, 0), true, true)];
-        let q = &sesion(&banco, &historial, 0, &mut Azar::new(3))[0];
+        let q = &sesion(&LN, &banco, &historial, 0, &mut Azar::new(3))[0];
         assert_eq!(q.opciones[q.correcta as usize], "sí");
         let mut opciones = q.opciones.clone();
         opciones.sort();
         assert_eq!(opciones, ["a veces", "no", "nunca", "sí"]);
         assert_eq!((q.paso.as_str(), q.paso_tras_seguro.as_str(), q.paso_tras_otra.as_str()), ("paso 1", "paso 2", "paso 0"));
-        let sin_ver = &sesion(&[pregunta("b1", "b")], &[], 0, &mut Azar::new(3))[0];
+        let sin_ver = &sesion(&LN, &[pregunta("b1", "b")], &[], 0, &mut Azar::new(3))[0];
         assert_eq!((sin_ver.paso.as_str(), sin_ver.paso_tras_seguro.as_str()), ("sin ver", "paso 1"));
     }
 
     #[test]
     fn corregir_compara_la_opcion_con_la_correcta_y_sin_opcion_es_en_blanco() {
-        let q = &sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
+        let q = &sesion(&LN, &[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
         let otra = (q.correcta + 1) % 4;
         let r = corregir(q, Some(q.correcta), true, "2026-11-04T12:41:22Z".parse().unwrap()).respuesta;
         assert_eq!(
@@ -1090,7 +1227,7 @@ mod tests {
 
     #[test]
     fn corregir_da_el_paso_tras_la_respuesta_y_avisa_de_un_fallo_seguro_y_un_acierto_dudoso() {
-        let q = &sesion(&[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
+        let q = &sesion(&LN, &[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
         let otra = (q.correcta + 1) % 4;
         let fila = |c: Correccion| (c.paso, c.aviso);
         assert_eq!(fila(corregir(q, Some(q.correcta), true, Timestamp::UNIX_EPOCH)), ("paso 1".into(), None));
@@ -1127,13 +1264,14 @@ mod tests {
         Guardado {
             guardada: Timestamp::from_second(guardada).unwrap(),
             ronda: Some(RondaGuardada { ids, resultados: resultados.to_vec(), simulacro: false, limite: None }),
+            seleccion: None,
         }
     }
 
     #[test]
     fn gana_el_guardado_mas_nuevo() {
         let viejo = guardado(1, &["a1"], &[]);
-        let nuevo = Guardado { guardada: Timestamp::from_second(2).unwrap(), ronda: None };
+        let nuevo = Guardado { guardada: Timestamp::from_second(2).unwrap(), ronda: None, seleccion: None };
         assert_eq!(gana(viejo.clone(), nuevo.clone()), nuevo);
         assert_eq!(gana(nuevo.clone(), viejo.clone()), nuevo);
         assert_eq!(gana(viejo.clone(), guardado(1, &["b1"], &[])), viejo);
@@ -1143,7 +1281,7 @@ mod tests {
     fn la_ronda_restaurada_sigue_en_la_primera_pregunta_sin_resultado() {
         let banco = [pregunta("a1", "a"), pregunta("b1", "b"), pregunta("c1", "c")];
         let g = guardado(1, &["c1", "a1", "b1"], &[Some(Resultado::Fallo)]);
-        let r = restaurar(&banco, &[], &g, &mut Azar::new(1)).unwrap();
+        let r = restaurar(&LN, &banco, &[], &g, &mut Azar::new(1)).unwrap();
         assert_eq!(r.preguntas.iter().map(|q| q.id.as_str()).collect::<Vec<_>>(), ["c1", "a1", "b1"]);
         assert_eq!(r.resultados, [Some(Resultado::Fallo), None, None]);
         assert_eq!((r.simulacro, r.limite), (false, None));
@@ -1153,17 +1291,17 @@ mod tests {
     fn la_ronda_restaurada_guarda_cada_resultado_con_su_pregunta_aunque_haya_saltos() {
         let banco = [pregunta("a1", "a"), pregunta("b1", "b"), pregunta("c1", "c")];
         let g = guardado(1, &["c1", "a1", "b1"], &[None, Some(Resultado::Acierto), None]);
-        let r = restaurar(&banco, &[], &g, &mut Azar::new(1)).unwrap();
+        let r = restaurar(&LN, &banco, &[], &g, &mut Azar::new(1)).unwrap();
         assert_eq!(r.resultados, [None, Some(Resultado::Acierto), None]);
-        assert!(restaurar(&banco, &[], &guardado(1, &["a1"], &[None, None]), &mut Azar::new(1)).is_none());
+        assert!(restaurar(&LN, &banco, &[], &guardado(1, &["a1"], &[None, None]), &mut Azar::new(1)).is_none());
     }
 
     #[test]
     fn una_ronda_con_una_pregunta_que_no_esta_en_el_banco_no_se_restaura() {
         let banco = [pregunta("a1", "a")];
-        assert!(restaurar(&banco, &[], &guardado(1, &["a1", "x9"], &[]), &mut Azar::new(1)).is_none());
+        assert!(restaurar(&LN, &banco, &[], &guardado(1, &["a1", "x9"], &[]), &mut Azar::new(1)).is_none());
         assert!(
-            restaurar(&banco, &[], &Guardado { guardada: Timestamp::from_second(1).unwrap(), ronda: None }, &mut Azar::new(1))
+            restaurar(&LN, &banco, &[], &Guardado { guardada: Timestamp::from_second(1).unwrap(), ronda: None, seleccion: None }, &mut Azar::new(1))
                 .is_none()
         );
     }

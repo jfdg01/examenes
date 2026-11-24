@@ -63,12 +63,12 @@ pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec
         }
         let nombre = p.fuente.pdf.as_str();
         let pdf = carpeta.join("pdfs").join(nombre);
-        let Some(temas) = examen.pdfs.get(nombre).filter(|_| pdf.is_file()) else {
+        let Some(tema) = examen.pdfs.get(nombre).filter(|_| pdf.is_file()) else {
             errores.push(format!("{id}: el pdf no está en examen.json o en pdfs/: {nombre}"));
             continue;
         };
-        if !temas.contains(&p.tema) {
-            errores.push(format!("{id}: el tema {} no es un tema de {nombre} en examen.json", p.tema));
+        if !tema.apartados.contains(&p.apartado) {
+            errores.push(format!("{id}: el apartado {} no es un apartado de {nombre} en examen.json", p.apartado));
         }
         match paginas_de.entry(nombre).or_insert_with(|| paginas(&pdf)) {
             Ok(n) if p.fuente.pagina == 0 || p.fuente.pagina > *n => {
@@ -76,6 +76,11 @@ pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec
             }
             Ok(_) => {}
             Err(e) => errores.push(format!("{id}: {e}")),
+        }
+    }
+    for (pdf, tema) in &examen.pdfs {
+        for a in tema.apartados.iter().filter(|a| !examen.apartados.contains_key(*a)) {
+            errores.push(format!("{pdf}: el apartado {a} no tiene nombre en apartados de examen.json"));
         }
     }
     let mut cuenta: Vec<(&str, usize)> = Vec::new();
@@ -160,7 +165,7 @@ fn clave(linea: &str) -> Option<(&str, &str)> {
 }
 
 /// Los avisos de las explicaciones: una línea `✓` de menos de 8 palabras, y una línea `✗` con el matiz de
-/// otra línea `✗` del mismo tema.
+/// otra línea `✗` del mismo apartado.
 pub fn explicaciones(preguntas: &[Pregunta]) -> Vec<String> {
     let mut avisos = Vec::new();
     let mut matices: HashMap<(&str, &str), &str> = HashMap::new();
@@ -172,7 +177,7 @@ pub fn explicaciones(preguntas: &[Pregunta]) -> Vec<String> {
             }
         }
         for (_, matiz) in p.explicacion.lines().filter_map(clave).filter(|(_, m)| !m.is_empty()) {
-            if let Some(otra) = matices.insert((&p.tema, matiz), &p.id) {
+            if let Some(otra) = matices.insert((&p.apartado, matiz), &p.id) {
                 avisos.push(format!("{}: la línea ✗ repite el matiz de {otra}: {matiz}", p.id));
             }
         }
@@ -349,34 +354,34 @@ pub fn revision(carpeta: &Path, informes: &[String]) -> Result<(), String> {
     Ok(())
 }
 
-/// Prepara un lote de temas: quita del banco sus preguntas y de `sin_pregunta` sus PDFs, y crea la carpeta
-/// de trabajo de cada tema. Falla sin cambiar nada con un historial o una ronda que usan los `id` del lote,
+/// Prepara un lote de apartados: quita del banco sus preguntas y de `sin_pregunta` sus PDFs, y crea la carpeta
+/// de trabajo de cada apartado. Falla sin cambiar nada con un historial o una ronda que usan los `id` del lote,
 /// porque los `id` nuevos los reusan.
-pub fn preparar(carpeta: &Path, temas: &[String]) -> Result<(), String> {
+pub fn preparar(carpeta: &Path, apartados: &[String]) -> Result<(), String> {
     let mut examen: Examen = leer(&carpeta.join("examen.json"))?;
     let archivo = carpeta.join("preguntas.json");
     let banco: Vec<Pregunta> = leer(&archivo)?;
-    if let Some(t) = temas.iter().find(|t| !examen.pdfs.values().any(|ts| ts.contains(t))) {
-        return Err(format!("el tema {t} no está en examen.json"));
+    if let Some(a) = apartados.iter().find(|a| !examen.pdfs.values().any(|t| t.apartados.contains(a))) {
+        return Err(format!("el apartado {a} no está en examen.json"));
     }
     let historial = carpeta.join("respuestas.jsonl");
-    let resto: Vec<Pregunta> = banco.iter().filter(|p| !temas.contains(&p.tema)).cloned().collect();
+    let resto: Vec<Pregunta> = banco.iter().filter(|p| !apartados.contains(&p.apartado)).cloned().collect();
     let del_lote = huerfanas(&resto, &historial)?.len() - huerfanas(&banco, &historial)?.len();
     if del_lote > 0 {
-        return Err(format!("respuestas.jsonl tiene {del_lote} id de los temas del lote: el dueño decide antes qué pasa con ellas"));
+        return Err(format!("respuestas.jsonl tiene {del_lote} id de los apartados del lote: el dueño decide antes qué pasa con ellas"));
     }
     if carpeta.join("ronda.json").exists() {
         return Err("ronda.json existe: una ronda a medias usa los id del banco".into());
     }
     let trabajo = carpeta.join("trabajo");
-    if let Some(t) = temas.iter().find(|t| trabajo.join(t).exists()) {
-        return Err(format!("{} ya existe", trabajo.join(t).display()));
+    if let Some(a) = apartados.iter().find(|a| trabajo.join(a).exists()) {
+        return Err(format!("{} ya existe", trabajo.join(a).display()));
     }
-    examen.sin_pregunta.retain(|pdf, _| !examen.pdfs[pdf].iter().any(|t| temas.contains(t)));
+    examen.sin_pregunta.retain(|pdf, _| !examen.pdfs[pdf].apartados.iter().any(|a| apartados.contains(a)));
     escribir(&archivo, &resto)?;
     escribir(&carpeta.join("examen.json"), &examen)?;
-    for t in temas {
-        let dir = trabajo.join(t);
+    for a in apartados {
+        let dir = trabajo.join(a);
         fs::create_dir_all(&dir).map_err(|e| format!("{}: {e}", dir.display()))?;
         escribir(&dir.join("examen.json"), &examen)?;
         escribir(&dir.join("preguntas.json"), &Vec::<Pregunta>::new())?;
@@ -385,23 +390,23 @@ pub fn preparar(carpeta: &Path, temas: &[String]) -> Result<(), String> {
     Ok(())
 }
 
-/// Une al banco las preguntas y el `sin_pregunta` de la carpeta de trabajo de cada tema del lote. Falla sin
-/// cambiar nada con una pregunta de otro tema o con un `id` que ya está en el banco. Devuelve las preguntas
+/// Une al banco las preguntas y el `sin_pregunta` de la carpeta de trabajo de cada apartado del lote. Falla sin
+/// cambiar nada con una pregunta de otro apartado o con un `id` que ya está en el banco. Devuelve las preguntas
 /// añadidas.
-pub fn montar(carpeta: &Path, temas: &[String]) -> Result<usize, String> {
+pub fn montar(carpeta: &Path, apartados: &[String]) -> Result<usize, String> {
     let mut examen: Examen = leer(&carpeta.join("examen.json"))?;
     let archivo = carpeta.join("preguntas.json");
     let mut banco: Vec<Pregunta> = leer(&archivo)?;
     let antes = banco.len();
-    for t in temas {
-        let dir = carpeta.join("trabajo").join(t);
+    for a in apartados {
+        let dir = carpeta.join("trabajo").join(a);
         let nuevas: Vec<Pregunta> = leer(&dir.join("preguntas.json"))?;
-        if let Some(p) = nuevas.iter().find(|p| &p.tema != t || banco.iter().any(|b| b.id == p.id)) {
-            return Err(format!("{}: {} no es del tema {t}, o ya está en el banco", dir.display(), p.id));
+        if let Some(p) = nuevas.iter().find(|p| &p.apartado != a || banco.iter().any(|b| b.id == p.id)) {
+            return Err(format!("{}: {} no es del apartado {a}, o ya está en el banco", dir.display(), p.id));
         }
         let copia: Examen = leer(&dir.join("examen.json"))?;
-        for (pdf, ts) in &examen.pdfs {
-            if let (true, Some(razones)) = (ts.contains(t), copia.sin_pregunta.get(pdf)) {
+        for (pdf, t) in &examen.pdfs {
+            if let (true, Some(razones)) = (t.apartados.contains(a), copia.sin_pregunta.get(pdf)) {
                 examen.sin_pregunta.insert(pdf.clone(), razones.clone());
             }
         }
@@ -412,7 +417,7 @@ pub fn montar(carpeta: &Path, temas: &[String]) -> Result<usize, String> {
     Ok(banco.len() - antes)
 }
 
-/// Una pregunta de un bloque del borrador, sin `id` ni `tema`. `BANCO.md` describe el formato del bloque.
+/// Una pregunta de un bloque del borrador, sin `id` ni `apartado`. `BANCO.md` describe el formato del bloque.
 fn bloque(encabezado: &str, lineas: &[&str], pdf: &str) -> Result<Pregunta, String> {
     let error = |e: &str| format!("{encabezado}: {e}");
     let (concepto, pagina) = encabezado
@@ -447,7 +452,7 @@ fn bloque(encabezado: &str, lineas: &[&str], pdf: &str) -> Result<Pregunta, Stri
     Ok(Pregunta {
         id: String::new(),
         concepto: concepto.trim().into(),
-        tema: String::new(),
+        apartado: String::new(),
         fuente: nucleo::Fuente { pdf: pdf.into(), pagina },
         pregunta: pregunta.to_string(),
         correcta: correcta.to_string(),
@@ -456,16 +461,17 @@ fn bloque(encabezado: &str, lineas: &[&str], pdf: &str) -> Result<Pregunta, Stri
     })
 }
 
-/// Añade al final de `preguntas.json` las preguntas del borrador, cada una con el siguiente `id` libre del tema.
+/// Añade al final de `preguntas.json` las preguntas del borrador, cada una con el siguiente `id` libre del apartado.
 /// Un concepto que ya está en el banco da un error, y el banco queda igual. Devuelve los `id` nuevos.
-pub fn importar(carpeta: &Path, tema: &str, borrador: &Path) -> Result<Vec<String>, String> {
+pub fn importar(carpeta: &Path, apartado: &str, borrador: &Path) -> Result<Vec<String>, String> {
     let examen: Examen = leer(&carpeta.join("examen.json"))?;
     let archivo = carpeta.join("preguntas.json");
     let mut banco: Vec<Pregunta> = leer(&archivo)?;
     let texto = fs::read_to_string(borrador).map_err(|e| format!("{}: {e}", borrador.display()))?;
-    let pdfs: Vec<&String> = examen.pdfs.iter().filter(|(_, t)| t.iter().any(|t| t == tema)).map(|(p, _)| p).collect();
+    let pdfs: Vec<&String> =
+        examen.pdfs.iter().filter(|(_, t)| t.apartados.iter().any(|a| a == apartado)).map(|(p, _)| p).collect();
     let [pdf] = pdfs[..] else {
-        return Err(format!("el tema {tema} tiene {} PDF en examen.json, y no 1", pdfs.len()));
+        return Err(format!("el apartado {apartado} tiene {} PDF en examen.json, y no 1", pdfs.len()));
     };
     let mut bloques: Vec<(&str, Vec<&str>)> = Vec::new();
     for l in texto.lines().filter(|l| !l.trim().is_empty()) {
@@ -480,7 +486,7 @@ pub fn importar(carpeta: &Path, tema: &str, borrador: &Path) -> Result<Vec<Strin
     }
     let siguiente =
         |prefijo: String| banco.iter().filter_map(|p| p.id.strip_prefix(&prefijo)?.parse::<u32>().ok()).max().unwrap_or(0);
-    let (mut normal, mut de_sigla) = (siguiente(format!("{tema}-")), siguiente(format!("{tema}-s")));
+    let (mut normal, mut de_sigla) = (siguiente(format!("{apartado}-")), siguiente(format!("{apartado}-s")));
     let mut nuevas = Vec::new();
     for (encabezado, lineas) in &bloques {
         let mut p = bloque(encabezado, lineas, pdf)?;
@@ -489,12 +495,12 @@ pub fn importar(carpeta: &Path, tema: &str, borrador: &Path) -> Result<Vec<Strin
         }
         p.id = if sigla(&p.concepto) {
             de_sigla += 1;
-            format!("{tema}-s{de_sigla:02}")
+            format!("{apartado}-s{de_sigla:02}")
         } else {
             normal += 1;
-            format!("{tema}-{normal:03}")
+            format!("{apartado}-{normal:03}")
         };
-        p.tema = tema.into();
+        p.apartado = apartado.into();
         nuevas.push(p);
     }
     let ids = nuevas.iter().map(|p| p.id.clone()).collect();
@@ -506,7 +512,7 @@ pub fn importar(carpeta: &Path, tema: &str, borrador: &Path) -> Result<Vec<Strin
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nucleo::Fuente;
+    use nucleo::{Fuente, Tema};
 
     /// Un PDF mínimo con `n` páginas, que poppler lee.
     fn pdf(archivo: &Path, n: u32) {
@@ -522,7 +528,7 @@ mod tests {
         fs::write(archivo, t).unwrap();
     }
 
-    /// Una carpeta de examen con `1_Legislacion.pdf` de 5 páginas, para los temas `rgpd` y `lssi`.
+    /// Una carpeta de examen con `1_Legislacion.pdf` de 5 páginas, para los apartados `rgpd` y `lssi`.
     fn carpeta() -> (tempfile::TempDir, Examen) {
         let dir = tempfile::tempdir().unwrap();
         fs::create_dir(dir.path().join("pdfs")).unwrap();
@@ -534,19 +540,24 @@ mod tests {
             minutos: 25,
             penalizacion: 0.25,
             pdfs: BTreeMap::from([
-                ("1_Legislacion.pdf".into(), vec!["rgpd".into(), "lssi".into()]),
-                ("2_Teoria.pdf".into(), vec!["ens".into()]),
+                ("1_Legislacion.pdf".into(), tema("Legislación", &["rgpd", "lssi"])),
+                ("2_Teoria.pdf".into(), tema("Teoría", &["ens"])),
             ]),
+            apartados: ["rgpd", "lssi", "ens"].map(|a| (a.into(), a.to_uppercase())).into(),
             sin_pregunta: BTreeMap::new(),
         };
         (dir, examen)
+    }
+
+    fn tema(nombre: &str, apartados: &[&str]) -> Tema {
+        Tema { nombre: nombre.into(), apartados: apartados.iter().map(|a| a.to_string()).collect() }
     }
 
     fn pregunta(id: &str) -> Pregunta {
         Pregunta {
             id: id.into(),
             concepto: "rgpd-brecha-plazo".into(),
-            tema: "rgpd".into(),
+            apartado: "rgpd".into(),
             pregunta: "¿En qué plazo notifica el responsable una brecha?".into(),
             correcta: "72 horas".into(),
             distractores: vec!["24 horas".into(), "Un mes".into(), "48 horas".into()],
@@ -579,8 +590,16 @@ mod tests {
     }
 
     #[test]
-    fn un_tema_que_no_es_de_su_pdf_falla() {
-        un_error(&con_pareja(Pregunta { tema: "ens".into(), ..pregunta("rgpd-001") }), "el tema ens");
+    fn un_apartado_que_no_es_de_su_pdf_falla() {
+        un_error(&con_pareja(Pregunta { apartado: "ens".into(), ..pregunta("rgpd-001") }), "el apartado ens");
+    }
+
+    #[test]
+    fn un_apartado_sin_nombre_falla() {
+        let (dir, mut examen) = carpeta();
+        examen.apartados.remove("ens");
+        let errores = comprobar(&con_pareja(pregunta("rgpd-001")), &examen, dir.path());
+        assert_eq!(errores, ["2_Teoria.pdf: el apartado ens no tiene nombre en apartados de examen.json"]);
     }
 
     #[test]
@@ -642,8 +661,8 @@ mod tests {
     }
 
     #[test]
-    fn una_linea_corta_o_un_matiz_repetido_en_el_tema_es_un_aviso() {
-        let con = |id: &str, tema: &str, e: &str| Pregunta { tema: tema.into(), explicacion: e.into(), ..pregunta(id) };
+    fn una_linea_corta_o_un_matiz_repetido_en_el_apartado_es_un_aviso() {
+        let con = |id: &str, apartado: &str, e: &str| Pregunta { apartado: apartado.into(), explicacion: e.into(), ..pregunta(id) };
         let buena = "✓ El responsable notifica la brecha en 72 horas desde que la conoce.\n✗ «24 horas»: el plazo es de 72";
         assert!(explicaciones(&[con("a", "rgpd", buena), con("b", "lssi", buena)]).is_empty());
         assert_eq!(explicaciones(&[con("a", "rgpd", "✓ Son 72 horas.")]), ["a: la línea ✓ tiene 3 palabras, menos de 8"]);
@@ -689,7 +708,7 @@ mod tests {
     /// La carpeta con `examen.json`, un banco con `rgpd-007` y `rgpd-s02`, y el borrador dado.
     fn para_importar(borrador: &str) -> tempfile::TempDir {
         let (dir, mut examen) = carpeta();
-        examen.pdfs.insert("3_Otro.pdf".into(), vec!["lssi".into()]);
+        examen.pdfs.insert("3_Otro.pdf".into(), tema("Otro", &["lssi"]));
         fs::write(dir.path().join("examen.json"), serde_json::to_string(&examen).unwrap()).unwrap();
         let banco = [pregunta("rgpd-007"), Pregunta { concepto: "sigla-aepd".into(), ..pregunta("rgpd-s02") }];
         fs::write(dir.path().join("preguntas.json"), serde_json::to_string(&banco).unwrap()).unwrap();
@@ -709,7 +728,7 @@ mod tests {
             serde_json::json!({
                 "id": "rgpd-008",
                 "concepto": "rgpd-brecha-nuevo",
-                "tema": "rgpd",
+                "apartado": "rgpd",
                 "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 5 },
                 "pregunta": "¿En qué plazo notifica el responsable una brecha?",
                 "correcta": "72 horas",
@@ -731,13 +750,13 @@ mod tests {
             ("\n".into(), "rgpd", "el borrador no tiene bloques"),
             (nuevo.replace("✓ El DPD", "El DPD"), "rgpd", "sigla-dpd · p2: el bloque no tiene una línea ✓"),
             (nuevo.replace(" · p5", ""), "rgpd", "rgpd-brecha-nuevo: el encabezado no es"),
-            (nuevo.clone(), "lssi", "el tema lssi tiene 2 PDF en examen.json, y no 1"),
-            (nuevo.clone(), "nada", "el tema nada tiene 0 PDF"),
+            (nuevo.clone(), "lssi", "el apartado lssi tiene 2 PDF en examen.json, y no 1"),
+            (nuevo.clone(), "nada", "el apartado nada tiene 0 PDF"),
         ];
-        for (borrador, tema, error) in casos {
+        for (borrador, apartado, error) in casos {
             let dir = para_importar(&borrador);
             let antes = fs::read_to_string(dir.path().join("preguntas.json")).unwrap();
-            let e = importar(dir.path(), tema, &dir.path().join("borrador.md")).unwrap_err();
+            let e = importar(dir.path(), apartado, &dir.path().join("borrador.md")).unwrap_err();
             assert!(e.contains(error), "{e}");
             assert_eq!(fs::read_to_string(dir.path().join("preguntas.json")).unwrap(), antes);
         }
@@ -834,26 +853,26 @@ mod tests {
         examen.sin_pregunta.insert("1_Legislacion.pdf".into(), BTreeMap::from([("1".into(), "portada".into())]));
         escribir(&c.join("examen.json"), &examen).unwrap();
         let mut otra = pregunta("e1");
-        otra.tema = "ens".into();
+        otra.apartado = "ens".into();
         escribir(&c.join("preguntas.json"), &vec![pregunta("r1"), otra]).unwrap();
-        let temas = vec!["rgpd".to_string()];
+        let apartados = vec!["rgpd".to_string()];
         fs::write(c.join("respuestas.jsonl"), "{\"id\":\"r1\",\"ts\":1,\"resultado\":\"Acierto\",\"seguro\":true}\n").unwrap();
-        assert!(preparar(c, &temas).unwrap_err().contains("respuestas.jsonl"));
+        assert!(preparar(c, &apartados).unwrap_err().contains("respuestas.jsonl"));
         fs::remove_file(c.join("respuestas.jsonl")).unwrap();
 
-        preparar(c, &temas).unwrap();
+        preparar(c, &apartados).unwrap();
         let banco: Vec<Pregunta> = leer(&c.join("preguntas.json")).unwrap();
         assert_eq!(banco.iter().map(|p| p.id.as_str()).collect::<Vec<_>>(), ["e1"]);
         assert!(leer::<Examen>(&c.join("examen.json")).unwrap().sin_pregunta.is_empty());
         let t = c.join("trabajo/rgpd");
         assert!(t.join("pdfs/1_Legislacion.pdf").exists());
-        assert!(preparar(c, &temas).unwrap_err().contains("ya existe"));
+        assert!(preparar(c, &apartados).unwrap_err().contains("ya existe"));
 
         escribir(&t.join("preguntas.json"), &vec![pregunta("r2")]).unwrap();
         escribir(&t.join("examen.json"), &examen).unwrap();
-        assert_eq!(montar(c, &temas).unwrap(), 1);
+        assert_eq!(montar(c, &apartados).unwrap(), 1);
         assert_eq!(leer::<Vec<Pregunta>>(&c.join("preguntas.json")).unwrap().len(), 2);
         assert_eq!(leer::<Examen>(&c.join("examen.json")).unwrap().sin_pregunta, examen.sin_pregunta);
-        assert!(montar(c, &temas).unwrap_err().contains("r2"));
+        assert!(montar(c, &apartados).unwrap_err().contains("r2"));
     }
 }

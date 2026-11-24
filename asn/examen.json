@@ -5,30 +5,64 @@
   "minutos": 45,
   "penalizacion": 0.0,
   "pdfs": {
-    "1_Introduccion.pdf": [
-      "introduccion"
-    ],
-    "2_Ciclo_de_vida.pdf": [
-      "ciclo-de-vida"
-    ],
-    "3_Alta_disponibilidad.pdf": [
-      "alta-disponibilidad"
-    ],
-    "4_Despliegue.pdf": [
-      "despliegue"
-    ],
-    "5_Monitorizacion.pdf": [
-      "monitorizacion"
-    ],
-    "6.1_Organizacion.pdf": [
-      "organizacion"
-    ],
-    "6.2_DFIR.pdf": [
-      "dfir"
-    ],
-    "S_Contenedores.pdf": [
-      "contenedores"
-    ]
+    "1_Introduccion.pdf": {
+      "nombre": "1. Introducción",
+      "apartados": [
+        "introduccion"
+      ]
+    },
+    "2_Ciclo_de_vida.pdf": {
+      "nombre": "2. Ciclo de vida",
+      "apartados": [
+        "ciclo-de-vida"
+      ]
+    },
+    "3_Alta_disponibilidad.pdf": {
+      "nombre": "3. Alta disponibilidad",
+      "apartados": [
+        "alta-disponibilidad"
+      ]
+    },
+    "4_Despliegue.pdf": {
+      "nombre": "4. Despliegue",
+      "apartados": [
+        "despliegue"
+      ]
+    },
+    "5_Monitorizacion.pdf": {
+      "nombre": "5. Monitorización",
+      "apartados": [
+        "monitorizacion"
+      ]
+    },
+    "6.1_Organizacion.pdf": {
+      "nombre": "6.1. Organización",
+      "apartados": [
+        "organizacion"
+      ]
+    },
+    "6.2_DFIR.pdf": {
+      "nombre": "6.2. DFIR",
+      "apartados": [
+        "dfir"
+      ]
+    },
+    "S_Contenedores.pdf": {
+      "nombre": "Seminario de contenedores",
+      "apartados": [
+        "contenedores"
+      ]
+    }
+  },
+  "apartados": {
+    "introduccion": "Introducción",
+    "ciclo-de-vida": "Ciclo de vida",
+    "alta-disponibilidad": "Alta disponibilidad",
+    "despliegue": "Despliegue",
+    "monitorizacion": "Monitorización",
+    "organizacion": "Organización",
+    "dfir": "DFIR",
+    "contenedores": "Contenedores"
   },
   "sin_pregunta": {
     "1_Introduccion.pdf": {

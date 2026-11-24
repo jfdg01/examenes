@@ -7,7 +7,7 @@ use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
 
 use crate::{
-    Cierre, Columnas, Correccion, Datos, Edicion, Editada, Guardado, Inicio, NotaDelSimulacro, PreguntaDeSesion, Respuesta,
+    Cierre, Columnas, Correccion, Datos, Edicion, Editada, Guardado, Inicio, NotaDelSimulacro, Par, PreguntaDeSesion, Respuesta,
     RondaAMedias, Simulacro, Tirador,
 };
 
@@ -24,6 +24,17 @@ fn dar<T: Tsify + Serialize>(rust: T) -> Js<T> {
     Ok(Ts::from_rust(&rust)?)
 }
 
+/// Los pares marcados. Sin selección, todo está marcado.
+fn pares(seleccion: Option<Vec<Ts<Par>>>) -> Result<Option<Vec<Par>>, JsError> {
+    seleccion.map(|s| s.into_iter().map(leer).collect()).transpose()
+}
+
+/// Los datos con solo el banco de la selección.
+fn de_la_seleccion(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>) -> Result<Datos, JsError> {
+    let d = leer(datos)?;
+    Ok(Datos { banco: crate::de_la_seleccion(&d.banco, pares(seleccion)?.as_deref()), ..d })
+}
+
 fn en_segundos(ahora: f64) -> i64 {
     (ahora / 1000.0) as i64
 }
@@ -34,20 +45,20 @@ fn azar(ahora: f64) -> crate::Azar {
 }
 
 #[wasm_bindgen]
-pub fn inicio(datos: Ts<Datos>, objetivo: f64) -> Js<Inicio> {
+pub fn inicio(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>, objetivo: f64) -> Js<Inicio> {
     let d = leer(datos)?;
-    dar(crate::inicio(&d.examen, &d.banco, &d.historial, objetivo))
+    dar(crate::inicio(&d.examen, &d.banco, &d.historial, pares(seleccion)?.as_deref(), objetivo))
 }
 
 #[wasm_bindgen]
-pub fn sesion(datos: Ts<Datos>, ahora: f64) -> Result<Vec<Ts<PreguntaDeSesion>>, JsError> {
-    let d = leer(datos)?;
-    crate::sesion(&d.banco, &d.historial, en_segundos(ahora), &mut azar(ahora)).into_iter().map(dar).collect()
+pub fn sesion(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>, ahora: f64) -> Result<Vec<Ts<PreguntaDeSesion>>, JsError> {
+    let d = de_la_seleccion(datos, seleccion)?;
+    crate::sesion(&d.examen, &d.banco, &d.historial, en_segundos(ahora), &mut azar(ahora)).into_iter().map(dar).collect()
 }
 
 #[wasm_bindgen]
-pub fn simulacro(datos: Ts<Datos>, ahora: f64) -> Js<Simulacro> {
-    let d = leer(datos)?;
+pub fn simulacro(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>, ahora: f64) -> Js<Simulacro> {
+    let d = de_la_seleccion(datos, seleccion)?;
     dar(crate::simulacro(&d.examen, &d.banco, &d.historial, &mut azar(ahora)))
 }
 
@@ -86,7 +97,7 @@ pub fn unir(a: Vec<Ts<Respuesta>>, b: Vec<Ts<Respuesta>>) -> Result<Vec<Ts<Respu
 #[wasm_bindgen]
 pub fn restaurar(datos: Ts<Datos>, guardado: Ts<Guardado>, ahora: f64) -> Result<Option<Ts<RondaAMedias>>, JsError> {
     let d = leer(datos)?;
-    crate::restaurar(&d.banco, &d.historial, &leer(guardado)?, &mut azar(ahora)).map(dar).transpose()
+    crate::restaurar(&d.examen, &d.banco, &d.historial, &leer(guardado)?, &mut azar(ahora)).map(dar).transpose()
 }
 
 /// Las columnas del PC antes de mover un tirador.

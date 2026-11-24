@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as nucleo from "./nucleo/nucleo.js";
-  import type { Columnas, Datos, Edicion, Guardado, Nota, NotaDelSimulacro, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
+  import type { Columnas, Datos, Edicion, Guardado, Nota, NotaDelSimulacro, Par, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
   import { aviso, type Marca } from "./Cuadricula.svelte";
   import Final from "./Final.svelte";
   import Hoja from "./Hoja.svelte";
@@ -19,7 +19,9 @@
   let objetivo = $state(Number(localStorage.getItem(claveObjetivo) ?? 5));
   let datos = $state.raw<Datos | null>(null);
   let error = $state("");
-  const inicio = $derived(datos && nucleo.inicio(datos, objetivo));
+  // Los pares marcados del inicio. Sin selección, todo está marcado.
+  let seleccion = $state.raw<Par[] | undefined>(undefined);
+  const inicio = $derived(datos && nucleo.inicio(datos, seleccion, objetivo));
 
   // Una respuesta sin red espera en `localStorage` hasta que llega al servidor.
   const pendientes = (): Respuesta[] => JSON.parse(localStorage.getItem(clavePendientes) ?? "[]");
@@ -75,6 +77,7 @@
     if (typeof local.guardada === "number") local.guardada = new Date(local.guardada).toISOString();
     const g = nucleo.gana(servidor, local);
     enviar(g);
+    seleccion = g.seleccion;
     const r = nucleo.restaurar(datos, g, Date.now());
     if (!r) return;
     ({ preguntas, resultados, simulacro } = r);
@@ -124,7 +127,7 @@
   function guardar() {
     const aMedias = ronda.estado === "Pregunta";
     const ids = preguntas.map((q) => q.id);
-    enviar({ guardada: new Date().toISOString(), ronda: aMedias ? { ids, resultados, simulacro, limite: simulacro ? limite : undefined } : undefined });
+    enviar({ guardada: new Date().toISOString(), ronda: aMedias ? { ids, resultados, simulacro, limite: simulacro ? limite : undefined } : undefined, seleccion });
   }
 
   let ronda = $state<Ronda>({ estado: "Inicio" });
@@ -169,10 +172,10 @@
     if (!datos) return;
     const ahora = Date.now();
     if (comoSimulacro) {
-      const s = nucleo.simulacro(datos, ahora);
+      const s = nucleo.simulacro(datos, seleccion, ahora);
       preguntas = s.preguntas;
       limite = ahora + s.segundos * 1000;
-    } else preguntas = nucleo.sesion(datos, ahora);
+    } else preguntas = nucleo.sesion(datos, seleccion, ahora);
     simulacro = comoSimulacro;
     resultados = preguntas.map(() => undefined);
     elecciones = preguntas.map(() => null);
@@ -288,6 +291,10 @@
     {error}
     onobjetivo={(o) => localStorage.setItem(claveObjetivo, String((objetivo = o)))}
     onempezar={empezar}
+    onseleccion={(s) => {
+      seleccion = s;
+      guardar();
+    }}
   />
 {:else if ronda.estado === "Pregunta" || revisando}
   <!-- El móvil: la línea de arriba, la barra, el cuerpo con su scroll y el pie fijo.

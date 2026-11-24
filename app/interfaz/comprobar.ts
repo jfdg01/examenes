@@ -103,6 +103,26 @@ try {
     await lista.screenshot({ path: `capturas/${nombre}-lista.png` });
     await lista.locator(`.examen[href="/${nombre}/"]`).click();
     await lista.getByText("Empezar la sesión").waitFor();
+
+    // La selección: un tema desmarcado sale de la tarjeta y queda tras recargar. Sin nada marcado, los botones no van.
+    const temas = lista.locator(".tema input");
+    assert.equal(await temas.count(), 5, "una casilla por tema de LN");
+    await temas.nth(1).uncheck();
+    await lista.getByText(/, con 4 de 5 temas$/).waitFor();
+    await lista.reload();
+    await lista.getByText(/, con 4 de 5 temas$/).waitFor();
+    assert(!(await temas.nth(1).isChecked()), "la selección vuelve al recargar");
+    await lista.locator(".apartado input").first().uncheck();
+    assert(await lista.evaluate(() => (document.querySelector(".tema input") as HTMLInputElement).indeterminate), "un tema a medias");
+    await lista.screenshot({ path: `capturas/${nombre}-seleccion.png`, fullPage: true });
+    // Un clic en un tema a medias lo marca entero.
+    await temas.nth(0).click();
+    assert(await lista.locator(".apartado input").first().isChecked(), "un clic en un tema a medias marca sus apartados");
+    for (let k = 0; k < 5; k++) await temas.nth(k).setChecked(false);
+    assert(await lista.getByText("Empezar la sesión").isDisabled(), "sin nada marcado, la sesión no empieza");
+    assert(await lista.getByText(/^Simulacro/).isDisabled(), "sin nada marcado, el simulacro no empieza");
+    for (let k = 0; k < 5; k++) await temas.nth(k).setChecked(true);
+    assert.equal(await lista.getByText(/ temas$/).count(), 0, "con todo marcado, la tarjeta no nombra los temas");
     await lista.locator(".volver").click();
     await lista.locator(".examen").first().waitFor();
     assert.equal(new URL(lista.url()).pathname, "/", "el enlace del inicio vuelve a la lista");

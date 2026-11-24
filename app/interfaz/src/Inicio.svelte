@@ -1,13 +1,25 @@
 <script lang="ts">
-  import type { Inicio } from "./nucleo/nucleo.js";
+  import type { Inicio, Par, TemaDelInicio } from "./nucleo/nucleo.js";
 
-  let { inicio, objetivo, error, onobjetivo, onempezar }: {
+  let { inicio, objetivo, error, onobjetivo, onempezar, onseleccion }: {
     inicio: Inicio | null;
     objetivo: number;
     error: string;
     onobjetivo: (objetivo: number) => void;
     onempezar: (simulacro: boolean) => void;
+    onseleccion: (seleccion: Par[]) => void;
   } = $props();
+
+  // Los pares marcados, con los `apartados` del tema `t` en `marcado`.
+  function marcar(temas: TemaDelInicio[], t: TemaDelInicio, apartados: string[], marcado: boolean) {
+    onseleccion(
+      temas.flatMap((u) =>
+        u.apartados
+          .filter((a) => (u.pdf === t.pdf && apartados.includes(a.apartado) ? marcado : a.marcado))
+          .map((a) => ({ pdf: u.pdf, apartado: a.apartado })),
+      ),
+    );
+  }
 </script>
 
 <main class="mx-auto max-w-[560px] p-4">
@@ -25,7 +37,7 @@
         <i class="bg-linea" style:flex={t.sin_ver}></i>
       </div>
       <p class="mt-1.5 text-[13px] text-tenue">
-        Sabes {t.sabes} · No sabes {t.no_sabes} · Sin ver {t.sin_ver}, de {t.sabes + t.no_sabes + t.sin_ver} conceptos
+        Sabes {t.sabes} · No sabes {t.no_sabes} · Sin ver {t.sin_ver}, de {t.sabes + t.no_sabes + t.sin_ver} conceptos{#if inicio.parte}, {inicio.parte}{/if}
       </p>
       <div class="my-3 rounded-xl bg-tarjeta p-3.5">
         <label class="flex items-center gap-3">
@@ -84,12 +96,44 @@
           {/each}
         </details>
       </div>
+      <fieldset class="my-3 rounded-xl bg-tarjeta p-3.5 text-[14px]">
+        {#each inicio.temas as tema (tema.pdf)}
+          {@const marcados = tema.apartados.filter((a) => a.marcado).length}
+          <label class="tema flex items-center gap-2.5 py-1">
+            <input
+              class="size-4 accent-acento"
+              type="checkbox"
+              checked={marcados === tema.apartados.length}
+              indeterminate={marcados > 0 && marcados < tema.apartados.length}
+              onchange={(e) => marcar(inicio.temas, tema, tema.apartados.map((a) => a.apartado), e.currentTarget.checked)}
+            />
+            <span class="flex-1 font-semibold">{tema.nombre}</span>
+            <span class="text-[13px] text-tenue">{tema.conceptos} conceptos</span>
+          </label>
+          {#if tema.apartados.length > 1}
+            {#each tema.apartados as a (a.apartado)}
+              <label class="apartado ml-6.5 flex items-center gap-2.5 py-0.5 text-tenue">
+                <input
+                  class="size-4 accent-acento"
+                  type="checkbox"
+                  checked={a.marcado}
+                  onchange={(e) => marcar(inicio.temas, tema, [a.apartado], e.currentTarget.checked)}
+                />
+                <span class="flex-1">{a.nombre}</span>
+                <span class="text-[13px]">{a.conceptos}</span>
+              </label>
+            {/each}
+          {/if}
+        {/each}
+      </fieldset>
       <button
-        class="my-3 block w-full cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento"
+        class="my-3 block w-full cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento disabled:cursor-default disabled:opacity-50"
+        disabled={inicio.sesion === 0}
         onclick={() => onempezar(false)}>Empezar la sesión ({inicio.sesion} preguntas)</button
       >
       <button
-        class="my-3 block w-full cursor-pointer rounded-xl border-2 border-linea bg-tarjeta p-4 text-[16px] font-semibold"
+        class="my-3 block w-full cursor-pointer rounded-xl border-2 border-linea bg-tarjeta p-4 text-[16px] font-semibold disabled:cursor-default disabled:opacity-50"
+        disabled={inicio.simulacro === 0}
         onclick={() => onempezar(true)}>Simulacro ({inicio.simulacro} preguntas)</button
       >
     {/if}

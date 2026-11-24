@@ -5,21 +5,43 @@
   "minutos": 25,
   "penalizacion": 0.3333333333333333,
   "pdfs": {
-    "1_Introduccion.pdf": [
-      "introduccion"
-    ],
-    "2_Claves.pdf": [
-      "claves"
-    ],
-    "3_Transporte.pdf": [
-      "transporte"
-    ],
-    "4_Aplicacion.pdf": [
-      "aplicacion"
-    ],
-    "E_SSL_TLS.pdf": [
-      "ssl-tls"
-    ]
+    "1_Introduccion.pdf": {
+      "nombre": "1. Introducción",
+      "apartados": [
+        "introduccion"
+      ]
+    },
+    "2_Claves.pdf": {
+      "nombre": "2. Claves",
+      "apartados": [
+        "claves"
+      ]
+    },
+    "3_Transporte.pdf": {
+      "nombre": "3. Transporte",
+      "apartados": [
+        "transporte"
+      ]
+    },
+    "4_Aplicacion.pdf": {
+      "nombre": "4. Aplicación",
+      "apartados": [
+        "aplicacion"
+      ]
+    },
+    "E_SSL_TLS.pdf": {
+      "nombre": "SSL/TLS: historia de un protocolo",
+      "apartados": [
+        "ssl-tls"
+      ]
+    }
+  },
+  "apartados": {
+    "introduccion": "Introducción",
+    "claves": "Claves",
+    "transporte": "Transporte",
+    "aplicacion": "Aplicación",
+    "ssl-tls": "SSL/TLS"
   },
   "sin_pregunta": {
     "1_Introduccion.pdf": {

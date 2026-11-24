@@ -2,8 +2,8 @@ use std::path::Path;
 use std::process::ExitCode;
 
 const USO: &str = "Uso: banco comprobar <carpeta> | banco paginas <carpeta> | banco revision <carpeta> <informe>... \
-                   | banco importar <carpeta> <tema> <borrador> | banco preparar <carpeta> <tema>... \
-                   | banco montar <carpeta> <tema>...";
+                   | banco importar <carpeta> <apartado> <borrador> | banco preparar <carpeta> <apartado>... \
+                   | banco montar <carpeta> <apartado>...";
 
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
@@ -22,7 +22,7 @@ fn main() -> ExitCode {
             true
         }),
         "importar" => match resto {
-            [tema, borrador] => banco::importar(carpeta, tema, Path::new(borrador)).map(|ids| {
+            [apartado, borrador] => banco::importar(carpeta, apartado, Path::new(borrador)).map(|ids| {
                 println!("{} preguntas añadidas: {}", ids.len(), ids.join(", "));
                 true
             }),

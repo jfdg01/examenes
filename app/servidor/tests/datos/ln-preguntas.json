@@ -2,7 +2,7 @@
   {
     "id": "rgpd-001",
     "concepto": "rgpd-brecha-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": {
       "pdf": "1_Legislacion.pdf",
       "pagina": 38
@@ -19,7 +19,7 @@
   {
     "id": "rgpd-002",
     "concepto": "lopdgdd-edad-consentimiento",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": {
       "pdf": "1_Legislacion.pdf",
       "pagina": 19
@@ -36,7 +36,7 @@
   {
     "id": "rgpd-003",
     "concepto": "rgpd-sanciones-maximo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": {
       "pdf": "1_Legislacion.pdf",
       "pagina": 43
@@ -53,7 +53,7 @@
   {
     "id": "rgpd-004",
     "concepto": "rgpd-encargado-definicion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": {
       "pdf": "1_Legislacion.pdf",
       "pagina": 26
@@ -70,7 +70,7 @@
   {
     "id": "rgpd-005",
     "concepto": "lopdgdd-morosos",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": {
       "pdf": "1_Legislacion.pdf",
       "pagina": 19
@@ -87,7 +87,7 @@
   {
     "id": "ens-001",
     "concepto": "sgsi-definicion",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": {
       "pdf": "2A _Teoría.pdf",
       "pagina": 5

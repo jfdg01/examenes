@@ -13,7 +13,7 @@ fn crear_examen(raiz: &Path, carpeta: &str, titulo: &str, banco: Option<&str>) {
     fs::create_dir(&dir).unwrap();
     fs::write(
         dir.join("examen.json"),
-        json!({ "titulo": titulo, "preguntas": 20, "opciones": 4, "minutos": 25, "penalizacion": 0.25, "pdfs": {} }).to_string(),
+        json!({ "titulo": titulo, "preguntas": 20, "opciones": 4, "minutos": 25, "penalizacion": 0.25, "pdfs": {}, "apartados": {} }).to_string(),
     )
     .unwrap();
     if let Some(banco) = banco {
@@ -179,7 +179,8 @@ async fn la_ronda_guardada_vuelve_igual() {
     assert_eq!(ronda(&url).await, json!({ "guardada": "1970-01-01T00:00:00Z", "ronda": null }));
 
     let g = json!({ "guardada": "2026-11-21T10:51:16.012Z", "ronda": {
-        "ids": ["rgpd-001", "rgpd-002"], "resultados": ["Blanco"], "simulacro": true, "limite": 1_795_185_376_012_u64 } });
+        "ids": ["rgpd-001", "rgpd-002"], "resultados": ["Blanco"], "simulacro": true, "limite": 1_795_185_376_012_u64 },
+        "seleccion": [{ "pdf": "1_Legislacion.pdf", "apartado": "rgpd" }] });
     assert_eq!(guardar_ronda(&url, &g).await, 204);
     assert_eq!(ronda(&url).await, g);
     assert_eq!(serde_json::from_str::<Value>(&fs::read_to_string(raiz.path().join("ln/ronda.json")).unwrap()).unwrap(), g);

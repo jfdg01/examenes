@@ -107,9 +107,9 @@
 >
   <span class="flex-1 truncate">
     <!-- La posición en la ronda va en el botón de la cuadrícula. -->
-    {#if revision}Revisión · {q.tema}
-    {:else if simulacro}{Math.floor(restante / 60)}:{String(restante % 60).padStart(2, "0")} · {q.tema}
-    {:else}{q.tema} · {q.paso}{/if}
+    {#if revision}Revisión · {q.apartado}
+    {:else if simulacro}{Math.floor(restante / 60)}:{String(restante % 60).padStart(2, "0")} · {q.apartado}
+    {:else}{q.apartado} · {q.paso}{/if}
   </span>
   <button
     class={[accion, borrador ? "border-acento text-acento" : "border-linea text-tenue"]}

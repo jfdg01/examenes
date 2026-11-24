@@ -2,7 +2,7 @@
   {
     "id": "rgpd-001",
     "concepto": "rgpd-deroga-directiva",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
     "pregunta": "¿A qué norma deroga y sustituye el RGPD (Reglamento (UE) 2016/679)?",
     "correcta": "La Directiva 95/46/CE",
@@ -12,7 +12,7 @@
   {
     "id": "rgpd-002",
     "concepto": "rgpd-deroga-directiva",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
     "pregunta": "¿Qué norma deroga y sustituye la Directiva 95/46/CE?",
     "correcta": "El Reglamento 2016/679 (RGPD)",
@@ -22,7 +22,7 @@
   {
     "id": "rgpd-101",
     "concepto": "rgpd-responsabilidad-infraccion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 56 },
     "pregunta": "En caso de infracción, ¿sobre quién recae la responsabilidad?",
     "correcta": "Sobre el responsable del tratamiento",
@@ -32,7 +32,7 @@
   {
     "id": "rgpd-102",
     "concepto": "rgpd-responsabilidad-infraccion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 56 },
     "pregunta": "¿Cómo son las sanciones de la nueva normativa de protección de datos respecto de las que había?",
     "correcta": "Más elevadas, ligadas al volumen de facturación de la empresa",
@@ -42,7 +42,7 @@
   {
     "id": "rgpd-103",
     "concepto": "rgpd-lopdgdd-ley",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 18 },
     "pregunta": "¿Qué hace la LOPDGDD (Ley Orgánica 3/2018) con respecto al RGPD?",
     "correcta": "Adapta el derecho español al modelo que establece el RGPD",
@@ -52,7 +52,7 @@
   {
     "id": "rgpd-006",
     "concepto": "rgpd-lopdgdd-ley",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 18 },
     "pregunta": "¿Qué norma adapta el derecho español al modelo del RGPD?",
     "correcta": "La Ley Orgánica 3/2018 (LOPDGDD)",
@@ -62,7 +62,7 @@
   {
     "id": "rgpd-104",
     "concepto": "rgpd-armonizacion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
     "pregunta": "¿Qué efecto tiene el RGPD sobre las normas de protección de datos de cada país?",
     "correcta": "Las armoniza en todos los Estados miembros de la Unión",
@@ -72,7 +72,7 @@
   {
     "id": "rgpd-105",
     "concepto": "rgpd-armonizacion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
     "pregunta": "Una empresa trata datos en 3 Estados miembros de la Unión. ¿Qué ventaja le da el RGPD?",
     "correcta": "Una misma normativa en los 3 Estados, de aplicación directa",
@@ -82,7 +82,7 @@
   {
     "id": "rgpd-009",
     "concepto": "rgpd-aplicacion-directa",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
     "pregunta": "¿Necesita el RGPD que cada Estado miembro lo transponga a una norma nacional?",
     "correcta": "No: es de aplicación directa en todos los Estados",
@@ -92,7 +92,7 @@
   {
     "id": "rgpd-010",
     "concepto": "rgpd-aplicacion-directa",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 16 },
     "pregunta": "¿Qué diferencia al RGPD de la Directiva 95/46/CE en su forma de aplicarse?",
     "correcta": "El RGPD se aplica directamente, sin transposición nacional",
@@ -102,7 +102,7 @@
   {
     "id": "rgpd-011",
     "concepto": "rgpd-lopd-soporte-fisico",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 14 },
     "pregunta": "¿Qué novedad trae la LOPD (Ley Orgánica 15/1999) frente a la LORTAD?",
     "correcta": "Protege también los datos en soporte físico, no solo los informatizados",
@@ -112,7 +112,7 @@
   {
     "id": "rgpd-012",
     "concepto": "rgpd-lopd-soporte-fisico",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 14 },
     "pregunta": "¿Qué ley española incluye por primera vez los datos personales en soporte físico, como un archivo en papel?",
     "correcta": "La LOPD, Ley Orgánica 15/1999",
@@ -122,7 +122,7 @@
   {
     "id": "rgpd-013",
     "concepto": "rgpd-lopdgdd-edad-consentimiento",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "¿A partir de qué edad puede un menor dar su consentimiento de manera autónoma según la LOPDGDD?",
     "correcta": "14 años",
@@ -132,7 +132,7 @@
   {
     "id": "rgpd-014",
     "concepto": "rgpd-lopdgdd-edad-consentimiento",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "Una red social española recibe el consentimiento de un usuario de 15 años, sin sus padres. ¿Es válido según la LOPDGDD?",
     "correcta": "Sí, porque la edad para consentir es de 14 años",
@@ -142,7 +142,7 @@
   {
     "id": "rgpd-015",
     "concepto": "rgpd-lopdgdd-morosos-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "¿Cuánto tiempo máximo puede estar una deuda en un fichero de morosos según la LOPDGDD?",
     "correcta": "5 años",
@@ -152,7 +152,7 @@
   {
     "id": "rgpd-016",
     "concepto": "rgpd-lopdgdd-morosos-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "¿Qué cambio hace la LOPDGDD en el tiempo máximo de inclusión de una deuda en un fichero de morosos?",
     "correcta": "Lo reduce de 6 a 5 años",
@@ -162,7 +162,7 @@
   {
     "id": "rgpd-017",
     "concepto": "rgpd-lopdgdd-morosos-importe",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "¿Qué importe mínimo debe tener una deuda para entrar en un fichero de morosos según la LOPDGDD?",
     "correcta": "50 €",
@@ -172,7 +172,7 @@
   {
     "id": "rgpd-018",
     "concepto": "rgpd-lopdgdd-morosos-importe",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "Una empresa quiere incluir en un fichero de morosos una deuda de 40 €. ¿Puede según la LOPDGDD?",
     "correcta": "No, porque el importe mínimo es de 50 €",
@@ -182,7 +182,7 @@
   {
     "id": "rgpd-019",
     "concepto": "rgpd-lopdgdd-desconexion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "¿Qué norma recoge el derecho a la desconexión de la vida laboral?",
     "correcta": "La LOPDGDD (Ley Orgánica 3/2018)",
@@ -192,7 +192,7 @@
   {
     "id": "rgpd-020",
     "concepto": "rgpd-lopdgdd-desconexion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "Un trabajador no quiere atender correos de su empresa fuera de su jornada. ¿Qué norma recoge ese derecho a la desconexión?",
     "correcta": "La LOPDGDD (Ley Orgánica 3/2018)",
@@ -202,7 +202,7 @@
   {
     "id": "rgpd-021",
     "concepto": "rgpd-responsable-encargado",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 25 },
     "pregunta": "¿Quién determina los fines y los medios del tratamiento de los datos personales?",
     "correcta": "El responsable del tratamiento",
@@ -212,7 +212,7 @@
   {
     "id": "rgpd-022",
     "concepto": "rgpd-responsable-encargado",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 26 },
     "pregunta": "¿Quién trata los datos personales únicamente por cuenta de otro?",
     "correcta": "El encargado del tratamiento",
@@ -222,7 +222,7 @@
   {
     "id": "rgpd-023",
     "concepto": "rgpd-responsable-encargado",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 26 },
     "pregunta": "Dentro de un grupo de empresas, ¿puede una empresa ser la encargada del tratamiento de otra del mismo grupo?",
     "correcta": "Sí: una de ellas puede actuar como encargada de otra",
@@ -232,7 +232,7 @@
   {
     "id": "rgpd-024",
     "concepto": "rgpd-contrato-encargo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 27 },
     "pregunta": "¿Cómo se formaliza la relación entre el responsable y el encargado del tratamiento?",
     "correcta": "En un contrato con un contenido mínimo fijado",
@@ -242,7 +242,7 @@
   {
     "id": "rgpd-025",
     "concepto": "rgpd-contrato-encargo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 27 },
     "pregunta": "Según el contenido mínimo del contrato de encargo, ¿cómo trata el encargado los datos personales?",
     "correcta": "Solo siguiendo instrucciones documentadas del responsable",
@@ -252,7 +252,7 @@
   {
     "id": "rgpd-026",
     "concepto": "rgpd-accountability-diseno",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 24 },
     "pregunta": "¿Qué significa la «responsabilidad activa» o «accountability»?",
     "correcta": "Ser diligente con todas las medidas, y no solo ante una infracción",
@@ -262,7 +262,7 @@
   {
     "id": "rgpd-027",
     "concepto": "rgpd-accountability-diseno",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 24 },
     "pregunta": "¿Qué principio aplica las medidas de protección de datos desde el momento de diseñar el tratamiento?",
     "correcta": "La protección desde el diseño («privacy by design»)",
@@ -272,7 +272,7 @@
   {
     "id": "rgpd-028",
     "concepto": "rgpd-accountability-diseno",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 24 },
     "pregunta": "Una empresa solo revisa su cumplimiento del RGPD cuando recibe una sanción. ¿Qué idea del RGPD incumple?",
     "correcta": "La responsabilidad activa («accountability»)",
@@ -282,7 +282,7 @@
   {
     "id": "rgpd-029",
     "concepto": "rgpd-ambito-territorial",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 31 },
     "pregunta": "Una empresa sin establecimiento en la UE ofrece un servicio gratuito a residentes en la UE. ¿Se le aplica el RGPD?",
     "correcta": "Sí, porque ofrece servicios a interesados que se encuentran en la Unión",
@@ -292,7 +292,7 @@
   {
     "id": "rgpd-030",
     "concepto": "rgpd-ambito-territorial",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 31 },
     "pregunta": "Un responsable con establecimiento en la UE trata los datos en servidores situados fuera de la UE. ¿Se aplica el RGPD?",
     "correcta": "Sí, con independencia de dónde tenga lugar el tratamiento",
@@ -302,7 +302,7 @@
   {
     "id": "rgpd-031",
     "concepto": "rgpd-fallecidos",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 30 },
     "pregunta": "¿Se aplica el RGPD a los datos de las personas fallecidas?",
     "correcta": "No: el RGPD excluye a las personas fallecidas",
@@ -312,7 +312,7 @@
   {
     "id": "rgpd-032",
     "concepto": "rgpd-fallecidos",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "¿Qué norma ofrece el derecho de acceso a familiares, parejas de hecho o herederos de personas fallecidas?",
     "correcta": "La LOPDGDD (Ley Orgánica 3/2018)",
@@ -322,7 +322,7 @@
   {
     "id": "rgpd-033",
     "concepto": "rgpd-consentimiento",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 31 },
     "pregunta": "¿Qué tipo de consentimiento deben obtener las empresas según el RGPD?",
     "correcta": "Expreso, inequívoco y verificable, y no tácito",
@@ -332,7 +332,7 @@
   {
     "id": "rgpd-034",
     "concepto": "rgpd-consentimiento",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 31 },
     "pregunta": "Una web entiende que el usuario acepta las cookies porque sigue navegando. ¿Es un consentimiento válido según el RGPD?",
     "correcta": "No: es una aceptación tácita, que ya no es posible",
@@ -342,7 +342,7 @@
   {
     "id": "rgpd-035",
     "concepto": "rgpd-consentimiento",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 31 },
     "pregunta": "¿Cómo se da un consentimiento inequívoco según el RGPD?",
     "correcta": "Con una declaración o una clara acción afirmativa",
@@ -352,7 +352,7 @@
   {
     "id": "rgpd-036",
     "concepto": "rgpd-informacion-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 33 },
     "pregunta": "Si los datos personales no se obtienen del interesado, ¿en qué plazo máximo hay que informarle?",
     "correcta": "1 mes desde que se obtienen los datos",
@@ -362,7 +362,7 @@
   {
     "id": "rgpd-037",
     "concepto": "rgpd-informacion-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 33 },
     "pregunta": "Frente a la LOPD, ¿cómo cambia el plazo para informar al interesado de unos datos que no facilitó él?",
     "correcta": "Baja de 3 meses en la LOPD a 1 mes",
@@ -372,7 +372,7 @@
   {
     "id": "rgpd-038",
     "concepto": "rgpd-dpd-obligatorio",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 35 },
     "pregunta": "¿En cuál de estos casos es obligatorio nombrar un Delegado de Protección de Datos?",
     "correcta": "Cuando una autoridad u organismo público hace el tratamiento",
@@ -382,7 +382,7 @@
   {
     "id": "rgpd-039",
     "concepto": "rgpd-dpd-obligatorio",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 35 },
     "pregunta": "Una empresa privada hace de forma masiva el tratamiento de datos de salud como actividad principal. ¿Debe nombrar un DPD?",
     "correcta": "Sí: trata a gran escala categorías especiales de datos",
@@ -392,7 +392,7 @@
   {
     "id": "rgpd-040",
     "concepto": "rgpd-dpd-comunicacion-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 35 },
     "pregunta": "¿En qué plazo comunican el responsable y el encargado a la AEPD el nombramiento de un DPD?",
     "correcta": "10 días",
@@ -402,7 +402,7 @@
   {
     "id": "rgpd-041",
     "concepto": "rgpd-dpd-comunicacion-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 35 },
     "pregunta": "Una empresa cesa a su Delegado de Protección de Datos. ¿Qué plazo tiene para comunicarlo a la autoridad de protección de datos?",
     "correcta": "10 días, como para un nombramiento",
@@ -412,7 +412,7 @@
   {
     "id": "rgpd-042",
     "concepto": "rgpd-brecha-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 38 },
     "pregunta": "¿En qué plazo notifica el responsable una violación de la seguridad de los datos personales?",
     "correcta": "Sin dilación indebida y, si es posible, en 72 horas",
@@ -422,7 +422,7 @@
   {
     "id": "rgpd-043",
     "concepto": "rgpd-brecha-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 38 },
     "pregunta": "¿Desde cuándo se cuentan las 72 horas para notificar una brecha de seguridad?",
     "correcta": "Desde que el responsable conoce la brecha",
@@ -432,7 +432,7 @@
   {
     "id": "rgpd-044",
     "concepto": "rgpd-derechos-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 39 },
     "pregunta": "Ante el ejercicio de un derecho, ¿en qué plazo informa el responsable al interesado sobre sus actuaciones?",
     "correcta": "1 mes",
@@ -442,7 +442,7 @@
   {
     "id": "rgpd-045",
     "concepto": "rgpd-derechos-plazo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 39 },
     "pregunta": "Un interesado ejerce su derecho de acceso el 1 de marzo. ¿Hasta cuándo tiene el responsable para informarle de sus actuaciones?",
     "correcta": "Hasta el 1 de abril, porque el plazo es de 1 mes",
@@ -452,7 +452,7 @@
   {
     "id": "rgpd-046",
     "concepto": "rgpd-derechos-nuevos",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 39 },
     "pregunta": "Además de los derechos ARCO, ¿qué derechos contiene el RGPD?",
     "correcta": "Olvido, portabilidad y limitación del tratamiento",
@@ -462,7 +462,7 @@
   {
     "id": "rgpd-047",
     "concepto": "rgpd-derechos-nuevos",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 39 },
     "pregunta": "¿Cuál de estos derechos añade el RGPD a los derechos ARCO?",
     "correcta": "El derecho a la portabilidad",
@@ -472,7 +472,7 @@
   {
     "id": "rgpd-106",
     "concepto": "rgpd-olvido-alcance",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 40 },
     "pregunta": "¿Qué permite el derecho al olvido frente a un buscador de Internet?",
     "correcta": "Que quite de sus resultados los enlaces de una búsqueda por su nombre",
@@ -482,7 +482,7 @@
   {
     "id": "rgpd-107",
     "concepto": "rgpd-olvido-alcance",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 40 },
     "pregunta": "Un usuario publicó datos propios en una red social y quiere borrarlos. ¿Qué derecho ejerce?",
     "correcta": "El derecho al olvido o de supresión de los datos",
@@ -492,7 +492,7 @@
   {
     "id": "rgpd-108",
     "concepto": "rgpd-limitacion-permitido",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 42 },
     "pregunta": "Con la limitación del tratamiento en vigor, ¿para qué puede tratar el responsable los datos?",
     "correcta": "Para la formulación o defensa de reclamaciones",
@@ -502,7 +502,7 @@
   {
     "id": "rgpd-109",
     "concepto": "rgpd-limitacion-permitido",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 42 },
     "pregunta": "¿Qué efecto tiene la limitación sobre los datos del interesado?",
     "correcta": "Dejan de aplicarse las operaciones de tratamiento previstas",
@@ -512,7 +512,7 @@
   {
     "id": "rgpd-051",
     "concepto": "rgpd-portabilidad-condiciones",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 41 },
     "pregunta": "¿Cuándo puede ejercerse el derecho a la portabilidad?",
     "correcta": "Solo si es automatizado y se basa en consentimiento o contrato",
@@ -522,7 +522,7 @@
   {
     "id": "rgpd-052",
     "concepto": "rgpd-portabilidad-condiciones",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 41 },
     "pregunta": "Una clínica guarda en fichas de papel los datos de sus pacientes. ¿Puede un paciente ejercer la portabilidad sobre ellas?",
     "correcta": "No: solo cabe en un tratamiento automatizado",
@@ -532,7 +532,7 @@
   {
     "id": "rgpd-053",
     "concepto": "rgpd-portabilidad-formato",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 41 },
     "pregunta": "¿En qué formato se entrega la copia de los datos con el derecho a la portabilidad?",
     "correcta": "En un formato estructurado, de uso común y de lectura mecánica",
@@ -542,7 +542,7 @@
   {
     "id": "rgpd-054",
     "concepto": "rgpd-portabilidad-formato",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 41 },
     "pregunta": "¿Qué derecho es una forma avanzada del derecho de acceso, con una copia en formato de lectura mecánica?",
     "correcta": "El derecho a la portabilidad",
@@ -552,7 +552,7 @@
   {
     "id": "rgpd-055",
     "concepto": "rgpd-limitacion-supuestos",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 42 },
     "pregunta": "Unos datos se tratan de forma ilícita, pero el interesado se opone a que se borren. ¿Qué derecho puede ejercer?",
     "correcta": "El derecho a la limitación del tratamiento",
@@ -562,7 +562,7 @@
   {
     "id": "rgpd-056",
     "concepto": "rgpd-limitacion-supuestos",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 42 },
     "pregunta": "Mientras el responsable atiende su solicitud de rectificación, el interesado pide que no se traten sus datos. ¿Qué derecho ejerce?",
     "correcta": "El derecho a la limitación del tratamiento",
@@ -572,7 +572,7 @@
   {
     "id": "rgpd-057",
     "concepto": "rgpd-sanciones-porcentaje",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 43 },
     "pregunta": "Según el temario, ¿qué límite tiene la multa por una infracción más grave cuando el infractor es una empresa?",
     "correcta": "El 4 % del volumen de negocio anual global del ejercicio anterior",
@@ -582,7 +582,7 @@
   {
     "id": "rgpd-058",
     "concepto": "rgpd-sanciones-porcentaje",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 43 },
     "pregunta": "Según el temario, ¿hasta qué porcentaje del volumen de negocio anual global puede llegar la sanción por una infracción leve?",
     "correcta": "2%",
@@ -592,7 +592,7 @@
   {
     "id": "rgpd-059",
     "concepto": "rgpd-medidas-apropiadas",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 43 },
     "pregunta": "¿Establece el RGPD un listado cerrado de medidas de seguridad?",
     "correcta": "No: solo pide medidas «apropiadas» al riesgo",
@@ -602,7 +602,7 @@
   {
     "id": "rgpd-060",
     "concepto": "rgpd-medidas-apropiadas",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 43 },
     "pregunta": "Con el RGPD, ¿qué papel tienen las medidas de seguridad de la LOPD?",
     "correcta": "Sirven de orientación para medir el cumplimiento",
@@ -612,7 +612,7 @@
   {
     "id": "rgpd-061",
     "concepto": "rgpd-categorias-especiales",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 47 },
     "pregunta": "¿Cuál de estos datos es una «categoría especial de datos personales»?",
     "correcta": "La afiliación sindical",
@@ -622,7 +622,7 @@
   {
     "id": "rgpd-062",
     "concepto": "rgpd-categorias-especiales",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 47 },
     "pregunta": "Un hospital guarda el diagnóstico de salud de un paciente. ¿Qué tipo de dato personal es?",
     "correcta": "Un dato personal de categoría especial",
@@ -632,7 +632,7 @@
   {
     "id": "rgpd-063",
     "concepto": "rgpd-registro-excepcion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 48 },
     "pregunta": "¿Qué organizaciones quedan fuera de la obligación de llevar el registro de actividades de tratamiento?",
     "correcta": "Las de menos de 250 trabajadores, sin riesgo ni datos especiales ni penales",
@@ -642,7 +642,7 @@
   {
     "id": "rgpd-064",
     "concepto": "rgpd-registro-excepcion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 48 },
     "pregunta": "Una empresa de 100 trabajadores trata datos de salud. ¿Debe llevar el registro de actividades de tratamiento?",
     "correcta": "Sí, porque son categorías especiales de datos",
@@ -652,7 +652,7 @@
   {
     "id": "rgpd-065",
     "concepto": "rgpd-eipd-cuando",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 49 },
     "pregunta": "¿Cuándo debe realizar el responsable una evaluación de impacto (EIPD)?",
     "correcta": "Antes del tratamiento, si es probable un alto riesgo",
@@ -662,7 +662,7 @@
   {
     "id": "rgpd-066",
     "concepto": "rgpd-eipd-cuando",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 48 },
     "pregunta": "Un tratamiento entraña un alto riesgo para los derechos de las personas. ¿En qué momento hace el responsable la evaluación de impacto?",
     "correcta": "Antes de poner en marcha el tratamiento",
@@ -672,7 +672,7 @@
   {
     "id": "iso27001-001",
     "concepto": "iso27001-dimension-disponibilidad",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 3 },
     "pregunta": "¿Qué dimensión de seguridad asegura que los servicios no se denieguen a los usuarios autorizados?",
     "correcta": "La disponibilidad",
@@ -682,7 +682,7 @@
   {
     "id": "iso27001-002",
     "concepto": "iso27001-dimension-disponibilidad",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 3 },
     "pregunta": "Un ataque deja una web caída durante horas para todos sus usuarios. ¿Qué dimensión de seguridad se pierde?",
     "correcta": "La disponibilidad",
@@ -692,7 +692,7 @@
   {
     "id": "iso27001-003",
     "concepto": "iso27001-dimension-integridad",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 3 },
     "pregunta": "¿Qué dimensión de seguridad asegura que la información no se altera de manera no autorizada?",
     "correcta": "La integridad",
@@ -702,7 +702,7 @@
   {
     "id": "iso27001-004",
     "concepto": "iso27001-dimension-integridad",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 3 },
     "pregunta": "Un empleado lee sin permiso unas nóminas, pero no las modifica. ¿Qué dimensión de seguridad se pierde?",
     "correcta": "La confidencialidad",
@@ -712,7 +712,7 @@
   {
     "id": "iso27001-005",
     "concepto": "iso27001-dimension-integridad",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 3 },
     "pregunta": "Alguien cambia sin autorización el importe de una factura en tránsito. ¿Qué dimensión de seguridad se pierde?",
     "correcta": "La integridad",
@@ -722,7 +722,7 @@
   {
     "id": "iso27001-006",
     "concepto": "iso27001-dimensiones-extra",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 3 },
     "pregunta": "¿Qué dimensión de seguridad añade el RGPD, como capacidad de un sistema de sobreponerse a un ciberincidente?",
     "correcta": "La resiliencia",
@@ -732,7 +732,7 @@
   {
     "id": "iso27001-007",
     "concepto": "iso27001-dimensiones-extra",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 3 },
     "pregunta": "Además de disponibilidad, integridad y confidencialidad, ¿qué dimensiones añade el ENS?",
     "correcta": "Autenticidad, trazabilidad, acceso y conservación",
@@ -742,7 +742,7 @@
   {
     "id": "iso27001-008",
     "concepto": "iso27001-sgsi-definicion",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 5 },
     "pregunta": "¿Sobre qué base se establece, implementa, mantiene y mejora un SGSI según su definición?",
     "correcta": "Sobre los riesgos que afronta la organización",
@@ -752,7 +752,7 @@
   {
     "id": "iso27001-009",
     "concepto": "iso27001-sgsi-definicion",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 5 },
     "pregunta": "¿Qué es un Sistema de Gestión de Seguridad de la Información (SGSI)?",
     "correcta": "Un conjunto de procesos de mejora continua de la seguridad",
@@ -762,7 +762,7 @@
   {
     "id": "iso27001-010",
     "concepto": "iso27001-sgsi-tipos-procesos",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 5 },
     "pregunta": "En un SGSI, ¿qué procesos controlan el funcionamiento del propio sistema y su mejora continua?",
     "correcta": "Los procesos de gestión",
@@ -772,7 +772,7 @@
   {
     "id": "iso27001-101",
     "concepto": "iso27001-sgsi-tipos-procesos",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 5 },
     "pregunta": "Según el temario, ¿qué dos tipos de procesos tiene un SGSI?",
     "correcta": "Los procesos de gestión y los de seguridad",
@@ -782,7 +782,7 @@
   {
     "id": "iso27001-012",
     "concepto": "iso27001-pdca-orden",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 7 },
     "pregunta": "¿Qué orden siguen las fases del ciclo PDCA de un SGSI?",
     "correcta": "Planificar, Hacer, Verificar, Actuar",
@@ -792,7 +792,7 @@
   {
     "id": "iso27001-013",
     "concepto": "iso27001-pdca-orden",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 7 },
     "pregunta": "¿En qué fase del ciclo PDCA se definen el alcance, la política de seguridad y el análisis de riesgos?",
     "correcta": "En la fase Planificar (Plan)",
@@ -802,7 +802,7 @@
   {
     "id": "iso27001-014",
     "concepto": "iso27001-pdca-check",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 8 },
     "pregunta": "¿En qué fase del ciclo PDCA están la auditoría y la revisión de la efectividad de los controles?",
     "correcta": "En la fase Verificar (Check)",
@@ -812,7 +812,7 @@
   {
     "id": "iso27001-015",
     "concepto": "iso27001-pdca-check",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 8 },
     "pregunta": "¿En qué fase del ciclo PDCA se implantan los controles y se gestionan los incidentes de seguridad?",
     "correcta": "En la fase Hacer (Do)",
@@ -822,7 +822,7 @@
   {
     "id": "iso27001-016",
     "concepto": "iso27001-pdca-act",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 9 },
     "pregunta": "¿En qué fase del ciclo PDCA se aplican acciones correctivas frente a las no conformidades de las auditorías?",
     "correcta": "En la fase Actuar (Act)",
@@ -832,7 +832,7 @@
   {
     "id": "iso27001-017",
     "concepto": "iso27001-pdca-act",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 9 },
     "pregunta": "En la fase Actuar, ¿frente a qué se aplican las acciones preventivas?",
     "correcta": "Frente a no conformidades potenciales",
@@ -842,7 +842,7 @@
   {
     "id": "iso27001-102",
     "concepto": "iso27001-requisitos-apartados",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 2 },
     "pregunta": "Según la introducción de la norma, ¿qué es necesario conocer para un SGSI?",
     "correcta": "La organización y su contexto (objetivos de negocio)",
@@ -852,7 +852,7 @@
   {
     "id": "iso27001-019",
     "concepto": "iso27001-requisitos-apartados",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 2 },
     "pregunta": "¿Cuál de estos es uno de los requisitos (apartados 4 a 10) de la UNE-ISO/IEC 27001?",
     "correcta": "El liderazgo",
@@ -862,7 +862,7 @@
   {
     "id": "iso27001-020",
     "concepto": "iso27001-documentacion-niveles",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 2 },
     "pregunta": "En la documentación por niveles de un SGSI, ¿qué demuestran las evidencias o registros?",
     "correcta": "La prueba de que lo previsto se ha ejecutado",
@@ -872,7 +872,7 @@
   {
     "id": "iso27001-021",
     "concepto": "iso27001-documentacion-niveles",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 2 },
     "pregunta": "¿Qué nivel de la documentación de un SGSI recoge las líneas generales de actuación?",
     "correcta": "Las políticas",
@@ -882,7 +882,7 @@
   {
     "id": "iso27001-022",
     "concepto": "iso27001-27001-certificable",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 3 },
     "pregunta": "¿Cuál de estas normas es certificable, según el temario?",
     "correcta": "La ISO/IEC 27001",
@@ -892,7 +892,7 @@
   {
     "id": "iso27001-023",
     "concepto": "iso27001-27001-certificable",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 3 },
     "pregunta": "¿Qué norma es el código de buenas prácticas y el repositorio de controles de seguridad?",
     "correcta": "La ISO/IEC 27002",
@@ -902,7 +902,7 @@
   {
     "id": "iso27001-024",
     "concepto": "iso27001-27001-certificable",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 3 },
     "pregunta": "Una empresa quiere un certificado de su SGSI. ¿Con qué norma se certifica?",
     "correcta": "Con la ISO/IEC 27001",
@@ -912,7 +912,7 @@
   {
     "id": "iso27001-025",
     "concepto": "iso27001-roles",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 5 },
     "pregunta": "En los roles de responsabilidad de un SGSI, ¿quién debe determinar los requisitos de seguridad?",
     "correcta": "Las áreas de negocio",
@@ -922,7 +922,7 @@
   {
     "id": "iso27001-026",
     "concepto": "iso27001-roles",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 5 },
     "pregunta": "¿Qué rol del SGSI resuelve asuntos interdisciplinarios y aprueba directrices y normas?",
     "correcta": "El Comité de Seguridad",
@@ -932,7 +932,7 @@
   {
     "id": "iso27001-027",
     "concepto": "iso27001-roles",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 5 },
     "pregunta": "¿Quién designa los roles y responsabilidades de un SGSI?",
     "correcta": "La dirección de la organización",
@@ -942,7 +942,7 @@
   {
     "id": "iso27001-028",
     "concepto": "iso27001-objetivos",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 7 },
     "pregunta": "¿Qué dos condiciones debe cumplir cada objetivo del SGSI según la ISO 27001?",
     "correcta": "Ser coherentes con la política y medibles",
@@ -952,7 +952,7 @@
   {
     "id": "iso27001-029",
     "concepto": "iso27001-objetivos",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 7 },
     "pregunta": "Un objetivo de seguridad dice «mejorar la seguridad», sin ningún indicador. ¿Qué requisito de la norma incumple?",
     "correcta": "Que los objetivos sean medibles",
@@ -962,7 +962,7 @@
   {
     "id": "iso27001-030",
     "concepto": "iso27001-auditoria-interna-frecuencia",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 12 },
     "pregunta": "¿Con qué frecuencia se lleva a cabo la auditoría interna de un SGSI?",
     "correcta": "Periódicamente, cada año, o si hay cambios",
@@ -972,7 +972,7 @@
   {
     "id": "iso27001-031",
     "concepto": "iso27001-auditoria-interna-frecuencia",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 12 },
     "pregunta": "En el plan de auditorías internas, ¿en qué ciclo debe quedar auditada toda la actividad del SGSI?",
     "correcta": "En un ciclo de 3 años",
@@ -982,7 +982,7 @@
   {
     "id": "iso27001-032",
     "concepto": "iso27001-auditoria-interna-equipo",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 12 },
     "pregunta": "¿Puede ser externo el equipo de una auditoría interna del SGSI?",
     "correcta": "Sí, si es independiente de la actividad auditada",
@@ -992,7 +992,7 @@
   {
     "id": "iso27001-033",
     "concepto": "iso27001-auditoria-interna-equipo",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 12 },
     "pregunta": "¿Qué requisito debe cumplir el equipo que hace la auditoría interna de un SGSI?",
     "correcta": "Ser independiente de la actividad que audita",
@@ -1002,7 +1002,7 @@
   {
     "id": "iso27001-034",
     "concepto": "iso27001-revision-direccion",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 13 },
     "pregunta": "¿Con qué intervalo planificado se hace la revisión por la dirección del SGSI?",
     "correcta": "1 año",
@@ -1012,7 +1012,7 @@
   {
     "id": "iso27001-035",
     "concepto": "iso27001-revision-direccion",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 13 },
     "pregunta": "¿Quién presenta la información en la revisión por la dirección del SGSI?",
     "correcta": "El responsable de seguridad, que reporta a la dirección",
@@ -1022,7 +1022,7 @@
   {
     "id": "iso27001-036",
     "concepto": "iso27001-acciones-correctivas",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 14 },
     "pregunta": "¿A qué dan solución las acciones correctivas del apartado de Mejora de la ISO 27001?",
     "correcta": "A las no conformidades con los requisitos del SGSI",
@@ -1032,7 +1032,7 @@
   {
     "id": "iso27001-037",
     "concepto": "iso27001-acciones-correctivas",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 14 },
     "pregunta": "Un incidente grave de seguridad se repite cada mes. ¿Qué pide la norma en el apartado de Mejora?",
     "correcta": "Una acción correctiva que lo solucione desde el origen",
@@ -1042,7 +1042,7 @@
   {
     "id": "iso27001-103",
     "concepto": "iso27001-27002-categorias",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 14 },
     "pregunta": "En la UNE-ISO/IEC 27002, ¿qué establece el objetivo de control de una categoría?",
     "correcta": "El resultado que se quiere conseguir con la categoría",
@@ -1052,7 +1052,7 @@
   {
     "id": "iso27001-039",
     "concepto": "iso27001-27002-categorias",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 14 },
     "pregunta": "¿Qué es cada categoría de la UNE-ISO/IEC 27002?",
     "correcta": "Un objetivo de control, con controles y una guía de apoyo",
@@ -1062,7 +1062,7 @@
   {
     "id": "iso27001-040",
     "concepto": "iso27001-seguridad-fisica",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 15 },
     "pregunta": "En la seguridad física y del entorno, ¿qué objetivo de control previene el acceso físico no autorizado a las instalaciones?",
     "correcta": "Las áreas seguras (11.1)",
@@ -1072,7 +1072,7 @@
   {
     "id": "iso27001-041",
     "concepto": "iso27001-seguridad-fisica",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 16 },
     "pregunta": "¿En qué objetivo de control está la «política de puesto de trabajo despejado y pantalla limpia»?",
     "correcta": "En la seguridad de los equipos (11.2)",
@@ -1082,7 +1082,7 @@
   {
     "id": "ens-101",
     "concepto": "ens-real-decreto",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 10 },
     "pregunta": "¿Qué crea el Real Decreto del ENS para el uso de los medios electrónicos?",
     "correcta": "Las condiciones necesarias para la confianza en ellos",
@@ -1092,7 +1092,7 @@
   {
     "id": "ens-102",
     "concepto": "ens-real-decreto",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 10 },
     "pregunta": "¿Qué introduce el Real Decreto del ENS en materia de seguridad de la información?",
     "correcta": "Elementos comunes que han de guiar a las administraciones",
@@ -1102,7 +1102,7 @@
   {
     "id": "ens-103",
     "concepto": "ens-ley-acceso-electronico",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 10 },
     "pregunta": "¿Qué derecho de los ciudadanos establece la Ley 11/2007 de Acceso Electrónico?",
     "correcta": "Comunicarse con las Administraciones Públicas por medios telemáticos",
@@ -1112,7 +1112,7 @@
   {
     "id": "ens-104",
     "concepto": "ens-ley-acceso-electronico",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 10 },
     "pregunta": "¿En qué estado está hoy la Ley 11/2007 de Acceso Electrónico?",
     "correcta": "Derogada por una ley posterior al ENS",
@@ -1122,7 +1122,7 @@
   {
     "id": "ens-006",
     "concepto": "ens-dimensiones",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 11 },
     "pregunta": "¿Qué dimensiones aseguran los requisitos mínimos del ENS?",
     "correcta": "Integridad, disponibilidad, autenticidad, confidencialidad y trazabilidad",
@@ -1132,7 +1132,7 @@
   {
     "id": "ens-007",
     "concepto": "ens-dimensiones",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 11 },
     "pregunta": "¿Cuál de estas dimensiones asegura el ENS y no está entre las 3 dimensiones clásicas de la ISO/IEC 27001?",
     "correcta": "La trazabilidad",
@@ -1142,7 +1142,7 @@
   {
     "id": "ens-008",
     "concepto": "ens-ambito",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 12 },
     "pregunta": "¿Qué actividad de una administración queda fuera de la obligación del ENS?",
     "correcta": "La que realiza en régimen de derecho privado",
@@ -1152,7 +1152,7 @@
   {
     "id": "ens-009",
     "concepto": "ens-ambito",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 12 },
     "pregunta": "¿Cuál de estas entidades está en el ámbito de aplicación del ENS?",
     "correcta": "Una universidad pública, como una fundación pública",
@@ -1162,7 +1162,7 @@
   {
     "id": "ens-010",
     "concepto": "ens-ambito",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 12 },
     "pregunta": "¿A qué relaciones se aplica el ENS, además de a las propias AAPP?",
     "correcta": "A los ciudadanos con las AAPP y a las AAPP entre sí",
@@ -1172,7 +1172,7 @@
   {
     "id": "ens-011",
     "concepto": "ens-ccn-cert",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 13 },
     "pregunta": "¿De quién depende el CCN-CERT?",
     "correcta": "Del Centro Criptológico Nacional (CCN)",
@@ -1182,7 +1182,7 @@
   {
     "id": "ens-012",
     "concepto": "ens-ccn-cert",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 13 },
     "pregunta": "¿Qué estructura es la responsable de la respuesta ante incidentes de seguridad en el ámbito del ENS?",
     "correcta": "El CCN-CERT",
@@ -1192,7 +1192,7 @@
   {
     "id": "ens-013",
     "concepto": "ens-ccn-cert",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 13 },
     "pregunta": "¿Qué son los documentos CCN-STIC?",
     "correcta": "Normas, guías y recomendaciones del CCN",
@@ -1202,7 +1202,7 @@
   {
     "id": "ens-014",
     "concepto": "ens-principios",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 16 },
     "pregunta": "¿Cuál de estos es un principio básico del ENS?",
     "correcta": "La seguridad como función diferenciadora",
@@ -1212,7 +1212,7 @@
   {
     "id": "ens-015",
     "concepto": "ens-principios",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 20 },
     "pregunta": "¿Cuál de estos es un requisito mínimo del ENS y no un principio básico?",
     "correcta": "La seguridad por defecto",
@@ -1222,7 +1222,7 @@
   {
     "id": "ens-016",
     "concepto": "ens-proceso-integral",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 16 },
     "pregunta": "Según el principio de «seguridad como proceso integral» del ENS, ¿qué elementos constituyen la seguridad?",
     "correcta": "Los técnicos, humanos, materiales y organizativos",
@@ -1232,7 +1232,7 @@
   {
     "id": "ens-017",
     "concepto": "ens-proceso-integral",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 16 },
     "pregunta": "Una administración se limita a hacer copias de seguridad y a poner contraseñas, y cree que ya cumple el ENS. ¿Qué principio básico olvida?",
     "correcta": "La seguridad como un proceso integral",
@@ -1242,7 +1242,7 @@
   {
     "id": "ens-018",
     "concepto": "ens-riesgos-minimizar",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 17 },
     "pregunta": "Según el ENS, ¿qué consigue la gestión de riesgos?",
     "correcta": "Minimizar los riesgos, que no se anulan",
@@ -1252,7 +1252,7 @@
   {
     "id": "ens-019",
     "concepto": "ens-riesgos-minimizar",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 17 },
     "pregunta": "Según el ENS, además de entre la naturaleza de los datos y su tratamiento, ¿qué otro equilibrio hay que mantener?",
     "correcta": "Entre los riesgos y las medidas de seguridad",
@@ -1262,7 +1262,7 @@
   {
     "id": "ens-020",
     "concepto": "ens-prevencion-reaccion",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 17 },
     "pregunta": "En el ENS, ¿qué medidas permiten restaurar la información y la continuidad de los servicios?",
     "correcta": "Las medidas de recuperación",
@@ -1272,7 +1272,7 @@
   {
     "id": "ens-021",
     "concepto": "ens-prevencion-reaccion",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 17 },
     "pregunta": "En el ENS, ¿qué medidas reducen la posibilidad de que una amenaza llegue a materializarse?",
     "correcta": "Las medidas de prevención",
@@ -1282,7 +1282,7 @@
   {
     "id": "ens-022",
     "concepto": "ens-lineas-defensa",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 18 },
     "pregunta": "¿Qué pide el principio de «líneas de defensa» del ENS?",
     "correcta": "Una protección en múltiples capas",
@@ -1292,7 +1292,7 @@
   {
     "id": "ens-023",
     "concepto": "ens-lineas-defensa",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 18 },
     "pregunta": "Un sistema tiene cortafuegos, antivirus y control de accesos, para ganar tiempo ante un ataque. ¿Qué principio del ENS aplica?",
     "correcta": "Las líneas de defensa",
@@ -1302,7 +1302,7 @@
   {
     "id": "ens-024",
     "concepto": "ens-reevaluacion",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 18 },
     "pregunta": "Según el principio de reevaluación periódica del ENS, ¿con qué frecuencia mínima se evalúan y actualizan las medidas y los riesgos?",
     "correcta": "Al menos cada año",
@@ -1312,7 +1312,7 @@
   {
     "id": "ens-025",
     "concepto": "ens-reevaluacion",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 24 },
     "pregunta": "¿Cada cuánto tiempo se realizan las auditorías del ENS, dentro de la mejora continua del proceso de seguridad?",
     "correcta": "Cada 2 años, o tras cambios relevantes en el sistema",
@@ -1322,7 +1322,7 @@
   {
     "id": "ens-026",
     "concepto": "ens-responsables",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 19 },
     "pregunta": "En el ENS, ¿quién fija los requisitos de seguridad de los datos que maneja la organización?",
     "correcta": "El Responsable de la Información",
@@ -1332,7 +1332,7 @@
   {
     "id": "ens-027",
     "concepto": "ens-responsables",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 19 },
     "pregunta": "En el ENS, ¿quién toma las decisiones para satisfacer los requisitos de la información y de los servicios?",
     "correcta": "El Responsable de Seguridad",
@@ -1342,7 +1342,7 @@
   {
     "id": "ens-028",
     "concepto": "ens-responsables",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 19 },
     "pregunta": "¿Qué principio del ENS separa la seguridad de los sistemas de la política de prestación de servicios?",
     "correcta": "La seguridad como función diferenciadora",
@@ -1352,7 +1352,7 @@
   {
     "id": "ens-105",
     "concepto": "ens-requisitos-minimos",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 20 },
     "pregunta": "¿Qué permite hacer el análisis de riesgos del ENS?",
     "correcta": "Seleccionar las medidas de seguridad necesarias",
@@ -1362,7 +1362,7 @@
   {
     "id": "ens-106",
     "concepto": "ens-requisitos-minimos",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 20 },
     "pregunta": "Según el requisito de implantación del proceso de seguridad del ENS, ¿a quién hay que involucrar?",
     "correcta": "A la totalidad del personal de la entidad",
@@ -1372,7 +1372,7 @@
   {
     "id": "ens-031",
     "concepto": "ens-seguridad-defecto",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 22 },
     "pregunta": "Según el requisito de «seguridad por defecto» del ENS, ¿qué debe ofrecer el sistema?",
     "correcta": "La funcionalidad mínima que el sistema requiere",
@@ -1382,7 +1382,7 @@
   {
     "id": "ens-032",
     "concepto": "ens-seguridad-defecto",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 22 },
     "pregunta": "Una administración desactiva los servicios de un servidor que no usa. ¿Qué requisito mínimo del ENS aplica?",
     "correcta": "La seguridad por defecto",
@@ -1392,7 +1392,7 @@
   {
     "id": "ens-033",
     "concepto": "ens-categorias",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 25 },
     "pregunta": "¿En qué categorías clasifica el ENS un sistema de información?",
     "correcta": "Alta, media o baja",
@@ -1402,7 +1402,7 @@
   {
     "id": "ens-034",
     "concepto": "ens-categorias",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 25 },
     "pregunta": "¿En función de qué se decide la categoría de un sistema en el ENS?",
     "correcta": "De la criticidad de la información que maneja",
@@ -1412,7 +1412,7 @@
   {
     "id": "riesgos-001",
     "concepto": "riesgos-analisis-evaluacion",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 6 },
     "pregunta": "En la planificación de la ISO 27001, ¿qué paso evalúa las consecuencias y las probabilidades de que los riesgos se materialicen?",
     "correcta": "El análisis de riesgos",
@@ -1422,7 +1422,7 @@
   {
     "id": "riesgos-002",
     "concepto": "riesgos-analisis-evaluacion",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 6 },
     "pregunta": "¿Qué paso compara los niveles de riesgo con los criterios de aceptación para decidir el tratamiento y su prioridad?",
     "correcta": "La evaluación de riesgos",
@@ -1432,7 +1432,7 @@
   {
     "id": "riesgos-101",
     "concepto": "riesgos-analisis-evaluacion",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 6 },
     "pregunta": "En la planificación de la ISO 27001, ¿a qué pérdidas se asocian los riesgos que se identifican?",
     "correcta": "A la pérdida de confidencialidad, integridad y disponibilidad",
@@ -1442,7 +1442,7 @@
   {
     "id": "riesgos-004",
     "concepto": "riesgos-metodologia",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 7 },
     "pregunta": "¿Cómo deben ser los resultados de la metodología de evaluación de riesgos que exige la ISO 27001?",
     "correcta": "Consistentes, válidos y comparables",
@@ -1452,7 +1452,7 @@
   {
     "id": "riesgos-005",
     "concepto": "riesgos-metodologia",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 31 },
     "pregunta": "Al calcular el riesgo, ¿qué es importante respecto a los criterios usados?",
     "correcta": "Que estén bien establecidos y se apliquen siempre igual",
@@ -1462,7 +1462,7 @@
   {
     "id": "riesgos-006",
     "concepto": "riesgos-estrategias",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 36 },
     "pregunta": "¿Qué estrategias de tratamiento de riesgos recoge el temario?",
     "correcta": "Asumir, transferir, eliminar y mitigar",
@@ -1472,7 +1472,7 @@
   {
     "id": "riesgos-007",
     "concepto": "riesgos-estrategias",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 36 },
     "pregunta": "¿Quién decide la estrategia de tratamiento: asumir, transferir, eliminar o mitigar?",
     "correcta": "El propietario del riesgo, según el riesgo máximo asumible",
@@ -1482,7 +1482,7 @@
   {
     "id": "riesgos-008",
     "concepto": "riesgos-estrategias",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 37 },
     "pregunta": "En el ejemplo del temario, el riesgo asumible es 4. ¿Qué se hace con los riesgos de los errores de usuario, que llegan a 6?",
     "correcta": "Se aplican controles para mitigarlos",
@@ -1492,7 +1492,7 @@
   {
     "id": "riesgos-009",
     "concepto": "riesgos-propietario",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 8 },
     "pregunta": "¿Quién aprueba el valor aceptable, asume el nivel residual y aprueba el plan de tratamiento?",
     "correcta": "El propietario del riesgo",
@@ -1502,7 +1502,7 @@
   {
     "id": "riesgos-010",
     "concepto": "riesgos-propietario",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 24 },
     "pregunta": "En el marco organizativo del ejemplo, ¿quién implanta las medidas de seguridad seleccionadas para mitigar los riesgos?",
     "correcta": "El responsable de sistemas",
@@ -1512,7 +1512,7 @@
   {
     "id": "riesgos-011",
     "concepto": "riesgos-propietario",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 35 },
     "pregunta": "En el ejemplo de implantación del temario, ¿quién es el único propietario del riesgo?",
     "correcta": "La dirección de la organización",
@@ -1522,7 +1522,7 @@
   {
     "id": "riesgos-012",
     "concepto": "riesgos-declaracion-aplicabilidad",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 8 },
     "pregunta": "¿Qué recoge la «Declaración de Aplicabilidad»?",
     "correcta": "Los controles necesarios y por qué se incluyen o excluyen",
@@ -1532,7 +1532,7 @@
   {
     "id": "riesgos-013",
     "concepto": "riesgos-declaracion-aplicabilidad",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 37 },
     "pregunta": "¿En qué documento se registra la selección de los controles de seguridad?",
     "correcta": "En la Declaración de Aplicabilidad",
@@ -1542,7 +1542,7 @@
   {
     "id": "riesgos-014",
     "concepto": "riesgos-inventario",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 24 },
     "pregunta": "¿En qué dimensiones se valora cada activo del inventario, según el temario?",
     "correcta": "Confidencialidad, disponibilidad e integridad",
@@ -1552,7 +1552,7 @@
   {
     "id": "riesgos-015",
     "concepto": "riesgos-inventario",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 24 },
     "pregunta": "¿Qué categorías de activo da el temario como ejemplo para el inventario?",
     "correcta": "Software, hardware y personal",
@@ -1562,7 +1562,7 @@
   {
     "id": "riesgos-016",
     "concepto": "riesgos-escala-activos",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 25 },
     "pregunta": "En la escala cualitativa del ejemplo, ¿qué significa un valor 3 de un activo en una dimensión?",
     "correcta": "Su pérdida causaría trastornos graves en la actividad normal",
@@ -1572,7 +1572,7 @@
   {
     "id": "riesgos-017",
     "concepto": "riesgos-escala-activos",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 25 },
     "pregunta": "El activo «Nóminas» vale 1 en confidencialidad, 3 en integridad y 2 en disponibilidad. ¿Cuál es su valoración total en el ejemplo?",
     "correcta": "6",
@@ -1582,7 +1582,7 @@
   {
     "id": "riesgos-018",
     "concepto": "riesgos-probabilidad",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 27 },
     "pregunta": "En la escala de probabilidad del ejemplo, ¿qué frecuencia media corresponde a la probabilidad «Muy baja» (1)?",
     "correcta": "Una vez cada 5 años",
@@ -1592,7 +1592,7 @@
   {
     "id": "riesgos-019",
     "concepto": "riesgos-probabilidad",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 27 },
     "pregunta": "Una amenaza ocurre de media 3 veces al año. ¿Qué probabilidad tiene en la escala del ejemplo?",
     "correcta": "Alta (4)",
@@ -1602,7 +1602,7 @@
   {
     "id": "riesgos-020",
     "concepto": "riesgos-degradacion",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 26 },
     "pregunta": "Al identificar y valorar las amenazas, ¿qué 2 valores se asignan en cada dimensión?",
     "correcta": "La probabilidad de ocurrencia y la degradación del activo",
@@ -1612,7 +1612,7 @@
   {
     "id": "riesgos-021",
     "concepto": "riesgos-degradacion",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 27 },
     "pregunta": "En el ejemplo, ¿cuándo tiene la amenaza «Fuego» una degradación «Alta» sobre el activo «Nóminas»?",
     "correcta": "Si las nóminas están en papel",
@@ -1622,7 +1622,7 @@
   {
     "id": "riesgos-022",
     "concepto": "riesgos-impacto",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 28 },
     "pregunta": "¿En función de qué se calcula el impacto de una amenaza sobre un activo?",
     "correcta": "Del valor del activo y de la degradación de la amenaza",
@@ -1632,7 +1632,7 @@
   {
     "id": "riesgos-023",
     "concepto": "riesgos-impacto",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 31 },
     "pregunta": "En el ejemplo, un activo con valor 3 sufre una amenaza con degradación 1. ¿Qué impacto da la tabla?",
     "correcta": "3",
@@ -1642,7 +1642,7 @@
   {
     "id": "riesgos-024",
     "concepto": "riesgos-riesgo",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 31 },
     "pregunta": "¿En función de qué se calcula el riesgo de cada amenaza?",
     "correcta": "Del impacto y de la probabilidad",
@@ -1652,7 +1652,7 @@
   {
     "id": "riesgos-034",
     "concepto": "riesgos-riesgo",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 32 },
     "pregunta": "En la tabla de cálculo de riesgo del ejemplo, ¿cómo se combinan la probabilidad y el impacto?",
     "correcta": "Se suman los dos valores y se resta 1",
@@ -1662,7 +1662,7 @@
   {
     "id": "riesgos-035",
     "concepto": "riesgos-riesgo",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 32 },
     "pregunta": "En la tabla de cálculo de riesgo del ejemplo, ¿qué riesgo da un impacto 0?",
     "correcta": "Riesgo 0 con cualquier probabilidad",
@@ -1672,7 +1672,7 @@
   {
     "id": "riesgos-026",
     "concepto": "riesgos-mapa",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 32 },
     "pregunta": "¿Qué se obtiene al aplicar el cálculo de riesgo a todos los activos?",
     "correcta": "Un mapa de riesgos con los activos de mayor riesgo",
@@ -1682,7 +1682,7 @@
   {
     "id": "riesgos-027",
     "concepto": "riesgos-mapa",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 32 },
     "pregunta": "Según el temario, ¿qué debe pasar con los métodos de cálculo del riesgo?",
     "correcta": "Deben quedar documentados",
@@ -1692,7 +1692,7 @@
   {
     "id": "riesgos-028",
     "concepto": "riesgos-catalogos",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 26 },
     "pregunta": "¿Cuál de estos es un catálogo de amenazas citado en el temario?",
     "correcta": "MAGERIT",
@@ -1702,7 +1702,7 @@
   {
     "id": "riesgos-102",
     "concepto": "riesgos-catalogos",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 26 },
     "pregunta": "Aparte de los catálogos generales, ¿dónde recoge el temario amenazas específicas para un ámbito de actividad concreto?",
     "correcta": "En las normas sectoriales, como la ISO/IEC 27799",
@@ -1712,7 +1712,7 @@
   {
     "id": "riesgos-030",
     "concepto": "riesgos-seleccion-controles",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 8 },
     "pregunta": "Al seleccionar los controles adecuados, ¿qué 2 cosas se valoran según el temario?",
     "correcta": "Cuánto reduce el riesgo y su coste de implementación y mantenimiento",
@@ -1722,7 +1722,7 @@
   {
     "id": "riesgos-031",
     "concepto": "riesgos-seleccion-controles",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 37 },
     "pregunta": "¿De dónde recomienda el temario tomar los controles de seguridad?",
     "correcta": "Del Anexo I de la ISO/IEC 27001 o de la ISO/IEC 27002",
@@ -1732,7 +1732,7 @@
   {
     "id": "riesgos-032",
     "concepto": "riesgos-plan-tratamiento",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 42 },
     "pregunta": "¿Qué trazabilidad debe establecer el plan de tratamiento de riesgos?",
     "correcta": "Entre cada medida y los riesgos que mitiga",
@@ -1742,7 +1742,7 @@
   {
     "id": "riesgos-033",
     "concepto": "riesgos-plan-tratamiento",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 42 },
     "pregunta": "En el ejemplo del plan de tratamiento de riesgos, ¿quién revisa y aprueba el plan?",
     "correcta": "La dirección, que hace efectivas las medidas organizativas",
@@ -1752,7 +1752,7 @@
   {
     "id": "auditoria-001",
     "concepto": "auditoria-definicion",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 4 },
     "pregunta": "Según el temario, ¿sobre qué sistemas se realiza una auditoría informática?",
     "correcta": "Sobre sistemas que ya están funcionando",
@@ -1762,7 +1762,7 @@
   {
     "id": "auditoria-002",
     "concepto": "auditoria-definicion",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 4 },
     "pregunta": "¿Cuál es el objeto de la auditoría informática, según su definición?",
     "correcta": "Juzgar si el sistema se adecúa a las necesidades de información",
@@ -1772,7 +1772,7 @@
   {
     "id": "auditoria-003",
     "concepto": "auditoria-resultado",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 4 },
     "pregunta": "¿Cómo es el resultado de una auditoría informática?",
     "correcta": "Un informe escrito dirigido a los gerentes del sistema",
@@ -1782,7 +1782,7 @@
   {
     "id": "auditoria-004",
     "concepto": "auditoria-resultado",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 4 },
     "pregunta": "¿En qué debe basarse siempre el resultado de una auditoría?",
     "correcta": "En pruebas recopiladas al analizar el SGSI",
@@ -1792,7 +1792,7 @@
   {
     "id": "auditoria-005",
     "concepto": "auditoria-internas-externas",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 4 },
     "pregunta": "¿Qué distingue una auditoría interna de una externa?",
     "correcta": "La interna usa recursos propios de la empresa auditada",
@@ -1802,7 +1802,7 @@
   {
     "id": "auditoria-006",
     "concepto": "auditoria-eficacia-interna",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 5 },
     "pregunta": "¿De qué dos factores depende la eficacia de la auditoría informática interna?",
     "correcta": "De la independencia y de la confianza",
@@ -1812,7 +1812,7 @@
   {
     "id": "auditoria-007",
     "concepto": "auditoria-eficacia-interna",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 5 },
     "pregunta": "En una auditoría interna, ¿a qué departamento debe pertenecer el personal auditor para ser independiente?",
     "correcta": "Al departamento staff de la dirección",
@@ -1822,7 +1822,7 @@
   {
     "id": "auditoria-008",
     "concepto": "auditoria-propiedades",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 5 },
     "pregunta": "Una auditoría examina más de lo encargado al comienzo y genera trabajo extra. ¿Qué propiedad incumple?",
     "correcta": "Ajustada a su alcance",
@@ -1832,7 +1832,7 @@
   {
     "id": "auditoria-009",
     "concepto": "auditoria-propiedades",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 5 },
     "pregunta": "Una vez definido el alcance, la auditoría descuida el estudio de algunas de sus partes. ¿Qué propiedad incumple?",
     "correcta": "Completa",
@@ -1842,7 +1842,7 @@
   {
     "id": "auditoria-010",
     "concepto": "auditoria-objetivos",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 5 },
     "pregunta": "Entre los objetivos de los auditores, ¿cuándo es eficiente el SGSI?",
     "correcta": "Cuando consigue sus metas con los mínimos recursos",
@@ -1852,7 +1852,7 @@
   {
     "id": "auditoria-011",
     "concepto": "auditoria-objetivos",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 5 },
     "pregunta": "¿Qué objetivo del auditor comprueba que la información es completa, válida y veraz?",
     "correcta": "La integridad de los datos",
@@ -1862,7 +1862,7 @@
   {
     "id": "auditoria-012",
     "concepto": "auditoria-deontologico-calidad-criterio",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 6 },
     "pregunta": "¿Qué principio del código deontológico obliga al auditor a negarse a la tarea si no se garantizan unas condiciones técnicas mínimas?",
     "correcta": "El principio de calidad",
@@ -1872,7 +1872,7 @@
   {
     "id": "auditoria-013",
     "concepto": "auditoria-deontologico-calidad-criterio",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 6 },
     "pregunta": "Si hay diferencia de opiniones, el auditor debe justificarlo en el informe. ¿Qué principio lo dice?",
     "correcta": "El principio de criterio propio",
@@ -1882,7 +1882,7 @@
   {
     "id": "auditoria-014",
     "concepto": "auditoria-deontologico-responsabilidad-economia",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 7 },
     "pregunta": "¿Qué principio obliga al auditor a hacerse cargo de los daños y perjuicios que causen sus actuaciones?",
     "correcta": "El principio de responsabilidad",
@@ -1892,7 +1892,7 @@
   {
     "id": "auditoria-015",
     "concepto": "auditoria-deontologico-responsabilidad-economia",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 7 },
     "pregunta": "¿Qué principio pide al auditor delimitar el alcance para evitar atrasos que aumenten los costes?",
     "correcta": "El principio de economía",
@@ -1902,7 +1902,7 @@
   {
     "id": "auditoria-016",
     "concepto": "auditoria-riesgo-auditoria",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 12 },
     "pregunta": "¿Cómo se calcula el riesgo deseado de la auditoría (DAR)?",
     "correcta": "DAR = IR x CR x DR",
@@ -1912,7 +1912,7 @@
   {
     "id": "auditoria-017",
     "concepto": "auditoria-riesgo-auditoria",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 12 },
     "pregunta": "En el cálculo del DAR, ¿qué componente depende enteramente del equipo auditor?",
     "correcta": "El riesgo de la detección (DR)",
@@ -1922,7 +1922,7 @@
   {
     "id": "auditoria-018",
     "concepto": "auditoria-riesgo-auditoria",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 12 },
     "pregunta": "En el cálculo del DAR, ¿qué es el riesgo de los controles (CR)?",
     "correcta": "Que los controles existentes no gestionen bien un hecho ilegal",
@@ -1932,7 +1932,7 @@
   {
     "id": "auditoria-019",
     "concepto": "auditoria-plan",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
     "pregunta": "¿Cuál es el objetivo del plan de auditoría?",
     "correcta": "Reducir el riesgo de una auditoría",
@@ -1942,7 +1942,7 @@
   {
     "id": "auditoria-020",
     "concepto": "auditoria-plan",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
     "pregunta": "En el plan de auditoría, ¿qué documentación revisa el cliente que encarga la auditoría?",
     "correcta": "La documentación externa",
@@ -1952,7 +1952,7 @@
   {
     "id": "auditoria-101",
     "concepto": "auditoria-isaca",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
     "pregunta": "¿Qué es CoBIT 5, una de las normativas que aporta ISACA?",
     "correcta": "Una estructura de negocio para gestionar y gobernar las TIC",
@@ -1962,7 +1962,7 @@
   {
     "id": "auditoria-022",
     "concepto": "auditoria-alcance",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 15 },
     "pregunta": "En la fase inicial del plan de auditoría, ¿qué dos documentos externos se generan?",
     "correcta": "La propuesta de alcance y el precontrato de auditoría",
@@ -1972,7 +1972,7 @@
   {
     "id": "auditoria-023",
     "concepto": "auditoria-alcance",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 15 },
     "pregunta": "En el precontrato de la fase de alcance, ¿a qué se compromete la empresa auditada?",
     "correcta": "A pagar el esfuerzo de hacer el presupuesto",
@@ -1982,7 +1982,7 @@
   {
     "id": "auditoria-024",
     "concepto": "auditoria-internas-externas",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 4 },
     "pregunta": "Una auditoría la realizan personas ajenas a la empresa auditada. ¿Qué tipo de auditoría es?",
     "correcta": "Externa",
@@ -1992,7 +1992,7 @@
   {
     "id": "auditoria-102",
     "concepto": "auditoria-isaca",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
     "pregunta": "¿Qué aporta ISACA al profesional de la auditoría, además de CoBIT 5?",
     "correcta": "Un código ético y un manual de preparación al examen CISA",
@@ -2002,7 +2002,7 @@
   {
     "id": "lssi-101",
     "concepto": "lssi-ley",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 58 },
     "pregunta": "¿Cuál de estas actividades queda dentro de la Ley 34/2002 por ser una actividad económica?",
     "correcta": "La organización de subastas por medios electrónicos",
@@ -2012,7 +2012,7 @@
   {
     "id": "lssi-002",
     "concepto": "lssi-ambito",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 58 },
     "pregunta": "¿Cuándo se aplica la LSSI al comercio electrónico y a otros servicios de Internet?",
     "correcta": "Cuando son parte de una actividad económica",
@@ -2022,7 +2022,7 @@
   {
     "id": "lssi-003",
     "concepto": "lssi-ambito",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 60 },
     "pregunta": "Un buscador gratuito se financia con publicidad. ¿Está incluido en la LSSI?",
     "correcta": "Sí, porque es una actividad económica para su prestador",
@@ -2032,7 +2032,7 @@
   {
     "id": "lssi-004",
     "concepto": "lssi-excluidos",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 60 },
     "pregunta": "¿Qué servicios quedan excluidos de la LSSI?",
     "correcta": "Los de notarios y registradores en sus funciones públicas",
@@ -2042,7 +2042,7 @@
   {
     "id": "lssi-005",
     "concepto": "lssi-excluidos",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 60 },
     "pregunta": "¿En qué caso quedan excluidos de la LSSI los servicios de abogados y procuradores?",
     "correcta": "En la representación y defensa en juicio",
@@ -2052,7 +2052,7 @@
   {
     "id": "lssi-006",
     "concepto": "lssi-informacion",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 60 },
     "pregunta": "¿Cómo debe el prestador indicar en su página web sus datos identificativos?",
     "correcta": "De forma permanente, fácil, directa y gratuita",
@@ -2062,7 +2062,7 @@
   {
     "id": "lssi-007",
     "concepto": "lssi-informacion",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 60 },
     "pregunta": "Si el prestador ejerce una profesión regulada, ¿qué debe indicar además en su web?",
     "correcta": "Su colegio profesional y su número de colegiado",
@@ -2072,7 +2072,7 @@
   {
     "id": "lssi-008",
     "concepto": "lssi-colaboracion",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 61 },
     "pregunta": "¿Tienen los prestadores de servicios de intermediación obligación de supervisar los contenidos que alojan?",
     "correcta": "No, pero colaboran con las autoridades si se les requiere",
@@ -2082,7 +2082,7 @@
   {
     "id": "lssi-009",
     "concepto": "lssi-colaboracion",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 61 },
     "pregunta": "¿Cuándo puede incurrir en responsabilidad un prestador de servicios de intermediación?",
     "correcta": "Si conoce que un material es ilegal y no lo retira con rapidez",
@@ -2092,7 +2092,7 @@
   {
     "id": "lssi-010",
     "concepto": "lssi-cookies",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 61 },
     "pregunta": "¿Qué cookie puede usarse sin recabar el consentimiento del usuario?",
     "correcta": "La del carrito de la compra de una tienda en línea",
@@ -2102,7 +2102,7 @@
   {
     "id": "lssi-011",
     "concepto": "lssi-cookies",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 61 },
     "pregunta": "Según la LSSI, ¿cuándo debe recabar el prestador el consentimiento para usar cookies?",
     "correcta": "Tras informarle de forma clara y completa de su uso y finalidad",
@@ -2112,7 +2112,7 @@
   {
     "id": "lssi-012",
     "concepto": "lssi-seguridad",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 62 },
     "pregunta": "¿Sobre qué deben informar los proveedores de acceso a Internet a sus usuarios?",
     "correcta": "Sobre los medios de protección frente a amenazas y de filtrado",
@@ -2122,7 +2122,7 @@
   {
     "id": "lssi-013",
     "concepto": "lssi-seguridad",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 62 },
     "pregunta": "¿Cómo se dan por cumplidas las obligaciones de información de seguridad de la LSSI?",
     "correcta": "Incluyéndola en la página o sitio principal del prestador",
@@ -2132,7 +2132,7 @@
   {
     "id": "lssi-014",
     "concepto": "lssi-ley",
-    "tema": "lssi",
+    "apartado": "lssi",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 58 },
     "pregunta": "¿Qué regula la Ley 34/2002?",
     "correcta": "Los servicios de la sociedad de la información",
@@ -2142,7 +2142,7 @@
   {
     "id": "software-001",
     "concepto": "software-naturaleza",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 64 },
     "pregunta": "¿Por qué vía protege España los programas de ordenador y las bases de datos?",
     "correcta": "Por la Ley de Propiedad Intelectual",
@@ -2152,7 +2152,7 @@
   {
     "id": "software-002",
     "concepto": "software-naturaleza",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 64 },
     "pregunta": "¿Qué ventaja tiene proteger el software como obra desde la propiedad intelectual?",
     "correcta": "La protección es automática y su duración es superior",
@@ -2162,7 +2162,7 @@
   {
     "id": "software-003",
     "concepto": "software-naturaleza",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 64 },
     "pregunta": "¿Qué dice el Convenio de Patentes Europeas sobre los programas de ordenador?",
     "correcta": "Que no se consideran invenciones, como tales",
@@ -2172,7 +2172,7 @@
   {
     "id": "software-004",
     "concepto": "software-requisitos",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 65 },
     "pregunta": "¿Qué dos requisitos debe cumplir una obra para ser objeto del derecho de propiedad intelectual?",
     "correcta": "La originalidad y la plasmación en algún soporte material",
@@ -2182,7 +2182,7 @@
   {
     "id": "software-005",
     "concepto": "software-requisitos",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 65 },
     "pregunta": "¿Desde qué momento surge el derecho de propiedad intelectual sobre una obra?",
     "correcta": "Desde su creación, sin necesidad de registro",
@@ -2192,7 +2192,7 @@
   {
     "id": "software-006",
     "concepto": "software-derechos",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 66 },
     "pregunta": "Un autor exige que nadie altere su obra. ¿Qué derecho moral ejerce?",
     "correcta": "La integridad de la obra",
@@ -2202,7 +2202,7 @@
   {
     "id": "software-007",
     "concepto": "software-derechos",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 66 },
     "pregunta": "¿Cuál de estos es un derecho de explotación sobre el software?",
     "correcta": "La comunicación pública",
@@ -2212,7 +2212,7 @@
   {
     "id": "software-008",
     "concepto": "software-programa",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 66 },
     "pregunta": "Según el art. 96.1, ¿qué engloba un programa de ordenador?",
     "correcta": "El código fuente, el código objeto y el manual explicativo",
@@ -2222,7 +2222,7 @@
   {
     "id": "software-009",
     "concepto": "software-programa",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 66 },
     "pregunta": "¿Quién puede considerarse autor de un programa de ordenador?",
     "correcta": "Tanto una persona física como una jurídica",
@@ -2232,7 +2232,7 @@
   {
     "id": "software-010",
     "concepto": "software-titularidad",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 67 },
     "pregunta": "Un programa se crea en el marco de una relación laboral. ¿De quién son los derechos de explotación?",
     "correcta": "Del empresario, solo para su actividad empresarial",
@@ -2242,7 +2242,7 @@
   {
     "id": "software-011",
     "concepto": "software-titularidad",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 67 },
     "pregunta": "¿Qué tipo de obra es un programa que se atribuye a una persona física o jurídica?",
     "correcta": "Una obra colectiva",
@@ -2252,7 +2252,7 @@
   {
     "id": "software-012",
     "concepto": "software-sin-autorizacion",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 68 },
     "pregunta": "¿Qué actividad puede hacer el usuario legítimo sin pedir autorización al autor, según la licencia?",
     "correcta": "Una copia de seguridad",
@@ -2262,7 +2262,7 @@
   {
     "id": "software-013",
     "concepto": "software-sin-autorizacion",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 67 },
     "pregunta": "¿Necesita autorización la reproducción de un programa para uso personal?",
     "correcta": "Sí, la reproducción total o parcial lo requiere, incluso la personal",
@@ -2272,7 +2272,7 @@
   {
     "id": "software-014",
     "concepto": "software-acciones",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 68 },
     "pregunta": "¿Cómo es la inscripción de un programa en el registro de la Propiedad Intelectual?",
     "correcta": "Voluntaria: el derecho surge sin ella",
@@ -2282,7 +2282,7 @@
   {
     "id": "software-015",
     "concepto": "software-bases-datos",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 68 },
     "pregunta": "¿Cuánto dura la protección <<sui generis>> de una base de datos?",
     "correcta": "15 años",
@@ -2292,7 +2292,7 @@
   {
     "id": "software-016",
     "concepto": "software-bases-datos",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 68 },
     "pregunta": "¿Qué protege la protección <<sui generis>> de las bases de datos?",
     "correcta": "Las inversiones para elaborar, verificar o presentar la base",
@@ -2302,7 +2302,7 @@
   {
     "id": "software-017",
     "concepto": "software-acciones",
-    "tema": "software",
+    "apartado": "software",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 68 },
     "pregunta": "¿Qué acción tiene el titular de los derechos de un programa para protegerlos?",
     "correcta": "La acción de cesación",
@@ -2312,7 +2312,7 @@
   {
     "id": "propiedad-101",
     "concepto": "propiedad-reforma",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 69 },
     "pregunta": "¿Con qué objetivo modifica la Ley 21/2014 el texto refundido de la Ley de Propiedad Intelectual?",
     "correcta": "Adaptarla a los cambios sociales, económicos y tecnológicos recientes",
@@ -2322,7 +2322,7 @@
   {
     "id": "propiedad-002",
     "concepto": "propiedad-copia-privada",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 70 },
     "pregunta": "¿Qué queda excluido del límite de la copia privada?",
     "correcta": "Los programas de ordenador",
@@ -2332,7 +2332,7 @@
   {
     "id": "propiedad-003",
     "concepto": "propiedad-copia-privada",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 70 },
     "pregunta": "¿Cuál de estas copias entra en el límite de la copia privada?",
     "correcta": "La copia de una obra emitida por televisión, para un uso privado",
@@ -2342,7 +2342,7 @@
   {
     "id": "propiedad-004",
     "concepto": "propiedad-copia-privada",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 70 },
     "pregunta": "¿Quién debe hacer la copia para que entre en el límite de la copia privada?",
     "correcta": "Una persona física, para un uso privado, ni profesional ni empresarial",
@@ -2352,7 +2352,7 @@
   {
     "id": "propiedad-005",
     "concepto": "propiedad-canon-aede",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 70 },
     "pregunta": "¿Quién debía pagar el 'canon AEDE' a los editores de noticias?",
     "correcta": "Los agregadores de noticias",
@@ -2362,7 +2362,7 @@
   {
     "id": "propiedad-006",
     "concepto": "propiedad-canon-aede",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 70 },
     "pregunta": "¿Qué contenido de un editor sigue necesitando su autorización cuando lo cita un agregador de noticias?",
     "correcta": "Las imágenes y las obras fotográficas",
@@ -2372,7 +2372,7 @@
   {
     "id": "propiedad-007",
     "concepto": "propiedad-tasa-google",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 71 },
     "pregunta": "¿Qué porcentaje grava el impuesto sobre determinados servicios digitales?",
     "correcta": "El 3% de los ingresos por los servicios gravados",
@@ -2382,7 +2382,7 @@
   {
     "id": "propiedad-008",
     "concepto": "propiedad-tasa-google",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 71 },
     "pregunta": "¿A qué empresas se aplica la nueva 'Tasa Google'?",
     "correcta": "A las que superan 750 millones de cifra de negocios y 3 millones de ingresos gravados",
@@ -2392,7 +2392,7 @@
   {
     "id": "propiedad-009",
     "concepto": "propiedad-sinde-wert",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 71 },
     "pregunta": "Según la Ley Sinde-Wert, ¿qué ocurre ante una segunda infracción?",
     "correcta": "Una sanción muy grave, con multa de 150 001 a 600 000 euros",
@@ -2402,7 +2402,7 @@
   {
     "id": "propiedad-010",
     "concepto": "propiedad-sinde-wert",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 71 },
     "pregunta": "¿A quién se aplica la Ley Sinde-Wert?",
     "correcta": "A los prestadores que vulneran la propiedad intelectual o localizan las obras",
@@ -2412,7 +2412,7 @@
   {
     "id": "propiedad-102",
     "concepto": "propiedad-reforma",
-    "tema": "propiedad",
+    "apartado": "propiedad",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 69 },
     "pregunta": "¿Qué regula la Directiva 2011/77/UE, que transpone la Ley 21/2014?",
     "correcta": "El plazo de protección del derecho de autor",
@@ -2422,7 +2422,7 @@
   {
     "id": "delitos-001",
     "concepto": "delitos-definicion",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 72 },
     "pregunta": "Según el temario, ¿qué son los delitos informáticos?",
     "correcta": "Las conductas ilícitas tipificadas en las leyes penales",
@@ -2432,7 +2432,7 @@
   {
     "id": "delitos-002",
     "concepto": "delitos-definicion",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 72 },
     "pregunta": "¿Qué impide el principio penal <<Nullum crimen sine lege previa>>?",
     "correcta": "Sancionar actos no contemplados en las normas al cometerse",
@@ -2442,7 +2442,7 @@
   {
     "id": "delitos-003",
     "concepto": "delitos-definicion",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 72 },
     "pregunta": "Según el temario, ¿qué dificultad plantean los ciberdelitos al Código Penal de 1995?",
     "correcta": "El delito se inicia en un país y se produce en otro distinto",
@@ -2452,7 +2452,7 @@
   {
     "id": "delitos-101",
     "concepto": "delitos-reforma",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 72 },
     "pregunta": "¿Qué crea la reforma del Código Penal por la Ley Orgánica 1/2015?",
     "correcta": "Una nueva categoría de ciberdelitos o delitos informáticos",
@@ -2462,7 +2462,7 @@
   {
     "id": "delitos-005",
     "concepto": "delitos-reforma",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 73 },
     "pregunta": "¿Cuál de estos delitos recoge expresamente la Ley Orgánica 1/2015?",
     "correcta": "La interceptación de las transmisiones de datos",
@@ -2472,7 +2472,7 @@
   {
     "id": "delitos-102",
     "concepto": "delitos-convenio",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 73 },
     "pregunta": "¿Qué pretende el Convenio sobre la Ciberdelincuencia, creado en Europa?",
     "correcta": "Armonizar las legislaciones de los diferentes países",
@@ -2482,7 +2482,7 @@
   {
     "id": "delitos-103",
     "concepto": "delitos-convenio",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 73 },
     "pregunta": "¿Sobre qué trata la Decisión Marco 2005/222/JAI, sustituida por la Directiva 2013/40/UE?",
     "correcta": "Los ataques contra los sistemas de información",
@@ -2492,7 +2492,7 @@
   {
     "id": "delitos-009",
     "concepto": "delitos-prueba",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 73 },
     "pregunta": "Según la normativa española (art. 26), ¿qué valor tiene el documento electrónico?",
     "correcta": "Tiene valor probatorio: sirve como prueba",
@@ -2502,7 +2502,7 @@
   {
     "id": "delitos-104",
     "concepto": "delitos-prueba",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 72 },
     "pregunta": "¿Por qué es muy complejo el descubrimiento, la persecución y la prueba de los delitos informáticos?",
     "correcta": "Por la naturaleza de los sistemas y la especialización de los sujetos",
@@ -2512,7 +2512,7 @@
   {
     "id": "etica-001",
     "concepto": "etica-etica-deontologia",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 75 },
     "pregunta": "¿Qué es la deontología, según el temario?",
     "correcta": "La parte de la ética que trata los deberes morales de los profesionales",
@@ -2522,7 +2522,7 @@
   {
     "id": "etica-002",
     "concepto": "etica-etica-deontologia",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 75 },
     "pregunta": "¿Qué es la ética, según el temario?",
     "correcta": "Los principios para las acciones humanas que surgen del análisis crítico de los actos",
@@ -2532,7 +2532,7 @@
   {
     "id": "etica-003",
     "concepto": "etica-casos",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 76 },
     "pregunta": "¿Qué caso del temario se debe a un fallo de diseño que aplicaba al enfermo radiaciones de alta potencia?",
     "correcta": "El equipo Therac-25",
@@ -2542,7 +2542,7 @@
   {
     "id": "etica-101",
     "concepto": "etica-casos",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 76 },
     "pregunta": "¿Cuál fue la causa de que un misil Scud iraquí penetrara en una base estadounidense en Dhahran, en 1991?",
     "correcta": "Un fallo en el software de defensa",
@@ -2552,7 +2552,7 @@
   {
     "id": "etica-005",
     "concepto": "etica-casos",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 75 },
     "pregunta": "¿Qué reveló el examen del hundimiento del buque Sheffield en 1982?",
     "correcta": "Que su software de defensa no se había verificado en su totalidad y tenía fallos",
@@ -2562,7 +2562,7 @@
   {
     "id": "etica-006",
     "concepto": "etica-responsabilidad",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 77 },
     "pregunta": "¿Cuándo obliga la responsabilidad profesional, como principio ético, a responder de la actuación?",
     "correcta": "Haya o no lesión a terceros",
@@ -2572,7 +2572,7 @@
   {
     "id": "etica-007",
     "concepto": "etica-responsabilidad",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 77 },
     "pregunta": "¿Qué son los códigos deontológicos, según el temario?",
     "correcta": "Un mecanismo de autorregulación del sector",
@@ -2582,7 +2582,7 @@
   {
     "id": "etica-008",
     "concepto": "etica-papa",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 78 },
     "pregunta": "En las cuestiones éticas PAPA, ¿qué deber corresponde a la intimidad?",
     "correcta": "El deber de secreto profesional",
@@ -2592,7 +2592,7 @@
   {
     "id": "etica-009",
     "concepto": "etica-papa",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 78 },
     "pregunta": "En las cuestiones éticas PAPA, ¿qué corresponde a la exactitud?",
     "correcta": "La competencia profesional y la transmisión de datos",
@@ -2602,7 +2602,7 @@
   {
     "id": "etica-010",
     "concepto": "etica-codigo-software",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 78 },
     "pregunta": "¿Cuántos principios tiene el código ético de los ingenieros de software que suscribieron la ACM y el IEEE en 1999?",
     "correcta": "Ocho, empezando por el interés público",
@@ -2612,7 +2612,7 @@
   {
     "id": "etica-011",
     "concepto": "etica-codigo-software",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 78 },
     "pregunta": "¿Qué organizaciones suscribieron en 1999 el código ético de los ingenieros de software?",
     "correcta": "La ACM y el IEEE",
@@ -2622,7 +2622,7 @@
   {
     "id": "etica-102",
     "concepto": "etica-rsc",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 78 },
     "pregunta": "¿Qué finalidad tiene la Responsabilidad Civil Corporativa, según el temario?",
     "correcta": "Contrarrestar el impacto de las empresas exigiéndoles actitudes responsables",
@@ -2632,7 +2632,7 @@
   {
     "id": "etica-013",
     "concepto": "etica-rsc",
-    "tema": "etica",
+    "apartado": "etica",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 78 },
     "pregunta": "¿Qué regula la Directiva 2002/95/CE?",
     "correcta": "El uso de sustancias peligrosas",
@@ -2642,7 +2642,7 @@
   {
     "id": "certificaciones-001",
     "concepto": "certificaciones-introduccion",
-    "tema": "certificaciones",
+    "apartado": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 2 },
     "pregunta": "¿Cuántos tipos de certificadoras hay, en función del lugar?",
     "correcta": "Cuatro: universidades, empresas, patrocinadas y gubernamentales",
@@ -2652,7 +2652,7 @@
   {
     "id": "certificaciones-002",
     "concepto": "certificaciones-introduccion",
-    "tema": "certificaciones",
+    "apartado": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 2 },
     "pregunta": "¿De qué depende la calidad de una certificación, según el temario?",
     "correcta": "Del reconocido prestigio de la certificadora",
@@ -2662,7 +2662,7 @@
   {
     "id": "certificaciones-003",
     "concepto": "certificaciones-beneficios",
-    "tema": "certificaciones",
+    "apartado": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 2 },
     "pregunta": "¿Cuál de estos es un beneficio de certificar el SGSI, según el temario?",
     "correcta": "Mejora su imagen ante otras empresas",
@@ -2672,7 +2672,7 @@
   {
     "id": "certificaciones-004",
     "concepto": "certificaciones-beneficios",
-    "tema": "certificaciones",
+    "apartado": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 2 },
     "pregunta": "Según el temario, ¿qué es lo más importante para una organización respecto al SGSI?",
     "correcta": "Gestionar la seguridad de la información",
@@ -2682,7 +2682,7 @@
   {
     "id": "certificaciones-005",
     "concepto": "certificaciones-espana",
-    "tema": "certificaciones",
+    "apartado": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 4 },
     "pregunta": "En España, ¿quién dispone del esquema para las entidades que certifican el cumplimiento del ENS?",
     "correcta": "La Entidad Nacional de Acreditación (ENAC)",
@@ -2692,7 +2692,7 @@
   {
     "id": "certificaciones-006",
     "concepto": "certificaciones-espana",
-    "tema": "certificaciones",
+    "apartado": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 4 },
     "pregunta": "¿Qué Administraciones Públicas deben estar certificadas en el ámbito del ENS?",
     "correcta": "Las que tienen sistemas de categoría MEDIA o ALTA",
@@ -2702,7 +2702,7 @@
   {
     "id": "certificaciones-007",
     "concepto": "certificaciones-espana",
-    "tema": "certificaciones",
+    "apartado": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 4 },
     "pregunta": "Según el temario, ¿qué establece la guía CCN-STIC 824?",
     "correcta": "Un marco de referencia para cumplir con el ENS",
@@ -2712,7 +2712,7 @@
   {
     "id": "certificaciones-016",
     "concepto": "certificaciones-recomendacion",
-    "tema": "certificaciones",
+    "apartado": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 11 },
     "pregunta": "¿Cuál de estas certificaciones recomienda el temario como básica?",
     "correcta": "La Security+ de CompTIA",
@@ -2722,7 +2722,7 @@
   {
     "id": "certificaciones-017",
     "concepto": "certificaciones-recomendacion",
-    "tema": "certificaciones",
+    "apartado": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 12 },
     "pregunta": "¿Cuál de estas certificaciones recomienda el temario como avanzada?",
     "correcta": "La CISM",
@@ -2732,7 +2732,7 @@
   {
     "id": "certificaciones-103",
     "concepto": "certificaciones-recomendacion",
-    "tema": "certificaciones",
+    "apartado": "certificaciones",
     "fuente": { "pdf": "3 _Teoría.pdf", "pagina": 11 },
     "pregunta": "¿Qué certificación de ISC2 recomienda el temario como básica?",
     "correcta": "La SSCP",
@@ -2742,7 +2742,7 @@
   {
     "id": "rgpd-110",
     "concepto": "rgpd-informatica-juridica-documental",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 2 },
     "pregunta": "¿Qué rama de la informática jurídica permite acceder de forma rápida a la legislación, la jurisprudencia y la doctrina?",
     "correcta": "La informática jurídica documental",
@@ -2752,7 +2752,7 @@
   {
     "id": "rgpd-111",
     "concepto": "rgpd-informatica-juridica-documental",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 2 },
     "pregunta": "¿Qué objetivos persigue la informática jurídica documental?",
     "correcta": "Un mejor conocimiento del Derecho y un trabajo jurídico más ágil",
@@ -2762,7 +2762,7 @@
   {
     "id": "rgpd-112",
     "concepto": "rgpd-derecho-informatico",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 4 },
     "pregunta": "¿Qué es el derecho informático según el temario?",
     "correcta": "Las normas jurídicas que regulan las tecnologías de la información",
@@ -2772,7 +2772,7 @@
   {
     "id": "rgpd-113",
     "concepto": "rgpd-derecho-informatico",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 2 },
     "pregunta": "¿Qué es la informática jurídica según el temario?",
     "correcta": "La aplicación de las tecnologías de la información al derecho",
@@ -2782,7 +2782,7 @@
   {
     "id": "rgpd-114",
     "concepto": "rgpd-libertad-informatica",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 4 },
     "pregunta": "¿Qué permite a las personas el derecho a la libertad informática o autodeterminación informativa?",
     "correcta": "Sustraer del conocimiento ajeno ciertas esferas de su vida",
@@ -2792,7 +2792,7 @@
   {
     "id": "rgpd-115",
     "concepto": "rgpd-libertad-informatica",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 4 },
     "pregunta": "Un ciudadano quiere saber quién es el dueño de un fichero con sus datos y para qué lo usa. ¿Qué derecho del artículo 18 de la Constitución lo ampara?",
     "correcta": "El derecho a la libertad informática",
@@ -2802,7 +2802,7 @@
   {
     "id": "rgpd-116",
     "concepto": "rgpd-habeas-data",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 5 },
     "pregunta": "¿Qué permite al sujeto el habeas data?",
     "correcta": "Acceder a sus datos de archivos públicos o privados y controlarlos",
@@ -2812,7 +2812,7 @@
   {
     "id": "rgpd-117",
     "concepto": "rgpd-habeas-data",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 5 },
     "pregunta": "¿Qué ámbito de la libertad protege el habeas data, frente al habeas corpus?",
     "correcta": "El interno: la intimidad, la identidad y la personalidad",
@@ -2822,7 +2822,7 @@
   {
     "id": "rgpd-118",
     "concepto": "rgpd-lopdgdd-competencia-desleal",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 20 },
     "pregunta": "¿Cómo frena la LOPDGDD el asesoramiento de mala calidad conocido como «adaptación a coste cero»?",
     "correcta": "Como práctica agresiva, en la Ley de competencia desleal",
@@ -2832,7 +2832,7 @@
   {
     "id": "rgpd-119",
     "concepto": "rgpd-lopdgdd-competencia-desleal",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 20 },
     "pregunta": "Además de la «adaptación a coste cero», ¿qué práctica agresiva regula la LOPDGDD al modificar la Ley de competencia desleal?",
     "correcta": "Suplantar la identidad de la AEPD o sus funciones",
@@ -2842,7 +2842,7 @@
   {
     "id": "rgpd-120",
     "concepto": "rgpd-dpd-certificacion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 37 },
     "pregunta": "¿Es obligatoria la certificación del Esquema de la AEPD para ejercer como Delegado de Protección de Datos?",
     "correcta": "No: acredita la cualificación, pero no es un requisito",
@@ -2852,7 +2852,7 @@
   {
     "id": "rgpd-121",
     "concepto": "rgpd-dpd-certificacion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 37 },
     "pregunta": "¿Qué certifica el Esquema de Certificación de DPD de la AEPD?",
     "correcta": "Que la persona tiene la cualificación y los conocimientos exigidos",
@@ -2862,7 +2862,7 @@
   {
     "id": "rgpd-124",
     "concepto": "rgpd-autoridad-control-principal",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 44 },
     "pregunta": "Un responsable del tratamiento tiene establecimientos en varios Estados miembros. ¿Qué autoridad de control dirige la supervisión de sus tratamientos?",
     "correcta": "La del Estado de su establecimiento principal",
@@ -2872,7 +2872,7 @@
   {
     "id": "rgpd-125",
     "concepto": "rgpd-autoridad-control-principal",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 44 },
     "pregunta": "Una empresa tiene su único establecimiento en la UE en Francia y trata datos de interesados en España. ¿Qué autoridad de control es la principal?",
     "correcta": "La francesa, la de su único establecimiento",
@@ -2882,7 +2882,7 @@
   {
     "id": "rgpd-126",
     "concepto": "rgpd-valoracion-riesgo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 46 },
     "pregunta": "Según el RGPD, ¿qué valoración del riesgo hace una organización pequeña con tratamientos poco complejos?",
     "correcta": "Una reflexión documentada sobre sus implicaciones en los derechos",
@@ -2892,7 +2892,7 @@
   {
     "id": "rgpd-127",
     "concepto": "rgpd-valoracion-riesgo",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 46 },
     "pregunta": "Un ayuntamiento observa con cámaras, de forma sistemática y a gran escala, una plaza pública. ¿Qué riesgo supone el tratamiento según el RGPD?",
     "correcta": "Un alto riesgo para los interesados",
@@ -2902,7 +2902,7 @@
   {
     "id": "rgpd-128",
     "concepto": "rgpd-listado-simplificado",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 52 },
     "pregunta": "Una comunidad de propietarios trata los datos básicos de sus vecinos y proveedores. ¿Cómo valora su situación ante el RGPD?",
     "correcta": "De forma simplificada, por su bajo nivel de riesgo",
@@ -2912,7 +2912,7 @@
   {
     "id": "rgpd-129",
     "concepto": "rgpd-listado-simplificado",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 52 },
     "pregunta": "Una pyme que hace tratamientos básicos de sus clientes empieza a elaborar perfiles de ellos. ¿Puede simplificar la valoración de su cumplimiento?",
     "correcta": "No: la elaboración de perfiles es un tratamiento de riesgo mayor",
@@ -2922,7 +2922,7 @@
   {
     "id": "rgpd-130",
     "concepto": "rgpd-facilita",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 53 },
     "pregunta": "¿Qué tratamientos quedan fuera de la herramienta Facilita RGPD de la AEPD?",
     "correcta": "Los de alto riesgo, como los de salud o los masivos",
@@ -2932,7 +2932,7 @@
   {
     "id": "rgpd-131",
     "concepto": "rgpd-facilita",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 53 },
     "pregunta": "Una empresa de escaso riesgo obtiene con Facilita RGPD toda su documentación. ¿Cumple ya el RGPD?",
     "correcta": "No: tener los documentos no implica cumplir de forma automática",
@@ -2942,7 +2942,7 @@
   {
     "id": "iso27001-104",
     "concepto": "iso27001-sgsi-beneficios",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 4 },
     "pregunta": "Según el temario, ¿qué beneficio legal da una correcta seguridad de la información?",
     "correcta": "Cumplir la ley, sin dolo si infringe una norma sin querer",
@@ -2952,7 +2952,7 @@
   {
     "id": "iso27001-105",
     "concepto": "iso27001-sgsi-beneficios",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 4 },
     "pregunta": "Según el temario, ¿cómo reduce costes una correcta seguridad de la información?",
     "correcta": "Con la prevención y la reducción eficaz del riesgo",
@@ -2962,7 +2962,7 @@
   {
     "id": "iso27001-106",
     "concepto": "iso27001-modelo-ambito",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 6 },
     "pregunta": "¿En qué organizaciones sirve la ISO/IEC 27001 de modelo para un SGSI?",
     "correcta": "En cualquier organización, sea cual sea su ámbito",
@@ -2972,7 +2972,7 @@
   {
     "id": "iso27001-107",
     "concepto": "iso27001-modelo-ambito",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 6 },
     "pregunta": "¿Qué es el ENS respecto a un SGSI como el de la ISO 27001?",
     "correcta": "Un SGSI para el ámbito de la Administración Pública",
@@ -2982,7 +2982,7 @@
   {
     "id": "ens-107",
     "concepto": "ens-accesos-instalaciones",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 21 },
     "pregunta": "Una administración mantiene cerrada la sala de sus sistemas cuando nadie la supervisa, y controla sus llaves. ¿Qué requisito mínimo del ENS cumple?",
     "correcta": "La protección de las instalaciones",
@@ -2992,7 +2992,7 @@
   {
     "id": "ens-108",
     "concepto": "ens-accesos-instalaciones",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 21 },
     "pregunta": "Un sistema de una administración deja a cada usuario usar las funciones que le corresponden, y ninguna otra. ¿Qué requisito mínimo del ENS cumple?",
     "correcta": "La autorización y control de los accesos",
@@ -3002,7 +3002,7 @@
   {
     "id": "ens-109",
     "concepto": "ens-registro-actividad",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 23 },
     "pregunta": "Según el requisito de registro de actividad del ENS, ¿qué derechos de los afectados hay que garantizar?",
     "correcta": "El honor, la intimidad y la propia imagen",
@@ -3012,7 +3012,7 @@
   {
     "id": "ens-110",
     "concepto": "ens-registro-actividad",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 23 },
     "pregunta": "¿Para qué usa el ENS los registros de la actividad de los usuarios?",
     "correcta": "Para monitorizar e investigar actividades no autorizadas",
@@ -3022,7 +3022,7 @@
   {
     "id": "iso27001-108",
     "concepto": "iso27001-alcance",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 4 },
     "pregunta": "Según el temario, ¿cómo se incorporan los recursos al alcance del SGSI?",
     "correcta": "Con ciclos de mejora continua, según su relevancia",
@@ -3032,7 +3032,7 @@
   {
     "id": "iso27001-109",
     "concepto": "iso27001-alcance",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 18 },
     "pregunta": "En la implementación de un SGSI, ¿qué determina la definición del alcance?",
     "correcta": "Los procesos de negocio sobre los que se aplica el sistema",
@@ -3042,7 +3042,7 @@
   {
     "id": "iso27001-110",
     "concepto": "iso27001-liderazgo",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 4 },
     "pregunta": "Según el requisito de liderazgo de la ISO 27001, ¿quién debe demostrar su compromiso con el SGSI?",
     "correcta": "La dirección de la organización",
@@ -3052,7 +3052,7 @@
   {
     "id": "iso27001-111",
     "concepto": "iso27001-liderazgo",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 4 },
     "pregunta": "Según el requisito de liderazgo de la ISO 27001, ¿qué hace la dirección?",
     "correcta": "Establecer la política y los objetivos de seguridad",
@@ -3062,7 +3062,7 @@
   {
     "id": "iso27001-112",
     "concepto": "iso27001-contexto-lanzamiento",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 18 },
     "pregunta": "En el lanzamiento de un SGSI, ¿qué estudia el análisis del contexto de la organización?",
     "correcta": "Sus circunstancias, dependencias, requisitos y motivaciones",
@@ -3072,7 +3072,7 @@
   {
     "id": "iso27001-113",
     "concepto": "iso27001-contexto-lanzamiento",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 18 },
     "pregunta": "Antes de implantar un SGSI, una empresa estudia sus requisitos internos y externos y sus motivaciones. ¿Qué paso de la implementación hace?",
     "correcta": "El análisis del contexto de la organización",
@@ -3082,7 +3082,7 @@
   {
     "id": "iso27001-114",
     "concepto": "iso27001-competencia-formacion",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 9 },
     "pregunta": "Según el requisito de competencia de la ISO 27001, ¿de qué parten las necesidades de formación?",
     "correcta": "De las competencias definidas para cada perfil o puesto",
@@ -3092,7 +3092,7 @@
   {
     "id": "iso27001-115",
     "concepto": "iso27001-competencia-formacion",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 9 },
     "pregunta": "Tras formar al personal, ¿qué hace la organización con las acciones formativas según el requisito de competencia?",
     "correcta": "Mantiene sus evidencias y valora su eficacia",
@@ -3102,7 +3102,7 @@
   {
     "id": "iso27001-116",
     "concepto": "iso27001-competencia-formacion",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 46 },
     "pregunta": "En la implementación del SGSI, ¿qué documento recoge las acciones de concienciación del personal, para seguir su eficacia?",
     "correcta": "Un plan de formación",
@@ -3112,7 +3112,7 @@
   {
     "id": "iso27001-117",
     "concepto": "iso27001-operacion",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 11 },
     "pregunta": "¿Qué pone en práctica la organización en el requisito de operación de la ISO 27001?",
     "correcta": "El plan de tratamiento de riesgos",
@@ -3122,7 +3122,7 @@
   {
     "id": "iso27001-118",
     "concepto": "iso27001-operacion",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 11 },
     "pregunta": "Una organización ejecuta las acciones previstas para tratar sus riesgos, bajo la supervisión del responsable de seguridad. ¿Qué requisito de la ISO 27001 cumple?",
     "correcta": "La operación",
@@ -3132,7 +3132,7 @@
   {
     "id": "iso27001-119",
     "concepto": "iso27001-evaluacion-desempeno",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 11 },
     "pregunta": "Además de los indicadores, ¿qué mecanismos de evaluación del desempeño exige la ISO 27001?",
     "correcta": "La auditoría interna y la revisión por la dirección",
@@ -3142,7 +3142,7 @@
   {
     "id": "iso27001-120",
     "concepto": "iso27001-evaluacion-desempeno",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 11 },
     "pregunta": "En la evaluación del desempeño del SGSI, ¿a qué se asocian los indicadores o métricas?",
     "correcta": "A los objetivos de seguridad de la organización",
@@ -3152,7 +3152,7 @@
   {
     "id": "iso27001-121",
     "concepto": "iso27001-tipos-documentos",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 44 },
     "pregunta": "De los 4 tipos de documentos del SGSI, ¿cuál fija las tareas y los responsables de ejecutar un proceso?",
     "correcta": "Los procedimientos",
@@ -3162,7 +3162,7 @@
   {
     "id": "iso27001-122",
     "concepto": "iso27001-tipos-documentos",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 45 },
     "pregunta": "En la documentación del SGSI, ¿qué tipo de documento es «Los datos de acceso son personales e intransferibles, y nadie los comunica a otros»?",
     "correcta": "Una norma",
@@ -3172,7 +3172,7 @@
   {
     "id": "iso27001-123",
     "concepto": "iso27001-tipos-documentos",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 45 },
     "pregunta": "En la documentación del SGSI, ¿qué tipo de documento es «Los sistemas piden a cada usuario, cada 90 días y de forma automática, que cambie su contraseña»?",
     "correcta": "Un procedimiento",
@@ -3182,7 +3182,7 @@
   {
     "id": "iso27001-124",
     "concepto": "iso27001-evidencias-ejemplos",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 47 },
     "pregunta": "En un SGSI, ¿qué son las actas del comité de seguridad, los informes de auditoría y los compromisos de confidencialidad firmados?",
     "correcta": "Evidencias de que se ejecutan los procedimientos",
@@ -3192,7 +3192,7 @@
   {
     "id": "iso27001-125",
     "concepto": "iso27001-evidencias-ejemplos",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 47 },
     "pregunta": "Una organización guarda las solicitudes de acceso de sus usuarios y los perfiles profesionales de su plantilla. ¿Qué papel tienen en el SGSI?",
     "correcta": "Prueban que se han ejecutado los procedimientos planificados",
@@ -3202,7 +3202,7 @@
   {
     "id": "iso27001-126",
     "concepto": "iso27001-revision-informe",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 46 },
     "pregunta": "¿Cómo es el informe que prepara el responsable de seguridad para la revisión por la dirección?",
     "correcta": "De alto nivel, sin detalles técnicos",
@@ -3212,7 +3212,7 @@
   {
     "id": "iso27001-127",
     "concepto": "iso27001-revision-informe",
-    "tema": "iso27001",
+    "apartado": "iso27001",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 46 },
     "pregunta": "¿Qué refleja el informe de la revisión del SGSI por la dirección?",
     "correcta": "La situación actual del sistema y sus planes de mejora",
@@ -3222,7 +3222,7 @@
   {
     "id": "auditoria-103",
     "concepto": "auditoria-equipo-convenio",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 10 },
     "pregunta": "¿Qué recoge el plan o convenio que se elabora tras decidir el equipo auditor?",
     "correcta": "Los objetivos, los miembros y las limitaciones",
@@ -3232,7 +3232,7 @@
   {
     "id": "auditoria-104",
     "concepto": "auditoria-equipo-convenio",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 10 },
     "pregunta": "¿Para qué necesita el equipo auditor el apoyo de la alta dirección de la organización auditada?",
     "correcta": "Para obtener los datos y la colaboración del personal",
@@ -3242,7 +3242,7 @@
   {
     "id": "rgpd-140",
     "concepto": "rgpd-informatica-juridica-decisional",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 3 },
     "pregunta": "¿Qué rama de la informática jurídica pone un programa en el lugar del operador jurídico para resolver un asunto?",
     "correcta": "La informática jurídica decisional",
@@ -3252,7 +3252,7 @@
   {
     "id": "rgpd-141",
     "concepto": "rgpd-informatica-juridica-decisional",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 3 },
     "pregunta": "¿En qué procesos excluye el temario los sistemas expertos de la informática jurídica decisional?",
     "correcta": "En los procesos penales, por su complejidad",
@@ -3262,7 +3262,7 @@
   {
     "id": "rgpd-142",
     "concepto": "rgpd-informatica-juridica-decisional",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 3 },
     "pregunta": "Un programa calcula la indemnización de un accidente. ¿Qué rama de la informática jurídica aplica?",
     "correcta": "La informática jurídica decisional",
@@ -3272,7 +3272,7 @@
   {
     "id": "rgpd-143",
     "concepto": "rgpd-informatica-juridica-gestion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 3 },
     "pregunta": "¿Qué automatiza la informática jurídica de gestión?",
     "correcta": "Las tareas de administración de juzgados, registros y despachos",
@@ -3282,7 +3282,7 @@
   {
     "id": "rgpd-144",
     "concepto": "rgpd-informatica-juridica-gestion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 3 },
     "pregunta": "Un juzgado usa un programa para controlar los plazos procesales y repartir los asuntos. ¿Qué rama de la informática jurídica aplica?",
     "correcta": "La informática jurídica de gestión",
@@ -3292,7 +3292,7 @@
   {
     "id": "delitos-110",
     "concepto": "delitos-apoderamiento",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 11 },
     "pregunta": "¿Qué conducta castiga el artículo 197 del Código Penal?",
     "correcta": "Usar o modificar sin consentimiento datos personales de un fichero, en perjuicio de un tercero",
@@ -3302,7 +3302,7 @@
   {
     "id": "delitos-111",
     "concepto": "delitos-apoderamiento",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 11 },
     "pregunta": "¿Qué pena de prisión fija el artículo 197 del Código Penal para el delito de apoderamiento de datos personales?",
     "correcta": "De 1 a 4 años",
@@ -3312,7 +3312,7 @@
   {
     "id": "delitos-112",
     "concepto": "delitos-agravantes",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 12 },
     "pregunta": "Según el Código Penal, ¿qué ocurre con la pena del acceso ilícito a datos personales cuando los datos son de salud?",
     "correcta": "La pena es mayor",
@@ -3322,7 +3322,7 @@
   {
     "id": "delitos-113",
     "concepto": "delitos-agravantes",
-    "tema": "delitos",
+    "apartado": "delitos",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 12 },
     "pregunta": "Un funcionario público revela datos personales que obtuvo al acceder a un sistema informático. ¿Qué pena le aplica el Código Penal?",
     "correcta": "Una pena superior, y puede ser inhabilitado",
@@ -3332,7 +3332,7 @@
   {
     "id": "rgpd-145",
     "concepto": "rgpd-lopdgdd-educacion-digital",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "¿Qué norma recoge el derecho a la educación digital?",
     "correcta": "La LOPDGDD (Ley Orgánica 3/2018)",
@@ -3342,7 +3342,7 @@
   {
     "id": "rgpd-146",
     "concepto": "rgpd-lopdgdd-educacion-digital",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "Un colegio enseña a sus alumnos a usar Internet de forma segura. ¿Qué derecho de la LOPDGDD atiende?",
     "correcta": "El derecho a la educación digital",
@@ -3352,7 +3352,7 @@
   {
     "id": "rgpd-147",
     "concepto": "rgpd-lopdgdd-medios-gratuitos",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "Según la LOPDGDD, ¿cómo son los medios que ofrece una empresa para que los ciudadanos ejerzan sus derechos?",
     "correcta": "De fácil acceso y gratuitos",
@@ -3362,7 +3362,7 @@
   {
     "id": "rgpd-148",
     "concepto": "rgpd-lopdgdd-medios-gratuitos",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 19 },
     "pregunta": "Una empresa cobra 10 € a cada cliente que pide el acceso a sus datos. ¿Qué obligación de la LOPDGDD incumple?",
     "correcta": "Facilitar medios gratuitos para ejercer los derechos",
@@ -3372,7 +3372,7 @@
   {
     "id": "rgpd-149",
     "concepto": "rgpd-lopdgdd-denuncias-anonimas",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 20 },
     "pregunta": "Respecto a la administración pública, ¿qué mecanismo para comunicar infracciones regula la LOPDGDD?",
     "correcta": "Un sistema de denuncias internas anónimas",
@@ -3382,7 +3382,7 @@
   {
     "id": "rgpd-150",
     "concepto": "rgpd-lopdgdd-denuncias-anonimas",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 20 },
     "pregunta": "Un empleado quiere avisar de una infracción de su empresa sin dar su nombre. ¿Qué mecanismo de la LOPDGDD usa?",
     "correcta": "Las denuncias internas anónimas",
@@ -3392,7 +3392,7 @@
   {
     "id": "rgpd-151",
     "concepto": "rgpd-ambito-material-excepciones",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 30 },
     "pregunta": "¿Se aplica el RGPD al tratamiento de datos de una actividad personal o doméstica?",
     "correcta": "No: queda fuera del ámbito material del RGPD",
@@ -3402,7 +3402,7 @@
   {
     "id": "rgpd-152",
     "concepto": "rgpd-ambito-material-excepciones",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 30 },
     "pregunta": "Una autoridad competente trata datos personales para investigar infracciones penales. ¿Se aplica el RGPD?",
     "correcta": "No: el ámbito material del RGPD lo excluye",
@@ -3412,7 +3412,7 @@
   {
     "id": "rgpd-153",
     "concepto": "rgpd-ambito-material-excepciones",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 30 },
     "pregunta": "Un Estado miembro trata datos personales para sus controles de fronteras, asilo e inmigración. ¿Se aplica el RGPD?",
     "correcta": "No: el ámbito material del RGPD lo excluye",
@@ -3422,7 +3422,7 @@
   {
     "id": "rgpd-154",
     "concepto": "rgpd-deber-informacion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 33 },
     "pregunta": "Según el deber de información del artículo 11 de la LOPDGDD, ¿cómo detallan las empresas la información?",
     "correcta": "De forma explícita y con un lenguaje comprensible",
@@ -3432,7 +3432,7 @@
   {
     "id": "rgpd-155",
     "concepto": "rgpd-deber-informacion",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 33 },
     "pregunta": "Según el deber de información de la LOPDGDD, ¿qué informa la empresa sobre las transferencias internacionales?",
     "correcta": "Su intención de realizarlas",
@@ -3442,7 +3442,7 @@
   {
     "id": "rgpd-156",
     "concepto": "rgpd-codigos-conducta",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 45 },
     "pregunta": "Según la LOPDGDD, ¿qué buscan los códigos de conducta?",
     "correcta": "Unos marcos específicos de tratamiento para determinados sectores",
@@ -3452,7 +3452,7 @@
   {
     "id": "rgpd-157",
     "concepto": "rgpd-codigos-conducta",
-    "tema": "rgpd",
+    "apartado": "rgpd",
     "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 45 },
     "pregunta": "¿Quién participa en la elaboración de los códigos de conducta de la LOPDGDD?",
     "correcta": "Los organismos profesionales, en concertación directa",
@@ -3462,7 +3462,7 @@
   {
     "id": "ens-111",
     "concepto": "ens-productos-certificados",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 21 },
     "pregunta": "Según el requisito de adquisición de productos de seguridad del ENS, ¿qué productos se valoran?",
     "correcta": "Los productos certificados con normas de reconocimiento mundial",
@@ -3472,7 +3472,7 @@
   {
     "id": "ens-112",
     "concepto": "ens-productos-certificados",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 21 },
     "pregunta": "Una administración compra un cortafuegos para su red. Según el ENS, ¿qué valora en el producto?",
     "correcta": "Que esté certificado con normas de reconocimiento mundial",
@@ -3482,7 +3482,7 @@
   {
     "id": "ens-113",
     "concepto": "ens-integridad-actualizacion",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 22 },
     "pregunta": "Según el requisito de integridad y actualización del ENS, ¿qué necesita la instalación de un nuevo elemento de seguridad?",
     "correcta": "Una autorización formal",
@@ -3492,7 +3492,7 @@
   {
     "id": "ens-114",
     "concepto": "ens-integridad-actualizacion",
-    "tema": "ens",
+    "apartado": "ens",
     "fuente": { "pdf": "2A _Teoría.pdf", "pagina": 22 },
     "pregunta": "Según el requisito de integridad y actualización del ENS, ¿con qué frecuencia se actualiza el sistema?",
     "correcta": "De forma permanente",
@@ -3502,7 +3502,7 @@
   {
     "id": "riesgos-110",
     "concepto": "riesgos-residual",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 38 },
     "pregunta": "Tras implantar los controles, ¿puede el riesgo residual llegar a cero?",
     "correcta": "No, aunque los controles cubran todas las amenazas",
@@ -3512,7 +3512,7 @@
   {
     "id": "riesgos-111",
     "concepto": "riesgos-residual",
-    "tema": "riesgos",
+    "apartado": "riesgos",
     "fuente": { "pdf": "2B _Teoría.pdf", "pagina": 38 },
     "pregunta": "¿Con qué metodología se calcula el riesgo residual?",
     "correcta": "Con la misma metodología del análisis de riesgos",
@@ -3522,7 +3522,7 @@
   {
     "id": "auditoria-110",
     "concepto": "auditoria-normas",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
     "pregunta": "En la auditoría de sistemas, ¿qué regula la ISO 9001?",
     "correcta": "Los requisitos de los sistemas de gestión de la calidad",
@@ -3532,7 +3532,7 @@
   {
     "id": "auditoria-111",
     "concepto": "auditoria-normas",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
     "pregunta": "¿Qué da la ISO 19011 a la auditoría de sistemas?",
     "correcta": "Las directrices para la auditoría de sistemas de gestión",
@@ -3542,7 +3542,7 @@
   {
     "id": "auditoria-112",
     "concepto": "auditoria-normas",
-    "tema": "auditoria",
+    "apartado": "auditoria",
     "fuente": { "pdf": "2C _Teoría.pdf", "pagina": 11 },
     "pregunta": "¿Por qué la auditoría de sistemas involucra la ISO 9001?",
     "correcta": "Porque abarca la gestión de calidad total",

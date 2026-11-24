@@ -154,8 +154,8 @@ async fn editar(
         .into_iter()
         .chain(&nueva.distractores)
         .any(|t| t.trim().is_empty());
-    let solo_textos = (&q.concepto, &q.tema, &q.fuente, q.distractores.len())
-        == (&nueva.concepto, &nueva.tema, &nueva.fuente, nueva.distractores.len());
+    let solo_textos = (&q.concepto, &q.apartado, &q.fuente, q.distractores.len())
+        == (&nueva.concepto, &nueva.apartado, &nueva.fuente, nueva.distractores.len());
     if !solo_textos || en_blanco {
         return Err((StatusCode::UNPROCESSABLE_ENTITY, "solo cambian los textos, y ninguno va en blanco").into_response());
     }
@@ -214,7 +214,7 @@ async fn responder(
 async fn leer_guardado(ruta: PathBuf) -> Result<Guardado, Response> {
     let texto = leer_si_existe(ruta).await?;
     if texto.is_empty() {
-        return Ok(Guardado { guardada: jiff::Timestamp::UNIX_EPOCH, ronda: None });
+        return Ok(Guardado { guardada: jiff::Timestamp::UNIX_EPOCH, ronda: None, seleccion: None });
     }
     serde_json::from_slice(&texto).map_err(error_interno)
 }
