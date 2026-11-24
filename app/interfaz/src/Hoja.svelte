@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PreguntaDeSesion } from "./nucleo/nucleo.js";
 
-  // `paso` es el paso del concepto tras la respuesta. Sin `paso`, la pregunta espera su respuesta.
+  // `paso` es el paso de la pregunta tras la respuesta. Sin `paso`, la pregunta espera su respuesta.
   // En el PC, "Siguiente" va en la hoja, debajo de la explicación. En el móvil va en el pie.
   let { q, paso, onsiguiente, etiqueta }: { q: PreguntaDeSesion; paso: string | undefined; onsiguiente: () => void; etiqueta: string } = $props();
 </script>

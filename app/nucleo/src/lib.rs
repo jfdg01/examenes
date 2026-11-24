@@ -93,47 +93,50 @@ pub struct Datos {
     pub historial: Vec<Respuesta>,
 }
 
-/// El paso de un concepto: el número de aciertos con "seguro" seguidos.
+/// El estado de una pregunta: sin ver, o su paso, el número de aciertos con "seguro" seguidos.
 #[derive(Clone, Copy, PartialEq, Debug)]
-pub enum Concepto {
+pub enum Estado {
     SinVer,
     Paso(u32),
 }
 
-impl Concepto {
-    /// Un acierto con "seguro" sube el paso, aunque el concepto no haya vencido. Otra respuesta lo pone a 0.
-    pub fn tras(self, acierto: bool, seguro: bool) -> Concepto {
+impl Estado {
+    /// Un acierto con "seguro" sube el paso, aunque la pregunta no haya vencido. Otra respuesta lo pone a 0.
+    pub fn tras(self, acierto: bool, seguro: bool) -> Estado {
         match (self, sube(acierto, seguro)) {
-            (Concepto::SinVer, true) => Concepto::Paso(1),
-            (Concepto::Paso(n), true) => Concepto::Paso(n.saturating_add(1)),
-            (_, false) => Concepto::Paso(0),
+            (Estado::SinVer, true) => Estado::Paso(1),
+            (Estado::Paso(n), true) => Estado::Paso(n.saturating_add(1)),
+            (_, false) => Estado::Paso(0),
         }
     }
 
-    /// El hueco en segundos: 10 minutos × 3^(paso − 1), y 0 con el paso a 0.
+    /// El hueco en segundos, como en SM-2: 10 minutos con el paso 1, 1 día con el paso 2, y después ×2,5 por paso.
+    /// Con el paso a 0, el hueco es 0.
     pub fn hueco(self) -> i64 {
         match self {
-            Concepto::SinVer | Concepto::Paso(0) => 0,
-            Concepto::Paso(n) => 600i64.saturating_mul(3i64.saturating_pow(n - 1)),
+            Estado::SinVer | Estado::Paso(0) => 0,
+            Estado::Paso(1) => 600,
+            // Un `f64` demasiado grande pasa a `i64::MAX`.
+            Estado::Paso(n) => (86_400.0 * 2.5f64.powf(n as f64 - 2.0)) as i64,
         }
     }
 }
 
-impl std::fmt::Display for Concepto {
+impl std::fmt::Display for Estado {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
-            Concepto::SinVer => write!(f, "sin ver"),
-            Concepto::Paso(n) => write!(f, "paso {n}"),
+            Estado::SinVer => write!(f, "sin ver"),
+            Estado::Paso(n) => write!(f, "paso {n}"),
         }
     }
 }
 
-/// Solo un acierto con "seguro" sube el paso de un concepto.
+/// Solo un acierto con "seguro" sube el paso de una pregunta.
 fn sube(acierto: bool, seguro: bool) -> bool {
     acierto && seguro
 }
 
-/// La respuesta a una pregunta de la ronda, con el paso del concepto tras ella y su aviso.
+/// La respuesta a una pregunta de la ronda, con el paso de la pregunta tras ella y su aviso.
 #[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct Correccion {
     pub respuesta: Respuesta,
@@ -166,19 +169,19 @@ pub fn restante(limite: f64, ahora: f64) -> u32 {
     ((limite - ahora) / 1000.0).round().max(0.0) as u32
 }
 
-/// El paso de cada concepto visto, y la hora en que vence.
-fn estados<'a>(banco: &'a [Pregunta], historial: &[Respuesta]) -> std::collections::HashMap<&'a str, (Concepto, i64)> {
-    let concepto: std::collections::HashMap<&str, &str> = banco.iter().map(|q| (q.id.as_str(), q.concepto.as_str())).collect();
+/// El paso de cada pregunta vista del banco, por su `id`, y la hora en que vence.
+fn estados<'a>(banco: &'a [Pregunta], historial: &[Respuesta]) -> std::collections::HashMap<&'a str, (Estado, i64)> {
+    let ids: std::collections::HashSet<&str> = banco.iter().map(|q| q.id.as_str()).collect();
     let mut ordenado: Vec<(i64, &Respuesta)> = historial.iter().map(|r| (r.ts.as_second(), r)).collect();
     ordenado.sort_by_key(|(t, _)| *t);
     let mut estado = std::collections::HashMap::new();
     for (t, r) in ordenado {
-        let Some(&c) = concepto.get(r.id.as_str()) else {
+        let Some(&id) = ids.get(r.id.as_str()) else {
             continue;
         };
-        let antes = estado.get(c).map_or(Concepto::SinVer, |e: &(Concepto, i64)| e.0);
+        let antes = estado.get(id).map_or(Estado::SinVer, |e: &(Estado, i64)| e.0);
         let despues = antes.tras(r.resultado == Resultado::Acierto, r.seguro);
-        estado.insert(c, (despues, t.saturating_add(despues.hueco())));
+        estado.insert(id, (despues, t.saturating_add(despues.hueco())));
     }
     estado
 }
@@ -210,12 +213,12 @@ pub struct Par {
     pub apartado: String,
 }
 
-/// Un tema en el inicio, con su número de conceptos y sus apartados.
+/// Un tema en el inicio, con su número de preguntas y sus apartados.
 #[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct TemaDelInicio {
     pub pdf: String,
     pub nombre: String,
-    pub conceptos: u32,
+    pub preguntas: u32,
     pub apartados: Vec<ApartadoDelInicio>,
 }
 
@@ -223,7 +226,7 @@ pub struct TemaDelInicio {
 pub struct ApartadoDelInicio {
     pub apartado: String,
     pub nombre: String,
-    pub conceptos: u32,
+    pub preguntas: u32,
     pub marcado: bool,
 }
 
@@ -236,8 +239,8 @@ fn marcado(seleccion: Option<&[Par]>, pdf: &str, apartado: &str) -> bool {
     seleccion.is_none_or(|s| s.iter().any(|p| p.pdf == pdf && p.apartado == apartado))
 }
 
-fn conceptos<'a>(preguntas: impl Iterator<Item = &'a Pregunta>) -> u32 {
-    preguntas.map(|q| q.concepto.as_str()).collect::<std::collections::HashSet<_>>().len() as u32
+fn conceptos(banco: &[Pregunta]) -> u32 {
+    banco.iter().map(|q| q.concepto.as_str()).collect::<std::collections::HashSet<_>>().len() as u32
 }
 
 /// La pantalla de la ronda. Del inicio sale una sesión, cada pregunta pasa de sin contestar a contestada,
@@ -263,14 +266,14 @@ pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], sele
         .map(|(pdf, tema)| TemaDelInicio {
             pdf: pdf.clone(),
             nombre: tema.nombre.clone(),
-            conceptos: conceptos(banco.iter().filter(|q| q.fuente.pdf == *pdf)),
+            preguntas: banco.iter().filter(|q| q.fuente.pdf == *pdf).count() as u32,
             apartados: tema
                 .apartados
                 .iter()
                 .map(|a| ApartadoDelInicio {
                     apartado: a.clone(),
                     nombre: examen.apartados.get(a).unwrap_or(a).clone(),
-                    conceptos: conceptos(banco.iter().filter(|q| q.fuente.pdf == *pdf && q.apartado == *a)),
+                    preguntas: banco.iter().filter(|q| q.fuente.pdf == *pdf && q.apartado == *a).count() as u32,
                     marcado: marcado(seleccion, pdf, a),
                 })
                 .collect(),
@@ -280,7 +283,7 @@ pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], sele
     let parte = temas.iter().any(|t| t.apartados.iter().any(|a| !a.marcado)).then(|| format!("con {con} de {} temas", temas.len()));
     let banco = de_la_seleccion(banco, seleccion);
     let tarjeta = tarjeta(examen, &banco, historial, objetivo);
-    let sesion = (tarjeta.sabes + tarjeta.no_sabes + tarjeta.sin_ver).min(TAMANO_SESION as u32);
+    let sesion = conceptos(&banco).min(TAMANO_SESION as u32);
     let simulacro = examen.preguntas.min(banco.len() as u32);
     Inicio::Listo { titulo, sesion, simulacro, tarjeta, temas, parte }
 }
@@ -324,7 +327,7 @@ pub struct PreguntaDeSesion {
     /// El índice de la opción correcta en `opciones`.
     pub correcta: u32,
     pub explicacion: String,
-    /// El paso del concepto antes de contestar.
+    /// El paso de la pregunta antes de contestar.
     pub paso: String,
     /// El paso tras un acierto con "seguro".
     pub paso_tras_seguro: String,
@@ -341,50 +344,32 @@ pub struct PreguntaDeSesion {
     pub copiar: String,
 }
 
-/// La sesión de 12: los fallados, los vencidos con paso 1 o más, los conceptos sin ver, y el relleno con los que vencen antes.
+/// La sesión de 12, con una pregunta por concepto como mucho. Recorre las preguntas en este orden, y toma la primera de cada concepto:
+/// las falladas, las vencidas con paso 1 o más, las hermanas sin ver de un concepto visto, las de los conceptos sin ver,
+/// y el relleno con las que vencen antes. Cada grupo va del que vence antes al que vence después, y el azar rompe los empates.
 /// `ahora` va en segundos desde 1970.
 pub fn sesion(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], ahora: i64, azar: &mut Azar) -> Vec<PreguntaDeSesion> {
     let estado = estados(banco, historial);
-    let mut ultima: std::collections::HashMap<&str, Timestamp> = std::collections::HashMap::new();
-    for r in historial {
-        let ts = ultima.entry(r.id.as_str()).or_insert(r.ts);
-        *ts = (*ts).max(r.ts);
-    }
-    // Una pregunta por concepto: la que no tiene respuestas, o la de la respuesta más vieja. El azar rompe los empates.
-    let mut barajado: Vec<&Pregunta> = banco.iter().collect();
-    azar.barajar(&mut barajado);
-    let mut conceptos: Vec<&str> = Vec::new();
-    let mut pregunta: std::collections::HashMap<&str, &Pregunta> = std::collections::HashMap::new();
-    for q in barajado {
-        let ultima_de = |q: &Pregunta| ultima.get(q.id.as_str()).copied();
-        match pregunta.get(q.concepto.as_str()) {
-            None => conceptos.push(&q.concepto),
-            Some(otra) => {
-                let gana = match (ultima_de(otra), ultima_de(q)) {
-                    (Some(_), None) => true,
-                    (Some(a), Some(b)) => b < a,
-                    (None, _) => false,
-                };
-                if !gana {
-                    continue;
-                }
-            }
-        }
-        pregunta.insert(&q.concepto, q);
-    }
-    let (mut vistos, sin_ver): (Vec<&str>, Vec<&str>) = conceptos.into_iter().partition(|c| estado.contains_key(c));
-    // Los vencidos van delante, con los fallados primero, y cada grupo del que vence antes al que vence después.
-    vistos.sort_by_key(|c| (estado[c].1 > ahora, !matches!(estado[c].0, Concepto::Paso(0)), estado[c].1));
-    let vencidos = vistos.iter().take_while(|c| estado[*c].1 <= ahora).count();
-    let mut elegidos: Vec<&str> =
-        vistos[..vencidos].iter().chain(&sin_ver).chain(&vistos[vencidos..]).take(TAMANO_SESION).copied().collect();
-    azar.barajar(&mut elegidos);
-    elegidos.into_iter().map(|c| de_la_ronda(examen, pregunta[c], &estado, azar)).collect()
+    let vistos: std::collections::HashSet<&str> =
+        banco.iter().filter(|q| estado.contains_key(q.id.as_str())).map(|q| q.concepto.as_str()).collect();
+    let mut orden: Vec<&Pregunta> = banco.iter().collect();
+    azar.barajar(&mut orden);
+    orden.sort_by_key(|q| match estado.get(q.id.as_str()) {
+        Some(&(Estado::Paso(0), vence)) => (0, vence),
+        Some(&(_, vence)) if vence <= ahora => (1, vence),
+        None if vistos.contains(q.concepto.as_str()) => (2, 0),
+        None => (3, 0),
+        Some(&(_, vence)) => (4, vence),
+    });
+    let mut usados = std::collections::HashSet::new();
+    let mut elegidas: Vec<&Pregunta> = orden.into_iter().filter(|q| usados.insert(q.concepto.as_str())).take(TAMANO_SESION).collect();
+    azar.barajar(&mut elegidas);
+    elegidas.into_iter().map(|q| de_la_ronda(examen, q, &estado, azar)).collect()
 }
 
-/// La pregunta con sus opciones al azar y el paso de su concepto.
-fn de_la_ronda(examen: &Examen, q: &Pregunta, estado: &std::collections::HashMap<&str, (Concepto, i64)>, azar: &mut Azar) -> PreguntaDeSesion {
-    let paso = estado.get(q.concepto.as_str()).map_or(Concepto::SinVer, |e| e.0);
+/// La pregunta con sus opciones al azar y su paso.
+fn de_la_ronda(examen: &Examen, q: &Pregunta, estado: &std::collections::HashMap<&str, (Estado, i64)>, azar: &mut Azar) -> PreguntaDeSesion {
+    let paso = estado.get(q.id.as_str()).map_or(Estado::SinVer, |e| e.0);
     let mut opciones: Vec<String> = std::iter::once(&q.correcta).chain(&q.distractores).cloned().collect();
     azar.barajar(&mut opciones);
     PreguntaDeSesion {
@@ -456,6 +441,7 @@ pub fn editar(banco: &[Pregunta], q: &PreguntaDeSesion, e: &Edicion) -> Option<E
 }
 
 /// El simulacro: las preguntas del examen, al azar del banco que recibe, y su duración. Un banco más pequeño da un simulacro más corto.
+/// Lleva una pregunta por concepto, y rellena con hermanas solo cuando faltan conceptos.
 #[derive(Serialize, Tsify)]
 pub struct Simulacro {
     pub segundos: u32,
@@ -466,10 +452,14 @@ pub fn simulacro(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], a
     let estado = estados(banco, historial);
     let mut barajado: Vec<&Pregunta> = banco.iter().collect();
     azar.barajar(&mut barajado);
-    barajado.truncate(examen.preguntas as usize);
+    let mut usados = std::collections::HashSet::new();
+    let (mut elegidas, hermanas): (Vec<&Pregunta>, Vec<&Pregunta>) = barajado.into_iter().partition(|q| usados.insert(q.concepto.as_str()));
+    elegidas.extend(hermanas);
+    elegidas.truncate(examen.preguntas as usize);
+    azar.barajar(&mut elegidas);
     Simulacro {
         segundos: examen.minutos.saturating_mul(60),
-        preguntas: barajado.into_iter().map(|q| de_la_ronda(examen, q, &estado, azar)).collect(),
+        preguntas: elegidas.into_iter().map(|q| de_la_ronda(examen, q, &estado, azar)).collect(),
     }
 }
 
@@ -581,7 +571,7 @@ pub struct Tarjeta {
     pub sin_ver: u32,
     /// La probabilidad de sacar el objetivo hoy, con la forma de las dudas que da más.
     pub hoy: u32,
-    /// Los conceptos en "sabes" que dan un 95 %.
+    /// Las preguntas en "sabes" que dan un 95 %.
     pub meta: u32,
     /// "✓", "≈1 sesión", "≈n sesiones" o "? sesiones".
     pub sesiones: String,
@@ -597,7 +587,7 @@ pub struct Tarjeta {
 #[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct Dudas {
     pub texto: String,
-    pub conceptos: u32,
+    pub preguntas: u32,
     pub porcentaje: u32,
     pub detalle: Option<String>,
 }
@@ -619,7 +609,7 @@ pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], obj
         meta += 1;
     }
     let faltan = meta - sabes;
-    // El ritmo: los conceptos que pasaron a "sabes" en las últimas respuestas, por sesión.
+    // El ritmo: las preguntas que pasaron a "sabes" en las últimas respuestas, por sesión.
     let mut ordenado = historial.to_vec();
     ordenado.sort_by_key(|r| r.ts);
     let antes = cuenta(banco, &ordenado[..ordenado.len().saturating_sub(VENTANA)]).0;
@@ -629,7 +619,7 @@ pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], obj
     let (blanco, contesta) = (p(sabes, None), p(sabes, Some(tasa)));
     let pc = |x: f64| (100.0 * x).round() as u32;
     let ciegas = format!("a ciegas, 1 de {}", examen.opciones);
-    let fila = |texto: &str, conceptos, tasa, detalle| Dudas { texto: texto.into(), conceptos, porcentaje: pc(tasa), detalle };
+    let fila = |texto: &str, preguntas, tasa, detalle| Dudas { texto: texto.into(), preguntas, porcentaje: pc(tasa), detalle };
     Tarjeta {
         sabes,
         no_sabes,
@@ -666,12 +656,11 @@ const META: f64 = 0.95;
 /// Las respuestas que cuentan para el ritmo: 5 sesiones de 12.
 const VENTANA: usize = 60;
 
-/// Los conceptos en "sabes", en "no sabes" y sin ver.
+/// Las preguntas en "sabes", en "no sabes" y sin ver.
 fn cuenta(banco: &[Pregunta], historial: &[Respuesta]) -> (u32, u32, u32) {
     let estado = estados(banco, historial);
-    let conceptos: std::collections::HashSet<&str> = banco.iter().map(|q| q.concepto.as_str()).collect();
-    let sabes = estado.values().filter(|e| matches!(e.0, Concepto::Paso(n) if n > 0)).count();
-    (sabes as u32, (estado.len() - sabes) as u32, (conceptos.len() - estado.len()) as u32)
+    let sabes = estado.values().filter(|e| matches!(e.0, Estado::Paso(n) if n > 0)).count();
+    (sabes as u32, (estado.len() - sabes) as u32, (banco.len() - estado.len()) as u32)
 }
 
 fn binomial(n: u32, k: u32, p: f64) -> f64 {
@@ -679,8 +668,8 @@ fn binomial(n: u32, k: u32, p: f64) -> f64 {
     c * p.powi(k as i32) * (1.0 - p).powi((n - k) as i32)
 }
 
-/// La probabilidad de sacar más de `objetivo` si cada pregunta es de un concepto en "sabes" con probabilidad `sabes`.
-/// Una pregunta de otro concepto acierta con probabilidad `acierto`, o queda en blanco con `None`.
+/// La probabilidad de sacar más de `objetivo` si cada pregunta está en "sabes" con probabilidad `sabes`.
+/// Otra pregunta acierta con probabilidad `acierto`, o queda en blanco con `None`.
 /// El objetivo pide `objetivo × preguntas / 10` aciertos netos, y un fallo resta la penalización.
 fn probabilidad(sabes: f64, acierto: Option<f64>, objetivo: f64, examen: &Examen) -> f64 {
     let n = examen.preguntas;
@@ -789,13 +778,13 @@ mod tests {
         let t = tarjeta(&LN, &banco_de(10), &h, 5.0);
         assert_eq!((t.sabes, t.no_sabes, t.sin_ver), (1, 2, 7));
         assert_eq!(t.dudas[0].detalle.as_deref(), Some("1 de 2 «dudo»"));
-        // 2 conceptos al 50 % y 7 al 25 %: 11/36.
+        // 2 preguntas al 50 % y 7 al 25 %: 11/36.
         assert_eq!([0, 1, 2].map(|i| t.dudas[i].porcentaje), [50, 25, 31]);
     }
 
     #[test]
     fn la_tarjeta_sigue_la_forma_con_la_probabilidad_mas_alta_y_el_consejo_da_las_dos() {
-        // 10 conceptos que sabes y 10 con un fallo con dudo: contestar solo resta, y una duda acierta 0 %.
+        // 10 preguntas que sabes y 10 con un fallo con dudo: contestar solo resta, y una duda acierta 0 %.
         let respuestas: Vec<_> = (0..10).map(|i| (i, true, true)).chain((10..20).map(|i| (i, false, false))).collect();
         let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 5.0);
         assert_eq!((t.hoy, t.si_contestas, t.en_blanco), (59, 25, 59));
@@ -803,9 +792,9 @@ mod tests {
     }
 
     #[test]
-    fn el_camino_cuenta_los_conceptos_para_un_95_y_las_sesiones_salen_del_ritmo() {
-        // Para un 10 con 20 preguntas solo valen 20 aciertos, así que el 95 % pide todos los conceptos.
-        // 4 conceptos nuevos en 4 respuestas son 12 por sesión, y faltan 16.
+    fn el_camino_cuenta_las_preguntas_para_un_95_y_las_sesiones_salen_del_ritmo() {
+        // Para un 10 con 20 preguntas solo valen 20 aciertos, así que el 95 % pide todas las preguntas.
+        // 4 preguntas nuevas en 4 respuestas son 12 por sesión, y faltan 16.
         let h = historial_de(&[(0, true, true), (1, true, true), (2, true, true), (3, true, true)]);
         let t = tarjeta(&LN, &banco_de(20), &h, 10.0);
         assert_eq!((t.sabes, t.meta), (4, 20));
@@ -814,7 +803,7 @@ mod tests {
 
     #[test]
     fn una_sola_sesion_va_en_singular() {
-        // 19 conceptos nuevos en 19 respuestas son 12 por sesión, y falta 1.
+        // 19 preguntas nuevas en 19 respuestas son 12 por sesión, y falta 1.
         let respuestas: Vec<_> = (0..19).map(|i| (i, true, true)).collect();
         let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 10.0);
         assert_eq!(t.sesiones, "≈1 sesión");
@@ -822,7 +811,7 @@ mod tests {
 
     #[test]
     fn el_ritmo_cuenta_solo_las_60_ultimas_respuestas() {
-        // 10 conceptos nuevos en las 60 últimas respuestas son 2 por sesión, y faltan 50.
+        // 10 preguntas nuevas en las 60 últimas respuestas son 2 por sesión, y faltan 50.
         let respuestas: Vec<_> = (0..50).map(|i| (i, true, true)).chain((0..50).map(|_| (0, true, true))).collect();
         let t = tarjeta(&LN, &banco_de(100), &historial_de(&respuestas), 10.0);
         assert_eq!((t.sabes, t.meta), (50, 100));
@@ -830,7 +819,7 @@ mod tests {
     }
 
     #[test]
-    fn con_un_95_hoy_no_faltan_conceptos_ni_sesiones() {
+    fn con_un_95_hoy_no_faltan_preguntas_ni_sesiones() {
         let respuestas: Vec<_> = (0..20).map(|i| (i, true, true)).collect();
         let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 5.0);
         assert_eq!((t.sabes, t.meta, t.hoy), (20, 20, 100));
@@ -846,7 +835,7 @@ mod tests {
 
     #[test]
     fn sabes_es_un_paso_de_1_o_mas() {
-        // c0 sube a paso 2, c1 vuelve a paso 0 tras un acierto con dudo, y una respuesta huérfana no cuenta.
+        // q0 sube a paso 2, q1 vuelve a paso 0 tras un acierto con dudo, y una respuesta huérfana no cuenta.
         let mut h = historial_de(&[(0, true, true), (0, true, true), (1, true, true), (1, true, false)]);
         h.push(respuesta("x", "1970-01-01T01:00:00Z", true, true));
         let t = tarjeta(&LN, &banco_de(3), &h, 5.0);
@@ -872,9 +861,9 @@ mod tests {
         assert_eq!(
             t.dudas,
             [
-                Dudas { texto: "en lo que viste".into(), conceptos: 0, porcentaje: 25, detalle: a_ciegas.clone() },
-                Dudas { texto: "en lo que no viste".into(), conceptos: 20, porcentaje: 25, detalle: a_ciegas },
-                Dudas { texto: "de media".into(), conceptos: 20, porcentaje: 25, detalle: None },
+                Dudas { texto: "en lo que viste".into(), preguntas: 0, porcentaje: 25, detalle: a_ciegas.clone() },
+                Dudas { texto: "en lo que no viste".into(), preguntas: 20, porcentaje: 25, detalle: a_ciegas },
+                Dudas { texto: "de media".into(), preguntas: 20, porcentaje: 25, detalle: None },
             ]
         );
     }
@@ -902,15 +891,10 @@ mod tests {
     }
 
     #[test]
-    fn el_simulacro_saca_al_azar_las_preguntas_del_examen_de_todo_el_banco_con_su_reloj() {
-        // 3 preguntas por concepto: el simulacro no lleva una sola por concepto.
-        let banco: Vec<Pregunta> = (0..30).map(|i| pregunta(&format!("q{i}"), &format!("c{}", i / 3))).collect();
+    fn el_simulacro_saca_al_azar_las_preguntas_del_examen_con_su_reloj() {
+        let banco: Vec<Pregunta> = (0..90).map(|i| pregunta(&format!("q{i}"), &format!("c{}", i / 3))).collect();
         let s = simulacro(&LN, &banco, &[], &mut Azar::new(1));
         assert_eq!((s.segundos, s.preguntas.len()), (25 * 60, 20));
-        let mut ids: Vec<&str> = s.preguntas.iter().map(|q| q.id.as_str()).collect();
-        ids.sort();
-        ids.dedup();
-        assert_eq!(ids.len(), 20);
         let otro = simulacro(&LN, &banco, &[], &mut Azar::new(2));
         assert_ne!(
             s.preguntas.iter().map(|q| &q.id).collect::<Vec<_>>(),
@@ -920,11 +904,34 @@ mod tests {
     }
 
     #[test]
-    fn una_pregunta_del_simulacro_da_el_paso_de_su_concepto() {
+    fn el_simulacro_lleva_una_pregunta_por_concepto_y_rellena_con_hermanas_cuando_faltan_conceptos() {
+        let conceptos_de = |s: &Simulacro| {
+            let mut c: Vec<&str> = s.preguntas.iter().map(|q| q.concepto.as_str()).collect();
+            c.sort();
+            c.dedup();
+            c.len()
+        };
+        for semilla in 0..20 {
+            // 30 conceptos de 3 preguntas: 20 conceptos distintos.
+            let grande: Vec<Pregunta> = (0..90).map(|i| pregunta(&format!("q{i}"), &format!("c{}", i / 3))).collect();
+            assert_eq!(conceptos_de(&simulacro(&LN, &grande, &[], &mut Azar::new(semilla))), 20);
+            // 10 conceptos de 3 preguntas: los 10 conceptos, y 10 hermanas sin repetir pregunta.
+            let corto = &grande[..30];
+            let s = simulacro(&LN, corto, &[], &mut Azar::new(semilla));
+            let mut ids: Vec<&str> = s.preguntas.iter().map(|q| q.id.as_str()).collect();
+            ids.sort();
+            ids.dedup();
+            assert_eq!((conceptos_de(&s), ids.len()), (10, 20));
+        }
+    }
+
+    #[test]
+    fn una_pregunta_del_simulacro_da_su_paso_y_no_el_de_sus_hermanas() {
         let banco = [pregunta("a1", "a"), pregunta("a2", "a")];
         let historial = [respuesta("a1", &minuto(0, 0), true, true)];
         let s = simulacro(&LN, &banco, &historial, &mut Azar::new(1));
-        assert!(s.preguntas.iter().all(|q| q.paso == "paso 1" && q.paso_tras_otra == "paso 0"));
+        let paso = |id: &str| s.preguntas.iter().find(|q| q.id == id).unwrap().paso.clone();
+        assert_eq!((paso("a1").as_str(), paso("a2").as_str()), ("paso 1", "sin ver"));
     }
 
     pub(crate) fn pregunta(id: &str, concepto: &str) -> Pregunta {
@@ -1029,9 +1036,9 @@ mod tests {
         let (examen, banco) = temario();
         let Inicio::Listo { sesion, temas, parte, .. } = inicio(&examen, &banco, &[], None, 5.0) else { panic!() };
         assert_eq!((sesion, parte), (3, None));
-        let resumen: Vec<_> = temas.iter().map(|t| (t.nombre.as_str(), t.conceptos, t.apartados.iter().all(|a| a.marcado))).collect();
-        assert_eq!(resumen, [("Uno", 1, true), ("Dos", 2, true)]);
-        assert_eq!(temas[1].apartados.iter().map(|a| (a.nombre.as_str(), a.conceptos)).collect::<Vec<_>>(), [("ENS", 1), ("Riesgos", 1)]);
+        let resumen: Vec<_> = temas.iter().map(|t| (t.nombre.as_str(), t.preguntas, t.apartados.iter().all(|a| a.marcado))).collect();
+        assert_eq!(resumen, [("Uno", 1, true), ("Dos", 3, true)]);
+        assert_eq!(temas[1].apartados.iter().map(|a| (a.nombre.as_str(), a.preguntas)).collect::<Vec<_>>(), [("ENS", 2), ("Riesgos", 1)]);
     }
 
     #[test]
@@ -1039,7 +1046,7 @@ mod tests {
         let (examen, banco) = temario();
         let seleccion = [par("2.pdf", "ens"), par("9.pdf", "viejo")];
         let Inicio::Listo { sesion, simulacro, tarjeta, temas, parte, .. } = inicio(&examen, &banco, &[], Some(&seleccion), 5.0) else { panic!() };
-        assert_eq!((sesion, simulacro, tarjeta.sin_ver), (1, 2, 1));
+        assert_eq!((sesion, simulacro, tarjeta.sin_ver), (1, 2, 2));
         assert_eq!(parte.as_deref(), Some("con 1 de 2 temas"));
         assert_eq!(temas[1].apartados.iter().map(|a| a.marcado).collect::<Vec<_>>(), [true, false]);
         assert!(!temas[0].apartados[0].marcado);
@@ -1060,7 +1067,7 @@ mod tests {
         assert_eq!((sesion, simulacro, parte.as_deref()), (0, 0, Some("con 0 de 2 temas")));
     }
 
-    /// El paso del concepto de la única pregunta del banco, como lo muestra la sesión.
+    /// El paso de la única pregunta del banco, como lo muestra la sesión.
     fn paso(banco: &[Pregunta], historial: &[Respuesta]) -> String {
         sesion(&LN, banco, historial, 0, &mut Azar::new(1)).remove(0).paso
     }
@@ -1085,11 +1092,12 @@ mod tests {
     }
 
     #[test]
-    fn los_huecos_son_10_30_y_90_minutos() {
-        let minutos = |c: Concepto| c.hueco() / 60;
-        assert_eq!([0, 1, 2, 3].map(|n| minutos(Concepto::Paso(n))), [0, 10, 30, 90]);
-        assert_eq!(Concepto::Paso(u32::MAX).hueco(), i64::MAX);
+    fn los_huecos_son_10_minutos_1_dia_y_despues_por_2_y_medio() {
+        let minutos = |n| Estado::Paso(n).hueco() / 60;
+        assert_eq!([0, 1, 2, 3, 4].map(minutos), [0, 10, 24 * 60, 60 * 60, 150 * 60]);
+        assert_eq!(Estado::Paso(u32::MAX).hueco(), i64::MAX);
     }
+
     fn minuto(m: i64, s: i64) -> String {
         format!("2026-11-04T12:{m:02}:{s:02}Z")
     }
@@ -1168,14 +1176,27 @@ mod tests {
     }
 
     #[test]
-    fn de_cada_concepto_sale_la_pregunta_sin_respuestas_y_despues_la_de_la_respuesta_mas_vieja() {
-        let banco = [pregunta("a1", "a"), pregunta("a2", "a"), pregunta("a3", "a")];
-        let viejas = [respuesta("a1", &minuto(2, 0), false, false), respuesta("a3", &minuto(1, 0), false, false)];
+    fn una_pregunta_fallada_vuelve_aunque_su_hermana_suba_de_paso() {
+        // a1 falla y a2 acierta: a1 sigue fallada, y entra en la sesión antes que su hermana vencida.
+        let banco = [pregunta("a1", "a"), pregunta("a2", "a")];
+        let historial = [respuesta("a2", &minuto(0, 0), true, true), respuesta("a1", &minuto(1, 0), false, false)];
+        let ahora = AHORA.parse::<Timestamp>().unwrap().as_second();
         for semilla in 0..20 {
-            let mut azar = Azar::new(semilla);
-            assert_eq!(sesion(&LN, &banco, &viejas, 0, &mut azar)[0].id, "a2");
-            let todas = [&viejas[..], &[respuesta("a2", &minuto(3, 0), false, false)]].concat();
-            assert_eq!(sesion(&LN, &banco, &todas, 0, &mut azar)[0].id, "a3");
+            let q = sesion(&LN, &banco, &historial, ahora, &mut Azar::new(semilla)).remove(0);
+            assert_eq!((q.id.as_str(), q.paso.as_str()), ("a1", "paso 0"));
+        }
+    }
+
+    #[test]
+    fn una_hermana_sin_ver_entra_antes_que_un_concepto_sin_ver() {
+        // a1 está al día, y 12 conceptos sin ver compiten con a2 por los 12 huecos de la sesión.
+        let banco = [vec![pregunta("a1", "a"), pregunta("a2", "a")], conceptos("b", 12)].concat();
+        let historial = [respuesta("a1", &minuto(59, 0), true, true)];
+        let ahora = AHORA.parse::<Timestamp>().unwrap().as_second();
+        for semilla in 0..20 {
+            let s = sesion(&LN, &banco, &historial, ahora, &mut Azar::new(semilla));
+            assert!(s.iter().any(|q| q.id == "a2"), "semilla {semilla}");
+            assert_eq!(s.len(), 12);
         }
     }
 

@@ -37,7 +37,7 @@
         <i class="bg-linea" style:flex={t.sin_ver}></i>
       </div>
       <p class="mt-1.5 text-[13px] text-tenue">
-        Sabes {t.sabes} · No sabes {t.no_sabes} · Sin ver {t.sin_ver}, de {t.sabes + t.no_sabes + t.sin_ver} conceptos{#if inicio.parte}, {inicio.parte}{/if}
+        Sabes {t.sabes} · No sabes {t.no_sabes} · Sin ver {t.sin_ver}, de {t.sabes + t.no_sabes + t.sin_ver} preguntas{#if inicio.parte}, {inicio.parte}{/if}
       </p>
       <div class="my-3 rounded-xl bg-tarjeta p-3.5">
         <label class="flex items-center gap-3">
@@ -89,7 +89,7 @@
               ]}
             >
               <span>{d.texto}</span>
-              <span class="text-right">{d.conceptos} conceptos</span>
+              <span class="text-right">{d.preguntas} preguntas</span>
               <b class="text-right">{d.porcentaje} %</b>
               {#if d.detalle}<em class="col-span-full -mt-0.5 text-[11px] not-italic opacity-75">{d.detalle}</em>{/if}
             </p>
@@ -108,7 +108,7 @@
               onchange={(e) => marcar(inicio.temas, tema, tema.apartados.map((a) => a.apartado), e.currentTarget.checked)}
             />
             <span class="flex-1 font-semibold">{tema.nombre}</span>
-            <span class="text-[13px] text-tenue">{tema.conceptos} conceptos</span>
+            <span class="text-[13px] text-tenue">{tema.preguntas} preguntas</span>
           </label>
           {#if tema.apartados.length > 1}
             {#each tema.apartados as a (a.apartado)}
@@ -120,7 +120,7 @@
                   onchange={(e) => marcar(inicio.temas, tema, [a.apartado], e.currentTarget.checked)}
                 />
                 <span class="flex-1">{a.nombre}</span>
-                <span class="text-[13px]">{a.conceptos}</span>
+                <span class="text-[13px]">{a.preguntas}</span>
               </label>
             {/each}
           {/if}
@@ -144,6 +144,6 @@
 {#snippet cifra(cifra: string, n: number)}
   <div>
     <b class="block text-[26px]/[1.1] text-acento">{cifra}</b>
-    <span class="text-[12px] text-tenue">con {n} conceptos</span>
+    <span class="text-[12px] text-tenue">con {n} preguntas</span>
   </div>
 {/snippet}
