@@ -232,7 +232,7 @@ pub fn informe(carpeta: &Path) -> Result<bool, String> {
     Ok(errores.is_empty())
 }
 
-/// Saca `paginas/<pdf sin .pdf>-<página>.webp`, a 80 ppp y calidad 60, de cada página de los PDFs de `pdfs/`.
+/// Saca `paginas/<pdf sin .pdf>-<página>.webp`, a 200 ppp y calidad 60, de cada página de los PDFs de `pdfs/`.
 /// Una imagen que ya existe se queda.
 pub fn sacar(carpeta: &Path) -> Result<(), String> {
     let destino = carpeta.join("paginas");
@@ -250,7 +250,7 @@ pub fn sacar(carpeta: &Path) -> Result<(), String> {
             }
             let n = pagina.to_string();
             let estado = Command::new("pdftoppm")
-                .args(["-png", "-r", "80", "-f", &n, "-l", &n, "-singlefile"])
+                .args(["-png", "-r", "200", "-f", &n, "-l", &n, "-singlefile"])
                 .arg(&pdf)
                 .arg(&nombre)
                 .status()
@@ -821,9 +821,9 @@ mod tests {
             ]
         );
         assert_eq!(fs::read_to_string(paginas.join("1_Legislacion-1.webp")).unwrap(), "ya estaba");
-        // 100 puntos a 80 ppp son 112 píxeles: el ancho va en los bytes 26 y 27 del WebP con pérdida.
+        // 100 puntos a 200 ppp son 278 píxeles: el ancho va en los bytes 26 y 27 del WebP con pérdida.
         let webp = fs::read(paginas.join("1_Legislacion-2.webp")).unwrap();
-        assert_eq!(u16::from_le_bytes(webp[26..28].try_into().unwrap()) & 0x3fff, 112);
+        assert_eq!(u16::from_le_bytes(webp[26..28].try_into().unwrap()) & 0x3fff, 278);
     }
 
     #[test]
