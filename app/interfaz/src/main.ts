@@ -9,5 +9,5 @@ import cargarNucleo from "./nucleo/nucleo.js";
 // La raíz muestra la lista de los exámenes, `/?plan` el plan de estudio, y `/<carpeta>/` su examen.
 const pantalla = location.pathname !== "/" ? App : location.search === "?plan" ? Plan : Lista;
 cargarNucleo().then(() => mount(pantalla, { target: document.getElementById("app")! }));
-// El cronómetro va antes de la pantalla: en el móvil ocupa su franja arriba, y en el PC flota.
+// El cronómetro ocupa su franja arriba, antes de la pantalla.
 mount(Pomodoro, { target: document.body, anchor: document.getElementById("app")! });

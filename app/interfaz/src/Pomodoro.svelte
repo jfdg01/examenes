@@ -67,7 +67,7 @@
 </script>
 
 <div
-  class="pomodoro relative mx-auto flex h-(--pomodoro) w-fit items-center rounded-b-lg pc:fixed pc:top-0 pc:left-1/2 pc:z-50 pc:-translate-x-1/2 text-[13px] font-semibold text-sobre-acento shadow-md [.en-simulacro_&]:hidden"
+  class="pomodoro relative mx-auto flex h-(--pomodoro) w-fit items-center rounded-b-lg text-[13px] font-semibold text-sobre-acento shadow-md [.en-simulacro_&]:hidden"
   class:bg-estudio={e.fase === "estudio"}
   class:bg-pausa={e.fase !== "estudio"}
 >
