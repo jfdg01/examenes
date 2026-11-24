@@ -6397,7 +6397,7 @@
       "Que se soporta la reanudación de sesión sin estado",
       "Que se soporta la renegociación segura"
     ],
-    "explicacion": "✓ La extensión status_request indica soporte para OCSP stapling.\n✗ «Que se soporta»: eso es session_ticket\n✗ «Que se soporta»: eso es renegotiation_info"
+    "explicacion": "✓ La extensión status_request indica soporte para OCSP stapling.\n✗ «la reanudación de sesión»: eso es session_ticket\n✗ «la renegociación segura»: eso es renegotiation_info"
   },
   {
     "id": "transporte-120",
@@ -7693,7 +7693,7 @@
       "El payload comprimido y el MAC, sin campos de longitud",
       "El payload comprimido sin relleno, con el número de secuencia"
     ],
-    "explicacion": "✓ El paquete lleva la longitud del paquete, la longitud del relleno, el payload comprimido y el relleno.\n✗ «El payload comprimido»: el MAC no forma parte del paquete cifrado, y hay campos de longitud\n✗ «El payload comprimido»: el paquete lleva relleno, y el número de secuencia queda fuera del paquete"
+    "explicacion": "✓ El paquete lleva la longitud del paquete, la longitud del relleno, el payload comprimido y el relleno.\n✗ «y el MAC»: el MAC no forma parte del paquete cifrado, y hay campos de longitud\n✗ «sin relleno»: el paquete lleva relleno, y el número de secuencia queda fuera del paquete"
   },
   {
     "id": "aplicacion-039",
@@ -7757,7 +7757,7 @@
       "Una clave de host, con un algoritmo fijado por el protocolo",
       "Una clave común, compartida con los demás servidores de su red"
     ],
-    "explicacion": "✓ Un servidor SSH puede tener varias claves de host con distintos algoritmos de cifrado asimétrico.\n✗ «Una clave»: el servidor puede tener varias, con algoritmos distintos\n✗ «Una clave»: la clave de host identifica a cada servidor y no se comparte"
+    "explicacion": "✓ Un servidor SSH puede tener varias claves de host con distintos algoritmos de cifrado asimétrico.\n✗ «un algoritmo fijado»: el servidor puede tener varias, con algoritmos distintos\n✗ «Una clave común»: la clave de host identifica a cada servidor y no se comparte"
   },
   {
     "id": "aplicacion-043",
@@ -8189,7 +8189,7 @@
       "Se firma con la clave privada del servidor y se verifica con la pública",
       "Se firma con la clave de sesión y el servidor la verifica con la misma"
     ],
-    "explicacion": "✓ El cliente firma el nonce con su clave privada, y el servidor verifica con la pública del cliente.\n✗ «Se firma con la clave»: el servidor no firma el nonce: el que se identifica es el cliente\n✗ «Se firma con la clave»: sería una clave simétrica, y la firma exige un par de claves"
+    "explicacion": "✓ El cliente firma el nonce con su clave privada, y el servidor verifica con la pública del cliente.\n✗ «con la clave privada del servidor»: el servidor no firma el nonce: el que se identifica es el cliente\n✗ «con la clave de sesión»: sería una clave simétrica, y la firma exige un par de claves"
   },
   {
     "id": "aplicacion-073",
@@ -8445,7 +8445,7 @@
       "Permitir root con una contraseña muy robusta que se cambie a menudo",
       "Permitir root desde cualquier IP si se conecta con clave pública"
     ],
-    "explicacion": "✓ Se recomienda no permitir la conexión del usuario root en la configuración de SSH.\n✗ «Permitir root»: el temario recomienda prohibir la conexión de root y no solo reforzarla\n✗ «Permitir root»: debe estar prohibido, y no condicionado al método de autenticación"
+    "explicacion": "✓ Se recomienda no permitir la conexión del usuario root en la configuración de SSH.\n✗ «una contraseña muy robusta»: el temario recomienda prohibir la conexión de root y no solo reforzarla\n✗ «con clave pública»: debe estar prohibido, y no condicionado al método de autenticación"
   },
   {
     "id": "aplicacion-089",
@@ -8845,7 +8845,7 @@
       "Partes independientes que se presentan en el orden en que aparecen",
       "Partes independientes sin orden de entrega para el receptor"
     ],
-    "explicacion": "✓ Alternative lleva versiones de la misma información, ordenadas de menor a mayor fidelidad, y se muestra la mejor.\n✗ «Partes independientes»: eso es el subtipo Mixed\n✗ «Partes independientes»: eso es el subtipo Parallel"
+    "explicacion": "✓ Alternative lleva versiones de la misma información, ordenadas de menor a mayor fidelidad, y se muestra la mejor.\n✗ «en el orden en que aparecen»: eso es el subtipo Mixed\n✗ «sin orden de entrega»: eso es el subtipo Parallel"
   },
   {
     "id": "aplicacion-114",
@@ -9053,7 +9053,7 @@
       "Con un registro TXT del emisor, con la clave pública de la firma",
       "Con un registro TXT del emisor, que dice que usa DKIM y SPF"
     ],
-    "explicacion": "✓ DANE especifica el certificado TLS del servidor SMTP con un registro TLSA, en un DNS asegurado con DNSSEC.\n✗ «Con un registro TXT»: el TXT con la clave de firma es de DKIM\n✗ «Con un registro TXT»: ese TXT es el de DMARC"
+    "explicacion": "✓ DANE especifica el certificado TLS del servidor SMTP con un registro TLSA, en un DNS asegurado con DNSSEC.\n✗ «con la clave pública»: el TXT con la clave de firma es de DKIM\n✗ «que usa DKIM y SPF»: ese TXT es el de DMARC"
   },
   {
     "id": "aplicacion-127",
@@ -9341,7 +9341,7 @@
       "Firma digital, cifrado, control de acceso y registro de auditoría",
       "Firma digital, resolución de nombres y filtrado de correo no deseado"
     ],
-    "explicacion": "✓ S/MIME añade a MIME la firma digital, el cifrado, la compresión y la compatibilidad con el correo.\n✗ «Firma digital»: no hay control de acceso ni auditoría entre las funciones de S/MIME\n✗ «Firma digital»: S/MIME no resuelve nombres ni filtra spam"
+    "explicacion": "✓ S/MIME añade a MIME la firma digital, el cifrado, la compresión y la compatibilidad con el correo.\n✗ «control de acceso»: no hay control de acceso ni auditoría entre las funciones de S/MIME\n✗ «resolución de nombres»: S/MIME no resuelve nombres ni filtra spam"
   },
   {
     "id": "aplicacion-145",
@@ -10989,7 +10989,7 @@
       "Porque TLSv1 usa exactamente el mismo padding que SSLv3 y no lo ha mejorado",
       "Porque TLSv1 no cifra con CBC y por eso el ataque necesita otro modo"
     ],
-    "explicacion": "✓ Varias implementaciones replican el ataque al pasar de SSLv3 a TLSv1 durante una sesión, aunque el protocolo mejora el padding.\n✗ «Porque TLSv1»: TLSv1 mejora el padding\n✗ «Porque TLSv1»: TLSv1 usa CBC"
+    "explicacion": "✓ Varias implementaciones replican el ataque al pasar de SSLv3 a TLSv1 durante una sesión, aunque el protocolo mejora el padding.\n✗ «el mismo padding»: TLSv1 mejora el padding\n✗ «no cifra con CBC»: TLSv1 usa CBC"
   },
   {
     "id": "ssl-tls-068",
@@ -11597,7 +11597,7 @@
       "Porque DoH rompe la compatibilidad con TLS 1.2",
       "Porque DoH exige a los ISP un certificado nuevo"
     ],
-    "explicacion": "✓ Con DoH las resoluciones no pasan por el DNS del ISP, y no puede rechazar las de los contenidos a bloquear.\n✗ «Porque DoH»: la controversia no es técnica sobre TLS\n✗ «Porque DoH»: no es el motivo"
+    "explicacion": "✓ Con DoH las resoluciones no pasan por el DNS del ISP, y no puede rechazar las de los contenidos a bloquear.\n✗ «rompe la compatibilidad»: la controversia no es técnica sobre TLS\n✗ «un certificado nuevo»: no es el motivo"
   },
   {
     "id": "ssl-tls-106",

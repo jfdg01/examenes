@@ -56,9 +56,13 @@ pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec
         if lineas.len() > p.distractores.len() {
             errores.push(format!("{id}: {} líneas ✗, y {} distractores", lineas.len(), p.distractores.len()));
         }
+        let mut claves = HashSet::new();
         for (i, (linea, d)) in lineas.into_iter().zip(&p.distractores).enumerate() {
-            if !clave(linea).is_some_and(|(c, _)| d.to_lowercase().contains(&c.to_lowercase())) {
+            let c = clave(linea).map(|(c, _)| c.to_lowercase());
+            if !c.as_ref().is_some_and(|c| d.to_lowercase().contains(c)) {
                 errores.push(format!("{id}: la línea ✗ {} no lleva una clave «…» de su distractor: {d}", i + 1));
+            } else if !claves.insert(c) {
+                errores.push(format!("{id}: la línea ✗ {} repite la clave de otra línea ✗", i + 1));
             }
         }
         let nombre = p.fuente.pdf.as_str();
@@ -656,6 +660,7 @@ mod tests {
         assert!(comprobar(&con("✓ x\n✗ «24 HORAS»: a\n✗ «un mes»: b"), &examen, dir.path()).is_empty());
         un_error(&con("✓ x\n✗ «24 horas»: a\n✗ «48 horas»: b"), "rgpd-001: la línea ✗ 2");
         un_error(&con("✓ x\n✗ 24 horas: a"), "rgpd-001: la línea ✗ 1");
+        un_error(&con("✓ x\n✗ «horas»: a\n✗ «un mes»: b\n✗ «Horas»: c"), "rgpd-001: la línea ✗ 3 repite");
         un_error(&con("✓ x\n✗ «»: a"), "rgpd-001: la línea ✗ 1");
         un_error(&con("✓ x\n✗ «24»: a\n✗ «Un»: b\n✗ «48»: c\n✗ «9»: d"), "rgpd-001: 4 líneas ✗, y 3 distractores");
     }

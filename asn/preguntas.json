@@ -3437,7 +3437,7 @@
       "El navegador la envía en las peticiones que salen del sitio original",
       "El navegador la envía por conexiones cifradas con TLS"
     ],
-    "explicacion": "✓ Una cookie HttpOnly no es accesible desde JavaScript, y un XSS no puede leerla.\n✗ «El navegador la envía»: eso es SameSite\n✗ «El navegador la envía»: eso es la propiedad Secure"
+    "explicacion": "✓ Una cookie HttpOnly no es accesible desde JavaScript, y un XSS no puede leerla.\n✗ «salen del sitio original»: eso es SameSite\n✗ «por conexiones cifradas»: eso es la propiedad Secure"
   },
   {
     "id": "ciclo-de-vida-104",
@@ -10749,7 +10749,7 @@
       "Que es la fase que más se suele pasar por alto en la respuesta a un incidente",
       "Que es la fase que puede tardar incluso meses en los equipos afectados"
     ],
-    "explicacion": "✓ El NIST señala la detección y evaluación exacta de incidentes como la parte más difícil del proceso.\n✗ «Que es la fase»: eso se dice de las actividades post-incidente\n✗ «Que es la fase»: eso se dice de la recuperación"
+    "explicacion": "✓ El NIST señala la detección y evaluación exacta de incidentes como la parte más difícil del proceso.\n✗ «más se suele pasar por alto»: eso se dice de las actividades post-incidente\n✗ «puede tardar incluso meses»: eso se dice de la recuperación"
   },
   {
     "id": "dfir-010",
