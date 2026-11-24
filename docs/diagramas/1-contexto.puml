@@ -10,5 +10,5 @@ System_Ext(tailscale, "Tailscale", "Sirve la app por HTTPS en la tailnet")
 
 Rel(estudiante, tailscale, "Abre la app", "HTTPS")
 Rel(tailscale, app, "Pasa cada petición")
-Rel(agente, app, "Escribe el banco", "banco importar, comprobar, revision")
+Rel(agente, app, "Escribe el banco", "banco importar, comprobar, revision, preparar, montar")
 @enduml

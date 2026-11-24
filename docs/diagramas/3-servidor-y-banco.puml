@@ -21,6 +21,7 @@ Container_Boundary(banco, "banco") {
   Component(comprobar, "banco comprobar", "", "Las reglas de BANCO.md, y el informe de errores y avisos")
   Component(importar, "banco importar", "", "Un borrador en Markdown al final de preguntas.json")
   Component(revision, "banco revision", "", "Aplica los informes de un revisor")
+  Component(lote, "banco preparar y montar", "", "Saca los temas de un lote a trabajo/ y los une otra vez al banco")
   Component(sacar, "banco paginas", "pdftoppm, ffmpeg", "Cada página de pdfs/ como WebP")
 }
 
@@ -44,9 +45,11 @@ Rel(estaticos, carpeta, "pdfs/, paginas/")
 Rel(agente, comprobar, "")
 Rel(agente, importar, "")
 Rel(agente, revision, "")
+Rel(agente, lote, "")
 Rel(agente, sacar, "")
 Rel(comprobar, carpeta, "Lee todo")
 Rel(importar, carpeta, "preguntas.json")
 Rel(revision, carpeta, "preguntas.json")
+Rel(lote, carpeta, "preguntas.json, examen.json y trabajo/")
 Rel(sacar, carpeta, "paginas/")
 @enduml
