@@ -196,9 +196,14 @@
             class="w-12 shrink-0 cursor-pointer border-l-2 border-linea bg-[color-mix(in_srgb,var(--color-aviso)_15%,var(--color-fondo))] text-[12px] font-bold text-aviso pc:w-16 pc:text-[13px]"
             onclick={() => oncontestar(k, false)}>dudo</button
           >
-        {:else if marca && marca !== "elegida"}
-          <span class={["icono flex items-center px-3 pc:px-3.5", marca === "acierto" ? "text-acierto" : "text-fallo"]}>
-            {@render icono(24, `M12 2a10 10 0 1 0 0 20a10 10 0 1 0 0-20${marca === "acierto" ? "M7.5 12.5l3 3 6-6.5" : "M8.5 8.5l7 7M15.5 8.5l-7 7"}`, 2.5)}
+        {:else}
+          <!-- El hueco tiene el ancho de «dudo», y el texto de la opción no cambia de líneas al contestar. -->
+          <span class="flex w-12 shrink-0 items-center justify-center pc:w-16">
+            {#if marca && marca !== "elegida"}
+              <span class={["icono flex", marca === "acierto" ? "text-acierto" : "text-fallo"]}>
+                {@render icono(24, `M12 2a10 10 0 1 0 0 20a10 10 0 1 0 0-20${marca === "acierto" ? "M7.5 12.5l3 3 6-6.5" : "M8.5 8.5l7 7M15.5 8.5l-7 7"}`, 2.5)}
+              </span>
+            {/if}
           </span>
         {/if}
       </div>
