@@ -27,6 +27,16 @@ FSRS tiene unos 20 parámetros. Salen del historial de todos los exámenes de la
 - El servidor la llama con los historiales de todos los exámenes al servir `inicio`, y manda los parámetros en `Datos`. Con un historial corto, `fsrs` devuelve `NotEnoughData`, y el servidor manda los parámetros por defecto.
 - El servidor guarda los parámetros en memoria, y los recalcula cada 100 respuestas nuevas. No los escribe en un archivo, porque siempre salen del historial.
 
+## La fecha del examen
+
+`examen.json` lleva `fecha`, como `"2026-11-27"`, y una `hora` opcional, como `"09:00"`. No llevan zona: el núcleo las lee en la hora local del dispositivo. Sin `hora`, el examen es a las 12:00. El examen pasa a su hora. Sin `fecha`, no hay tope ni días que faltan.
+
+El inicio muestra la fecha y los días de calendario que faltan:
+
+- "Examen el viernes 27 a las 09:00 · faltan 3 días". Sin `hora` en `examen.json`, "Examen el viernes 27 · faltan 3 días".
+- El día del examen, "Examen hoy a las 09:00", o "Examen hoy" sin `hora`.
+- Con el examen pasado o sin `fecha`, no muestra nada.
+
 ## La ronda
 
 - Del **inicio**, una ronda empieza como una sesión o como un simulacro.
