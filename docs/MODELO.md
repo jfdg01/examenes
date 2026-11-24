@@ -29,8 +29,13 @@ Rust tiene un `enum Ronda { Inicio, Pregunta { contestada: bool }, Final }`.
 
 ## La sesión de 12 preguntas
 
-1. Los conceptos vencidos, del vencido hace más tiempo al vencido hace menos.
-2. Mientras quedan conceptos sin ver, 4 huecos son para ellos.
-3. Los huecos que sobran se llenan con más conceptos sin ver, y después con los conceptos que vencen antes.
+La sesión llena sus 12 preguntas en este orden:
+
+1. Los conceptos fallados, del fallo más viejo al más nuevo. Con 12 fallados o más, la sesión no lleva nada más: un fallo se corrige antes de avanzar en el banco.
+2. Los conceptos vencidos con un paso de 1 o más, del vencido hace más tiempo al vencido hace menos.
+3. Los conceptos sin ver.
+4. Los conceptos que vencen antes.
+
+Un fallo dentro de una sesión no vuelve en la misma sesión, y abre la sesión siguiente.
 
 La sesión lleva una pregunta por concepto, y una pregunta sin respuestas sale antes que una con respuestas. Las 12 preguntas salen en un orden al azar, y las opciones de cada una también. El azar sale de una semilla, y la misma semilla da el mismo orden.

@@ -32,13 +32,15 @@ Una app para practicar exámenes tipo test, con un banco de preguntas por examen
 
 **Vencido**: Un concepto cuyo hueco ya pasó, y que toca repasar.
 
+**Fallado**: Un concepto visto con el paso a 0, por un fallo, un acierto con "dudo" o una pregunta en blanco. Un fallado está siempre vencido. _Evita_: caja, pendiente
+
 **Sabes**: Un concepto con un paso de 1 o más. _Evita_: dominado, sabido
 
 ## La práctica
 
 **Ronda**: Una serie de preguntas de principio a fin: una sesión o un simulacro.
 
-**Sesión**: Una ronda de 12 preguntas, una por concepto de la selección, elegidas por su vencimiento. _Evita_: repaso, bloque
+**Sesión**: Una ronda de 12 preguntas, una por concepto de la selección: primero los fallados, y después los demás por su vencimiento. _Evita_: repaso, bloque
 
 **Simulacro**: Una ronda con el formato del examen: sus preguntas al azar de la selección, y su tiempo.
 
