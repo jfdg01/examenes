@@ -98,16 +98,25 @@ El borrador tiene un bloque por pregunta:
 
 ## El flujo de trabajo
 
-1. El agente creador escribe una tanda de unas 10 preguntas en el borrador. Una tanda lleva conceptos enteros, porque `banco importar` no añade preguntas a un concepto del banco.
-2. El agente revisa su tanda: compara cada pregunta con su página y con las reglas.
-3. El agente corre `banco importar` y `banco comprobar`, y arregla los errores y los avisos.
-4. El agente sigue con la siguiente tanda, hasta que el tema acaba.
+Un agente creador escribe un tema en su carpeta de trabajo, `<examen>/trabajo/<tema>/`. La carpeta tiene una copia de `examen.json`, su propio `preguntas.json` y un enlace `pdfs` a los PDFs del examen. Así `banco importar` y `banco comprobar` corren sin tocar el banco del examen.
 
-Al acabar el tema 3 de ASN, una prueba única revisa 1 de cada 3 conceptos. La hace un solo revisor que no escribió las preguntas, y cuenta solo los fallos graves, los de la regla 3. Con 1 fallo grave o más cada 10 preguntas revisadas, cada tema siguiente lleva una revisión completa al acabar. Con menos fallos, la revisión del agente creador queda sola.
+1. El agente escribe una tanda de unas 10 preguntas en un borrador de su carpeta. Una tanda lleva conceptos enteros, porque `banco importar` no añade preguntas a un concepto del banco.
+2. El agente revisa su tanda: compara cada pregunta con su página y con las reglas.
+3. El agente corre `banco importar` y `banco comprobar` en su carpeta, y arregla los errores y los avisos. Una pregunta ya importada se arregla a mano en el `preguntas.json` de la carpeta.
+4. El agente marca cada página sin pregunta en el `sin_pregunta` de su copia de `examen.json`, con su razón.
+5. El agente sigue con la siguiente tanda, hasta que `banco comprobar` no da ningún aviso de página de su PDF. Los avisos de los otros PDFs no son suyos.
+
+Los nombres evitan los choques entre temas:
+
+- Un `concepto` empieza por su tema: `transporte-mac-hmac`.
+- Un concepto de sigla es `sigla-` y la sigla en minúsculas, sin el tema: `sigla-aead`. Así, una sigla de dos temas choca en el montaje, y `banco comprobar` la ve.
+- Una idea que vive sobre todo en otro PDF es de ese tema. Este tema la pregunta solo desde lo que su PDF explica.
+
+Cada tema que escribe un agente lleva una revisión completa al acabar. La revisión del propio creador y el comprobador dejan fallos que solo ve otro agente.
 
 ## La revisión completa
 
-Un agente que no escribió las preguntas revisa el tema entero: compara cada pregunta con su página y con las reglas. El revisor comprueba también que la `fuente` es la página que explica la idea. El revisor de la revisión completa y el de la prueba del tema 3 no cambian `preguntas.json`: cada uno da un informe en JSON, con una lista de fallos.
+Un agente que no escribió las preguntas revisa el tema entero: compara cada pregunta con su página y con las reglas. El revisor comprueba también que la `fuente` es la página que explica la idea, y juzga cada razón de `sin_pregunta` de su PDF. El revisor no cambia `preguntas.json`: da un informe en JSON, con una lista de fallos.
 
 ```json
 {
@@ -119,14 +128,15 @@ Un agente que no escribió las preguntas revisa el tema entero: compara cada pre
 }
 ```
 
+- `id` es la pregunta del fallo, o `null` para un fallo sin pregunta, como una página con una idea y sin concepto. El texto del fallo da entonces la página.
 - `regla` es el número de la regla rota, y 0 para una `fuente` equivocada.
-- `gravedad` es `grave` para un fallo de la regla 3, y `leve` para el resto.
-- `arreglo` da los campos nuevos de la pregunta, o `null` para un fallo sin arreglo claro. Un arreglo cambia solo `pregunta`, `correcta`, `distractores`, `explicacion` y `fuente`.
+- `gravedad` es `grave` para un fallo de la regla 3, y `leve` para el resto, también una `fuente` equivocada.
+- `arreglo` da los campos nuevos de la pregunta, o `null` para un fallo sin arreglo claro. Un arreglo cambia solo `pregunta`, `correcta`, `distractores`, `explicacion` y `fuente`. Su `explicacion` sigue la regla 8.
 
 Un agente aplica los informes:
 
 ```bash
-cargo run --manifest-path app/Cargo.toml -p banco -- revision ps revision-*.json
+cargo run --manifest-path app/Cargo.toml -p banco -- revision ps ps/trabajo/revision-*.json
 ```
 
-`banco revision` lista los fallos sin aplicar, y ese agente los arregla a mano. Después corre el comprobador.
+`banco revision` lista los fallos sin aplicar con `A mano:`, y ese agente los arregla a mano. Un concepto nuevo entra con un borrador y `banco importar`. Un borrado o un cambio de idea se hacen en el JSON. Después corre el comprobador.
