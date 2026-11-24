@@ -268,8 +268,9 @@ pub fn sacar(carpeta: &Path) -> Result<(), String> {
 /// Un fallo del informe de un revisor. La revisión de `BANCO.md` define cada campo.
 #[derive(Deserialize)]
 pub struct Fallo {
+    /// El `id` de la pregunta, o `null` para un fallo sin pregunta, como una página sin concepto.
     #[serde(default)]
-    pub id: String,
+    pub id: Option<String>,
     #[serde(default)]
     pub gravedad: String,
     #[serde(default)]
@@ -302,7 +303,7 @@ pub fn aplicar(banco: &mut [Pregunta], fallos: Vec<Fallo>) -> Vec<Fallo> {
                 || a.explicacion.is_some()
                 || a.fuente.is_some()
         });
-        let (Some(a), Some(p)) = (arreglo, banco.iter_mut().find(|p| p.id == f.id)) else {
+        let (Some(a), Some(p)) = (arreglo, banco.iter_mut().find(|p| Some(&p.id) == f.id.as_ref())) else {
             pendientes.push(f);
             continue;
         };
@@ -339,7 +340,7 @@ pub fn revision(carpeta: &Path, informes: &[String]) -> Result<(), String> {
     fs::write(&archivo, texto).map_err(|e| format!("{}: {e}", archivo.display()))?;
     println!("{} arreglos aplicados.", total - pendientes.len());
     for f in pendientes {
-        println!("A mano: {} ({}): {}", f.id, f.gravedad, f.fallo);
+        println!("A mano: {} ({}): {}", f.id.as_deref().unwrap_or("sin id"), f.gravedad, f.fallo);
     }
     Ok(())
 }
@@ -749,12 +750,13 @@ mod tests {
                 {"id": "rgpd-001", "regla": 5, "gravedad": "leve", "fallo": "y", "arreglo": null},
                 {"id": "rgpd-001", "regla": 0, "gravedad": "leve", "fallo": "z", "arreglo": {"id": "rgpd-009"}},
                 {"id": "viejo-1", "regla": 3, "gravedad": "grave", "fallo": "w", "arreglo": {"correcta": "1"}},
-                {"id": "rgpd-001", "regla": 4, "gravedad": "leve", "fallo": "v", "arreglo": {}}
+                {"id": "rgpd-001", "regla": 4, "gravedad": "leve", "fallo": "v", "arreglo": {}},
+                {"id": null, "regla": 1, "gravedad": "leve", "fallo": "u", "arreglo": null}
             ]"#,
         )
         .unwrap();
         let pendientes: Vec<String> = aplicar(&mut banco, fallos).into_iter().map(|f| f.fallo).collect();
-        assert_eq!(pendientes, ["y", "z", "w", "v"]);
+        assert_eq!(pendientes, ["y", "z", "w", "v", "u"]);
         assert_eq!(banco[0].correcta, "3 días");
         assert_eq!(banco[0].id, "rgpd-001");
     }
