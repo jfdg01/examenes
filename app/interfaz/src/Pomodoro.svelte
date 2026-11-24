@@ -12,6 +12,10 @@
   let ahora = $state(Date.now());
   const resta = $derived(e.fin ? Math.max(0, e.fin - ahora) : e.resta);
   const segundos = $derived(Math.ceil(resta / 1000));
+  // "+5 min" alarga la fase, así que la barra cuenta sobre la fase alargada.
+  const hecho = $derived(1 - resta / Math.max(duracion[e.fase], resta));
+  const empezada = $derived(!!e.fin || e.resta !== duracion[e.fase]);
+  const nombre = $derived(e.fase === "estudio" ? `Estudio · ${(e.hechos % 3) + 1} de 3` : e.fase === "pausa" ? "Pausa" : "Pausa larga");
 
   const guardar = (n: Estado) => localStorage.setItem(clave, JSON.stringify((e = n)));
   // Otra pestaña cambia el cronómetro, y esta lo sigue.
@@ -63,19 +67,36 @@
 </script>
 
 <div
-  class="pomodoro fixed top-0 left-1/2 z-50 flex -translate-x-1/2 rounded-b-lg text-[13px] font-semibold text-sobre-acento [.en-simulacro_&]:hidden"
+  class="pomodoro fixed top-0 left-1/2 z-50 flex -translate-x-1/2 items-center rounded-b-lg text-[13px] font-semibold text-sobre-acento shadow-md [.en-simulacro_&]:hidden"
   class:bg-estudio={e.fase === "estudio"}
   class:bg-pausa={e.fase !== "estudio"}
 >
-  <button class="py-0.5 pl-3 tabular-nums" class:opacity-60={!e.fin} title={e.fin ? "Pausar" : "Empezar"} onclick={alternar}>
+  <button class="flex items-center gap-1.5 py-1 pl-3 tabular-nums" title={e.fin ? "Pausar" : empezada ? "Seguir" : "Empezar"} onclick={alternar}>
+    {#if e.fin}{@render icono(11, "M8 5v14M16 5v14")}{:else}{@render icono(11, "M6 4l14 8-14 8z", true)}{/if}
     {Math.floor(segundos / 60)}:{String(segundos % 60).padStart(2, "0")}
   </button>
-  <button class="peer px-2" title="Los controles">▾</button>
-  <div
-    class="absolute top-full right-0 hidden flex-col rounded-lg bg-tarjeta p-1 text-texto peer-hover:flex peer-focus:flex hover:flex focus-within:flex [&>button]:rounded [&>button]:px-2 [&>button]:py-0.5 [&>button]:text-left [&>button]:whitespace-nowrap [&>button:hover]:bg-linea"
-  >
-    <button onclick={alternar}>{e.fin ? "Pausar" : "Empezar"}</button>
-    <button onclick={mas5}>+5 min</button>
-    <button onclick={saltar}>Saltar {e.fase === "estudio" ? "el estudio" : "la pausa"}</button>
+  <button class="peer self-stretch px-2 opacity-70 hover:opacity-100 focus:opacity-100" title="Los controles">{@render icono(12, "M6 9l6 6 6-6")}</button>
+  <!-- La barra del avance de la fase. -->
+  <span class="absolute inset-x-2 bottom-0.5 h-0.5 rounded-full bg-sobre-acento/15">
+    <span class="block h-full rounded-full bg-sobre-acento/50" style:width="{hecho * 100}%"></span>
+  </span>
+  <!-- El relleno de arriba, y no un margen, deja pasar el ratón de la flecha a los controles. -->
+  <div class="absolute top-full left-1/2 hidden min-w-full -translate-x-1/2 pt-1 peer-hover:block peer-focus:block hover:block focus-within:block">
+    <div class="flex flex-col gap-1 rounded-lg border border-linea bg-tarjeta p-1.5 text-texto shadow-lg">
+      <span class="px-1 text-[11px] font-normal whitespace-nowrap text-tenue">{nombre}</span>
+      <div class="flex gap-1 [&>button]:flex [&>button]:h-7 [&>button]:flex-1 [&>button]:items-center [&>button]:justify-center [&>button]:rounded-md [&>button]:px-2 [&>button]:hover:bg-linea">
+        <button title={e.fin ? "Pausar" : empezada ? "Seguir" : "Empezar"} onclick={alternar}>
+          {#if e.fin}{@render icono(14, "M8 5v14M16 5v14")}{:else}{@render icono(14, "M6 4l14 8-14 8z", true)}{/if}
+        </button>
+        <button title="+5 min" onclick={mas5}>+5</button>
+        <button title={e.fase === "estudio" ? "Saltar el estudio" : "Saltar la pausa"} onclick={saltar}>{@render icono(14, "M5 4l10 8-10 8zM19 5v14")}</button>
+      </div>
+    </div>
   </div>
 </div>
+
+{#snippet icono(lado: number, d: string, relleno = false)}
+  <svg width={lado} height={lado} viewBox="0 0 24 24" fill={relleno ? "currentColor" : "none"} stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path {d} />
+  </svg>
+{/snippet}

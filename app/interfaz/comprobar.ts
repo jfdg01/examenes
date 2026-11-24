@@ -138,18 +138,18 @@ try {
   await reloj.goto("http://127.0.0.1:8691/");
   const pomodoro = reloj.locator(".pomodoro");
   await pomodoro.getByText("25:00").waitFor();
-  assert(!(await reloj.getByText("+5 min").isVisible()), "los controles no se ven sin el ratón sobre la flecha");
+  assert(!(await reloj.getByTitle("+5 min").isVisible()), "los controles no se ven sin el ratón sobre la flecha");
   await reloj.getByTitle("Los controles").hover();
-  await reloj.getByText("+5 min").click();
+  await reloj.getByTitle("+5 min").click();
   await pomodoro.getByText("30:00").waitFor();
-  await reloj.getByText("Saltar el estudio").click();
+  await reloj.getByTitle("Saltar el estudio").click();
   await pomodoro.getByText("5:00").waitFor();
-  await reloj.getByText("Saltar la pausa").click();
-  await reloj.getByText("Saltar el estudio").click();
-  await reloj.getByText("Saltar la pausa").click();
-  await reloj.getByText("Saltar el estudio").click();
+  await reloj.getByTitle("Saltar la pausa").click();
+  await reloj.getByTitle("Saltar el estudio").click();
+  await reloj.getByTitle("Saltar la pausa").click();
+  await reloj.getByTitle("Saltar el estudio").click();
   await pomodoro.getByText("20:00").waitFor();
-  await pomodoro.getByTitle("Empezar").click();
+  await pomodoro.getByTitle("Empezar").first().click();
   await reloj.reload();
   await pomodoro.getByText(/^\s*19:5\d\s*$/).waitFor();
   // Una fase que acaba con la página cerrada pasa a la siguiente al volver, y espera el clic.
