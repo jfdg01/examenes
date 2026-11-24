@@ -71,6 +71,7 @@ async function navegar(page: Page, nombre: string) {
   page.once("dialog", (d) => d.accept());
   await page.getByTitle("Abandonar").click();
   await page.getByText(/^Simulacro/).click();
+  assert(!(await visible(page, ".pomodoro")), "en un simulacro solo se ve su reloj");
   for (let k = 0; k < 20; k++) {
     await page.locator(".opcion button").first().click();
     assert.equal(await page.locator(".icono").count(), 0, "el simulacro no corrige al momento");
@@ -131,6 +132,31 @@ try {
     await lista.getByText("No hay exámenes").waitFor();
     await lista.close();
   }
+
+  // El cronómetro de pausas: los controles salen sobre la flecha, y la fase sigue tras recargar.
+  const reloj = await navegador.newPage({ viewport: { width: 1280, height: 800 } });
+  await reloj.goto("http://127.0.0.1:8691/");
+  const pomodoro = reloj.locator(".pomodoro");
+  await pomodoro.getByText("25:00").waitFor();
+  assert(!(await reloj.getByText("+5 min").isVisible()), "los controles no se ven sin el ratón sobre la flecha");
+  await reloj.getByTitle("Los controles").hover();
+  await reloj.getByText("+5 min").click();
+  await pomodoro.getByText("30:00").waitFor();
+  await reloj.getByText("Saltar el estudio").click();
+  await pomodoro.getByText("5:00").waitFor();
+  await reloj.getByText("Saltar la pausa").click();
+  await reloj.getByText("Saltar el estudio").click();
+  await reloj.getByText("Saltar la pausa").click();
+  await reloj.getByText("Saltar el estudio").click();
+  await pomodoro.getByText("20:00").waitFor();
+  await pomodoro.getByTitle("Empezar").click();
+  await reloj.reload();
+  await pomodoro.getByText(/^\s*19:5\d\s*$/).waitFor();
+  // Una fase que acaba con la página cerrada pasa a la siguiente al volver, y espera el clic.
+  await reloj.evaluate(() => localStorage.setItem("pomodoro", JSON.stringify({ ...JSON.parse(localStorage.getItem("pomodoro")!), fin: Date.now() })));
+  await reloj.reload();
+  await pomodoro.getByText("25:00").waitFor();
+  await reloj.close();
 
   // El móvil: la página de la fuente se abre a pantalla completa, y las otras opciones se pliegan.
   const movil = await abrir("movil", 390, 844);
