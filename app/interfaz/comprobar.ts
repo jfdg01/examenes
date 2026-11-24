@@ -30,6 +30,11 @@ async function abrir(examen: string, width: number, height: number) {
   return page;
 }
 const visible = (page: Page, sel: string) => page.locator(sel).first().isVisible();
+// En el móvil, editar va en el menú «⋯».
+async function editar(page: Page) {
+  if (await page.getByTitle("Más").isVisible()) await page.getByTitle("Más").click();
+  await page.getByTitle("Editar la pregunta").click();
+}
 const contestar = (page: Page) => page.locator(".opcion button").first().click();
 const rejilla = (page: Page) => page.getByTitle("Las preguntas").filter({ visible: true });
 async function irA(page: Page, n: number) {
@@ -52,8 +57,15 @@ async function navegar(page: Page, nombre: string) {
   await page.locator(".cuadricula button", { hasText: /^1$/ }).click();
   assert(await page.locator(".opcion button").first().isDisabled(), "una pregunta contestada no cambia de respuesta");
 
+  // En el móvil, el menú «⋯» abre editar, la nota y copiar, y un toque fuera lo cierra.
+  if (await page.getByTitle("Más").isVisible()) {
+    await page.getByTitle("Más").click();
+    await page.screenshot({ path: `capturas/${nombre}-menu.png` });
+    await page.mouse.click(200, 400);
+    assert(!(await page.getByTitle("Copiar la pregunta y las opciones").isVisible()), "un toque fuera cierra el menú");
+  }
   // La edición entra en `preguntas.json` con el mismo id, y Cancelar deja la pregunta como estaba.
-  await page.getByTitle("Editar la pregunta").click();
+  await editar(page);
   assert.equal(await page.locator(".hoja").count(), 0, "la edición oculta la hoja");
   assert.equal(await page.locator(".nota").count(), 0, "la edición oculta la nota");
   await page.screenshot({ path: `capturas/${nombre}-editar.png` });
@@ -62,7 +74,7 @@ async function navegar(page: Page, nombre: string) {
   await page.getByText("¿Un enunciado editado?").waitFor();
   const banco = await page.evaluate(() => fetch("api/inicio").then((r) => r.json()));
   assert.equal(banco.banco.filter((q: { pregunta: string }) => q.pregunta === "¿Un enunciado editado?").length, 1, "la edición llega al banco");
-  await page.getByTitle("Editar la pregunta").click();
+  await editar(page);
   await page.locator("textarea").first().fill("Otro");
   await page.getByText("Cancelar").click();
   await page.getByText("¿Un enunciado editado?").waitFor();

@@ -97,10 +97,16 @@
     copiada = true;
     setTimeout(() => (copiada = false), 1000);
   }
+
+  // En el móvil, editar, la nota y copiar van en el menú «⋯». Un toque en un botón o fuera lo cierra.
+  let mas = $state(false);
+  let menu: HTMLElement;
   // Los botones de la línea de arriba.
   const accion = "flex h-7 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border bg-tarjeta text-[12px]";
   const otras = $derived(q.opciones.length - (eleccion?.opcion == null || eleccion.opcion === q.correcta ? 1 : 2));
 </script>
+
+<svelte:window onclick={(ev) => mas && !menu.contains(ev.target as Node) && (mas = false)} />
 
 <!-- En el PC, cada parte ocupa su área de la rejilla de la ronda, y el cuerpo deja pasar sus 2 columnas. -->
 <p
@@ -117,6 +123,20 @@
   <a class={[accion, "border-linea text-tenue"]} title="Plan de estudio" href="/?plan">
     {@render icono(14, "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z")}
   </a>
+  <span class="relative flex pc:contents" bind:this={menu}>
+  <!-- El botón del menú lleva la marca de editar y de copiar, porque el menú se cierra al tocar. -->
+  <button
+    class={[accion, "pc:hidden", borrador ? "border-acento text-acento" : copiada ? "border-acierto text-acierto" : "border-linea text-tenue"]}
+    title="Más"
+    onclick={() => (mas = !mas)}
+  >
+    {@render icono(14, "M5 12h.01M12 12h.01M19 12h.01", 3)}
+  </button>
+  <span
+    class={["absolute top-full right-0 z-30 mt-1 gap-1.5 rounded-lg border border-linea bg-tarjeta p-1.5 shadow-lg pc:contents", mas ? "flex" : "hidden"]}
+    onclick={() => (mas = false)}
+    role="none"
+  >
   <button
     class={[accion, borrador ? "border-acento text-acento" : "border-linea text-tenue"]}
     title="Editar la pregunta"
@@ -138,6 +158,8 @@
   >
     {@render icono(14, "M5 15V5a2 2 0 0 1 2-2h10M11 9h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2z")}
   </button>
+  </span>
+  </span>
   <!-- Cerrar va en la esquina, en rojo, para que no se confunda con los otros. -->
   <button
     class={[accion, "border-fallo text-fallo bg-[color-mix(in_srgb,var(--color-fallo)_18%,var(--color-fondo))]!"]}
