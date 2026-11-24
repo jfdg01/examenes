@@ -3,7 +3,7 @@
 # ponytail: comprueba el árbol de trabajo y no el stage; un stash del resto si un commit parcial lo necesita.
 set -e
 cambios=$(git diff --cached --name-only)
-if echo "$cambios" | grep -q '^app/'; then
+if echo "$cambios" | grep -v '\.md$' | grep -q '^app/'; then
   cargo test -q --manifest-path app/Cargo.toml
 fi
 for ex in $(echo "$cambios" | grep -E '^[^/]+/(preguntas|examen)\.json$' | cut -d/ -f1 | sort -u); do
