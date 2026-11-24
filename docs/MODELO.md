@@ -1,20 +1,19 @@
 # El modelo de la práctica
 
-La app tiene 2 máquinas de estados: el paso de una pregunta y la ronda. El paso se calcula desde `respuestas.jsonl`. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
+La app tiene 2 máquinas de estados: el estado de una pregunta y la ronda. El estado se calcula desde `respuestas.jsonl`. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
 
-## El paso de una pregunta
+## El estado de una pregunta
 
-Cada pregunta tiene su paso, y una respuesta mueve solo el de su pregunta. El concepto no tiene estado: agrupa las preguntas para la sesión y el simulacro. Un paso por concepto no vale: una pregunta fácil subiría el paso que una difícil baja, y la difícil volvería sin fin. La razón está en [el ADR 0003](adr/0003-el-paso-es-de-la-pregunta.md).
+Cada pregunta tiene su estado, y una respuesta mueve solo el de su pregunta. El concepto no tiene estado: agrupa las preguntas para la sesión y el simulacro. Un estado por concepto no vale: un acierto en una pregunta fácil subiría lo que un fallo en una difícil baja, y la difícil volvería sin fin. La razón está en [el ADR 0003](adr/0003-el-estado-es-de-la-pregunta.md). El hueco sale de FSRS, el planificador de Anki, con el crate `fsrs` 7. La razón está en [el ADR 0004](adr/0004-el-hueco-sale-de-fsrs.md).
 
 - Una pregunta sin respuestas está **sin ver**.
-- Un acierto con "seguro" sube el paso en 1, aunque la pregunta no haya vencido. El hueco sigue a SM-2: la pregunta vence 10 minutos después con el paso 1, 1 día después con el paso 2, y el hueco crece ×2,5 con cada paso más.
-- Un fallo, un acierto con "dudo" o una pregunta en blanco ponen el paso a 0, y la pregunta vence en el acto.
-- Cada respuesta mueve el paso, la de una sesión y la de un simulacro.
-- El paso sale del historial unido: el del servidor y las respuestas del dispositivo que aún no llegaron. Una respuesta con el mismo `id` y `ts` cuenta una vez.
-
-Una pregunta con un paso de 1 o más está en **sabes**. La barra del camino, la tarjeta de la nota y el inicio cuentan preguntas. La pantalla de la pregunta muestra su paso.
-
-Rust tiene un `enum Estado { SinVer, Paso(u32) }`.
+- Cada respuesta lleva una nota de FSRS. Un acierto con "seguro" es Good. Un fallo, un acierto con "dudo" y una pregunta en blanco son Again. Hard y Easy no se usan.
+- FSRS calcula el **recuerdo** de cada pregunta vista desde sus respuestas: la probabilidad de acertarla en un momento dado.
+- **Los pasos de aprendizaje.** Again lleva la pregunta al paso de 1 minuto. Good en el paso de 1 minuto la lleva al de 10 minutos, y Good en el de 10 minutos la gradúa. Una pregunta sin ver acertada con "seguro" empieza en el paso de 10 minutos. FSRS actualiza el recuerdo con cada respuesta, también dentro de los pasos.
+- Una pregunta graduada vence cuando su recuerdo baja al 90 %, el recuerdo objetivo. El objetivo es una constante del núcleo. Un Again la devuelve al paso de 1 minuto.
+- **El tope de la víspera.** Ningún hueco pasa de las 00:00 del día antes del examen. Una respuesta dada después de ese momento no lleva tope, y una pregunta de un examen sin fecha tampoco.
+- Cada respuesta mueve el estado, la de una sesión y la de un simulacro.
+- El estado sale del historial unido: el del servidor y las respuestas del dispositivo que aún no llegaron. Una respuesta con el mismo `id` y `ts` cuenta una vez.
 
 ## La ronda
 
@@ -33,13 +32,13 @@ Rust tiene un `enum Ronda { Inicio, Pregunta { contestada: bool }, Final }`.
 
 La sesión lleva como mucho una pregunta por concepto, porque una hermana (otra pregunta del mismo concepto) da pistas de la respuesta. La sesión recorre las preguntas en este orden, y toma la primera de cada concepto hasta llenar 12:
 
-1. Las preguntas falladas, del fallo más viejo al más nuevo. Con falladas de 12 conceptos o más, la sesión no lleva nada más: un fallo se corrige antes de avanzar en el banco.
-2. Las preguntas vencidas con un paso de 1 o más, de la vencida hace más tiempo a la vencida hace menos.
+1. Las falladas vencidas, del fallo más viejo al más nuevo. Con falladas de 12 conceptos o más, la sesión no lleva nada más: un fallo se corrige antes de avanzar en el banco.
+2. Las demás vencidas, de menor a mayor recuerdo.
 3. Las hermanas sin ver de un concepto con alguna pregunta vista. Así, una idea se cierra antes de abrir otra.
 4. Las preguntas de los conceptos sin ver.
 5. Las preguntas que vencen antes.
 
-Un concepto con una fallada y una vencida entra con la fallada, y la vencida espera a la sesión siguiente. Un fallo dentro de una sesión no vuelve en la misma sesión, y abre la sesión siguiente.
+Un concepto con una fallada y una vencida entra con la fallada, y la vencida espera a la sesión siguiente. Un fallo dentro de una sesión no vuelve en la misma sesión, y abre la sesión siguiente cuando pasa su minuto.
 
 Dentro de un grupo, el azar rompe los empates. Las 12 preguntas salen en un orden al azar, y las opciones de cada una también. El azar sale de una semilla, y la misma semilla da el mismo orden.
 
