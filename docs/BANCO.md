@@ -154,6 +154,6 @@ cargo run --manifest-path app/Cargo.toml -p banco -- revision ps ps/trabajo/revi
 
 `banco revision` lista los fallos sin aplicar con `A mano:`, y ese agente los arregla a mano. Un concepto nuevo entra con un borrador y `banco importar`. Un borrado o un cambio de idea se hacen en el JSON. Después corre el comprobador.
 
-## Una tanda de temas
+## Un lote de temas
 
-Un agente principal que escribe varios temas a la vez, o que rehace un examen entero, sigue [`TANDA.md`](TANDA.md).
+Un agente principal que escribe varios temas a la vez, o que rehace un examen entero, sigue [`LOTE.md`](LOTE.md).
