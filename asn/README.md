@@ -22,7 +22,7 @@ El examen pide un bolígrafo de tinta azul o negra y el NIF, o un documento ofic
 | `6.2_DFIR.pdf` | Tema 6.2. DFIR | `dfir` |
 | `S_Contenedores.pdf` | Seminario de creación y ejecución de contenedores | `contenedores` |
 
-El banco tiene las preguntas del tema 1 (`introduccion`). Los demás temas no tienen preguntas.
+El banco tiene las preguntas de los temas 1 y 2 (`introduccion` y `ciclo-de-vida`). Los demás temas no tienen preguntas.
 
 La interfaz está en https://3090.taila51846.ts.net:8601/asn/, en el servidor de `app/`. El servidor sirve todos los exámenes, y la raíz lista cada uno.
 

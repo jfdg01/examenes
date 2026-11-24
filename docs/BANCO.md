@@ -96,6 +96,13 @@ El borrador tiene un bloque por pregunta:
 - Cada pregunta recibe el siguiente `id` libre del tema: `ciclo-de-vida-127`. Un concepto de sigla recibe la forma `ciclo-de-vida-s15`.
 - `importar` solo añade preguntas. Un concepto del borrador que ya está en el banco da un error, y el banco queda igual. Una edición de una pregunta del banco se hace a mano en el JSON.
 
+## Las fuentes
+
+Cada PDF de un examen tiene su texto y sus imágenes, que da `banco paginas`:
+
+- El texto de `<examen>/pdfs/<nombre>.pdf` está en `<examen>/texto/<nombre>.txt`. Un form feed (`\f`) separa las páginas: la página N es el trozo N.
+- La imagen de la página N está en `<examen>/paginas/<nombre>-N.webp`. Un diagrama o una tabla se leen en la imagen, porque el texto los pierde.
+
 ## El flujo de trabajo
 
 Un agente creador escribe un tema en su carpeta de trabajo, `<examen>/trabajo/<tema>/`. La carpeta tiene una copia de `examen.json`, su propio `preguntas.json` y un enlace `pdfs` a los PDFs del examen. Así `banco importar` y `banco comprobar` corren sin tocar el banco del examen.
@@ -104,7 +111,11 @@ Un agente creador escribe un tema en su carpeta de trabajo, `<examen>/trabajo/<t
 2. El agente revisa su tanda: compara cada pregunta con su página y con las reglas.
 3. El agente corre `banco importar` y `banco comprobar` en su carpeta, y arregla los errores y los avisos. Una pregunta ya importada se arregla a mano en el `preguntas.json` de la carpeta.
 4. El agente marca cada página sin pregunta en el `sin_pregunta` de su copia de `examen.json`, con su razón.
-5. El agente sigue con la siguiente tanda, hasta que `banco comprobar` no da ningún aviso de página de su PDF. Los avisos de los otros PDFs no son suyos.
+5. El agente sigue con la siguiente tanda. El tema acaba cuando cada página de su PDF tiene un concepto o una razón en `sin_pregunta`, y `banco comprobar` no da ningún aviso de su PDF. Los avisos de los otros PDFs son de otros temas.
+
+Cada archivo del creador vive en su carpeta de trabajo, también los borradores, porque otros creadores escriben otros temas a la vez. El creador usa el binario `app/target/debug/banco`, y deja `cargo` al agente principal: varios `cargo` a la vez se bloquean.
+
+Al acabar, el creador devuelve en pocas líneas el número de conceptos y de preguntas, cada aviso que dejó a propósito con su razón, y cada duda sobre una regla.
 
 Los nombres evitan los choques entre temas:
 
@@ -116,7 +127,9 @@ Cada tema que escribe un agente lleva una revisión completa al acabar. La revis
 
 ## La revisión completa
 
-Un agente que no escribió las preguntas revisa el tema entero: compara cada pregunta con su página y con las reglas. El revisor comprueba también que la `fuente` es la página que explica la idea, y juzga cada razón de `sin_pregunta` de su PDF. El revisor no cambia `preguntas.json`: da un informe en JSON, con una lista de fallos.
+Un agente que no escribió las preguntas revisa el tema entero: compara cada pregunta con su página y con las reglas. El revisor comprueba también que la `fuente` es la página que explica la idea, y juzga cada razón de `sin_pregunta` de su PDF. El revisor acaba cuando juzgó cada pregunta del tema y cada razón de `sin_pregunta` de su PDF. Un fallo señala la página o la regla que rompe la pregunta.
+
+El revisor deja el banco como está, y escribe un informe en JSON con una lista de fallos, en `<examen>/trabajo/revision-<tema>.json`. Al acabar, devuelve en pocas líneas el número de fallos graves y leves, y los 3 fallos más importantes.
 
 ```json
 {
@@ -166,20 +179,13 @@ El agente principal lanza un creador por tema con esta orden. `<examen>`, `<tema
 ````
 Escribe desde cero las preguntas del tema `<tema>` del examen `<examen>`. El PDF es `<pdf>`, de <N> páginas. Escribe en español.
 
-Lee primero `docs/BANCO.md` entero y `<examen>/README.md`. Sigue «El flujo de trabajo» al pie de la letra. Cada punto marcado del README que toca tu PDF tiene su concepto.
-
-- El texto del PDF está en `<examen>/texto/<pdf sin .pdf>.txt`. Un form feed (`\f`) separa las páginas: la página N es el trozo N.
-- La imagen de la página N es `<examen>/paginas/<pdf sin .pdf>-N.webp`. Mírala cuando el texto no basta, como en un diagrama o una tabla.
-- Tu carpeta de trabajo es `<examen>/trabajo/<tema>/`. Guarda ahí cada archivo tuyo, también los borradores. No escribas fuera de ella: otros agentes escriben otros temas a la vez.
-- El binario es `app/target/debug/banco`. No corras `cargo`.
+Lee primero `docs/BANCO.md` entero y `<examen>/README.md`. Eres el creador de «El flujo de trabajo», y tu carpeta de trabajo es `<examen>/trabajo/<tema>/`. Cada punto marcado del README que toca tu PDF tiene su concepto.
 
 ```bash
 B=app/target/debug/banco
 $B importar <examen>/trabajo/<tema> <tema> <examen>/trabajo/<tema>/tanda.md
 $B comprobar <examen>/trabajo/<tema>
 ```
-
-Al acabar, devuelve en pocas líneas el número de conceptos y de preguntas, cada aviso que dejaste a propósito con su razón, y cada duda sobre una regla.
 ````
 
 El agente principal guarda las dudas de cada creador para su revisor.
@@ -218,16 +224,11 @@ El agente principal lanza un revisor por tema con esta orden. Cada revisor recib
 ````
 Haz la revisión completa del tema `<tema>` del examen `<examen>`. Tú no escribiste estas preguntas. Escribe en español.
 
-Lee primero `docs/BANCO.md`, sobre todo «Las reglas» y «La revisión completa», y `<examen>/README.md`.
+Lee primero `docs/BANCO.md`, sobre todo «Las reglas», «Las fuentes» y «La revisión completa», y `<examen>/README.md`. Eres el revisor de «La revisión completa». Tu PDF es `<pdf>`.
 
-- El banco es `<examen>/preguntas.json`. Revisa cada pregunta con `"tema": "<tema>"`. Filtra el JSON con python3, y no leas el archivo entero.
-- El texto del PDF `<pdf>` está en `<examen>/texto/<pdf sin .pdf>.txt`, con un form feed (`\f`) entre páginas. La imagen de la página N es `<examen>/paginas/<pdf sin .pdf>-N.webp`.
-- Juzga cada razón de `sin_pregunta` de tu PDF en `<examen>/examen.json`.
-- Las dudas del creador: <dudas>.
+Lee solo las preguntas con `"tema": "<tema>"` de `<examen>/preguntas.json`, con un filtro de python3: el banco entero satura tu contexto.
 
-No cambies ningún archivo del repo, salvo tu informe: `<examen>/trabajo/revision-<tema>.json`. Un fallo es real: no des fallos por gusto.
-
-Al acabar, devuelve en pocas líneas el número de fallos graves y leves, y los 3 fallos más importantes.
+Las dudas del creador: <dudas>.
 ````
 
 ### 5. Los arreglos
