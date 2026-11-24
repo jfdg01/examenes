@@ -1229,7 +1229,7 @@
       "Porque los empleados comparten sus contraseñas entre varias cuentas de la nube",
       "Porque los proveedores unifican sus IAM en un único sistema"
     ],
-    "explicacion": "✓ Las credenciales de máquinas casi nadie las revisa ni las rota como las de personas, y una API key expuesta da acceso duradero.\n✗ «Porque los empleados»: las NHI no son cuentas de personas\n✗ «Porque los proveedores»: las diferencias entre IAM de proveedores agravan el problema"
+    "explicacion": "✓ Cada servicio o agente de IA lleva sus propias credenciales, y una API key expuesta da acceso a quien la use hasta que alguien la revoca.\n✗ «Porque los empleados»: las NHI no son cuentas de personas\n✗ «Porque los proveedores»: las diferencias entre IAM de proveedores agravan el problema"
   },
   {
     "id": "introduccion-078",
@@ -1277,7 +1277,7 @@
       "Mantiene la base de datos de vulnerabilidades CVE",
       "Certifica a los profesionales en seguridad en la nube"
     ],
-    "explicacion": "✓ Sus proyectos son abiertos, y cualquiera puede usarlos y aportar a ellos sin pagar licencias.\n✗ «Mantiene la base de datos»: de los CVE se ocupa MITRE y no OWASP\n✗ «Certifica a los profesionales»: esa certificación es de la CSA"
+    "explicacion": "✓ Publica guías y proyectos abiertos de buenas prácticas, y los equipos de desarrollo los usan como referencia para asegurar sus aplicaciones.\n✗ «Mantiene la base de datos»: de los CVE se ocupa MITRE y no OWASP\n✗ «Certifica a los profesionales»: esa certificación es de la CSA"
   },
   {
     "id": "introduccion-081",
@@ -1677,7 +1677,7 @@
       "Al análisis de requisitos",
       "Al seguimiento y la evaluación continua"
     ],
-    "explicacion": "✓ Son tareas de cuando se construye y se pone en marcha la aplicación, el momento en que la configuración y las bibliotecas se aplican.\n✗ «Al análisis»: el análisis define amenazas y requisitos, y no configura servicios\n✗ «Al seguimiento»: esa fase verifica y monitoriza lo ya desplegado"
+    "explicacion": "✓ La diapositiva sitúa en esa fase las herramientas, las bibliotecas de seguridad y la configuración de servicios, que reducen las vulnerabilidades del código ya construido.\n✗ «Al análisis»: el análisis define amenazas y requisitos, y no configura servicios\n✗ «Al seguimiento»: esa fase verifica y monitoriza lo ya desplegado"
   },
   {
     "id": "ciclo-de-vida-006",
@@ -1981,7 +1981,7 @@
       "Para fijar fechas obligatorias de mitigación en agencias europeas",
       "Para recoger ataques de honeypots en tiempo real"
     ],
-    "explicacion": "✓ Los servicios de cada país comparten así sus datos de vulnerabilidades y no dependen solo de bases de fuera de Europa.\n✗ «Para fijar fechas obligatorias»: esas fechas son del KEV de la CISA\n✗ «Para recoger ataques de honeypots»: es la tarea de Shadowserver"
+    "explicacion": "✓ Reúne en un punto común lo que cada servicio nacional sabe de vulnerabilidades en explotación, y así todos lo consultan.\n✗ «Para fijar fechas obligatorias»: esas fechas son del KEV de la CISA\n✗ «Para recoger ataques de honeypots»: es la tarea de Shadowserver"
   },
   {
     "id": "ciclo-de-vida-s01",
@@ -2125,7 +2125,7 @@
       "L2, el nivel normal, con unos 175 controles",
       "L3, el nivel avanzado, con todos los controles"
     ],
-    "explicacion": "✓ Elige los controles que frenan los ataques más comunes, y por eso cada uno aporta mucha protección por poco esfuerzo.\n✗ «L2, el nivel normal»: exige más esfuerzo y cubre los riesgos habituales\n✗ «L3, el nivel avanzado»: es el de más seguridad y más complejidad de implantación"
+    "explicacion": "✓ L1 es el nivel de partida: con solo el 20% de los controles ya baja mucho el riesgo, y L2 y L3 añaden controles con más esfuerzo.\n✗ «L2, el nivel normal»: exige más esfuerzo y cubre los riesgos habituales\n✗ «L3, el nivel avanzado»: es el de más seguridad y más complejidad de implantación"
   },
   {
     "id": "ciclo-de-vida-029",
@@ -2621,7 +2621,7 @@
       "Pide al usuario que confirme el envío de las cookies al otro sitio antes de enviarlas",
       "Añade un token CSRF a la petición para que el otro sitio la valide"
     ],
-    "explicacion": "✓ Una petición con cookies o con métodos especiales puede cambiar datos, y el navegador pregunta con OPTIONS antes de enviarla.\n✗ «Pide al usuario»: el navegador no consulta al usuario\n✗ «Añade un token CSRF»: CORS no usa tokens"
+    "explicacion": "✓ El navegador envía antes un OPTIONS para saber si el otro sitio admite el origen y el método, y no manda la petición real sin su permiso.\n✗ «Pide al usuario»: el navegador no consulta al usuario\n✗ «Añade un token CSRF»: CORS no usa tokens"
   },
   {
     "id": "ciclo-de-vida-060",
@@ -3501,7 +3501,7 @@
       "Mezcla los datos del usuario con las instrucciones del sistema y pide al modelo que ignore las dudosas",
       "Filtra los comandos sospechosos de la entrada del usuario con una lista de palabras prohibidas"
     ],
-    "explicacion": "✓ Si el modelo sabe dónde acaban las instrucciones, trata como datos cualquier orden que el atacante escriba después.\n✗ «Mezcla los datos»: mezclarlos es lo que explota el atacante\n✗ «Filtra los comandos»: eso es la validación y la sanitización, y no la separación"
+    "explicacion": "✓ Los delimitadores marcan qué es instrucción y qué es dato, para que el modelo trate como dato una orden del atacante, aunque no lo garantizan.\n✗ «Mezcla los datos»: mezclarlos es lo que explota el atacante\n✗ «Filtra los comandos»: eso es la validación y la sanitización, y no la separación"
   },
   {
     "id": "ciclo-de-vida-108",
@@ -4669,7 +4669,7 @@
       "Almacena el modelo de información de la aplicación y sus reglas de acceso a los datos",
       "Presenta la información al usuario en las pantallas de la interfaz"
     ],
-    "explicacion": "✓ El controlador recibe la acción del usuario, actualiza el modelo y elige la vista, así que vista y datos no se conocen.\n✗ «Almacena el modelo»: es la función del modelo\n✗ «Presenta la información»: es la función de la vista"
+    "explicacion": "✓ El controlador recibe la acción del usuario, actualiza el modelo y elige la vista, y así separa la entrada del usuario de los datos y de su presentación.\n✗ «Almacena el modelo»: es la función del modelo\n✗ «Presenta la información»: es la función de la vista"
   },
   {
     "id": "alta-disponibilidad-024",
@@ -8973,7 +8973,7 @@
       "Cambiar el código fuente de la aplicación afectada",
       "Revocar el certificado TLS del servidor"
     ],
-    "explicacion": "✓ Al bloquear y avisar, frena el ataque y deja constancia para analizarlo, y el honeypot permite estudiar al atacante.\n✗ «Cambiar el código fuente»: el WAF no modifica el código de la aplicación\n✗ «Revocar el certificado»: el WAF finaliza el canal TLS, y no revoca certificados"
+    "explicacion": "✓ El WAF analiza cada petición HTTP: al bloquear la operación frena el ataque, y la alerta deja constancia para analizarlo después.\n✗ «Cambiar el código fuente»: el WAF no modifica el código de la aplicación\n✗ «Revocar el certificado»: el WAF finaliza el canal TLS, y no revoca certificados"
   },
   {
     "id": "monitorizacion-092",
@@ -9709,7 +9709,7 @@
       "La seguridad física de los edificios y las personas",
       "La privacidad de los datos de carácter personal"
     ],
-    "explicacion": "✓ El CISO define los riesgos que afectan al negocio y ayuda a implantar los controles, y por eso su ámbito es la información.\n✗ «La seguridad física»: la seguridad física es tradicionalmente del CSO\n✗ «La privacidad»: la privacidad es del DPO"
+    "explicacion": "✓ El CISO cubre la gobernanza y la operación de la información de la empresa. La seguridad física es del CSO y la privacidad del DPO.\n✗ «La seguridad física»: la seguridad física es tradicionalmente del CSO\n✗ «La privacidad»: la privacidad es del DPO"
   },
   {
     "id": "organizacion-014",
@@ -9725,7 +9725,7 @@
       "Al comité ejecutivo de la empresa",
       "Al SOC Manager"
     ],
-    "explicacion": "✓ El CISO conoce los incidentes porque la seguridad de la información es suya, y los comunica hacia fuera, no hacia dentro.\n✗ «Al comité ejecutivo»: el temario da la autoridad competente como destino\n✗ «Al SOC Manager»: es el SOC Manager quien comunica las debilidades al CISO, y no al revés"
+    "explicacion": "✓ Como responsable de la seguridad de la información, el CISO conoce los incidentes y debe notificarlos a la autoridad competente, fuera de la empresa.\n✗ «Al comité ejecutivo»: el temario da la autoridad competente como destino\n✗ «Al SOC Manager»: es el SOC Manager quien comunica las debilidades al CISO, y no al revés"
   },
   {
     "id": "organizacion-015",
@@ -11501,7 +11501,7 @@
       "Azure Functions",
       "Azure Monitor"
     ],
-    "explicacion": "✓ Azure ofrece este registro para que sus servicios descarguen con pull las imágenes que se guardan en él.\n✗ «Azure Functions»: ejecuta código sin servidor, y no almacena imágenes\n✗ «Azure Monitor»: recopila métricas y logs, y no almacena imágenes"
+    "explicacion": "✓ El registro de Azure guarda las imágenes cerca de los servicios que las ejecutan, y estos las descargan con pull sin salir de la nube.\n✗ «Azure Functions»: ejecuta código sin servidor, y no almacena imágenes\n✗ «Azure Monitor»: recopila métricas y logs, y no almacena imágenes"
   },
   {
     "id": "contenedores-013",
