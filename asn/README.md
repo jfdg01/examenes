@@ -11,7 +11,7 @@ El examen pide un bolígrafo de tinta azul o negra y el NIF, o un documento ofic
 
 ## El temario
 
-| `pdf` | El tema | `tema` |
+| `pdf` | El tema | `apartado` |
 |---|---|---|
 | `1_Introduccion.pdf` | Tema 1. Introducción y conceptos básicos | `introduccion` |
 | `2_Ciclo_de_vida.pdf` | Tema 2. Seguridad en el ciclo de vida de desarrollo del software | `ciclo-de-vida` |

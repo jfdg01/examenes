@@ -1,6 +1,6 @@
 # El modelo de la práctica
 
-La app tiene 2 máquinas de estados: el paso de un concepto y la ronda. El paso se calcula desde `respuestas.jsonl`. La ronda a medias se guarda en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
+La app tiene 2 máquinas de estados: el paso de un concepto y la ronda. El paso se calcula desde `respuestas.jsonl`. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
 
 ## El paso de un concepto
 
@@ -17,12 +17,13 @@ Rust tiene un `enum Concepto { SinVer, Paso(u32) }`.
 ## La ronda
 
 - Del **inicio**, una ronda empieza como una sesión o como un simulacro.
+- El inicio tiene una casilla por tema, y una por apartado en un tema con varios. La **selección** son los pares (tema, apartado) marcados. La sesión, el simulacro y la tarjeta usan solo sus preguntas, y la tarjeta dice "con 3 de 5 temas". Sin nada marcado, los botones no empiezan.
 - Cada pregunta pasa de **sin contestar** a **contestada**, y la pantalla muestra la solución. El simulacro añade el botón "En blanco" y el reloj, y solo marca la opción elegida hasta el final.
 - La cuadrícula lleva a cualquier pregunta de la ronda. Una pregunta contestada no cambia de respuesta, y una pregunta saltada espera la suya.
 - La ronda va al **final** cuando todas las preguntas están contestadas. Con alguna sin contestar, "Terminar" queda gris y lleva a la primera que falta. El final vuelve al inicio, y el botón ✕ también.
 - El final muestra la cuadrícula en verde y rojo. Un número abre su pregunta corregida, y "Resultado" vuelve al final.
 - Un simulacro con el `limite` pasado va al final. Cada pregunta sin contestar cuenta en blanco para la nota, y no entra en el historial.
-- La ronda a medias vive en `localStorage` y en el servidor, con sus ids, un resultado o `null` por pregunta y el límite del simulacro. Al cargar, gana el guardado más nuevo, y la ronda sigue en la primera pregunta sin resultado. Una ronda con un id que ya no está en el banco no se restaura.
+- La ronda a medias vive en `localStorage` y en el servidor, con sus ids, un resultado o `null` por pregunta y el límite del simulacro. El guardado lleva también la selección: un apartado nuevo sale desmarcado, y sin selección guardada todo está marcado. Al cargar, gana el guardado más nuevo, y la ronda sigue en la primera pregunta sin resultado. Una ronda con un id que ya no está en el banco no se restaura.
 
 Rust tiene un `enum Ronda { Inicio, Pregunta { contestada: bool }, Final }`.
 

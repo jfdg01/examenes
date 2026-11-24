@@ -6,7 +6,7 @@ El número de preguntas y la duración faltan. El simulacro usa 20 preguntas y 2
 
 ## El temario
 
-| `pdf` | El tema | `tema` | Lo que trae |
+| `pdf` | El tema | `apartado` | Lo que trae |
 |---|---|---|---|
 | `1_Introduccion.pdf` | Tema 1. Introducción | `introduccion` | Las capas, los servicios y los ataques de X.800, el canal seguro, los oráculos, la degradación y PFS |
 | `2_Claves.pdf` | Tema 2. Administración y distribución de claves | `claves` | La distribución de claves, el KDC, los certificados X.509, la revocación (CRL y OCSP) y la PKI |

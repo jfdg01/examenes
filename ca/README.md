@@ -4,7 +4,7 @@ El examen es de preguntas cortas, sin test. Este test de práctica entrena los m
 
 ## El temario
 
-| `pdf` | El tema | `tema` | Lo que trae |
+| `pdf` | El tema | `apartado` | Lo que trae |
 |---|---|---|---|
 | `2.1.Cifrados_Bloques_p.pdf` | Tema 2. Cifrados de bloques | `bloques` | El relleno y el troceado, y los modos ECB, CBC, CFB, OFB y CTR |
 | `3.1.Cifrados_Flujo_p.pdf` | Tema 3. Cifrados de flujo | `flujo` | Los modos como generadores de secuencia, síncronos y asíncronos |
