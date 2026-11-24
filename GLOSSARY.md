@@ -8,7 +8,11 @@ Una app para practicar exámenes tipo test, con un banco de preguntas por examen
 
 **Banco**: Las preguntas de un examen.
 
-**Concepto**: La idea que una pregunta pone a prueba. Varias preguntas del banco comparten un concepto. _Evita_: tema (un tema agrupa conceptos)
+**Tema**: Un PDF del temario, como lo numera la clase. Un tema trae muchos conceptos. _Evita_: lección, unidad
+
+**Apartado**: Un trozo de un tema, con su nombre corto. Un tema tiene uno o varios apartados, y un apartado puede salir en varios temas. _Evita_: tema, sección
+
+**Concepto**: La idea que una pregunta pone a prueba. Varias preguntas del banco comparten un concepto. _Evita_: tema (un tema trae muchos conceptos)
 
 **Historial**: Todas las respuestas de un examen, en orden de hora. Cada respuesta es un acierto, un fallo o una pregunta en blanco.
 
@@ -34,6 +38,8 @@ Una app para practicar exámenes tipo test, con un banco de preguntas por examen
 
 **Ronda**: Una serie de preguntas de principio a fin: una sesión o un simulacro.
 
-**Sesión**: Una ronda de 12 preguntas, una por concepto, elegidas por su vencimiento. _Evita_: repaso, bloque
+**Sesión**: Una ronda de 12 preguntas, una por concepto de la selección, elegidas por su vencimiento. _Evita_: repaso, bloque
 
-**Simulacro**: Una ronda con el formato del examen: sus preguntas al azar de todo el banco, y su tiempo.
+**Simulacro**: Una ronda con el formato del examen: sus preguntas al azar de la selección, y su tiempo.
+
+**Selección**: Los apartados de cada tema que marcas en el inicio. Las rondas y la tarjeta de la nota usan solo sus preguntas. Sin nada marcado antes, la selección es el banco entero. _Evita_: filtro
