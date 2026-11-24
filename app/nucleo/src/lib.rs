@@ -286,7 +286,6 @@ pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], sele
 }
 
 const TAMANO_SESION: usize = 12;
-const HUECOS_SIN_VER: usize = 4;
 
 /// El azar de la sesión, de una semilla: la misma semilla da el mismo orden.
 pub struct Azar(u64);
@@ -342,7 +341,7 @@ pub struct PreguntaDeSesion {
     pub copiar: String,
 }
 
-/// La sesión de 12: los vencidos, 4 huecos para los conceptos sin ver, y el relleno con los que vencen antes.
+/// La sesión de 12: los fallados, los vencidos con paso 1 o más, los conceptos sin ver, y el relleno con los que vencen antes.
 /// `ahora` va en segundos desde 1970.
 pub fn sesion(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], ahora: i64, azar: &mut Azar) -> Vec<PreguntaDeSesion> {
     let estado = estados(banco, historial);
@@ -374,9 +373,9 @@ pub fn sesion(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], ahor
         pregunta.insert(&q.concepto, q);
     }
     let (mut vistos, sin_ver): (Vec<&str>, Vec<&str>) = conceptos.into_iter().partition(|c| estado.contains_key(c));
-    vistos.sort_by_key(|c| estado[c].1);
-    let huecos = TAMANO_SESION - if sin_ver.is_empty() { 0 } else { HUECOS_SIN_VER };
-    let vencidos = vistos.iter().take_while(|c| estado[*c].1 <= ahora).count().min(huecos);
+    // Los vencidos van delante, con los fallados primero, y cada grupo del que vence antes al que vence después.
+    vistos.sort_by_key(|c| (estado[c].1 > ahora, !matches!(estado[c].0, Concepto::Paso(0)), estado[c].1));
+    let vencidos = vistos.iter().take_while(|c| estado[*c].1 <= ahora).count();
     let mut elegidos: Vec<&str> =
         vistos[..vencidos].iter().chain(&sin_ver).chain(&vistos[vencidos..]).take(TAMANO_SESION).copied().collect();
     azar.barajar(&mut elegidos);
@@ -1123,18 +1122,29 @@ mod tests {
     }
 
     #[test]
-    fn la_sesion_saca_primero_los_vencidos_hace_mas_tiempo() {
+    fn la_sesion_saca_primero_los_fallados_hace_mas_tiempo() {
         let banco = conceptos("v", 15);
         assert_eq!(de_la_sesion(&banco, &fallos(&banco)), ids(&banco[..12]));
     }
 
     #[test]
-    fn la_sesion_guarda_4_huecos_para_los_conceptos_sin_ver() {
-        let vencidos = conceptos("v", 20);
+    fn con_12_fallados_la_sesion_no_lleva_conceptos_sin_ver() {
+        let fallados = conceptos("f", 12);
         let sin_ver = conceptos("s", 10);
-        let sesion = de_la_sesion(&[vencidos.clone(), sin_ver].concat(), &fallos(&vencidos));
-        assert_eq!(sesion.iter().filter(|id| id.starts_with('s')).count(), 4);
-        assert_eq!(sesion.iter().filter(|id| id.starts_with('v')).cloned().collect::<Vec<_>>(), ids(&vencidos[..8]));
+        assert_eq!(de_la_sesion(&[fallados.clone(), sin_ver].concat(), &fallos(&fallados)), ids(&fallados));
+    }
+
+    #[test]
+    fn los_fallados_van_antes_que_los_vencidos_con_paso_y_estos_antes_que_los_sin_ver() {
+        let fallados = conceptos("f", 3);
+        let vencidos = conceptos("v", 20);
+        let sin_ver = conceptos("s", 5);
+        // Los vencidos con paso 1 vencieron antes que los fallos, y aun así los fallados entran primero.
+        let mut historial: Vec<Respuesta> =
+            vencidos.iter().enumerate().map(|(i, q)| respuesta(&q.id, &minuto(0, i as i64), true, true)).collect();
+        historial.extend(fallados.iter().enumerate().map(|(i, q)| respuesta(&q.id, &minuto(40, i as i64), false, false)));
+        let banco = [fallados.clone(), vencidos.clone(), sin_ver].concat();
+        assert_eq!(de_la_sesion(&banco, &historial), ids(&[fallados, vencidos[..9].to_vec()].concat()));
     }
 
     #[test]
@@ -1143,7 +1153,7 @@ mod tests {
         let sin_ver = conceptos("s", 2);
         let al_dia = conceptos("d", 20);
         let mut historial = fallos(&vencidos);
-        historial.extend(al_dia.iter().enumerate().map(|(i, q)| respuesta(&q.id, &minuto(30, i as i64), true, true)));
+        historial.extend(al_dia.iter().enumerate().map(|(i, q)| respuesta(&q.id, &minuto(55, i as i64), true, true)));
         let banco = [vencidos.clone(), sin_ver.clone(), al_dia.clone()].concat();
         assert_eq!(de_la_sesion(&banco, &historial), ids(&[vencidos, sin_ver, al_dia[..8].to_vec()].concat()));
     }
