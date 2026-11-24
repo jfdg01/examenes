@@ -23,7 +23,7 @@
 </script>
 
 <main class="mx-auto max-w-[560px] p-4">
-  <a class="volver text-[13px] text-tenue" href="/">← Exámenes</a>
+  <p class="flex justify-between text-[13px] text-tenue"><a class="volver" href="/">← Exámenes</a><a href="/?plan">Plan de estudio →</a></p>
   {#if inicio}
     <h1 class="mt-2 mb-1 text-[24px] font-bold">{inicio.titulo}</h1>
     {#if inicio.estado === "BancoVacio"}

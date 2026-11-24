@@ -111,6 +111,9 @@
     {:else if simulacro}{Math.floor(restante / 60)}:{String(restante % 60).padStart(2, "0")} · {q.apartado}
     {:else}{q.apartado} · {q.paso}{/if}
   </span>
+  <a class={[accion, "border-linea text-tenue"]} title="Plan de estudio" href="/?plan">
+    {@render icono(14, "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z")}
+  </a>
   <button
     class={[accion, borrador ? "border-acento text-acento" : "border-linea text-tenue"]}
     title="Editar la pregunta"
