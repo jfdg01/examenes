@@ -23,7 +23,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 4
     },
-    "pregunta": "¿Qué tipo de recursos de cómputo, almacenamiento y red reúne el repositorio de la nube?",
+    "pregunta": "¿Qué tipo de recursos de cómputo, almacenamiento y red se usan generalmente en la nube?",
     "correcta": "Recursos homogéneos que comparten los clientes",
     "distractores": [
       "Recursos heterogéneos y dedicados a cada cliente",

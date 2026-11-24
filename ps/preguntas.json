@@ -1287,7 +1287,7 @@
       "pdf": "1_Introduccion.pdf",
       "pagina": 22
     },
-    "pregunta": "¿Qué mecanismo penetrante de X.800 marca un recurso con los atributos de seguridad que lo nombran o designan?",
+    "pregunta": "¿Qué \"pervasive security mechanism\" de X.800 marca un recurso con los atributos de seguridad que lo nombran o designan?",
     "correcta": "La etiqueta de seguridad",
     "distractores": [
       "La detección de eventos relevantes para la seguridad",
