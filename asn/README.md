@@ -22,7 +22,7 @@ El examen pide un bolígrafo de tinta azul o negra y el NIF, o un documento ofic
 | `6.2_DFIR.pdf` | Tema 6.2. DFIR | `dfir` |
 | `S_Contenedores.pdf` | Seminario de creación y ejecución de contenedores | `contenedores` |
 
-El banco tiene 756 preguntas, de los 8 temas.
+El banco tiene 786 preguntas, de los 8 temas.
 
 La interfaz está en https://3090.taila51846.ts.net:8601/asn/, en el servidor de `app/`. El servidor sirve todos los exámenes, y la raíz lista cada uno.
 
