@@ -1,18 +1,20 @@
 # El modelo de la práctica
 
-La app tiene 2 máquinas de estados: el paso de un concepto y la ronda. El paso se calcula desde `respuestas.jsonl`. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
+La app tiene 2 máquinas de estados: el paso de una pregunta y la ronda. El paso se calcula desde `respuestas.jsonl`. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
 
-## El paso de un concepto
+## El paso de una pregunta
 
-- Un concepto sin respuestas está **sin ver**.
-- Un acierto con "seguro" sube el paso en 1, aunque el concepto no haya vencido. El concepto vence 10 minutos × 3^(paso − 1) después de la respuesta.
-- Un fallo, un acierto con "dudo" o una pregunta en blanco ponen el paso a 0, y el concepto vence en el acto.
+Cada pregunta tiene su paso, y una respuesta mueve solo el de su pregunta. El concepto no tiene estado: agrupa las preguntas para la sesión y el simulacro. Un paso por concepto no vale: una pregunta fácil subiría el paso que una difícil baja, y la difícil volvería sin fin. La razón está en [el ADR 0003](adr/0003-el-paso-es-de-la-pregunta.md).
+
+- Una pregunta sin respuestas está **sin ver**.
+- Un acierto con "seguro" sube el paso en 1, aunque la pregunta no haya vencido. El hueco sigue a SM-2: la pregunta vence 10 minutos después con el paso 1, 1 día después con el paso 2, y el hueco crece ×2,5 con cada paso más.
+- Un fallo, un acierto con "dudo" o una pregunta en blanco ponen el paso a 0, y la pregunta vence en el acto.
 - Cada respuesta mueve el paso, la de una sesión y la de un simulacro.
 - El paso sale del historial unido: el del servidor y las respuestas del dispositivo que aún no llegaron. Una respuesta con el mismo `id` y `ts` cuenta una vez.
 
-Un concepto con un paso de 1 o más está en **sabes**. La barra del camino y la tarjeta de la nota cuentan los conceptos en "sabes". La pantalla de la pregunta muestra el paso del concepto.
+Una pregunta con un paso de 1 o más está en **sabes**. La barra del camino, la tarjeta de la nota y el inicio cuentan preguntas. La pantalla de la pregunta muestra su paso.
 
-Rust tiene un `enum Concepto { SinVer, Paso(u32) }`.
+Rust tiene un `enum Estado { SinVer, Paso(u32) }`.
 
 ## La ronda
 
@@ -29,13 +31,18 @@ Rust tiene un `enum Ronda { Inicio, Pregunta { contestada: bool }, Final }`.
 
 ## La sesión de 12 preguntas
 
-La sesión llena sus 12 preguntas en este orden:
+La sesión lleva como mucho una pregunta por concepto, porque una hermana (otra pregunta del mismo concepto) da pistas de la respuesta. La sesión recorre las preguntas en este orden, y toma la primera de cada concepto hasta llenar 12:
 
-1. Los conceptos fallados, del fallo más viejo al más nuevo. Con 12 fallados o más, la sesión no lleva nada más: un fallo se corrige antes de avanzar en el banco.
-2. Los conceptos vencidos con un paso de 1 o más, del vencido hace más tiempo al vencido hace menos.
-3. Los conceptos sin ver.
-4. Los conceptos que vencen antes.
+1. Las preguntas falladas, del fallo más viejo al más nuevo. Con falladas de 12 conceptos o más, la sesión no lleva nada más: un fallo se corrige antes de avanzar en el banco.
+2. Las preguntas vencidas con un paso de 1 o más, de la vencida hace más tiempo a la vencida hace menos.
+3. Las hermanas sin ver de un concepto con alguna pregunta vista. Así, una idea se cierra antes de abrir otra.
+4. Las preguntas de los conceptos sin ver.
+5. Las preguntas que vencen antes.
 
-Un fallo dentro de una sesión no vuelve en la misma sesión, y abre la sesión siguiente.
+Un concepto con una fallada y una vencida entra con la fallada, y la vencida espera a la sesión siguiente. Un fallo dentro de una sesión no vuelve en la misma sesión, y abre la sesión siguiente.
 
-La sesión lleva una pregunta por concepto, y una pregunta sin respuestas sale antes que una con respuestas. Las 12 preguntas salen en un orden al azar, y las opciones de cada una también. El azar sale de una semilla, y la misma semilla da el mismo orden.
+Dentro de un grupo, el azar rompe los empates. Las 12 preguntas salen en un orden al azar, y las opciones de cada una también. El azar sale de una semilla, y la misma semilla da el mismo orden.
+
+## El simulacro
+
+El simulacro lleva las preguntas del examen, al azar de la selección, con una pregunta por concepto. Solo rellena con hermanas cuando la selección tiene menos conceptos que preguntas el examen.
