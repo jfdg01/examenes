@@ -15,6 +15,18 @@ Cada pregunta tiene su estado, y una respuesta mueve solo el de su pregunta. El 
 - Cada respuesta mueve el estado, la de una sesión y la de un simulacro.
 - El estado sale del historial unido: el del servidor y las respuestas del dispositivo que aún no llegaron. Una respuesta con el mismo `id` y `ts` cuenta una vez.
 
+Una pregunta está en **sabes** si está fuera de los pasos de aprendizaje y su recuerdo en el examen es del 90 % o más. Sin fecha, o con el examen pasado, cuenta el recuerdo de ahora. La barra del camino, la tarjeta de la nota y el inicio cuentan preguntas. La tarjeta trata cada pregunta en "sabes" como acertada. El recuerdo de cada pregunta en la nota es cosa de `El modelo de la nota` (#36).
+
+Tras la respuesta, la pantalla de la pregunta muestra cuándo vuelve y su recuerdo en el examen: "vuelve en 3 días · 94 % en el examen". Sin fecha, o con el examen pasado, muestra solo "vuelve en 3 días".
+
+## Los parámetros de FSRS
+
+FSRS tiene unos 20 parámetros. Salen del historial de todos los exámenes de la raíz juntos: es el mismo estudiante con el mismo tipo de pregunta, y juntos llegan antes al mínimo de respuestas.
+
+- El optimizador de `fsrs` corre en una función pura de `nucleo`, sin archivos ni red.
+- El servidor la llama con los historiales de todos los exámenes al servir `inicio`, y manda los parámetros en `Datos`. Con un historial corto, `fsrs` devuelve `NotEnoughData`, y el servidor manda los parámetros por defecto.
+- El servidor guarda los parámetros en memoria, y los recalcula cada 100 respuestas nuevas. No los escribe en un archivo, porque siempre salen del historial.
+
 ## La ronda
 
 - Del **inicio**, una ronda empieza como una sesión o como un simulacro.
