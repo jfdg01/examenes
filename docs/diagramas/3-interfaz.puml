@@ -10,7 +10,7 @@ Container_Boundary(interfaz, "interfaz") {
   Component(main, "main.ts", "", "Carga nucleo y monta Lista en / o App en /<carpeta>/")
   Component(lista, "Lista.svelte", "", "La lista de exámenes")
   Component(app, "App.svelte", "", "La ronda: carga, guarda, corrige y envía. Todo el estado vive aquí")
-  Component(inicio, "Inicio.svelte", "", "La tarjeta de la nota y los botones de empezar")
+  Component(inicio, "Inicio.svelte", "", "La selección de apartados, la tarjeta de la nota y los botones de empezar")
   Component(pregunta, "Pregunta.svelte", "", "Una pregunta, su solución y su edición")
   Component(final, "Final.svelte", "", "La nota del simulacro y la cuadrícula en verde y rojo")
   Component(cuadricula, "Cuadricula.svelte", "", "Los números de la ronda, para saltar a una pregunta")

@@ -14,13 +14,13 @@ App -> N : unir(historial, pendientes)
 App -> S : GET api/ronda
 App -> L : la ronda de este dispositivo
 App -> N : gana(servidor, local)
-N --> App : el guardado más nuevo
+N --> App : el guardado más nuevo, con su selección
 App -> S : PUT api/ronda, con el guardado que gana
 App -> L : el guardado que gana
 App -> N : restaurar(datos, guardado)
 alt con una ronda a medias
   N --> App : RondaAMedias: sigue en la primera sin contestar
 else sin ronda
-  N --> App : null: la pantalla del inicio
+  N --> App : null: la pantalla del inicio, con la selección del guardado
 end
 @enduml
