@@ -6,7 +6,7 @@ El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.
 {
   "id": "transporte-007",
   "concepto": "transporte-ssh-clave-de-sesion",
-  "tema": "transporte",
+  "apartado": "transporte",
   "fuente": { "pdf": "3_Transporte.pdf", "pagina": 41 },
   "pregunta": "En SSH, ¿cómo acuerdan el cliente y el servidor la clave de sesión?",
   "correcta": "Con un intercambio Diffie-Hellman, firmado por la clave del servidor",
@@ -18,9 +18,9 @@ El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.
 }
 ```
 
-- `id` es la clave del historial, y no cambia nunca. Empieza por el `tema`: `transporte-007`, y `transporte-s03` para una sigla.
+- `id` es la clave del historial, y no cambia nunca. Empieza por el `apartado`: `transporte-007`, y `transporte-s03` para una sigla.
 - `concepto` agrupa las preguntas de una misma idea.
-- `tema` es uno de los temas del PDF de su `fuente` en el campo `pdfs` de `examen.json`.
+- `apartado` es uno de los apartados del tema de su `fuente`, en el campo `pdfs` de `examen.json`. Su nombre está en el campo `apartados`, y la cabecera de la pregunta lo muestra.
 - `fuente` es el PDF y su página de PDF, y no el número de la diapositiva. Es la página que explica la idea, y no una página que solo la nombra.
 - `distractores` tiene `opciones` − 1 opciones. La interfaz baraja la correcta con los distractores.
 
@@ -48,12 +48,12 @@ El `README.md` de cada examen dice lo que el profesor marcó como importante. Es
 cargo run --manifest-path app/Cargo.toml -p banco -- comprobar ps
 ```
 
-`banco comprobar` recibe la carpeta del examen, y falla con cada pregunta que rompe el formato: un `id` repetido, un `tema` que no es de su PDF, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 3 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. Falla también con una línea `✗` cuya clave `«…»` no está en su distractor, en el orden de `distractores`, sin distinguir mayúsculas. También avisa, sin fallar, de estas cosas:
+`banco comprobar` recibe la carpeta del examen, y falla con cada pregunta que rompe el formato: un `id` repetido, un `apartado` que no es de su PDF, un apartado sin nombre, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 3 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. Falla también con una línea `✗` cuya clave `«…»` no está en su distractor, en el orden de `distractores`, sin distinguir mayúsculas. También avisa, sin fallar, de estas cosas:
 
 - un "siempre", un "nunca" o un "solo" de un distractor que la correcta no dice;
 - una correcta que es la opción más larga en más de 1 de cada 3 preguntas, sin contar las siglas;
 - una línea `✓` de menos de 8 palabras;
-- dos líneas `✗` del mismo tema con el mismo matiz, el texto después de los dos puntos;
+- dos líneas `✗` del mismo apartado con el mismo matiz, el texto después de los dos puntos;
 - una página de un PDF con preguntas que ninguna `fuente` cita y que `sin_pregunta` no marca;
 - una página que `sin_pregunta` marca y que tiene una pregunta;
 - una respuesta del historial con un `id` fuera del banco.
@@ -89,11 +89,11 @@ El borrador tiene un bloque por pregunta:
 - «Auditar la seguridad una vez» | la seguridad cubre todo el ciclo
 ```
 
-- El encabezado da el `concepto` y la página de la `fuente`. El PDF de la `fuente` es el PDF del tema en `examen.json`. Un tema con varios PDF da un error.
+- El encabezado da el `concepto` y la página de la `fuente`. El PDF de la `fuente` es el PDF del tema del apartado en `examen.json`. Un apartado de varios temas da un error.
 - La línea sin marca es el enunciado, y la línea `+` es la correcta.
 - La línea `✓` es obligatoria, y es la primera línea de la `explicacion`.
 - Una línea `-` es un distractor, con su clave entre `«»` y su matiz después de un solo `|`. `importar` quita las comillas del distractor y escribe la línea `✗ «clave»: matiz`. Un distractor sin `«»`, o con un `|` que falta o que sobra, da un error.
-- Cada pregunta recibe el siguiente `id` libre del tema: `ciclo-de-vida-127`. Un concepto de sigla recibe la forma `ciclo-de-vida-s15`.
+- Cada pregunta recibe el siguiente `id` libre del apartado: `ciclo-de-vida-127`. Un concepto de sigla recibe la forma `ciclo-de-vida-s15`.
 - `importar` solo añade preguntas. Un concepto del borrador que ya está en el banco da un error, y el banco queda igual. Una edición de una pregunta del banco se hace a mano en el JSON.
 
 ## Las fuentes
