@@ -103,7 +103,7 @@ El borrador tiene un bloque por pregunta:
 3. El agente corre `banco importar` y `banco comprobar`, y arregla los errores y los avisos.
 4. El agente sigue con la siguiente tanda, hasta que el tema acaba.
 
-Al acabar el tema 3 de ASN, una prueba única revisa 1 de cada 3 conceptos. La hace un solo revisor que no escribió las preguntas, y cuenta solo los fallos graves: la regla 3 y una `fuente` equivocada. Con 1 fallo grave o más cada 10 preguntas revisadas, cada tema siguiente lleva una revisión completa al acabar. Con menos fallos, la revisión del agente creador queda sola.
+Al acabar el tema 3 de ASN, una prueba única revisa 1 de cada 3 conceptos. La hace un solo revisor que no escribió las preguntas, y cuenta solo los fallos graves, los de la regla 3. Con 1 fallo grave o más cada 10 preguntas revisadas, cada tema siguiente lleva una revisión completa al acabar. Con menos fallos, la revisión del agente creador queda sola.
 
 ## La revisión completa
 
