@@ -42,10 +42,10 @@
     "pregunta": "¿Qué consecuencia tienen las propiedades de la nube para las aplicaciones que se ejecutan en ella?",
     "correcta": "Requieren un diseño adaptado y traen aspectos de seguridad específicos",
     "distractores": [
-      "Ninguna, una aplicación tradicional las aprovecha igual al migrarla",
+      "Una aplicación tradicional las aprovecha igual al migrarla a la nube",
       "Cambian el modelo de facturación pero no el diseño ni la seguridad"
     ],
-    "explicacion": "✓ Las propiedades de la nube exigen diseñar la aplicación para aprovecharlas, y añaden riesgos de seguridad propios.\n✗ «Ninguna, una aplicación tradicional»: sin adaptar el diseño no se aprovecha la elasticidad\n✗ «Cambian el modelo de facturación»: la nube afecta también al diseño y a la seguridad"
+    "explicacion": "✓ Las propiedades de la nube exigen diseñar la aplicación para aprovecharlas, y añaden riesgos de seguridad propios.\n✗ «Una aplicación tradicional las aprovecha igual»: sin adaptar el diseño no se aprovecha la elasticidad\n✗ «Cambian el modelo de facturación»: la nube afecta también al diseño y a la seguridad"
   },
   {
     "id": "introduccion-004",
@@ -619,7 +619,7 @@
     "correcta": "Compatibilidad: el mismo contenedor corre en proveedores distintos",
     "distractores": [
       "Adaptación automática del código del cliente a cada proveedor de servicio",
-      "Un tamaño fijo de contenedor idéntico en todos los casos"
+      "Un tamaño fijo de contenedor, idéntico entre proveedores"
     ],
     "explicacion": "✓ Un contenedor empaqueta lo que necesita y se ejecuta igual en proveedores diferentes.\n✗ «Adaptación automática»: el proveedor no reescribe el código del cliente\n✗ «Un tamaño fijo»: el tamaño se ajusta a los elementos que usa"
   },
@@ -795,7 +795,7 @@
     "correcta": "La autoría, o no repudio",
     "distractores": [
       "La identificación y autenticación, que garantiza la identidad y los privilegios",
-      "La integridad, que impide alterar los datos en cualquier momento"
+      "La integridad, que impide alterar los datos sin autorización"
     ],
     "explicacion": "✓ La autoría impide que una entidad repudie su participación en una operación.\n✗ «La identificación y autenticación»: verifica quién es la entidad, no impide que la niegue después\n✗ «La integridad»: protege el contenido y no la participación de la entidad"
   },
@@ -810,7 +810,7 @@
     "pregunta": "¿Qué garantiza la confidencialidad de los datos?",
     "correcta": "Que solo las personas autorizadas puedan acceder a ellos",
     "distractores": [
-      "Que no se alteren en ningún momento ni lugar",
+      "Que no se alteren al almacenarlos o transmitirlos",
       "Que sean accesibles cuando el servicio los requiera"
     ],
     "explicacion": "✓ La confidencialidad limita el acceso a los datos a las personas autorizadas.\n✗ «Que no se alteren»: eso es integridad\n✗ «Que sean accesibles»: eso es disponibilidad"
@@ -2299,7 +2299,7 @@
     "correcta": "Verificar los privilegios del usuario para ese recurso y denegar por defecto",
     "distractores": [
       "Permitir el acceso por defecto y bloquear con una lista negra los recursos protegidos",
-      "Confiar en la autenticación del usuario para todos los recursos de la aplicación"
+      "Confiar en la autenticación del usuario para acceder a los recursos de la aplicación"
     ],
     "explicacion": "✓ Cada recurso verifica los privilegios del usuario, y el acceso se deniega por defecto.\n✗ «Permitir el acceso por defecto»: una lista negra deja pasar lo que no prevé\n✗ «Confiar en la autenticación»: estar autenticado no autoriza a cada recurso"
   },
@@ -2555,9 +2555,9 @@
     "correcta": "La cookie solo se envía en peticiones que salen de contenidos del sitio original",
     "distractores": [
       "La cookie también se envía en peticiones seguras que no cambian estado, como GET",
-      "La cookie no se envía en ninguna petición, ni siquiera desde el sitio que la creó"
+      "La cookie también se envía en peticiones POST que salen de otros sitios"
     ],
-    "explicacion": "✓ Con Strict, el navegador envía la cookie solo si la petición sale del sitio original.\n✗ «La cookie también se envía»: ese es el modo Lax\n✗ «La cookie no se envía»: impediría usar la sesión en el propio sitio"
+    "explicacion": "✓ Con Strict, el navegador envía la cookie solo si la petición sale del sitio original.\n✗ «La cookie también se envía»: ese es el modo Lax\n✗ «La cookie también se envía en peticiones POST»: en Strict la cookie no sale en las peticiones de otros sitios"
   },
   {
     "id": "ciclo-de-vida-056",
@@ -2570,7 +2570,7 @@
     "pregunta": "¿Qué añade el modo Lax de SameSite al modo Strict?",
     "correcta": "Envía también la cookie en peticiones seguras que no cambian el estado, como GET",
     "distractores": [
-      "Envía también la cookie en peticiones POST desde cualquier sitio que el usuario visite",
+      "Envía también la cookie en peticiones POST desde otros sitios que el usuario visite",
       "Impide leerla desde JavaScript en el navegador del usuario"
     ],
     "explicacion": "✓ Lax permite la cookie en peticiones seguras como GET, y es el modo por defecto de los navegadores actuales.\n✗ «Envía también la cookie»: un POST desde otro sitio es la petición que SameSite busca frenar\n✗ «Impide leerla»: leerla desde JavaScript lo impide HttpOnly"
@@ -2795,7 +2795,7 @@
     "correcta": "Una lista blanca de destinos válidos",
     "distractores": [
       "Una lista negra con las direcciones internas conocidas, porque se mantiene con facilidad",
-      "Una expresión regular que reconozca todos los formatos de dirección interna posibles"
+      "Una expresión regular que reconozca las direcciones internas en la URL"
     ],
     "explicacion": "✓ Una lista blanca admite solo los destinos previstos, y las listas negras pueden eludirse.\n✗ «Una lista negra»: el atacante usa direcciones que la lista no prevé\n✗ «Una expresión regular»: un formato no previsto la elude"
   },
@@ -2875,7 +2875,7 @@
     "correcta": "Asociando los errores de ejecución a páginas de error genéricas, como las de 404 o 500",
     "distractores": [
       "Incluyendo el volcado de pila completo en la página de error para facilitar el diagnóstico",
-      "Devolviendo un código 200 con una página vacía en cualquier error del servidor"
+      "Devolviendo un código 200 con una página vacía ante un error del servidor"
     ],
     "explicacion": "✓ Una página genérica de error no enseña la traza, y el detalle queda en el servidor.\n✗ «Incluyendo el volcado de pila»: revela información que ayuda al atacante\n✗ «Devolviendo un código 200»: no es una página de error genérica con su código"
   },
@@ -2939,7 +2939,7 @@
     "correcta": "Configurando el procesador XML para desactivar el acceso a entidades externas si no hacen falta",
     "distractores": [
       "Cifrando el contenido XML con TLS entre el cliente y el servicio SOAP",
-      "Validando que el XML incluya un DOCTYPE con todas las entidades que el cliente necesita para su petición"
+      "Validando que el XML incluya un DOCTYPE con las entidades que el cliente necesita para su petición"
     ],
     "explicacion": "✓ Un procesador bien configurado desactiva las entidades externas que la aplicación no necesita.\n✗ «Cifrando el contenido XML»: el cifrado en tránsito no impide que el procesador resuelva entidades\n✗ «Validando que el XML»: el DOCTYPE es la vía del ataque"
   },
@@ -3211,9 +3211,9 @@
     "correcta": "Solo como último recurso, como una corrección temporal, y con bibliotecas especializadas",
     "distractores": [
       "Como contramedida principal, por ser común a todas las bases de datos de la organización",
-      "En cualquier consulta cuyo parámetro sea un nombre de columna, en lugar de validarlo"
+      "En las consultas cuyo parámetro sea un nombre de columna, en lugar de validarlo"
     ],
-    "explicacion": "✓ El escapado es el último recurso, porque cada base de datos lo hace a su manera.\n✗ «Como contramedida principal»: el proceso es específico de cada base de datos\n✗ «En cualquier consulta cuyo parámetro»: para esos casos se usa una lista blanca de operaciones permitidas"
+    "explicacion": "✓ El escapado es el último recurso, porque cada base de datos lo hace a su manera.\n✗ «Como contramedida principal»: el proceso es específico de cada base de datos\n✗ «En las consultas cuyo parámetro»: para esos casos se usa una lista blanca de operaciones permitidas"
   },
   {
     "id": "ciclo-de-vida-090",
@@ -3307,7 +3307,7 @@
     "correcta": "Los datos del cliente, como formularios o URLs, se usan directamente para actualizar la página, por ejemplo un mensaje de error",
     "distractores": [
       "El código queda guardado en la base de datos y se ejecuta en cada visita a la página",
-      "El código está en ficheros JavaScript de la aplicación que cualquier usuario descarga"
+      "El código está en ficheros JavaScript de la aplicación que el usuario descarga"
     ],
     "explicacion": "✓ En el XSS reflejado la página usa datos del cliente sin guardarlos en la aplicación.\n✗ «El código queda guardado»: eso es un XSS almacenado\n✗ «El código está en ficheros»: un fichero de la aplicación es persistente, es decir, almacenado"
   },
@@ -3338,7 +3338,7 @@
     "pregunta": "¿Cuál es la protección principal frente a XSS sobre los datos que la aplicación escribe en la página HTML?",
     "correcta": "Codificarlos según su contexto de salida: contenido, atributos, URLs, CSS o JavaScript",
     "distractores": [
-      "Filtrarlos en la entrada con una lista negra de etiquetas script, sin codificar nada del usuario",
+      "Filtrarlos en la entrada con una lista negra de etiquetas script, sin codificar la salida",
       "Cifrarlos con TLS antes de enviarlos desde el servidor hasta el navegador"
     ],
     "explicacion": "✓ La codificación de la salida según su contexto impide que un dato se interprete como código.\n✗ «Filtrarlos en la entrada»: una lista negra se elude con vectores no previstos\n✗ «Cifrarlos con TLS»: TLS protege el tránsito y no impide que el navegador los interprete como código"
@@ -3434,8 +3434,8 @@
     "pregunta": "¿Qué efecto tiene la propiedad HttpOnly de una cookie?",
     "correcta": "El JavaScript no puede leerla, por ejemplo con document.cookie",
     "distractores": [
-      "El navegador la envía únicamente a las peticiones que salen del sitio original",
-      "El navegador la envía únicamente por conexiones cifradas con TLS"
+      "El navegador la envía en las peticiones que salen del sitio original",
+      "El navegador la envía por conexiones cifradas con TLS"
     ],
     "explicacion": "✓ Una cookie HttpOnly no es accesible desde JavaScript, y un XSS no puede leerla.\n✗ «El navegador la envía»: eso es SameSite\n✗ «El navegador la envía»: eso es la propiedad Secure"
   },
@@ -3978,10 +3978,10 @@
     "pregunta": "¿Qué permite la política Content-Security-Policy: script-src 'self'?",
     "correcta": "Solo JavaScript de ficheros del mismo dominio, y no el que va dentro del HTML",
     "distractores": [
-      "JavaScript de cualquier dominio si el fichero se sirve por HTTPS",
-      "Todo el JavaScript del documento, incluido el que va escrito en línea en el HTML"
+      "JavaScript de otros dominios si el fichero se sirve por HTTPS",
+      "El JavaScript del documento, incluido el que va escrito en línea en el HTML"
     ],
-    "explicacion": "✓ Con script-src 'self' solo se admite el JavaScript de ficheros del propio dominio, y no el del HTML.\n✗ «JavaScript de cualquier dominio si el fichero se sirve por HTTPS»: 'self' limita el origen al propio dominio y no al protocolo\n✗ «Todo el JavaScript del documento, incluido el que va escrito en línea en el HTML»: por defecto no se permite el JavaScript dentro del HTML"
+    "explicacion": "✓ Con script-src 'self' solo se admite el JavaScript de ficheros del propio dominio, y no el del HTML.\n✗ «JavaScript de otros dominios si el fichero se sirve por HTTPS»: 'self' limita el origen al propio dominio y no al protocolo\n✗ «El JavaScript del documento, incluido el que va escrito en línea en el HTML»: por defecto no se permite el JavaScript dentro del HTML"
   },
   {
     "id": "ciclo-de-vida-131",
@@ -4250,10 +4250,10 @@
     "pregunta": "En el ejemplo seguro de inyección SQL, ¿qué papel tiene el signo ? de la consulta?",
     "correcta": "Es el parámetro al que se asigna el dato del usuario, sin concatenarlo en la consulta",
     "distractores": [
-      "Es el comodín que selecciona cualquier nombre de usuario de la tabla sin otra cosa",
+      "Es el comodín que selecciona varios nombres de usuario de la tabla",
       "Es la marca que activa la validación del nombre de usuario del formulario"
     ],
-    "explicacion": "✓ El signo ? marca el parámetro, y el dato del usuario se asigna después sin concatenarlo.\n✗ «Es el comodín que selecciona cualquier nombre de usuario de la tabla»: no es un comodín sino un parámetro que recibe el dato\n✗ «Es la marca que activa la validación del nombre de usuario del formulario»: la validación la hace el patrón y no el signo ?"
+    "explicacion": "✓ El signo ? marca el parámetro, y el dato del usuario se asigna después sin concatenarlo.\n✗ «Es el comodín que selecciona varios nombres de usuario»: no es un comodín sino un parámetro que recibe el dato\n✗ «Es la marca que activa la validación del nombre de usuario del formulario»: la validación la hace el patrón y no el signo ?"
   },
   {
     "id": "alta-disponibilidad-001",
@@ -4426,10 +4426,10 @@
     "pregunta": "¿Qué significa la heterogeneidad tecnológica de los microservicios?",
     "correcta": "Que cada microservicio puede desarrollarse con una pila de desarrollo diferente",
     "distractores": [
-      "Que todos deben usar el mismo lenguaje para poder comunicarse",
+      "Que deben usar el mismo lenguaje para poder comunicarse",
       "Que se despliegan en máquinas virtuales IaaS"
     ],
-    "explicacion": "✓ Cada microservicio elige su lenguaje y tecnología, y se comunican con protocolos abiertos.\n✗ «Que todos deben usar el mismo lenguaje»: los protocolos abiertos permiten pilas distintas\n✗ «Que se despliegan en máquinas virtuales»: se despliegan también en PaaS, CaaS o FaaS"
+    "explicacion": "✓ Cada microservicio elige su lenguaje y tecnología, y se comunican con protocolos abiertos.\n✗ «Que deben usar el mismo lenguaje»: los protocolos abiertos permiten pilas distintas\n✗ «Que se despliegan en máquinas virtuales»: se despliegan también en PaaS, CaaS o FaaS"
   },
   {
     "id": "alta-disponibilidad-015",
@@ -4443,7 +4443,7 @@
     "correcta": "Elasticidad bajo demanda, alta disponibilidad y tolerancia a fallos",
     "distractores": [
       "Elimina la comunicación entre servicios al duplicar el código",
-      "Obliga a desplegar todos los servicios juntos"
+      "Obliga a desplegar los servicios juntos"
     ],
     "explicacion": "✓ Replicar los microservicios permite adaptarse a la demanda y seguir funcionando ante fallos.\n✗ «Elimina la comunicación»: los servicios replicados siguen comunicándose por la red\n✗ «Obliga a desplegar»: cada microservicio se despliega y se replica de forma individual"
   },
@@ -4602,10 +4602,10 @@
     "pregunta": "¿Por qué se ajusta el número máximo de conexiones por nodo?",
     "correcta": "Cada conexión consume recursos, y el nodo debe rechazar rápido lo que no puede atender",
     "distractores": [
-      "Para encolar todas las peticiones que no se pueden atender, en lugar de rechazarlas",
+      "Para encolar las peticiones que no se pueden atender, en lugar de rechazarlas",
       "Para evitar el uso de un pool de conexiones"
     ],
-    "explicacion": "✓ Limitar las conexiones protege los recursos del nodo, que rechaza enseguida el exceso (fail-fast).\n✗ «Para encolar todas las peticiones»: un nodo saturado acabaría bloqueado, y no rechazaría rápido\n✗ «Para evitar»: el pool y el límite se usan a la vez"
+    "explicacion": "✓ Limitar las conexiones protege los recursos del nodo, que rechaza enseguida el exceso (fail-fast).\n✗ «Para encolar las peticiones»: un nodo saturado acabaría bloqueado, y no rechazaría rápido\n✗ «Para evitar»: el pool y el límite se usan a la vez"
   },
   {
     "id": "alta-disponibilidad-026",
@@ -4699,9 +4699,9 @@
     "correcta": "Zonas o recursos independientes, para que un error en una no afecte a las demás",
     "distractores": [
       "Una respuesta inmediata de error cuando falla la comunicación",
-      "Un único repositorio de datos compartido por todos los servicios"
+      "Un repositorio de datos compartido por los servicios"
     ],
-    "explicacion": "✓ Los mamparos aíslan zonas o recursos para que un fallo no se propague a los demás.\n✗ «Una respuesta inmediata»: es el interruptor, y no los mamparos\n✗ «Un único repositorio de datos»: los mamparos separan los recursos, y no los comparten"
+    "explicacion": "✓ Los mamparos aíslan zonas o recursos para que un fallo no se propague a los demás.\n✗ «Una respuesta inmediata»: es el interruptor, y no los mamparos\n✗ «Un repositorio de datos compartido»: los mamparos separan los recursos, y no los comparten"
   },
   {
     "id": "alta-disponibilidad-032",
@@ -4794,7 +4794,7 @@
     "pregunta": "¿En qué se diferencia un balanceador L4 de uno L7?",
     "correcta": "L4 balancea sobre TCP, y L7 balancea a nivel de aplicación, como HTTP",
     "distractores": [
-      "L4 interpreta HTTP y L7 balancea únicamente sobre TCP",
+      "L4 interpreta HTTP y L7 balancea sobre TCP",
       "Ambos balancean a nivel IP, y L7 añade además el cifrado de la comunicación"
     ],
     "explicacion": "✓ L4 reparte sobre TCP, por ejemplo SMTP, y L7 lo hace sobre el protocolo de aplicación, como HTTP.\n✗ «L4 interpreta HTTP»: es al revés\n✗ «Ambos balancean»: los dos niveles son de transporte y aplicación"
@@ -5002,7 +5002,7 @@
     "pregunta": "¿Cómo se escalan las lecturas con CQRS?",
     "correcta": "Con escrituras sobre un nodo principal y lecturas sobre nodos réplicas",
     "distractores": [
-      "Con lecturas y escrituras en cualquier nodo sin coordinación",
+      "Con lecturas y escrituras repartidas entre nodos sin coordinación",
       "Con las entidades repartidas entre nodos shards"
     ],
     "explicacion": "✓ Las réplicas atienden las lecturas, mientras el nodo principal recibe las escrituras.\n✗ «Con lecturas y escrituras»: no hay nodo principal que ordene las escrituras\n✗ «Con las entidades repartidas»: es el escalado de escrituras"
@@ -5434,10 +5434,10 @@
     "pregunta": "¿Cómo se pueden aprovisionar los recursos de una aplicación en la nube para atender la demanda?",
     "correcta": "De forma manual o dinámica (elástica)",
     "distractores": [
-      "De forma únicamente estática con el máximo previsto desde el despliegue inicial",
+      "De forma estática, con el máximo previsto desde el despliegue inicial",
       "Mediante una sola máquina de gran capacidad"
     ],
-    "explicacion": "✓ Los recursos se aprovisionan a mano o de forma dinámica y elástica, según la demanda.\n✗ «De forma únicamente estática»: no se adapta a la demanda real\n✗ «Mediante una sola máquina»: las arquitecturas distribuidas reparten la carga entre varios recursos"
+    "explicacion": "✓ Los recursos se aprovisionan a mano o de forma dinámica y elástica, según la demanda.\n✗ «De forma estática»: no se adapta a la demanda real\n✗ «Mediante una sola máquina»: las arquitecturas distribuidas reparten la carga entre varios recursos"
   },
   {
     "id": "alta-disponibilidad-078",
@@ -5530,10 +5530,10 @@
     "pregunta": "Un balanceador detecta contenedores de Docker o de Kubernetes y crea sus nodos sin reiniciarse. ¿Qué capacidad aprovecha?",
     "correcta": "Configurar los nodos de forma dinámica desde diferentes proveedores",
     "distractores": [
-      "Balancear únicamente a nivel L4 sobre TCP para cualquier tipo de servicio",
+      "Balancear a nivel L4 sobre TCP",
       "Cachear elementos estáticos como imágenes o CSS para evitar sobrecargas"
     ],
-    "explicacion": "✓ Los nodos se configuran de forma dinámica desde proveedores como Docker, Kubernetes o Consul.\n✗ «Balancear únicamente a nivel L4»: no depende del nivel OSI\n✗ «Cachear elementos estáticos»: no crea nodos"
+    "explicacion": "✓ Los nodos se configuran de forma dinámica desde proveedores como Docker, Kubernetes o Consul.\n✗ «Balancear a nivel L4»: no depende del nivel OSI\n✗ «Cachear elementos estáticos»: no crea nodos"
   },
   {
     "id": "alta-disponibilidad-084",
@@ -5578,7 +5578,7 @@
     "pregunta": "¿Qué funcionalidades adicionales dan los servicios específicos de descubrimiento frente al DNS?",
     "correcta": "Registro, configuración, almacenamiento clave-valor y mensajes",
     "distractores": [
-      "Cifrado de las consultas y firma de todas las respuestas del servicio",
+      "Cifrado de las consultas y firma de las respuestas del servicio",
       "Reparto de las peticiones entre servicios por round-robin"
     ],
     "explicacion": "✓ Además de localizar servicios, ofrecen registro, configuración, clave-valor y mensajes.\n✗ «Cifrado»: no es la funcionalidad que añaden\n✗ «Reparto»: el DNS también lo permite"
@@ -5610,10 +5610,10 @@
     "pregunta": "¿Qué interfaces ofrece Consul para acceder a sus servicios?",
     "correcta": "Una interfaz REST y una interfaz DNS transparente",
     "distractores": [
-      "Únicamente una interfaz gráfica de monitorización",
+      "Una interfaz SOAP y un cliente gráfico de monitorización",
       "Un cliente propio que sustituye al DNS del sistema"
     ],
-    "explicacion": "✓ Consul se usa por REST o por DNS de forma transparente.\n✗ «Únicamente una interfaz gráfica»: tiene interfaz gráfica, pero también REST y DNS\n✗ «Un cliente propio»: usa DNS estándar de forma transparente"
+    "explicacion": "✓ Consul se usa por REST o por DNS de forma transparente.\n✗ «Una interfaz SOAP»: Consul ofrece REST y DNS, y no SOAP\n✗ «Un cliente propio»: usa DNS estándar de forma transparente"
   },
   {
     "id": "alta-disponibilidad-089",
@@ -5626,7 +5626,7 @@
     "pregunta": "En la replicación de Consul para alta disponibilidad, ¿qué propiedades del teorema CAP prioriza?",
     "correcta": "Disponibilidad y tolerancia a particiones (AP)",
     "distractores": [
-      "Consistencia y tolerancia a particiones (CP) en cualquier configuración",
+      "Consistencia y tolerancia a particiones (CP)",
       "Consistencia y disponibilidad (CA)"
     ],
     "explicacion": "✓ Consul replica en alta disponibilidad con enfoque AP.\n✗ «Consistencia y tolerancia a particiones (CP)»: CP deja la información inaccesible hasta sincronizar los nodos\n✗ «Consistencia y disponibilidad (CA)»: CA no tolera desconexiones entre nodos"
@@ -6011,9 +6011,9 @@
     "correcta": "La conexión no está permitida",
     "distractores": [
       "La conexión se permite si están en la misma subred",
-      "La conexión se permite para el protocolo SSH únicamente"
+      "La conexión se permite si usa el protocolo SSH"
     ],
-    "explicacion": "✓ Sin flecha entre dos hosts, la conexión no está permitida, y todo lo no declarado queda denegado.\n✗ «La conexión se permite si están en la misma subred»: la subred no basta, porque el permiso es expreso\n✗ «La conexión se permite para el protocolo SSH»: SSH tampoco queda permitido sin su regla expresa"
+    "explicacion": "✓ Sin flecha entre dos hosts, la conexión no está permitida, y todo lo no declarado queda denegado.\n✗ «La conexión se permite si están en la misma subred»: la subred no basta, porque el permiso es expreso\n✗ «La conexión se permite si usa el protocolo SSH»: SSH tampoco queda permitido sin su regla expresa"
   },
   {
     "id": "despliegue-018",
@@ -6122,7 +6122,7 @@
     "pregunta": "¿Qué suelen permitir las VPC y sus listas de control de acceso para facilitar la detección de problemas y ataques?",
     "correcta": "Registrar la actividad de red",
     "distractores": [
-      "Bloquear de forma automática cualquier conexión hacia el exterior",
+      "Bloquear de forma automática las conexiones hacia el exterior",
       "Cifrar las comunicaciones entre las subredes de cada zona de la VPC"
     ],
     "explicacion": "✓ Las VPC suelen permitir registros de actividad, y facilitan así la detección de problemas y de ataques.\n✗ «Bloquear de forma automática»: las reglas de acceso las define el administrador, y no se bloquea por sí solo\n✗ «Cifrar las comunicaciones»: una VPC aísla redes, y no cifra su tráfico"
@@ -6443,9 +6443,9 @@
     "correcta": "La IP de los nodos puede variar, y el puerto externo está en el rango 30000-32767",
     "distractores": [
       "Necesita un balanceador del proveedor con una IP fija que se factura por cada servicio",
-      "Es accesible únicamente desde dentro del clúster"
+      "No es accesible desde fuera del clúster"
     ],
-    "explicacion": "✓ NodePort usa la IP externa de los nodos, que puede variar, con un puerto externo del rango 30000-32767.\n✗ «Necesita un balanceador»: eso es LoadBalancer\n✗ «Es accesible únicamente»: eso es ClusterIP"
+    "explicacion": "✓ NodePort usa la IP externa de los nodos, que puede variar, con un puerto externo del rango 30000-32767.\n✗ «Necesita un balanceador»: eso es LoadBalancer\n✗ «No es accesible desde fuera del clúster»: eso es ClusterIP"
   },
   {
     "id": "despliegue-045",
@@ -6459,9 +6459,9 @@
     "correcta": "Requiere costes adicionales por cada servicio, como una IP estática",
     "distractores": [
       "Limita los puertos externos al rango 30000-32767 de cada nodo del clúster",
-      "Funciona únicamente dentro del clúster"
+      "No admite conexiones desde fuera del clúster"
     ],
-    "explicacion": "✓ LoadBalancer usa un balanceador del proveedor, con IP y puertos fijos, y cobra costes adicionales por servicio.\n✗ «Limita los puertos»: es una restricción de NodePort\n✗ «Funciona únicamente»: LoadBalancer expone el servicio a redes externas"
+    "explicacion": "✓ LoadBalancer usa un balanceador del proveedor, con IP y puertos fijos, y cobra costes adicionales por servicio.\n✗ «Limita los puertos»: es una restricción de NodePort\n✗ «No admite conexiones desde fuera»: LoadBalancer expone el servicio a redes externas"
   },
   {
     "id": "despliegue-046",
@@ -6522,7 +6522,7 @@
     "pregunta": "¿Cuál es la diferencia entre las estrategias de despliegue Recreate y RollingUpdate en un Deployment de Kubernetes?",
     "correcta": "Recreate destruye las instancias activas y lanza las nuevas, y RollingUpdate las sustituye progresivamente",
     "distractores": [
-      "Recreate sustituye progresivamente las instancias, y RollingUpdate las destruye todas a la vez en cada nodo",
+      "Recreate sustituye progresivamente las instancias, y RollingUpdate las destruye a la vez",
       "Las dos sustituyen una instancia a la vez"
     ],
     "explicacion": "✓ Recreate apaga todas las instancias antes de lanzar las nuevas, y RollingUpdate las cambia poco a poco, sin cortar el servicio.\n✗ «Recreate sustituye»: invierte las estrategias\n✗ «Las dos»: Recreate para todas las instancias a la vez"
@@ -6682,10 +6682,10 @@
     "pregunta": "¿Qué se debe hacer en un clúster Kind para usar una imagen local de Docker?",
     "correcta": "Enviar la imagen al clúster, por ejemplo con kind load",
     "distractores": [
-      "Nada, porque comparte el registro local de Docker",
+      "Lanzarla sin más, porque Kind comparte el registro local de Docker",
       "Publicar la imagen en Docker Hub y descargarla desde cada nodo"
     ],
-    "explicacion": "✓ El clúster Kind no comparte el registro local de Docker, y las imágenes locales se envían con kind load.\n✗ «Nada»: solo el clúster de Docker Desktop comparte el registro local\n✗ «Publicar la imagen»: no es necesario publicar la imagen para usarla en Kind"
+    "explicacion": "✓ El clúster Kind no comparte el registro local de Docker, y las imágenes locales se envían con kind load.\n✗ «Lanzarla sin más»: solo el clúster de Docker Desktop comparte el registro local\n✗ «Publicar la imagen»: no es necesario publicar la imagen para usarla en Kind"
   },
   {
     "id": "despliegue-060",
@@ -6859,9 +6859,9 @@
     "correcta": "Se almacena en memoria, u ofuscada, y solo la consultan los pods autorizados",
     "distractores": [
       "Se guarda en claro en el repositorio de git junto al manifiesto del Deployment",
-      "Lo ve cualquier pod del mismo namespace"
+      "Lo leen los pods del mismo namespace sin permisos"
     ],
-    "explicacion": "✓ Los secretos se guardan en la memoria de los nodos o, si se persisten, cifrados, y solo acceden los pods establecidos.\n✗ «Se guarda en claro»: un secreto no se versiona sin protección\n✗ «Lo ve cualquier pod»: solo los pods preestablecidos los consultan"
+    "explicacion": "✓ Los secretos se guardan en la memoria de los nodos o, si se persisten, cifrados, y solo acceden los pods establecidos.\n✗ «Se guarda en claro»: un secreto no se versiona sin protección\n✗ «Lo leen los pods del mismo namespace»: solo los pods preestablecidos los consultan"
   },
   {
     "id": "despliegue-071",
@@ -6906,7 +6906,7 @@
     "pregunta": "¿Por qué hacen falta volúmenes en Kubernetes para guardar datos de una aplicación?",
     "correcta": "Porque las imágenes de los contenedores no son persistentes",
     "distractores": [
-      "Porque los pods comparten un disco por defecto entre todos los nodos",
+      "Porque los pods comparten un disco por defecto entre los nodos",
       "Porque el nodo máster guarda los datos de cada pod"
     ],
     "explicacion": "✓ Las imágenes de los contenedores no son persistentes, y los volúmenes dan unidades de almacenamiento persistente.\n✗ «Porque los pods»: los pods no comparten un disco sin un volumen\n✗ «Porque el nodo»: el máster guarda estado del clúster"
@@ -7034,7 +7034,7 @@
     "pregunta": "¿Qué servicio de balanceo de carga usa GKE para exponer servicios hacia Internet?",
     "correcta": "GLBC, el balanceador de carga de GCP",
     "distractores": [
-      "Traefik instalado por defecto en todos los nodos",
+      "Traefik, instalado por defecto en el clúster",
       "El kube-proxy de cada nodo"
     ],
     "explicacion": "✓ GKE usa GLBC para exponer servicios, y su coste suma al del clúster.\n✗ «Traefik»: el balanceador es de GCP\n✗ «El kube-proxy»: kube-proxy balancea dentro del clúster"
@@ -7067,9 +7067,9 @@
     "correcta": "El número 1, la más alta; el 65535 es la más baja",
     "distractores": [
       "El 65535, la más alta, y el 1 la más baja",
-      "Ninguna, porque todas las reglas se aplican a la vez con el mismo peso"
+      "Las reglas se aplican en el orden en que se crean"
     ],
-    "explicacion": "✓ La prioridad 1 es la más alta y la 65535 la más baja en las reglas de cortafuegos de GCP.\n✗ «El 65535»: es la más baja\n✗ «Ninguna»: la prioridad ordena las reglas, y se evalúa antes la que tiene el número más bajo"
+    "explicacion": "✓ La prioridad 1 es la más alta y la 65535 la más baja en las reglas de cortafuegos de GCP.\n✗ «El 65535»: es la más baja\n✗ «Las reglas se aplican en el orden en que se crean»: la prioridad ordena las reglas, y se evalúa antes la que tiene el número más bajo"
   },
   {
     "id": "despliegue-084",
@@ -7243,7 +7243,7 @@
     "correcta": "Al menos 2 nodos",
     "distractores": [
       "Un nodo por cada servicio de la aplicación, y como mínimo cinco",
-      "Tres nodos máster y ningún nodo esclavo"
+      "Tres nodos máster, sin contar los nodos esclavos"
     ],
     "explicacion": "✓ En producción hace falta al menos 2 nodos para garantizar la alta disponibilidad (HA).\n✗ «Un nodo por cada servicio»: no es el criterio de la diapositiva\n✗ «Tres nodos máster»: el mínimo cuenta nodos del clúster, y no solo másters"
   },
@@ -7355,7 +7355,7 @@
     "correcta": "Unifica enrutamiento avanzado y balanceo que antes se configuraban de forma independiente",
     "distractores": [
       "Elimina la necesidad de un software que atienda las peticiones del clúster en el clúster y entre nodos",
-      "Cifra el tráfico de forma automática entre todos los pods del clúster"
+      "Cifra el tráfico de forma automática entre los pods del clúster"
     ],
     "explicacion": "✓ Gateway API unifica configuraciones avanzadas de enrutamiento y balanceo que antes iban por separado.\n✗ «Elimina la necesidad»: sigue necesitando un software que las gestione\n✗ «Cifra el tráfico»: no cifra por sí mismo el tráfico"
   },
@@ -7370,7 +7370,7 @@
     "pregunta": "¿En qué estado de adopción está Gateway API en Kubernetes?",
     "correcta": "En implantación: debe habilitarse expresamente y los desarrolladores la adaptan a sus productos",
     "distractores": [
-      "Está activa en cualquier clúster y sustituyó a los Ingress por completo",
+      "Está activa por defecto y sustituyó a los Ingress",
       "Está retirada por problemas de seguridad en el enrutado de L4"
     ],
     "explicacion": "✓ Gateway API está en proceso de implantación, se habilita expresamente y cada producto, como traefik, la adapta.\n✗ «Está activa»: debe habilitarse, y los Ingress siguen en uso\n✗ «Está retirada»: está en implantación, y no retirada"
@@ -7418,7 +7418,7 @@
     "pregunta": "¿Qué diferencia hay entre un Role y un ClusterRole?",
     "correcta": "El alcance: un Role vale en un namespace, y un ClusterRole en todo el clúster",
     "distractores": [
-      "El tipo de operación: un Role únicamente lee, y un ClusterRole también modifica",
+      "El tipo de operación: un Role lee, y un ClusterRole también modifica",
       "El destinatario: un Role es para usuarios, y un ClusterRole para servicios"
     ],
     "explicacion": "✓ Role limita los permisos a un namespace, y ClusterRole los extiende a todo el clúster.\n✗ «El tipo de operación»: ambos definen cualquier operación permitida\n✗ «El destinatario»: eso lo decide el RoleBinding"
@@ -7754,7 +7754,7 @@
     "pregunta": "¿Qué necesidades tiene el propio sistema de monitorización de una aplicación en la nube?",
     "correcta": "Alta disponibilidad y tolerancia a fallos, al ser distribuido",
     "distractores": [
-      "Menos que una aplicación normal, porque únicamente lee datos de otros",
+      "Menos que una aplicación normal, porque se limita a leer datos de otros",
       "Almacenamiento centralizado en un único servidor sin replicar"
     ],
     "explicacion": "✓ El sistema de monitorización es una aplicación distribuida más, con sus propios requisitos de disponibilidad.\n✗ «Menos que una aplicación normal»: también debe ser disponible, y se ve con las consideraciones CAP\n✗ «Almacenamiento centralizado»: un único servidor es un punto de fallo"
@@ -7994,7 +7994,7 @@
     "pregunta": "¿Qué riesgo trae que las versiones originales de syslog no tengan autoría?",
     "correcta": "Se pueden recibir mensajes falsos",
     "distractores": [
-      "Se pierden mensajes por no usar ninguna cola",
+      "Se pierden mensajes por no usar colas",
       "Se rompe el formato del mensaje al transmitirse"
     ],
     "explicacion": "✓ Sin autoría el receptor no comprueba quién envió el mensaje, así que un atacante puede inventarlo.\n✗ «Se pierden mensajes»: eso es la falta de tolerancia a fallos\n✗ «Se rompe»: eso es la falta de un formato definido"
@@ -8058,10 +8058,10 @@
     "pregunta": "¿Cómo consigue ELK alta disponibilidad y tolerancia a fallos?",
     "correcta": "Con colas de logs, un clúster Logstash y replicación",
     "distractores": [
-      "Con un único nodo de gran capacidad para todos los logs",
+      "Con un nodo de gran capacidad para los logs",
       "Con syslog en UDP y un servidor central de respaldo"
     ],
-    "explicacion": "✓ Las colas, el clúster de Logstash y la replicación de Elasticsearch evitan puntos únicos de fallo.\n✗ «Con un único nodo»: un solo nodo es un punto de fallo\n✗ «Con syslog en UDP»: UDP no da tolerancia a fallos, y ELK no se apoya en él"
+    "explicacion": "✓ Las colas, el clúster de Logstash y la replicación de Elasticsearch evitan puntos únicos de fallo.\n✗ «Con un nodo de gran capacidad»: un solo nodo es un punto de fallo\n✗ «Con syslog en UDP»: UDP no da tolerancia a fallos, y ELK no se apoya en él"
   },
   {
     "id": "monitorizacion-041",
@@ -8187,7 +8187,7 @@
     "correcta": "Los accesos de Apache con código 404 a URLs que empiezan por /admin",
     "distractores": [
       "Los accesos de Apache con código 200 a la URL /admin",
-      "Las alertas de Apache de cualquier URL con errores de servidor"
+      "Las alertas de Apache con errores de servidor en /admin"
     ],
     "explicacion": "✓ El filtro combina con AND un código 404 y una URL bajo /admin en los accesos de Apache.\n✗ «Los accesos»: el código del filtro es 404\n✗ «Las alertas»: el filtro limita la URL a /admin y el código a 404"
   },
@@ -8251,7 +8251,7 @@
     "correcta": "Identificar y secuenciar los registros de una operación distribuida",
     "distractores": [
       "Medir el uso de CPU y memoria de cada máquina virtual",
-      "Almacenar logs de servicio sin ninguna estructura"
+      "Almacenar logs de servicio sin estructura"
     ],
     "explicacion": "✓ Las trazas ligan las tareas de una misma operación repartida por varios nodos.\n✗ «Medir»: eso son métricas de estado\n✗ «Almacenar»: las trazas añaden la correlación entre tareas"
   },
@@ -8426,8 +8426,8 @@
     "pregunta": "En Java, un método lleva la anotación @WithSpan(\"getProducts\") y @SpanAttribute en un parámetro. ¿Qué instrumentación es?",
     "correcta": "Manual, porque el programador marca el span y sus atributos",
     "distractores": [
-      "Automática porque el SDK genera todos los spans sin anotaciones",
-      "Del collector porque lo configura el gestor de eventos"
+      "Automática, porque el SDK genera los spans sin anotaciones",
+      "Del collector, porque lo configura el gestor de eventos"
     ],
     "explicacion": "✓ Las anotaciones definen el span y sus atributos en el código, y eso es instrumentación manual.\n✗ «Automática»: la automática no exige anotaciones\n✗ «Del collector»: el collector no se configura con anotaciones del código"
   },
@@ -8506,7 +8506,7 @@
     "pregunta": "¿Qué caracteriza a una respuesta silenciosa de AppSensor?",
     "correcta": "El usuario no es consciente de la respuesta de la aplicación",
     "distractores": [
-      "Cambia la experiencia del usuario sin negarle nada de lo que podía hacer",
+      "Cambia la experiencia del usuario sin negarle funciones",
       "Reduce funciones de la aplicación para el usuario"
     ],
     "explicacion": "✓ La respuesta silenciosa, como registrar o notificar al administrador, no se nota para el usuario.\n✗ «Cambia la experiencia»: eso es una respuesta pasiva\n✗ «Reduce funciones»: eso es una respuesta activa"
@@ -9099,7 +9099,7 @@
     "correcta": "Desactiva el motor de reglas para esa IP, y no registra la petición",
     "distractores": [
       "Bloquea el acceso desde la IP de administración",
-      "Registra cada petición de la IP en el log de actividad con todos sus detalles de cabecera"
+      "Registra cada petición de la IP en el log de actividad con sus detalles de cabecera"
     ],
     "explicacion": "✓ La regla da acceso total a la IP de administración, porque apaga el motor sin registro.\n✗ «Bloquea»: la acción es pass, que deja pasar\n✗ «Registra»: la acción nolog evita registrar"
   },
@@ -9371,7 +9371,7 @@
     "correcta": "Su transmisión, su autoría y su acceso, y evitar logs tóxicos",
     "distractores": [
       "La rotación de los logs, que cifra cada fichero antes de borrarlo",
-      "El formato de cada fuente, que debe ser idéntico en todos los nodos"
+      "El formato de cada fuente, que debe ser idéntico entre nodos"
     ],
     "explicacion": "✓ Los datos de monitorización viajan y se guardan, y hay que asegurar su canal, su origen y quién los lee.\n✗ «La rotación»: la rotación evita que crezcan, y no protege la transmisión ni el acceso\n✗ «El formato»: los formatos son heterogéneos, y no es un asunto de seguridad"
   },
@@ -10650,7 +10650,7 @@
     "pregunta": "¿Qué distingue a la fase de detección y análisis de las demás, según el NIST?",
     "correcta": "Que detectar y evaluar los incidentes con exactitud es lo más difícil de la respuesta",
     "distractores": [
-      "Que es la fase que más se suele pasar por alto en cualquier incidente de una organización",
+      "Que es la fase que más se suele pasar por alto en la respuesta a un incidente",
       "Que es la fase que puede tardar incluso meses en los equipos afectados"
     ],
     "explicacion": "✓ El NIST señala la detección y evaluación exacta de incidentes como la parte más difícil del proceso.\n✗ «Que es la fase»: eso se dice de las actividades post-incidente\n✗ «Que es la fase»: eso se dice de la recuperación"
@@ -10747,7 +10747,7 @@
     "correcta": "El incidente y los esfuerzos de respuesta correspondientes",
     "distractores": [
       "Las capacidades del malware y sus indicadores de compromiso",
-      "Las herramientas que se instalarán antes de cualquier incidente"
+      "Las herramientas que se instalarán antes del siguiente incidente"
     ],
     "explicacion": "✓ En la fase post-incidente se analizan el incidente y los esfuerzos de respuesta que se hicieron.\n✗ «Las capacidades del malware»: lo estudia el analista de malware durante la investigación, y no es el objeto de la fase post-incidente\n✗ «Las herramientas»: dotar al equipo de herramientas es trabajo de preparación"
   },
@@ -11002,7 +11002,7 @@
     "pregunta": "¿Qué medidas toma la contención?",
     "correcta": "Medidas que paran la amenaza, como parar servicios, aislar sistemas o restringir la red",
     "distractores": [
-      "Reinstalar de nuevo los sistemas en todos los equipos y servidores afectados",
+      "Reinstalar de nuevo los sistemas en los equipos y servidores afectados",
       "Restaurar el funcionamiento normal de la organización tras cada incidente"
     ],
     "explicacion": "✓ La contención toma medidas que paran la amenaza, como parar servicios, restringir la red o aislar sistemas.\n✗ «Reinstalar de nuevo»: reinstalar sistemas es erradicación, y no contención\n✗ «Restaurar el funcionamiento»: es recuperación"
@@ -11323,7 +11323,7 @@
     "correcta": "De una imagen inmutable común y una capa de ejecución modificable propia",
     "distractores": [
       "De una copia completa de la imagen para cada contenedor y otra capa fija",
-      "De una imagen modificable compartida por todos los contenedores"
+      "De una imagen modificable compartida por los contenedores"
     ],
     "explicacion": "✓ La imagen es de solo lectura y compartida; cada contenedor añade su capa de lectura y escritura única.\n✗ «De una copia completa»: las capas de la imagen se comparten, y no se copian\n✗ «De una imagen modificable»: la imagen es de solo lectura y los cambios van a la capa propia"
   },
@@ -11387,7 +11387,7 @@
     "correcta": "Crear la imagen o recuperarla con pull desde un registro",
     "distractores": [
       "Enviar la imagen con push a un registro y volver a lanzarlo",
-      "Etiquetar la imagen con docker tag sin descargar nada"
+      "Etiquetar la imagen con docker tag sin descargarla"
     ],
     "explicacion": "✓ Para lanzar un contenedor se debe crear o recuperar (pull) la imagen de un registro.\n✗ «Enviar la imagen»: push publica una imagen, y no la recupera\n✗ «Etiquetar la imagen»: tag solo añade un nombre a una imagen que ya está en local"
   },
@@ -11482,7 +11482,7 @@
     "pregunta": "¿Por qué hay que publicar los puertos de un contenedor para usar su servicio desde el navegador del host?",
     "correcta": "Porque el contenedor corre en una red NAT virtual aislada del host",
     "distractores": [
-      "Porque el contenedor no tiene ninguna dirección IP",
+      "Porque el contenedor no tiene dirección IP",
       "Porque la imagen cierra los puertos al construirse"
     ],
     "explicacion": "✓ El contenedor queda tras una red NAT virtual, así que hace falta una redirección de puertos hacia el host.\n✗ «Porque el contenedor»: el contenedor tiene red, pero no es alcanzable desde fuera sin redirección\n✗ «Porque la imagen»: la imagen no cierra puertos, y es la red NAT la que aísla"
@@ -11514,7 +11514,7 @@
     "pregunta": "¿Qué imágenes de Docker Hub se recomienda usar?",
     "correcta": "Las oficiales, mejor con muchas estrellas y descargas",
     "distractores": [
-      "Las más recientes publicadas por cualquier usuario",
+      "Las más recientes publicadas por usuarios particulares",
       "Las más pequeñas aunque no tengan documentación"
     ],
     "explicacion": "✓ Se recomiendan imágenes oficiales como ubuntu, php o tomcat, con muchas estrellas y descargas.\n✗ «Las más recientes»: la novedad no da confianza, y se prefieren las oficiales\n✗ «Las más pequeñas»: hay que revisar la documentación de la imagen"
