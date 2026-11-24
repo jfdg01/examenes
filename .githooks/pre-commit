@@ -1,0 +1,14 @@
+#!/bin/sh
+# Corre los tests si el commit cambia app/, y banco comprobar en cada examen cuyo banco cambia.
+# ponytail: comprueba el árbol de trabajo y no el stage; un stash del resto si un commit parcial lo necesita.
+set -e
+cambios=$(git diff --cached --name-only)
+if echo "$cambios" | grep -q '^app/'; then
+  cargo test -q --manifest-path app/Cargo.toml
+fi
+for ex in $(echo "$cambios" | grep -E '^[^/]+/(preguntas|examen)\.json$' | cut -d/ -f1 | sort -u); do
+  cargo run -q --manifest-path app/Cargo.toml -p banco -- comprobar "$ex" >/dev/null || {
+    echo "banco comprobar $ex falla: corre el comando para ver el informe" >&2
+    exit 1
+  }
+done
