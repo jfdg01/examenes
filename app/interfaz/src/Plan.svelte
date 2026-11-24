@@ -57,14 +57,14 @@
   const hechas = (b: Bloque, fecha: string) => Math.floor((respuestas[b.examen]?.[fecha] ?? 0) / 12);
 </script>
 
-<main class="mx-auto max-w-[1400px] p-4">
+<main class="mx-auto max-w-[1100px] p-4">
   <button class="cursor-pointer text-[13px] text-tenue" onclick={() => history.back()}>← Volver</button>
   <h1 class="mt-2 mb-1 text-[24px] font-bold">Plan de estudio</h1>
   <p class="mb-4 text-[13px] text-tenue">
     Una casilla = una sesión de 12 respuestas, y se marca sola. Cada fila de 4 = un bloque de 30 min, y después 5 a 10 min de pausa. + = marca ese tema en el inicio,
     sin desmarcar los anteriores.
   </p>
-  <div class="grid gap-3 pc:grid-cols-7">
+  <div class="grid gap-3 pc:grid-cols-4">
     {#each plan as d (d.fecha)}
       <section
         class={[
