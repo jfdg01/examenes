@@ -241,14 +241,15 @@
   {#if !borrador}{@render children()}{/if}
 </div>
 <div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:border-0 pc:p-0 pc:[grid-area:pie]">
-  {#if !contestada}
+  <!-- La ayuda de una pregunta contestada queda invisible, y los botones de debajo no saltan. -->
+  <div class={[contestada && "invisible"]}>
     {#if simulacro}
       <button class="mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue" onclick={() => oncontestar(null, false)}
         >En blanco</button
       >
     {/if}
     <p class="m-0 mb-2 text-center text-[11.5px] text-tenue pc:mt-[1em] pc:mb-0 pc:text-left pc:text-[13px]">Toca el texto si estás seguro. Toca «dudo» si dudas.</p>
-  {/if}
+  </div>
   <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible, y la cuadrícula no se mueve. -->
   <div class="flex gap-2 pc:hidden">
     <button
