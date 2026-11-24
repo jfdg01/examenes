@@ -4065,7 +4065,7 @@
   },
   {
     "id": "ciclo-de-vida-136",
-    "concepto": "ciclo-de-vida-autenticacion-refuerzos",
+    "concepto": "ciclo-de-vida-doble-factor",
     "tema": "ciclo-de-vida",
     "fuente": {
       "pdf": "2_Ciclo_de_vida.pdf",
@@ -4081,7 +4081,7 @@
   },
   {
     "id": "ciclo-de-vida-137",
-    "concepto": "ciclo-de-vida-autenticacion-refuerzos",
+    "concepto": "ciclo-de-vida-registro-de-credenciales",
     "tema": "ciclo-de-vida",
     "fuente": {
       "pdf": "2_Ciclo_de_vida.pdf",
@@ -4097,7 +4097,7 @@
   },
   {
     "id": "ciclo-de-vida-138",
-    "concepto": "ciclo-de-vida-autenticacion-refuerzos",
+    "concepto": "ciclo-de-vida-sesion-persistente",
     "tema": "ciclo-de-vida",
     "fuente": {
       "pdf": "2_Ciclo_de_vida.pdf",
@@ -4254,6 +4254,102 @@
       "Es la marca que activa la validación del nombre de usuario del formulario"
     ],
     "explicacion": "✓ El signo ? marca el parámetro, y el dato del usuario se asigna después sin concatenarlo.\n✗ «Es el comodín que selecciona varios nombres de usuario»: no es un comodín sino un parámetro que recibe el dato\n✗ «Es la marca que activa la validación del nombre de usuario del formulario»: la validación la hace el patrón y no el signo ?"
+  },
+  {
+    "id": "ciclo-de-vida-148",
+    "concepto": "ciclo-de-vida-doble-factor",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "Un usuario con la sesión iniciada pide una transferencia de fondos. ¿Qué refuerzo de la autenticación se recomienda antes de ejecutarla?",
+    "correcta": "Pedir un segundo factor de autenticación",
+    "distractores": [
+      "Renovar la cookie de sesión del usuario",
+      "Comprobar que la petición llega por HTTPS"
+    ],
+    "explicacion": "✓ La doble autenticación protege las operaciones críticas aunque alguien haya robado la sesión.\n✗ «Renovar la cookie de sesión»: no comprueba otra vez la identidad del usuario\n✗ «Comprobar que la petición llega por HTTPS»: protege el canal, y no confirma quién hace la operación"
+  },
+  {
+    "id": "ciclo-de-vida-149",
+    "concepto": "ciclo-de-vida-doble-factor",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿A qué operaciones de una aplicación se recomienda aplicar la doble autenticación?",
+    "correcta": "A las operaciones críticas",
+    "distractores": [
+      "A cada petición de lectura",
+      "A las páginas públicas del sitio"
+    ],
+    "explicacion": "✓ La guía pide el doble factor en las operaciones críticas, donde una suplantación hace más daño.\n✗ «A cada petición de lectura»: estorba al usuario y no protege más lo importante\n✗ «A las páginas públicas»: no guardan nada que un segundo factor deba proteger"
+  },
+  {
+    "id": "ciclo-de-vida-150",
+    "concepto": "ciclo-de-vida-registro-de-credenciales",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué contramedida de los fallos de autenticación deja rastro de un cambio de clave o de una recuperación de cuenta?",
+    "correcta": "El registro de las operaciones sobre credenciales",
+    "distractores": [
+      "El cifrado de las credenciales en reposo",
+      "La limitación de las operaciones fallidas"
+    ],
+    "explicacion": "✓ Registrar las operaciones sobre credenciales permite auditar quién cambió una clave y cuándo.\n✗ «El cifrado de las credenciales»: protege la clave guardada, pero no deja rastro de la operación\n✗ «La limitación de las operaciones fallidas»: frena la fuerza bruta, y no anota los cambios"
+  },
+  {
+    "id": "ciclo-de-vida-151",
+    "concepto": "ciclo-de-vida-registro-de-credenciales",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "Un atacante cambia la clave de una víctima con el proceso de recuperación de clave. ¿Qué medida permite detectarlo después?",
+    "correcta": "Registrar las operaciones sobre las credenciales",
+    "distractores": [
+      "Guardar las claves con Argon2id y una sal",
+      "Sacar el identificador de sesión de la URL"
+    ],
+    "explicacion": "✓ El registro de la recuperación y del cambio de clave guarda la prueba del ataque.\n✗ «Guardar las claves con Argon2id»: dificulta romper claves robadas, y no detecta el cambio\n✗ «Sacar el identificador de sesión de la URL»: evita exponer la sesión, y no registra lo que pasó"
+  },
+  {
+    "id": "ciclo-de-vida-152",
+    "concepto": "ciclo-de-vida-sesion-persistente",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "Un usuario cierra el navegador sin pulsar «Desconectar», y su cookie de sesión es persistente. ¿Qué riesgo queda?",
+    "correcta": "Su identificador de sesión sigue siendo válido",
+    "distractores": [
+      "Su clave queda guardada en texto plano",
+      "La aplicación bloquea su cuenta al reconectar"
+    ],
+    "explicacion": "✓ Sin desconexión, la sesión no se invalida, y quien tenga la cookie la puede usar.\n✗ «Su clave queda guardada en texto plano»: la cookie guarda el identificador de sesión, y no la clave\n✗ «La aplicación bloquea su cuenta»: la sesión sigue abierta, y nada bloquea la cuenta"
+  },
+  {
+    "id": "ciclo-de-vida-153",
+    "concepto": "ciclo-de-vida-sesion-persistente",
+    "tema": "ciclo-de-vida",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    },
+    "pregunta": "¿Qué riesgo comparten una cookie de sesión persistente y una sesión con una caducidad muy elevada?",
+    "correcta": "Alargan la vida de un identificador de sesión que puede robarse",
+    "distractores": [
+      "Impiden reutilizar la sesión en otro navegador del usuario",
+      "Cifran el identificador de sesión en el lado del cliente"
+    ],
+    "explicacion": "✓ Las dos dejan válido el identificador de sesión mucho tiempo, y un robo dura lo mismo.\n✗ «Impiden reutilizar la sesión»: una cookie robada funciona en otro navegador\n✗ «Cifran el identificador de sesión»: la persistencia y la caducidad no cifran nada"
   },
   {
     "id": "alta-disponibilidad-001",
@@ -11505,7 +11601,7 @@
   },
   {
     "id": "contenedores-019",
-    "concepto": "contenedores-catalogo-de-imagenes",
+    "concepto": "contenedores-imagenes-oficiales",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11521,7 +11617,7 @@
   },
   {
     "id": "contenedores-020",
-    "concepto": "contenedores-catalogo-de-imagenes",
+    "concepto": "contenedores-documentacion-de-imagen",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11537,7 +11633,7 @@
   },
   {
     "id": "contenedores-021",
-    "concepto": "contenedores-catalogo-de-imagenes",
+    "concepto": "contenedores-docker-search",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11553,7 +11649,7 @@
   },
   {
     "id": "contenedores-022",
-    "concepto": "contenedores-docker-run-opciones",
+    "concepto": "contenedores-run-rm",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11569,7 +11665,7 @@
   },
   {
     "id": "contenedores-023",
-    "concepto": "contenedores-docker-run-opciones",
+    "concepto": "contenedores-run-detach",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11585,7 +11681,7 @@
   },
   {
     "id": "contenedores-024",
-    "concepto": "contenedores-docker-run-opciones",
+    "concepto": "contenedores-docker-ps",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11601,7 +11697,7 @@
   },
   {
     "id": "contenedores-025",
-    "concepto": "contenedores-gestion-de-contenedores",
+    "concepto": "contenedores-docker-exec",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11617,7 +11713,7 @@
   },
   {
     "id": "contenedores-026",
-    "concepto": "contenedores-gestion-de-contenedores",
+    "concepto": "contenedores-docker-logs",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11633,7 +11729,7 @@
   },
   {
     "id": "contenedores-027",
-    "concepto": "contenedores-gestion-de-contenedores",
+    "concepto": "contenedores-stop-rm",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11745,7 +11841,7 @@
   },
   {
     "id": "contenedores-034",
-    "concepto": "contenedores-dockerfile-instrucciones",
+    "concepto": "contenedores-expose",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11761,7 +11857,7 @@
   },
   {
     "id": "contenedores-035",
-    "concepto": "contenedores-dockerfile-instrucciones",
+    "concepto": "contenedores-entrypoint",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -11777,7 +11873,7 @@
   },
   {
     "id": "contenedores-036",
-    "concepto": "contenedores-dockerfile-instrucciones",
+    "concepto": "contenedores-dockerfile-run",
     "tema": "contenedores",
     "fuente": {
       "pdf": "S_Contenedores.pdf",
@@ -12094,5 +12190,389 @@
       "docker search"
     ],
     "explicacion": "✓ Docker Desktop, las extensiones de VS Code y lazydocker son utilidades visuales.\n✗ «podman»: podman es una herramienta de gestión, y no una utilidad visual\n✗ «docker search»: es un comando de terminal"
+  },
+  {
+    "id": "contenedores-056",
+    "concepto": "contenedores-imagenes-oficiales",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "Necesitas una imagen de Tomcat en Docker Hub. ¿Cuál eliges, según las recomendaciones del seminario?",
+    "correcta": "La imagen oficial de tomcat",
+    "distractores": [
+      "La imagen de un usuario con la versión más reciente",
+      "La imagen más ligera, aunque tenga pocas descargas"
+    ],
+    "explicacion": "✓ Las imágenes oficiales, como ubuntu, php o tomcat, son la primera recomendación del seminario.\n✗ «La imagen de un usuario»: una imagen no oficial no tiene el mismo respaldo\n✗ «La imagen más ligera»: el tamaño no es un criterio, y pocas descargas son mala señal"
+  },
+  {
+    "id": "contenedores-057",
+    "concepto": "contenedores-imagenes-oficiales",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "Entre dos imágenes de Docker Hub para la misma tarea, ¿qué señales hacen preferible una de ellas?",
+    "correcta": "Muchas estrellas y muchas descargas",
+    "distractores": [
+      "Un nombre corto y la etiqueta latest",
+      "Un Dockerfile con pocas instrucciones"
+    ],
+    "explicacion": "✓ Las estrellas y las descargas indican una imagen que la comunidad usa y valora.\n✗ «Un nombre corto y la etiqueta latest»: el nombre y la etiqueta no dicen nada de su calidad\n✗ «Un Dockerfile con pocas instrucciones»: el número de instrucciones no mide la fiabilidad"
+  },
+  {
+    "id": "contenedores-058",
+    "concepto": "contenedores-documentacion-de-imagen",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    },
+    "pregunta": "Vas a lanzar la imagen php:8-apache. ¿Dónde consultas sus detalles de uso y sus variantes?",
+    "correcta": "En su página de Docker Hub",
+    "distractores": [
+      "En la salida de docker ps -a",
+      "En el docker-compose.yml del proyecto"
+    ],
+    "explicacion": "✓ La página de la imagen en hub.docker.com documenta su uso y variantes como php:8-apache.\n✗ «En la salida de docker ps -a»: lista contenedores, y no documenta imágenes\n✗ «En el docker-compose.yml»: declara cómo se lanza el proyecto, y no explica la imagen"
+  },
+  {
+    "id": "contenedores-059",
+    "concepto": "contenedores-documentacion-de-imagen",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "¿Para qué sirve revisar la documentación de una imagen del catálogo antes de usarla?",
+    "correcta": "Para conocer sus detalles de uso, como puertos o carpetas",
+    "distractores": [
+      "Para conseguir la clave que permite descargarla",
+      "Para compilar la imagen en local antes del pull"
+    ],
+    "explicacion": "✓ La documentación explica cómo se usa la imagen: sus puertos, sus carpetas y sus variantes.\n✗ «Para conseguir la clave»: una imagen pública se descarga sin clave\n✗ «Para compilar la imagen en local»: una imagen del catálogo se descarga ya construida"
+  },
+  {
+    "id": "contenedores-060",
+    "concepto": "contenedores-docker-search",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "¿Qué hace el comando docker search ubuntu?",
+    "correcta": "Busca imágenes de ubuntu en el catálogo de Docker Hub",
+    "distractores": [
+      "Busca contenedores de ubuntu en ejecución en el host",
+      "Descarga la imagen de ubuntu al equipo local"
+    ],
+    "explicacion": "✓ docker search consulta el catálogo de Docker Hub desde la línea de comandos, sin descargar.\n✗ «Busca contenedores de ubuntu en ejecución»: eso lo hace docker ps\n✗ «Descarga la imagen de ubuntu»: eso lo hace docker pull"
+  },
+  {
+    "id": "contenedores-061",
+    "concepto": "contenedores-docker-search",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "¿Dónde se localiza el nombre de una imagen antes de lanzar el primer contenedor?",
+    "correcta": "En hub.docker.com o con docker search",
+    "distractores": [
+      "Con docker images, que lista el catálogo remoto",
+      "Con docker ps, que lista las imágenes del registro"
+    ],
+    "explicacion": "✓ El nombre se busca en la web de Docker Hub, o con docker search en la terminal.\n✗ «Con docker images»: lista las imágenes locales, y no el catálogo\n✗ «Con docker ps»: lista contenedores, y no imágenes"
+  },
+  {
+    "id": "contenedores-062",
+    "concepto": "contenedores-run-rm",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "¿Qué opción de docker run lanza un contenedor temporal, que se elimina al terminar?",
+    "correcta": "--rm",
+    "distractores": [
+      "-d",
+      "-it"
+    ],
+    "explicacion": "✓ Con --rm, Docker borra el contenedor cuando acaba su ejecución.\n✗ «-d»: lanza el contenedor en segundo plano, y no lo borra al acabar\n✗ «-it»: habilita una terminal interactiva en el contenedor"
+  },
+  {
+    "id": "contenedores-063",
+    "concepto": "contenedores-run-rm",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "Sales del bash que abrió docker run -it --rm ubuntu:26.04 /bin/bash. ¿Qué muestra docker ps -a sobre ese contenedor?",
+    "correcta": "Nada, porque el contenedor ya no existe",
+    "distractores": [
+      "El contenedor parado, listo para docker start",
+      "El contenedor en ejecución en segundo plano"
+    ],
+    "explicacion": "✓ --rm elimina el contenedor al terminar, así que docker ps -a ya no lo lista.\n✗ «El contenedor parado»: así quedaría sin la opción --rm\n✗ «El contenedor en ejecución»: al salir del bash, el contenedor termina"
+  },
+  {
+    "id": "contenedores-064",
+    "concepto": "contenedores-run-detach",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "¿Qué opción de docker run ejecuta un contenedor de forma permanente en segundo plano?",
+    "correcta": "-d, la opción detach",
+    "distractores": [
+      "--rm, la opción de borrado",
+      "-it, la opción de terminal"
+    ],
+    "explicacion": "✓ La opción -d (detach) deja el contenedor corriendo en segundo plano, como un servidor.\n✗ «--rm, la opción de borrado»: borra el contenedor cuando termina\n✗ «-it, la opción de terminal»: abre una terminal interactiva en primer plano"
+  },
+  {
+    "id": "contenedores-065",
+    "concepto": "contenedores-run-detach",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "¿Cómo te conectas a la terminal del contenedor myserver, lanzado con docker run -d -it?",
+    "correcta": "Con docker attach myserver",
+    "distractores": [
+      "Con docker logs myserver",
+      "Con docker search myserver"
+    ],
+    "explicacion": "✓ docker attach conecta tu terminal al contenedor en segundo plano, y Ctrl+PQ la desconecta.\n✗ «Con docker logs»: muestra la salida de registro, sin abrir una terminal\n✗ «Con docker search»: busca imágenes en el catálogo de Docker Hub"
+  },
+  {
+    "id": "contenedores-066",
+    "concepto": "contenedores-docker-ps",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "¿Qué lista el comando docker ps sin opciones?",
+    "correcta": "Los contenedores en ejecución",
+    "distractores": [
+      "Los contenedores parados y los activos",
+      "Las imágenes descargadas en el host"
+    ],
+    "explicacion": "✓ docker ps lista los contenedores en ejecución, y la opción -a añade los parados.\n✗ «Los contenedores parados y los activos»: eso lo lista docker ps -a\n✗ «Las imágenes descargadas»: eso lo lista docker images"
+  },
+  {
+    "id": "contenedores-067",
+    "concepto": "contenedores-docker-ps",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    },
+    "pregunta": "Paras el contenedor myserver con docker stop. ¿Qué comando lo sigue listando?",
+    "correcta": "docker ps -a",
+    "distractores": [
+      "docker ps",
+      "docker images"
+    ],
+    "explicacion": "✓ Un contenedor parado sigue existiendo, y docker ps -a lo lista con los activos.\n✗ «docker ps»: lista los contenedores que están en ejecución\n✗ «docker images»: muestra las imágenes locales del host"
+  },
+  {
+    "id": "contenedores-068",
+    "concepto": "contenedores-docker-exec",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué hace el comando docker exec -it www-server /bin/bash?",
+    "correcta": "Abre una consola bash en el contenedor en ejecución",
+    "distractores": [
+      "Lanza un contenedor nuevo de la imagen www-server",
+      "Muestra los logs de bash del contenedor www-server"
+    ],
+    "explicacion": "✓ docker exec ejecuta un comando en un contenedor que ya corre, y -it le da una terminal.\n✗ «Lanza un contenedor nuevo»: eso lo hace docker run\n✗ «Muestra los logs»: eso lo hace docker logs"
+  },
+  {
+    "id": "contenedores-069",
+    "concepto": "contenedores-docker-exec",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué condición necesita docker exec para ejecutar un comando en un contenedor?",
+    "correcta": "Que el contenedor esté en ejecución",
+    "distractores": [
+      "Que el contenedor se lanzara con --rm",
+      "Que la imagen tenga una instrucción EXPOSE"
+    ],
+    "explicacion": "✓ docker exec actúa sobre un contenedor que ya está en ejecución, sin lanzar uno nuevo.\n✗ «Que el contenedor se lanzara con --rm»: --rm decide si se borra al terminar\n✗ «Que la imagen tenga una instrucción EXPOSE»: EXPOSE documenta un puerto, y no afecta a exec"
+  },
+  {
+    "id": "contenedores-070",
+    "concepto": "contenedores-docker-logs",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué muestra el comando docker logs www-server?",
+    "correcta": "La salida de registro del contenedor www-server",
+    "distractores": [
+      "Las instrucciones del Dockerfile de su imagen",
+      "El historial de descargas de su imagen"
+    ],
+    "explicacion": "✓ docker logs muestra lo que escribe el contenedor en su salida, como los errores del servidor.\n✗ «Las instrucciones del Dockerfile»: la construcción de la imagen no está en los logs del contenedor\n✗ «El historial de descargas»: los logs recogen la ejecución, y no las descargas"
+  },
+  {
+    "id": "contenedores-071",
+    "concepto": "contenedores-docker-logs",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    },
+    "pregunta": "Tu página en http://localhost:8080 da un error del servidor PHP del contenedor www-server. ¿Qué comando consultas primero?",
+    "correcta": "docker logs www-server",
+    "distractores": [
+      "docker images www-server",
+      "docker search www-server"
+    ],
+    "explicacion": "✓ Los logs del contenedor recogen la salida y los errores del servidor que corre dentro.\n✗ «docker images»: muestra los detalles de una imagen, y no los errores en ejecución\n✗ «docker search»: busca en el catálogo remoto de Docker Hub"
+  },
+  {
+    "id": "contenedores-072",
+    "concepto": "contenedores-stop-rm",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué comando borra el contenedor parado myserver?",
+    "correcta": "docker rm myserver",
+    "distractores": [
+      "docker rmi myserver",
+      "docker stop myserver"
+    ],
+    "explicacion": "✓ docker rm borra un contenedor parado, y docker rmi borra una imagen.\n✗ «docker rmi»: borra imágenes, y no contenedores\n✗ «docker stop»: detiene el contenedor, pero no lo borra"
+  },
+  {
+    "id": "contenedores-073",
+    "concepto": "contenedores-stop-rm",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    },
+    "pregunta": "¿Qué comando arranca otra vez el contenedor parado www-server, con su nombre y su configuración?",
+    "correcta": "docker start www-server",
+    "distractores": [
+      "docker run www-server",
+      "docker attach www-server"
+    ],
+    "explicacion": "✓ docker start arranca de nuevo un contenedor parado, que conserva su configuración.\n✗ «docker run»: crea un contenedor nuevo a partir de una imagen\n✗ «docker attach»: conecta la terminal a un contenedor que ya corre"
+  },
+  {
+    "id": "contenedores-074",
+    "concepto": "contenedores-expose",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    },
+    "pregunta": "Un Dockerfile tiene EXPOSE 3000. ¿Qué hace falta para usar ese puerto desde el navegador del host?",
+    "correcta": "Publicarlo al lanzar el contenedor, con -p 8080:3000",
+    "distractores": [
+      "Reconstruir la imagen con EXPOSE en la última línea",
+      "Añadir la instrucción ENV PORT=3000 al Dockerfile"
+    ],
+    "explicacion": "✓ EXPOSE solo documenta el puerto, y la publicación se hace con -p en docker run.\n✗ «Reconstruir la imagen»: la posición de EXPOSE no cambia su efecto\n✗ «Añadir la instrucción ENV PORT=3000»: define una variable de entorno, y no publica el puerto"
+  },
+  {
+    "id": "contenedores-075",
+    "concepto": "contenedores-expose",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué tipo de información aporta la instrucción EXPOSE en un Dockerfile?",
+    "correcta": "Metadatos sobre el puerto accesible en el contenedor",
+    "distractores": [
+      "Una regla del cortafuegos del host para el puerto",
+      "La redirección del puerto del host al del contenedor"
+    ],
+    "explicacion": "✓ EXPOSE es un metadato: dice qué puerto usa el contenedor, sin abrirlo ni redirigirlo.\n✗ «Una regla del cortafuegos»: EXPOSE no toca la configuración de red del host\n✗ «La redirección del puerto»: la redirección la hace -p al lanzar el contenedor"
+  },
+  {
+    "id": "contenedores-076",
+    "concepto": "contenedores-entrypoint",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué hace la instrucción ENTRYPOINT [\"node\",\"app.js\"] en un Dockerfile?",
+    "correcta": "Fija la aplicación que ejecuta el contenedor al arrancar",
+    "distractores": [
+      "Instala node en la imagen durante la construcción",
+      "Copia app.js al directorio de trabajo de la imagen"
+    ],
+    "explicacion": "✓ ENTRYPOINT indica la aplicación que arranca el contenedor, aquí node con app.js.\n✗ «Instala node en la imagen»: node viene de la imagen base node:latest\n✗ «Copia app.js al directorio de trabajo»: eso lo hace la instrucción COPY"
+  },
+  {
+    "id": "contenedores-077",
+    "concepto": "contenedores-entrypoint",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    },
+    "pregunta": "Un Dockerfile no tiene ENTRYPOINT. ¿Qué aplicación ejecuta el contenedor?",
+    "correcta": "La que define la imagen base",
+    "distractores": [
+      "Una consola bash que Docker añade por defecto",
+      "El primer comando RUN del Dockerfile"
+    ],
+    "explicacion": "✓ Sin ENTRYPOINT, el contenedor ejecuta la aplicación que define su imagen base.\n✗ «Una consola bash que Docker añade»: Docker no añade una aplicación propia\n✗ «El primer comando RUN»: RUN se ejecuta al construir la imagen, y no al arrancar"
+  },
+  {
+    "id": "contenedores-078",
+    "concepto": "contenedores-dockerfile-run",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Cuándo se ejecuta una instrucción RUN de un Dockerfile?",
+    "correcta": "Al construir la imagen con docker build",
+    "distractores": [
+      "Cada vez que arranca un contenedor de la imagen",
+      "Al publicar la imagen con docker push"
+    ],
+    "explicacion": "✓ RUN modifica la imagen durante su construcción, por ejemplo al instalar dependencias.\n✗ «Cada vez que arranca un contenedor»: lo que corre al arrancar lo fija ENTRYPOINT\n✗ «Al publicar la imagen»: push sube una imagen que ya está construida"
+  },
+  {
+    "id": "contenedores-079",
+    "concepto": "contenedores-dockerfile-run",
+    "tema": "contenedores",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    },
+    "pregunta": "¿Qué necesita RUN npm install dentro de la imagen para descargar las dependencias?",
+    "correcta": "El package.json del proyecto, copiado antes con COPY",
+    "distractores": [
+      "Una variable ENV PORT definida antes de RUN",
+      "El puerto que declara la instrucción EXPOSE 3000"
+    ],
+    "explicacion": "✓ npm install lee package.json, y por eso el Dockerfile lo copia antes de la instrucción RUN.\n✗ «Una variable ENV PORT»: la variable configura la aplicación, y no sus dependencias\n✗ «El puerto que declara la instrucción EXPOSE»: npm install no usa un puerto del contenedor"
   }
 ]
