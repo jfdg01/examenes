@@ -14,7 +14,7 @@ El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.
     "El cliente la cifra con la clave pública del servidor",
     "El servidor la envía firmada con su clave privada"
   ],
-  "explicacion": "✓ SSH acuerda la clave con Diffie-Hellman, y el servidor firma el intercambio.\n✗ «La cifra con la clave pública del servidor»: es el intercambio RSA de TLS 1.2, y no el de SSH.\n✗ «La envía firmada»: una firma da autenticidad, y no confidencialidad. La clave viajaría a la vista."
+  "explicacion": "✓ Con Diffie-Hellman, los dos calculan la misma clave sin enviarla. La firma del servidor impide que un intermediario se haga pasar por él.\n✗ «La cifra con la clave pública del servidor»: es el intercambio RSA de TLS 1.2, y no el de SSH.\n✗ «La envía firmada»: una firma da autenticidad, y no confidencialidad. La clave viajaría a la vista."
 }
 ```
 
@@ -35,7 +35,7 @@ Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002) y la guí
 5. **Cada distractor es un error plausible**, la confusión más probable de quien estudia. Sale del temario, o es una idea plausible fuera de él. Cada distractor falla por un _matiz_ que la explicación nombra.
 6. **Ninguna pista fuera de la idea.** Las opciones tienen una longitud y una forma gramatical parecidas. La correcta es la más larga en 1 de cada 3 preguntas de media. Un término clave, una sigla o una traducción del enunciado sale en todas las opciones o en ninguna. Una palabra común, como "atacante" o "servidor", queda fuera de esta regla. Un "siempre", un "nunca" o un "solo" que hace falso un distractor por exclusión lo delata, y sale también en la correcta. "Un solo" y "una sola" dan un número, y no son un absoluto. Cada opción se lee sola, porque la interfaz las randomiza.
 7. **El enunciado es afirmativo**, y pregunta qué es, qué hace o por qué.
-8. **La explicación nombra cada matiz, con una línea por opción.** La primera línea empieza por `✓` y explica la correcta. Cada distractor tiene después su línea, en el orden de `distractores`. La línea empieza por `✗` y por las palabras clave del distractor entre comillas, y sigue con su matiz. Una letra no sirve, porque la interfaz randomiza las opciones.
+8. **La explicación nombra cada matiz, con una línea por opción.** La primera línea empieza por `✓` y dice por qué la correcta responde a la pregunta: el mecanismo o la razón que la hace cierta. No repite el enunciado ni la correcta en forma afirmativa, porque quien falló ya la lee en las opciones y no aprende nada nuevo. Cada distractor tiene después su línea, en el orden de `distractores`. La línea empieza por `✗` y por las palabras clave del distractor entre comillas, y sigue con su matiz. Una letra no sirve, porque la interfaz randomiza las opciones.
 9. **Una sigla de seguridad es un concepto propio, con una sola pregunta:** el enunciado da la sigla y pide su significado, con 2 desarrollos plausibles como distractores. Las siglas generales de informática, como TCP, IP o ASCII, quedan fuera. Su `fuente` es la primera página que la explica.
 
 Una pregunta que pasa a preguntar otra idea lleva un `id` nuevo. Una pregunta que cambia de forma o de distractores conserva su `id`, como en una edición a mano del JSON.
@@ -84,7 +84,7 @@ El borrador tiene un bloque por pregunta:
 ## ciclo-de-vida-defensa-en-profundidad · p3
 ¿Qué significa aplicar defensa en profundidad?
 + Aplicar medidas de seguridad en todo el ciclo
-✓ La defensa en profundidad pone controles en cada fase del ciclo, y no en un solo punto.
+✓ Cada control puede fallar. Con controles en cada fase, el atacante que pasa uno se encuentra con el siguiente.
 - «Un solo control robusto» en el perímetro | una sola barrera es un único punto de fallo
 - «Auditar la seguridad una vez» | la seguridad cubre todo el ciclo
 ```
