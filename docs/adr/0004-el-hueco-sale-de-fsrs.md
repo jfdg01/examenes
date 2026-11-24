@@ -11,3 +11,12 @@ El estudiante practica para un examen con fecha, a menudo con pocos días por de
 - **Ningún hueco pasa del principio de la víspera del examen.** FSRS no sabe cuándo es el examen, y tras unos pocos aciertos da huecos de semanas. El tope da a cada pregunta un repaso el día antes. Una respuesta posterior a ese momento sigue solo a FSRS, para que el tope no la devuelva sin fin.
 - **"Sabes" es un recuerdo del 90 % o más el día del examen, fuera de los pasos de aprendizaje.** La barra mide lo que el estudiante sabrá en el examen, y no lo que sabe hoy.
 
+## Las alternativas
+
+- **SM-2, con un paso por pregunta: 10 minutos, 1 día, y ×2,5 con cada acierto con "seguro".** No mide el olvido ni la dificultad, y no sabe nada del examen.
+- **El "dudo" como Hard.** Sube el recuerdo de una respuesta adivinada.
+- **Sin pasos de aprendizaje.** Una pregunta nueva acertada con "seguro" volvería en unos 2 días.
+- **Los parámetros por defecto siempre, o unos por examen.** Los de por defecto no aprenden del estudiante. Uno por examen tarda más en llegar al mínimo de respuestas.
+- **El tope en un tercio de la distancia al examen.** Da más repasos de lo que el estudiante ya sabe, y les quita tiempo a las falladas.
+- **El tope 24 horas antes del examen.** Una pregunta contestada la mañana de la víspera volvería otra vez esa tarde.
+- **`rs-fsrs`, o FSRS escrito a mano.** `rs-fsrs` no trae el optimizador. FSRS a mano obliga a mantener la paridad con Anki.
