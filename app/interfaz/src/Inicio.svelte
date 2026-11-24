@@ -41,7 +41,7 @@
       </p>
       <div class="my-3 rounded-xl bg-tarjeta p-3.5">
         <label class="flex items-center gap-3">
-          <b class="text-[16px] whitespace-nowrap">Sacar más de {objetivo.toLocaleString("es")}</b>
+          <b class="text-[16px] whitespace-nowrap">Sacar más de <span class="inline-block w-[3ch] tabular-nums">{objetivo.toLocaleString("es")}</span></b>
           <input
             class="min-w-0 flex-1 accent-acento"
             type="range"
