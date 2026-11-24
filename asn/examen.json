@@ -3,15 +3,81 @@
   "preguntas": 35,
   "opciones": 3,
   "minutos": 45,
-  "penalizacion": 0,
+  "penalizacion": 0.0,
   "pdfs": {
-    "1_Introduccion.pdf": ["introduccion"],
-    "2_Ciclo_de_vida.pdf": ["ciclo-de-vida"],
-    "3_Alta_disponibilidad.pdf": ["alta-disponibilidad"],
-    "4_Despliegue.pdf": ["despliegue"],
-    "5_Monitorizacion.pdf": ["monitorizacion"],
-    "6.1_Organizacion.pdf": ["organizacion"],
-    "6.2_DFIR.pdf": ["dfir"],
-    "S_Contenedores.pdf": ["contenedores"]
+    "1_Introduccion.pdf": [
+      "introduccion"
+    ],
+    "2_Ciclo_de_vida.pdf": [
+      "ciclo-de-vida"
+    ],
+    "3_Alta_disponibilidad.pdf": [
+      "alta-disponibilidad"
+    ],
+    "4_Despliegue.pdf": [
+      "despliegue"
+    ],
+    "5_Monitorizacion.pdf": [
+      "monitorizacion"
+    ],
+    "6.1_Organizacion.pdf": [
+      "organizacion"
+    ],
+    "6.2_DFIR.pdf": [
+      "dfir"
+    ],
+    "S_Contenedores.pdf": [
+      "contenedores"
+    ]
+  },
+  "sin_pregunta": {
+    "1_Introduccion.pdf": {
+      "1": "portada y cifras de informes de mercado, sin una idea del temario",
+      "2": "citas de Sun Tzu y Boromir, sin una idea del temario",
+      "3": "objetivos del tema y portada de sección, sin una idea del temario",
+      "13": "diagrama que repite el reparto de responsabilidades de IaaS, CaaS, PaaS y FaaS de las páginas 10 a 12, y portada de sección",
+      "16": "enunciado de la actividad 1.1 y portada de sección",
+      "23": "conclusiones que resumen el tema y bibliografía"
+    },
+    "2_Ciclo_de_vida.pdf": {
+      "1": "portada, sin contenido de examen",
+      "9": "ejemplos numerados de controles ASVS de la idea de la página 8",
+      "13": "ejemplos de código de CSRF de la idea de la página 12",
+      "22": "ejemplos de código de inyección SQL y OGNL de las ideas de las páginas 21 y 23",
+      "32": "conclusiones que resumen las páginas anteriores"
+    },
+    "3_Alta_disponibilidad.pdf": {
+      "1": "portada y mapa del ciclo de vida",
+      "2": "título de sección y objetivos del tema",
+      "10": "diagrama de la arquitectura de tres capas y portada de la sección",
+      "12": "ejemplos de configuración de la idea de la página 11",
+      "23": "bibliografía"
+    },
+    "4_Despliegue.pdf": {
+      "1": "portada",
+      "2": "objetivos del tema, sin idea propia",
+      "10": "requisitos y herramientas de instalación local, procedimiento sin idea de seguridad",
+      "17": "ejemplos de YAML de las ideas de las páginas 15 y 16",
+      "19": "conclusiones que repiten ideas de las páginas 5, 7 y 13",
+      "20": "portada de los anexos",
+      "22": "comandos gcloud de ejemplo sobre las reglas de la página 21",
+      "27": "ejemplo de YAML de la idea de la página 26",
+      "28": "instalación de Minikube, procedimiento",
+      "29": "comandos de Minikube, procedimiento",
+      "32": "liberar recursos de GKE, procedimiento de costes"
+    },
+    "5_Monitorizacion.pdf": {
+      "1": "portada y esquema del ciclo de vida, que repite el tema 2",
+      "2": "cita y objetivos del tema, sin una idea que preguntar",
+      "15": "portada de la sección de detección y respuesta",
+      "24": "bibliografía"
+    },
+    "6.1_Organizacion.pdf": {
+      "1": "portada y objetivos del tema, sin una idea propia"
+    },
+    "S_Contenedores.pdf": {
+      "1": "portada y objetivos del seminario",
+      "9": "referencias bibliográficas"
+    }
   }
 }
