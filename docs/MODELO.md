@@ -7,7 +7,8 @@ La app tiene 2 máquinas de estados: el paso de una pregunta y la ronda. El paso
 Cada pregunta tiene su paso, y una respuesta mueve solo el de su pregunta. El concepto no tiene estado: agrupa las preguntas para la sesión y el simulacro. Un paso por concepto no vale: una pregunta fácil subiría el paso que una difícil baja, y la difícil volvería sin fin. La razón está en [el ADR 0003](adr/0003-el-paso-es-de-la-pregunta.md).
 
 - Una pregunta sin respuestas está **sin ver**.
-- Un acierto con "seguro" sube el paso en 1, aunque la pregunta no haya vencido. El hueco sigue a SM-2: la pregunta vence 10 minutos después con el paso 1, 1 día después con el paso 2, y el hueco crece ×2,5 con cada paso más.
+- Un acierto con "seguro" sube el paso en 1, aunque la pregunta no haya vencido. La pregunta vence 1 día después con el paso 1, y el hueco crece ×2,5 con cada paso más.
+- Una pregunta sin ver acertada con "seguro" salta al paso 3, que vence en unos 6 días. Una pregunta que sabes a la primera no gasta repasos en la semana del examen.
 - Un fallo, un acierto con "dudo" o una pregunta en blanco ponen el paso a 0, y la pregunta vence en el acto.
 - Cada respuesta mueve el paso, la de una sesión y la de un simulacro.
 - El paso sale del historial unido: el del servidor y las respuestas del dispositivo que aún no llegaron. Una respuesta con el mismo `id` y `ts` cuenta una vez.
