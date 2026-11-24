@@ -67,11 +67,11 @@
 </script>
 
 <div
-  class="pomodoro fixed top-0 left-1/2 z-50 flex -translate-x-1/2 items-center rounded-b-lg text-[13px] font-semibold text-sobre-acento shadow-md [.en-simulacro_&]:hidden"
+  class="pomodoro relative mx-auto flex h-(--pomodoro) w-fit items-center rounded-b-lg pc:fixed pc:top-0 pc:left-1/2 pc:z-50 pc:-translate-x-1/2 text-[13px] font-semibold text-sobre-acento shadow-md [.en-simulacro_&]:hidden"
   class:bg-estudio={e.fase === "estudio"}
   class:bg-pausa={e.fase !== "estudio"}
 >
-  <button class="flex items-center gap-1.5 py-1 pl-3 tabular-nums" title={e.fin ? "Pausar" : empezada ? "Seguir" : "Empezar"} onclick={alternar}>
+  <button class="flex items-center gap-1.5 pl-3 tabular-nums" title={e.fin ? "Pausar" : empezada ? "Seguir" : "Empezar"} onclick={alternar}>
     {#if e.fin}{@render icono(11, "M8 5v14M16 5v14")}{:else}{@render icono(11, "M6 4l14 8-14 8z", true)}{/if}
     {Math.floor(segundos / 60)}:{String(segundos % 60).padStart(2, "0")}
   </button>
@@ -81,7 +81,7 @@
     <span class="block h-full rounded-full bg-sobre-acento/50" style:width="{hecho * 100}%"></span>
   </span>
   <!-- El relleno de arriba, y no un margen, deja pasar el ratón de la flecha a los controles. -->
-  <div class="absolute top-full left-1/2 hidden min-w-full -translate-x-1/2 pt-1 peer-hover:block peer-focus:block hover:block focus-within:block">
+  <div class="absolute top-full left-1/2 z-50 hidden min-w-full -translate-x-1/2 pt-1 peer-hover:block peer-focus:block hover:block focus-within:block">
     <div class="flex flex-col gap-1 rounded-lg border border-linea bg-tarjeta p-1.5 text-texto shadow-lg">
       <span class="px-1 text-[11px] font-normal whitespace-nowrap text-tenue">{nombre}</span>
       <div class="flex gap-1 [&>button]:flex [&>button]:h-7 [&>button]:flex-1 [&>button]:items-center [&>button]:justify-center [&>button]:rounded-md [&>button]:px-2 [&>button]:hover:bg-linea">

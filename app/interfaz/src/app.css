@@ -12,6 +12,14 @@
 }
 
 /* El corte del móvil y del PC: `pc:` aplica desde 900 px. La paleta es Gruvbox dark, la de la terminal. */
+/* El alto del cronómetro de pausas. En el móvil, la pantalla de la pregunta mide el resto. */
+:root {
+  --pomodoro: 28px;
+}
+.en-simulacro {
+  --pomodoro: 0px;
+}
+
 @theme {
   --breakpoint-pc: 900px;
   --default-font-family: "JetBrains Mono", monospace;
