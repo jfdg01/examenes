@@ -12,13 +12,6 @@
 }
 
 /* El corte del móvil y del PC: `pc:` aplica desde 900 px. La paleta es Gruvbox dark, la de la terminal. */
-/* El alto del cronómetro de pausas. La pantalla de la pregunta y los tiradores empiezan debajo. */
-:root {
-  --pomodoro: 28px;
-}
-.en-simulacro {
-  --pomodoro: 0px;
-}
 
 @theme {
   --breakpoint-pc: 900px;

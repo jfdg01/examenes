@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { NotaDelSimulacro } from "./nucleo/nucleo.js";
   import Cuadricula, { type Marca } from "./Cuadricula.svelte";
+  import Pomodoro from "./Pomodoro.svelte";
 
   let { simulacro, nota, preguntas, error, onvolver, marcas, onrevisar }: {
     // La cuadrícula corregida: cada número abre su pregunta.
@@ -16,7 +17,10 @@
 </script>
 
 <main class="mx-auto max-w-[560px] p-4">
-  <h1 class="mt-2 mb-1 text-[24px] font-bold">{simulacro ? "El simulacro ha terminado" : "La sesión ha terminado"}</h1>
+  <div class="flex items-start justify-between gap-3">
+    <h1 class="mt-2 mb-1 text-[24px] font-bold">{simulacro ? "El simulacro ha terminado" : "La sesión ha terminado"}</h1>
+    <Pomodoro />
+  </div>
   {#if nota}
     {#if simulacro}
       <p class={tarjeta}>Aciertos: {nota.aciertos} · Fallos: {nota.fallos} · En blanco: {nota.en_blanco}</p>

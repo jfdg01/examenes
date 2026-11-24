@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Pomodoro from "./Pomodoro.svelte";
   import type { ExamenDeLaLista } from "./nucleo/nucleo.js";
 
   let examenes = $state.raw<ExamenDeLaLista[] | null>(null);
@@ -10,7 +11,7 @@
 </script>
 
 <main class="mx-auto max-w-[560px] p-4">
-  <a class="text-[13px] text-tenue" href="/?plan">Plan de estudio →</a>
+  <p class="flex items-center justify-between text-[13px] text-tenue"><a href="/?plan">Plan de estudio →</a><Pomodoro /></p>
   <h1 class="mt-2 mb-1 text-[24px] font-bold">Exámenes</h1>
   {#if examenes?.length === 0}
     <p class="my-3 rounded-xl bg-tarjeta p-3.5">No hay exámenes</p>

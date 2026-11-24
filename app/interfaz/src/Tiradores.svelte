@@ -8,7 +8,7 @@
 {#each ["L", "S", "R"] as const as k (k)}
   <div
     class={[
-      "tirador hidden pc:fixed pc:top-(--pomodoro) pc:bottom-0 pc:z-9 pc:-ml-3 pc:block pc:w-6 pc:cursor-col-resize pc:touch-none",
+      "tirador hidden pc:fixed pc:inset-y-0 pc:z-9 pc:-ml-3 pc:block pc:w-6 pc:cursor-col-resize pc:touch-none",
       "after:absolute after:inset-y-4 after:left-[11px] after:w-0.5 hover:after:bg-acento active:after:bg-acento",
       k === "S" && "after:bg-linea",
       "before:absolute before:top-1/2 before:left-[5px] before:z-1 before:-mt-5 before:box-border before:hidden before:h-10 before:w-3.5",

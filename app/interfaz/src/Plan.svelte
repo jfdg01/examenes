@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Pomodoro from "./Pomodoro.svelte";
   import type { Datos } from "./nucleo/nucleo.js";
 
   // ponytail: el plan de la semana de ASN y PS va en el código. Tras el examen del lunes 30, la pantalla se borra.
@@ -58,7 +59,10 @@
 </script>
 
 <main class="mx-auto max-w-[1100px] p-4">
-  <button class="cursor-pointer text-[13px] text-tenue" onclick={() => history.back()}>← Volver</button>
+  <p class="flex items-center justify-between text-[13px] text-tenue">
+    <button class="cursor-pointer" onclick={() => history.back()}>← Volver</button>
+    <Pomodoro />
+  </p>
   <h1 class="mt-2 mb-1 text-[24px] font-bold">Plan de estudio</h1>
   <p class="mb-4 text-[13px] text-tenue">
     Una casilla = una sesión de 12 respuestas, y se marca sola. Cada fila de 4 = un bloque de 30 min, y después 5 a 10 min de pausa. + = marca ese tema en el inicio,
