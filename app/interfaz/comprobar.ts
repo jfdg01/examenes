@@ -64,6 +64,12 @@ async function navegar(page: Page, nombre: string) {
     await page.mouse.click(200, 400);
     assert(!(await page.getByTitle("Copiar la pregunta y las opciones").isVisible()), "un toque fuera cierra el menú");
   }
+  // En el móvil, el texto de arriba a la izquierda se lee entero, sin «…».
+  if (nombre === "movil") {
+    await page.locator(".donde").evaluate((e) => (e.textContent = "Propiedad intelectual · sin ver"));
+    await page.screenshot({ path: "capturas/movil-arriba.png", clip: { x: 0, y: 0, width: 390, height: 80 } });
+    assert(await page.locator(".donde").evaluate((e) => e.scrollWidth <= e.clientWidth), "el texto de arriba se lee entero");
+  }
   // La edición entra en `preguntas.json` con el mismo id, y Cancelar deja la pregunta como estaba.
   await editar(page);
   assert.equal(await page.locator(".hoja").count(), 0, "la edición oculta la hoja");

@@ -112,7 +112,8 @@
 <p
   class="m-0 flex items-center gap-2 px-3.5 pt-2 pb-1.5 text-[12px] whitespace-nowrap text-tenue pc:gap-1.5 pc:px-0 pc:pt-0 pc:pb-2.5 pc:text-[13px] pc:[grid-area:meta]"
 >
-  <span class="flex-1 truncate">
+  <!-- En el móvil, el texto pasa a una segunda línea antes que cortarse: los botones ocupan casi todo el ancho. -->
+  <span class="donde min-w-0 flex-1 leading-tight whitespace-normal pc:truncate">
     <!-- La posición en la ronda va en el botón de la cuadrícula. -->
     {#if revision}Revisión · {q.apartado}
     {:else if simulacro}{Math.floor(restante / 60)}:{String(restante % 60).padStart(2, "0")} · {q.apartado}
