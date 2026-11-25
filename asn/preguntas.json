@@ -5287,7 +5287,7 @@
       "pdf": "3_Alta_disponibilidad.pdf",
       "pagina": 20
     },
-    "pregunta": "¿Cómo recibe la configuración una instancia con variables de entorno?",
+    "pregunta": "¿Cómo recibe la configuración una instancia mediante variables de entorno?",
     "correcta": "Se definen al lanzar la instancia y la aplicación las recupera del sistema operativo",
     "distractores": [
       "La aplicación las pide a un servicio externo",
@@ -5416,7 +5416,7 @@
       "pagina": 4
     },
     "pregunta": "¿Qué cuatro propiedades definen a un sistema reactivo según el Manifiesto Reactivo?",
-    "correcta": "Responsive, resilient, elastic y message driven",
+    "correcta": "Responsivo, resistente, elastico y pensado para mensajes",
     "distractores": [
       "Escalable, seguro, consistente y tolerante a particiones",
       "Sin estado, replicado, cifrado y monolítico"
