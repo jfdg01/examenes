@@ -109,7 +109,8 @@
               onchange={(e) => marcar(inicio.temas, tema, tema.apartados.map((a) => a.apartado), e.currentTarget.checked)}
             />
             <span class="flex-1 font-semibold">{tema.nombre}</span>
-            <span class="text-[13px] text-tenue">{tema.preguntas} preguntas</span>
+            <span class="text-[13px] text-tenue tabular-nums">{tema.sabes}/{tema.preguntas} preguntas</span>
+            <a class="text-[13px] text-acento underline" href="pdfs/{tema.pdf}" target="_blank">PDF</a>
           </label>
           {#if tema.apartados.length > 1}
             {#each tema.apartados as a (a.apartado)}
@@ -121,7 +122,7 @@
                   onchange={(e) => marcar(inicio.temas, tema, [a.apartado], e.currentTarget.checked)}
                 />
                 <span class="flex-1">{a.nombre}</span>
-                <span class="text-[13px]">{a.preguntas}</span>
+                <span class="mr-[calc(3ch+10px)] text-[13px] tabular-nums">{a.sabes}/{a.preguntas}</span>
               </label>
             {/each}
           {/if}

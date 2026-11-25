@@ -101,6 +101,11 @@ pub enum Estado {
 }
 
 impl Estado {
+    /// Una pregunta está en "sabes" desde el paso 1.
+    pub fn sabes(self) -> bool {
+        matches!(self, Estado::Paso(n) if n > 0)
+    }
+
     /// Un acierto con "seguro" sube el paso, aunque la pregunta no haya vencido. Otra respuesta lo pone a 0.
     /// Una pregunta sin ver acertada con "seguro" salta al paso 3, que vence después de la semana del examen.
     pub fn tras(self, acierto: bool, seguro: bool) -> Estado {
@@ -213,12 +218,13 @@ pub struct Par {
     pub apartado: String,
 }
 
-/// Un tema en el inicio, con su número de preguntas y sus apartados.
+/// Un tema en el inicio, con su número de preguntas, las que están en "sabes", y sus apartados.
 #[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct TemaDelInicio {
     pub pdf: String,
     pub nombre: String,
     pub preguntas: u32,
+    pub sabes: u32,
     pub apartados: Vec<ApartadoDelInicio>,
 }
 
@@ -227,6 +233,7 @@ pub struct ApartadoDelInicio {
     pub apartado: String,
     pub nombre: String,
     pub preguntas: u32,
+    pub sabes: u32,
     pub marcado: bool,
 }
 
@@ -260,6 +267,8 @@ pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], sele
     if banco.is_empty() {
         return Inicio::BancoVacio { titulo };
     }
+    let estado = estados(banco, historial);
+    let sabe = |q: &&Pregunta| estado.get(q.id.as_str()).is_some_and(|e| e.0.sabes());
     let temas: Vec<TemaDelInicio> = examen
         .pdfs
         .iter()
@@ -267,6 +276,7 @@ pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], sele
             pdf: pdf.clone(),
             nombre: tema.nombre.clone(),
             preguntas: banco.iter().filter(|q| q.fuente.pdf == *pdf).count() as u32,
+            sabes: banco.iter().filter(|q| q.fuente.pdf == *pdf).filter(sabe).count() as u32,
             apartados: tema
                 .apartados
                 .iter()
@@ -274,6 +284,7 @@ pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], sele
                     apartado: a.clone(),
                     nombre: examen.apartados.get(a).unwrap_or(a).clone(),
                     preguntas: banco.iter().filter(|q| q.fuente.pdf == *pdf && q.apartado == *a).count() as u32,
+                    sabes: banco.iter().filter(|q| q.fuente.pdf == *pdf && q.apartado == *a).filter(sabe).count() as u32,
                     marcado: marcado(seleccion, pdf, a),
                 })
                 .collect(),
@@ -663,7 +674,7 @@ const VENTANA: usize = 60;
 /// Las preguntas en "sabes", en "no sabes" y sin ver.
 fn cuenta(banco: &[Pregunta], historial: &[Respuesta]) -> (u32, u32, u32) {
     let estado = estados(banco, historial);
-    let sabes = estado.values().filter(|e| matches!(e.0, Estado::Paso(n) if n > 0)).count();
+    let sabes = estado.values().filter(|e| e.0.sabes()).count();
     (sabes as u32, (estado.len() - sabes) as u32, (banco.len() - estado.len()) as u32)
 }
 
@@ -1043,6 +1054,15 @@ mod tests {
         let resumen: Vec<_> = temas.iter().map(|t| (t.nombre.as_str(), t.preguntas, t.apartados.iter().all(|a| a.marcado))).collect();
         assert_eq!(resumen, [("Uno", 1, true), ("Dos", 3, true)]);
         assert_eq!(temas[1].apartados.iter().map(|a| (a.nombre.as_str(), a.preguntas)).collect::<Vec<_>>(), [("ENS", 2), ("Riesgos", 1)]);
+    }
+
+    #[test]
+    fn cada_tema_y_cada_apartado_cuentan_las_preguntas_que_sabes() {
+        let (examen, banco) = temario();
+        let historial = [respuesta("b1", "2026-01-01T00:00:00Z", true, true), respuesta("c1", "2026-01-01T00:00:00Z", false, false)];
+        let Inicio::Listo { temas, .. } = inicio(&examen, &banco, &historial, None, 5.0) else { panic!() };
+        assert_eq!(temas.iter().map(|t| (t.sabes, t.preguntas)).collect::<Vec<_>>(), [(0, 1), (1, 3)]);
+        assert_eq!(temas[1].apartados.iter().map(|a| (a.sabes, a.preguntas)).collect::<Vec<_>>(), [(1, 2), (0, 1)]);
     }
 
     #[test]
