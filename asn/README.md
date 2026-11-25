@@ -5,7 +5,7 @@ El examen de la convocatoria Ordinaria I es el viernes 27 de noviembre de 2026, 
 1. Entre 30 y 40 preguntas tipo test, con 3 opciones y una sola correcta.
 2. Entre 2 y 3 preguntas de desarrollo o supuestos prácticos.
 
-El test de práctica entrena solo la parte tipo test. El simulacro tiene 35 preguntas y 45 minutos, para dejar tiempo a la parte de desarrollo. El enunciado del examen no dice si un fallo resta, así que `penalizacion` es 0. Cambia `penalizacion` en `examen.json` cuando sepas la regla.
+El test de práctica entrena solo la parte tipo test. El simulacro tiene 35 preguntas y 45 minutos, para dejar tiempo a la parte de desarrollo. Un fallo resta 1/3 de un acierto, y una pregunta en blanco no cuenta.
 
 El examen pide un bolígrafo de tinta azul o negra y el NIF, o un documento oficial original de identificación.
 
