@@ -75,6 +75,8 @@
     const local = JSON.parse(localStorage.getItem(claveRonda) ?? "null") ?? sinRonda;
     // Un guardado de este dispositivo con la hora en milisegundos pasa a ISO, y no pierde la ronda.
     if (typeof local.guardada === "number") local.guardada = new Date(local.guardada).toISOString();
+    // Una ronda de este dispositivo sin las respuestas del simulacro las tiene ya en el historial.
+    if (local.ronda && !local.ronda.respuestas) local.ronda.respuestas = [];
     const g = nucleo.gana(servidor, local);
     enviar(g);
     seleccion = g.seleccion;
@@ -82,6 +84,7 @@
     if (!r) return;
     ({ preguntas, resultados, simulacro } = r);
     elecciones = preguntas.map(() => null);
+    respuestas = preguntas.map((q) => r.respuestas.find((x) => x.id === q.id) ?? null);
     limite = r.limite ?? 0;
     seguir();
   }
@@ -127,7 +130,7 @@
   function guardar() {
     const aMedias = ronda.estado === "Pregunta";
     const ids = preguntas.map((q) => q.id);
-    enviar({ guardada: new Date().toISOString(), ronda: aMedias ? { ids, resultados, simulacro, limite: simulacro ? limite : undefined } : undefined, seleccion });
+    enviar({ guardada: new Date().toISOString(), ronda: aMedias ? { ids, resultados, respuestas: respuestas.filter((r) => r !== null), simulacro, limite: simulacro ? limite : undefined } : undefined, seleccion });
   }
 
   let ronda = $state<Ronda>({ estado: "Inicio" });
@@ -135,6 +138,8 @@
   let i = $state(0);
   // La elección y el resultado de cada pregunta van en su posición, porque la ronda salta entre preguntas.
   let elecciones = $state<(Eleccion | null)[]>([]);
+  // La última respuesta de cada pregunta del simulacro, que entra en el historial al terminar.
+  let respuestas: (Respuesta | null)[] = [];
   const eleccion = $derived(elecciones[i] ?? null);
   let simulacro = $state(false);
   let resultados = $state<(Resultado | undefined)[]>([]);
@@ -179,6 +184,7 @@
     simulacro = comoSimulacro;
     resultados = preguntas.map(() => undefined);
     elecciones = preguntas.map(() => null);
+    respuestas = preguntas.map(() => null);
     revisando = false;
     seguir();
     guardar();
@@ -211,6 +217,7 @@
     if (ronda.estado === "Final") return;
     clearInterval(reloj);
     ronda = { estado: "Final" };
+    entregar();
     guardar();
     nota = nucleo.nota({ preguntas: preguntas.length, resultados: resultados.filter((r) => r !== undefined) }, datos!.examen.penalizacion);
   }
@@ -221,10 +228,23 @@
     elecciones[i] = { opcion, correccion };
     ronda = { estado: "Pregunta", contestada: true };
     resultados[i] = respuesta.resultado;
+    if (simulacro) respuestas[i] = respuesta;
     guardar();
-    localStorage.setItem(clavePendientes, JSON.stringify([...pendientes(), respuesta]));
-    datos = { ...datos!, historial: nucleo.unir(datos!.historial, [respuesta]) };
+    if (!simulacro) await alHistorial([respuesta]);
+  }
+
+  async function alHistorial(nuevas: Respuesta[]) {
+    if (!nuevas.length) return;
+    localStorage.setItem(clavePendientes, JSON.stringify([...pendientes(), ...nuevas]));
+    datos = { ...datos!, historial: nucleo.unir(datos!.historial, nuevas) };
     error = await enviarPendientes();
+  }
+
+  // Las respuestas del simulacro entran en el historial al terminar o al abandonar, cada una una vez.
+  function entregar() {
+    const nuevas = respuestas.filter((r) => r !== null);
+    respuestas = respuestas.map(() => null);
+    alHistorial(nuevas);
   }
 
   function ir(k: number) {
@@ -272,6 +292,7 @@
 
   function volver() {
     clearInterval(reloj);
+    entregar();
     cargarInicio();
     ronda = { estado: "Inicio" };
     guardar();

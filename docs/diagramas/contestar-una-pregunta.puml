@@ -1,6 +1,6 @@
 @startuml contestar-una-pregunta
 skinparam shadowing false
-title Contestar una pregunta: contestar() en App.svelte\nUna respuesta sin red espera en localStorage, y no se pierde
+title Contestar una pregunta: contestar() en App.svelte\nUna respuesta sin red espera en localStorage, y no se pierde\nEl simulacro guarda sus respuestas en la ronda, y entregar() las manda al terminar o al abandonar
 
 participant "App.svelte" as App
 participant "nucleo (WASM)" as N
@@ -10,7 +10,8 @@ participant servidor as S
 App -> N : corregir(pregunta, opcion, seguro, ahora)
 N --> App : Correccion: el resultado, el paso nuevo y el aviso
 App -> L : guardar(): la ronda
-App -> S : guardar(): PUT api/ronda
+App -> S : guardar(): PUT api/ronda, con las respuestas del simulacro
+note over App : un simulacro sigue aquí hasta terminar(), que llama a entregar()
 App -> L : añade la respuesta a las pendientes
 App -> N : unir(historial, [respuesta])
 App -> S : POST api/respuestas, con todas las pendientes

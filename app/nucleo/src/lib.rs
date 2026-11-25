@@ -478,11 +478,14 @@ pub struct Guardado {
 
 /// Una ronda a medias: sus preguntas, el resultado de cada una y el límite del simulacro, en milisegundos.
 /// `resultados` va en el orden de `ids`, con `null` en una pregunta sin contestar.
+/// `respuestas` lleva la última respuesta de cada pregunta contestada del simulacro, que entra en el historial al terminar.
+/// Una sesión manda cada respuesta al historial al contestar, y su lista va vacía.
 #[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct RondaGuardada {
     pub ids: Vec<String>,
     pub resultados: Vec<Option<Resultado>>,
+    pub respuestas: Vec<Respuesta>,
     pub simulacro: bool,
     pub limite: Option<u64>,
 }
@@ -506,6 +509,7 @@ pub fn unir(a: &[Respuesta], b: &[Respuesta]) -> Vec<Respuesta> {
 pub struct RondaAMedias {
     pub preguntas: Vec<PreguntaDeSesion>,
     pub resultados: Vec<Option<Resultado>>,
+    pub respuestas: Vec<Respuesta>,
     pub simulacro: bool,
     pub limite: Option<u64>,
 }
@@ -522,7 +526,7 @@ pub fn restaurar(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], g
     }
     let mut resultados = r.resultados.clone();
     resultados.resize(preguntas.len(), None);
-    Some(RondaAMedias { preguntas, resultados, simulacro: r.simulacro, limite: r.limite })
+    Some(RondaAMedias { preguntas, resultados, respuestas: r.respuestas.clone(), simulacro: r.simulacro, limite: r.limite })
 }
 
 /// Lo que pasó en una pregunta: un acierto, un fallo o una pregunta en blanco.
@@ -1302,7 +1306,7 @@ mod tests {
         let ids = ids.iter().map(|&i| i.into()).collect();
         Guardado {
             guardada: Timestamp::from_second(guardada).unwrap(),
-            ronda: Some(RondaGuardada { ids, resultados: resultados.to_vec(), simulacro: false, limite: None }),
+            ronda: Some(RondaGuardada { ids, resultados: resultados.to_vec(), respuestas: vec![], simulacro: false, limite: None }),
             seleccion: None,
         }
     }
@@ -1333,6 +1337,18 @@ mod tests {
         let r = restaurar(&LN, &banco, &[], &g, &mut Azar::new(1)).unwrap();
         assert_eq!(r.resultados, [None, Some(Resultado::Acierto), None]);
         assert!(restaurar(&LN, &banco, &[], &guardado(1, &["a1"], &[None, None]), &mut Azar::new(1)).is_none());
+    }
+
+    #[test]
+    fn el_simulacro_restaurado_lleva_sus_respuestas_fuera_del_historial() {
+        let banco = [pregunta("a1", "a"), pregunta("b1", "b")];
+        let mut g = guardado(1, &["a1", "b1"], &[Some(Resultado::Acierto)]);
+        let respuestas = vec![respuesta("a1", "1970-01-01T00:00:05Z", true, true)];
+        let ronda = g.ronda.as_mut().unwrap();
+        ronda.simulacro = true;
+        ronda.respuestas = respuestas.clone();
+        let r = restaurar(&LN, &banco, &[], &g, &mut Azar::new(1)).unwrap();
+        assert_eq!(r.respuestas, respuestas);
     }
 
     #[test]

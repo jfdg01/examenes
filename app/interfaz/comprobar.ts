@@ -2,7 +2,7 @@
 // `npm run build` va antes. Las capturas quedan en `capturas/`.
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { cpSync, mkdirSync, mkdtempSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium, type Page } from "playwright";
@@ -90,12 +90,24 @@ async function navegar(page: Page, nombre: string) {
   await page.getByTitle("Abandonar").click();
   await page.getByText(/^Simulacro/).click();
   assert(!(await visible(page, ".pomodoro")), "en un simulacro solo se ve su reloj");
+  // Las respuestas del simulacro entran en el historial al terminar.
+  const historial = join(raiz, nombre, "respuestas.jsonl");
+  const lineas = () => (existsSync(historial) ? readFileSync(historial, "utf8").trim().split("\n").length : 0);
+  const antes = lineas();
   for (let k = 0; k < 20; k++) {
-    await page.locator(".opcion button").first().click();
+    if (k === 0) {
+      // Una respuesta del simulacro cambia hasta el final: la última elegida queda marcada.
+      await page.locator(".opcion button").first().click();
+      await page.locator(".opcion").last().locator("button").first().click();
+      assert((await page.locator(".opcion").last().getAttribute("class"))!.includes("border-acento"), "la respuesta del simulacro cambia");
+      assert(!(await page.locator(".opcion").first().getAttribute("class"))!.includes("border-acento"), "solo la última elegida queda marcada");
+    } else await page.locator(".opcion button").first().click();
     assert.equal(await page.locator(".icono").count(), 0, "el simulacro no corrige al momento");
     // En el PC, el simulacro avanza con "Siguiente ›", porque la hoja no lleva la corrección.
     if (k < 19) await page.getByRole("button", { name: /^Siguiente/ }).filter({ visible: true }).last().click();
   }
+  await page.waitForTimeout(500);
+  assert.equal(lineas(), antes, "el simulacro no manda respuestas al historial antes de terminar");
   // Con todas contestadas, el móvil termina con el botón grande desde cualquier pregunta, y el PC desde la cuadrícula.
   await irA(page, 3);
   if (nombre === "movil") await page.getByRole("button", { name: "Terminar", exact: true }).filter({ visible: true }).click();
@@ -104,6 +116,8 @@ async function navegar(page: Page, nombre: string) {
     await page.getByText("Terminar el simulacro").click();
   }
   await page.getByText("El simulacro ha terminado").waitFor();
+  await page.waitForTimeout(500);
+  assert.equal(lineas() - antes, 20, "cada pregunta del simulacro entra una vez en el historial, al terminar");
   await page.screenshot({ path: `capturas/${nombre}-final.png` });
   await page.locator(".cuadricula button", { hasText: /^5$/ }).click();
   await page.getByText(/^Revisión · /).waitFor();

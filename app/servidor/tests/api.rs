@@ -179,7 +179,7 @@ async fn la_ronda_guardada_vuelve_igual() {
     assert_eq!(ronda(&url).await, json!({ "guardada": "1970-01-01T00:00:00Z", "ronda": null }));
 
     let g = json!({ "guardada": "2026-11-21T10:51:16.012Z", "ronda": {
-        "ids": ["rgpd-001", "rgpd-002"], "resultados": ["Blanco"], "simulacro": true, "limite": 1_795_185_376_012_u64 },
+        "ids": ["rgpd-001", "rgpd-002"], "resultados": ["Blanco"], "respuestas": [{ "id": "rgpd-001", "ts": "2026-11-21T10:50:00Z", "resultado": "Blanco", "seguro": false }], "simulacro": true, "limite": 1_795_185_376_012_u64 },
         "seleccion": [{ "pdf": "1_Legislacion.pdf", "apartado": "rgpd" }] });
     assert_eq!(guardar_ronda(&url, &g).await, 204);
     assert_eq!(ronda(&url).await, g);
@@ -196,7 +196,7 @@ async fn una_ronda_mal_formada_no_se_guarda() {
         json!({ "guardada": 1_795_183_876_012_u64, "ronda": null }),
         json!({ "guardada": "ayer", "ronda": null }),
         json!({ "guardada": "2026-11-21T10:51:16Z", "ronda": null, "extra": 1 }),
-        json!({ "guardada": "2026-11-21T10:51:16Z", "ronda": { "ids": [], "resultados": ["acierto"], "simulacro": false, "limite": null } }),
+        json!({ "guardada": "2026-11-21T10:51:16Z", "ronda": { "ids": [], "resultados": ["acierto"], "respuestas": [], "simulacro": false, "limite": null } }),
     ] {
         assert!(guardar_ronda(&url, &mala).await.is_client_error(), "{mala}");
     }
@@ -211,7 +211,7 @@ async fn un_guardado_mas_viejo_no_pisa_la_ronda() {
     let nuevo = json!({ "guardada": "2026-11-21T10:51:17Z", "ronda": null });
 
     assert_eq!(guardar_ronda(&url, &nuevo).await, 204);
-    let viejo = json!({ "guardada": "2026-11-21T10:51:16Z", "ronda": { "ids": ["rgpd-001"], "resultados": [], "simulacro": false, "limite": null } });
+    let viejo = json!({ "guardada": "2026-11-21T10:51:16Z", "ronda": { "ids": ["rgpd-001"], "resultados": [], "respuestas": [], "simulacro": false, "limite": null } });
     assert_eq!(guardar_ronda(&url, &viejo).await, 204);
     assert_eq!(ronda(&url).await, nuevo);
 }

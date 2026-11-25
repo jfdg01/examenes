@@ -14,6 +14,7 @@ state Final
 Inicio --> SinContestar : empezar(comoSimulacro)
 SinContestar --> Contestada : contestar(opcion, seguro)
 SinContestar --> Contestada : contestar(null), "En blanco" del simulacro
+Contestada --> Contestada : contestar(), otra opción del simulacro
 Contestada --> SinContestar : siguiente() o ir(k), a una sin contestar
 SinContestar --> Contestada : ir(k), a una contestada
 Contestada --> Final : intentarTerminar() → terminar(), todas contestadas

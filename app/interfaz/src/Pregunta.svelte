@@ -103,6 +103,8 @@
   let menu: HTMLElement;
   // Los botones de la línea de arriba.
   const accion = "flex h-7 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border bg-tarjeta text-[12px]";
+  // Una respuesta del simulacro cambia hasta el final. La corregida queda fija.
+  const fija = $derived(contestada && corregida);
   const otras = $derived(q.opciones.length - (eleccion?.opcion == null || eleccion.opcion === q.correcta ? 1 : 2));
 </script>
 
@@ -217,10 +219,10 @@
       >
         <button
           class="flex-1 cursor-pointer px-3 py-[11px] text-left text-[13.5px] disabled:cursor-default pc:p-3.5 pc:text-[15px]"
-          disabled={contestada}
+          disabled={fija}
           onclick={() => oncontestar(k, true)}>{opcion}</button
         >
-        {#if !contestada}
+        {#if !fija}
           <button
             class="w-12 shrink-0 cursor-pointer border-l-2 border-linea bg-[color-mix(in_srgb,var(--color-aviso)_15%,var(--color-fondo))] text-[12px] font-bold text-aviso pc:w-16 pc:text-[13px]"
             onclick={() => oncontestar(k, false)}>dudo</button
@@ -238,7 +240,7 @@
       </div>
     {/each}
     {#if contestada && !corregida}
-      <p class="mb-2.5 text-[13px] text-tenue">La respuesta queda guardada. La corrección sale al final.</p>
+      <p class="mb-2.5 text-[13px] text-tenue">La respuesta queda guardada, y cambia hasta terminar. La corrección sale al final.</p>
     {/if}
     {#if corregida && contestada}
       <button
@@ -275,8 +277,8 @@
   {#if !borrador}{@render children()}{/if}
 </div>
 <div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:border-0 pc:p-0 pc:[grid-area:pie]">
-  <!-- La ayuda de una pregunta contestada queda invisible, y los botones de debajo no saltan. -->
-  <div class={[contestada && "invisible"]}>
+  <!-- La ayuda de una pregunta corregida queda invisible, y los botones de debajo no saltan. -->
+  <div class={[fija && "invisible"]}>
     {#if simulacro}
       <button class="mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue" onclick={() => oncontestar(null, false)}
         >En blanco</button
