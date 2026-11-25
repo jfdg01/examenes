@@ -20,7 +20,7 @@ Rust tiene un `enum Estado { SinVer, Paso(u32) }`.
 ## La ronda
 
 - Del **inicio**, una ronda empieza como una sesión o como un simulacro.
-- El inicio tiene una casilla por tema, y una por apartado en un tema con varios. La **selección** son los pares (tema, apartado) marcados. La sesión, el simulacro y la tarjeta usan solo sus preguntas, y la tarjeta dice "con 3 de 5 temas". Sin nada marcado, los botones no empiezan.
+- El inicio tiene una casilla por tema, y una por apartado en un tema con varios. La **selección** son los pares (tema, apartado) marcados. La sesión, el simulacro y la tarjeta usan solo sus preguntas, y la tarjeta dice "con 3 de 5 temas". Sin nada marcado, los botones no empiezan. Cada casilla dice cuántas de sus preguntas sabes, como "30/100 preguntas", y cada tema lleva un enlace a su PDF.
 - Cada pregunta pasa de **sin contestar** a **contestada**, y la pantalla muestra la solución. El simulacro añade el botón "En blanco" y el reloj, y solo marca la opción elegida hasta el final.
 - Una respuesta de la sesión entra en el historial al contestar, y no cambia. Una respuesta del simulacro cambia hasta el final, como en el papel, y entra en el historial al terminar o al abandonar. Así el historial guarda solo la respuesta final.
 - La cuadrícula lleva a cualquier pregunta de la ronda, y una pregunta saltada espera su respuesta.
