@@ -9,18 +9,7 @@ Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están 
 
 ## Arrancar
 
-La build de la interfaz necesita el target `wasm32-unknown-unknown` y `wasm-bindgen-cli`, con la versión de `wasm-bindgen` de `nucleo/Cargo.toml`.
-
-```bash
-rustup target add wasm32-unknown-unknown
-cargo install wasm-bindgen-cli --version 0.2.130
-```
-
-```bash
-cd app/interfaz && npm install && npm run build
-cd .. && cargo run --release -p servidor -- .. 127.0.0.1:8602
-tailscale serve --bg --https=8601 http://127.0.0.1:8602
-```
+Los comandos de la instalación y del arranque están en [el README de la raíz](../README.md). `wasm-bindgen-cli` lleva la versión de `wasm-bindgen` de `nucleo/Cargo.toml`.
 
 El servidor recibe la raíz de los exámenes y su dirección. Cada carpeta de la raíz con `examen.json` es un examen en `/<carpeta>/`. El servidor lee la raíz en cada petición, así que un examen nuevo aparece sin reiniciar.
 
