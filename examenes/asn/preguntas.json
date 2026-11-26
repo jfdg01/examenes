@@ -2567,7 +2567,7 @@
       "pdf": "2_Ciclo_de_vida.pdf",
       "pagina": 15
     },
-    "pregunta": "¿Qué añade el modo Lax de SameSite al modo Strict?",
+    "pregunta": "¿En qué petición envía la cookie el modo Lax de SameSite, y el modo Strict no?",
     "correcta": "Envía también la cookie en un GET desde otro sitio, como al seguir un enlace",
     "distractores": [
       "Envía también la cookie en peticiones POST desde otros sitios que el usuario visite",
