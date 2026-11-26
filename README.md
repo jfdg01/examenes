@@ -34,4 +34,23 @@ Abre `http://127.0.0.1:8602` y elige un examen. Tus respuestas y tus notas se gu
 
 Para abrir la app desde el móvil, publícala en tu tailnet con `tailscale serve --bg --https=8601 http://127.0.0.1:8602`.
 
+## Crear un examen nuevo
+
+Un agente de código, como Claude Code, escribe las preguntas con las reglas de [`docs/BANCO.md`](docs/BANCO.md). Para un examen entero, el agente sigue [`docs/LOTE.md`](docs/LOTE.md): un agente creador y un agente revisor por apartado, en paralelo. Antes, prepara la carpeta del examen. Los comandos necesitan `poppler` y `ffmpeg`.
+
+1. Crea una carpeta en la raíz, como `redes/`, y pon los PDFs del temario en `redes/pdfs/`.
+2. Copia `ps/examen.json` a `redes/examen.json`, y cambia el título, los PDFs y sus apartados.
+3. Crea `redes/preguntas.json` con una lista vacía: `[]`.
+4. Saca las imágenes y el texto de cada página:
+
+```bash
+cargo run --manifest-path app/Cargo.toml -p banco -- paginas redes
+mkdir -p redes/texto
+for f in redes/pdfs/*.pdf; do pdftotext -layout "$f" "redes/texto/$(basename "${f%.pdf}").txt"; done
+```
+
+5. Pide al agente que escriba el examen `redes` siguiendo `docs/LOTE.md`.
+
+El examen aparece en la lista de la app sin reiniciar el servidor.
+
 El código, los tests y el hook de git están en [`app/README.md`](app/README.md).

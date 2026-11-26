@@ -98,7 +98,7 @@ El borrador tiene un bloque por pregunta:
 
 ## Las fuentes
 
-Cada PDF de un examen tiene su texto y sus imágenes, que da `banco paginas`:
+Cada PDF de un examen tiene su texto, que da `pdftotext -layout`, y sus imágenes, que da `banco paginas`:
 
 - El texto de `<examen>/pdfs/<nombre>.pdf` está en `<examen>/texto/<nombre>.txt`. Un form feed (`\f`) separa las páginas: la página N es el trozo N.
 - La imagen de la página N está en `<examen>/paginas/<nombre>-N.webp`. Un diagrama o una tabla se leen en la imagen, porque el texto los pierde.
