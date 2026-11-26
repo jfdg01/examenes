@@ -14,19 +14,18 @@ Cada carpeta de `examenes/` es un examen, con su banco de preguntas y las págin
 
 ## Instalar
 
-Necesitas [Rust](https://rustup.rs) y Node 22 o más nuevo, con `npm`.
+Necesitas [Rust](https://rustup.rs) y Node 22 o más nuevo, con `npm`. `instalar.sh` instala el resto, y dice qué falta del sistema para crear un examen.
 
 ```bash
 git clone https://github.com/jfdg01/examenes.git
 cd examenes
-rustup target add wasm32-unknown-unknown
-cargo install wasm-bindgen-cli --version 0.2.130
+./instalar.sh
 ```
 
 ## Arrancar
 
 ```bash
-cd app/interfaz && npm install && npm run build
+cd app/interfaz && npm run build
 cd .. && cargo run --release -p servidor
 ```
 

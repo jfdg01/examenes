@@ -9,7 +9,7 @@ Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están 
 
 ## Arrancar
 
-Los comandos de la instalación y del arranque están en [el README de la raíz](../README.md). `wasm-bindgen-cli` lleva la versión de `wasm-bindgen` de `nucleo/Cargo.toml`.
+Los comandos de la instalación y del arranque están en [el README de la raíz](../README.md).
 
 El servidor recibe la raíz de los exámenes y su dirección. Cada carpeta de la raíz con `examen.json` es un examen en `/<carpeta>/`. El servidor lee la raíz en cada petición, así que un examen nuevo aparece sin reiniciar.
 
