@@ -12,7 +12,7 @@ System_Boundary(app, "Los exámenes") {
   ContainerDb(local, "localStorage", "navegador", "Las respuestas pendientes, la ronda a medias y las preferencias")
   Container(servidor, "servidor", "Rust, axum", "Guarda y sirve los archivos de cada examen")
   Container(banco, "banco", "Rust, CLI", "Comprueba e importa el banco, y saca las páginas de los PDFs")
-  ContainerDb(carpetas, "Carpetas de examen", "archivos: asn/, ln/, ps/…", "examen.json, preguntas.json, respuestas.jsonl, ronda.json, notas.json, pdfs/, paginas/")
+  ContainerDb(carpetas, "Carpetas de examen", "archivos: examenes/asn/, examenes/ps/…", "examen.json, preguntas.json, respuestas.jsonl, ronda.json, notas.json, pdfs/, paginas/")
 }
 
 Rel(estudiante, interfaz, "Contesta preguntas")

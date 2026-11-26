@@ -5,7 +5,7 @@ use std::path::PathBuf;
 #[tokio::main]
 async fn main() {
     let mut args = std::env::args().skip(1);
-    let raiz = PathBuf::from(args.next().unwrap_or_else(|| "..".into()));
+    let raiz = PathBuf::from(args.next().unwrap_or_else(|| "../examenes".into()));
     let direccion = args.next().unwrap_or_else(|| "127.0.0.1:8602".into());
     let interfaz = PathBuf::from(concat!(env!("CARGO_MANIFEST_DIR"), "/../interfaz/dist"));
 

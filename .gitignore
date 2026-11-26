@@ -1,10 +1,9 @@
 *.pdf
-!asn/pdfs/*.pdf
-!ps/pdfs/*.pdf
-*/respuestas.jsonl
-*/notas.json
-*/ronda.json
-*/preguntas-mal.md
+!examenes/asn/pdfs/*.pdf
+!examenes/ps/pdfs/*.pdf
+examenes/*/respuestas.jsonl
+examenes/*/notas.json
+examenes/*/ronda.json
+examenes/*/preguntas-mal.md
 app/interfaz/prototipo
-*/trabajo/
-
+examenes/*/trabajo/

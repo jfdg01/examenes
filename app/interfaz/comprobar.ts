@@ -11,7 +11,7 @@ const raiz = mkdtempSync(join(tmpdir(), "examenes-"));
 // Cada pantalla tiene su copia, porque el servidor guarda la ronda a medias de cada examen.
 for (const examen of ["movil", "pc"]) {
   mkdirSync(join(raiz, examen));
-  for (const f of ["examen.json", "preguntas.json"]) cpSync(join("../../ln", f), join(raiz, examen, f));
+  for (const f of ["examen.json", "preguntas.json"]) cpSync(join("../../examenes/ln", f), join(raiz, examen, f));
 }
 spawnSync("cargo", ["build", "-q", "-p", "servidor"], { stdio: "inherit" });
 const servidor = spawn("../target/debug/servidor", [raiz, "127.0.0.1:8691"], { stdio: "ignore" });
