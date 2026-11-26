@@ -12238,5 +12238,197 @@
       "El puerto que declara la instrucción EXPOSE 3000"
     ],
     "explicacion": "✓ npm install lee package.json, y por eso el Dockerfile lo copia antes de la instrucción RUN.\n✗ «Una variable ENV PORT»: la variable configura la aplicación, y no sus dependencias\n✗ «El puerto que declara la instrucción EXPOSE»: npm install no usa un puerto del contenedor"
+  },
+  {
+    "id": "despliegue-067",
+    "concepto": "despliegue-configmap",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Para qué sirven los ConfigMaps en Kubernetes?",
+    "correcta": "Para dar a los contenedores elementos de configuración como variables de entorno o ficheros",
+    "distractores": [
+      "Para guardar las credenciales de acceso",
+      "Para guardar datos persistentes de la base de datos"
+    ],
+    "explicacion": "✓ Separar la configuración de la imagen permite cambiarla en el clúster sin reconstruir el contenedor.\n✗ «Para guardar las credenciales»: eso se guarda en un Secret\n✗ «Para guardar datos persistentes»: eso va en volúmenes persistentes"
+  },
+  {
+    "id": "despliegue-068",
+    "concepto": "despliegue-configmap",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué comando de kubectl crea un ConfigMap a partir de un fichero de configuración, como php.ini?",
+    "correcta": "kubectl create configmap con la opción --from-file",
+    "distractores": [
+      "kubectl create secret con la opción --from-file",
+      "kubectl expose configmap con la opción --port"
+    ],
+    "explicacion": "✓ Así la configuración vive en el clúster y no en la imagen, y el pod la recibe al iniciarse sin reconstruirla.\n✗ «kubectl create secret»: crea un Secret para datos sensibles, y no un ConfigMap\n✗ «kubectl expose configmap»: expose crea un Service, y no admite un ConfigMap"
+  },
+  {
+    "id": "despliegue-069",
+    "concepto": "despliegue-configmap",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 23
+    },
+    "pregunta": "¿Qué objetivo tiene la auto-configuración de pods en Kubernetes?",
+    "correcta": "Centralizar la configuración en el clúster, y que cada contenedor la lea al iniciarse",
+    "distractores": [
+      "Incluir la configuración dentro de la imagen de cada contenedor",
+      "Repartir a mano un fichero de configuración distinto en cada nodo"
+    ],
+    "explicacion": "✓ Así los cambios de configuración o de credenciales se hacen en un solo sitio, sin reconstruir la imagen de cada contenedor.\n✗ «Incluir la configuración dentro de la imagen»: la configuración vive en el clúster, y no en la imagen\n✗ «Repartir a mano un fichero»: el clúster centraliza la configuración, y no se copia a mano en los nodos"
+  },
+  {
+    "id": "despliegue-070",
+    "concepto": "despliegue-secrets",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Cómo protege Kubernetes la información sensible de un Secret?",
+    "correcta": "Se almacena en memoria, u ofuscada, y solo la consultan los pods autorizados",
+    "distractores": [
+      "Se guarda en claro en el repositorio de git junto al manifiesto del Deployment",
+      "Lo leen los pods del mismo namespace sin permisos"
+    ],
+    "explicacion": "✓ Un secreto no se escribe en claro en disco: vive en memoria o cifrado, y solo se entrega a los pods autorizados.\n✗ «Se guarda en claro»: un secreto no se versiona sin protección\n✗ «Lo leen los pods del mismo namespace»: solo los pods preestablecidos los consultan"
+  },
+  {
+    "id": "despliegue-071",
+    "concepto": "despliegue-secrets",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué ofuscación usa Kubernetes para los datos de un Secret?",
+    "correcta": "Base64",
+    "distractores": [
+      "AES con la clave del nodo",
+      "SHA-256 de cada valor"
+    ],
+    "explicacion": "✓ Base64 ofusca los datos de un Secret, pero es solo una codificación reversible, y no un cifrado.\n✗ «AES»: los datos de un Secret no se ofuscan así\n✗ «SHA-256»: un hash no se puede revertir, y el pod necesita el valor"
+  },
+  {
+    "id": "despliegue-072",
+    "concepto": "despliegue-secrets",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 24
+    },
+    "pregunta": "¿Qué tipos de Secret distingue Kubernetes?",
+    "correcta": "generic, tls y docker-registry",
+    "distractores": [
+      "generic, ssh y oauth",
+      "public, private y shared según el namespace"
+    ],
+    "explicacion": "✓ Cada tipo guarda un contenido con formato propio: datos cualesquiera, un certificado con su clave, o credenciales para bajar imágenes.\n✗ «generic, ssh y oauth»: oauth no es un tipo de Secret; la página distingue generic, tls y docker-registry\n✗ «public, private y shared»: los tipos de Secret dependen del uso (contenido genérico, certificados o credenciales de registro), y no del namespace"
+  },
+  {
+    "id": "despliegue-079",
+    "concepto": "despliegue-gke",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Qué ventaja tiene GKE sobre un clúster Kubernetes propio respecto al nodo máster?",
+    "correcta": "No es necesario gestionar un nodo máster, porque GKE se encarga de sus labores",
+    "distractores": [
+      "Se necesitan dos nodos máster en cada región del clúster con balanceo entre ellos",
+      "El máster se gestiona con kubectl desde el panel web del proveedor de nube"
+    ],
+    "explicacion": "✓ Google opera el plano de control, así que el equipo se ahorra instalarlo, actualizarlo y repararlo.\n✗ «Se necesitan»: GKE no pide un máster al usuario\n✗ «El máster»: GKE no lo expone al usuario"
+  },
+  {
+    "id": "despliegue-080",
+    "concepto": "despliegue-gke",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Qué ofrece GKE para garantizar la disponibilidad de los nodos del clúster?",
+    "correcta": "Auto-reparación de nodos, con actualización automática del software",
+    "distractores": [
+      "Un solo nodo fijo, sin reparación en el que se instala todo a mano",
+      "Reparación manual desde la consola de GCP en cada nodo que falle"
+    ],
+    "explicacion": "✓ Un nodo que falla se reemplaza solo, así que el clúster mantiene su capacidad sin que un operador intervenga.\n✗ «Un solo nodo»: GKE ofrece auto-reparación\n✗ «Reparación manual»: es automática"
+  },
+  {
+    "id": "despliegue-081",
+    "concepto": "despliegue-gke",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 30
+    },
+    "pregunta": "¿Qué servicio de balanceo de carga usa GKE para exponer servicios hacia Internet?",
+    "correcta": "GLBC, el balanceador de carga de GCP",
+    "distractores": [
+      "Traefik, instalado por defecto en el clúster",
+      "El kube-proxy de cada nodo"
+    ],
+    "explicacion": "✓ GLBC reparte el tráfico que llega de Internet entre los nodos, y GKE lo gestiona sin que el equipo monte un balanceador propio.\n✗ «Traefik»: el balanceador es de GCP\n✗ «El kube-proxy»: kube-proxy balancea dentro del clúster"
+  },
+  {
+    "id": "despliegue-085",
+    "concepto": "despliegue-gke-nodeport",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Por qué un servicio NodePort de Kubernetes en GKE no es accesible desde Internet por defecto?",
+    "correcta": "Porque los nodos de GKE tienen IP en una VPC privada",
+    "distractores": [
+      "Porque GKE bloquea el rango 30000-32767",
+      "Porque NodePort exige un nodo máster propio, y GKE no lo ofrece"
+    ],
+    "explicacion": "✓ Los nodos de GKE están en una VPC privada, y sin reglas de cortafuegos el puerto NodePort no se alcanza desde el exterior.\n✗ «Porque GKE bloquea»: las reglas de cortafuegos pueden abrirlo\n✗ «Porque NodePort»: GKE gestiona el máster, y no condiciona el acceso"
+  },
+  {
+    "id": "despliegue-086",
+    "concepto": "despliegue-gke-nodeport",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué hay que hacer en GKE para dar acceso desde el exterior a un servicio NodePort sin un balanceador?",
+    "correcta": "Crear reglas específicas de cortafuegos que den acceso a los nodos",
+    "distractores": [
+      "Asignar una IP pública al pod directamente",
+      "Cambiar el tipo del servicio a ClusterIP"
+    ],
+    "explicacion": "✓ La VPC privada bloquea por defecto el tráfico entrante, y una regla de cortafuegos abre solo el puerto del NodePort.\n✗ «Asignar una IP»: la IP de un pod es interna y descartable\n✗ «Cambiar el tipo»: ClusterIP solo da acceso interno"
+  },
+  {
+    "id": "despliegue-087",
+    "concepto": "despliegue-gke-nodeport",
+    "apartado": "despliegue",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 31
+    },
+    "pregunta": "¿Qué permite kubectl port-forward con un servicio de Kubernetes?",
+    "correcta": "Acceder a la aplicación desde el host local mediante un proxy temporal, para pruebas",
+    "distractores": [
+      "Exponer la aplicación a Internet con una IP pública",
+      "Abrir las reglas de cortafuegos de la VPC"
+    ],
+    "explicacion": "✓ El proxy solo escucha en la máquina del usuario, así que se prueba la aplicación sin exponerla a Internet.\n✗ «Exponer la aplicación»: el proxy es temporal y local\n✗ «Abrir las reglas»: port-forward no cambia las reglas"
   }
 ]
