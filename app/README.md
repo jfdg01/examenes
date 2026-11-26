@@ -4,7 +4,7 @@ Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están 
 
 - `nucleo/`: toda la lógica, sin leer archivos ni la red. Corre en el navegador como WASM, y el servidor usa sus tipos para validar.
 - `servidor/`: el servidor de `axum`. Guarda y sirve los archivos de cada examen, con gzip.
-- `banco/`: las herramientas del banco de un examen, para su dueño: `banco comprobar`, `banco importar`, `banco montar`, `banco paginas`, `banco preparar` y `banco revision`, con las reglas de [`BANCO.md`](../docs/BANCO.md). `comprobar` y `paginas` necesitan `pdfinfo` y `pdftoppm`, de poppler, y `paginas` necesita `ffmpeg`, con `libwebp`.
+- `banco/`: las herramientas del banco de un examen, para su dueño: `banco comprobar`, `banco importar`, `banco montar`, `banco paginas`, `banco preparar` y `banco revision`, con las reglas de [`BANCO.md`](../docs/BANCO.md). `comprobar` necesita `pdfinfo`, de poppler. `paginas` necesita `pdfinfo`, `pdftoppm` y `pdftotext`, de poppler, y `ffmpeg`, con `libwebp`.
 - `interfaz/`: la interfaz de Svelte 5, con Vite, TypeScript y Tailwind 4. `main.ts` monta `Lista.svelte` en `/`, `Plan.svelte` en `/?plan` y `App.svelte` en `/<carpeta>/`. Cada pantalla lleva en su línea de arriba `Pomodoro.svelte`, el botón del cronómetro de pausas, menos en un simulacro.
 
 ## Arrancar

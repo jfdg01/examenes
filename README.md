@@ -41,12 +41,10 @@ Un agente de código, como Claude Code, escribe las preguntas con las reglas de 
 1. Crea una carpeta en `examenes/`, como `examenes/redes/`, y pon los PDFs del temario en `examenes/redes/pdfs/`.
 2. Copia `examenes/ps/examen.json` a `examenes/redes/examen.json`, y cambia el título, los PDFs y sus apartados.
 3. Crea `examenes/redes/preguntas.json` con una lista vacía: `[]`.
-4. Saca las imágenes y el texto de cada página:
+4. Saca el texto y las imágenes de cada página:
 
 ```bash
 cargo run --manifest-path app/Cargo.toml -p banco -- paginas examenes/redes
-mkdir -p examenes/redes/texto
-for f in examenes/redes/pdfs/*.pdf; do pdftotext -layout "$f" "examenes/redes/texto/$(basename "${f%.pdf}").txt"; done
 ```
 
 5. Pide al agente que escriba el examen `examenes/redes` siguiendo `docs/LOTE.md`.

@@ -26,7 +26,7 @@ El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.
 
 ## Las reglas
 
-Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002) y la guía de redacción del NBME. Valen para cada banco, salvo el de LN, que tiene 2 o 3 preguntas por concepto y una explicación de una línea.
+Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002) y la guía de redacción del NBME. Valen para cada banco, salvo el de LN, que está congelado: tiene 2 o 3 preguntas por concepto y una explicación de una línea.
 
 1. **Un concepto es una idea del temario.** Una idea es una regla, un mecanismo, la diferencia entre 2 cosas o lo que hace algo. Una página da tantos conceptos como ideas tiene, de 0 a varios. Una fecha, un número de RFC o de norma, o el nombre de quien publica algo no son una idea.
 2. **3 preguntas por concepto**, cada una desde un ángulo distinto, lo más ortogonales entre sí que sea razonable. Así, los 3 ángulos cubren la idea entera, y la app repasa cada uno por separado.
@@ -56,7 +56,8 @@ cargo run --manifest-path app/Cargo.toml -p banco -- comprobar examenes/ps
 - dos líneas `✗` del mismo apartado con el mismo matiz, el texto después de los dos puntos;
 - una página de un PDF con preguntas que ninguna `fuente` cita y que `sin_pregunta` no marca;
 - una página que `sin_pregunta` marca y que tiene una pregunta;
-- una respuesta del historial con un `id` fuera del banco.
+- una respuesta del historial con un `id` fuera del banco;
+- un `concepto` con menos de 3 preguntas o con más de 3, en un examen con `"congelado": true` en `examen.json`. Un banco congelado es anterior a esa regla, y no se reescribe.
 
 Un aviso de una pista o de una explicación lo juzga el revisor: un absoluto que no delata al distractor se queda.
 
@@ -98,7 +99,7 @@ El borrador tiene un bloque por pregunta:
 
 ## Las fuentes
 
-Cada PDF de un examen tiene su texto, que da `pdftotext -layout`, y sus imágenes, que da `banco paginas`:
+`banco paginas` saca de cada PDF de un examen su texto, con `pdftotext -layout`, y sus imágenes:
 
 - El texto de `<examen>/pdfs/<nombre>.pdf` está en `<examen>/texto/<nombre>.txt`. Un form feed (`\f`) separa las páginas: la página N es el trozo N.
 - La imagen de la página N está en `<examen>/paginas/<nombre>-N.webp`. Un diagrama o una tabla se leen en la imagen, porque el texto los pierde.
