@@ -100,7 +100,7 @@
       <fieldset class="my-3 rounded-xl bg-tarjeta p-3.5 text-[14px]">
         {#each inicio.temas as tema (tema.pdf)}
           {@const marcados = tema.apartados.filter((a) => a.marcado).length}
-          <label class="tema flex items-center gap-2.5 py-1">
+          <label class="tema flex items-center gap-2.5 py-1.5">
             <input
               class="size-4 accent-acento"
               type="checkbox"
@@ -108,9 +108,12 @@
               indeterminate={marcados > 0 && marcados < tema.apartados.length}
               onchange={(e) => marcar(inicio.temas, tema, tema.apartados.map((a) => a.apartado), e.currentTarget.checked)}
             />
-            <span class="flex-1 font-semibold">{tema.nombre}</span>
-            <span class="text-[13px] text-tenue tabular-nums">{tema.sabes}/{tema.preguntas} preguntas</span>
-            <a class="text-[13px] text-acento underline" href="pdfs/{tema.pdf}" target="_blank">PDF</a>
+            <!-- El espacio duro tras el número deja "1." en la línea de su primera palabra. -->
+            <span class="min-w-0 flex-1">
+              <span class="block font-semibold">{tema.nombre.replace(/^(\S+\.) /, "$1\u00a0")}</span>
+              <span class="block text-[13px] text-tenue tabular-nums">{tema.sabes}/{tema.preguntas} preguntas</span>
+            </span>
+            <a class="self-start text-[13px] text-acento underline" href="pdfs/{tema.pdf}" target="_blank">PDF</a>
           </label>
           {#if tema.apartados.length > 1}
             {#each tema.apartados as a (a.apartado)}
@@ -121,8 +124,10 @@
                   checked={a.marcado}
                   onchange={(e) => marcar(inicio.temas, tema, [a.apartado], e.currentTarget.checked)}
                 />
-                <span class="flex-1">{a.nombre}</span>
-                <span class="mr-[calc(3ch+10px)] text-[13px] tabular-nums">{a.sabes}/{a.preguntas}</span>
+                <span class="min-w-0 flex-1">
+                  <span class="block">{a.nombre}</span>
+                  <span class="block text-[13px] tabular-nums">{a.sabes}/{a.preguntas} preguntas</span>
+                </span>
               </label>
             {/each}
           {/if}
