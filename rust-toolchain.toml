@@ -1,0 +1,4 @@
+# En la raíz, y no en app/: rustup busca este archivo desde el directorio de trabajo hacia arriba, y `banco` corre desde la raíz.
+[toolchain]
+channel = "1.100.0"
+targets = ["wasm32-unknown-unknown"]
