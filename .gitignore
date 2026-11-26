@@ -1,4 +1,6 @@
 *.pdf
+!asn/pdfs/*.pdf
+!ps/pdfs/*.pdf
 */respuestas.jsonl
 */notas.json
 */ronda.json
