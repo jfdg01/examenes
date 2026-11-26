@@ -4,6 +4,7 @@
   "opciones": 4,
   "minutos": 25,
   "penalizacion": 0.25,
+  "congelado": true,
   "pdfs": {
     "1_Legislacion.pdf": {"nombre": "1. Legislación y normativa", "apartados": ["rgpd", "lssi", "software", "propiedad", "delitos", "etica"]},
     "2A _Teoría.pdf": {"nombre": "2A. Seguridad e ISO 27001", "apartados": ["iso27001", "ens"]},

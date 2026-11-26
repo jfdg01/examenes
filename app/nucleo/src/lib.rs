@@ -26,6 +26,9 @@ pub struct Examen {
     /// Para cada PDF, las páginas sin pregunta y la razón de cada una. `banco comprobar` las lee. La página es texto, como cada clave de un objeto de JSON: el WASM no convierte `"1"` en un número.
     #[serde(default)]
     pub sin_pregunta: std::collections::BTreeMap<String, std::collections::BTreeMap<String, String>>,
+    /// El banco es anterior a la regla de 3 preguntas por concepto, y no se reescribe: `banco comprobar` da esa cuenta como aviso, y no como error.
+    #[serde(default)]
+    pub congelado: bool,
 }
 
 /// Un tema: un PDF del temario, con su nombre y las claves de sus apartados.
@@ -752,6 +755,7 @@ mod tests {
         pdfs: std::collections::BTreeMap::new(),
         sin_pregunta: std::collections::BTreeMap::new(),
         apartados: std::collections::BTreeMap::new(),
+        congelado: false,
     };
 
     /// Un banco de `n` conceptos `c0`, `c1`…, con una pregunta `q0`, `q1`… cada uno.

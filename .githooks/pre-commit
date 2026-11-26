@@ -2,7 +2,8 @@
 # Corre los tests si el commit cambia app/, y banco comprobar en cada examen cuyo banco cambia.
 # ponytail: comprueba el árbol de trabajo y no el stage; un stash del resto si un commit parcial lo necesita.
 set -e
-cambios=$(git diff --cached --name-only)
+# Un movimiento sin cambios (R100) no cambia el contenido: el hook lo salta, y lee la ruta nueva de los demás.
+cambios=$(git diff --cached --name-status | awk -F'\t' '$1 != "R100" { print $NF }')
 if echo "$cambios" | grep -v '\.md$' | grep -q '^app/'; then
   cargo test -q --manifest-path app/Cargo.toml
 fi

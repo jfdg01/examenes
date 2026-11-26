@@ -87,6 +87,14 @@ pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec
             errores.push(format!("{pdf}: el apartado {a} no tiene nombre en apartados de examen.json"));
         }
     }
+    if !examen.congelado {
+        errores.extend(cuentas(preguntas));
+    }
+    errores
+}
+
+/// Cada concepto con un número de preguntas distinto de 3, o de 1 si es de sigla.
+pub fn cuentas(preguntas: &[Pregunta]) -> Vec<String> {
     let mut cuenta: Vec<(&str, usize)> = Vec::new();
     for p in preguntas {
         match cuenta.iter_mut().find(|(c, _)| *c == p.concepto) {
@@ -94,14 +102,15 @@ pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec
             None => cuenta.push((&p.concepto, 1)),
         }
     }
+    let mut fallos = Vec::new();
     for (concepto, n) in cuenta {
         let esperado = if sigla(concepto) { 1 } else { 3 };
         if n != esperado {
             let s = if n == 1 { "" } else { "s" };
-            errores.push(format!("{concepto}: {n} pregunta{s}, y no {esperado}"));
+            fallos.push(format!("{concepto}: {n} pregunta{s}, y no {esperado}"));
         }
     }
-    errores
+    fallos
 }
 
 /// Los `id` de `respuestas.jsonl` que no están en el banco, sin repetir y en orden.
@@ -225,7 +234,9 @@ pub fn informe(carpeta: &Path) -> Result<bool, String> {
     for e in &errores {
         println!("{e}");
     }
-    let avisos = [pistas(&preguntas), explicaciones(&preguntas), paginas_sin_pregunta(&preguntas, &examen, carpeta)];
+    let congelado = if examen.congelado { cuentas(&preguntas) } else { Vec::new() };
+    let avisos =
+        [pistas(&preguntas), explicaciones(&preguntas), paginas_sin_pregunta(&preguntas, &examen, carpeta), congelado];
     for aviso in avisos.concat() {
         println!("Aviso: {aviso}");
     }
@@ -236,17 +247,32 @@ pub fn informe(carpeta: &Path) -> Result<bool, String> {
     Ok(errores.is_empty())
 }
 
-/// Saca `paginas/<pdf sin .pdf>-<página>.webp`, a 200 ppp y calidad 60, de cada página de los PDFs de `pdfs/`.
-/// Una imagen que ya existe se queda.
+/// Saca de cada PDF de `pdfs/` su texto, `texto/<pdf sin .pdf>.txt`, y la imagen de cada página,
+/// `paginas/<pdf sin .pdf>-<página>.webp`, a 200 ppp y calidad 60. Un texto o una imagen que ya existe se queda.
 pub fn sacar(carpeta: &Path) -> Result<(), String> {
     let destino = carpeta.join("paginas");
-    fs::create_dir_all(&destino).map_err(|e| format!("{}: {e}", destino.display()))?;
+    let textos = carpeta.join("texto");
+    for d in [&destino, &textos] {
+        fs::create_dir_all(d).map_err(|e| format!("{}: {e}", d.display()))?;
+    }
     let leidos = fs::read_dir(carpeta.join("pdfs")).map_err(|e| format!("{}/pdfs: {e}", carpeta.display()))?;
     let mut pdfs: Vec<_> =
         leidos.filter_map(|e| e.ok().map(|e| e.path())).filter(|p| p.extension().is_some_and(|x| x == "pdf")).collect();
     pdfs.sort();
     for pdf in pdfs {
         let base = pdf.file_stem().unwrap().to_string_lossy();
+        let texto = textos.join(format!("{base}.txt"));
+        if !texto.exists() {
+            let estado = Command::new("pdftotext")
+                .arg("-layout")
+                .arg(&pdf)
+                .arg(&texto)
+                .status()
+                .map_err(|e| format!("pdftotext: {e}"))?;
+            if !estado.success() {
+                return Err(format!("pdftotext falla en {}", pdf.display()));
+            }
+        }
         for pagina in 1..=paginas(&pdf)? {
             let nombre = destino.join(format!("{base}-{pagina}"));
             if nombre.with_added_extension("webp").exists() {
@@ -549,6 +575,7 @@ mod tests {
             ]),
             apartados: ["rgpd", "lssi", "ens"].map(|a| (a.into(), a.to_uppercase())).into(),
             sin_pregunta: BTreeMap::new(),
+            congelado: false,
         };
         (dir, examen)
     }
@@ -643,6 +670,14 @@ mod tests {
         assert!(comprobar(&tres, &examen, dir.path()).is_empty());
         un_error(&tres[..2], "rgpd-brecha-plazo: 2 preguntas, y no 3");
         un_error(&[tres, vec![pregunta("rgpd-004")]].concat(), "rgpd-brecha-plazo: 4 preguntas");
+    }
+
+    #[test]
+    fn un_examen_congelado_no_falla_por_la_cuenta_de_un_concepto() {
+        let (dir, examen) = carpeta();
+        let examen = Examen { congelado: true, ..examen };
+        assert!(comprobar(&[pregunta("rgpd-001")], &examen, dir.path()).is_empty());
+        assert_eq!(cuentas(&[pregunta("rgpd-001")]), ["rgpd-brecha-plazo: 1 pregunta, y no 3"]);
     }
 
     #[test]
@@ -803,7 +838,7 @@ mod tests {
     }
 
     #[test]
-    fn sacar_da_una_imagen_por_pagina_y_deja_las_que_ya_existen() {
+    fn sacar_da_un_texto_por_pdf_y_una_imagen_por_pagina_y_deja_las_que_ya_existen() {
         let (dir, _) = carpeta();
         pdf(&dir.path().join("pdfs/2 _Teoría.pdf"), 2);
         let paginas = dir.path().join("paginas");
@@ -829,6 +864,8 @@ mod tests {
         // 100 puntos a 200 ppp son 278 píxeles: el ancho va en los bytes 26 y 27 del WebP con pérdida.
         let webp = fs::read(paginas.join("1_Legislacion-2.webp")).unwrap();
         assert_eq!(u16::from_le_bytes(webp[26..28].try_into().unwrap()) & 0x3fff, 278);
+        // Un form feed cierra cada página del texto.
+        assert_eq!(fs::read_to_string(dir.path().join("texto/2 _Teoría.txt")).unwrap().matches('\x0c').count(), 2);
     }
 
     #[test]
