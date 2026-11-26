@@ -10,7 +10,7 @@ En cada pregunta, tocas el texto de una opción si estás seguro, o «dudo» si 
 
 <img src="docs/capturas/movil-solucion.webp" alt="La solución en el móvil" width="300">
 
-Cada carpeta de la raíz es un examen, con su banco de preguntas y las páginas del temario. Los PDFs de `asn/` y `ps/` están en git, y la app los abre en la página de cada pregunta. El vocabulario de la app está en [`GLOSSARY.md`](GLOSSARY.md).
+Cada carpeta de `examenes/` es un examen, con su banco de preguntas y las páginas del temario. Los PDFs de `examenes/asn/` y `examenes/ps/` están en git, y la app los abre en la página de cada pregunta. El vocabulario de la app está en [`GLOSSARY.md`](GLOSSARY.md).
 
 ## Instalar
 
@@ -27,7 +27,7 @@ cargo install wasm-bindgen-cli --version 0.2.130
 
 ```bash
 cd app/interfaz && npm install && npm run build
-cd .. && cargo run --release -p servidor -- .. 127.0.0.1:8602
+cd .. && cargo run --release -p servidor
 ```
 
 Abre `http://127.0.0.1:8602` y elige un examen. Tus respuestas y tus notas se guardan en la carpeta de cada examen, fuera de git.
@@ -38,18 +38,18 @@ Para abrir la app desde el móvil, publícala en tu tailnet con `tailscale serve
 
 Un agente de código, como Claude Code, escribe las preguntas con las reglas de [`docs/BANCO.md`](docs/BANCO.md). Para un examen entero, el agente sigue [`docs/LOTE.md`](docs/LOTE.md): un agente creador y un agente revisor por apartado, en paralelo. Antes, prepara la carpeta del examen. Los comandos necesitan `poppler` y `ffmpeg`.
 
-1. Crea una carpeta en la raíz, como `redes/`, y pon los PDFs del temario en `redes/pdfs/`.
-2. Copia `ps/examen.json` a `redes/examen.json`, y cambia el título, los PDFs y sus apartados.
-3. Crea `redes/preguntas.json` con una lista vacía: `[]`.
+1. Crea una carpeta en `examenes/`, como `examenes/redes/`, y pon los PDFs del temario en `examenes/redes/pdfs/`.
+2. Copia `examenes/ps/examen.json` a `examenes/redes/examen.json`, y cambia el título, los PDFs y sus apartados.
+3. Crea `examenes/redes/preguntas.json` con una lista vacía: `[]`.
 4. Saca las imágenes y el texto de cada página:
 
 ```bash
-cargo run --manifest-path app/Cargo.toml -p banco -- paginas redes
-mkdir -p redes/texto
-for f in redes/pdfs/*.pdf; do pdftotext -layout "$f" "redes/texto/$(basename "${f%.pdf}").txt"; done
+cargo run --manifest-path app/Cargo.toml -p banco -- paginas examenes/redes
+mkdir -p examenes/redes/texto
+for f in examenes/redes/pdfs/*.pdf; do pdftotext -layout "$f" "examenes/redes/texto/$(basename "${f%.pdf}").txt"; done
 ```
 
-5. Pide al agente que escriba el examen `redes` siguiendo `docs/LOTE.md`.
+5. Pide al agente que escriba el examen `examenes/redes` siguiendo `docs/LOTE.md`.
 
 > [!WARNING]
 > Un examen entero gasta muchos tokens. Cada apartado lanza un creador y un revisor, y cada uno lee todas las páginas de su PDF, también las imágenes. Empieza con un solo apartado para ver el gasto.

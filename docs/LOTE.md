@@ -9,7 +9,7 @@ Un lote escribe varios apartados de una vez, o rehace un examen entero. Un agent
 
 ```bash
 cargo build --manifest-path app/Cargo.toml -p banco
-app/target/debug/banco preparar ps introduccion claves
+app/target/debug/banco preparar examenes/ps introduccion claves
 ```
 
 ## 2. La creación

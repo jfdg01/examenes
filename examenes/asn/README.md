@@ -26,4 +26,4 @@ El banco tiene 777 preguntas, de los 8 temas. De los anexos de `4_Despliegue.pdf
 
 La interfaz está en https://3090.taila51846.ts.net:8601/asn/, en el servidor de `app/`. El servidor sirve todos los exámenes, y la raíz lista cada uno.
 
-El código está en `app/README.md`, y el formato y las reglas del banco están en [`docs/BANCO.md`](../docs/BANCO.md).
+El código está en `app/README.md`, y el formato y las reglas del banco están en [`docs/BANCO.md`](../../docs/BANCO.md).

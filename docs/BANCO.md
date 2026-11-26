@@ -1,6 +1,6 @@
 # El banco: `preguntas.json`
 
-El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.json`. Es el único contrato entre el banco y la interfaz.
+El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.json`. Es el único contrato entre el banco y la interfaz. `<examen>` es la carpeta del examen, como `examenes/ps`.
 
 ```json
 {
@@ -45,7 +45,7 @@ El `README.md` de cada examen dice lo que el profesor marcó como importante. Es
 ## El comprobador
 
 ```bash
-cargo run --manifest-path app/Cargo.toml -p banco -- comprobar ps
+cargo run --manifest-path app/Cargo.toml -p banco -- comprobar examenes/ps
 ```
 
 `banco comprobar` recibe la carpeta del examen, y falla con cada pregunta que rompe el formato: un `id` repetido, un `apartado` que no es de su PDF, un apartado sin nombre, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 3 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. Falla también con una línea `✗` cuya clave `«…»` no está en su distractor, en el orden de `distractores`, sin distinguir mayúsculas, y con dos líneas `✗` de una pregunta con la misma clave. También avisa, sin fallar, de estas cosas:
@@ -75,7 +75,7 @@ Un tema acaba cuando `banco comprobar` no da ningún aviso de página de su PDF.
 El agente creador escribe las preguntas en un borrador en Markdown, y no en el JSON. `banco importar` añade las preguntas del borrador al final de `preguntas.json`:
 
 ```bash
-cargo run --manifest-path app/Cargo.toml -p banco -- importar asn ciclo-de-vida borrador.md
+cargo run --manifest-path app/Cargo.toml -p banco -- importar examenes/asn ciclo-de-vida borrador.md
 ```
 
 El borrador tiene un bloque por pregunta:
@@ -149,7 +149,7 @@ El revisor deja el banco como está, y escribe un informe en JSON con una lista 
 Un agente aplica los informes:
 
 ```bash
-cargo run --manifest-path app/Cargo.toml -p banco -- revision ps ps/trabajo/revision-*.json
+cargo run --manifest-path app/Cargo.toml -p banco -- revision examenes/ps examenes/ps/trabajo/revision-*.json
 ```
 
 `banco revision` lista los fallos sin aplicar con `A mano:`, y ese agente los arregla a mano. Un concepto nuevo entra con un borrador y `banco importar`. Un borrado o un cambio de idea se hacen en el JSON. Después corre el comprobador.
