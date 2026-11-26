@@ -19,6 +19,9 @@ pub struct Examen {
     pub minutos: u32,
     /// La parte de un acierto que resta un fallo.
     pub penalizacion: f64,
+    /// La probabilidad de acierto con la que vence una pregunta. Se edita a mano.
+    #[serde(default = "retencion")]
+    pub retencion: f64,
     /// Los temas, por el nombre de su PDF de `pdfs/`.
     pub pdfs: std::collections::BTreeMap<String, Tema>,
     /// El nombre de cada apartado, por su clave. Un apartado tiene un solo nombre, aunque salga en 2 temas.
@@ -29,6 +32,10 @@ pub struct Examen {
     /// El banco es anterior a la regla de 3 preguntas por concepto, y no se reescribe: `banco comprobar` da esa cuenta como aviso, y no como error.
     #[serde(default)]
     pub congelado: bool,
+}
+
+fn retencion() -> f64 {
+    0.9
 }
 
 /// Un tema: un PDF del temario, con su nombre y las claves de sus apartados.
@@ -96,59 +103,78 @@ pub struct Datos {
     pub historial: Vec<Respuesta>,
 }
 
-/// El estado de una pregunta: sin ver, o su paso, el número de aciertos con "seguro" seguidos.
-#[derive(Clone, Copy, PartialEq, Debug)]
-pub enum Estado {
-    SinVer,
-    Paso(u32),
+/// FSRS-7 con los parámetros por defecto.
+static FSRS: std::sync::LazyLock<fsrs::FSRS> = std::sync::LazyLock::new(fsrs::FSRS::default);
+
+const DIA: f32 = 86_400.0;
+const OTRA_SESION: &str = "vuelve en la próxima sesión";
+
+/// El estado de una pregunta vista: su memoria de FSRS, la hora de su última respuesta en segundos,
+/// y si esa respuesta fue un fallo o una pregunta en blanco.
+#[derive(Clone, Copy, Debug)]
+struct Estado {
+    memoria: fsrs::MemoryState,
+    ultima: i64,
+    fallada: bool,
 }
 
 impl Estado {
-    /// Una pregunta está en "sabes" desde el paso 1.
-    pub fn sabes(self) -> bool {
-        matches!(self, Estado::Paso(n) if n > 0)
+    /// El estado tras una respuesta en `t`, desde el estado de antes, o desde una pregunta sin ver.
+    /// Un fallo y una pregunta en blanco son Again, un acierto con "dudo" es Hard, y un acierto con "seguro" es Good.
+    fn tras(antes: Option<Estado>, resultado: Resultado, seguro: bool, t: i64) -> Estado {
+        // La retención cambia solo el intervalo de cada botón, que aquí no cuenta.
+        let siguientes = FSRS
+            .next_states_with_elapsed_days(antes.map(|e| e.memoria), 0.9, antes.map_or(0.0, |e| e.dias_hasta(t)))
+            .expect("con los parámetros por defecto, FSRS da siempre una memoria finita");
+        let siguiente = match (resultado, seguro) {
+            (Resultado::Acierto, true) => siguientes.good,
+            (Resultado::Acierto, false) => siguientes.hard,
+            _ => siguientes.again,
+        };
+        Estado { memoria: siguiente.memory, ultima: t, fallada: resultado != Resultado::Acierto }
     }
 
-    /// Un acierto con "seguro" sube el paso, aunque la pregunta no haya vencido. Otra respuesta lo pone a 0.
-    /// Una pregunta sin ver acertada con "seguro" salta al paso 3, que vence después de la semana del examen.
-    pub fn tras(self, acierto: bool, seguro: bool) -> Estado {
-        match (self, sube(acierto, seguro)) {
-            (Estado::SinVer, true) => Estado::Paso(3),
-            (Estado::Paso(n), true) => Estado::Paso(n.saturating_add(1)),
-            (_, false) => Estado::Paso(0),
+    /// Los días desde la última respuesta hasta `t`. Un reloj por detrás de la última respuesta da 0.
+    fn dias_hasta(&self, t: i64) -> f32 {
+        t.saturating_sub(self.ultima).max(0) as f32 / DIA
+    }
+
+    /// La probabilidad de acierto en `ahora`, de 0 a 1.
+    fn probabilidad(&self, ahora: i64) -> f64 {
+        FSRS.current_retrievability(self.memoria, self.dias_hasta(ahora)) as f64
+    }
+
+    /// Una fallada vence siempre, aunque FSRS le dé unas horas: la sesión siguiente la saca primero.
+    fn vencida(&self, ahora: i64, retencion: f64) -> bool {
+        self.fallada || self.probabilidad(ahora) < retencion
+    }
+
+    /// Cuándo vuelve la pregunta, visto desde `ahora`: cuando su probabilidad de acierto baje de la retención.
+    fn vuelve(&self, ahora: i64, retencion: f64) -> String {
+        let vence = self.ultima as f64 + FSRS.interval_at_retrievability(self.memoria, retencion as f32) as f64 * DIA as f64;
+        let horas = ((vence - ahora as f64) / 3600.0).round();
+        if self.vencida(ahora, retencion) || horas < 1.0 {
+            return OTRA_SESION.into();
         }
-    }
-
-    /// El hueco en segundos: 1 día con el paso 1, y después ×2,5 por paso.
-    /// Con el paso a 0, el hueco es 0.
-    pub fn hueco(self) -> i64 {
-        match self {
-            Estado::SinVer | Estado::Paso(0) => 0,
-            // Un `f64` demasiado grande pasa a `i64::MAX`.
-            Estado::Paso(n) => (86_400.0 * 2.5f64.powf(n as f64 - 1.0)) as i64,
+        match (horas, (horas / 24.0).round()) {
+            (1.0, _) => "vuelve en 1 hora".into(),
+            (h, _) if h < 24.0 => format!("vuelve en {h} horas"),
+            (_, 1.0) => "vuelve en 1 día".into(),
+            (_, d) => format!("vuelve en {d} días"),
         }
     }
 }
 
-impl std::fmt::Display for Estado {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            Estado::SinVer => write!(f, "sin ver"),
-            Estado::Paso(n) => write!(f, "paso {n}"),
-        }
-    }
+/// La probabilidad de acierto de una pregunta en `ahora`, como `62 %`, o `sin ver`.
+fn en_porcentaje(estado: Option<&Estado>, ahora: i64) -> String {
+    estado.map_or("sin ver".into(), |e| format!("{} %", (100.0 * e.probabilidad(ahora)).round()))
 }
 
-/// Solo un acierto con "seguro" sube el paso de una pregunta.
-fn sube(acierto: bool, seguro: bool) -> bool {
-    acierto && seguro
-}
-
-/// La respuesta a una pregunta de la ronda, con el paso de la pregunta tras ella y su aviso.
+/// La respuesta a una pregunta de la ronda, con cuándo vuelve la pregunta tras ella y su aviso.
 #[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct Correccion {
     pub respuesta: Respuesta,
-    pub paso: String,
+    pub vuelve: String,
     pub aviso: Option<String>,
 }
 
@@ -160,14 +186,15 @@ pub fn corregir(q: &PreguntaDeSesion, opcion: Option<u32>, seguro: bool, ahora: 
         Some(_) => Resultado::Fallo,
     };
     let seguro = seguro && opcion.is_some();
-    let aviso = match (resultado, seguro) {
-        (Resultado::Fallo, true) => Some("Fallo con «seguro»: una idea falsa. Repásala."),
-        (Resultado::Acierto, false) => Some("Acierto con «dudo»: cuenta como un fallo."),
-        _ => None,
-    };
+    let aviso = (resultado == Resultado::Fallo && seguro).then(|| "Fallo con «seguro»: una idea falsa. Repásala.".into());
     Correccion {
-        paso: if sube(resultado == Resultado::Acierto, seguro) { &q.paso_tras_seguro } else { &q.paso_tras_otra }.clone(),
-        aviso: aviso.map(Into::into),
+        vuelve: match (resultado, seguro) {
+            (Resultado::Acierto, true) => &q.vuelve_tras_seguro,
+            (Resultado::Acierto, false) => &q.vuelve_tras_dudo,
+            _ => &q.vuelve_tras_fallo,
+        }
+        .clone(),
+        aviso,
         respuesta: Respuesta { id: q.id.clone(), ts: ahora, resultado, seguro },
     }
 }
@@ -177,19 +204,20 @@ pub fn restante(limite: f64, ahora: f64) -> u32 {
     ((limite - ahora) / 1000.0).round().max(0.0) as u32
 }
 
-/// El paso de cada pregunta vista del banco, por su `id`, y la hora en que vence.
-fn estados<'a>(banco: &'a [Pregunta], historial: &[Respuesta]) -> std::collections::HashMap<&'a str, (Estado, i64)> {
+type Estados<'a> = std::collections::HashMap<&'a str, Estado>;
+
+/// El estado de cada pregunta vista del banco, por su `id`.
+fn estados<'a>(banco: &'a [Pregunta], historial: &[Respuesta]) -> Estados<'a> {
     let ids: std::collections::HashSet<&str> = banco.iter().map(|q| q.id.as_str()).collect();
-    let mut ordenado: Vec<(i64, &Respuesta)> = historial.iter().map(|r| (r.ts.as_second(), r)).collect();
-    ordenado.sort_by_key(|(t, _)| *t);
-    let mut estado = std::collections::HashMap::new();
-    for (t, r) in ordenado {
+    let mut ordenado: Vec<&Respuesta> = historial.iter().collect();
+    ordenado.sort_by_key(|r| r.ts);
+    let mut estado = Estados::new();
+    for r in ordenado {
         let Some(&id) = ids.get(r.id.as_str()) else {
             continue;
         };
-        let antes = estado.get(id).map_or(Estado::SinVer, |e: &(Estado, i64)| e.0);
-        let despues = antes.tras(r.resultado == Resultado::Acierto, r.seguro);
-        estado.insert(id, (despues, t.saturating_add(despues.hueco())));
+        let despues = Estado::tras(estado.get(id).copied(), r.resultado, r.seguro, r.ts.as_second());
+        estado.insert(id, despues);
     }
     estado
 }
@@ -264,14 +292,21 @@ pub enum Ronda {
 }
 
 /// El inicio, con la tarjeta de la nota para sacar más de `objetivo` sobre 10.
-/// Sin selección, todo está marcado. Un par de la selección que no existe no cuenta.
-pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], seleccion: Option<&[Par]>, objetivo: f64) -> Inicio {
+/// Sin selección, todo está marcado. Un par de la selección que no existe no cuenta. `ahora` va en segundos desde 1970.
+pub fn inicio(
+    examen: &Examen,
+    banco: &[Pregunta],
+    historial: &[Respuesta],
+    seleccion: Option<&[Par]>,
+    objetivo: f64,
+    ahora: i64,
+) -> Inicio {
     let titulo = examen.titulo.clone();
     if banco.is_empty() {
         return Inicio::BancoVacio { titulo };
     }
     let estado = estados(banco, historial);
-    let sabe = |q: &&Pregunta| estado.get(q.id.as_str()).is_some_and(|e| e.0.sabes());
+    let sabe = |q: &&Pregunta| estado.get(q.id.as_str()).is_some_and(|e| !e.vencida(ahora, examen.retencion));
     let temas: Vec<TemaDelInicio> = examen
         .pdfs
         .iter()
@@ -294,9 +329,10 @@ pub fn inicio(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], sele
         })
         .collect();
     let con = temas.iter().filter(|t| t.apartados.iter().any(|a| a.marcado)).count();
-    let parte = temas.iter().any(|t| t.apartados.iter().any(|a| !a.marcado)).then(|| format!("con {con} de {} temas", temas.len()));
+    let parte =
+        temas.iter().any(|t| t.apartados.iter().any(|a| !a.marcado)).then(|| format!("con {con} de {} temas", temas.len()));
     let banco = de_la_seleccion(banco, seleccion);
-    let tarjeta = tarjeta(examen, &banco, historial, objetivo);
+    let tarjeta = tarjeta(examen, &banco, historial, objetivo, ahora);
     let sesion = conceptos(&banco).min(TAMANO_SESION as u32);
     let simulacro = examen.preguntas.min(banco.len() as u32);
     Inicio::Listo { titulo, sesion, simulacro, tarjeta, temas, parte }
@@ -341,12 +377,14 @@ pub struct PreguntaDeSesion {
     /// El índice de la opción correcta en `opciones`.
     pub correcta: u32,
     pub explicacion: String,
-    /// El paso de la pregunta antes de contestar.
-    pub paso: String,
-    /// El paso tras un acierto con "seguro".
-    pub paso_tras_seguro: String,
-    /// El paso tras un fallo, un acierto con "dudo" o una pregunta en blanco.
-    pub paso_tras_otra: String,
+    /// La probabilidad de acierto antes de contestar, como `62 %`, o `sin ver`.
+    pub probabilidad: String,
+    /// Cuándo vuelve la pregunta con su estado de ahora, como `vuelve en 3 días`.
+    pub vuelve: String,
+    /// Cuándo vuelve tras un acierto con "seguro", con "dudo", y tras un fallo o una pregunta en blanco.
+    pub vuelve_tras_seguro: String,
+    pub vuelve_tras_dudo: String,
+    pub vuelve_tras_fallo: String,
     /// El PDF y la página, como `2A _Teoría.pdf · pág. 7`.
     pub fuente: String,
     pub pagina: u32,
@@ -359,31 +397,41 @@ pub struct PreguntaDeSesion {
 }
 
 /// La sesión de 12, con una pregunta por concepto como mucho. Recorre las preguntas en este orden, y toma la primera de cada concepto:
-/// las falladas, las vencidas con paso 1 o más, las hermanas sin ver de un concepto visto, las de los conceptos sin ver,
-/// y el relleno con las que vencen antes. Cada grupo va del que vence antes al que vence después, y el azar rompe los empates.
+/// las falladas, del fallo más viejo al más nuevo, las demás vencidas, las hermanas sin ver de un concepto visto, las de los conceptos sin ver,
+/// y el relleno con las no vencidas. Las vencidas y el relleno van de la menor probabilidad de acierto a la mayor, y el azar rompe los empates.
 /// `ahora` va en segundos desde 1970.
-pub fn sesion(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], ahora: i64, azar: &mut Azar) -> Vec<PreguntaDeSesion> {
+pub fn sesion(
+    examen: &Examen,
+    banco: &[Pregunta],
+    historial: &[Respuesta],
+    ahora: i64,
+    azar: &mut Azar,
+) -> Vec<PreguntaDeSesion> {
     let estado = estados(banco, historial);
     let vistos: std::collections::HashSet<&str> =
         banco.iter().filter(|q| estado.contains_key(q.id.as_str())).map(|q| q.concepto.as_str()).collect();
     let mut orden: Vec<&Pregunta> = banco.iter().collect();
     azar.barajar(&mut orden);
-    orden.sort_by_key(|q| match estado.get(q.id.as_str()) {
-        Some(&(Estado::Paso(0), vence)) => (0, vence),
-        Some(&(_, vence)) if vence <= ahora => (1, vence),
-        None if vistos.contains(q.concepto.as_str()) => (2, 0),
-        None => (3, 0),
-        Some(&(_, vence)) => (4, vence),
-    });
+    let clave = |q: &Pregunta| match estado.get(q.id.as_str()) {
+        Some(e) if e.fallada => (0, e.ultima as f64),
+        Some(e) if e.vencida(ahora, examen.retencion) => (1, e.probabilidad(ahora)),
+        None if vistos.contains(q.concepto.as_str()) => (2, 0.0),
+        None => (3, 0.0),
+        Some(e) => (4, e.probabilidad(ahora)),
+    };
+    let mut orden: Vec<((u8, f64), &Pregunta)> = orden.into_iter().map(|q| (clave(q), q)).collect();
+    orden.sort_by(|(a, _), (b, _)| a.0.cmp(&b.0).then(a.1.total_cmp(&b.1)));
     let mut usados = std::collections::HashSet::new();
-    let mut elegidas: Vec<&Pregunta> = orden.into_iter().filter(|q| usados.insert(q.concepto.as_str())).take(TAMANO_SESION).collect();
+    let mut elegidas: Vec<&Pregunta> =
+        orden.into_iter().map(|(_, q)| q).filter(|q| usados.insert(q.concepto.as_str())).take(TAMANO_SESION).collect();
     azar.barajar(&mut elegidas);
-    elegidas.into_iter().map(|q| de_la_ronda(examen, q, &estado, azar)).collect()
+    elegidas.into_iter().map(|q| de_la_ronda(examen, q, &estado, ahora, azar)).collect()
 }
 
-/// La pregunta con sus opciones al azar y su paso.
-fn de_la_ronda(examen: &Examen, q: &Pregunta, estado: &std::collections::HashMap<&str, (Estado, i64)>, azar: &mut Azar) -> PreguntaDeSesion {
-    let paso = estado.get(q.id.as_str()).map_or(Estado::SinVer, |e| e.0);
+/// La pregunta con sus opciones al azar, su probabilidad de acierto y cuándo vuelve.
+fn de_la_ronda(examen: &Examen, q: &Pregunta, estado: &Estados, ahora: i64, azar: &mut Azar) -> PreguntaDeSesion {
+    let antes = estado.get(q.id.as_str()).copied();
+    let vuelve_tras = |resultado, seguro| Estado::tras(antes, resultado, seguro, ahora).vuelve(ahora, examen.retencion);
     let mut opciones: Vec<String> = std::iter::once(&q.correcta).chain(&q.distractores).cloned().collect();
     azar.barajar(&mut opciones);
     PreguntaDeSesion {
@@ -395,9 +443,11 @@ fn de_la_ronda(examen: &Examen, q: &Pregunta, estado: &std::collections::HashMap
         copiar: para_copiar(&q.pregunta, &opciones),
         opciones,
         explicacion: q.explicacion.clone(),
-        paso: paso.to_string(),
-        paso_tras_seguro: paso.tras(true, true).to_string(),
-        paso_tras_otra: paso.tras(false, false).to_string(),
+        probabilidad: en_porcentaje(antes.as_ref(), ahora),
+        vuelve: antes.map_or(OTRA_SESION.into(), |e| e.vuelve(ahora, examen.retencion)),
+        vuelve_tras_seguro: vuelve_tras(Resultado::Acierto, true),
+        vuelve_tras_dudo: vuelve_tras(Resultado::Acierto, false),
+        vuelve_tras_fallo: vuelve_tras(Resultado::Fallo, false),
         fuente: format!("{} · pág. {}", q.fuente.pdf, q.fuente.pagina),
         pagina: q.fuente.pagina,
         imagen: format!("paginas/{}-{}.webp", q.fuente.pdf.strip_suffix(".pdf").unwrap_or(&q.fuente.pdf), q.fuente.pagina),
@@ -462,18 +512,19 @@ pub struct Simulacro {
     pub preguntas: Vec<PreguntaDeSesion>,
 }
 
-pub fn simulacro(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], azar: &mut Azar) -> Simulacro {
+pub fn simulacro(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], ahora: i64, azar: &mut Azar) -> Simulacro {
     let estado = estados(banco, historial);
     let mut barajado: Vec<&Pregunta> = banco.iter().collect();
     azar.barajar(&mut barajado);
     let mut usados = std::collections::HashSet::new();
-    let (mut elegidas, hermanas): (Vec<&Pregunta>, Vec<&Pregunta>) = barajado.into_iter().partition(|q| usados.insert(q.concepto.as_str()));
+    let (mut elegidas, hermanas): (Vec<&Pregunta>, Vec<&Pregunta>) =
+        barajado.into_iter().partition(|q| usados.insert(q.concepto.as_str()));
     elegidas.extend(hermanas);
     elegidas.truncate(examen.preguntas as usize);
     azar.barajar(&mut elegidas);
     Simulacro {
         segundos: examen.minutos.saturating_mul(60),
-        preguntas: elegidas.into_iter().map(|q| de_la_ronda(examen, q, &estado, azar)).collect(),
+        preguntas: elegidas.into_iter().map(|q| de_la_ronda(examen, q, &estado, ahora, azar)).collect(),
     }
 }
 
@@ -530,11 +581,21 @@ pub struct RondaAMedias {
 
 /// Una ronda con un id que no está en el banco, o con más resultados que preguntas, no se restaura.
 /// Una lista de resultados más corta que `ids` acaba en preguntas sin contestar.
-pub fn restaurar(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], guardado: &Guardado, azar: &mut Azar) -> Option<RondaAMedias> {
+pub fn restaurar(
+    examen: &Examen,
+    banco: &[Pregunta],
+    historial: &[Respuesta],
+    guardado: &Guardado,
+    ahora: i64,
+    azar: &mut Azar,
+) -> Option<RondaAMedias> {
     let r = guardado.ronda.as_ref()?;
     let estado = estados(banco, historial);
-    let preguntas: Vec<_> =
-        r.ids.iter().map(|id| Some(de_la_ronda(examen, banco.iter().find(|q| q.id == *id)?, &estado, azar))).collect::<Option<_>>()?;
+    let preguntas: Vec<_> = r
+        .ids
+        .iter()
+        .map(|id| Some(de_la_ronda(examen, banco.iter().find(|q| q.id == *id)?, &estado, ahora, azar)))
+        .collect::<Option<_>>()?;
     if r.resultados.len() > preguntas.len() {
         return None;
     }
@@ -610,10 +671,10 @@ pub struct Dudas {
     pub detalle: Option<String>,
 }
 
-/// La tarjeta de la nota para sacar más de `objetivo` sobre 10.
-pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], objetivo: f64) -> Tarjeta {
+/// La tarjeta de la nota para sacar más de `objetivo` sobre 10, en `ahora`.
+pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], objetivo: f64, ahora: i64) -> Tarjeta {
     let a_ciegas = 1.0 / examen.opciones as f64;
-    let (sabes, no_sabes, sin_ver) = cuenta(banco, historial);
+    let (sabes, no_sabes, sin_ver) = cuenta(examen, banco, historial, ahora);
     let n = sabes + no_sabes + sin_ver;
     let total = n.max(1) as f64;
     // Una pregunta en blanco no es una duda contestada.
@@ -630,7 +691,7 @@ pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], obj
     // El ritmo: las preguntas que pasaron a "sabes" en las últimas respuestas, por sesión.
     let mut ordenado = historial.to_vec();
     ordenado.sort_by_key(|r| r.ts);
-    let antes = cuenta(banco, &ordenado[..ordenado.len().saturating_sub(VENTANA)]).0;
+    let antes = cuenta(examen, banco, &ordenado[..ordenado.len().saturating_sub(VENTANA)], ahora).0;
     let sesiones_de_la_ventana =
         if historial.is_empty() { 1.0 } else { historial.len().min(VENTANA) as f64 / TAMANO_SESION as f64 };
     let ritmo = (sabes as f64 - antes as f64) / sesiones_de_la_ventana;
@@ -674,10 +735,10 @@ const META: f64 = 0.95;
 /// Las respuestas que cuentan para el ritmo: 5 sesiones de 12.
 const VENTANA: usize = 60;
 
-/// Las preguntas en "sabes", en "no sabes" y sin ver.
-fn cuenta(banco: &[Pregunta], historial: &[Respuesta]) -> (u32, u32, u32) {
+/// Las preguntas en "sabes", en "no sabes" y sin ver, en `ahora`.
+fn cuenta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], ahora: i64) -> (u32, u32, u32) {
     let estado = estados(banco, historial);
-    let sabes = estado.values().filter(|e| e.0.sabes()).count();
+    let sabes = estado.values().filter(|e| !e.vencida(ahora, examen.retencion)).count();
     (sabes as u32, (estado.len() - sabes) as u32, (banco.len() - estado.len()) as u32)
 }
 
@@ -752,6 +813,7 @@ mod tests {
         opciones: 4,
         minutos: 25,
         penalizacion: 0.25,
+        retencion: 0.9,
         pdfs: std::collections::BTreeMap::new(),
         sin_pregunta: std::collections::BTreeMap::new(),
         apartados: std::collections::BTreeMap::new(),
@@ -775,6 +837,9 @@ mod tests {
             .collect()
     }
 
+    /// Una hora después de `historial_de`.
+    const TRAS: i64 = 2 * 3600;
+
     fn cerca(a: f64, b: f64) {
         assert!((a - b).abs() < 1e-9, "{a} ≠ {b}");
     }
@@ -794,18 +859,18 @@ mod tests {
     #[test]
     fn una_duda_acierta_con_el_porcentaje_de_dudo_en_lo_que_viste_y_a_ciegas_en_lo_que_no() {
         let h = historial_de(&[(0, true, true), (1, false, false), (2, true, false)]);
-        let t = tarjeta(&LN, &banco_de(10), &h, 5.0);
-        assert_eq!((t.sabes, t.no_sabes, t.sin_ver), (1, 2, 7));
+        let t = tarjeta(&LN, &banco_de(10), &h, 5.0, TRAS);
+        assert_eq!((t.sabes, t.no_sabes, t.sin_ver), (2, 1, 7));
         assert_eq!(t.dudas[0].detalle.as_deref(), Some("1 de 2 «dudo»"));
-        // 2 preguntas al 50 % y 7 al 25 %: 11/36.
-        assert_eq!([0, 1, 2].map(|i| t.dudas[i].porcentaje), [50, 25, 31]);
+        // Una pregunta al 50 % y 7 al 25 %: 9/32.
+        assert_eq!([0, 1, 2].map(|i| t.dudas[i].porcentaje), [50, 25, 28]);
     }
 
     #[test]
     fn la_tarjeta_sigue_la_forma_con_la_probabilidad_mas_alta_y_el_consejo_da_las_dos() {
         // 10 preguntas que sabes y 10 con un fallo con dudo: contestar solo resta, y una duda acierta 0 %.
         let respuestas: Vec<_> = (0..10).map(|i| (i, true, true)).chain((10..20).map(|i| (i, false, false))).collect();
-        let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 5.0);
+        let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 5.0, TRAS);
         assert_eq!((t.hoy, t.si_contestas, t.en_blanco), (59, 25, 59));
         assert_eq!(t.consejo, "Deja las dudas en blanco");
     }
@@ -815,7 +880,7 @@ mod tests {
         // Para un 10 con 20 preguntas solo valen 20 aciertos, así que el 95 % pide todas las preguntas.
         // 4 preguntas nuevas en 4 respuestas son 12 por sesión, y faltan 16.
         let h = historial_de(&[(0, true, true), (1, true, true), (2, true, true), (3, true, true)]);
-        let t = tarjeta(&LN, &banco_de(20), &h, 10.0);
+        let t = tarjeta(&LN, &banco_de(20), &h, 10.0, TRAS);
         assert_eq!((t.sabes, t.meta), (4, 20));
         assert_eq!(t.sesiones, "≈2 sesiones");
     }
@@ -824,7 +889,7 @@ mod tests {
     fn una_sola_sesion_va_en_singular() {
         // 19 preguntas nuevas en 19 respuestas son 12 por sesión, y falta 1.
         let respuestas: Vec<_> = (0..19).map(|i| (i, true, true)).collect();
-        let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 10.0);
+        let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 10.0, TRAS);
         assert_eq!(t.sesiones, "≈1 sesión");
     }
 
@@ -832,7 +897,7 @@ mod tests {
     fn el_ritmo_cuenta_solo_las_60_ultimas_respuestas() {
         // 10 preguntas nuevas en las 60 últimas respuestas son 2 por sesión, y faltan 50.
         let respuestas: Vec<_> = (0..50).map(|i| (i, true, true)).chain((0..50).map(|_| (0, true, true))).collect();
-        let t = tarjeta(&LN, &banco_de(100), &historial_de(&respuestas), 10.0);
+        let t = tarjeta(&LN, &banco_de(100), &historial_de(&respuestas), 10.0, TRAS);
         assert_eq!((t.sabes, t.meta), (50, 100));
         assert_eq!(t.sesiones, "≈25 sesiones");
     }
@@ -840,31 +905,34 @@ mod tests {
     #[test]
     fn con_un_95_hoy_no_faltan_preguntas_ni_sesiones() {
         let respuestas: Vec<_> = (0..20).map(|i| (i, true, true)).collect();
-        let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 5.0);
+        let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 5.0, TRAS);
         assert_eq!((t.sabes, t.meta, t.hoy), (20, 20, 100));
         assert_eq!(t.sesiones, "✓");
     }
 
     #[test]
     fn sin_ritmo_las_sesiones_no_se_pueden_calcular() {
-        let t = tarjeta(&LN, &banco_de(20), &historial_de(&[(0, false, true)]), 10.0);
+        let t = tarjeta(&LN, &banco_de(20), &historial_de(&[(0, false, true)]), 10.0, TRAS);
         assert_eq!((t.sabes, t.meta), (0, 20));
         assert_eq!(t.sesiones, "? sesiones");
     }
 
     #[test]
-    fn sabes_es_un_paso_de_1_o_mas() {
-        // q0 sube a paso 2, q1 vuelve a paso 0 tras un acierto con dudo, y una respuesta huérfana no cuenta.
-        let mut h = historial_de(&[(0, true, true), (0, true, true), (1, true, true), (1, true, false)]);
+    fn sabes_es_una_pregunta_vista_y_no_vencida() {
+        // q0 acierta con "dudo", q1 falla tras un acierto, y una respuesta huérfana no cuenta.
+        let mut h = historial_de(&[(0, true, true), (0, true, false), (1, true, true), (1, false, true)]);
         h.push(respuesta("x", "1970-01-01T01:00:00Z", true, true));
-        let t = tarjeta(&LN, &banco_de(3), &h, 5.0);
+        let t = tarjeta(&LN, &banco_de(3), &h, 5.0, TRAS);
         assert_eq!((t.sabes, t.no_sabes, t.sin_ver), (1, 1, 1));
+        // Un mes después, q0 bajó de la retención y vence.
+        let t = tarjeta(&LN, &banco_de(3), &h, 5.0, 30 * 86_400);
+        assert_eq!((t.sabes, t.no_sabes, t.sin_ver), (0, 2, 1));
     }
 
     #[test]
     fn un_examen_de_3_opciones_sin_penalizacion_aconseja_contestar() {
         let asn = Examen { preguntas: 35, opciones: 3, minutos: 45, penalizacion: 0.0, ..LN };
-        let t = tarjeta(&asn, &banco_de(20), &[], 5.0);
+        let t = tarjeta(&asn, &banco_de(20), &[], 5.0, TRAS);
         assert_eq!(t.dudas[2].porcentaje, 33);
         assert_eq!(t.dudas[1].detalle.as_deref(), Some("a ciegas, 1 de 3"));
         assert_eq!(t.consejo, "Contesta las dudas");
@@ -872,7 +940,7 @@ mod tests {
 
     #[test]
     fn la_tarjeta_sin_historial_acierta_una_duda_a_ciegas_y_no_tiene_ritmo() {
-        let t = tarjeta(&LN, &banco_de(20), &[], 5.0);
+        let t = tarjeta(&LN, &banco_de(20), &[], 5.0, TRAS);
         assert_eq!((t.sabes, t.no_sabes, t.sin_ver, t.hoy, t.si_contestas, t.en_blanco), (0, 0, 20, 0, 0, 0));
         assert_eq!(t.consejo, "Contesta las dudas");
         assert_eq!(t.sesiones, "? sesiones");
@@ -912,14 +980,14 @@ mod tests {
     #[test]
     fn el_simulacro_saca_al_azar_las_preguntas_del_examen_con_su_reloj() {
         let banco: Vec<Pregunta> = (0..90).map(|i| pregunta(&format!("q{i}"), &format!("c{}", i / 3))).collect();
-        let s = simulacro(&LN, &banco, &[], &mut Azar::new(1));
+        let s = simulacro(&LN, &banco, &[], 0, &mut Azar::new(1));
         assert_eq!((s.segundos, s.preguntas.len()), (25 * 60, 20));
-        let otro = simulacro(&LN, &banco, &[], &mut Azar::new(2));
+        let otro = simulacro(&LN, &banco, &[], 0, &mut Azar::new(2));
         assert_ne!(
             s.preguntas.iter().map(|q| &q.id).collect::<Vec<_>>(),
             otro.preguntas.iter().map(|q| &q.id).collect::<Vec<_>>()
         );
-        assert_eq!(simulacro(&LN, &banco[..5], &[], &mut Azar::new(1)).preguntas.len(), 5);
+        assert_eq!(simulacro(&LN, &banco[..5], &[], 0, &mut Azar::new(1)).preguntas.len(), 5);
     }
 
     #[test]
@@ -933,10 +1001,10 @@ mod tests {
         for semilla in 0..20 {
             // 30 conceptos de 3 preguntas: 20 conceptos distintos.
             let grande: Vec<Pregunta> = (0..90).map(|i| pregunta(&format!("q{i}"), &format!("c{}", i / 3))).collect();
-            assert_eq!(conceptos_de(&simulacro(&LN, &grande, &[], &mut Azar::new(semilla))), 20);
+            assert_eq!(conceptos_de(&simulacro(&LN, &grande, &[], 0, &mut Azar::new(semilla))), 20);
             // 10 conceptos de 3 preguntas: los 10 conceptos, y 10 hermanas sin repetir pregunta.
             let corto = &grande[..30];
-            let s = simulacro(&LN, corto, &[], &mut Azar::new(semilla));
+            let s = simulacro(&LN, corto, &[], 0, &mut Azar::new(semilla));
             let mut ids: Vec<&str> = s.preguntas.iter().map(|q| q.id.as_str()).collect();
             ids.sort();
             ids.dedup();
@@ -945,12 +1013,13 @@ mod tests {
     }
 
     #[test]
-    fn una_pregunta_del_simulacro_da_su_paso_y_no_el_de_sus_hermanas() {
+    fn una_pregunta_del_simulacro_da_su_probabilidad_y_no_la_de_sus_hermanas() {
         let banco = [pregunta("a1", "a"), pregunta("a2", "a")];
         let historial = [respuesta("a1", &minuto(0, 0), true, true)];
-        let s = simulacro(&LN, &banco, &historial, &mut Azar::new(1));
-        let paso = |id: &str| s.preguntas.iter().find(|q| q.id == id).unwrap().paso.clone();
-        assert_eq!((paso("a1").as_str(), paso("a2").as_str()), ("paso 3", "sin ver"));
+        let ahora = minuto(0, 0).parse::<Timestamp>().unwrap().as_second();
+        let s = simulacro(&LN, &banco, &historial, ahora, &mut Azar::new(1));
+        let probabilidad = |id: &str| s.preguntas.iter().find(|q| q.id == id).unwrap().probabilidad.clone();
+        assert_eq!((probabilidad("a1").as_str(), probabilidad("a2").as_str()), ("100 %", "sin ver"));
     }
 
     pub(crate) fn pregunta(id: &str, concepto: &str) -> Pregunta {
@@ -1002,7 +1071,7 @@ mod tests {
         assert_eq!((r.banco.id.as_str(), r.banco.concepto.as_str()), ("a1", "a"));
         assert_eq!((r.ronda.opciones, r.ronda.correcta), (e.opciones.clone(), 1));
         assert_eq!(r.ronda.copiar, "¿a1 bien?\n\nA) a ratos\nB) claro\nC) jamás\nD) no");
-        assert_eq!(r.ronda.paso, q.paso);
+        assert_eq!(r.ronda.probabilidad, q.probabilidad);
         assert!(editar(&[pregunta("b1", "b")], &q, &e).is_none(), "sin la pregunta en el banco no hay edición");
     }
 
@@ -1024,9 +1093,9 @@ mod tests {
     fn el_inicio_da_el_titulo_y_las_preguntas_de_la_sesion() {
         let banco = [pregunta("a1", "a"), pregunta("a2", "a"), pregunta("b1", "b")];
         let examen = Examen { titulo: "LN".into(), ..LN };
-        let Inicio::Listo { titulo, sesion, simulacro, .. } = inicio(&examen, &banco, &[], None, 5.0) else { panic!() };
+        let Inicio::Listo { titulo, sesion, simulacro, .. } = inicio(&examen, &banco, &[], None, 5.0, TRAS) else { panic!() };
         assert_eq!((titulo.as_str(), sesion, simulacro), ("LN", 2, 3));
-        assert_eq!(inicio(&examen, &[], &[], None, 5.0), Inicio::BancoVacio { titulo: "LN".into() });
+        assert_eq!(inicio(&examen, &[], &[], None, 5.0, TRAS), Inicio::BancoVacio { titulo: "LN".into() });
     }
 
     fn par(pdf: &str, apartado: &str) -> Par {
@@ -1035,7 +1104,10 @@ mod tests {
 
     /// 2 temas: «Uno» con RGPD, y «Dos» con ENS y Riesgos. Un concepto por apartado, y 2 preguntas en ENS.
     fn temario() -> (Examen, Vec<Pregunta>) {
-        let tema = |nombre: &str, apartados: &[&str]| Tema { nombre: nombre.into(), apartados: apartados.iter().map(|a| a.to_string()).collect() };
+        let tema = |nombre: &str, apartados: &[&str]| Tema {
+            nombre: nombre.into(),
+            apartados: apartados.iter().map(|a| a.to_string()).collect(),
+        };
         let examen = Examen {
             pdfs: [("1.pdf".into(), tema("Uno", &["rgpd"])), ("2.pdf".into(), tema("Dos", &["ens", "riesgos"]))].into(),
             apartados: [("rgpd", "RGPD"), ("ens", "ENS"), ("riesgos", "Riesgos")].map(|(a, n)| (a.into(), n.into())).into(),
@@ -1046,25 +1118,35 @@ mod tests {
             fuente: Fuente { pdf: pdf.into(), pagina: 1 },
             ..pregunta(id, concepto)
         };
-        let banco = vec![q("a1", "a", "1.pdf", "rgpd"), q("b1", "b", "2.pdf", "ens"), q("b2", "b", "2.pdf", "ens"), q("c1", "c", "2.pdf", "riesgos")];
+        let banco = vec![
+            q("a1", "a", "1.pdf", "rgpd"),
+            q("b1", "b", "2.pdf", "ens"),
+            q("b2", "b", "2.pdf", "ens"),
+            q("c1", "c", "2.pdf", "riesgos"),
+        ];
         (examen, banco)
     }
 
     #[test]
     fn sin_seleccion_todo_esta_marcado() {
         let (examen, banco) = temario();
-        let Inicio::Listo { sesion, temas, parte, .. } = inicio(&examen, &banco, &[], None, 5.0) else { panic!() };
+        let Inicio::Listo { sesion, temas, parte, .. } = inicio(&examen, &banco, &[], None, 5.0, TRAS) else { panic!() };
         assert_eq!((sesion, parte), (3, None));
-        let resumen: Vec<_> = temas.iter().map(|t| (t.nombre.as_str(), t.preguntas, t.apartados.iter().all(|a| a.marcado))).collect();
+        let resumen: Vec<_> =
+            temas.iter().map(|t| (t.nombre.as_str(), t.preguntas, t.apartados.iter().all(|a| a.marcado))).collect();
         assert_eq!(resumen, [("Uno", 1, true), ("Dos", 3, true)]);
-        assert_eq!(temas[1].apartados.iter().map(|a| (a.nombre.as_str(), a.preguntas)).collect::<Vec<_>>(), [("ENS", 2), ("Riesgos", 1)]);
+        assert_eq!(
+            temas[1].apartados.iter().map(|a| (a.nombre.as_str(), a.preguntas)).collect::<Vec<_>>(),
+            [("ENS", 2), ("Riesgos", 1)]
+        );
     }
 
     #[test]
     fn cada_tema_y_cada_apartado_cuentan_las_preguntas_que_sabes() {
         let (examen, banco) = temario();
-        let historial = [respuesta("b1", "2026-01-01T00:00:00Z", true, true), respuesta("c1", "2026-01-01T00:00:00Z", false, false)];
-        let Inicio::Listo { temas, .. } = inicio(&examen, &banco, &historial, None, 5.0) else { panic!() };
+        let historial =
+            [respuesta("b1", "2026-01-01T00:00:00Z", true, true), respuesta("c1", "2026-01-01T00:00:00Z", false, false)];
+        let Inicio::Listo { temas, .. } = inicio(&examen, &banco, &historial, None, 5.0, TRAS) else { panic!() };
         assert_eq!(temas.iter().map(|t| (t.sabes, t.preguntas)).collect::<Vec<_>>(), [(0, 1), (1, 3)]);
         assert_eq!(temas[1].apartados.iter().map(|a| (a.sabes, a.preguntas)).collect::<Vec<_>>(), [(1, 2), (0, 1)]);
     }
@@ -1073,7 +1155,11 @@ mod tests {
     fn la_seleccion_marca_sus_pares_y_las_rondas_salen_de_ella() {
         let (examen, banco) = temario();
         let seleccion = [par("2.pdf", "ens"), par("9.pdf", "viejo")];
-        let Inicio::Listo { sesion, simulacro, tarjeta, temas, parte, .. } = inicio(&examen, &banco, &[], Some(&seleccion), 5.0) else { panic!() };
+        let Inicio::Listo { sesion, simulacro, tarjeta, temas, parte, .. } =
+            inicio(&examen, &banco, &[], Some(&seleccion), 5.0, TRAS)
+        else {
+            panic!()
+        };
         assert_eq!((sesion, simulacro, tarjeta.sin_ver), (1, 2, 2));
         assert_eq!(parte.as_deref(), Some("con 1 de 2 temas"));
         assert_eq!(temas[1].apartados.iter().map(|a| a.marcado).collect::<Vec<_>>(), [true, false]);
@@ -1091,42 +1177,24 @@ mod tests {
     #[test]
     fn una_seleccion_vacia_da_rondas_de_0_preguntas() {
         let (examen, banco) = temario();
-        let Inicio::Listo { sesion, simulacro, parte, .. } = inicio(&examen, &banco, &[], Some(&[]), 5.0) else { panic!() };
+        let Inicio::Listo { sesion, simulacro, parte, .. } = inicio(&examen, &banco, &[], Some(&[]), 5.0, TRAS) else { panic!() };
         assert_eq!((sesion, simulacro, parte.as_deref()), (0, 0, Some("con 0 de 2 temas")));
     }
 
-    /// El paso de la única pregunta del banco, como lo muestra la sesión.
-    fn paso(banco: &[Pregunta], historial: &[Respuesta]) -> String {
-        sesion(&LN, banco, historial, 0, &mut Azar::new(1)).remove(0).paso
+    /// La única pregunta del banco, como la muestra una sesión en `ahora`.
+    fn la_pregunta(banco: &[Pregunta], historial: &[Respuesta], ahora: &str) -> PreguntaDeSesion {
+        sesion(&LN, banco, historial, ahora.parse::<Timestamp>().unwrap().as_second(), &mut Azar::new(1)).remove(0)
     }
 
     #[test]
-    fn un_acierto_con_seguro_sube_el_paso_aunque_no_haya_vencido() {
+    fn la_pregunta_muestra_su_probabilidad_de_acierto_que_baja_con_el_tiempo() {
         let banco = [pregunta("a1", "a")];
-        let historial = [
-            respuesta("a1", "2026-11-04T12:00:00Z", false, false),
-            respuesta("a1", "2026-11-04T12:01:00Z", true, true),
-            respuesta("a1", "2026-11-04T12:02:00Z", true, true),
-        ];
-        assert_eq!(paso(&banco, &historial), "paso 2");
-        assert_eq!(paso(&banco, &[]), "sin ver");
-    }
-
-    #[test]
-    fn cualquier_otra_respuesta_pone_el_paso_a_0() {
-        let banco = [pregunta("a1", "a")];
-        for (acierto, seguro) in [(true, false), (false, true), (false, false)] {
-            let historial =
-                [respuesta("a1", "2026-11-04T12:00:00Z", true, true), respuesta("a1", "2026-11-04T12:01:00Z", acierto, seguro)];
-            assert_eq!(paso(&banco, &historial), "paso 0", "{acierto} {seguro}");
-        }
-    }
-
-    #[test]
-    fn los_huecos_son_1_dia_y_despues_por_2_y_medio() {
-        let horas = |n| Estado::Paso(n).hueco() / 3600;
-        assert_eq!([0, 1, 2, 3].map(horas), [0, 24, 60, 150]);
-        assert_eq!(Estado::Paso(u32::MAX).hueco(), i64::MAX);
+        let historial = [respuesta("a1", "2026-11-04T12:00:00Z", true, true)];
+        let probabilidad = |ahora| la_pregunta(&banco, &historial, ahora).probabilidad;
+        // Un acierto con "seguro" en una pregunta sin ver es Good: FSRS-7 la deja en el 90 % a los 4,78 días.
+        assert_eq!(probabilidad("2026-11-04T12:00:00Z"), "100 %");
+        assert_eq!(probabilidad("2026-11-09T06:40:00Z"), "90 %");
+        assert_eq!(la_pregunta(&banco, &[], AHORA).probabilidad, "sin ver");
     }
 
     fn minuto(m: i64, s: i64) -> String {
@@ -1141,10 +1209,11 @@ mod tests {
     }
 
     fn de_la_sesion(banco: &[Pregunta], historial: &[Respuesta]) -> Vec<String> {
-        let mut ids: Vec<String> = sesion(&LN, banco, historial, AHORA.parse::<Timestamp>().unwrap().as_second(), &mut Azar::new(1))
-            .into_iter()
-            .map(|q| q.id)
-            .collect();
+        let mut ids: Vec<String> =
+            sesion(&LN, banco, historial, AHORA.parse::<Timestamp>().unwrap().as_second(), &mut Azar::new(1))
+                .into_iter()
+                .map(|q| q.id)
+                .collect();
         ids.sort();
         ids
     }
@@ -1174,16 +1243,19 @@ mod tests {
     }
 
     #[test]
-    fn los_fallados_van_antes_que_los_vencidos_con_paso_y_estos_antes_que_los_sin_ver() {
+    fn los_fallados_van_antes_que_los_vencidos_y_estos_antes_que_los_sin_ver() {
         let fallados = conceptos("f", 3);
         let vencidos = conceptos("v", 20);
         let sin_ver = conceptos("s", 5);
-        // Los vencidos con paso 1, fallados y acertados el día antes, vencieron antes que los fallos, y aun así los fallados entran primero.
+        // Los vencidos, fallados y acertados el día antes, vencieron antes que los fallos, y aun así los fallados entran primero.
         let mut historial: Vec<Respuesta> = vencidos
             .iter()
             .enumerate()
             .flat_map(|(i, q)| {
-                [respuesta(&q.id, &format!("2026-11-03T11:{i:02}:00Z"), false, false), respuesta(&q.id, &format!("2026-11-03T11:{i:02}:30Z"), true, true)]
+                [
+                    respuesta(&q.id, &format!("2026-11-03T11:{i:02}:00Z"), false, false),
+                    respuesta(&q.id, &format!("2026-11-03T11:{i:02}:30Z"), true, true),
+                ]
             })
             .collect();
         historial.extend(fallados.iter().enumerate().map(|(i, q)| respuesta(&q.id, &minuto(40, i as i64), false, false)));
@@ -1212,14 +1284,14 @@ mod tests {
     }
 
     #[test]
-    fn una_pregunta_fallada_vuelve_aunque_su_hermana_suba_de_paso() {
+    fn una_pregunta_fallada_vuelve_aunque_su_hermana_este_al_dia() {
         // a1 falla y a2 acierta: a1 sigue fallada, y entra en la sesión antes que su hermana vencida.
         let banco = [pregunta("a1", "a"), pregunta("a2", "a")];
         let historial = [respuesta("a2", &minuto(0, 0), true, true), respuesta("a1", &minuto(1, 0), false, false)];
         let ahora = AHORA.parse::<Timestamp>().unwrap().as_second();
         for semilla in 0..20 {
             let q = sesion(&LN, &banco, &historial, ahora, &mut Azar::new(semilla)).remove(0);
-            assert_eq!((q.id.as_str(), q.paso.as_str()), ("a1", "paso 0"));
+            assert_eq!(q.id, "a1");
         }
     }
 
@@ -1253,14 +1325,15 @@ mod tests {
     #[test]
     fn la_misma_semilla_da_siempre_el_mismo_orden() {
         let banco = conceptos("c", 30);
-        let orden =
-            |semilla| sesion(&LN, &banco, &[], 0, &mut Azar::new(semilla)).into_iter().map(|q| (q.id, q.opciones)).collect::<Vec<_>>();
+        let orden = |semilla| {
+            sesion(&LN, &banco, &[], 0, &mut Azar::new(semilla)).into_iter().map(|q| (q.id, q.opciones)).collect::<Vec<_>>()
+        };
         assert_eq!(orden(7), orden(7));
         assert_ne!(orden(7), orden(8));
     }
 
     #[test]
-    fn la_pregunta_da_las_opciones_al_azar_la_correcta_y_el_paso() {
+    fn la_pregunta_da_las_opciones_al_azar_y_la_correcta() {
         let banco = [pregunta("a1", "a")];
         let historial = [respuesta("a1", &minuto(0, 0), true, true)];
         let q = &sesion(&LN, &banco, &historial, 0, &mut Azar::new(3))[0];
@@ -1268,9 +1341,6 @@ mod tests {
         let mut opciones = q.opciones.clone();
         opciones.sort();
         assert_eq!(opciones, ["a veces", "no", "nunca", "sí"]);
-        assert_eq!((q.paso.as_str(), q.paso_tras_seguro.as_str(), q.paso_tras_otra.as_str()), ("paso 3", "paso 4", "paso 0"));
-        let sin_ver = &sesion(&LN, &[pregunta("b1", "b")], &[], 0, &mut Azar::new(3))[0];
-        assert_eq!((sin_ver.paso.as_str(), sin_ver.paso_tras_seguro.as_str()), ("sin ver", "paso 3"));
     }
 
     #[test]
@@ -1293,21 +1363,20 @@ mod tests {
     }
 
     #[test]
-    fn corregir_da_el_paso_tras_la_respuesta_y_avisa_de_un_fallo_seguro_y_un_acierto_dudoso() {
+    fn corregir_dice_cuando_vuelve_la_pregunta_y_avisa_de_un_fallo_seguro() {
+        // En una pregunta sin ver, FSRS-7 da 4,78 días a Good y 0,6 días a Hard hasta el 90 %.
         let q = &sesion(&LN, &[pregunta("a1", "a")], &[], 0, &mut Azar::new(3))[0];
         let otra = (q.correcta + 1) % 4;
-        let fila = |c: Correccion| (c.paso, c.aviso);
-        assert_eq!(fila(corregir(q, Some(q.correcta), true, Timestamp::UNIX_EPOCH)), ("paso 3".into(), None));
-        assert_eq!(
-            fila(corregir(q, Some(q.correcta), false, Timestamp::UNIX_EPOCH)),
-            ("paso 0".into(), Some("Acierto con «dudo»: cuenta como un fallo.".into()))
-        );
+        let fila = |c: Correccion| (c.vuelve, c.aviso);
+        let otra_sesion = OTRA_SESION.to_string();
+        assert_eq!(fila(corregir(q, Some(q.correcta), true, Timestamp::UNIX_EPOCH)), ("vuelve en 5 días".into(), None));
+        assert_eq!(fila(corregir(q, Some(q.correcta), false, Timestamp::UNIX_EPOCH)), ("vuelve en 14 horas".into(), None));
         assert_eq!(
             fila(corregir(q, Some(otra), true, Timestamp::UNIX_EPOCH)),
-            ("paso 0".into(), Some("Fallo con «seguro»: una idea falsa. Repásala.".into()))
+            (otra_sesion.clone(), Some("Fallo con «seguro»: una idea falsa. Repásala.".into()))
         );
-        assert_eq!(fila(corregir(q, Some(otra), false, Timestamp::UNIX_EPOCH)), ("paso 0".into(), None));
-        assert_eq!(fila(corregir(q, None, true, Timestamp::UNIX_EPOCH)), ("paso 0".into(), None));
+        assert_eq!(fila(corregir(q, Some(otra), false, Timestamp::UNIX_EPOCH)), (otra_sesion.clone(), None));
+        assert_eq!(fila(corregir(q, None, true, Timestamp::UNIX_EPOCH)), (otra_sesion, None));
     }
 
     #[test]
@@ -1318,11 +1387,11 @@ mod tests {
     }
 
     #[test]
-    fn una_pregunta_en_blanco_pone_el_paso_a_0_y_no_cuenta_como_duda() {
+    fn una_pregunta_en_blanco_queda_fallada_y_no_cuenta_como_duda() {
         let mut h = historial_de(&[(0, true, true), (1, true, false)]);
         h.push(Respuesta { resultado: Resultado::Blanco, ..respuesta("q0", "1970-01-01T01:00:00Z", false, false) });
-        let t = tarjeta(&LN, &banco_de(2), &h, 5.0);
-        assert_eq!((t.sabes, t.no_sabes), (0, 2));
+        let t = tarjeta(&LN, &banco_de(2), &h, 5.0, TRAS);
+        assert_eq!((t.sabes, t.no_sabes), (1, 1));
         assert_eq!(t.dudas[0].detalle.as_deref(), Some("1 de 1 «dudo»"));
     }
 
@@ -1330,7 +1399,13 @@ mod tests {
         let ids = ids.iter().map(|&i| i.into()).collect();
         Guardado {
             guardada: Timestamp::from_second(guardada).unwrap(),
-            ronda: Some(RondaGuardada { ids, resultados: resultados.to_vec(), respuestas: vec![], simulacro: false, limite: None }),
+            ronda: Some(RondaGuardada {
+                ids,
+                resultados: resultados.to_vec(),
+                respuestas: vec![],
+                simulacro: false,
+                limite: None,
+            }),
             seleccion: None,
         }
     }
@@ -1348,7 +1423,7 @@ mod tests {
     fn la_ronda_restaurada_sigue_en_la_primera_pregunta_sin_resultado() {
         let banco = [pregunta("a1", "a"), pregunta("b1", "b"), pregunta("c1", "c")];
         let g = guardado(1, &["c1", "a1", "b1"], &[Some(Resultado::Fallo)]);
-        let r = restaurar(&LN, &banco, &[], &g, &mut Azar::new(1)).unwrap();
+        let r = restaurar(&LN, &banco, &[], &g, 0, &mut Azar::new(1)).unwrap();
         assert_eq!(r.preguntas.iter().map(|q| q.id.as_str()).collect::<Vec<_>>(), ["c1", "a1", "b1"]);
         assert_eq!(r.resultados, [Some(Resultado::Fallo), None, None]);
         assert_eq!((r.simulacro, r.limite), (false, None));
@@ -1358,9 +1433,9 @@ mod tests {
     fn la_ronda_restaurada_guarda_cada_resultado_con_su_pregunta_aunque_haya_saltos() {
         let banco = [pregunta("a1", "a"), pregunta("b1", "b"), pregunta("c1", "c")];
         let g = guardado(1, &["c1", "a1", "b1"], &[None, Some(Resultado::Acierto), None]);
-        let r = restaurar(&LN, &banco, &[], &g, &mut Azar::new(1)).unwrap();
+        let r = restaurar(&LN, &banco, &[], &g, 0, &mut Azar::new(1)).unwrap();
         assert_eq!(r.resultados, [None, Some(Resultado::Acierto), None]);
-        assert!(restaurar(&LN, &banco, &[], &guardado(1, &["a1"], &[None, None]), &mut Azar::new(1)).is_none());
+        assert!(restaurar(&LN, &banco, &[], &guardado(1, &["a1"], &[None, None]), 0, &mut Azar::new(1)).is_none());
     }
 
     #[test]
@@ -1371,17 +1446,24 @@ mod tests {
         let ronda = g.ronda.as_mut().unwrap();
         ronda.simulacro = true;
         ronda.respuestas = respuestas.clone();
-        let r = restaurar(&LN, &banco, &[], &g, &mut Azar::new(1)).unwrap();
+        let r = restaurar(&LN, &banco, &[], &g, 0, &mut Azar::new(1)).unwrap();
         assert_eq!(r.respuestas, respuestas);
     }
 
     #[test]
     fn una_ronda_con_una_pregunta_que_no_esta_en_el_banco_no_se_restaura() {
         let banco = [pregunta("a1", "a")];
-        assert!(restaurar(&LN, &banco, &[], &guardado(1, &["a1", "x9"], &[]), &mut Azar::new(1)).is_none());
+        assert!(restaurar(&LN, &banco, &[], &guardado(1, &["a1", "x9"], &[]), 0, &mut Azar::new(1)).is_none());
         assert!(
-            restaurar(&LN, &banco, &[], &Guardado { guardada: Timestamp::from_second(1).unwrap(), ronda: None, seleccion: None }, &mut Azar::new(1))
-                .is_none()
+            restaurar(
+                &LN,
+                &banco,
+                &[],
+                &Guardado { guardada: Timestamp::from_second(1).unwrap(), ronda: None, seleccion: None },
+                0,
+                &mut Azar::new(1)
+            )
+            .is_none()
         );
     }
 
