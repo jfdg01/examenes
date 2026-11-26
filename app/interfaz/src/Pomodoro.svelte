@@ -90,8 +90,9 @@
   <button class="peer flex h-full cursor-pointer items-center px-1.5 text-tenue hover:text-texto focus:text-texto" title="Los controles">
     {@render icono(12, "M6 9l6 6 6-6")}
   </button>
-  <!-- La barra del avance de la fase, en el borde de abajo. -->
-  <span class="absolute inset-x-1.5 bottom-0 h-px">
+  <!-- La barra del avance de la fase, en el borde de abajo. Sin `pointer-events`, porque tapa el borde
+       de la flecha: el ratón que baja a los controles la cruza, y el panel se cierra. -->
+  <span class="pointer-events-none absolute inset-x-1.5 bottom-0 h-px">
     <span class="block h-full bg-current opacity-60" style:width="{hecho * 100}%"></span>
   </span>
   <!-- El relleno de arriba, y no un margen, deja pasar el ratón de la flecha a los controles. -->
