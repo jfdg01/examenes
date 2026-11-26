@@ -4,6 +4,7 @@
   "opciones": 3,
   "minutos": 30,
   "penalizacion": 0.3333333333333333,
+  "congelado": true,
   "pdfs": {
     "2.1.Cifrados_Bloques_p.pdf": {"nombre": "2. Cifrados de bloques", "apartados": ["bloques"]},
     "3.1.Cifrados_Flujo_p.pdf": {"nombre": "3. Cifrados de flujo", "apartados": ["flujo"]}
