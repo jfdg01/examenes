@@ -2568,12 +2568,12 @@
       "pagina": 15
     },
     "pregunta": "¿Qué añade el modo Lax de SameSite al modo Strict?",
-    "correcta": "Envía también la cookie en peticiones seguras que no cambian el estado, como GET",
+    "correcta": "Envía también la cookie en un GET desde otro sitio, como al seguir un enlace",
     "distractores": [
       "Envía también la cookie en peticiones POST desde otros sitios que el usuario visite",
       "Impide leerla desde JavaScript en el navegador del usuario"
     ],
-    "explicacion": "✓ Un GET seguro no cambia el estado, así que enviar la cookie no permite un CSRF dañino. Por eso Lax es habitual.\n✗ «Envía también la cookie»: un POST desde otro sitio es la petición que SameSite busca frenar\n✗ «Impide leerla»: leerla desde JavaScript lo impide HttpOnly"
+    "explicacion": "✓ Strict no envía la cookie en ninguna petición desde otro sitio. Lax la envía en un GET de navegación, que no cambia el estado y no permite un CSRF dañino.\n✗ «En peticiones POST»: un POST desde otro sitio es la petición que SameSite busca frenar\n✗ «Impide leerla»: leerla desde JavaScript lo impide HttpOnly"
   },
   {
     "id": "ciclo-de-vida-057",
