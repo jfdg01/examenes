@@ -51,6 +51,9 @@ for f in redes/pdfs/*.pdf; do pdftotext -layout "$f" "redes/texto/$(basename "${
 
 5. Pide al agente que escriba el examen `redes` siguiendo `docs/LOTE.md`.
 
+> [!WARNING]
+> Un examen entero gasta muchos tokens. Cada apartado lanza un creador y un revisor, y cada uno lee todas las páginas de su PDF, también las imágenes. Empieza con un solo apartado para ver el gasto.
+
 El examen aparece en la lista de la app sin reiniciar el servidor.
 
 El código, los tests y el hook de git están en [`app/README.md`](app/README.md).
