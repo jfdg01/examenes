@@ -123,9 +123,6 @@
   </span>
   <!-- En un simulacro solo se ve su reloj. -->
   {#if !simulacro}<Pomodoro />{/if}
-  <a class={[accion, "border-linea text-tenue"]} title="Plan de estudio" href="/?plan">
-    {@render icono(14, "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z")}
-  </a>
   <span class="relative flex pc:contents" bind:this={menu}>
   <!-- El botón del menú lleva la marca de editar y de copiar, porque el menú se cierra al tocar. -->
   <button

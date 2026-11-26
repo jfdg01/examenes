@@ -11,7 +11,7 @@
 </script>
 
 <main class="mx-auto max-w-[560px] p-4">
-  <p class="flex items-center justify-between text-[13px] text-tenue"><a href="/?plan">Plan de estudio →</a><Pomodoro /></p>
+  <p class="flex items-center justify-end text-[13px] text-tenue"><Pomodoro /></p>
   <h1 class="mt-2 mb-1 text-[24px] font-bold">Exámenes</h1>
   {#if examenes?.length === 0}
     <p class="my-3 rounded-xl bg-tarjeta p-3.5">No hay exámenes</p>
