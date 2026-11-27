@@ -2554,10 +2554,10 @@
     "pregunta": "¿Qué hace la propiedad SameSite en modo Strict en una cookie?",
     "correcta": "La cookie solo se envía en peticiones que salen de contenidos del sitio original",
     "distractores": [
-      "La cookie también se envía en peticiones seguras que no cambian estado, como GET",
+      "La cookie también se envía al llegar desde otro sitio con un enlace",
       "La cookie también se envía en peticiones POST que salen de otros sitios"
     ],
-    "explicacion": "✓ Si el usuario llega desde otro sitio, la cookie no viaja, y su sesión no se envía aunque la tenga abierta.\n✗ «La cookie también se envía»: ese es el modo Lax\n✗ «La cookie también se envía en peticiones POST»: en Strict la cookie no sale en las peticiones de otros sitios"
+    "explicacion": "✓ Si el usuario llega desde otro sitio, la cookie no viaja, y su sesión no se envía aunque la tenga abierta.\n✗ «Al llegar desde otro sitio con un enlace»: ese es el modo Lax\n✗ «En peticiones POST»: en Strict la cookie no sale en las peticiones de otros sitios"
   },
   {
     "id": "ciclo-de-vida-056",
@@ -2568,12 +2568,12 @@
       "pagina": 15
     },
     "pregunta": "¿En qué petición envía la cookie el modo Lax de SameSite, y el modo Strict no?",
-    "correcta": "Envía también la cookie en un GET desde otro sitio, como al seguir un enlace",
+    "correcta": "Envía también la cookie al llegar desde otro sitio con una navegación GET, como un enlace",
     "distractores": [
       "Envía también la cookie en peticiones POST desde otros sitios que el usuario visite",
-      "Impide leerla desde JavaScript en el navegador del usuario"
+      "Impide que JavaScript lea la cookie en el navegador del usuario"
     ],
-    "explicacion": "✓ Strict no envía la cookie en ninguna petición desde otro sitio. Lax la envía en un GET de navegación, que no cambia el estado y no permite un CSRF dañino.\n✗ «En peticiones POST»: un POST desde otro sitio es la petición que SameSite busca frenar\n✗ «Impide leerla»: leerla desde JavaScript lo impide HttpOnly"
+    "explicacion": "✓ Strict no envía la cookie en ninguna petición desde otro sitio. Lax la envía en un GET de navegación, que no cambia el estado y no permite un CSRF dañino.\n✗ «En peticiones POST»: un POST desde otro sitio es la petición que SameSite busca frenar\n✗ «Impide que JavaScript lea»: eso lo hace HttpOnly"
   },
   {
     "id": "ciclo-de-vida-057",
