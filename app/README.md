@@ -4,7 +4,7 @@ Un servidor de Rust y una interfaz de Svelte 5. Las decisiones del stack están 
 
 - `nucleo/`: toda la lógica, sin leer archivos ni la red. Corre en el navegador como WASM, y el servidor usa sus tipos para validar.
 - `servidor/`: el servidor de `axum`. Guarda y sirve los archivos de cada examen, con gzip.
-- `banco/`: las herramientas del banco de un examen, para su dueño: `banco comprobar`, `banco importar`, `banco montar`, `banco paginas`, `banco preparar` y `banco revision`, con las reglas de [`BANCO.md`](../docs/BANCO.md). `comprobar` necesita `pdfinfo`, de poppler. `paginas` necesita `pdfinfo`, `pdftoppm` y `pdftotext`, de poppler, y `ffmpeg`, con `libwebp`.
+- `banco/`: las herramientas del banco de un examen, para su dueño: `banco comprobar`, `banco importar`, `banco montar`, `banco paginas`, `banco preparar` y `banco revision`, con las reglas de [`CONCEPTOS.md`](../docs/CONCEPTOS.md), [`TEST.md`](../docs/TEST.md), [`DESARROLLO.md`](../docs/DESARROLLO.md) y [`FUENTES.md`](../docs/FUENTES.md). `comprobar` necesita `pdfinfo`, de poppler. `paginas` necesita `pdfinfo`, `pdftoppm` y `pdftotext`, de poppler, y `ffmpeg`, con `libwebp`.
 - `interfaz/`: la interfaz de Svelte 5, con Vite, TypeScript y Tailwind 4. `main.ts` monta `Lista.svelte` en `/`, `Plan.svelte` en `/?plan` y `App.svelte` en `/<carpeta>/`. Cada pantalla lleva en su línea de arriba `Pomodoro.svelte`, el botón del cronómetro de pausas, menos en un simulacro.
 
 ## Arrancar
@@ -21,4 +21,4 @@ El servidor recibe la raíz de los exámenes y su dirección. Cada carpeta de la
 
 El hook `.githooks/pre-commit` corre `cargo test` en un commit que cambia `app/`, y `banco comprobar` en un commit que cambia el banco de un examen. Un clon nuevo lo activa con `git config core.hooksPath .githooks`.
 
-`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra una copia de `examenes/ln/`. Las capturas quedan en `interfaz/capturas/`, fuera de git. Las clases sin estilo, como `examen`, `opcion` o `tirador`, existen para las aserciones de la comprobación: no las borres.
+`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra una copia del examen de `interfaz/prueba/`, que sale del banco de LN y lleva un `conceptos.json` de prueba. Las capturas quedan en `interfaz/capturas/`, fuera de git. Las clases sin estilo, como `examen`, `opcion` o `tirador`, existen para las aserciones de la comprobación: no las borres.

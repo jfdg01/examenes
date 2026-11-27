@@ -1,11 +1,11 @@
-# El estado es de la pregunta, y el concepto solo agrupa
+# El estado es de la pregunta, y el concepto no tiene estado
 
 El banco escribe cada idea como un concepto con 3 preguntas, desde 3 ángulos. Las 3 preguntas de un concepto no son igual de difíciles, y la difícil suele probar una parte de la idea que la fácil no toca.
 
 ## Las decisiones
 
 - **Cada pregunta tiene su estado y su vencimiento.** Una respuesta mueve solo el estado de su pregunta. Con un estado por concepto, un fallo en la difícil lo baja, un acierto en la fácil lo sube, y la rotación vuelve a la difícil: el concepto no avanza nunca, y la difícil no se aprende. Con un estado por pregunta, la difícil vuelve hasta que la aciertas, y la fácil sigue su camino. El estado sale de FSRS, por [el ADR 0004](0004-el-planificador-es-fsrs.md).
-- **El concepto agrupa.** Una sesión lleva como mucho una pregunta por concepto, y un simulacro también mientras haya conceptos. Una hermana da pistas de la respuesta, y un acierto con pista no mide lo que sabes. Es la misma regla que Anki aplica a las tarjetas hermanas.
+- **El concepto agrupa, sin estado.** El concepto guarda su idea y su página, por [el ADR 0005](0005-el-concepto-es-una-entidad.md), y ningún estado de FSRS. Una sesión lleva como mucho una pregunta por concepto, y un simulacro también mientras haya conceptos. Una hermana da pistas de la respuesta, y un acierto con pista no mide lo que sabes. Es la misma regla que Anki aplica a las tarjetas hermanas.
 - **"Sabes", la barra, la tarjeta y el inicio cuentan preguntas.** El examen pregunta preguntas, y una sola unidad deja que las cifras sumen.
 - **El historial no migra.** Cada respuesta de `respuestas.jsonl` guarda el `id` de su pregunta, y el estado de cada pregunta sale de ese historial.
 

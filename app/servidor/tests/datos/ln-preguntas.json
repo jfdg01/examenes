@@ -3,10 +3,6 @@
     "id": "rgpd-001",
     "concepto": "rgpd-brecha-plazo",
     "apartado": "rgpd",
-    "fuente": {
-      "pdf": "1_Legislacion.pdf",
-      "pagina": 38
-    },
     "pregunta": "¿En qué plazo notifica el responsable una violación de seguridad a la autoridad de control, si es posible?",
     "correcta": "Dentro de las 72 horas desde que tiene constancia de ella",
     "distractores": [
@@ -20,10 +16,6 @@
     "id": "rgpd-002",
     "concepto": "lopdgdd-edad-consentimiento",
     "apartado": "rgpd",
-    "fuente": {
-      "pdf": "1_Legislacion.pdf",
-      "pagina": 19
-    },
     "pregunta": "Según la LOPDGDD, ¿desde qué edad da un menor su consentimiento de manera autónoma?",
     "correcta": "14 años",
     "distractores": [
@@ -37,10 +29,6 @@
     "id": "rgpd-003",
     "concepto": "rgpd-sanciones-maximo",
     "apartado": "rgpd",
-    "fuente": {
-      "pdf": "1_Legislacion.pdf",
-      "pagina": 43
-    },
     "pregunta": "¿Hasta qué porcentaje del volumen de negocio anual llega la sanción de una empresa por una infracción de las más graves?",
     "correcta": "El 4 % del volumen de negocio total anual global",
     "distractores": [
@@ -54,10 +42,6 @@
     "id": "rgpd-004",
     "concepto": "rgpd-encargado-definicion",
     "apartado": "rgpd",
-    "fuente": {
-      "pdf": "1_Legislacion.pdf",
-      "pagina": 26
-    },
     "pregunta": "¿Quién trata los datos personales únicamente por cuenta del responsable del tratamiento?",
     "correcta": "El encargado del tratamiento",
     "distractores": [
@@ -71,10 +55,6 @@
     "id": "rgpd-005",
     "concepto": "lopdgdd-morosos",
     "apartado": "rgpd",
-    "fuente": {
-      "pdf": "1_Legislacion.pdf",
-      "pagina": 19
-    },
     "pregunta": "¿Cuál es el tiempo máximo de inclusión de una deuda en un fichero de morosos según la LOPDGDD?",
     "correcta": "5 años",
     "distractores": [
@@ -88,10 +68,6 @@
     "id": "ens-001",
     "concepto": "sgsi-definicion",
     "apartado": "ens",
-    "fuente": {
-      "pdf": "2A _Teoría.pdf",
-      "pagina": 5
-    },
     "pregunta": "¿Sobre qué base establece un SGSI, lo implementa y lo mejora de manera continua?",
     "correcta": "Sobre los riesgos a los que se enfrenta la organización",
     "distractores": [

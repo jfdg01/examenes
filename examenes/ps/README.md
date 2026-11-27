@@ -2,7 +2,7 @@
 
 El examen es el lunes 30 de noviembre de 2026. Dura 1 hora y tiene 2 partes de 5 puntos cada una: preguntas de desarrollo sobre las definiciones y las características de los protocolos más importantes, y un test de verdadero o falso sobre los mismos contenidos. El test de práctica entrena las ideas de las 2 partes con 3 opciones por pregunta y una sola correcta. Un fallo resta 1/3 de un acierto, y una pregunta en blanco no cuenta.
 
-El número de preguntas de cada parte falta. El simulacro usa 20 preguntas y 25 minutos, cifras provisionales de `examen.json`.
+El número de preguntas de cada parte falta. El simulacro usa 5 de desarrollo y 20 de test en 60 minutos, cifras provisionales de `examen.json`.
 
 ## El temario
 
@@ -32,8 +32,8 @@ Las fechas y los números de RFC no entran en el examen. El resto del temario s�
 
 ## El banco
 
-El banco tiene 768 preguntas: 3 por cada idea de los 5 PDFs, y 1 por cada sigla de seguridad. Una idea que sale en 2 PDFs tiene un solo concepto.
+El banco tiene 771 preguntas de test: 3 por cada idea de los 5 PDFs, y 1 por cada sigla de seguridad. Tiene también 52 preguntas de desarrollo. Una idea que sale en 2 PDFs tiene un solo concepto.
 
 La interfaz está en https://3090.taila51846.ts.net:8601/ps/, en el servidor de `app/`. El servidor sirve todos los exámenes, y la raíz lista cada uno.
 
-El código está en `app/README.md`, y el formato y las reglas del banco están en [`docs/BANCO.md`](../../docs/BANCO.md).
+El código está en `app/README.md`, y el formato y las reglas del banco están en [`docs/CONCEPTOS.md`](../../docs/CONCEPTOS.md), [`docs/TEST.md`](../../docs/TEST.md) y [`docs/DESARROLLO.md`](../../docs/DESARROLLO.md).

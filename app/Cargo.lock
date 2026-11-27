@@ -88,6 +88,7 @@ dependencies = [
 name = "banco"
 version = "0.1.0"
 dependencies = [
+ "jiff",
  "nucleo",
  "serde",
  "serde_json",
@@ -721,6 +722,7 @@ dependencies = [
  "getrandom",
  "jiff",
  "serde",
+ "serde_json",
  "tsify",
  "wasm-bindgen",
 ]

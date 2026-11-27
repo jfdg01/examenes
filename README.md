@@ -35,7 +35,7 @@ Para abrir la app desde el móvil, publícala en tu tailnet con `tailscale serve
 
 ## Crear un examen nuevo
 
-Un agente de código, como Claude Code, escribe las preguntas con las reglas de [`docs/BANCO.md`](docs/BANCO.md). Para un examen entero, el agente sigue [`docs/LOTE.md`](docs/LOTE.md): un agente creador y un agente revisor por apartado, en paralelo. Antes, prepara la carpeta del examen. Los comandos necesitan `poppler` y `ffmpeg`.
+Un agente de código, como Claude Code, escribe primero los conceptos, con las reglas de [`docs/CONCEPTOS.md`](docs/CONCEPTOS.md), y después las preguntas de test, con las de [`docs/TEST.md`](docs/TEST.md), y las de desarrollo, con las de [`docs/DESARROLLO.md`](docs/DESARROLLO.md). La skill de proyecto `lote` lanza un agente creador y un agente revisor por apartado, en paralelo. Antes, prepara la carpeta del examen. Los comandos necesitan `poppler` y `ffmpeg`.
 
 1. Crea una carpeta en `examenes/`, como `examenes/redes/`, y pon los PDFs del temario en `examenes/redes/pdfs/`.
 2. Copia `examenes/ps/examen.json` a `examenes/redes/examen.json`, y cambia el título, los PDFs y sus apartados.
@@ -46,7 +46,7 @@ Un agente de código, como Claude Code, escribe las preguntas con las reglas de 
 cargo run --manifest-path app/Cargo.toml -p banco -- paginas examenes/redes
 ```
 
-5. Pide al agente que escriba el examen `examenes/redes` siguiendo `docs/LOTE.md`.
+5. Pide al agente `/lote examenes/redes conceptos`, y después `/lote examenes/redes test`.
 
 > [!WARNING]
 > Un examen entero gasta muchos tokens. Cada apartado lanza un creador y un revisor, y cada uno lee todas las páginas de su PDF, también las imágenes. Empieza con un solo apartado para ver el gasto.

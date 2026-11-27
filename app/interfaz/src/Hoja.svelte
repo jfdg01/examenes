@@ -16,11 +16,15 @@
       onclick={onsiguiente}>{etiqueta}</button
     >
     <div class="mt-3 text-[13px] text-tenue">
-      <p class="my-2">
-        {q.fuente} · {q.concepto} · {vuelve} ·
-        <a class="text-acento underline" href={q.pdf} target="_blank">Abrir el PDF en la página {q.pagina}</a>
-      </p>
-      <img class="my-2 mt-1.5 hidden w-full rounded-lg bg-white pc:block" src={q.imagen} alt="La página {q.pagina} de la fuente" />
+      {#if q.pagina}
+        <p class="my-2">
+          {q.pagina.fuente} · {q.concepto} · {vuelve} ·
+          <a class="text-acento underline" href={q.pagina.pdf} target="_blank">Abrir el PDF en la página {q.pagina.numero}</a>
+        </p>
+        <img class="my-2 mt-1.5 hidden w-full rounded-lg bg-white pc:block" src={q.pagina.imagen} alt="La página {q.pagina.numero} de la fuente" />
+      {:else}
+        <p class="my-2">{q.concepto} · {vuelve}</p>
+      {/if}
     </div>
   {/if}
 </div>

@@ -12,7 +12,8 @@ use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
-use nucleo::{Datos, Examen, ExamenDeLaLista, Guardado, Nota, Pregunta, Respuesta};
+use nucleo::desarrollo::LineaDeDesarrollo;
+use nucleo::{Datos, Examen, ExamenDeLaLista, Guardado, Nota, Pregunta, PreguntaDeDesarrollo, Respuesta};
 use tower_http::compression::CompressionLayer;
 use tower_http::services::ServeDir;
 
@@ -37,6 +38,7 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
         .route("/{examen}/", get(pagina))
         .route("/{examen}/api/inicio", get(inicio))
         .route("/{examen}/api/respuestas", axum::routing::post(responder))
+        .route("/{examen}/api/desarrollo", axum::routing::post(desarrollar))
         .route("/{examen}/api/preguntas", axum::routing::put(editar))
         .route("/{examen}/api/notas", get(leer_notas).post(anotar))
         .route("/{examen}/api/ronda", get(leer_ronda).put(guardar_ronda))
@@ -131,12 +133,28 @@ async fn leer_si_existe(ruta: PathBuf) -> Result<Vec<u8>, Response> {
     }
 }
 
-async fn leer_banco(carpetas: &Carpetas, examen: &str) -> Result<Vec<Pregunta>, Response> {
-    let texto = leer_si_existe(carpetas.raiz.join(examen).join("preguntas.json")).await?;
+/// Una lista de JSON de la carpeta del examen. Sin el archivo, la lista está vacía.
+async fn leer_lista<T: serde::de::DeserializeOwned>(
+    carpetas: &Carpetas,
+    examen: &str,
+    archivo: &str,
+) -> Result<Vec<T>, Response> {
+    let texto = leer_si_existe(carpetas.raiz.join(examen).join(archivo)).await?;
     if texto.is_empty() {
         return Ok(Vec::new());
     }
     serde_json::from_slice(&texto).map_err(error_interno)
+}
+
+/// Escribe un archivo entero en un temporal de la misma carpeta, y lo renombra: un corte a mitad deja el archivo viejo.
+async fn escribir(ruta: PathBuf, texto: impl AsRef<[u8]>) -> Result<(), Response> {
+    use tokio::io::AsyncWriteExt;
+    let nombre = ruta.file_name().ok_or_else(|| error_interno("una ruta sin archivo"))?.to_string_lossy();
+    let temporal = ruta.with_file_name(format!(".{nombre}.tmp"));
+    let mut archivo = tokio::fs::File::create(&temporal).await.map_err(error_interno)?;
+    archivo.write_all(texto.as_ref()).await.map_err(error_interno)?;
+    archivo.sync_all().await.map_err(error_interno)?;
+    tokio::fs::rename(temporal, ruta).await.map_err(error_interno)
 }
 
 /// Cambia los textos de una pregunta del banco por su `id`: el enunciado, `correcta`, `distractores` y `explicacion`.
@@ -148,26 +166,30 @@ async fn editar(
 ) -> Result<StatusCode, Response> {
     leer_examen(&carpetas, &examen).await?;
     let _cerrojo = carpetas.cerrojo.lock().await;
-    let mut banco = leer_banco(&carpetas, &examen).await?;
+    let mut banco: Vec<Pregunta> = leer_lista(&carpetas, &examen, "preguntas.json").await?;
     let q = banco.iter_mut().find(|q| q.id == nueva.id).ok_or_else(|| StatusCode::NOT_FOUND.into_response())?;
     let en_blanco = [&nueva.pregunta, &nueva.correcta, &nueva.explicacion]
         .into_iter()
         .chain(&nueva.distractores)
         .any(|t| t.trim().is_empty());
-    let solo_textos = (&q.concepto, &q.apartado, &q.fuente, q.distractores.len())
-        == (&nueva.concepto, &nueva.apartado, &nueva.fuente, nueva.distractores.len());
+    let solo_textos =
+        (&q.concepto, &q.apartado, q.distractores.len()) == (&nueva.concepto, &nueva.apartado, nueva.distractores.len());
     if !solo_textos || en_blanco {
         return Err((StatusCode::UNPROCESSABLE_ENTITY, "solo cambian los textos, y ninguno va en blanco").into_response());
     }
     *q = nueva;
     let texto = serde_json::to_string_pretty(&banco).map_err(error_interno)? + "\n";
-    tokio::fs::write(carpetas.raiz.join(&examen).join("preguntas.json"), texto).await.map_err(error_interno)?;
+    escribir(carpetas.raiz.join(&examen).join("preguntas.json"), texto).await?;
     Ok(StatusCode::NO_CONTENT)
 }
 
-/// `respuestas.jsonl` tiene una respuesta por línea. Quien llama tiene el cerrojo.
-async fn leer_historial(carpetas: &Carpetas, examen: &str) -> Result<Vec<Respuesta>, Response> {
-    let texto = leer_si_existe(carpetas.raiz.join(examen).join("respuestas.jsonl")).await?;
+/// Un historial tiene una línea de JSON por línea, como `respuestas.jsonl`. Quien llama tiene el cerrojo.
+async fn leer_historial<T: serde::de::DeserializeOwned>(
+    carpetas: &Carpetas,
+    examen: &str,
+    archivo: &str,
+) -> Result<Vec<T>, Response> {
+    let texto = leer_si_existe(carpetas.raiz.join(examen).join(archivo)).await?;
     texto
         .split(|&b| b == b'\n')
         .filter(|linea| !linea.trim_ascii().is_empty())
@@ -175,13 +197,16 @@ async fn leer_historial(carpetas: &Carpetas, examen: &str) -> Result<Vec<Respues
         .collect()
 }
 
-/// Las cifras, el banco y el historial del examen. La interfaz calcula todo con `nucleo`.
+/// Las cifras, los conceptos, los dos bancos y el historial del examen. La interfaz calcula todo con `nucleo`.
 async fn inicio(State(carpetas): Estado, Path(examen): Path<String>) -> Result<axum::Json<Datos>, Response> {
     let datos = leer_examen(&carpetas, &examen).await?;
-    let banco = leer_banco(&carpetas, &examen).await?;
     let _cerrojo = carpetas.cerrojo.lock().await;
-    let historial = leer_historial(&carpetas, &examen).await?;
-    Ok(axum::Json(Datos { examen: datos, banco, historial }))
+    let conceptos = leer_lista(&carpetas, &examen, "conceptos.json").await?;
+    let banco = leer_lista(&carpetas, &examen, "preguntas.json").await?;
+    let desarrollo: Vec<PreguntaDeDesarrollo> = leer_lista(&carpetas, &examen, "desarrollo.json").await?;
+    let historial = leer_historial(&carpetas, &examen, "respuestas.jsonl").await?;
+    let historial_de_desarrollo = leer_historial(&carpetas, &examen, "desarrollo.jsonl").await?;
+    Ok(axum::Json(Datos { examen: datos, banco, conceptos, desarrollo, historial, historial_de_desarrollo }))
 }
 
 /// Añade al historial cada respuesta nueva. Una respuesta con el mismo `id` y `ts` ya está, y no entra otra vez.
@@ -192,20 +217,48 @@ async fn responder(
 ) -> Result<StatusCode, Response> {
     leer_examen(&carpetas, &examen).await?;
     let _cerrojo = carpetas.cerrojo.lock().await;
-    let mut vistas: std::collections::HashSet<(String, jiff::Timestamp)> =
-        leer_historial(&carpetas, &examen).await?.into_iter().map(|r| (r.id, r.ts)).collect();
-    let mut nuevas = String::new();
-    for r in respuestas {
-        if vistas.insert((r.id.clone(), r.ts)) {
-            nuevas += &serde_json::to_string(&r).map_err(error_interno)?;
-            nuevas += "\n";
+    let viejas: Vec<Respuesta> = leer_historial(&carpetas, &examen, "respuestas.jsonl").await?;
+    anadir(&carpetas, &examen, "respuestas.jsonl", &viejas, &respuestas, |r| (r.id.clone(), r.ts)).await
+}
+
+/// Añade a `desarrollo.jsonl` cada línea nueva. Una línea con la misma clave ya está, y no entra otra vez.
+async fn desarrollar(
+    State(carpetas): Estado,
+    Path(examen): Path<String>,
+    axum::Json(lineas): axum::Json<Vec<LineaDeDesarrollo>>,
+) -> Result<StatusCode, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    let _cerrojo = carpetas.cerrojo.lock().await;
+    let viejas: Vec<LineaDeDesarrollo> = leer_historial(&carpetas, &examen, "desarrollo.jsonl").await?;
+    anadir(&carpetas, &examen, "desarrollo.jsonl", &viejas, &lineas, |l| {
+        let (id, ts, corregida) = l.clave();
+        (id.to_owned(), ts, corregida)
+    })
+    .await
+}
+
+/// Añade al historial `archivo` las líneas de `nuevas` con una clave que no está en `viejas`. Quien llama tiene el cerrojo.
+async fn anadir<T: serde::Serialize, K: std::hash::Hash + Eq>(
+    carpetas: &Carpetas,
+    examen: &str,
+    archivo: &str,
+    viejas: &[T],
+    nuevas: &[T],
+    clave: impl Fn(&T) -> K,
+) -> Result<StatusCode, Response> {
+    let mut vistas: std::collections::HashSet<K> = viejas.iter().map(&clave).collect();
+    let mut texto = String::new();
+    for l in nuevas {
+        if vistas.insert(clave(l)) {
+            texto += &serde_json::to_string(l).map_err(error_interno)?;
+            texto += "\n";
         }
     }
-    if !nuevas.is_empty() {
+    if !texto.is_empty() {
         use tokio::io::AsyncWriteExt;
-        let ruta = carpetas.raiz.join(&examen).join("respuestas.jsonl");
-        let mut archivo = tokio::fs::OpenOptions::new().create(true).append(true).open(ruta).await.map_err(error_interno)?;
-        archivo.write_all(nuevas.as_bytes()).await.map_err(error_interno)?;
+        let ruta = carpetas.raiz.join(examen).join(archivo);
+        let mut f = tokio::fs::OpenOptions::new().create(true).append(true).open(ruta).await.map_err(error_interno)?;
+        f.write_all(texto.as_bytes()).await.map_err(error_interno)?;
     }
     Ok(StatusCode::NO_CONTENT)
 }
@@ -236,7 +289,7 @@ async fn guardar_ronda(
     let _cerrojo = carpetas.cerrojo.lock().await;
     let gana = nucleo::gana(leer_guardado(ruta.clone()).await?, guardado);
     let texto = serde_json::to_vec(&gana).map_err(error_interno)?;
-    tokio::fs::write(ruta, texto).await.map_err(error_interno)?;
+    escribir(ruta, texto).await?;
     Ok(StatusCode::NO_CONTENT)
 }
 
@@ -273,7 +326,7 @@ async fn anotar(
         notas.insert(nota.id, nota.texto);
     }
     let texto = serde_json::to_vec_pretty(&notas).map_err(error_interno)?;
-    tokio::fs::write(ruta, texto).await.map_err(error_interno)?;
+    escribir(ruta, texto).await?;
     Ok(StatusCode::NO_CONTENT)
 }
 

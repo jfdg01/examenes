@@ -286,10 +286,10 @@
   <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible, y la cuadrícula no se mueve. -->
   <div class="flex gap-2 pc:hidden">
     <button
-      class={["ver-pagina flex shrink-0 cursor-pointer items-center gap-1.5 rounded-[10px] border-2 border-linea bg-tarjeta px-3 text-[13px] whitespace-nowrap", !(contestada && corregida) && "invisible"]}
+      class={["ver-pagina flex shrink-0 cursor-pointer items-center gap-1.5 rounded-[10px] border-2 border-linea bg-tarjeta px-3 text-[13px] whitespace-nowrap", !(contestada && corregida && q.pagina) && "invisible"]}
       onclick={onverpagina}
     >
-      {@render icono(16, "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8")} pág. {q.pagina}
+      {@render icono(16, "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8")} pág. {q.pagina?.numero}
     </button>
     {@render rejilla()}
     <button

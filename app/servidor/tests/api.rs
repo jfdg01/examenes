@@ -187,6 +187,18 @@ async fn la_ronda_guardada_vuelve_igual() {
 }
 
 #[tokio::test]
+async fn la_ronda_de_un_simulacro_mixto_vuelve_con_el_texto_de_cada_pregunta_de_desarrollo() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+    let g = json!({ "guardada": "2026-11-21T10:51:16.012Z", "ronda": {
+        "ids": ["rgpd-001"], "resultados": [], "respuestas": [], "simulacro": true, "limite": 1_795_185_376_012_u64,
+        "desarrollo": { "ids": ["rgpd-d1", "rgpd-d2"], "textos": ["El RGPD protege datos.", ""], "hechas": [] } } });
+    assert_eq!(guardar_ronda(&url, &g).await, 204);
+    assert_eq!(ronda(&url).await, g);
+}
+
+#[tokio::test]
 async fn una_ronda_mal_formada_no_se_guarda() {
     let raiz = TempDir::new().unwrap();
     crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
@@ -377,4 +389,114 @@ async fn una_edicion_mal_formada_no_toca_preguntas_json() {
         assert_eq!(editar(&url, &mala).await, estado, "{mala}");
     }
     assert_eq!(fs::read_to_string(raiz.path().join("ln/preguntas.json")).unwrap(), BANCO_LN);
+}
+
+/// Copia el examen de prueba, con conceptos y desarrollo, en `<raiz>/prueba`.
+fn crear_prueba(raiz: &Path) -> std::path::PathBuf {
+    let origen = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/datos/prueba");
+    let dir = raiz.join("prueba");
+    fs::create_dir(&dir).unwrap();
+    for archivo in ["examen.json", "conceptos.json", "preguntas.json", "desarrollo.json"] {
+        fs::copy(origen.join(archivo), dir.join(archivo)).unwrap();
+    }
+    dir
+}
+
+#[tokio::test]
+async fn el_inicio_da_los_conceptos_y_el_desarrollo() {
+    let raiz = TempDir::new().unwrap();
+    crear_prueba(raiz.path());
+    let url = arrancar(raiz.path()).await;
+
+    let inicio = inicio(&url, "prueba").await;
+    assert_eq!(inicio["conceptos"].as_array().unwrap().len(), 6);
+    assert_eq!(inicio["desarrollo"][0]["forma"], "proceso");
+    assert_eq!((&inicio["examen"]["desarrollo"], &inicio["examen"]["pesos"]), (&json!(1), &json!({ "test": 5.0, "desarrollo": 5.0 })));
+}
+
+#[tokio::test]
+async fn un_examen_sin_conceptos_da_las_listas_vacias() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    let inicio = inicio(&url, "ln").await;
+    assert_eq!((&inicio["conceptos"], &inicio["desarrollo"]), (&json!([]), &json!([])));
+}
+
+#[tokio::test]
+async fn una_pregunta_editada_de_un_examen_con_conceptos_queda_en_preguntas_json() {
+    let raiz = TempDir::new().unwrap();
+    let dir = crear_prueba(raiz.path());
+    let url = arrancar(raiz.path()).await;
+
+    let mut q = inicio(&url, "prueba").await["banco"][1].clone();
+    q["pregunta"] = json!("¿Un enunciado editado?");
+    let estado = reqwest::Client::new().put(format!("{url}/prueba/api/preguntas")).json(&q).send().await.unwrap().status();
+    assert_eq!(estado, 204);
+    assert_eq!(inicio(&url, "prueba").await["banco"][1], q);
+    let guardada = &serde_json::from_str::<Value>(&fs::read_to_string(dir.join("preguntas.json")).unwrap()).unwrap()[1];
+    assert_eq!(guardada, &q);
+}
+
+#[tokio::test]
+async fn un_temporal_a_medio_escribir_deja_el_archivo_viejo_entero() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+    let g = |hora: &str| json!({ "guardada": hora, "ronda": null });
+    assert_eq!(guardar_ronda(&url, &g("2026-11-21T10:00:00Z")).await, 204);
+    let dir = raiz.path().join("ln");
+    let temporales =
+        || fs::read_dir(&dir).unwrap().filter(|e| e.as_ref().unwrap().file_name().to_string_lossy().ends_with(".tmp")).count();
+    assert_eq!(temporales(), 0, "la escritura renombra su temporal");
+
+    // Un corte a mitad de la escritura deja el temporal cortado, y no toca el archivo.
+    fs::write(dir.join(".ronda.json.tmp"), "{\"guardada\": \"2026-11-2").unwrap();
+    assert_eq!(ronda(&url).await, g("2026-11-21T10:00:00Z"));
+
+    assert_eq!(guardar_ronda(&url, &g("2026-11-21T11:00:00Z")).await, 204);
+    assert_eq!(ronda(&url).await, g("2026-11-21T11:00:00Z"));
+    assert_eq!(temporales(), 0);
+}
+
+async fn desarrollar(url: &str, cuerpo: &Value) -> reqwest::StatusCode {
+    reqwest::Client::new().post(format!("{url}/prueba/api/desarrollo")).json(cuerpo).send().await.unwrap().status()
+}
+
+#[tokio::test]
+async fn una_linea_de_desarrollo_entra_en_su_historial_una_sola_vez() {
+    let raiz = TempDir::new().unwrap();
+    let dir = crear_prueba(raiz.path());
+    let url = arrancar(raiz.path()).await;
+    let respuesta = json!({ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "texto": "SSH cifra" });
+    let correccion =
+        json!({ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Hard", "corregida": "2026-11-04T12:00:00Z" });
+    let otra = json!({ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Good", "corregida": "2026-11-05T09:00:00Z" });
+
+    assert_eq!(desarrollar(&url, &json!([respuesta, correccion])).await, 204);
+    assert_eq!(desarrollar(&url, &json!([respuesta, correccion, otra])).await, 204);
+
+    assert_eq!(fs::read_to_string(dir.join("desarrollo.jsonl")).unwrap().lines().count(), 3);
+    assert_eq!(inicio(&url, "prueba").await["historial_de_desarrollo"], json!([respuesta, correccion, otra]));
+    assert!(!dir.join("respuestas.jsonl").exists(), "el desarrollo no toca el historial del test");
+}
+
+#[tokio::test]
+async fn una_linea_de_desarrollo_mal_formada_no_entra_en_su_historial() {
+    let raiz = TempDir::new().unwrap();
+    let dir = crear_prueba(raiz.path());
+    let url = arrancar(raiz.path()).await;
+
+    for mala in [
+        json!([{ "id": "ssh-d001", "ts": "ayer", "texto": "x" }]),
+        json!([{ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Easy", "corregida": "2026-11-04T12:00:00Z" }]),
+        json!([{ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Good" }]),
+        json!([{ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "texto": "x", "extra": 1 }]),
+        json!([{ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "resultado": "Acierto", "seguro": true }]),
+    ] {
+        assert!(desarrollar(&url, &mala).await.is_client_error(), "{mala}");
+    }
+    assert!(!dir.join("desarrollo.jsonl").exists());
+    assert_eq!(inicio(&url, "prueba").await["historial_de_desarrollo"], json!([]));
 }

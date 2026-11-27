@@ -3,10 +3,6 @@
     "id": "bloques-001",
     "concepto": "bloques-modos-necesidad",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 11
-    },
     "pregunta": "En un cifrado por bloques, ¿por qué hace falta un modo de operación?",
     "correcta": "El mensaje suele ser más largo que un bloque, y hay que trocearlo",
     "distractores": [
@@ -19,10 +15,6 @@
     "id": "bloques-002",
     "concepto": "bloques-modos-necesidad",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 11
-    },
     "pregunta": "Un mensaje de 70 bytes se cifra con un algoritmo de bloques de 16 bytes. ¿Qué pasos aplica el modo de operación?",
     "correcta": "Rellenar, trocear, cifrar cada bloque y ensamblar el resultado",
     "distractores": [
@@ -35,10 +27,6 @@
     "id": "bloques-003",
     "concepto": "bloques-modos-necesidad",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 11
-    },
     "pregunta": "Para cifrar un mensaje de varios bloques, ¿qué decide el modo de operación?",
     "correcta": "Cómo se relaciona cada bloque con los demás al cifrarlo",
     "distractores": [
@@ -51,10 +39,6 @@
     "id": "bloques-004",
     "concepto": "bloques-ecb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 11
-    },
     "pregunta": "En el modo ECB, ¿cómo se cifra cada bloque del mensaje?",
     "correcta": "Por separado, con la misma clave y sin depender de otros bloques",
     "distractores": [
@@ -67,10 +51,6 @@
     "id": "bloques-005",
     "concepto": "bloques-ecb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 12
-    },
     "pregunta": "Se cifra en ECB una imagen con grandes zonas de un solo color. ¿Qué se ve en la imagen cifrada?",
     "correcta": "Las formas de la imagen, porque bloques iguales dan cifrados iguales",
     "distractores": [
@@ -83,10 +63,6 @@
     "id": "bloques-006",
     "concepto": "bloques-ecb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 11
-    },
     "pregunta": "Un atacante intercepta un mensaje cifrado en ECB sin conocer la clave. ¿Qué manipulación hace, de forma que cada bloque se siga descifrando bien?",
     "correcta": "Eliminar, permutar o duplicar bloques enteros del criptograma",
     "distractores": [
@@ -99,10 +75,6 @@
     "id": "bloques-007",
     "concepto": "bloques-cbc",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 13
-    },
     "pregunta": "En el modo CBC, ¿con qué se combina cada bloque claro antes de cifrarlo?",
     "correcta": "Con el bloque cifrado anterior, mediante XOR",
     "distractores": [
@@ -115,10 +87,6 @@
     "id": "bloques-008",
     "concepto": "bloques-cbc",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 13
-    },
     "pregunta": "Dos mensajes cifrados en CBC con la misma clave empiezan por el mismo bloque claro, pero usan vectores de inicialización distintos. ¿Cómo salen sus primeros bloques cifrados?",
     "correcta": "Distintos, porque el vector cambia la entrada del cifrado",
     "distractores": [
@@ -131,10 +99,6 @@
     "id": "bloques-009",
     "concepto": "bloques-cbc",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 13
-    },
     "pregunta": "¿Qué propiedad del modo CBC permite usarlo para verificar la integridad de un mensaje?",
     "correcta": "Cada bloque cifrado depende de todos los bloques claros anteriores",
     "distractores": [
@@ -147,10 +111,6 @@
     "id": "bloques-010",
     "concepto": "bloques-cfb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 14
-    },
     "pregunta": "En el modo CFB, ¿en qué orden se procesa cada bloque?",
     "correcta": "Cifra el bloque cifrado anterior, y combina el resultado con el bloque claro",
     "distractores": [
@@ -163,10 +123,6 @@
     "id": "bloques-011",
     "concepto": "bloques-cfb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 14
-    },
     "pregunta": "Un receptor descifra un mensaje en CFB con un algoritmo de bloques. ¿Qué función del algoritmo usa?",
     "correcta": "La de cifrado, la misma que usa el emisor",
     "distractores": [
@@ -179,10 +135,6 @@
     "id": "bloques-012",
     "concepto": "bloques-cfb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 14
-    },
     "pregunta": "Un terminal manda cada pulsación de teclado, de un byte, cifrada con un algoritmo de bloques de 16 bytes. ¿Qué modo manda cada byte sin esperar a llenar un bloque?",
     "correcta": "CFB, que combina cada paquete con una parte del cifrado",
     "distractores": [
@@ -195,10 +147,6 @@
     "id": "bloques-013",
     "concepto": "bloques-ofb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 15
-    },
     "pregunta": "En el modo OFB, ¿de qué depende la secuencia que se combina con el mensaje?",
     "correcta": "De la clave y del vector de inicialización",
     "distractores": [
@@ -211,10 +159,6 @@
     "id": "bloques-014",
     "concepto": "bloques-ofb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 15
-    },
     "pregunta": "Un emisor en OFB conoce la clave y el vector de inicialización antes de tener el mensaje. ¿Qué puede hacer por adelantado?",
     "correcta": "Calcular la secuencia entera, y guardarla para el XOR",
     "distractores": [
@@ -227,10 +171,6 @@
     "id": "bloques-015",
     "concepto": "bloques-ofb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 15
-    },
     "pregunta": "Al combinar mediante XOR la secuencia del modo OFB con el mensaje, ¿qué tipo de cifrado resulta?",
     "correcta": "Un cifrado de flujo",
     "distractores": [
@@ -243,10 +183,6 @@
     "id": "bloques-016",
     "concepto": "bloques-ctr",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 16
-    },
     "pregunta": "En el modo CTR, ¿qué entra al cifrado para generar cada bloque de secuencia?",
     "correcta": "Un contador, que cambia en cada bloque",
     "distractores": [
@@ -259,10 +195,6 @@
     "id": "bloques-017",
     "concepto": "bloques-ctr",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 16
-    },
     "pregunta": "Un servidor de 8 núcleos cifra un archivo grande con un algoritmo de bloques. ¿Qué modo le deja calcular la secuencia en los 8 núcleos a la vez?",
     "correcta": "CTR, porque cada bloque de secuencia depende solo de su contador",
     "distractores": [
@@ -275,10 +207,6 @@
     "id": "bloques-018",
     "concepto": "bloques-ctr",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 16
-    },
     "pregunta": "Un usuario quiere descifrar solo el bloque 1000 de un archivo cifrado en CTR. ¿Qué tiene que calcular?",
     "correcta": "El cifrado del contador 1000, y nada más",
     "distractores": [
@@ -291,10 +219,6 @@
     "id": "flujo-001",
     "concepto": "flujo-modos-sincronia",
     "apartado": "flujo",
-    "fuente": {
-      "pdf": "3.1.Cifrados_Flujo_p.pdf",
-      "pagina": 11
-    },
     "pregunta": "Como generador de secuencia, ¿qué tipo de generador produce el modo CFB?",
     "correcta": "Asíncrono, porque la secuencia usa el criptograma anterior",
     "distractores": [
@@ -307,10 +231,6 @@
     "id": "flujo-002",
     "concepto": "flujo-modos-sincronia",
     "apartado": "flujo",
-    "fuente": {
-      "pdf": "3.1.Cifrados_Flujo_p.pdf",
-      "pagina": 12
-    },
     "pregunta": "En una transmisión cifrada en OFB se pierde un bit por el camino. ¿Qué le pasa al resto del mensaje descifrado?",
     "correcta": "Se corrompe, porque emisor y receptor pierden la sincronización",
     "distractores": [
@@ -323,10 +243,6 @@
     "id": "flujo-003",
     "concepto": "flujo-modos-sincronia",
     "apartado": "flujo",
-    "fuente": {
-      "pdf": "3.1.Cifrados_Flujo_p.pdf",
-      "pagina": 11
-    },
     "pregunta": "En una transmisión cifrada en CFB se pierde un bloque por el camino. ¿Qué le pasa al resto del mensaje descifrado?",
     "correcta": "Falla el bloque siguiente, y después se resincroniza con el criptograma",
     "distractores": [
@@ -339,10 +255,6 @@
     "id": "bloques-019",
     "concepto": "sigla-ecb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 11
-    },
     "pregunta": "¿Qué significa la sigla ECB en los modos de operación?",
     "correcta": "Electronic Codebook",
     "distractores": [
@@ -355,10 +267,6 @@
     "id": "bloques-020",
     "concepto": "sigla-cbc",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 13
-    },
     "pregunta": "¿Qué significa la sigla CBC en los modos de operación?",
     "correcta": "Cipher Block Chaining",
     "distractores": [
@@ -371,10 +279,6 @@
     "id": "bloques-021",
     "concepto": "sigla-cfb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 14
-    },
     "pregunta": "¿Qué significa la sigla CFB en los modos de operación?",
     "correcta": "Cipher Feedback",
     "distractores": [
@@ -387,10 +291,6 @@
     "id": "bloques-022",
     "concepto": "sigla-ofb",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 15
-    },
     "pregunta": "¿Qué significa la sigla OFB en los modos de operación?",
     "correcta": "Output Feedback",
     "distractores": [
@@ -403,10 +303,6 @@
     "id": "bloques-023",
     "concepto": "sigla-ctr",
     "apartado": "bloques",
-    "fuente": {
-      "pdf": "2.1.Cifrados_Bloques_p.pdf",
-      "pagina": 16
-    },
     "pregunta": "¿Qué significa la sigla CTR en los modos de operación?",
     "correcta": "Counter",
     "distractores": [

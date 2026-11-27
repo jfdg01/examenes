@@ -1,0 +1,56 @@
+[
+  {
+    "id": "ssh-puerto",
+    "apartado": "ssh",
+    "idea": "SSH escucha por defecto en el puerto TCP 22.",
+    "fuente": {
+      "pdf": "1_Redes.pdf",
+      "pagina": 1
+    }
+  },
+  {
+    "id": "ssh-clave-de-sesion",
+    "apartado": "ssh",
+    "idea": "SSH deriva una clave de sesión simétrica con Diffie-Hellman.",
+    "fuente": {
+      "pdf": "1_Redes.pdf",
+      "pagina": 1
+    }
+  },
+  {
+    "id": "ssh-autenticacion-del-servidor",
+    "apartado": "ssh",
+    "idea": "El cliente autentica al servidor con la clave pública de su host.",
+    "fuente": {
+      "pdf": "1_Redes.pdf",
+      "pagina": 1
+    }
+  },
+  {
+    "id": "ssh-autenticacion-del-usuario",
+    "apartado": "ssh",
+    "idea": "El usuario se autentica con contraseña o con su clave pública.",
+    "fuente": {
+      "pdf": "1_Redes.pdf",
+      "pagina": 1
+    }
+  },
+  {
+    "id": "sigla-tls",
+    "apartado": "tls",
+    "idea": "TLS son las siglas de Transport Layer Security.",
+    "fuente": {
+      "pdf": "1_Redes.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "tls-certificado",
+    "apartado": "tls",
+    "idea": "El servidor TLS prueba su identidad con un certificado X.509 firmado por una CA.",
+    "fuente": {
+      "pdf": "1_Redes.pdf",
+      "pagina": 2
+    }
+  }
+]

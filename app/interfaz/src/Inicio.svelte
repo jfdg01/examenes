@@ -1,13 +1,16 @@
 <script lang="ts">
   import Pomodoro from "./Pomodoro.svelte";
-  import type { Inicio, Par, TemaDelInicio } from "./nucleo/nucleo.js";
+  import type { CifraDeDesarrollo, Inicio, Par, TemaDelInicio } from "./nucleo/nucleo.js";
 
-  let { inicio, objetivo, error, onobjetivo, onempezar, onseleccion }: {
+  let { inicio, desarrollo, objetivo, error, onobjetivo, onempezar, ondesarrollo, onseleccion }: {
     inicio: Inicio | null;
+    // Sin banco de desarrollo, `undefined`, y el botón no sale.
+    desarrollo: CifraDeDesarrollo | undefined;
     objetivo: number;
     error: string;
     onobjetivo: (objetivo: number) => void;
     onempezar: (simulacro: boolean) => void;
+    ondesarrollo: () => void;
     onseleccion: (seleccion: Par[]) => void;
   } = $props();
 
@@ -133,15 +136,31 @@
           {/if}
         {/each}
       </fieldset>
-      <button
-        class="my-3 block w-full cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento disabled:cursor-default disabled:opacity-50"
-        disabled={inicio.sesion === 0}
-        onclick={() => onempezar(false)}>Empezar la sesión ({inicio.sesion} preguntas)</button
-      >
+      <!-- Un aviso sin bloqueo: `banco pendientes` lista las respuestas, y el agente las corrige. -->
+      {#if desarrollo?.sin_corregir}
+        <p class="sin-corregir mt-3 -mb-1 text-[13px] text-aviso">
+          {desarrollo.sin_corregir === 1 ? "1 respuesta sin corregir" : `${desarrollo.sin_corregir} respuestas sin corregir`}
+        </p>
+      {/if}
+      <div class="my-3 flex gap-2.5">
+        <button
+          class="flex-1 cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento disabled:cursor-default disabled:opacity-50"
+          disabled={inicio.sesion === 0}
+          onclick={() => onempezar(false)}>Tipo test ({inicio.sesion})</button
+        >
+        {#if desarrollo}
+          <button
+            class="desarrollo flex-1 cursor-pointer rounded-xl border-2 border-acento bg-tarjeta p-4 text-[16px] font-semibold text-acento disabled:cursor-default disabled:opacity-50"
+            disabled={desarrollo.sesion === 0}
+            onclick={ondesarrollo}>Desarrollo ({desarrollo.sesion})</button
+          >
+        {/if}
+      </div>
       <button
         class="my-3 block w-full cursor-pointer rounded-xl border-2 border-linea bg-tarjeta p-4 text-[16px] font-semibold disabled:cursor-default disabled:opacity-50"
         disabled={inicio.simulacro === 0}
-        onclick={() => onempezar(true)}>Simulacro ({inicio.simulacro} preguntas)</button
+        onclick={() => onempezar(true)}
+        >Simulacro ({#if desarrollo?.simulacro}{desarrollo.simulacro} de desarrollo y {inicio.simulacro} de test{:else}{inicio.simulacro} preguntas{/if})</button
       >
     {/if}
   {/if}

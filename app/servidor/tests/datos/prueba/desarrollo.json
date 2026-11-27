@@ -1,0 +1,28 @@
+[
+  {
+    "id": "ssh-d001",
+    "apartado": "ssh",
+    "forma": "proceso",
+    "enunciado": "Describe cómo se establece una conexión SSH.",
+    "modelo": "El cliente abre una conexión TCP al puerto 22 del servidor. Los dos derivan una clave de sesión simétrica con Diffie-Hellman. El cliente autentica al servidor con la clave pública de su host. Después el usuario se autentica con una contraseña o con su clave pública.",
+    "puntos": [
+      "ssh-puerto",
+      "ssh-clave-de-sesion",
+      "ssh-autenticacion-del-servidor",
+      "ssh-autenticacion-del-usuario"
+    ]
+  },
+  {
+    "id": "ssh-d002",
+    "apartado": "ssh",
+    "forma": "comparacion",
+    "enunciado": "Compara la autenticación del servidor y la del usuario en SSH.",
+    "modelo": "SSH autentica primero al servidor y después al usuario. El servidor prueba su identidad con la clave pública de su host. El usuario la prueba con una contraseña o con su clave pública. Las dos autenticaciones viajan cifradas con la clave de sesión, que sale de Diffie-Hellman sobre el puerto 22.",
+    "puntos": [
+      "ssh-puerto",
+      "ssh-clave-de-sesion",
+      "ssh-autenticacion-del-servidor",
+      "ssh-autenticacion-del-usuario"
+    ]
+  }
+]

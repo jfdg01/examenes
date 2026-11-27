@@ -1,6 +1,8 @@
 # El modelo de la práctica
 
-La app tiene 2 máquinas de estados: el estado de una pregunta y la ronda. El estado se calcula desde `respuestas.jsonl`. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
+El banco de un examen son 3 archivos: `conceptos.json`, `preguntas.json` con las preguntas de test, y `desarrollo.json` con las de desarrollo. Las preguntas salen de los conceptos, por [el ADR 0005](adr/0005-el-concepto-es-una-entidad.md). La página de una pregunta de test es la de su concepto. Las preguntas de un examen congelado sin `conceptos.json` no tienen página.
+
+La app tiene 2 máquinas de estados: el estado de una pregunta y la ronda. El estado se calcula desde `respuestas.jsonl` en el test, y desde `desarrollo.jsonl` en el desarrollo. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
 
 ## El estado de una pregunta
 
@@ -46,3 +48,24 @@ Dentro de un grupo, el azar rompe los empates. Las 12 preguntas salen en un orde
 ## El simulacro
 
 El simulacro lleva las preguntas del examen, al azar de la selección, con una pregunta por concepto. Solo rellena con hermanas cuando la selección tiene menos conceptos que preguntas el examen.
+
+Con `desarrollo` en `examen.json`, el simulacro es **mixto**: lleva primero esas preguntas de desarrollo, al azar de la selección, y luego el test, con un solo reloj. La cuadrícula numera las dos partes seguidas.
+
+- Una pregunta de desarrollo lleva solo el enunciado y el cuadro de texto. Un cuadro vacío no bloquea "Terminar", y cuenta como Again.
+- Al terminar, cada respuesta entra en el historial **sin corregir**, y un cuadro vacío entra con su Again. Al abandonar, entran solo las respuestas con texto.
+- El final pone cada texto junto a la respuesta modelo y sus puntos, con los botones de la nota. Una respuesta sin clic queda sin corregir, y la corrige después el agente, como dice [`DESARROLLO.md`](DESARROLLO.md).
+- La nota pesa cada parte con `pesos`. Con alguna respuesta sin corregir, la nota dice "desarrollo sin corregir". El test resta sus fallos sin límite en 0.
+
+## La sesión de desarrollo
+
+Una pregunta de desarrollo tiene su estado de FSRS, aparte del test, por [el ADR 0006](adr/0006-el-desarrollo-es-un-banco-aparte.md). Una nota de desarrollo no mueve ninguna pregunta de test.
+
+- El botón "Desarrollo" va a la derecha de "Tipo test", y dice cuántas preguntas lleva su sesión, como "Desarrollo (4)". Sin `desarrollo.json`, no sale.
+- Una pregunta de desarrollo está en la selección cuando su apartado está marcado en un tema que lleva el PDF de alguno de sus conceptos.
+- La sesión lleva 4 preguntas: las falladas, de la más vieja a la más nueva; las vencidas, de la menor probabilidad de acierto a la mayor; las sin ver; y las no vencidas. No lleva la regla de un concepto por pregunta, porque cada pregunta de desarrollo cubre varios conceptos.
+- "No la sabía", "A medias" y "La sabía" son Again, Hard y Good. "Ver respuesta modelo" funciona con el cuadro vacío, para una respuesta pensada y no escrita.
+- La nota entra en el historial al ponerla, como en la sesión de test, y la sesión pasa a la siguiente sin hacer. Cuando todas están hechas, vuelve al inicio, sin final.
+- "Anterior" y "Siguiente" saltan entre las 4. Una pregunta hecha enseña su texto, la respuesta modelo y su nota, sin cambiarlos, porque FSRS ya contó esa nota.
+- "Corregir luego" sale entre las flechas, bajo las 3 notas, con la respuesta modelo abierta, porque al compararlas se ve si cuesta corregirla. Guarda el texto sin nota. Con el cuadro vacío queda gris.
+- El inicio dice "N respuestas sin corregir" cuando el historial las tiene. Una respuesta sin corregir no mueve su FSRS hasta su corrección.
+- La ronda guardada lleva el texto de cada pregunta y lo hecho con cada una, su nota o "Corregir luego", así que una recarga sigue en la primera sin hacer, con su texto. La del simulacro mixto lleva los textos del desarrollo, y vuelve al desarrollo si el test no tiene respuestas.

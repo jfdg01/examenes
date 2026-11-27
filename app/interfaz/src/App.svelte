@@ -1,7 +1,9 @@
 <script lang="ts">
   import * as nucleo from "./nucleo/nucleo.js";
-  import type { Columnas, Datos, Edicion, Guardado, Nota, NotaDelSimulacro, Par, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
+  import type { Columnas, Datos, Edicion, Guardado, Hecha, LineaDeDesarrollo, Nota, NotaDeDesarrollo, Pagina, Par, PreguntaDeDesarrolloDeSesion, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
   import { aviso, type Marca } from "./Cuadricula.svelte";
+  import Desarrollo from "./Desarrollo.svelte";
+  import DesarrolloDelSimulacro from "./DesarrolloDelSimulacro.svelte";
   import Final from "./Final.svelte";
   import Hoja from "./Hoja.svelte";
   import Inicio from "./Inicio.svelte";
@@ -14,6 +16,7 @@
   const claveObjetivo = `${carpeta}-objetivo`;
   const claveRonda = `${carpeta}-ronda`;
   const clavePendientes = `${carpeta}-pendientes`;
+  const clavePendientesDeDesarrollo = `${carpeta}-pendientes-desarrollo`;
   const claveColumnas = `${carpeta}-columnas`;
   const claveNotasVisibles = `${carpeta}-notas-visibles`;
   let objetivo = $state(Number(localStorage.getItem(claveObjetivo) ?? 5));
@@ -22,27 +25,31 @@
   // Los pares marcados del inicio. Sin selección, todo está marcado.
   let seleccion = $state.raw<Par[] | undefined>(undefined);
   const inicio = $derived(datos && nucleo.inicio(datos, seleccion, objetivo, Date.now()));
+  const cifraDeDesarrollo = $derived(datos ? nucleo.cifra_de_desarrollo(datos, seleccion) : undefined);
 
-  // Una respuesta sin red espera en `localStorage` hasta que llega al servidor.
-  const pendientes = (): Respuesta[] => JSON.parse(localStorage.getItem(clavePendientes) ?? "[]");
+  // Una respuesta sin red espera en `localStorage` hasta que llega al servidor. El test y el desarrollo tienen cada uno su lista.
+  const pendientes = <T,>(clave: string): T[] => JSON.parse(localStorage.getItem(clave) ?? "[]");
 
   // Los envíos van en cola, y una respuesta nueva solo entra al final de las pendientes.
   // Así las enviadas son las primeras. El error es "" cuando todas llegaron.
   let cola = Promise.resolve("");
   function enviarPendientes() {
-    return (cola = cola.then(async () => {
-      const enviando = pendientes();
-      if (!enviando.length) return "";
-      const r = await fetch("api/respuestas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(enviando),
-      }).catch(() => null);
-      if (!r) return "Sin red: la respuesta se envía al volver la red.";
-      if (!r.ok) return `El servidor responde ${r.status}, y la respuesta sigue en este dispositivo.`;
-      localStorage.setItem(clavePendientes, JSON.stringify(pendientes().slice(enviando.length)));
-      return "";
-    }));
+    return (cola = cola.then(
+      async () => (await enviarLista(clavePendientes, "api/respuestas")) || (await enviarLista(clavePendientesDeDesarrollo, "api/desarrollo")),
+    ));
+  }
+  async function enviarLista(clave: string, ruta: string) {
+    const enviando = pendientes(clave);
+    if (!enviando.length) return "";
+    const r = await fetch(ruta, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(enviando),
+    }).catch(() => null);
+    if (!r) return "Sin red: la respuesta se envía al volver la red.";
+    if (!r.ok) return `El servidor responde ${r.status}, y la respuesta sigue en este dispositivo.`;
+    localStorage.setItem(clave, JSON.stringify(pendientes(clave).slice(enviando.length)));
+    return "";
   }
   // Con la red de vuelta, las pendientes salen y el historial llega con las respuestas de otros dispositivos.
   addEventListener("online", cargarInicio);
@@ -55,7 +62,11 @@
       if (!r.ok) throw new Error(`El servidor responde ${r.status}`);
       const d: Datos = await r.json();
       // Una respuesta que no llegó al servidor sigue en el historial de la pantalla.
-      datos = { ...d, historial: nucleo.unir(d.historial, pendientes()) };
+      datos = {
+        ...d,
+        historial: nucleo.unir(d.historial, pendientes(clavePendientes)),
+        historial_de_desarrollo: nucleo.unir_desarrollo(d.historial_de_desarrollo, pendientes(clavePendientesDeDesarrollo)),
+      };
       document.title = datos.examen.titulo;
     } catch (e) {
       error = datos ? "Sin red: el inicio usa el historial de este dispositivo." : (e as Error).message;
@@ -71,18 +82,31 @@
       .then((r) => (r.ok ? r.json() : sinRonda))
       .catch(() => sinRonda);
     // Un clic en "Empezar" antes de la respuesta ya empezó una ronda nueva, que gana.
-    if (ronda.estado !== "Inicio") return;
+    if (ronda.estado !== "Inicio" || desarrollo) return;
     const local = JSON.parse(localStorage.getItem(claveRonda) ?? "null") ?? sinRonda;
     // Un guardado de este dispositivo con la hora en milisegundos pasa a ISO, y no pierde la ronda.
     if (typeof local.guardada === "number") local.guardada = new Date(local.guardada).toISOString();
     // Una ronda de este dispositivo sin las respuestas del simulacro las tiene ya en el historial.
     if (local.ronda && !local.ronda.respuestas) local.ronda.respuestas = [];
+    // Una sesión de desarrollo de este dispositivo con el número de hechas marca cada una como sin corregir.
+    const rd = local.ronda?.desarrollo;
+    if (typeof rd?.hechas === "number") rd.hechas = rd.ids.map((_: string, k: number) => (k < rd.hechas ? "SinCorregir" : undefined));
     const g = nucleo.gana(servidor, local);
     enviar(g);
     seleccion = g.seleccion;
+    const d = nucleo.restaurar_desarrollo(datos, g, Date.now());
+    if (d) {
+      textos = d.textos;
+      hechas = d.hechas;
+      modelosAbiertos = d.hechas.map(() => false);
+      j = Math.max(0, d.hechas.findIndex((h) => !h));
+      desarrollo = d.preguntas;
+      return;
+    }
     const r = nucleo.restaurar(datos, g, Date.now());
     if (!r) return;
     ({ preguntas, resultados, simulacro } = r);
+    empezarElDesarrolloDelSimulacro(r.desarrollo, r.textos);
     elecciones = preguntas.map(() => null);
     respuestas = preguntas.map((q) => r.respuestas.find((x) => x.id === q.id) ?? null);
     limite = r.limite ?? 0;
@@ -106,8 +130,7 @@
 
   // La nota sale al servidor medio segundo después de la última tecla en su pregunta.
   const temporizadores: Record<string, ReturnType<typeof setTimeout>> = {};
-  function anotar(texto: string) {
-    const id = q.id;
+  function anotar(id: string, texto: string) {
     notas[id] = texto;
     clearTimeout(temporizadores[id]);
     temporizadores[id] = setTimeout(async () => {
@@ -121,16 +144,26 @@
     }, 500);
   }
 
-  function enviar(g: Guardado) {
+  function enviar(g: Guardado, alServidor = true) {
     localStorage.setItem(claveRonda, JSON.stringify(g));
-    fetch("api/ronda", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(g) }).catch(() => {});
+    if (alServidor) fetch("api/ronda", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(g) }).catch(() => {});
   }
 
   // La ronda a medias, o ninguna en el inicio y el final.
-  function guardar() {
+  function guardar(alServidor = true) {
+    if (alServidor) clearTimeout(guardado);
+    const guardada = new Date().toISOString();
+    if (desarrollo) {
+      const ids = desarrollo.map((q) => q.id);
+      return enviar({ guardada, ronda: { ids, resultados: [], respuestas: [], simulacro: false, limite: undefined, desarrollo: { ids, textos, hechas } }, seleccion }, alServidor);
+    }
     const aMedias = ronda.estado === "Pregunta";
     const ids = preguntas.map((q) => q.id);
-    enviar({ guardada: new Date().toISOString(), ronda: aMedias ? { ids, resultados, respuestas: respuestas.filter((r) => r !== null), simulacro, limite: simulacro ? limite : undefined } : undefined, seleccion });
+    const conDesarrollo = desarrolloDelSimulacro.length ? { ids: desarrolloDelSimulacro.map((q) => q.id), textos: textosDelSimulacro, hechas: [] } : undefined;
+    enviar(
+      { guardada, ronda: aMedias ? { ids, resultados, respuestas: respuestas.filter((r) => r !== null), simulacro, limite: simulacro ? limite : undefined, desarrollo: conDesarrollo } : undefined, seleccion },
+      alServidor,
+    );
   }
 
   let ronda = $state<Ronda>({ estado: "Inicio" });
@@ -155,7 +188,6 @@
       return r === "Acierto" ? "acierto" : r === "Fallo" ? "fallo" : "blanco";
     }),
   );
-  let nota = $state<NotaDelSimulacro | null>(null);
   let limite = 0;
   let reloj: ReturnType<typeof setInterval> | undefined;
   let restante = $state(0);
@@ -180,7 +212,11 @@
       const s = nucleo.simulacro(datos, seleccion, ahora);
       preguntas = s.preguntas;
       limite = ahora + s.segundos * 1000;
-    } else preguntas = nucleo.sesion(datos, seleccion, ahora);
+      empezarElDesarrolloDelSimulacro(s.desarrollo, s.desarrollo.map(() => ""));
+    } else {
+      preguntas = nucleo.sesion(datos, seleccion, ahora);
+      empezarElDesarrolloDelSimulacro([], []);
+    }
     simulacro = comoSimulacro;
     resultados = preguntas.map(() => undefined);
     elecciones = preguntas.map(() => null);
@@ -194,7 +230,8 @@
   function seguir() {
     i = resultados.findIndex((r) => r === undefined);
     if (i < 0) i = preguntas.length;
-    nota = null;
+    // Un simulacro mixto sin respuestas de test empieza en su primer desarrollo.
+    enDesarrollo = desarrolloDelSimulacro.length && resultados.every((r) => r === undefined) ? 0 : -1;
     abiertas = false;
     error = "";
     if (i >= preguntas.length) return terminar();
@@ -217,9 +254,8 @@
     if (ronda.estado === "Final") return;
     clearInterval(reloj);
     ronda = { estado: "Final" };
-    entregar();
+    entregar(true);
     guardar();
-    nota = nucleo.nota({ preguntas: preguntas.length, resultados: resultados.filter((r) => r !== undefined) }, datos!.examen.penalizacion);
   }
 
   async function contestar(opcion: number | null, seguro: boolean) {
@@ -235,19 +271,71 @@
 
   async function alHistorial(nuevas: Respuesta[]) {
     if (!nuevas.length) return;
-    localStorage.setItem(clavePendientes, JSON.stringify([...pendientes(), ...nuevas]));
+    localStorage.setItem(clavePendientes, JSON.stringify([...pendientes<Respuesta>(clavePendientes), ...nuevas]));
     datos = { ...datos!, historial: nucleo.unir(datos!.historial, nuevas) };
     error = await enviarPendientes();
   }
 
   // Las respuestas del simulacro entran en el historial al terminar o al abandonar, cada una una vez.
-  function entregar() {
+  // Al terminar entra cada desarrollo, y uno vacío lleva su corrección Again. Al abandonar, solo entra el que tiene texto.
+  function entregar(alTerminar = false) {
     const nuevas = respuestas.filter((r) => r !== null);
     respuestas = respuestas.map(() => null);
     alHistorial(nuevas);
+    if (desarrolloEntregado) return;
+    desarrolloEntregado = true;
+    const ahora = Date.now();
+    const lineas = desarrolloDelSimulacro.flatMap((q, k) => {
+      const texto = textosDelSimulacro[k];
+      if (!alTerminar && !texto.trim()) return [];
+      const l = nucleo.responder(q.id, texto, ahora);
+      tsDelSimulacro[k] = l[0].ts;
+      notasDelSimulacro[k] = texto.trim() ? undefined : "Again";
+      return l;
+    });
+    alDesarrollo(lineas);
+  }
+
+  // Las preguntas de desarrollo del simulacro van antes que las de test. La posición `k` de la ronda es la de
+  // desarrollo `k` si `k` es menor que su número, y la de test `k` menos ese número si no.
+  let desarrolloDelSimulacro = $state.raw<PreguntaDeDesarrolloDeSesion[]>([]);
+  let textosDelSimulacro = $state<string[]>([]);
+  // El `ts` de la línea de respuesta de cada desarrollo, y su nota del final, `undefined` sin corregir.
+  let tsDelSimulacro: string[] = [];
+  let notasDelSimulacro = $state<(NotaDeDesarrollo | undefined)[]>([]);
+  let desarrolloEntregado = false;
+  // La pregunta de desarrollo en pantalla, o -1 en una de test.
+  let enDesarrollo = $state(-1);
+  // El final tiene la nota, que cambia con cada corrección de un desarrollo.
+  const nota = $derived(
+    final && datos
+      ? nucleo.nota({ preguntas: preguntas.length, resultados: resultados.filter((r) => r !== undefined), desarrollo: notasDelSimulacro }, datos.examen)
+      : null,
+  );
+  const marcasDeLaRonda: Marca[] = $derived([...textosDelSimulacro.map((t): Marca => (t.trim() ? "contestada" : "blanco")), ...marcas]);
+  function empezarElDesarrolloDelSimulacro(qs: PreguntaDeDesarrolloDeSesion[], ts: string[]) {
+    desarrolloDelSimulacro = qs;
+    textosDelSimulacro = ts;
+    tsDelSimulacro = qs.map(() => "");
+    notasDelSimulacro = [];
+    desarrolloEntregado = false;
+  }
+  function irEnLaRonda(k: number) {
+    if (k >= desarrolloDelSimulacro.length) return ir(k - desarrolloDelSimulacro.length);
+    enDesarrollo = k;
+    avisar = false;
+  }
+  function escribirEnElSimulacro(texto: string) {
+    textosDelSimulacro[enDesarrollo] = texto;
+    guardarLuego();
+  }
+  function corregirDelSimulacro(k: number, n: NotaDeDesarrollo) {
+    notasDelSimulacro[k] = n;
+    alDesarrollo([nucleo.corregir_respuesta(desarrolloDelSimulacro[k].id, tsDelSimulacro[k], n, Date.now())]);
   }
 
   function ir(k: number) {
+    enDesarrollo = -1;
     i = k;
     avisar = false;
     abiertas = false;
@@ -290,6 +378,64 @@
     return "";
   }
 
+  // La sesión de desarrollo. Sin ella, `desarrollo` es null.
+  let desarrollo = $state.raw<PreguntaDeDesarrolloDeSesion[] | null>(null);
+  let textos = $state<string[]>([]);
+  // Lo hecho con cada pregunta. Una pregunta hecha se ve sin cambiarla, y la sesión acaba cuando todas lo están.
+  let hechas = $state<(Hecha | undefined)[]>([]);
+  // La pregunta en pantalla, y si tiene la respuesta modelo abierta.
+  let j = $state(0);
+  let modelosAbiertos = $state<boolean[]>([]);
+  let paginaDeDesarrollo = $state.raw<Pagina | null>(null);
+
+  function empezarDesarrollo() {
+    if (!datos) return;
+    const preguntas = nucleo.sesion_de_desarrollo(datos, seleccion, Date.now());
+    if (!preguntas.length) return;
+    textos = preguntas.map(() => "");
+    hechas = preguntas.map(() => undefined);
+    modelosAbiertos = preguntas.map(() => false);
+    j = 0;
+    error = "";
+    desarrollo = preguntas;
+    guardar();
+  }
+
+  // El texto entra en `localStorage` con cada tecla, y en el servidor medio segundo después de la última.
+  let guardado: ReturnType<typeof setTimeout> | undefined;
+  function escribir(texto: string) {
+    textos[j] = texto;
+    guardarLuego();
+  }
+  function guardarLuego() {
+    guardar(false);
+    clearTimeout(guardado);
+    guardado = setTimeout(() => guardar(), 500);
+  }
+
+  // La respuesta calificada, o sin corregir con «Corregir luego». Una nota cambia cuándo vuelve la pregunta. La sesión
+  // sigue en la siguiente sin hacer, y tras la última vuelve al inicio.
+  function responder(hecha: Hecha, lineas: LineaDeDesarrollo[]) {
+    if (!desarrollo) return;
+    const q = desarrollo[j];
+    const vuelve = { Again: q.vuelve_tras_again, Hard: q.vuelve_tras_hard, Good: q.vuelve_tras_good, SinCorregir: q.vuelve }[hecha];
+    desarrollo = desarrollo.map((p, k) => (k === j ? { ...p, vuelve } : p));
+    hechas[j] = hecha;
+    const n = hechas.length;
+    const siguiente = [...Array(n).keys()].map((k) => (j + 1 + k) % n).find((k) => !hechas[k]);
+    if (siguiente === undefined) desarrollo = null;
+    else j = siguiente;
+    guardar();
+    alDesarrollo(lineas);
+  }
+
+  async function alDesarrollo(lineas: LineaDeDesarrollo[]) {
+    if (!lineas.length) return;
+    localStorage.setItem(clavePendientesDeDesarrollo, JSON.stringify([...pendientes<LineaDeDesarrollo>(clavePendientesDeDesarrollo), ...lineas]));
+    datos = { ...datos!, historial_de_desarrollo: nucleo.unir_desarrollo(datos!.historial_de_desarrollo, lineas) };
+    error = await enviarPendientes();
+  }
+
   function volver() {
     clearInterval(reloj);
     entregar();
@@ -299,15 +445,51 @@
   }
 
   function abandonar() {
+    if (desarrollo) {
+      if (!confirm("¿Abandonar la sesión de desarrollo? Las notas quedan en el historial.")) return;
+      desarrollo = null;
+      guardar();
+      return;
+    }
     if (revisando) return void (revisando = false);
     const que = simulacro ? "el simulacro" : "la sesión";
     if (confirm(`¿Abandonar ${que}? Las respuestas quedan en el historial.`)) volver();
   }
 </script>
 
-{#if ronda.estado === "Inicio"}
+{#if desarrollo}
+  {@const p = desarrollo[j]}
+  {#key j}
+    <Desarrollo
+      q={p}
+      i={j}
+      total={desarrollo.length}
+      texto={textos[j]}
+      hecha={hechas[j]}
+      solucion={modelosAbiertos[j] || !!hechas[j]}
+      nota={notas[p.id] ?? ""}
+      {notasVisibles}
+      {error}
+      ontexto={escribir}
+      onsolucion={() => (modelosAbiertos[j] = true)}
+      oncalificar={(n) => responder(n, nucleo.calificar(p.id, textos[j], n, Date.now()))}
+      oncorregirluego={() => responder("SinCorregir", nucleo.responder(p.id, textos[j], Date.now()))}
+      onir={(k) => (j = k)}
+      onnota={(t) => anotar(p.id, t)}
+      onnotasvisibles={alternarNotas}
+      onverpagina={(g) => {
+        paginaDeDesarrollo = g;
+        verPagina();
+      }}
+      onabandonar={abandonar}
+    />
+  {/key}
+  {#if pagina && paginaDeDesarrollo}<PaginaCompleta pagina={paginaDeDesarrollo} oncerrar={() => history.back()} />{/if}
+{:else if ronda.estado === "Inicio"}
   <Inicio
     {inicio}
+    desarrollo={cifraDeDesarrollo}
+    ondesarrollo={empezarDesarrollo}
     {objetivo}
     {error}
     onobjetivo={(o) => localStorage.setItem(claveObjetivo, String((objetivo = o)))}
@@ -317,7 +499,24 @@
       guardar();
     }}
   />
+{:else if ronda.estado === "Pregunta" && enDesarrollo >= 0}
+  {#key enDesarrollo}
+    <DesarrolloDelSimulacro
+      q={desarrolloDelSimulacro[enDesarrollo]}
+      i={enDesarrollo}
+      total={marcasDeLaRonda.length}
+      {restante}
+      texto={textosDelSimulacro[enDesarrollo]}
+      marcas={marcasDeLaRonda}
+      ontexto={escribirEnElSimulacro}
+      onir={irEnLaRonda}
+      onterminar={intentarTerminar}
+      onabandonar={abandonar}
+    />
+  {/key}
 {:else if ronda.estado === "Pregunta" || revisando}
+  <!-- La revisión desde el final lleva solo las preguntas de test. -->
+  {@const antes = revisando ? 0 : desarrolloDelSimulacro.length}
   <!-- El móvil: la línea de arriba, la barra, el cuerpo con su scroll y el pie fijo.
        El PC: 2 columnas. --l, --s y --r son el borde izquierdo, el separador y el borde derecho. -->
   <div
@@ -330,8 +529,8 @@
     {#key i}
     <Pregunta
       {q}
-      {i}
-      total={preguntas.length}
+      i={antes + i}
+      total={antes + preguntas.length}
       {simulacro}
       {restante}
       {eleccion}
@@ -343,15 +542,15 @@
       onabandonar={abandonar}
       oncontestar={contestar}
       onabiertas={() => (abiertas = !abiertas)}
-      onnota={anotar}
+      onnota={(t) => anotar(q.id, t)}
       onnotasvisibles={alternarNotas}
       onverpagina={verPagina}
       onsiguiente={siguiente}
       corregida={!simulacro || final}
       revision={revisando}
-      {marcas}
+      marcas={revisando ? marcas : marcasDeLaRonda}
       oneditar={editar}
-      onir={ir}
+      onir={(k) => (revisando ? ir(k) : irEnLaRonda(k))}
       onterminar={intentarTerminar}
       {etiqueta}
     >
@@ -363,12 +562,14 @@
       onsoltar={() => localStorage.setItem(claveColumnas, JSON.stringify(columnas))}
     />
   </div>
-  {#if pagina}<PaginaCompleta {q} oncerrar={() => history.back()} />{/if}
+  {#if pagina && q.pagina}<PaginaCompleta pagina={q.pagina} oncerrar={() => history.back()} />{/if}
 {:else}
   <Final
     {simulacro}
     {nota}
     preguntas={preguntas.length}
+    desarrollo={desarrolloDelSimulacro.map((q, k) => ({ q, texto: textosDelSimulacro[k], nota: notasDelSimulacro[k] }))}
+    oncorregir={corregirDelSimulacro}
     {error}
     onvolver={volver}
     {marcas}
