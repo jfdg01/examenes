@@ -21,7 +21,7 @@ El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.
 - `id` es la clave del historial, y no cambia nunca. Empieza por el `apartado`: `transporte-007`, y `transporte-s03` para una sigla.
 - `concepto` agrupa las preguntas de una misma idea.
 - `apartado` es uno de los apartados del tema de su `fuente`, en el campo `pdfs` de `examen.json`. Su nombre está en el campo `apartados`, y la cabecera de la pregunta lo muestra.
-- `fuente` es el PDF y su página de PDF, y no el número de la diapositiva. Es la página que explica la idea, y no una página que solo la nombra.
+- `fuente` es el PDF y su página de PDF, y no el número de la diapositiva. Un examen con `conceptos.json` no la lleva en la pregunta: la página es la de su concepto. Es la página que explica la idea, y no una página que solo la nombra.
 - `distractores` tiene `opciones` − 1 opciones. La interfaz baraja la correcta con los distractores.
 
 ## Las reglas
@@ -48,7 +48,7 @@ El `README.md` de cada examen dice lo que el profesor marcó como importante. Es
 cargo run --manifest-path app/Cargo.toml -p banco -- comprobar examenes/ps
 ```
 
-`banco comprobar` recibe la carpeta del examen, y falla con cada pregunta que rompe el formato: un `id` repetido, un `apartado` que no es de su PDF, un apartado sin nombre, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 3 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. Falla también con una línea `✗` cuya clave `«…»` no está en su distractor, en el orden de `distractores`, sin distinguir mayúsculas, y con dos líneas `✗` de una pregunta con la misma clave. También avisa, sin fallar, de estas cosas:
+`banco comprobar` recibe la carpeta del examen. Valida también `conceptos.json` y `desarrollo.json` si existen. Con `conceptos.json`, la cobertura de páginas mira las `fuente` de los conceptos. Un apartado sin preguntas de test acepta conceptos sin preguntas. Falla con cada pregunta que rompe el formato: un `id` repetido, un `apartado` que no es de su PDF, un apartado sin nombre, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 3 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. Falla también con una línea `✗` cuya clave `«…»` no está en su distractor, en el orden de `distractores`, sin distinguir mayúsculas, y con dos líneas `✗` de una pregunta con la misma clave. También avisa, sin fallar, de estas cosas:
 
 - un "siempre", un "nunca" o un "solo" de un distractor que la correcta no dice;
 - una correcta que es la opción más larga en más de 1 de cada 3 preguntas, sin contar las siglas;

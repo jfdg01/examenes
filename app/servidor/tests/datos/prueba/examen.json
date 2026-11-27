@@ -1,0 +1,25 @@
+{
+  "titulo": "Prueba",
+  "preguntas": 4,
+  "opciones": 4,
+  "minutos": 10,
+  "penalizacion": 0.25,
+  "pdfs": {
+    "1_Redes.pdf": {
+      "nombre": "Redes",
+      "apartados": [
+        "ssh",
+        "tls"
+      ]
+    }
+  },
+  "apartados": {
+    "ssh": "SSH",
+    "tls": "TLS"
+  },
+  "sin_pregunta": {
+    "1_Redes.pdf": {
+      "3": "La bibliografía, sin ideas propias."
+    }
+  }
+}

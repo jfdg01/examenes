@@ -17,3 +17,6 @@ wasm-bindgen = "=0.2.130"
 # `fsrs` trae `getrandom`, que en wasm32 pide su backend de JS. El `cfg` va en `.cargo/config.toml`.
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 getrandom = { version = "0.4", features = ["wasm_js"] }
+
+[dev-dependencies]
+serde_json = "1"

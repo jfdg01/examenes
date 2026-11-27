@@ -378,3 +378,85 @@ async fn una_edicion_mal_formada_no_toca_preguntas_json() {
     }
     assert_eq!(fs::read_to_string(raiz.path().join("ln/preguntas.json")).unwrap(), BANCO_LN);
 }
+
+/// Copia el examen de prueba, con conceptos y desarrollo, en `<raiz>/prueba`.
+fn crear_prueba(raiz: &Path) -> std::path::PathBuf {
+    let origen = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/datos/prueba");
+    let dir = raiz.join("prueba");
+    fs::create_dir(&dir).unwrap();
+    for archivo in ["examen.json", "conceptos.json", "preguntas.json", "desarrollo.json"] {
+        fs::copy(origen.join(archivo), dir.join(archivo)).unwrap();
+    }
+    dir
+}
+
+#[tokio::test]
+async fn el_inicio_da_los_conceptos_el_desarrollo_y_la_fuente_de_cada_pregunta_desde_su_concepto() {
+    let raiz = TempDir::new().unwrap();
+    crear_prueba(raiz.path());
+    let url = arrancar(raiz.path()).await;
+
+    let inicio = inicio(&url, "prueba").await;
+    assert_eq!(inicio["conceptos"].as_array().unwrap().len(), 6);
+    assert_eq!(inicio["desarrollo"][0]["forma"], "proceso");
+    assert_eq!(inicio["banco"][0]["fuente"], json!({ "pdf": "1_Redes.pdf", "pagina": 2 }));
+}
+
+#[tokio::test]
+async fn un_examen_sin_conceptos_da_las_listas_vacias_y_la_fuente_de_cada_pregunta() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+
+    let inicio = inicio(&url, "ln").await;
+    assert_eq!((&inicio["conceptos"], &inicio["desarrollo"]), (&json!([]), &json!([])));
+    assert_eq!(inicio["banco"][0]["fuente"], json!({ "pdf": "1_Legislacion.pdf", "pagina": 38 }));
+}
+
+#[tokio::test]
+async fn una_pregunta_sin_fuente_ni_concepto_da_un_error_que_la_nombra() {
+    let raiz = TempDir::new().unwrap();
+    let dir = crear_prueba(raiz.path());
+    fs::remove_file(dir.join("conceptos.json")).unwrap();
+    let url = arrancar(raiz.path()).await;
+
+    let respuesta = reqwest::get(format!("{url}/prueba/api/inicio")).await.unwrap();
+    assert_eq!(respuesta.status(), 500);
+    assert!(respuesta.text().await.unwrap().contains("tls-001"));
+}
+
+#[tokio::test]
+async fn una_pregunta_editada_de_un_examen_con_conceptos_queda_sin_fuente_en_preguntas_json() {
+    let raiz = TempDir::new().unwrap();
+    let dir = crear_prueba(raiz.path());
+    let url = arrancar(raiz.path()).await;
+
+    let mut q = inicio(&url, "prueba").await["banco"][1].clone();
+    q["pregunta"] = json!("¿Un enunciado editado?");
+    let estado = reqwest::Client::new().put(format!("{url}/prueba/api/preguntas")).json(&q).send().await.unwrap().status();
+    assert_eq!(estado, 204);
+    assert_eq!(inicio(&url, "prueba").await["banco"][1], q);
+    let guardada = &serde_json::from_str::<Value>(&fs::read_to_string(dir.join("preguntas.json")).unwrap()).unwrap()[1];
+    assert_eq!((&guardada["pregunta"], guardada.get("fuente")), (&json!("¿Un enunciado editado?"), None));
+}
+
+#[tokio::test]
+async fn un_temporal_a_medio_escribir_deja_el_archivo_viejo_entero() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+    let g = |hora: &str| json!({ "guardada": hora, "ronda": null });
+    assert_eq!(guardar_ronda(&url, &g("2026-11-21T10:00:00Z")).await, 204);
+    let dir = raiz.path().join("ln");
+    let temporales =
+        || fs::read_dir(&dir).unwrap().filter(|e| e.as_ref().unwrap().file_name().to_string_lossy().ends_with(".tmp")).count();
+    assert_eq!(temporales(), 0, "la escritura renombra su temporal");
+
+    // Un corte a mitad de la escritura deja el temporal cortado, y no toca el archivo.
+    fs::write(dir.join(".ronda.json.tmp"), "{\"guardada\": \"2026-11-2").unwrap();
+    assert_eq!(ronda(&url).await, g("2026-11-21T10:00:00Z"));
+
+    assert_eq!(guardar_ronda(&url, &g("2026-11-21T11:00:00Z")).await, 204);
+    assert_eq!(ronda(&url).await, g("2026-11-21T11:00:00Z"));
+    assert_eq!(temporales(), 0);
+}
