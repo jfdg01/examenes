@@ -1,6 +1,6 @@
 ---
 name: lote
-description: Escribe un banco de un examen por tipo (conceptos o test), con un creador y un revisor por apartado. Úsala con `/lote <examen> <tipo> [apartados]`, o cuando el dueño pide escribir o rehacer los conceptos o las preguntas de uno o varios apartados.
+description: Escribe un banco de un examen por tipo (conceptos, test o desarrollo), con un creador y un revisor por apartado. Úsala con `/lote <examen> <tipo> [apartados]`, o cuando el dueño pide escribir o rehacer los conceptos, las preguntas de test o las de desarrollo de uno o varios apartados.
 ---
 
 # Un lote
@@ -11,16 +11,17 @@ Un lote corre un solo tipo. El formato, las reglas, el creador y la revisión de
 
 - `conceptos`: [`docs/CONCEPTOS.md`](../../../docs/CONCEPTOS.md).
 - `test`: [`docs/TEST.md`](../../../docs/TEST.md).
+- `desarrollo`: [`docs/DESARROLLO.md`](../../../docs/DESARROLLO.md).
 
 En los comandos, `$B` es `app/target/debug/banco`.
 
 ## 1. La preparación
 
-1. Un lote de `test` en un apartado sin conceptos corre antes un lote de `conceptos` en ese apartado, entero, hasta sus arreglos. Después sigue con el de `test`.
-2. Un lote de `test` borra las preguntas del apartado. Pregunta al dueño qué pasa con el historial de esos apartados: `banco importar` vuelve a empezar en el primer `id` libre, y una respuesta vieja de `respuestas.jsonl` señalaría una pregunta nueva. Las opciones son borrar esas respuestas, o guardarlas fuera del repo. `ronda.json` se borra, porque una ronda a medias usa los `id` viejos.
+1. Un lote de `test` o de `desarrollo` en un apartado sin conceptos corre antes un lote de `conceptos` en ese apartado, entero, hasta sus arreglos. Después sigue con el lote pedido.
+2. Un lote de `test` o de `desarrollo` borra las preguntas de su tipo del apartado. Pregunta al dueño qué pasa con el historial de esos apartados, `respuestas.jsonl` en `test` y `desarrollo.jsonl` en `desarrollo`: `banco importar` vuelve a empezar en el primer `id` libre, y una respuesta vieja señalaría una pregunta nueva. Las opciones son borrar esas respuestas, o guardarlas fuera del repo. `ronda.json` se borra, porque una ronda a medias usa los `id` viejos.
 3. Compila `banco` una vez, para el binario de los creadores, y corre `banco preparar`. El comando quita del banco lo que el lote escribe y crea `<examen>/trabajo/<apartado>/` para cada apartado. Falla sin cambiar nada:
    - en `conceptos`, con una pregunta de test o de desarrollo de esos apartados, porque quedaría sin concepto;
-   - en `test`, con un apartado sin conceptos, con respuestas de esos apartados en `respuestas.jsonl`, o con `ronda.json`.
+   - en `test` y en `desarrollo`, con un apartado sin conceptos, con respuestas de esos apartados en su historial, o con `ronda.json`.
 
 ```bash
 cargo build --manifest-path app/Cargo.toml -p banco
@@ -56,7 +57,7 @@ $B montar <examen> <tipo> <apartado>...
 Una sigla de dos apartados choca en el montaje. Se queda en el apartado cuya página la explica, y sale a mano del `conceptos.json` de la otra carpeta de trabajo. Después:
 
 1. Corre `banco comprobar <examen>`.
-2. En `conceptos`, comprueba que cada punto marcado del `README.md` tiene su concepto. Un punto que ningún creador cubrió entra con un borrador y `banco importar`.
+2. En `conceptos`, comprueba que cada punto marcado del `README.md` tiene su concepto. En `desarrollo`, que tiene su pregunta. Un punto que ningún creador cubrió entra con un borrador y `banco importar`.
 3. Corre los tests, cambia la cifra de preguntas del `README.md` del examen si cambió, y haz el commit. El commit separa el banco de los creadores de los arreglos de la revisión.
 
 ## 4. La revisión
