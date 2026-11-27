@@ -157,31 +157,28 @@ pub fn desarrollo_de_la_seleccion(
 /// Las preguntas de desarrollo que sabes y las que hay, para el botón "Desarrollo" del inicio.
 #[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct CifraDeDesarrollo {
-    pub sabes: u32,
-    pub preguntas: u32,
+    /// Las preguntas de la sesión de desarrollo de la selección.
+    pub sesion: u32,
     /// Las preguntas de desarrollo del simulacro de la selección.
     pub simulacro: u32,
     /// Las respuestas sin corregir del examen entero, de cualquier selección.
     pub sin_corregir: u32,
 }
 
-/// La cifra de la selección. Sin banco de desarrollo, no hay cifra. `ahora` va en segundos desde 1970.
+/// La cifra de la selección. Sin banco de desarrollo, no hay cifra.
 pub fn cifra_de_desarrollo(
     examen: &Examen,
     desarrollo: &[PreguntaDeDesarrollo],
     conceptos: &[Concepto],
     historial: &[LineaDeDesarrollo],
     seleccion: Option<&[Par]>,
-    ahora: i64,
 ) -> Option<CifraDeDesarrollo> {
     if desarrollo.is_empty() {
         return None;
     }
     let elegidas = desarrollo_de_la_seleccion(examen, desarrollo, conceptos, seleccion);
-    let estado = estados(&elegidas, historial);
     Some(CifraDeDesarrollo {
-        sabes: estado.values().filter(|e| !e.vencida(ahora, examen.retencion)).count() as u32,
-        preguntas: elegidas.len() as u32,
+        sesion: TAMANO.min(elegidas.len()) as u32,
         simulacro: examen.desarrollo.min(elegidas.len() as u32),
         sin_corregir: sin_corregir(historial).len() as u32,
     })
@@ -454,7 +451,8 @@ mod tests {
         let antes = de_la_sesion(&[], &banco_de(1), DIA).remove(0);
         assert_eq!(antes.vuelve, OTRA_SESION);
         assert_eq!(antes.vuelve_tras_again, OTRA_SESION);
-        for (nota, tras) in [(NotaDeDesarrollo::Hard, &antes.vuelve_tras_hard), (NotaDeDesarrollo::Good, &antes.vuelve_tras_good)] {
+        for (nota, tras) in [(NotaDeDesarrollo::Hard, &antes.vuelve_tras_hard), (NotaDeDesarrollo::Good, &antes.vuelve_tras_good)]
+        {
             let despues = de_la_sesion(&corregida("d0", DIA, nota, DIA), &banco_de(1), DIA).remove(0);
             assert_eq!(despues.vuelve, *tras);
         }
@@ -553,12 +551,12 @@ mod tests {
     #[test]
     fn la_retencion_del_examen_decide_que_pregunta_esta_vencida() {
         let historial = corregida("d0", 0, NotaDeDesarrollo::Good, 0);
-        let cifra = |retencion| {
+        let primera = |retencion| {
             let examen = Examen { retencion, ..examen() };
-            cifra_de_desarrollo(&examen, &banco_de(3), &[], &historial, None, DIA).unwrap()
+            sesion_de_desarrollo(&examen, &banco_de(3), &[], &historial, DIA, &mut Azar::new(7)).remove(0).id
         };
-        assert_eq!(cifra(0.8), CifraDeDesarrollo { sabes: 1, preguntas: 3, simulacro: 2, sin_corregir: 0 });
-        assert_eq!(cifra(0.99).sabes, 0);
+        assert_ne!(primera(0.8), "d0");
+        assert_eq!(primera(0.99), "d0");
     }
 
     #[test]
@@ -571,7 +569,7 @@ mod tests {
 
     #[test]
     fn sin_banco_de_desarrollo_no_hay_cifra() {
-        assert_eq!(cifra_de_desarrollo(&examen(), &[], &[], &[], None, 0), None);
+        assert_eq!(cifra_de_desarrollo(&examen(), &[], &[], &[], None), None);
     }
 
     #[test]
@@ -581,8 +579,8 @@ mod tests {
         let solo_tls = [Par { pdf: "2.pdf".into(), apartado: "tls".into() }];
         let elegidas = desarrollo_de_la_seleccion(&examen(), &banco, &conceptos, Some(&solo_tls));
         assert_eq!(elegidas, [banco[1].clone()]);
-        let cifra = cifra_de_desarrollo(&examen(), &banco, &conceptos, &[], Some(&solo_tls), 0);
-        assert_eq!(cifra, Some(CifraDeDesarrollo { sabes: 0, preguntas: 1, simulacro: 1, sin_corregir: 0 }));
+        let cifra = cifra_de_desarrollo(&examen(), &banco, &conceptos, &[], Some(&solo_tls));
+        assert_eq!(cifra, Some(CifraDeDesarrollo { sesion: 1, simulacro: 1, sin_corregir: 0 }));
         assert_eq!(desarrollo_de_la_seleccion(&examen(), &banco, &conceptos, None).len(), 2);
     }
 
@@ -673,7 +671,7 @@ mod tests {
         assert!(estados(&banco_de(1), &sin).is_empty());
         let con = [sin, vec![corregir_respuesta("d0", hora(0), NotaDeDesarrollo::Good, hora(40 * DIA))]].concat();
         assert_eq!(estados(&banco_de(1), &con)["d0"].ultima, 0);
-        let cifra = cifra_de_desarrollo(&examen(), &banco_de(1), &[], &responder("d0", "x", hora(0)), None, 0).unwrap();
+        let cifra = cifra_de_desarrollo(&examen(), &banco_de(1), &[], &responder("d0", "x", hora(0)), None).unwrap();
         assert_eq!(cifra.sin_corregir, 1);
     }
 
@@ -692,8 +690,13 @@ mod tests {
         let r = crate::restaurar(&datos(banco_de(2), vec![]), &g, 0, &mut Azar::new(1)).unwrap();
         assert_eq!((ids(&r.desarrollo), r.textos), (vec!["d1"], vec!["SSH cifra".to_string()]));
         assert!(
-            crate::restaurar(&datos(banco_de(2), vec![]), &guardado(false, Some(ronda(&["d1"], &[], vec![]))), 0, &mut Azar::new(1))
-                .is_none()
+            crate::restaurar(
+                &datos(banco_de(2), vec![]),
+                &guardado(false, Some(ronda(&["d1"], &[], vec![]))),
+                0,
+                &mut Azar::new(1)
+            )
+            .is_none()
         );
     }
 }
