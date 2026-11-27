@@ -7,12 +7,16 @@ use std::fs;
 use std::path::Path;
 use std::process::Command;
 
-use nucleo::{Examen, Pregunta};
+use nucleo::{Concepto, Examen, Forma, Fuente, Pregunta, PreguntaDeDesarrollo};
 use serde::Deserialize;
 
 fn leer<T: serde::de::DeserializeOwned>(archivo: &Path) -> Result<T, String> {
     let texto = fs::read_to_string(archivo).map_err(|e| format!("{}: {e}", archivo.display()))?;
     serde_json::from_str(&texto).map_err(|e| format!("{}: {e}", archivo.display()))
+}
+
+fn leer_si_existe<T: serde::de::DeserializeOwned>(archivo: &Path) -> Result<Option<T>, String> {
+    if archivo.exists() { leer(archivo).map(Some) } else { Ok(None) }
 }
 
 fn escribir<T: serde::Serialize>(archivo: &Path, datos: &T) -> Result<(), String> {
@@ -35,12 +39,49 @@ pub fn paginas(pdf: &Path) -> Result<u32, String> {
         .ok_or_else(|| format!("pdfinfo no lee {}", pdf.display()))
 }
 
-/// Los errores del banco: cada pregunta que rompe el formato de `BANCO.md`.
-pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec<String> {
+/// Los errores de la `fuente` de una pregunta o de un concepto: un PDF que no existe, un apartado que no es de su PDF
+/// y una página fuera del PDF.
+fn comprobar_fuente(
+    id: &str,
+    apartado: &str,
+    fuente: &Fuente,
+    examen: &Examen,
+    carpeta: &Path,
+    paginas_de: &mut HashMap<String, Result<u32, String>>,
+    errores: &mut Vec<String>,
+) {
+    let nombre = fuente.pdf.as_str();
+    let pdf = carpeta.join("pdfs").join(nombre);
+    let Some(tema) = examen.pdfs.get(nombre).filter(|_| pdf.is_file()) else {
+        errores.push(format!("{id}: el pdf no está en examen.json o en pdfs/: {nombre}"));
+        return;
+    };
+    if !tema.apartados.iter().any(|a| a == apartado) {
+        errores.push(format!("{id}: el apartado {apartado} no es un apartado de {nombre} en examen.json"));
+    }
+    match paginas_de.entry(nombre.to_string()).or_insert_with(|| paginas(&pdf)) {
+        Ok(n) if fuente.pagina == 0 || fuente.pagina > *n => {
+            errores.push(format!("{id}: la página {} no está entre las {n} de {nombre}", fuente.pagina))
+        }
+        Ok(_) => {}
+        Err(e) => errores.push(format!("{id}: {e}")),
+    }
+}
+
+/// Los errores del banco de test y de sus conceptos. Sin `conceptos.json`, `conceptos` es `None`, y cada pregunta lleva su `fuente`.
+pub fn comprobar(preguntas: &[Pregunta], conceptos: Option<&[Concepto]>, examen: &Examen, carpeta: &Path) -> Vec<String> {
     let distractores = (examen.opciones as usize).saturating_sub(1);
     let mut errores = Vec::new();
+    let mut paginas_de = HashMap::new();
     let mut vistos = HashSet::new();
-    let mut paginas_de: HashMap<&str, Result<u32, String>> = HashMap::new();
+    for c in conceptos.unwrap_or_default() {
+        if !vistos.insert(&c.id) {
+            errores.push(format!("{}: id repetido", c.id));
+        }
+        comprobar_fuente(&c.id, &c.apartado, &c.fuente, examen, carpeta, &mut paginas_de, &mut errores);
+    }
+    let concepto_de: HashMap<&str, &Concepto> = conceptos.unwrap_or_default().iter().map(|c| (c.id.as_str(), c)).collect();
+    let mut vistos = HashSet::new();
     for p in preguntas {
         let id = &p.id;
         if !vistos.insert(id) {
@@ -65,21 +106,16 @@ pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec
                 errores.push(format!("{id}: la línea ✗ {} repite la clave de otra línea ✗", i + 1));
             }
         }
-        let nombre = p.fuente.pdf.as_str();
-        let pdf = carpeta.join("pdfs").join(nombre);
-        let Some(tema) = examen.pdfs.get(nombre).filter(|_| pdf.is_file()) else {
-            errores.push(format!("{id}: el pdf no está en examen.json o en pdfs/: {nombre}"));
-            continue;
-        };
-        if !tema.apartados.contains(&p.apartado) {
-            errores.push(format!("{id}: el apartado {} no es un apartado de {nombre} en examen.json", p.apartado));
-        }
-        match paginas_de.entry(nombre).or_insert_with(|| paginas(&pdf)) {
-            Ok(n) if p.fuente.pagina == 0 || p.fuente.pagina > *n => {
-                errores.push(format!("{id}: la página {} no está entre las {n} de {nombre}", p.fuente.pagina))
-            }
-            Ok(_) => {}
-            Err(e) => errores.push(format!("{id}: {e}")),
+        match (conceptos, &p.fuente) {
+            (Some(_), _) => match concepto_de.get(p.concepto.as_str()) {
+                None => errores.push(format!("{id}: el concepto {} no está en conceptos.json", p.concepto)),
+                Some(c) if c.apartado != p.apartado => {
+                    errores.push(format!("{id}: el apartado {} no es el de su concepto {}, {}", p.apartado, c.id, c.apartado))
+                }
+                Some(_) => {}
+            },
+            (None, Some(f)) => comprobar_fuente(id, &p.apartado, f, examen, carpeta, &mut paginas_de, &mut errores),
+            (None, None) => errores.push(format!("{id}: sin fuente, y el examen no tiene conceptos.json")),
         }
     }
     for (pdf, tema) in &examen.pdfs {
@@ -88,14 +124,21 @@ pub fn comprobar(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec
         }
     }
     if !examen.congelado {
-        errores.extend(cuentas(preguntas));
+        errores.extend(cuentas(preguntas, conceptos));
     }
     errores
 }
 
-/// Cada concepto con un número de preguntas distinto de 3, o de 1 si es de sigla.
-pub fn cuentas(preguntas: &[Pregunta]) -> Vec<String> {
+/// Cada concepto con un número de preguntas distinto de 3, o de 1 si es de sigla. Con `conceptos.json`, cuenta
+/// también los conceptos sin preguntas de un apartado con preguntas de test: un apartado sin ellas espera su lote de test.
+pub fn cuentas(preguntas: &[Pregunta], conceptos: Option<&[Concepto]>) -> Vec<String> {
+    let con_test: HashSet<&str> = preguntas.iter().map(|p| p.apartado.as_str()).collect();
     let mut cuenta: Vec<(&str, usize)> = Vec::new();
+    for c in conceptos.unwrap_or_default().iter().filter(|c| con_test.contains(c.apartado.as_str())) {
+        if !cuenta.iter().any(|(id, _)| *id == c.id) {
+            cuenta.push((&c.id, 0));
+        }
+    }
     for p in preguntas {
         match cuenta.iter_mut().find(|(c, _)| *c == p.concepto) {
             Some((_, n)) => *n += 1,
@@ -111,6 +154,58 @@ pub fn cuentas(preguntas: &[Pregunta]) -> Vec<String> {
         }
     }
     fallos
+}
+
+/// Los errores de `desarrollo.json`: un `id` repetido o del test, un punto que no es un concepto de su apartado,
+/// un número de puntos fuera de 4 a 8, y un concepto en 2 preguntas que no son de la forma comparación.
+pub fn comprobar_desarrollo(desarrollo: &[PreguntaDeDesarrollo], preguntas: &[Pregunta], conceptos: &[Concepto]) -> Vec<String> {
+    let del_test: HashSet<&str> = preguntas.iter().map(|p| p.id.as_str()).collect();
+    let apartado_de: HashMap<&str, &str> = conceptos.iter().map(|c| (c.id.as_str(), c.apartado.as_str())).collect();
+    let mut errores = Vec::new();
+    let mut vistos = HashSet::new();
+    let mut usos: BTreeMap<&str, Vec<&str>> = BTreeMap::new();
+    for d in desarrollo {
+        let id = &d.id;
+        if !vistos.insert(id) {
+            errores.push(format!("{id}: id repetido"));
+        }
+        if del_test.contains(id.as_str()) {
+            errores.push(format!("{id}: id repetido en preguntas.json"));
+        }
+        if !(4..=8).contains(&d.puntos.len()) {
+            errores.push(format!("{id}: {} puntos, y no de 4 a 8", d.puntos.len()));
+        }
+        for punto in &d.puntos {
+            if apartado_de.get(punto.as_str()) != Some(&d.apartado.as_str()) {
+                errores.push(format!("{id}: el punto {punto} no es un concepto de {}", d.apartado));
+            }
+            if d.forma != Forma::Comparacion {
+                usos.entry(punto).or_default().push(id);
+            }
+        }
+    }
+    for (concepto, ids) in usos.into_iter().filter(|(_, ids)| ids.len() > 1) {
+        errores.push(format!("{concepto}: punto de {}, que no son de la forma comparación", ids.join(" y de ")));
+    }
+    errores
+}
+
+/// Las frases de un texto: cada `.`, `?` o `!` seguido de un espacio o del final, y un final sin ellos.
+fn cuantas_frases(texto: &str) -> usize {
+    let c: Vec<char> = texto.trim().chars().collect();
+    let fin = |i: usize| matches!(c[i], '.' | '?' | '!') && c.get(i + 1).is_none_or(|s| s.is_whitespace());
+    let cortes = (0..c.len()).filter(|&i| fin(i)).count();
+    cortes + usize::from(!c.is_empty() && !fin(c.len() - 1))
+}
+
+/// Los avisos de una respuesta modelo de menos de 4 frases o de más de 8.
+pub fn frases(desarrollo: &[PreguntaDeDesarrollo]) -> Vec<String> {
+    desarrollo
+        .iter()
+        .map(|d| (d, cuantas_frases(&d.modelo)))
+        .filter(|(_, n)| !(4..=8).contains(n))
+        .map(|(d, n)| format!("{}: la respuesta modelo tiene {n} frases, y no de 4 a 8", d.id))
+        .collect()
 }
 
 /// Los `id` de `respuestas.jsonl` que no están en el banco, sin repetir y en orden.
@@ -200,10 +295,20 @@ pub fn explicaciones(preguntas: &[Pregunta]) -> Vec<String> {
 
 /// Los avisos de las páginas de cada PDF con alguna pregunta: una página sin pregunta y sin razón en
 /// `sin_pregunta`, y una página con pregunta y con razón.
-pub fn paginas_sin_pregunta(preguntas: &[Pregunta], examen: &Examen, carpeta: &Path) -> Vec<String> {
+/// Con `conceptos.json`, mira las fuentes de los conceptos.
+pub fn paginas_sin_pregunta(
+    preguntas: &[Pregunta],
+    conceptos: Option<&[Concepto]>,
+    examen: &Examen,
+    carpeta: &Path,
+) -> Vec<String> {
+    let fuentes: Vec<&Fuente> = match conceptos {
+        Some(cs) => cs.iter().map(|c| &c.fuente).collect(),
+        None => preguntas.iter().filter_map(|p| p.fuente.as_ref()).collect(),
+    };
     let mut citadas: BTreeMap<&str, BTreeSet<u32>> = BTreeMap::new();
-    for p in preguntas {
-        citadas.entry(&p.fuente.pdf).or_default().insert(p.fuente.pagina);
+    for f in fuentes {
+        citadas.entry(&f.pdf).or_default().insert(f.pagina);
     }
     let mut avisos = Vec::new();
     for (pdf, con) in citadas {
@@ -227,15 +332,28 @@ pub fn paginas_sin_pregunta(preguntas: &[Pregunta], examen: &Examen, carpeta: &P
 pub fn informe(carpeta: &Path) -> Result<bool, String> {
     let examen: Examen = leer(&carpeta.join("examen.json"))?;
     let preguntas: Vec<Pregunta> = leer(&carpeta.join("preguntas.json"))?;
-    let errores = comprobar(&preguntas, &examen, carpeta);
+    let conceptos: Option<Vec<Concepto>> = leer_si_existe(&carpeta.join("conceptos.json"))?;
+    let desarrollo: Vec<PreguntaDeDesarrollo> = leer_si_existe(&carpeta.join("desarrollo.json"))?.unwrap_or_default();
+    let conceptos = conceptos.as_deref();
+    let errores = [
+        comprobar(&preguntas, conceptos, &examen, carpeta),
+        comprobar_desarrollo(&desarrollo, &preguntas, conceptos.unwrap_or_default()),
+    ]
+    .concat();
     if errores.is_empty() {
         println!("El banco no tiene errores.");
     }
     for e in &errores {
         println!("{e}");
     }
-    let congelado = if examen.congelado { cuentas(&preguntas) } else { Vec::new() };
-    let avisos = [pistas(&preguntas), explicaciones(&preguntas), paginas_sin_pregunta(&preguntas, &examen, carpeta), congelado];
+    let congelado = if examen.congelado { cuentas(&preguntas, conceptos) } else { Vec::new() };
+    let avisos = [
+        pistas(&preguntas),
+        explicaciones(&preguntas),
+        paginas_sin_pregunta(&preguntas, conceptos, &examen, carpeta),
+        frases(&desarrollo),
+        congelado,
+    ];
     for aviso in avisos.concat() {
         println!("Aviso: {aviso}");
     }
@@ -355,7 +473,7 @@ pub fn aplicar(banco: &mut [Pregunta], fallos: Vec<Fallo>) -> Vec<Fallo> {
             p.explicacion = v;
         }
         if let Some(v) = a.fuente {
-            p.fuente = v;
+            p.fuente = Some(v);
         }
     }
     pendientes
@@ -480,7 +598,7 @@ fn bloque(encabezado: &str, lineas: &[&str], pdf: &str) -> Result<Pregunta, Stri
         id: String::new(),
         concepto: concepto.trim().into(),
         apartado: String::new(),
-        fuente: nucleo::Fuente { pdf: pdf.into(), pagina },
+        fuente: Some(Fuente { pdf: pdf.into(), pagina }),
         pregunta: pregunta.to_string(),
         correcta: correcta.to_string(),
         distractores,
@@ -539,7 +657,7 @@ pub fn importar(carpeta: &Path, apartado: &str, borrador: &Path) -> Result<Vec<S
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nucleo::{Fuente, Tema};
+    use nucleo::{Concepto, Forma, Fuente, PreguntaDeDesarrollo, Tema};
 
     /// Un PDF mínimo con `n` páginas, que poppler lee.
     fn pdf(archivo: &Path, n: u32) {
@@ -591,7 +709,7 @@ mod tests {
             correcta: "72 horas".into(),
             distractores: vec!["24 horas".into(), "Un mes".into(), "48 horas".into()],
             explicacion: "Art. 33 del RGPD.".into(),
-            fuente: Fuente { pdf: "1_Legislacion.pdf".into(), pagina: 5 },
+            fuente: Some(Fuente { pdf: "1_Legislacion.pdf".into(), pagina: 5 }),
         }
     }
 
@@ -602,7 +720,7 @@ mod tests {
 
     fn un_error(preguntas: &[Pregunta], texto: &str) {
         let (dir, examen) = carpeta();
-        let errores = comprobar(preguntas, &examen, dir.path());
+        let errores = comprobar(preguntas, None, &examen, dir.path());
         assert_eq!(errores.len(), 1, "{errores:?}");
         assert!(errores[0].contains(texto), "{errores:?}");
     }
@@ -610,7 +728,7 @@ mod tests {
     #[test]
     fn una_pregunta_valida_no_da_errores() {
         let (dir, examen) = carpeta();
-        assert_eq!(comprobar(&con_pareja(pregunta("rgpd-001")), &examen, dir.path()), Vec::<String>::new());
+        assert_eq!(comprobar(&con_pareja(pregunta("rgpd-001")), None, &examen, dir.path()), Vec::<String>::new());
     }
 
     #[test]
@@ -627,7 +745,7 @@ mod tests {
     fn un_apartado_sin_nombre_falla() {
         let (dir, mut examen) = carpeta();
         examen.apartados.remove("ens");
-        let errores = comprobar(&con_pareja(pregunta("rgpd-001")), &examen, dir.path());
+        let errores = comprobar(&con_pareja(pregunta("rgpd-001")), None, &examen, dir.path());
         assert_eq!(errores, ["2_Teoria.pdf: el apartado ens no tiene nombre en apartados de examen.json"]);
     }
 
@@ -648,7 +766,7 @@ mod tests {
     #[test]
     fn un_pdf_fuera_de_examen_json_o_de_pdfs_falla() {
         for nombre in ["4_Teoria.pdf", "2_Teoria.pdf"] {
-            let fuente = Fuente { pdf: nombre.into(), pagina: 1 };
+            let fuente = Some(Fuente { pdf: nombre.into(), pagina: 1 });
             un_error(&con_pareja(Pregunta { fuente, ..pregunta("rgpd-001") }), nombre);
         }
     }
@@ -656,7 +774,7 @@ mod tests {
     #[test]
     fn una_pagina_fuera_del_pdf_falla() {
         for pagina in [0, 6] {
-            let fuente = Fuente { pdf: "1_Legislacion.pdf".into(), pagina };
+            let fuente = Some(Fuente { pdf: "1_Legislacion.pdf".into(), pagina });
             un_error(&con_pareja(Pregunta { fuente, ..pregunta("rgpd-001") }), &format!("la página {pagina}"));
         }
     }
@@ -665,7 +783,7 @@ mod tests {
     fn un_concepto_con_2_o_con_4_preguntas_falla() {
         let (dir, examen) = carpeta();
         let tres = vec![pregunta("rgpd-001"), pregunta("rgpd-002"), pregunta("rgpd-003")];
-        assert!(comprobar(&tres, &examen, dir.path()).is_empty());
+        assert!(comprobar(&tres, None, &examen, dir.path()).is_empty());
         un_error(&tres[..2], "rgpd-brecha-plazo: 2 preguntas, y no 3");
         un_error(&[tres, vec![pregunta("rgpd-004")]].concat(), "rgpd-brecha-plazo: 4 preguntas");
     }
@@ -674,23 +792,218 @@ mod tests {
     fn un_examen_congelado_no_falla_por_la_cuenta_de_un_concepto() {
         let (dir, examen) = carpeta();
         let examen = Examen { congelado: true, ..examen };
-        assert!(comprobar(&[pregunta("rgpd-001")], &examen, dir.path()).is_empty());
-        assert_eq!(cuentas(&[pregunta("rgpd-001")]), ["rgpd-brecha-plazo: 1 pregunta, y no 3"]);
+        assert!(comprobar(&[pregunta("rgpd-001")], None, &examen, dir.path()).is_empty());
+        assert_eq!(cuentas(&[pregunta("rgpd-001")], None), ["rgpd-brecha-plazo: 1 pregunta, y no 3"]);
     }
 
     #[test]
     fn un_concepto_de_sigla_tiene_1_pregunta() {
         let (dir, examen) = carpeta();
         let sigla = |id: &str| Pregunta { concepto: "sigla-rgpd".into(), ..pregunta(id) };
-        assert!(comprobar(&[sigla("rgpd-001")], &examen, dir.path()).is_empty());
+        assert!(comprobar(&[sigla("rgpd-001")], None, &examen, dir.path()).is_empty());
         un_error(&[sigla("rgpd-001"), sigla("rgpd-002")], "sigla-rgpd: 2 preguntas, y no 1");
+    }
+
+    fn concepto(id: &str, apartado: &str, pagina: u32) -> Concepto {
+        let fuente = Fuente { pdf: "1_Legislacion.pdf".into(), pagina };
+        Concepto { id: id.into(), apartado: apartado.into(), idea: format!("La idea de {id}."), fuente }
+    }
+
+    /// Las 3 preguntas de `rgpd-brecha-plazo`, sin `fuente`, y su concepto.
+    fn con_conceptos() -> (Vec<Pregunta>, Vec<Concepto>) {
+        let sin = |id: &str| Pregunta { fuente: None, ..pregunta(id) };
+        (vec![sin("rgpd-001"), sin("rgpd-002"), sin("rgpd-003")], vec![concepto("rgpd-brecha-plazo", "rgpd", 5)])
+    }
+
+    fn un_error_con(preguntas: &[Pregunta], conceptos: &[Concepto], texto: &str) {
+        let (dir, examen) = carpeta();
+        let errores = comprobar(preguntas, Some(conceptos), &examen, dir.path());
+        assert_eq!(errores.len(), 1, "{errores:?}");
+        assert!(errores[0].contains(texto), "{errores:?}");
+    }
+
+    #[test]
+    fn con_conceptos_una_pregunta_sin_fuente_es_valida() {
+        let (dir, examen) = carpeta();
+        let (preguntas, conceptos) = con_conceptos();
+        assert_eq!(comprobar(&preguntas, Some(&conceptos), &examen, dir.path()), Vec::<String>::new());
+    }
+
+    #[test]
+    fn sin_conceptos_una_pregunta_sin_fuente_falla() {
+        let (preguntas, _) = con_conceptos();
+        let (dir, examen) = carpeta();
+        let errores = comprobar(&preguntas, None, &examen, dir.path());
+        assert_eq!(
+            errores,
+            ["rgpd-001: sin fuente", "rgpd-002: sin fuente", "rgpd-003: sin fuente"]
+                .map(|e| format!("{e}, y el examen no tiene conceptos.json"))
+        );
+    }
+
+    #[test]
+    fn un_concepto_repetido_fuera_de_su_pdf_o_de_sus_paginas_falla() {
+        let (preguntas, c) = con_conceptos();
+        let otro = |id: &str, apartado: &str, pagina| [c.clone(), vec![concepto(id, apartado, pagina)]].concat();
+        un_error_con(&preguntas, &otro("rgpd-brecha-plazo", "rgpd", 5), "rgpd-brecha-plazo: id repetido");
+        un_error_con(&preguntas, &otro("ens-x", "ens", 5), "ens-x: el apartado ens no es un apartado de 1_Legislacion.pdf");
+        un_error_con(&preguntas, &otro("lssi-x", "lssi", 6), "lssi-x: la página 6 no está entre las 5");
+        let mut fuera = otro("ens-x", "ens", 1);
+        fuera[1].fuente.pdf = "2_Teoria.pdf".into();
+        un_error_con(&preguntas, &fuera, "ens-x: el pdf no está en examen.json o en pdfs/: 2_Teoria.pdf");
+    }
+
+    #[test]
+    fn una_pregunta_de_un_concepto_que_no_esta_en_conceptos_json_falla() {
+        let (mut preguntas, conceptos) = con_conceptos();
+        preguntas.push(Pregunta { fuente: None, concepto: "sigla-rgpd".into(), ..pregunta("rgpd-004") });
+        un_error_con(&preguntas, &conceptos, "rgpd-004: el concepto sigla-rgpd no está en conceptos.json");
+    }
+
+    #[test]
+    fn una_pregunta_de_otro_apartado_que_su_concepto_falla() {
+        let (mut preguntas, conceptos) = con_conceptos();
+        preguntas[0].apartado = "lssi".into();
+        let (dir, examen) = carpeta();
+        let errores = comprobar(&preguntas, Some(&conceptos), &examen, dir.path());
+        assert!(
+            errores.contains(&"rgpd-001: el apartado lssi no es el de su concepto rgpd-brecha-plazo, rgpd".to_string()),
+            "{errores:?}"
+        );
+    }
+
+    #[test]
+    fn un_apartado_sin_preguntas_acepta_conceptos_sin_preguntas_y_uno_con_preguntas_no() {
+        let (preguntas, c) = con_conceptos();
+        let (dir, examen) = carpeta();
+        let lssi = [c.clone(), vec![concepto("lssi-cookies", "lssi", 4)]].concat();
+        assert!(comprobar(&preguntas, Some(&lssi), &examen, dir.path()).is_empty());
+        let rgpd = [c.clone(), vec![concepto("rgpd-dpd", "rgpd", 4)]].concat();
+        un_error_con(&preguntas, &rgpd, "rgpd-dpd: 0 preguntas, y no 3");
+        let sigla = [c, vec![concepto("sigla-rgpd", "rgpd", 4)]].concat();
+        let con_sigla =
+            [preguntas, vec![Pregunta { fuente: None, concepto: "sigla-rgpd".into(), ..pregunta("rgpd-004") }]].concat();
+        assert!(comprobar(&con_sigla, Some(&sigla), &examen, dir.path()).is_empty());
+    }
+
+    #[test]
+    fn con_conceptos_la_cobertura_de_paginas_mira_sus_fuentes() {
+        let (dir, examen) = carpeta();
+        let (preguntas, mut conceptos) = con_conceptos();
+        conceptos.push(concepto("lssi-cookies", "lssi", 4));
+        assert_eq!(
+            paginas_sin_pregunta(&preguntas, Some(&conceptos), &examen, dir.path()),
+            ["1_Legislacion.pdf: páginas sin pregunta y sin razón en sin_pregunta: 1, 2, 3"]
+        );
+    }
+
+    /// 9 conceptos de `rgpd`, `rgpd-0` a `rgpd-8`, y uno de `lssi`.
+    fn conceptos_de_desarrollo() -> Vec<Concepto> {
+        (0..9).map(|i| concepto(&format!("rgpd-{i}"), "rgpd", 1)).chain([concepto("lssi-0", "lssi", 1)]).collect()
+    }
+
+    /// Una pregunta de desarrollo de `rgpd` con los puntos `rgpd-<i>`.
+    fn desarrollo(id: &str, forma: Forma, puntos: std::ops::Range<usize>) -> PreguntaDeDesarrollo {
+        PreguntaDeDesarrollo {
+            id: id.into(),
+            apartado: "rgpd".into(),
+            forma,
+            enunciado: "Describe el RGPD.".into(),
+            modelo: "Uno. Dos. Tres. Cuatro.".into(),
+            puntos: puntos.map(|i| format!("rgpd-{i}")).collect(),
+        }
+    }
+
+    fn errores_de_desarrollo(d: &[PreguntaDeDesarrollo]) -> Vec<String> {
+        comprobar_desarrollo(d, &[pregunta("rgpd-001")], &conceptos_de_desarrollo())
+    }
+
+    #[test]
+    fn una_pregunta_de_desarrollo_valida_no_da_errores() {
+        assert!(
+            errores_de_desarrollo(&[desarrollo("rgpd-d001", Forma::Objeto, 0..4), desarrollo("rgpd-d002", Forma::Proceso, 4..9)])
+                .is_empty()
+        );
+    }
+
+    #[test]
+    fn un_id_de_desarrollo_repetido_o_del_test_falla() {
+        let d = |id: &str, r| desarrollo(id, Forma::Objeto, r);
+        assert_eq!(errores_de_desarrollo(&[d("rgpd-d001", 0..4), d("rgpd-d001", 4..8)]), ["rgpd-d001: id repetido"]);
+        assert_eq!(errores_de_desarrollo(&[d("rgpd-001", 0..4)]), ["rgpd-001: id repetido en preguntas.json"]);
+    }
+
+    #[test]
+    fn un_punto_que_no_es_un_concepto_de_su_apartado_falla() {
+        let mut d = desarrollo("rgpd-d001", Forma::Objeto, 0..4);
+        d.puntos[0] = "lssi-0".into();
+        d.puntos[1] = "rgpd-no-esta".into();
+        assert_eq!(
+            errores_de_desarrollo(&[d]),
+            [
+                "rgpd-d001: el punto lssi-0 no es un concepto de rgpd",
+                "rgpd-d001: el punto rgpd-no-esta no es un concepto de rgpd"
+            ]
+        );
+    }
+
+    #[test]
+    fn menos_de_4_puntos_o_mas_de_8_falla() {
+        assert_eq!(
+            errores_de_desarrollo(&[desarrollo("rgpd-d001", Forma::Objeto, 0..3)]),
+            ["rgpd-d001: 3 puntos, y no de 4 a 8"]
+        );
+        assert_eq!(
+            errores_de_desarrollo(&[desarrollo("rgpd-d001", Forma::Objeto, 0..9)]),
+            ["rgpd-d001: 9 puntos, y no de 4 a 8"]
+        );
+        assert!(errores_de_desarrollo(&[desarrollo("rgpd-d001", Forma::Objeto, 0..8)]).is_empty());
+    }
+
+    #[test]
+    fn un_concepto_en_2_preguntas_que_no_son_de_comparacion_falla() {
+        let objeto = desarrollo("rgpd-d001", Forma::Objeto, 0..4);
+        let comparacion = desarrollo("rgpd-d002", Forma::Comparacion, 2..6);
+        assert!(errores_de_desarrollo(&[objeto.clone(), comparacion]).is_empty());
+        let proceso = desarrollo("rgpd-d002", Forma::Proceso, 3..7);
+        assert_eq!(
+            errores_de_desarrollo(&[objeto, proceso]),
+            ["rgpd-3: punto de rgpd-d001 y de rgpd-d002, que no son de la forma comparación"]
+        );
+    }
+
+    #[test]
+    fn una_respuesta_modelo_de_menos_de_4_frases_o_de_mas_de_8_es_un_aviso() {
+        let con = |modelo: &str| PreguntaDeDesarrollo { modelo: modelo.into(), ..desarrollo("rgpd-d001", Forma::Objeto, 0..4) };
+        assert!(frases(&[con("TLS 1.3 cifra. ¿Cómo? Con AES! Y más.")]).is_empty());
+        assert_eq!(frases(&[con("Una. Dos. Tres")]), ["rgpd-d001: la respuesta modelo tiene 3 frases, y no de 4 a 8"]);
+        assert_eq!(frases(&[con(&"Una. ".repeat(9))]), ["rgpd-d001: la respuesta modelo tiene 9 frases, y no de 4 a 8"]);
+    }
+
+    #[test]
+    fn una_forma_desconocida_falla_y_la_nombra() {
+        let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../servidor/tests/datos/prueba");
+        let copia = tempfile::tempdir().unwrap();
+        fs::create_dir(copia.path().join("pdfs")).unwrap();
+        for archivo in ["examen.json", "conceptos.json", "preguntas.json", "desarrollo.json", "pdfs/1_Redes.pdf"] {
+            fs::copy(dir.join(archivo), copia.path().join(archivo)).unwrap();
+        }
+        let texto = fs::read_to_string(copia.path().join("desarrollo.json")).unwrap().replacen("\"proceso\"", "\"caso\"", 1);
+        fs::write(copia.path().join("desarrollo.json"), texto).unwrap();
+        assert!(informe(copia.path()).unwrap_err().contains("caso"));
+    }
+
+    #[test]
+    fn el_examen_de_prueba_del_servidor_pasa_la_comprobacion() {
+        let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../servidor/tests/datos/prueba");
+        assert!(informe(&dir).unwrap());
     }
 
     #[test]
     fn una_clave_que_no_esta_en_su_distractor_falla() {
         let (dir, examen) = carpeta();
         let con = |explicacion: &str| con_pareja(Pregunta { explicacion: explicacion.into(), ..pregunta("rgpd-001") });
-        assert!(comprobar(&con("✓ x\n✗ «24 HORAS»: a\n✗ «un mes»: b"), &examen, dir.path()).is_empty());
+        assert!(comprobar(&con("✓ x\n✗ «24 HORAS»: a\n✗ «un mes»: b"), None, &examen, dir.path()).is_empty());
         un_error(&con("✓ x\n✗ «24 horas»: a\n✗ «48 horas»: b"), "rgpd-001: la línea ✗ 2");
         un_error(&con("✓ x\n✗ 24 horas: a"), "rgpd-001: la línea ✗ 1");
         un_error(&con("✓ x\n✗ «horas»: a\n✗ «un mes»: b\n✗ «Horas»: c"), "rgpd-001: la línea ✗ 3 repite");
@@ -717,9 +1030,9 @@ mod tests {
         let razones =
             BTreeMap::from([("1".into(), "portada".into()), ("2".into(), "índice".into()), ("5".into(), "repetida".into())]);
         examen.sin_pregunta = BTreeMap::from([("1_Legislacion.pdf".into(), razones)]);
-        let en = |id: &str, pagina| Pregunta { fuente: Fuente { pdf: "1_Legislacion.pdf".into(), pagina }, ..pregunta(id) };
+        let en = |id: &str, pagina| Pregunta { fuente: Some(Fuente { pdf: "1_Legislacion.pdf".into(), pagina }), ..pregunta(id) };
         assert_eq!(
-            paginas_sin_pregunta(&[en("a", 3), en("b", 5)], &examen, dir.path()),
+            paginas_sin_pregunta(&[en("a", 3), en("b", 5)], None, &examen, dir.path()),
             [
                 "1_Legislacion.pdf: páginas sin pregunta y sin razón en sin_pregunta: 4",
                 "1_Legislacion.pdf: páginas con pregunta y con razón en sin_pregunta: 5"

@@ -1,0 +1,54 @@
+[
+  {
+    "id": "tls-001",
+    "concepto": "sigla-tls",
+    "apartado": "tls",
+    "pregunta": "¿Qué significan las siglas TLS?",
+    "correcta": "Transport Layer Security",
+    "distractores": [
+      "Transfer Layer Session",
+      "Trusted Link Service",
+      "Transport Link Signature"
+    ],
+    "explicacion": "✓ TLS son las siglas de Transport Layer Security, el sucesor de SSL."
+  },
+  {
+    "id": "tls-002",
+    "concepto": "tls-certificado",
+    "apartado": "tls",
+    "pregunta": "¿Con qué prueba un servidor TLS su identidad?",
+    "correcta": "Con un certificado X.509 firmado por una CA",
+    "distractores": [
+      "Con una contraseña que comparte de antemano con cada cliente",
+      "Con su dirección IP",
+      "Con un token de sesión"
+    ],
+    "explicacion": "✓ El servidor envía un certificado X.509 que firma una autoridad de certificación."
+  },
+  {
+    "id": "tls-003",
+    "concepto": "tls-certificado",
+    "apartado": "tls",
+    "pregunta": "¿Quién firma el certificado de un servidor TLS?",
+    "correcta": "Una autoridad de certificación",
+    "distractores": [
+      "El propio cliente",
+      "El router de la red",
+      "El servidor DNS que resuelve el nombre de su dominio"
+    ],
+    "explicacion": "✓ Una autoridad de certificación en la que confía el cliente firma el certificado."
+  },
+  {
+    "id": "tls-004",
+    "concepto": "tls-certificado",
+    "apartado": "tls",
+    "pregunta": "¿Qué formato tiene el certificado de un servidor TLS?",
+    "correcta": "X.509",
+    "distractores": [
+      "PGP",
+      "JSON Web Token",
+      "Kerberos"
+    ],
+    "explicacion": "✓ TLS usa certificados con el formato X.509 de la ITU."
+  }
+]

@@ -61,15 +61,87 @@ pub struct Pregunta {
     pub concepto: String,
     /// La clave del apartado, uno de los apartados del tema de `fuente.pdf`.
     pub apartado: String,
-    pub fuente: Fuente,
+    /// La página de la pregunta. `preguntas.json` la lleva solo en un examen sin `conceptos.json`,
+    /// y el servidor da cada pregunta con ella, desde su concepto si lo tiene: ver `con_fuentes`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub fuente: Option<Fuente>,
     pub pregunta: String,
     pub correcta: String,
     pub distractores: Vec<String>,
     pub explicacion: String,
 }
 
-/// La página del PDF de `pdfs/` que respalda una pregunta.
-#[derive(Deserialize, Serialize, Tsify, Clone, PartialEq)]
+impl Pregunta {
+    fn pagina(&self) -> &Fuente {
+        self.fuente.as_ref().expect("el servidor da cada pregunta con su fuente")
+    }
+}
+
+/// Un concepto de `conceptos.json`: una idea del temario, de la que salen sus preguntas de test y un punto de desarrollo.
+#[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct Concepto {
+    /// El slug, como `transporte-ssh-clave-de-sesion`, o `sigla-…` para una sigla.
+    pub id: String,
+    pub apartado: String,
+    /// La idea en una frase que se entiende sola.
+    pub idea: String,
+    pub fuente: Fuente,
+}
+
+/// La forma de una pregunta de desarrollo: lo que pide su enunciado.
+#[derive(Deserialize, Serialize, Tsify, Clone, Copy, PartialEq, Debug)]
+#[serde(rename_all = "kebab-case")]
+pub enum Forma {
+    Objeto,
+    Proceso,
+    Comparacion,
+    CausaEfecto,
+    Estructura,
+    Propiedad,
+    Clasificacion,
+    Contramedida,
+    Criterio,
+}
+
+/// Una pregunta de `desarrollo.json`.
+#[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct PreguntaDeDesarrollo {
+    /// Como `ssh-d001`.
+    pub id: String,
+    pub apartado: String,
+    pub forma: Forma,
+    pub enunciado: String,
+    /// La respuesta modelo en prosa, de 4 a 8 frases.
+    pub modelo: String,
+    /// Los `id` de los conceptos que la respuesta cubre, de 4 a 8, todos de su apartado.
+    pub puntos: Vec<String>,
+}
+
+/// El banco con la página de cada pregunta: la de su concepto si el examen tiene conceptos, y la suya si no los tiene.
+/// Falla con una pregunta sin página.
+pub fn con_fuentes(banco: Vec<Pregunta>, conceptos: &[Concepto]) -> Result<Vec<Pregunta>, String> {
+    let fuente_de: std::collections::HashMap<&str, &Fuente> = conceptos.iter().map(|c| (c.id.as_str(), &c.fuente)).collect();
+    banco
+        .into_iter()
+        .map(|q| {
+            let fuente = if conceptos.is_empty() {
+                q.fuente.clone().ok_or_else(|| format!("{}: sin fuente, y el examen no tiene conceptos.json", q.id))?
+            } else {
+                Fuente::clone(
+                    fuente_de
+                        .get(q.concepto.as_str())
+                        .ok_or_else(|| format!("{}: el concepto {} no está en conceptos.json", q.id, q.concepto))?,
+                )
+            };
+            Ok(Pregunta { fuente: Some(fuente), ..q })
+        })
+        .collect()
+}
+
+/// La página del PDF de `pdfs/` que respalda una pregunta o un concepto.
+#[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct Fuente {
     pub pdf: String,
@@ -99,7 +171,10 @@ pub struct Nota {
 #[derive(Deserialize, Serialize, Tsify)]
 pub struct Datos {
     pub examen: Examen,
+    /// Las preguntas de test, cada una con su fuente.
     pub banco: Vec<Pregunta>,
+    pub conceptos: Vec<Concepto>,
+    pub desarrollo: Vec<PreguntaDeDesarrollo>,
     pub historial: Vec<Respuesta>,
 }
 
@@ -270,7 +345,7 @@ pub struct ApartadoDelInicio {
 
 /// Las preguntas de los pares marcados. Sin selección, todo el banco.
 pub fn de_la_seleccion(banco: &[Pregunta], seleccion: Option<&[Par]>) -> Vec<Pregunta> {
-    banco.iter().filter(|q| marcado(seleccion, &q.fuente.pdf, &q.apartado)).cloned().collect()
+    banco.iter().filter(|q| marcado(seleccion, &q.pagina().pdf, &q.apartado)).cloned().collect()
 }
 
 fn marcado(seleccion: Option<&[Par]>, pdf: &str, apartado: &str) -> bool {
@@ -313,16 +388,16 @@ pub fn inicio(
         .map(|(pdf, tema)| TemaDelInicio {
             pdf: pdf.clone(),
             nombre: tema.nombre.clone(),
-            preguntas: banco.iter().filter(|q| q.fuente.pdf == *pdf).count() as u32,
-            sabes: banco.iter().filter(|q| q.fuente.pdf == *pdf).filter(sabe).count() as u32,
+            preguntas: banco.iter().filter(|q| q.pagina().pdf == *pdf).count() as u32,
+            sabes: banco.iter().filter(|q| q.pagina().pdf == *pdf).filter(sabe).count() as u32,
             apartados: tema
                 .apartados
                 .iter()
                 .map(|a| ApartadoDelInicio {
                     apartado: a.clone(),
                     nombre: examen.apartados.get(a).unwrap_or(a).clone(),
-                    preguntas: banco.iter().filter(|q| q.fuente.pdf == *pdf && q.apartado == *a).count() as u32,
-                    sabes: banco.iter().filter(|q| q.fuente.pdf == *pdf && q.apartado == *a).filter(sabe).count() as u32,
+                    preguntas: banco.iter().filter(|q| q.pagina().pdf == *pdf && q.apartado == *a).count() as u32,
+                    sabes: banco.iter().filter(|q| q.pagina().pdf == *pdf && q.apartado == *a).filter(sabe).count() as u32,
                     marcado: marcado(seleccion, pdf, a),
                 })
                 .collect(),
@@ -431,6 +506,7 @@ pub fn sesion(
 /// La pregunta con sus opciones al azar, su probabilidad de acierto y cuándo vuelve.
 fn de_la_ronda(examen: &Examen, q: &Pregunta, estado: &Estados, ahora: i64, azar: &mut Azar) -> PreguntaDeSesion {
     let antes = estado.get(q.id.as_str()).copied();
+    let f = q.pagina();
     let vuelve_tras = |resultado, seguro| Estado::tras(antes, resultado, seguro, ahora).vuelve(ahora, examen.retencion);
     let mut opciones: Vec<String> = std::iter::once(&q.correcta).chain(&q.distractores).cloned().collect();
     azar.barajar(&mut opciones);
@@ -448,10 +524,10 @@ fn de_la_ronda(examen: &Examen, q: &Pregunta, estado: &Estados, ahora: i64, azar
         vuelve_tras_seguro: vuelve_tras(Resultado::Acierto, true),
         vuelve_tras_dudo: vuelve_tras(Resultado::Acierto, false),
         vuelve_tras_fallo: vuelve_tras(Resultado::Fallo, false),
-        fuente: format!("{} · pág. {}", q.fuente.pdf, q.fuente.pagina),
-        pagina: q.fuente.pagina,
-        imagen: format!("paginas/{}-{}.webp", q.fuente.pdf.strip_suffix(".pdf").unwrap_or(&q.fuente.pdf), q.fuente.pagina),
-        pdf: format!("pdfs/{}#page={}", q.fuente.pdf, q.fuente.pagina),
+        fuente: format!("{} · pág. {}", f.pdf, f.pagina),
+        pagina: f.pagina,
+        imagen: format!("paginas/{}-{}.webp", f.pdf.strip_suffix(".pdf").unwrap_or(&f.pdf), f.pagina),
+        pdf: format!("pdfs/{}#page={}", f.pdf, f.pagina),
     }
 }
 
@@ -1031,7 +1107,7 @@ mod tests {
             correcta: "sí".into(),
             distractores: vec!["no".into(), "a veces".into(), "nunca".into()],
             explicacion: "porque sí".into(),
-            fuente: Fuente { pdf: "2A _Teoría.pdf".into(), pagina: 7 },
+            fuente: Some(Fuente { pdf: "2A _Teoría.pdf".into(), pagina: 7 }),
         }
     }
 
@@ -1084,6 +1160,62 @@ mod tests {
         assert_eq!(q.pdf, "pdfs/2A _Teoría.pdf#page=7");
     }
 
+    fn concepto(id: &str, pdf: &str, pagina: u32) -> Concepto {
+        Concepto {
+            id: id.into(),
+            apartado: "rgpd".into(),
+            idea: format!("La idea de {id}."),
+            fuente: Fuente { pdf: pdf.into(), pagina },
+        }
+    }
+
+    #[test]
+    fn con_conceptos_la_pregunta_toma_la_pagina_de_su_concepto() {
+        let conceptos = [concepto("a", "1.pdf", 3)];
+        let banco = con_fuentes(vec![pregunta("a1", "a")], &conceptos).unwrap();
+        assert_eq!(banco[0].fuente, Some(Fuente { pdf: "1.pdf".into(), pagina: 3 }));
+        let q = sesion(&LN, &banco, &[], 0, &mut Azar::new(1)).remove(0);
+        assert_eq!(q.fuente, "1.pdf · pág. 3");
+    }
+
+    #[test]
+    fn sin_conceptos_la_pregunta_lleva_su_pagina() {
+        let banco = con_fuentes(vec![pregunta("a1", "a")], &[]).unwrap();
+        assert_eq!(banco[0].fuente, Some(Fuente { pdf: "2A _Teoría.pdf".into(), pagina: 7 }));
+    }
+
+    #[test]
+    fn una_pregunta_sin_pagina_no_entra() {
+        let sin_concepto = con_fuentes(vec![pregunta("a1", "a")], &[concepto("b", "1.pdf", 3)]);
+        assert_eq!(sin_concepto.err().unwrap(), "a1: el concepto a no está en conceptos.json");
+        let sin_fuente = con_fuentes(vec![Pregunta { fuente: None, ..pregunta("a1", "a") }], &[]);
+        assert_eq!(sin_fuente.err().unwrap(), "a1: sin fuente, y el examen no tiene conceptos.json");
+    }
+
+    #[test]
+    fn una_pregunta_de_desarrollo_lee_sus_9_formas_y_nada_mas() {
+        let formas = [
+            "objeto",
+            "proceso",
+            "comparacion",
+            "causa-efecto",
+            "estructura",
+            "propiedad",
+            "clasificacion",
+            "contramedida",
+            "criterio",
+        ];
+        for forma in formas {
+            let json = format!(
+                r#"{{"id": "ssh-d001", "apartado": "ssh", "forma": "{forma}", "enunciado": "Describe SSH.", "modelo": "SSH cifra.", "puntos": ["a"]}}"#
+            );
+            let d: PreguntaDeDesarrollo = serde_json::from_str(&json).unwrap();
+            assert_eq!(serde_json::to_value(d.forma).unwrap(), forma);
+        }
+        let caso = r#"{"id": "x", "apartado": "ssh", "forma": "caso", "enunciado": "", "modelo": "", "puntos": []}"#;
+        assert!(serde_json::from_str::<PreguntaDeDesarrollo>(caso).is_err());
+    }
+
     pub(crate) fn respuesta(id: &str, ts: &str, acierto: bool, seguro: bool) -> Respuesta {
         let resultado = if acierto { Resultado::Acierto } else { Resultado::Fallo };
         Respuesta { id: id.into(), ts: ts.parse().unwrap(), resultado, seguro }
@@ -1115,7 +1247,7 @@ mod tests {
         };
         let q = |id: &str, concepto: &str, pdf: &str, apartado: &str| Pregunta {
             apartado: apartado.into(),
-            fuente: Fuente { pdf: pdf.into(), pagina: 1 },
+            fuente: Some(Fuente { pdf: pdf.into(), pagina: 1 }),
             ..pregunta(id, concepto)
         };
         let banco = vec![
