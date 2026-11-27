@@ -613,8 +613,11 @@ fn sin_el_lote<T: DeUnApartado + Clone>(
     }
     let (resto, lote): (Vec<T>, Vec<T>) = banco.iter().cloned().partition(|p| !apartados.iter().any(|a| a == p.apartado()));
     let del_lote: HashSet<&str> = lote.iter().map(|p| p.id()).collect();
+    let de_otro: HashSet<&str> = resto.iter().map(|p| p.id()).collect();
+    // Un `id` sin pregunta con el prefijo de un apartado del lote es de una pregunta borrada, y `importar` lo reusa.
+    let huerfano = |id: &str| !de_otro.contains(id) && apartados.iter().any(|a| id.starts_with(&format!("{a}-")));
     let usados = ids_del_historial(&carpeta.join(historial))?;
-    let de_lote = usados.iter().filter(|id| del_lote.contains(id.as_str())).count();
+    let de_lote = usados.iter().filter(|id| del_lote.contains(id.as_str()) || huerfano(id)).count();
     if de_lote > 0 {
         return Err(format!(
             "{historial} tiene {de_lote} id de los apartados del lote: el dueño decide antes qué pasa con ellas"
@@ -1598,6 +1601,9 @@ Compara la LSSI y el RGPD.
         assert!(preparar(c, Tipo::Desarrollo, &apartados).unwrap_err().contains("el apartado rgpd no tiene conceptos"));
         escribir(&c.join("conceptos.json"), &base()).unwrap();
         fs::write(c.join("desarrollo.jsonl"), "{\"id\":\"rgpd-d001\",\"ts\":1,\"texto\":\"x\"}\n").unwrap();
+        let e = preparar(c, Tipo::Desarrollo, &apartados).unwrap_err();
+        assert!(e.contains("desarrollo.jsonl tiene 1 id de los apartados del lote"), "{e}");
+        fs::write(c.join("desarrollo.jsonl"), "{\"id\":\"rgpd-d009\",\"ts\":1,\"texto\":\"x\"}\n").unwrap();
         let e = preparar(c, Tipo::Desarrollo, &apartados).unwrap_err();
         assert!(e.contains("desarrollo.jsonl tiene 1 id de los apartados del lote"), "{e}");
         fs::write(c.join("desarrollo.jsonl"), "{\"id\":\"ens-d001\",\"ts\":1,\"texto\":\"x\"}\n").unwrap();
