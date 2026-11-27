@@ -138,6 +138,22 @@ pub struct PreguntaDeDesarrolloDeSesion {
     pub vuelve_tras_good: String,
 }
 
+/// El PDF de cada concepto, por su `id`.
+fn pdfs(conceptos: &[Concepto]) -> std::collections::HashMap<&str, &str> {
+    conceptos.iter().map(|c| (c.id.as_str(), c.fuente.pdf.as_str())).collect()
+}
+
+/// Si la pregunta está en el apartado `apartado` del tema `pdf`: es de ese apartado, y algún punto sale de ese PDF.
+fn en(
+    examen: &Examen,
+    pdfs: &std::collections::HashMap<&str, &str>,
+    q: &PreguntaDeDesarrollo,
+    pdf: &str,
+    apartado: &str,
+) -> bool {
+    q.apartado == apartado && q.puntos.iter().any(|c| pdfs.get(c.as_str()) == Some(&pdf)) && examen.pdfs.contains_key(pdf)
+}
+
 /// Las preguntas de desarrollo de los pares marcados. Sin selección, todo el banco.
 pub fn desarrollo_de_la_seleccion(
     examen: &Examen,
@@ -145,16 +161,15 @@ pub fn desarrollo_de_la_seleccion(
     conceptos: &[Concepto],
     seleccion: Option<&[Par]>,
 ) -> Vec<PreguntaDeDesarrollo> {
-    let pdf: std::collections::HashMap<&str, &str> = conceptos.iter().map(|c| (c.id.as_str(), c.fuente.pdf.as_str())).collect();
-    let en = |q: &PreguntaDeDesarrollo, p: &Par| {
-        q.apartado == p.apartado
-            && q.puntos.iter().any(|c| pdf.get(c.as_str()) == Some(&p.pdf.as_str()))
-            && examen.pdfs.contains_key(&p.pdf)
-    };
-    desarrollo.iter().filter(|q| seleccion.is_none_or(|s| s.iter().any(|p| en(q, p)))).cloned().collect()
+    let pdfs = pdfs(conceptos);
+    desarrollo
+        .iter()
+        .filter(|q| seleccion.is_none_or(|s| s.iter().any(|p| en(examen, &pdfs, q, &p.pdf, &p.apartado))))
+        .cloned()
+        .collect()
 }
 
-/// Las preguntas de desarrollo que sabes y las que hay, para el botón "Desarrollo" del inicio.
+/// Las preguntas de desarrollo que sabes y las que hay, para el inicio.
 #[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct CifraDeDesarrollo {
     /// Las preguntas de la sesión de desarrollo de la selección.
@@ -163,24 +178,58 @@ pub struct CifraDeDesarrollo {
     pub simulacro: u32,
     /// Las respuestas sin corregir del examen entero, de cualquier selección.
     pub sin_corregir: u32,
+    /// Las preguntas de la selección vistas y no vencidas, como el "sabes" del test.
+    pub sabes: u32,
+    pub hay: u32,
+    /// La cuenta de cada apartado de cada tema, de todo el banco.
+    pub pares: Vec<CuentaDelPar>,
 }
 
-/// La cifra de la selección. Sin banco de desarrollo, no hay cifra.
+#[derive(Serialize, Tsify, PartialEq, Debug)]
+pub struct CuentaDelPar {
+    pub pdf: String,
+    pub apartado: String,
+    pub sabes: u32,
+    pub hay: u32,
+}
+
+/// La cifra de la selección en `ahora`, en segundos desde 1970. Sin banco de desarrollo, no hay cifra.
 pub fn cifra_de_desarrollo(
     examen: &Examen,
     desarrollo: &[PreguntaDeDesarrollo],
     conceptos: &[Concepto],
     historial: &[LineaDeDesarrollo],
     seleccion: Option<&[Par]>,
+    ahora: i64,
 ) -> Option<CifraDeDesarrollo> {
     if desarrollo.is_empty() {
         return None;
     }
+    let estado = estados(desarrollo, historial);
+    let sabe = |q: &PreguntaDeDesarrollo| estado.get(q.id.as_str()).is_some_and(|e| !e.vencida(ahora, examen.retencion));
     let elegidas = desarrollo_de_la_seleccion(examen, desarrollo, conceptos, seleccion);
+    let pdfs = pdfs(conceptos);
+    let pares = examen
+        .pdfs
+        .iter()
+        .flat_map(|(pdf, tema)| tema.apartados.iter().map(move |a| (pdf, a)))
+        .map(|(pdf, a)| {
+            let del_par: Vec<&PreguntaDeDesarrollo> = desarrollo.iter().filter(|q| en(examen, &pdfs, q, pdf, a)).collect();
+            CuentaDelPar {
+                pdf: pdf.clone(),
+                apartado: a.clone(),
+                sabes: del_par.iter().filter(|q| sabe(q)).count() as u32,
+                hay: del_par.len() as u32,
+            }
+        })
+        .collect();
     Some(CifraDeDesarrollo {
         sesion: TAMANO.min(elegidas.len()) as u32,
         simulacro: examen.desarrollo.min(elegidas.len() as u32),
         sin_corregir: sin_corregir(historial).len() as u32,
+        sabes: elegidas.iter().filter(|q| sabe(q)).count() as u32,
+        hay: elegidas.len() as u32,
+        pares,
     })
 }
 
@@ -569,7 +618,7 @@ mod tests {
 
     #[test]
     fn sin_banco_de_desarrollo_no_hay_cifra() {
-        assert_eq!(cifra_de_desarrollo(&examen(), &[], &[], &[], None), None);
+        assert_eq!(cifra_de_desarrollo(&examen(), &[], &[], &[], None, 0), None);
     }
 
     #[test]
@@ -579,9 +628,26 @@ mod tests {
         let solo_tls = [Par { pdf: "2.pdf".into(), apartado: "tls".into() }];
         let elegidas = desarrollo_de_la_seleccion(&examen(), &banco, &conceptos, Some(&solo_tls));
         assert_eq!(elegidas, [banco[1].clone()]);
-        let cifra = cifra_de_desarrollo(&examen(), &banco, &conceptos, &[], Some(&solo_tls));
-        assert_eq!(cifra, Some(CifraDeDesarrollo { sesion: 1, simulacro: 1, sin_corregir: 0 }));
+        let cifra = cifra_de_desarrollo(&examen(), &banco, &conceptos, &[], Some(&solo_tls), 0).unwrap();
+        assert_eq!((cifra.sesion, cifra.simulacro, cifra.sin_corregir, cifra.hay), (1, 1, 0, 1));
         assert_eq!(desarrollo_de_la_seleccion(&examen(), &banco, &conceptos, None).len(), 2);
+    }
+
+    #[test]
+    fn la_cifra_cuenta_lo_que_sabes_en_la_seleccion_y_en_cada_par() {
+        let banco = [pregunta("ssh-d1", "ssh", "a"), pregunta("ssh-d2", "ssh", "a"), pregunta("tls-d1", "tls", "b")];
+        let conceptos = [concepto("a", "ssh", "1.pdf"), concepto("b", "tls", "2.pdf")];
+        let historial = calificar("ssh-d1", "x", NotaDeDesarrollo::Good, hora(0));
+        let cuenta = |c: &CifraDeDesarrollo| c.pares.iter().map(|p| (p.pdf.clone(), p.sabes, p.hay)).collect::<Vec<_>>();
+        let hoy = cifra_de_desarrollo(&examen(), &banco, &conceptos, &historial, None, 0).unwrap();
+        assert_eq!((hoy.sabes, hoy.hay), (1, 3));
+        assert_eq!(cuenta(&hoy), [("1.pdf".into(), 1, 2), ("2.pdf".into(), 0, 1)]);
+        let solo_tls = [Par { pdf: "2.pdf".into(), apartado: "tls".into() }];
+        let tls = cifra_de_desarrollo(&examen(), &banco, &conceptos, &historial, Some(&solo_tls), 0).unwrap();
+        assert_eq!((tls.sabes, tls.hay), (0, 1));
+        assert_eq!(cuenta(&tls), cuenta(&hoy));
+        let vencida = cifra_de_desarrollo(&examen(), &banco, &conceptos, &historial, None, 400 * DIA).unwrap();
+        assert_eq!(vencida.sabes, 0);
     }
 
     #[test]
@@ -671,7 +737,7 @@ mod tests {
         assert!(estados(&banco_de(1), &sin).is_empty());
         let con = [sin, vec![corregir_respuesta("d0", hora(0), NotaDeDesarrollo::Good, hora(40 * DIA))]].concat();
         assert_eq!(estados(&banco_de(1), &con)["d0"].ultima, 0);
-        let cifra = cifra_de_desarrollo(&examen(), &banco_de(1), &[], &responder("d0", "x", hora(0)), None).unwrap();
+        let cifra = cifra_de_desarrollo(&examen(), &banco_de(1), &[], &responder("d0", "x", hora(0)), None, 0).unwrap();
         assert_eq!(cifra.sin_corregir, 1);
     }
 

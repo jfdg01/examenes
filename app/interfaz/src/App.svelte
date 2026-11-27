@@ -25,7 +25,7 @@
   // Los pares marcados del inicio. Sin selección, todo está marcado.
   let seleccion = $state.raw<Par[] | undefined>(undefined);
   const inicio = $derived(datos && nucleo.inicio(datos, seleccion, objetivo, Date.now()));
-  const cifraDeDesarrollo = $derived(datos ? nucleo.cifra_de_desarrollo(datos, seleccion) : undefined);
+  const cifraDeDesarrollo = $derived(datos ? nucleo.cifra_de_desarrollo(datos, seleccion, Date.now()) : undefined);
 
   // Una respuesta sin red espera en `localStorage` hasta que llega al servidor. El test y el desarrollo tienen cada uno su lista.
   const pendientes = <T,>(clave: string): T[] => JSON.parse(localStorage.getItem(clave) ?? "[]");

@@ -411,7 +411,10 @@ async fn el_inicio_da_los_conceptos_y_el_desarrollo() {
     let inicio = inicio(&url, "prueba").await;
     assert_eq!(inicio["conceptos"].as_array().unwrap().len(), 6);
     assert_eq!(inicio["desarrollo"][0]["forma"], "proceso");
-    assert_eq!((&inicio["examen"]["desarrollo"], &inicio["examen"]["pesos"]), (&json!(1), &json!({ "test": 5.0, "desarrollo": 5.0 })));
+    assert_eq!(
+        (&inicio["examen"]["desarrollo"], &inicio["examen"]["pesos"]),
+        (&json!(1), &json!({ "test": 5.0, "desarrollo": 5.0 }))
+    );
 }
 
 #[tokio::test]

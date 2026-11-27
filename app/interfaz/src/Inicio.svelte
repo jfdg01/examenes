@@ -24,6 +24,23 @@
       ),
     );
   }
+
+  // La tarjeta de los temas, plegada o no, se recuerda entre visitas. Un tema empieza con sus apartados plegados.
+  const clavePlegados = "temas-plegados";
+  let plegados = $state(localStorage.getItem(clavePlegados) === "si");
+  function plegar() {
+    plegados = !plegados;
+    localStorage.setItem(clavePlegados, plegados ? "si" : "no");
+  }
+  let abiertos = $state<string[]>([]);
+  const abrir = (pdf: string) => (abiertos = abiertos.includes(pdf) ? abiertos.filter((p) => p !== pdf) : [...abiertos, pdf]);
+
+  // Las preguntas de desarrollo que sabes y las que hay en los `apartados` del tema `pdf`, o "" si no hay ninguna.
+  function deDesarrollo(pdf: string, apartados: string[]): string {
+    const pares = desarrollo?.pares.filter((p) => p.pdf === pdf && apartados.includes(p.apartado)) ?? [];
+    const hay = pares.reduce((n, p) => n + p.hay, 0);
+    return hay ? ` · ${pares.reduce((n, p) => n + p.sabes, 0)}/${hay} desarrollo` : "";
+  }
 </script>
 
 <main class="mx-auto max-w-[560px] p-4">
@@ -43,6 +60,9 @@
       <p class="mt-1.5 text-[13px] text-tenue">
         Sabes {t.sabes} · No sabes {t.no_sabes} · Sin ver {t.sin_ver}, de {t.sabes + t.no_sabes + t.sin_ver} preguntas{#if inicio.parte}, {inicio.parte}{/if}
       </p>
+      {#if desarrollo?.hay}
+        <p class="cifra-desarrollo mt-0.5 text-[13px] text-tenue">Desarrollo: sabes {desarrollo.sabes} de {desarrollo.hay}</p>
+      {/if}
       <div class="my-3 rounded-xl bg-tarjeta p-3.5">
         <label class="flex items-center gap-3">
           <b class="text-[16px] whitespace-nowrap">Sacar más de <span class="inline-block w-[3ch] tabular-nums">{objetivo.toLocaleString("es")}</span></b>
@@ -100,8 +120,14 @@
           {/each}
         </details>
       </div>
+      {@const enteros = inicio.temas.filter((u) => u.apartados.every((a) => a.marcado)).length}
       <fieldset class="my-3 rounded-xl bg-tarjeta p-3.5 text-[14px]">
-        {#each inicio.temas as tema (tema.pdf)}
+        <button class="plegar-temas flex w-full cursor-pointer items-center gap-2.5 text-left" aria-expanded={!plegados} onclick={plegar}>
+          <b class="flex-1">Temas</b>
+          <span class="text-[13px] text-tenue tabular-nums">{enteros} de {inicio.temas.length} marcados</span>
+          {@render flecha(!plegados)}
+        </button>
+        {#each plegados ? [] : inicio.temas as tema (tema.pdf)}
           {@const marcados = tema.apartados.filter((a) => a.marcado).length}
           <label class="tema flex items-center gap-2.5 py-1.5">
             <input
@@ -114,11 +140,25 @@
             <!-- El espacio duro tras el número deja "1." en la línea de su primera palabra. -->
             <span class="min-w-0 flex-1">
               <span class="block font-semibold">{tema.nombre.replace(/^(\S+\.) /, "$1\u00a0")}</span>
-              <span class="block text-[13px] text-tenue tabular-nums">{tema.sabes}/{tema.preguntas} preguntas</span>
+              <span class="block text-[13px] text-tenue tabular-nums">{tema.sabes}/{tema.preguntas} preguntas{deDesarrollo(
+                  tema.pdf,
+                  tema.apartados.map((a) => a.apartado),
+                )}</span>
             </span>
             <a class="self-start text-[13px] text-acento underline" href="pdfs/{tema.pdf}" target="_blank">PDF</a>
+            {#if tema.apartados.length > 1}
+              <button
+                class="abrir-tema cursor-pointer self-start"
+                title="Apartados"
+                aria-expanded={abiertos.includes(tema.pdf)}
+                onclick={(e) => {
+                  e.preventDefault();
+                  abrir(tema.pdf);
+                }}>{@render flecha(abiertos.includes(tema.pdf))}</button
+              >
+            {/if}
           </label>
-          {#if tema.apartados.length > 1}
+          {#if tema.apartados.length > 1 && abiertos.includes(tema.pdf)}
             {#each tema.apartados as a (a.apartado)}
               <label class="apartado ml-6.5 flex items-center gap-2.5 py-0.5 text-tenue">
                 <input
@@ -129,7 +169,7 @@
                 />
                 <span class="min-w-0 flex-1">
                   <span class="block">{a.nombre}</span>
-                  <span class="block text-[13px] tabular-nums">{a.sabes}/{a.preguntas} preguntas</span>
+                  <span class="block text-[13px] tabular-nums">{a.sabes}/{a.preguntas} preguntas{deDesarrollo(tema.pdf, [a.apartado])}</span>
                 </span>
               </label>
             {/each}
@@ -166,6 +206,10 @@
   {/if}
   {#if error}<p class="my-3 text-aviso">{error}</p>{/if}
 </main>
+
+{#snippet flecha(abierta: boolean)}
+  <i class={["block w-4 text-center text-tenue not-italic transition-transform", abierta && "rotate-90"]}>›</i>
+{/snippet}
 
 {#snippet cifra(cifra: string, n: number)}
   <div>

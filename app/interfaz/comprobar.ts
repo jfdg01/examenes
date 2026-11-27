@@ -245,6 +245,11 @@ try {
     await lista.reload();
     await lista.getByText(/, con 4 de 5 temas$/).waitFor();
     assert(!(await temas.nth(1).isChecked()), "la selección vuelve al recargar");
+    await lista.getByText(/^Desarrollo: sabes 0 de \d+$/).waitFor();
+    assert.equal(await lista.locator(".tema").getByText(/ · 0\/\d+ desarrollo$/).count() > 0, true, "un tema cuenta sus desarrollos");
+    // Un tema empieza con sus apartados plegados, y su flecha los abre.
+    assert.equal(await lista.locator(".apartado").count(), 0, "los apartados empiezan plegados");
+    await lista.locator(".abrir-tema").first().click();
     await lista.locator(".apartado input").first().uncheck();
     assert(await lista.evaluate(() => (document.querySelector(".tema input") as HTMLInputElement).indeterminate), "un tema a medias");
     await lista.screenshot({ path: `capturas/${nombre}-seleccion.png`, fullPage: true });
@@ -256,6 +261,15 @@ try {
     assert(await lista.getByText(/^Simulacro/).isDisabled(), "sin nada marcado, el simulacro no empieza");
     for (let k = 0; k < 5; k++) await temas.nth(k).setChecked(true);
     assert.equal(await lista.getByText(/ temas$/).count(), 0, "con todo marcado, la tarjeta no nombra los temas");
+    // La tarjeta de los temas se pliega entera, y sigue plegada tras recargar.
+    await lista.locator(".plegar-temas").click();
+    assert.equal(await temas.count(), 0, "la tarjeta plegada esconde los temas");
+    await lista.getByText("5 de 5 marcados").waitFor();
+    await lista.reload();
+    await lista.getByText("5 de 5 marcados").waitFor();
+    assert.equal(await temas.count(), 0, "la tarjeta sigue plegada tras recargar");
+    await lista.screenshot({ path: `capturas/${nombre}-temas-plegados.png` });
+    await lista.locator(".plegar-temas").click();
     await lista.locator(".volver").click();
     await lista.locator(".examen").first().waitFor();
     assert.equal(new URL(lista.url()).pathname, "/", "el enlace del inicio vuelve a la lista");

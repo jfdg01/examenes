@@ -120,7 +120,11 @@ pub fn restaurar(datos: Ts<Datos>, guardado: Ts<Guardado>, ahora: f64) -> Result
 
 /// Las preguntas de desarrollo de la selección. Sin banco de desarrollo, `undefined`.
 #[wasm_bindgen]
-pub fn cifra_de_desarrollo(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>) -> Result<Option<Ts<CifraDeDesarrollo>>, JsError> {
+pub fn cifra_de_desarrollo(
+    datos: Ts<Datos>,
+    seleccion: Option<Vec<Ts<Par>>>,
+    ahora: f64,
+) -> Result<Option<Ts<CifraDeDesarrollo>>, JsError> {
     let d = leer(datos)?;
     crate::desarrollo::cifra_de_desarrollo(
         &d.examen,
@@ -128,6 +132,7 @@ pub fn cifra_de_desarrollo(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>) ->
         &d.conceptos,
         &d.historial_de_desarrollo,
         pares(seleccion)?.as_deref(),
+        en_segundos(ahora),
     )
     .map(dar)
     .transpose()
