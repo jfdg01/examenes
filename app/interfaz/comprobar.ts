@@ -2,16 +2,21 @@
 // `npm run build` va antes. Las capturas quedan en `capturas/`.
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium, type Page } from "playwright";
 
 const raiz = mkdtempSync(join(tmpdir(), "examenes-"));
 // Cada pantalla tiene su copia, porque el servidor guarda la ronda a medias de cada examen.
-for (const examen of ["movil", "pc"]) {
+for (const examen of ["movil", "pc", "mixto-movil", "mixto-pc"]) {
   mkdirSync(join(raiz, examen));
   for (const f of ["examen.json", "preguntas.json", "conceptos.json", "desarrollo.json"]) cpSync(join("prueba", f), join(raiz, examen, f));
+}
+// El simulacro mixto lleva las 2 preguntas de desarrollo del banco de prueba.
+for (const examen of ["mixto-movil", "mixto-pc"]) {
+  const e = JSON.parse(readFileSync(join("prueba", "examen.json"), "utf8"));
+  writeFileSync(join(raiz, examen, "examen.json"), JSON.stringify({ ...e, desarrollo: 2, pesos: { test: 5, desarrollo: 5 } }));
 }
 spawnSync("cargo", ["build", "-q", "-p", "servidor"], { stdio: "inherit" });
 const servidor = spawn("../target/debug/servidor", [raiz, "127.0.0.1:8691"], { stdio: "ignore" });
@@ -156,17 +161,58 @@ async function desarrollar(examen: string, width: number, height: number) {
   await page.locator(".pagina img").waitFor();
   await page.goBack();
   assert.equal(await page.locator(".pagina").count(), 0, "el botón de atrás cierra la página");
-  // Una respuesta con texto guarda 2 líneas, y una con el cuadro vacío guarda 1.
+  // Una respuesta calificada guarda 2 líneas, y «Corregir luego» guarda solo la respuesta.
   await page.getByText("La sabía", { exact: true }).click();
   await page.getByText(/^2 \/ 2 · /).waitFor();
   assert.equal(await page.locator(".respuesta").inputValue(), "", "la pregunta siguiente empieza en blanco");
-  await page.getByText("Ver respuesta modelo").click();
-  await page.getByText("No la sabía").click();
+  assert(await page.locator(".corregir-luego").isDisabled(), "un cuadro vacío no se deja sin corregir");
+  await page.locator(".respuesta").fill("Otra respuesta");
+  await page.locator(".corregir-luego").click();
   await page.getByText("Empezar la sesión").waitFor();
+  await page.getByText("1 respuesta sin corregir").waitFor();
+  await page.screenshot({ path: `capturas/${examen}-sin-corregir.png`, fullPage: true });
   await page.waitForTimeout(500);
   const lineas = readFileSync(join(raiz, examen, "desarrollo.jsonl"), "utf8").trim().split("\n");
-  assert.equal(lineas.length, 3, "la respuesta con texto y las 2 correcciones llegan a desarrollo.jsonl");
+  assert.equal(lineas.length, 3, "las 2 respuestas y la corrección de la primera llegan a desarrollo.jsonl");
   assert(!existsSync(join(raiz, examen, "respuestas.jsonl")), "una nota de desarrollo no toca el historial de test");
+  await page.close();
+}
+
+// El simulacro mixto: los 2 desarrollos antes del test, el texto tras recargar, y su corrección en el final.
+async function mixto(examen: string, width: number, height: number) {
+  const page = await navegador.newPage({ viewport: { width, height } });
+  await page.goto(`http://127.0.0.1:8691/${examen}/`);
+  await page.getByText("Simulacro (2 de desarrollo y 20 de test)").click();
+  await page.locator(".desarrollo-del-simulacro").getByText(/ · desarrollo$/).waitFor();
+  assert.equal(await page.locator(".modelo, .puntos").count(), 0, "el desarrollo del simulacro solo enseña el enunciado y el cuadro");
+  await page.locator(".respuesta").fill("Mi desarrollo");
+  await page.screenshot({ path: `capturas/${examen}-desarrollo.png` });
+  await page.waitForTimeout(800);
+  await page.reload();
+  assert.equal(await page.locator(".respuesta").inputValue(), "Mi desarrollo", "el texto del simulacro vuelve al recargar");
+  // El segundo desarrollo queda en blanco, y Siguiente lleva a la primera pregunta de test.
+  await page.getByRole("button", { name: "Siguiente ›" }).click();
+  await page.getByTitle("Las preguntas").getByText("2 / 22").waitFor();
+  await page.getByRole("button", { name: "Siguiente ›" }).click();
+  await rejilla(page).getByText("3 / 22").waitFor();
+  for (let k = 0; k < 20; k++) {
+    await page.locator(".opcion button").first().click();
+    if (k < 19) await page.getByRole("button", { name: /^Siguiente/ }).filter({ visible: true }).last().click();
+  }
+  await rejilla(page).click();
+  await page.getByText("Terminar el simulacro").click();
+  await page.getByText("El simulacro ha terminado").waitFor();
+  assert.equal(await page.locator(".correccion").count(), 2, "cada desarrollo sale en el final");
+  await page.locator(".nota-del-simulacro").getByText("desarrollo sin corregir").waitFor();
+  assert.equal(await page.locator(".cuadricula button").count(), 20, "la cuadrícula del final es del test");
+  await page.screenshot({ path: `capturas/${examen}-final.png`, fullPage: true });
+  // El desarrollo vacío ya es «No la sabía», y el otro se corrige en el final.
+  await page.locator(".correccion").nth(1).getByText("No la sabía").waitFor();
+  await page.locator(".correccion").first().getByRole("button", { name: "La sabía", exact: true }).click();
+  await page.locator(".nota-del-simulacro").getByText(/Nota: .+ sobre 10/).waitFor();
+  await page.waitForTimeout(500);
+  const lineas = readFileSync(join(raiz, examen, "desarrollo.jsonl"), "utf8").trim().split("\n");
+  assert.equal(lineas.length, 3, "la respuesta con texto, el Again del vacío y la corrección llegan a desarrollo.jsonl");
   await page.close();
 }
 
@@ -176,7 +222,7 @@ try {
     const lista = await navegador.newPage({ viewport: { width, height } });
     await lista.goto("http://127.0.0.1:8691/");
     await lista.locator(".examen").first().waitFor();
-    assert.equal(await lista.locator(".examen").count(), 2, "la lista lleva los 2 exámenes de la raíz");
+    assert.equal(await lista.locator(".examen").count(), 4, "la lista lleva los 4 exámenes de la raíz");
     await lista.screenshot({ path: `capturas/${nombre}-lista.png` });
     await lista.locator(`.examen[href="/${nombre}/"]`).click();
     await lista.getByText("Empezar la sesión").waitFor();
@@ -236,6 +282,8 @@ try {
 
   await desarrollar("movil", 390, 844);
   await desarrollar("pc", 1280, 800);
+  await mixto("mixto-movil", 390, 844);
+  await mixto("mixto-pc", 1280, 800);
 
   // El móvil: la página de la fuente se abre a pantalla completa, y las otras opciones se pliegan.
   const movil = await abrir("movil", 390, 844);

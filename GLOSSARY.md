@@ -4,7 +4,7 @@ Una app para practicar exámenes, con un banco de preguntas de test y de desarro
 
 ## El examen y su banco
 
-**Examen**: Una asignatura con su formato: el número de preguntas, de opciones y de minutos, y la penalización de un fallo. _Evita_: test, asignatura
+**Examen**: Una asignatura con su formato: el número de preguntas de test y de desarrollo, de opciones y de minutos, la penalización de un fallo y el peso de cada parte en la nota. _Evita_: test, asignatura
 
 **Banco**: Las preguntas de un examen, de test y de desarrollo.
 

@@ -184,7 +184,11 @@ async fn editar(
 }
 
 /// Un historial tiene una línea de JSON por línea, como `respuestas.jsonl`. Quien llama tiene el cerrojo.
-async fn leer_historial<T: serde::de::DeserializeOwned>(carpetas: &Carpetas, examen: &str, archivo: &str) -> Result<Vec<T>, Response> {
+async fn leer_historial<T: serde::de::DeserializeOwned>(
+    carpetas: &Carpetas,
+    examen: &str,
+    archivo: &str,
+) -> Result<Vec<T>, Response> {
     let texto = leer_si_existe(carpetas.raiz.join(examen).join(archivo)).await?;
     texto
         .split(|&b| b == b'\n')

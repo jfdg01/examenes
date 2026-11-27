@@ -136,6 +136,12 @@
           {/if}
         {/each}
       </fieldset>
+      <!-- Un aviso sin bloqueo: `banco pendientes` lista las respuestas, y el agente las corrige. -->
+      {#if desarrollo?.sin_corregir}
+        <p class="sin-corregir mt-3 -mb-1 text-[13px] text-aviso">
+          {desarrollo.sin_corregir === 1 ? "1 respuesta sin corregir" : `${desarrollo.sin_corregir} respuestas sin corregir`}
+        </p>
+      {/if}
       <div class="my-3 flex gap-2.5">
         <button
           class="flex-1 cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento disabled:cursor-default disabled:opacity-50"
@@ -154,7 +160,8 @@
       <button
         class="my-3 block w-full cursor-pointer rounded-xl border-2 border-linea bg-tarjeta p-4 text-[16px] font-semibold disabled:cursor-default disabled:opacity-50"
         disabled={inicio.simulacro === 0}
-        onclick={() => onempezar(true)}>Simulacro ({inicio.simulacro} preguntas)</button
+        onclick={() => onempezar(true)}
+        >Simulacro ({#if desarrollo?.simulacro}{desarrollo.simulacro} de desarrollo y {inicio.simulacro} de test{:else}{inicio.simulacro} preguntas{/if})</button
       >
     {/if}
   {/if}

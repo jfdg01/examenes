@@ -86,6 +86,16 @@ app/target/debug/banco importar examenes/ps/trabajo/aplicacion desarrollo aplica
 
 Una forma desconocida o un bloque sin enunciado, sin modelo o sin puntos da un error, y el banco queda igual. Una edición de una pregunta del banco se hace a mano en el JSON.
 
+## La corrección
+
+Una respuesta sin corregir sale de "Corregir luego" o de un simulacro mixto. El agente la corrige cuando el dueño lo pide: `banco pendientes <examen>` lista cada una, y `banco corregir` guarda su nota.
+
+- **Good:** la respuesta cubre todos los puntos, sin nada falso.
+- **Hard:** la respuesta cubre la mitad de los puntos o más, sin nada falso.
+- **Again:** el resto, también una respuesta con algo falso.
+
+El agente dice en el chat, por cada respuesta, la nota y cada punto que faltó. Así el dueño sabe qué repasar.
+
 ## El comprobador
 
 `banco comprobar <carpeta>` falla con un `id` repetido o que también está en `preguntas.json`, un punto que no es un concepto de su apartado, menos de 4 puntos o más de 8, y un concepto en 2 preguntas que no son de la forma `comparacion`. Avisa, sin fallar, de un modelo de menos de 4 frases o de más de 8.
