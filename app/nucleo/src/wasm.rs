@@ -6,6 +6,7 @@ use serde::de::DeserializeOwned;
 use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
 
+use crate::desarrollo::{CifraDeDesarrollo, DesarrolloAMedias, LineaDeDesarrollo, NotaDeDesarrollo, PreguntaDeDesarrolloDeSesion};
 use crate::{
     Cierre, Columnas, Correccion, Datos, Edicion, Editada, Guardado, Inicio, NotaDelSimulacro, Par, PreguntaDeSesion, Respuesta,
     RondaAMedias, Simulacro, Tirador,
@@ -111,6 +112,71 @@ pub fn restaurar(datos: Ts<Datos>, guardado: Ts<Guardado>, ahora: f64) -> Result
     crate::restaurar(&d.examen, &d.banco, &d.conceptos, &d.historial, &leer(guardado)?, en_segundos(ahora), &mut azar(ahora))
         .map(dar)
         .transpose()
+}
+
+/// Las preguntas de desarrollo que sabes de la selección. Sin banco de desarrollo, `undefined`.
+#[wasm_bindgen]
+pub fn cifra_de_desarrollo(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>, ahora: f64) -> Result<Option<Ts<CifraDeDesarrollo>>, JsError> {
+    let d = leer(datos)?;
+    crate::desarrollo::cifra_de_desarrollo(
+        &d.examen,
+        &d.desarrollo,
+        &d.conceptos,
+        &d.historial_de_desarrollo,
+        pares(seleccion)?.as_deref(),
+        en_segundos(ahora),
+    )
+    .map(dar)
+    .transpose()
+}
+
+#[wasm_bindgen]
+pub fn sesion_de_desarrollo(
+    datos: Ts<Datos>,
+    seleccion: Option<Vec<Ts<Par>>>,
+    ahora: f64,
+) -> Result<Vec<Ts<PreguntaDeDesarrolloDeSesion>>, JsError> {
+    let d = leer(datos)?;
+    let elegidas = crate::desarrollo::desarrollo_de_la_seleccion(&d.examen, &d.desarrollo, &d.conceptos, pares(seleccion)?.as_deref());
+    crate::desarrollo::sesion_de_desarrollo(
+        &d.examen,
+        &elegidas,
+        &d.conceptos,
+        &d.historial_de_desarrollo,
+        en_segundos(ahora),
+        &mut azar(ahora),
+    )
+    .into_iter()
+    .map(dar)
+    .collect()
+}
+
+#[wasm_bindgen]
+pub fn calificar(id: String, texto: String, nota: Ts<NotaDeDesarrollo>, ahora: f64) -> Result<Vec<Ts<LineaDeDesarrollo>>, JsError> {
+    let ahora = jiff::Timestamp::from_second(en_segundos(ahora))?;
+    crate::desarrollo::calificar(&id, &texto, leer(nota)?, ahora).into_iter().map(dar).collect()
+}
+
+#[wasm_bindgen]
+pub fn unir_desarrollo(a: Vec<Ts<LineaDeDesarrollo>>, b: Vec<Ts<LineaDeDesarrollo>>) -> Result<Vec<Ts<LineaDeDesarrollo>>, JsError> {
+    let a: Vec<_> = a.into_iter().map(leer).collect::<Result<_, _>>()?;
+    let b: Vec<_> = b.into_iter().map(leer).collect::<Result<_, _>>()?;
+    crate::desarrollo::unir_desarrollo(&a, &b).into_iter().map(dar).collect()
+}
+
+#[wasm_bindgen]
+pub fn restaurar_desarrollo(datos: Ts<Datos>, guardado: Ts<Guardado>, ahora: f64) -> Result<Option<Ts<DesarrolloAMedias>>, JsError> {
+    let d = leer(datos)?;
+    crate::desarrollo::restaurar_desarrollo(
+        &d.examen,
+        &d.desarrollo,
+        &d.conceptos,
+        &d.historial_de_desarrollo,
+        &leer(guardado)?,
+        en_segundos(ahora),
+    )
+    .map(dar)
+    .transpose()
 }
 
 /// Las columnas del PC antes de mover un tirador.

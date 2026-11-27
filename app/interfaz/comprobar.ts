@@ -11,7 +11,7 @@ const raiz = mkdtempSync(join(tmpdir(), "examenes-"));
 // Cada pantalla tiene su copia, porque el servidor guarda la ronda a medias de cada examen.
 for (const examen of ["movil", "pc"]) {
   mkdirSync(join(raiz, examen));
-  for (const f of ["examen.json", "preguntas.json", "conceptos.json"]) cpSync(join("prueba", f), join(raiz, examen, f));
+  for (const f of ["examen.json", "preguntas.json", "conceptos.json", "desarrollo.json"]) cpSync(join("prueba", f), join(raiz, examen, f));
 }
 spawnSync("cargo", ["build", "-q", "-p", "servidor"], { stdio: "inherit" });
 const servidor = spawn("../target/debug/servidor", [raiz, "127.0.0.1:8691"], { stdio: "ignore" });
@@ -126,6 +126,50 @@ async function navegar(page: Page, nombre: string) {
   await page.getByText("El simulacro ha terminado").waitFor();
 }
 
+// La sesión de desarrollo: el botón del inicio, la pregunta, el texto tras recargar, la solución y las 2 notas.
+async function desarrollar(examen: string, width: number, height: number) {
+  const page = await navegador.newPage({ viewport: { width, height } });
+  await page.route("**/paginas/**", (r) => r.fulfill({ contentType: "image/png", body: hoja }));
+  await page.goto(`http://127.0.0.1:8691/${examen}/`);
+  const boton = page.locator("button.desarrollo");
+  await boton.getByText("0/2").waitFor();
+  const sesion = (await page.getByText("Empezar la sesión").boundingBox())!;
+  assert((await boton.boundingBox())!.x > sesion.x, "el botón de desarrollo va a la derecha de la sesión");
+  await page.screenshot({ path: `capturas/${examen}-inicio-desarrollo.png`, fullPage: true });
+  await boton.click();
+  await page.getByText(/^1 \/ 2 · RGPD · sin ver$/).waitFor();
+  await page.screenshot({ path: `capturas/${examen}-desarrollo.png` });
+  // El texto viaja con la ronda guardada, y vuelve al recargar.
+  await page.locator(".respuesta").fill("Mi respuesta");
+  await page.waitForTimeout(800);
+  await page.reload();
+  assert.equal(await page.locator(".respuesta").inputValue(), "Mi respuesta", "el texto vuelve al recargar");
+  await page.getByText("Ver respuesta modelo").click();
+  assert.equal(await page.locator(".puntos li").count(), 4, "la solución lleva los 4 puntos");
+  const texto = (await page.locator(".respuesta").boundingBox())!;
+  const modelo = (await page.locator(".modelo").boundingBox())!;
+  if (width >= 900) assert(modelo.x > texto.x + texto.width - 1, "en el PC, el modelo va al lado del texto");
+  else assert(modelo.y > texto.y + texto.height - 1, "en el móvil, el modelo va debajo del texto");
+  await page.screenshot({ path: `capturas/${examen}-desarrollo-solucion.png`, fullPage: true });
+  await page.locator(".puntos .ver-pagina").first().click();
+  // El punto abre su página a pantalla completa.
+  await page.locator(".pagina img").waitFor();
+  await page.goBack();
+  assert.equal(await page.locator(".pagina").count(), 0, "el botón de atrás cierra la página");
+  // Una respuesta con texto guarda 2 líneas, y una con el cuadro vacío guarda 1.
+  await page.getByText("La sabía", { exact: true }).click();
+  await page.getByText(/^2 \/ 2 · /).waitFor();
+  assert.equal(await page.locator(".respuesta").inputValue(), "", "la pregunta siguiente empieza en blanco");
+  await page.getByText("Ver respuesta modelo").click();
+  await page.getByText("No la sabía").click();
+  await page.getByText("Empezar la sesión").waitFor();
+  await page.waitForTimeout(500);
+  const lineas = readFileSync(join(raiz, examen, "desarrollo.jsonl"), "utf8").trim().split("\n");
+  assert.equal(lineas.length, 3, "la respuesta con texto y las 2 correcciones llegan a desarrollo.jsonl");
+  assert(!existsSync(join(raiz, examen, "respuestas.jsonl")), "una nota de desarrollo no toca el historial de test");
+  await page.close();
+}
+
 try {
   // La lista: cada examen de la raíz abre su ruta, y su inicio lleva de vuelta a la lista.
   for (const [nombre, width, height] of [["movil", 390, 844], ["pc", 1280, 800]] as const) {
@@ -189,6 +233,9 @@ try {
   await reloj.reload();
   await pomodoro.getByText("25:00").waitFor();
   await reloj.close();
+
+  await desarrollar("movil", 390, 844);
+  await desarrollar("pc", 1280, 800);
 
   // El móvil: la página de la fuente se abre a pantalla completa, y las otras opciones se pliegan.
   const movil = await abrir("movil", 390, 844);

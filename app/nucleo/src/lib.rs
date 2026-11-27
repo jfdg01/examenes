@@ -4,6 +4,7 @@ use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
+pub mod desarrollo;
 pub mod wasm;
 
 /// Las cifras de un examen, de `examen.json`.
@@ -175,6 +176,8 @@ pub struct Datos {
     pub conceptos: Vec<Concepto>,
     pub desarrollo: Vec<PreguntaDeDesarrollo>,
     pub historial: Vec<Respuesta>,
+    /// Las líneas de `desarrollo.jsonl`.
+    pub historial_de_desarrollo: Vec<desarrollo::LineaDeDesarrollo>,
 }
 
 /// FSRS-7 con los parámetros por defecto.
@@ -469,7 +472,7 @@ pub struct PreguntaDeSesion {
 }
 
 /// La página de una pregunta de la ronda.
-#[derive(Serialize, Deserialize, Tsify, Clone)]
+#[derive(Serialize, Deserialize, Tsify, Clone, PartialEq, Debug)]
 pub struct Pagina {
     /// El PDF y la página, como `2A _Teoría.pdf · pág. 7`.
     pub fuente: String,
@@ -662,6 +665,9 @@ pub struct RondaGuardada {
     pub respuestas: Vec<Respuesta>,
     pub simulacro: bool,
     pub limite: Option<u64>,
+    /// Una sesión de desarrollo lleva aquí su texto y su nota, y `resultados` y `respuestas` van vacíos.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub desarrollo: Option<desarrollo::RondaDeDesarrollo>,
 }
 
 /// El guardado más nuevo. Con la misma hora gana `a`.
@@ -1572,6 +1578,7 @@ mod tests {
                 respuestas: vec![],
                 simulacro: false,
                 limite: None,
+                desarrollo: None,
             }),
             seleccion: None,
         }

@@ -12,6 +12,7 @@ use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
+use nucleo::desarrollo::LineaDeDesarrollo;
 use nucleo::{Datos, Examen, ExamenDeLaLista, Guardado, Nota, Pregunta, PreguntaDeDesarrollo, Respuesta};
 use tower_http::compression::CompressionLayer;
 use tower_http::services::ServeDir;
@@ -37,6 +38,7 @@ pub fn app(raiz: PathBuf, interfaz: PathBuf) -> Router {
         .route("/{examen}/", get(pagina))
         .route("/{examen}/api/inicio", get(inicio))
         .route("/{examen}/api/respuestas", axum::routing::post(responder))
+        .route("/{examen}/api/desarrollo", axum::routing::post(desarrollar))
         .route("/{examen}/api/preguntas", axum::routing::put(editar))
         .route("/{examen}/api/notas", get(leer_notas).post(anotar))
         .route("/{examen}/api/ronda", get(leer_ronda).put(guardar_ronda))
@@ -181,9 +183,9 @@ async fn editar(
     Ok(StatusCode::NO_CONTENT)
 }
 
-/// `respuestas.jsonl` tiene una respuesta por línea. Quien llama tiene el cerrojo.
-async fn leer_historial(carpetas: &Carpetas, examen: &str) -> Result<Vec<Respuesta>, Response> {
-    let texto = leer_si_existe(carpetas.raiz.join(examen).join("respuestas.jsonl")).await?;
+/// Un historial tiene una línea de JSON por línea, como `respuestas.jsonl`. Quien llama tiene el cerrojo.
+async fn leer_historial<T: serde::de::DeserializeOwned>(carpetas: &Carpetas, examen: &str, archivo: &str) -> Result<Vec<T>, Response> {
+    let texto = leer_si_existe(carpetas.raiz.join(examen).join(archivo)).await?;
     texto
         .split(|&b| b == b'\n')
         .filter(|linea| !linea.trim_ascii().is_empty())
@@ -198,8 +200,9 @@ async fn inicio(State(carpetas): Estado, Path(examen): Path<String>) -> Result<a
     let conceptos = leer_lista(&carpetas, &examen, "conceptos.json").await?;
     let banco = leer_lista(&carpetas, &examen, "preguntas.json").await?;
     let desarrollo: Vec<PreguntaDeDesarrollo> = leer_lista(&carpetas, &examen, "desarrollo.json").await?;
-    let historial = leer_historial(&carpetas, &examen).await?;
-    Ok(axum::Json(Datos { examen: datos, banco, conceptos, desarrollo, historial }))
+    let historial = leer_historial(&carpetas, &examen, "respuestas.jsonl").await?;
+    let historial_de_desarrollo = leer_historial(&carpetas, &examen, "desarrollo.jsonl").await?;
+    Ok(axum::Json(Datos { examen: datos, banco, conceptos, desarrollo, historial, historial_de_desarrollo }))
 }
 
 /// Añade al historial cada respuesta nueva. Una respuesta con el mismo `id` y `ts` ya está, y no entra otra vez.
@@ -210,20 +213,48 @@ async fn responder(
 ) -> Result<StatusCode, Response> {
     leer_examen(&carpetas, &examen).await?;
     let _cerrojo = carpetas.cerrojo.lock().await;
-    let mut vistas: std::collections::HashSet<(String, jiff::Timestamp)> =
-        leer_historial(&carpetas, &examen).await?.into_iter().map(|r| (r.id, r.ts)).collect();
-    let mut nuevas = String::new();
-    for r in respuestas {
-        if vistas.insert((r.id.clone(), r.ts)) {
-            nuevas += &serde_json::to_string(&r).map_err(error_interno)?;
-            nuevas += "\n";
+    let viejas: Vec<Respuesta> = leer_historial(&carpetas, &examen, "respuestas.jsonl").await?;
+    anadir(&carpetas, &examen, "respuestas.jsonl", &viejas, &respuestas, |r| (r.id.clone(), r.ts)).await
+}
+
+/// Añade a `desarrollo.jsonl` cada línea nueva. Una línea con la misma clave ya está, y no entra otra vez.
+async fn desarrollar(
+    State(carpetas): Estado,
+    Path(examen): Path<String>,
+    axum::Json(lineas): axum::Json<Vec<LineaDeDesarrollo>>,
+) -> Result<StatusCode, Response> {
+    leer_examen(&carpetas, &examen).await?;
+    let _cerrojo = carpetas.cerrojo.lock().await;
+    let viejas: Vec<LineaDeDesarrollo> = leer_historial(&carpetas, &examen, "desarrollo.jsonl").await?;
+    anadir(&carpetas, &examen, "desarrollo.jsonl", &viejas, &lineas, |l| {
+        let (id, ts, corregida) = l.clave();
+        (id.to_owned(), ts, corregida)
+    })
+    .await
+}
+
+/// Añade al historial `archivo` las líneas de `nuevas` con una clave que no está en `viejas`. Quien llama tiene el cerrojo.
+async fn anadir<T: serde::Serialize, K: std::hash::Hash + Eq>(
+    carpetas: &Carpetas,
+    examen: &str,
+    archivo: &str,
+    viejas: &[T],
+    nuevas: &[T],
+    clave: impl Fn(&T) -> K,
+) -> Result<StatusCode, Response> {
+    let mut vistas: std::collections::HashSet<K> = viejas.iter().map(&clave).collect();
+    let mut texto = String::new();
+    for l in nuevas {
+        if vistas.insert(clave(l)) {
+            texto += &serde_json::to_string(l).map_err(error_interno)?;
+            texto += "\n";
         }
     }
-    if !nuevas.is_empty() {
+    if !texto.is_empty() {
         use tokio::io::AsyncWriteExt;
-        let ruta = carpetas.raiz.join(&examen).join("respuestas.jsonl");
-        let mut archivo = tokio::fs::OpenOptions::new().create(true).append(true).open(ruta).await.map_err(error_interno)?;
-        archivo.write_all(nuevas.as_bytes()).await.map_err(error_interno)?;
+        let ruta = carpetas.raiz.join(examen).join(archivo);
+        let mut f = tokio::fs::OpenOptions::new().create(true).append(true).open(ruta).await.map_err(error_interno)?;
+        f.write_all(texto.as_bytes()).await.map_err(error_interno)?;
     }
     Ok(StatusCode::NO_CONTENT)
 }
