@@ -1,6 +1,6 @@
-//! Las herramientas del banco de un examen: la comprobación de `preguntas.json`, las imágenes de las páginas
-//! de los PDFs y los arreglos de una revisión. Las 3 leen la carpeta del examen. La comprobación y las
-//! imágenes llaman a `pdfinfo` y `pdftoppm` de poppler.
+//! Las herramientas del banco de un examen: la comprobación de sus archivos, el texto y las imágenes de las
+//! páginas de los PDFs, y los pasos de un lote: el borrador, la carpeta de trabajo de cada apartado y los arreglos
+//! de una revisión. Todas leen la carpeta del examen. La comprobación y las imágenes llaman a poppler.
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fs;
@@ -22,6 +22,25 @@ fn leer_si_existe<T: serde::de::DeserializeOwned>(archivo: &Path) -> Result<Opti
 fn escribir<T: serde::Serialize>(archivo: &Path, datos: &T) -> Result<(), String> {
     let texto = serde_json::to_string_pretty(datos).map_err(|e| e.to_string())? + "\n";
     fs::write(archivo, texto).map_err(|e| format!("{}: {e}", archivo.display()))
+}
+
+/// El tipo de un lote: lo que escriben sus creadores. Cada tipo vive en su archivo del examen.
+#[derive(Clone, Copy, PartialEq, Debug)]
+pub enum Tipo {
+    Conceptos,
+    Test,
+}
+
+impl std::str::FromStr for Tipo {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, String> {
+        match s {
+            "conceptos" => Ok(Tipo::Conceptos),
+            "test" => Ok(Tipo::Test),
+            _ => Err(format!("el tipo {s} no es conceptos ni test")),
+        }
+    }
 }
 
 /// Un concepto de una sigla, que tiene una sola pregunta.
@@ -247,7 +266,7 @@ fn absolutos(texto: &str) -> BTreeSet<String> {
         .collect()
 }
 
-/// Los avisos de las pistas de la regla 6 de `BANCO.md`, que un revisor juzga.
+/// Los avisos de las pistas de la regla 5 de `docs/TEST.md`, que un revisor juzga.
 pub fn pistas(preguntas: &[Pregunta]) -> Vec<String> {
     let mut avisos = Vec::new();
     for p in preguntas {
@@ -412,70 +431,78 @@ pub fn sacar(carpeta: &Path) -> Result<(), String> {
     Ok(())
 }
 
-/// Un fallo del informe de un revisor. La revisión de `BANCO.md` define cada campo.
+/// Un fallo del informe de un revisor. «La revisión» de `docs/TEST.md` y de `docs/CONCEPTOS.md` define cada campo.
 #[derive(Deserialize)]
 pub struct Fallo {
-    /// El `id` de la pregunta, o `null` para un fallo sin pregunta, como una página sin concepto.
+    /// El `id` de la pregunta o del concepto, o `null` para un fallo sin `id`, como una página sin concepto.
     #[serde(default)]
     pub id: Option<String>,
     #[serde(default)]
     pub gravedad: String,
     #[serde(default)]
     pub fallo: String,
-    /// Un `Arreglo` que el revisor propone, o `null`.
+    /// Los campos nuevos que el revisor propone, o `null`.
     #[serde(default)]
     pub arreglo: serde_json::Value,
 }
 
-/// Los campos de una pregunta que un arreglo cambia. Otro campo deja el fallo para arreglarlo a mano.
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
-struct Arreglo {
-    pregunta: Option<String>,
-    correcta: Option<String>,
-    distractores: Option<Vec<String>>,
-    explicacion: Option<String>,
+/// Lo que un lote escribe en un apartado: un concepto o una pregunta.
+pub trait DeUnApartado: serde::Serialize + serde::de::DeserializeOwned {
+    /// Los campos que un arreglo de la revisión cambia. Otro campo deja el fallo para arreglarlo a mano.
+    const CAMPOS: &[&str];
+    fn id(&self) -> &str;
+    fn apartado(&self) -> &str;
+}
+
+impl DeUnApartado for Pregunta {
+    const CAMPOS: &[&str] = &["pregunta", "correcta", "distractores", "explicacion"];
+    fn id(&self) -> &str {
+        &self.id
+    }
+    fn apartado(&self) -> &str {
+        &self.apartado
+    }
+}
+
+impl DeUnApartado for Concepto {
+    const CAMPOS: &[&str] = &["idea", "fuente"];
+    fn id(&self) -> &str {
+        &self.id
+    }
+    fn apartado(&self) -> &str {
+        &self.apartado
+    }
 }
 
 /// Aplica cada arreglo al banco, y devuelve los fallos que un agente arregla a mano: un fallo sin arreglo,
-/// con un campo que un arreglo no cambia, o con un `id` fuera del banco.
-pub fn aplicar(banco: &mut [Pregunta], fallos: Vec<Fallo>) -> Vec<Fallo> {
+/// con un campo que un arreglo no cambia o con un valor que no encaja, o con un `id` fuera del banco.
+pub fn aplicar<T: DeUnApartado>(banco: &mut [T], fallos: Vec<Fallo>) -> Vec<Fallo> {
     let mut pendientes = Vec::new();
     for f in fallos {
-        let arreglo = serde_json::from_value::<Arreglo>(f.arreglo.clone())
-            .ok()
-            .filter(|a| a.pregunta.is_some() || a.correcta.is_some() || a.distractores.is_some() || a.explicacion.is_some());
-        let (Some(a), Some(p)) = (arreglo, banco.iter_mut().find(|p| Some(&p.id) == f.id.as_ref())) else {
+        let campos = f.arreglo.as_object().filter(|a| !a.is_empty() && a.keys().all(|k| T::CAMPOS.contains(&k.as_str())));
+        let item = banco.iter_mut().find(|x| Some(x.id()) == f.id.as_deref());
+        let arreglado = campos.zip(item).and_then(|(campos, item)| {
+            let mut valor = serde_json::to_value(&*item).ok()?;
+            valor.as_object_mut()?.extend(campos.clone());
+            *item = serde_json::from_value(valor).ok()?;
+            Some(())
+        });
+        if arreglado.is_none() {
             pendientes.push(f);
-            continue;
-        };
-        if let Some(v) = a.pregunta {
-            p.pregunta = v;
-        }
-        if let Some(v) = a.correcta {
-            p.correcta = v;
-        }
-        if let Some(v) = a.distractores {
-            p.distractores = v;
-        }
-        if let Some(v) = a.explicacion {
-            p.explicacion = v;
         }
     }
     pendientes
 }
 
-/// Aplica los informes de la revisión a `preguntas.json` de la carpeta, y lista los fallos sin aplicar.
-pub fn revision(carpeta: &Path, informes: &[String]) -> Result<(), String> {
-    let archivo = carpeta.join("preguntas.json");
-    let mut banco: Vec<Pregunta> = leer(&archivo)?;
+fn revisar<T: DeUnApartado>(archivo: &Path, informes: &[String]) -> Result<(), String> {
+    let mut banco: Vec<T> = leer(archivo)?;
     let mut fallos = Vec::new();
     for informe in informes {
         fallos.extend(leer::<Vec<Fallo>>(Path::new(informe))?);
     }
     let total = fallos.len();
     let pendientes = aplicar(&mut banco, fallos);
-    escribir(&archivo, &banco)?;
+    escribir(archivo, &banco)?;
     println!("{} arreglos aplicados.", total - pendientes.len());
     for f in pendientes {
         println!("A mano: {} ({}): {}", f.id.as_deref().unwrap_or("sin id"), f.gravedad, f.fallo);
@@ -483,73 +510,130 @@ pub fn revision(carpeta: &Path, informes: &[String]) -> Result<(), String> {
     Ok(())
 }
 
-/// Prepara un lote de apartados: quita del banco sus preguntas y de `sin_pregunta` sus PDFs, y crea la carpeta
-/// de trabajo de cada apartado. Falla sin cambiar nada con un historial o una ronda que usan los `id` del lote,
-/// porque los `id` nuevos los reusan.
-pub fn preparar(carpeta: &Path, apartados: &[String]) -> Result<(), String> {
+/// Aplica los informes de la revisión al archivo del tipo, y lista los fallos sin aplicar.
+pub fn revision(carpeta: &Path, tipo: Tipo, informes: &[String]) -> Result<(), String> {
+    match tipo {
+        Tipo::Conceptos => revisar::<Concepto>(&carpeta.join("conceptos.json"), informes),
+        Tipo::Test => revisar::<Pregunta>(&carpeta.join("preguntas.json"), informes),
+    }
+}
+
+/// Prepara un lote de apartados: quita del banco lo que el lote escribe, y crea la carpeta de trabajo de cada
+/// apartado, con una copia de `examen.json`, un `preguntas.json` vacío, un `conceptos.json` y un enlace `pdfs`.
+///
+/// - `conceptos` quita los conceptos de los apartados y el `sin_pregunta` de sus PDFs, porque la cobertura de las
+///   páginas mira los conceptos. Falla con una pregunta de test o de desarrollo de los apartados: quedaría sin
+///   concepto. El `conceptos.json` del trabajo está vacío.
+/// - `test` quita las preguntas de los apartados. Falla con un apartado sin conceptos, y con un historial o una
+///   ronda que usan los `id` del lote, porque los `id` nuevos los reusan. El `conceptos.json` del trabajo es una
+///   copia del banco.
+///
+/// Cada fallo deja todo sin cambiar.
+pub fn preparar(carpeta: &Path, tipo: Tipo, apartados: &[String]) -> Result<(), String> {
     let mut examen: Examen = leer(&carpeta.join("examen.json"))?;
-    let archivo = carpeta.join("preguntas.json");
-    let banco: Vec<Pregunta> = leer(&archivo)?;
+    let banco: Vec<Pregunta> = leer(&carpeta.join("preguntas.json"))?;
+    let conceptos: Vec<Concepto> = leer_si_existe(&carpeta.join("conceptos.json"))?.unwrap_or_default();
     if let Some(a) = apartados.iter().find(|a| !examen.pdfs.values().any(|t| t.apartados.contains(a))) {
         return Err(format!("el apartado {a} no está en examen.json"));
-    }
-    let historial = carpeta.join("respuestas.jsonl");
-    let resto: Vec<Pregunta> = banco.iter().filter(|p| !apartados.contains(&p.apartado)).cloned().collect();
-    let del_lote = huerfanas(&resto, &historial)?.len() - huerfanas(&banco, &historial)?.len();
-    if del_lote > 0 {
-        return Err(format!(
-            "respuestas.jsonl tiene {del_lote} id de los apartados del lote: el dueño decide antes qué pasa con ellas"
-        ));
-    }
-    if carpeta.join("ronda.json").exists() {
-        return Err("ronda.json existe: una ronda a medias usa los id del banco".into());
     }
     let trabajo = carpeta.join("trabajo");
     if let Some(a) = apartados.iter().find(|a| trabajo.join(a).exists()) {
         return Err(format!("{} ya existe", trabajo.join(a).display()));
     }
-    examen.sin_pregunta.retain(|pdf, _| !examen.pdfs[pdf].apartados.iter().any(|a| apartados.contains(a)));
-    escribir(&archivo, &resto)?;
-    escribir(&carpeta.join("examen.json"), &examen)?;
+    let del_lote = |a: &String| apartados.contains(a);
+    let conceptos_del_trabajo = match tipo {
+        Tipo::Conceptos => {
+            let desarrollo: Vec<PreguntaDeDesarrollo> = leer_si_existe(&carpeta.join("desarrollo.json"))?.unwrap_or_default();
+            let con_preguntas = banco.iter().map(|p| &p.apartado).chain(desarrollo.iter().map(|d| &d.apartado));
+            if let Some(a) = con_preguntas.into_iter().find(|a| del_lote(a)) {
+                return Err(format!(
+                    "el apartado {a} tiene preguntas de test o de desarrollo: un lote de conceptos las deja sin concepto"
+                ));
+            }
+            let resto: Vec<&Concepto> = conceptos.iter().filter(|c| !del_lote(&c.apartado)).collect();
+            examen.sin_pregunta.retain(|pdf, _| !examen.pdfs[pdf].apartados.iter().any(del_lote));
+            escribir(&carpeta.join("conceptos.json"), &resto)?;
+            escribir(&carpeta.join("examen.json"), &examen)?;
+            Vec::new()
+        }
+        Tipo::Test => {
+            if let Some(a) = apartados.iter().find(|a| !conceptos.iter().any(|c| &c.apartado == *a)) {
+                return Err(format!("el apartado {a} no tiene conceptos: corre antes un lote de conceptos"));
+            }
+            let historial = carpeta.join("respuestas.jsonl");
+            let resto: Vec<Pregunta> = banco.iter().filter(|p| !del_lote(&p.apartado)).cloned().collect();
+            let de_lote = huerfanas(&resto, &historial)?.len() - huerfanas(&banco, &historial)?.len();
+            if de_lote > 0 {
+                return Err(format!(
+                    "respuestas.jsonl tiene {de_lote} id de los apartados del lote: el dueño decide antes qué pasa con ellas"
+                ));
+            }
+            if carpeta.join("ronda.json").exists() {
+                return Err("ronda.json existe: una ronda a medias usa los id del banco".into());
+            }
+            escribir(&carpeta.join("preguntas.json"), &resto)?;
+            conceptos
+        }
+    };
     for a in apartados {
         let dir = trabajo.join(a);
         fs::create_dir_all(&dir).map_err(|e| format!("{}: {e}", dir.display()))?;
         escribir(&dir.join("examen.json"), &examen)?;
         escribir(&dir.join("preguntas.json"), &Vec::<Pregunta>::new())?;
+        escribir(&dir.join("conceptos.json"), &conceptos_del_trabajo)?;
         std::os::unix::fs::symlink("../../pdfs", dir.join("pdfs")).map_err(|e| format!("{}: {e}", dir.display()))?;
     }
     Ok(())
 }
 
-/// Une al banco las preguntas y el `sin_pregunta` de la carpeta de trabajo de cada apartado del lote. Falla sin
-/// cambiar nada con una pregunta de otro apartado o con un `id` que ya está en el banco. Devuelve las preguntas
-/// añadidas.
-pub fn montar(carpeta: &Path, apartados: &[String]) -> Result<usize, String> {
-    let mut examen: Examen = leer(&carpeta.join("examen.json"))?;
-    let archivo = carpeta.join("preguntas.json");
-    let mut banco: Vec<Pregunta> = leer(&archivo)?;
-    let antes = banco.len();
+/// El banco del archivo con lo que trae la carpeta de trabajo de cada apartado del lote. Falla con un `id` de otro
+/// apartado o que ya está en el banco, como una sigla de dos apartados.
+fn unir<T: DeUnApartado>(carpeta: &Path, archivo: &str, apartados: &[String]) -> Result<Vec<T>, String> {
+    let mut banco: Vec<T> = leer_si_existe(&carpeta.join(archivo))?.unwrap_or_default();
     for a in apartados {
         let dir = carpeta.join("trabajo").join(a);
-        let nuevas: Vec<Pregunta> = leer(&dir.join("preguntas.json"))?;
-        if let Some(p) = nuevas.iter().find(|p| &p.apartado != a || banco.iter().any(|b| b.id == p.id)) {
-            return Err(format!("{}: {} no es del apartado {a}, o ya está en el banco", dir.display(), p.id));
+        let nuevos: Vec<T> = leer(&dir.join(archivo))?;
+        if let Some(x) = nuevos.iter().find(|x| x.apartado() != a || banco.iter().any(|b| b.id() == x.id())) {
+            return Err(format!("{}: {} no es del apartado {a}, o ya está en el banco", dir.display(), x.id()));
         }
-        let copia: Examen = leer(&dir.join("examen.json"))?;
-        for (pdf, t) in &examen.pdfs {
-            if let (true, Some(razones)) = (t.apartados.contains(a), copia.sin_pregunta.get(pdf)) {
-                examen.sin_pregunta.insert(pdf.clone(), razones.clone());
-            }
-        }
-        banco.extend(nuevas);
+        banco.extend(nuevos);
     }
-    escribir(&archivo, &banco)?;
-    escribir(&carpeta.join("examen.json"), &examen)?;
-    Ok(banco.len() - antes)
+    Ok(banco)
 }
 
-/// Una pregunta de un bloque del borrador, sin `id` ni `apartado`. El encabezado es su concepto. `BANCO.md` describe el formato del bloque.
-fn bloque(concepto: &str, lineas: &[&str]) -> Result<Pregunta, String> {
+/// Une al banco lo que escribió cada apartado del lote, y en un lote de conceptos también el `sin_pregunta` de sus
+/// PDFs. Falla sin cambiar nada con un `id` de otro apartado o que ya está en el banco. Devuelve cuántos añade.
+pub fn montar(carpeta: &Path, tipo: Tipo, apartados: &[String]) -> Result<usize, String> {
+    match tipo {
+        Tipo::Conceptos => {
+            let archivo = carpeta.join("conceptos.json");
+            let antes = leer_si_existe::<Vec<Concepto>>(&archivo)?.unwrap_or_default().len();
+            let banco: Vec<Concepto> = unir(carpeta, "conceptos.json", apartados)?;
+            let mut examen: Examen = leer(&carpeta.join("examen.json"))?;
+            for a in apartados {
+                let copia: Examen = leer(&carpeta.join("trabajo").join(a).join("examen.json"))?;
+                for (pdf, t) in &examen.pdfs {
+                    if let (true, Some(razones)) = (t.apartados.contains(a), copia.sin_pregunta.get(pdf)) {
+                        examen.sin_pregunta.entry(pdf.clone()).or_default().extend(razones.clone());
+                    }
+                }
+            }
+            escribir(&archivo, &banco)?;
+            escribir(&carpeta.join("examen.json"), &examen)?;
+            Ok(banco.len() - antes)
+        }
+        Tipo::Test => {
+            let archivo = carpeta.join("preguntas.json");
+            let antes = leer::<Vec<Pregunta>>(&archivo)?.len();
+            let banco: Vec<Pregunta> = unir(carpeta, "preguntas.json", apartados)?;
+            escribir(&archivo, &banco)?;
+            Ok(banco.len() - antes)
+        }
+    }
+}
+
+/// Una pregunta de un bloque del borrador, sin `id` ni `apartado`. El encabezado es su concepto. «El borrador» de `docs/TEST.md` describe el formato del bloque.
+fn bloque(concepto: &str, lineas: &[String]) -> Result<Pregunta, String> {
     let error = |e: &str| format!("{concepto}: {e}");
     let (mut pregunta, mut correcta, mut verdad) = (Vec::new(), Vec::new(), Vec::new());
     let (mut distractores, mut explicacion) = (Vec::new(), Vec::new());
@@ -587,50 +671,97 @@ fn bloque(concepto: &str, lineas: &[&str]) -> Result<Pregunta, String> {
     })
 }
 
-/// Añade al final de `preguntas.json` las preguntas del borrador, cada una con el siguiente `id` libre del apartado.
-/// Un concepto que ya está en el banco da un error, y el banco queda igual. Devuelve los `id` nuevos.
-pub fn importar(carpeta: &Path, apartado: &str, borrador: &Path) -> Result<Vec<String>, String> {
-    let examen: Examen = leer(&carpeta.join("examen.json"))?;
-    let archivo = carpeta.join("preguntas.json");
-    let mut banco: Vec<Pregunta> = leer(&archivo)?;
+/// Los bloques del borrador: el encabezado `## ` de cada uno, y sus líneas no vacías.
+fn bloques(borrador: &Path) -> Result<Vec<(String, Vec<String>)>, String> {
     let texto = fs::read_to_string(borrador).map_err(|e| format!("{}: {e}", borrador.display()))?;
-    if !examen.pdfs.values().any(|t| t.apartados.iter().any(|a| a == apartado)) {
-        return Err(format!("el apartado {apartado} no está en examen.json"));
-    }
-    let mut bloques: Vec<(&str, Vec<&str>)> = Vec::new();
+    let mut bloques: Vec<(String, Vec<String>)> = Vec::new();
     for l in texto.lines().filter(|l| !l.trim().is_empty()) {
         match (l.strip_prefix("## "), bloques.last_mut()) {
-            (Some(encabezado), _) => bloques.push((encabezado.trim(), Vec::new())),
-            (None, Some((_, lineas))) => lineas.push(l),
+            (Some(encabezado), _) => bloques.push((encabezado.trim().into(), Vec::new())),
+            (None, Some((_, lineas))) => lineas.push(l.into()),
             (None, None) => return Err(format!("una línea antes del primer «## »: {l}")),
         }
     }
     if bloques.is_empty() {
         return Err(format!("el borrador no tiene bloques: {}", borrador.display()));
     }
-    let siguiente =
-        |prefijo: String| banco.iter().filter_map(|p| p.id.strip_prefix(&prefijo)?.parse::<u32>().ok()).max().unwrap_or(0);
-    let (mut normal, mut de_sigla) = (siguiente(format!("{apartado}-")), siguiente(format!("{apartado}-s")));
-    let mut nuevas = Vec::new();
-    for (encabezado, lineas) in &bloques {
-        let mut p = bloque(encabezado, lineas)?;
-        if banco.iter().any(|b| b.concepto == p.concepto) {
-            return Err(format!("el concepto {} ya está en el banco", p.concepto));
-        }
-        p.id = if sigla(&p.concepto) {
-            de_sigla += 1;
-            format!("{apartado}-s{de_sigla:02}")
-        } else {
-            normal += 1;
-            format!("{apartado}-{normal:03}")
-        };
-        p.apartado = apartado.into();
-        nuevas.push(p);
+    Ok(bloques)
+}
+
+/// Un concepto de un bloque del borrador de conceptos: el encabezado es su `id`, la línea sin marca su idea, y la
+/// línea `@ <página>` la página de su `fuente` en el PDF del apartado.
+fn bloque_de_concepto(id: &str, apartado: &str, pdf: &str, lineas: &[String]) -> Result<Concepto, String> {
+    let error = |e: &str| format!("{id}: {e}");
+    if !id.starts_with(&format!("{apartado}-")) && !sigla(id) {
+        return Err(error(&format!("el id no empieza por {apartado}- ni por sigla-")));
     }
-    let ids = nuevas.iter().map(|p| p.id.clone()).collect();
-    banco.extend(nuevas);
-    escribir(&archivo, &banco)?;
-    Ok(ids)
+    let (paginas, ideas): (Vec<&String>, Vec<&String>) = lineas.iter().partition(|l| l.starts_with('@'));
+    let pagina = paginas.iter().map(|l| l[1..].trim().parse::<u32>());
+    let ([idea], [Ok(pagina)]) = (&ideas[..], &pagina.collect::<Vec<_>>()[..]) else {
+        return Err(error("el bloque no tiene una línea de idea y una línea @ <página>"));
+    };
+    let fuente = Fuente { pdf: pdf.into(), pagina: *pagina };
+    Ok(Concepto { id: id.into(), apartado: apartado.into(), idea: idea.trim().into(), fuente })
+}
+
+/// Añade al final del archivo del tipo lo que trae el borrador. Una pregunta de test recibe el siguiente `id`
+/// libre del apartado, y un concepto lleva el `id` de su encabezado. Un concepto que ya está en el banco da un
+/// error, y el banco queda igual. Devuelve los `id` nuevos.
+pub fn importar(carpeta: &Path, tipo: Tipo, apartado: &str, borrador: &Path) -> Result<Vec<String>, String> {
+    let examen: Examen = leer(&carpeta.join("examen.json"))?;
+    let pdfs: Vec<&String> =
+        examen.pdfs.iter().filter(|(_, t)| t.apartados.iter().any(|a| a == apartado)).map(|(p, _)| p).collect();
+    let pdf = match pdfs[..] {
+        [pdf] => pdf,
+        [] => return Err(format!("el apartado {apartado} no está en examen.json")),
+        _ => return Err(format!("el apartado {apartado} está en {} PDFs de examen.json", pdfs.len())),
+    };
+    let bloques = bloques(borrador)?;
+    match tipo {
+        Tipo::Conceptos => {
+            let archivo = carpeta.join("conceptos.json");
+            let mut conceptos: Vec<Concepto> = leer_si_existe(&archivo)?.unwrap_or_default();
+            let mut ids = Vec::new();
+            for (id, lineas) in &bloques {
+                let c = bloque_de_concepto(id, apartado, pdf, lineas)?;
+                if conceptos.iter().any(|b| b.id == c.id) {
+                    return Err(format!("el concepto {} ya está en el banco", c.id));
+                }
+                ids.push(c.id.clone());
+                conceptos.push(c);
+            }
+            escribir(&archivo, &conceptos)?;
+            Ok(ids)
+        }
+        Tipo::Test => {
+            let archivo = carpeta.join("preguntas.json");
+            let mut banco: Vec<Pregunta> = leer(&archivo)?;
+            let siguiente = |prefijo: String| {
+                banco.iter().filter_map(|p| p.id.strip_prefix(&prefijo)?.parse::<u32>().ok()).max().unwrap_or(0)
+            };
+            let (mut normal, mut de_sigla) = (siguiente(format!("{apartado}-")), siguiente(format!("{apartado}-s")));
+            let mut nuevas = Vec::new();
+            for (encabezado, lineas) in &bloques {
+                let mut p = bloque(encabezado, lineas)?;
+                if banco.iter().any(|b| b.concepto == p.concepto) {
+                    return Err(format!("el concepto {} ya está en el banco", p.concepto));
+                }
+                p.id = if sigla(&p.concepto) {
+                    de_sigla += 1;
+                    format!("{apartado}-s{de_sigla:02}")
+                } else {
+                    normal += 1;
+                    format!("{apartado}-{normal:03}")
+                };
+                p.apartado = apartado.into();
+                nuevas.push(p);
+            }
+            let ids = nuevas.iter().map(|p| p.id.clone()).collect();
+            banco.extend(nuevas);
+            escribir(&archivo, &banco)?;
+            Ok(ids)
+        }
+    }
 }
 
 #[cfg(test)]
@@ -1027,7 +1158,7 @@ mod tests {
     #[test]
     fn importar_anade_cada_bloque_con_el_siguiente_id_libre() {
         let dir = para_importar(&BORRADOR.replace("rgpd-brecha-plazo", "rgpd-brecha-nuevo"));
-        let ids = importar(dir.path(), "rgpd", &dir.path().join("borrador.md")).unwrap();
+        let ids = importar(dir.path(), Tipo::Test, "rgpd", &dir.path().join("borrador.md")).unwrap();
         assert_eq!(ids, ["rgpd-008", "rgpd-s03"]);
         let banco: Vec<serde_json::Value> = leer(&dir.path().join("preguntas.json")).unwrap();
         assert_eq!(banco.len(), 4);
@@ -1061,9 +1192,77 @@ mod tests {
         for (borrador, apartado, error) in casos {
             let dir = para_importar(&borrador);
             let antes = fs::read_to_string(dir.path().join("preguntas.json")).unwrap();
-            let e = importar(dir.path(), apartado, &dir.path().join("borrador.md")).unwrap_err();
+            let e = importar(dir.path(), Tipo::Test, apartado, &dir.path().join("borrador.md")).unwrap_err();
             assert!(e.contains(error), "{e}");
             assert_eq!(fs::read_to_string(dir.path().join("preguntas.json")).unwrap(), antes);
+        }
+    }
+
+    const CONCEPTOS: &str = "\
+## rgpd-brecha-nueva
+El responsable notifica una brecha a la autoridad en 72 horas desde que la conoce.
+@ 4
+
+## sigla-dpd
+DPD es el Delegado de Protección de Datos.
+@ 2
+";
+
+    /// La carpeta con `examen.json`, `conceptos.json` con `rgpd-brecha-plazo`, y el borrador de conceptos dado.
+    fn para_importar_conceptos(borrador: &str) -> tempfile::TempDir {
+        let dir = para_importar(borrador);
+        escribir(&dir.path().join("conceptos.json"), &base()).unwrap();
+        dir
+    }
+
+    #[test]
+    fn importar_anade_cada_concepto_del_borrador_con_la_pagina_de_su_pdf() {
+        let dir = para_importar_conceptos(CONCEPTOS);
+        let ids = importar(dir.path(), Tipo::Conceptos, "rgpd", &dir.path().join("borrador.md")).unwrap();
+        assert_eq!(ids, ["rgpd-brecha-nueva", "sigla-dpd"]);
+        let conceptos: Vec<serde_json::Value> = leer(&dir.path().join("conceptos.json")).unwrap();
+        assert_eq!(conceptos.len(), 3);
+        assert_eq!(
+            conceptos[1..],
+            [
+                serde_json::json!({
+                    "id": "rgpd-brecha-nueva",
+                    "apartado": "rgpd",
+                    "idea": "El responsable notifica una brecha a la autoridad en 72 horas desde que la conoce.",
+                    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 4 }
+                }),
+                serde_json::json!({
+                    "id": "sigla-dpd",
+                    "apartado": "rgpd",
+                    "idea": "DPD es el Delegado de Protección de Datos.",
+                    "fuente": { "pdf": "1_Legislacion.pdf", "pagina": 2 }
+                })
+            ]
+        );
+    }
+
+    #[test]
+    fn importar_conceptos_falla_sin_tocar_conceptos_json() {
+        let casos = [
+            (CONCEPTOS.replace("brecha-nueva", "brecha-plazo"), "rgpd", "el concepto rgpd-brecha-plazo ya está en el banco"),
+            (CONCEPTOS.replace("sigla-dpd", "rgpd-brecha-nueva"), "rgpd", "el concepto rgpd-brecha-nueva ya está en el banco"),
+            (CONCEPTOS.replace("## rgpd-", "## lssi-"), "rgpd", "lssi-brecha-nueva: el id no empieza por rgpd- ni por sigla-"),
+            (
+                CONCEPTOS.replace("@ 4", "@ cuatro"),
+                "rgpd",
+                "rgpd-brecha-nueva: el bloque no tiene una línea de idea y una línea @ <página>",
+            ),
+            (CONCEPTOS.replace("@ 2\n", ""), "rgpd", "sigla-dpd: el bloque no tiene una línea de idea"),
+            (CONCEPTOS.replace("@ 2", "Otra idea.\n@ 2"), "rgpd", "sigla-dpd: el bloque no tiene una línea de idea"),
+            (CONCEPTOS.replace("## rgpd-", "## lssi-"), "lssi", "el apartado lssi está en 2 PDFs de examen.json"),
+            (CONCEPTOS.to_string(), "nada", "el apartado nada no está en examen.json"),
+        ];
+        for (borrador, apartado, error) in casos {
+            let dir = para_importar_conceptos(&borrador);
+            let antes = fs::read_to_string(dir.path().join("conceptos.json")).unwrap();
+            let e = importar(dir.path(), Tipo::Conceptos, apartado, &dir.path().join("borrador.md")).unwrap_err();
+            assert!(e.contains(error), "{e}");
+            assert_eq!(fs::read_to_string(dir.path().join("conceptos.json")).unwrap(), antes);
         }
     }
 
@@ -1154,32 +1353,109 @@ mod tests {
     }
 
     #[test]
-    fn preparar_vacia_el_lote_y_montar_lo_devuelve() {
+    fn aplicar_a_un_concepto_cambia_su_idea_y_su_fuente() {
+        let mut banco = vec![concepto("rgpd-brecha-plazo", "rgpd", 5)];
+        let fallos: Vec<Fallo> = serde_json::from_str(
+            r#"[
+                {"id": "rgpd-brecha-plazo", "regla": 0, "gravedad": "leve", "fallo": "x",
+                 "arreglo": {"idea": "Otra idea.", "fuente": {"pdf": "1_Legislacion.pdf", "pagina": 7}}},
+                {"id": "rgpd-brecha-plazo", "regla": 2, "gravedad": "leve", "fallo": "y", "arreglo": {"correcta": "1"}}
+            ]"#,
+        )
+        .unwrap();
+        let pendientes: Vec<String> = aplicar(&mut banco, fallos).into_iter().map(|f| f.fallo).collect();
+        assert_eq!(pendientes, ["y"]);
+        assert_eq!(banco[0].idea, "Otra idea.");
+        assert_eq!(banco[0].fuente.pagina, 7);
+    }
+
+    /// La carpeta con `examen.json` con una razón de `sin_pregunta` en `1_Legislacion.pdf`, y `preguntas.json` con
+    /// `r1` de `rgpd` y `e1` de `ens`.
+    fn para_un_lote() -> (tempfile::TempDir, Examen) {
         let (dir, mut examen) = carpeta();
         let c = dir.path();
         examen.sin_pregunta.insert("1_Legislacion.pdf".into(), BTreeMap::from([("1".into(), "portada".into())]));
         escribir(&c.join("examen.json"), &examen).unwrap();
-        let mut otra = pregunta("e1");
-        otra.apartado = "ens".into();
+        let otra = Pregunta { apartado: "ens".into(), ..pregunta("e1") };
         escribir(&c.join("preguntas.json"), &vec![pregunta("r1"), otra]).unwrap();
+        (dir, examen)
+    }
+
+    #[test]
+    fn preparar_test_vacia_las_preguntas_del_lote_y_montar_las_devuelve() {
+        let (dir, examen) = para_un_lote();
+        let c = dir.path();
         let apartados = vec!["rgpd".to_string()];
+        assert!(preparar(c, Tipo::Test, &apartados).unwrap_err().contains("el apartado rgpd no tiene conceptos"));
+        escribir(&c.join("conceptos.json"), &base()).unwrap();
         fs::write(c.join("respuestas.jsonl"), "{\"id\":\"r1\",\"ts\":1,\"resultado\":\"Acierto\",\"seguro\":true}\n").unwrap();
-        assert!(preparar(c, &apartados).unwrap_err().contains("respuestas.jsonl"));
+        assert!(preparar(c, Tipo::Test, &apartados).unwrap_err().contains("respuestas.jsonl"));
         fs::remove_file(c.join("respuestas.jsonl")).unwrap();
 
-        preparar(c, &apartados).unwrap();
+        preparar(c, Tipo::Test, &apartados).unwrap();
         let banco: Vec<Pregunta> = leer(&c.join("preguntas.json")).unwrap();
         assert_eq!(banco.iter().map(|p| p.id.as_str()).collect::<Vec<_>>(), ["e1"]);
+        // `sin_pregunta` mira las páginas de los conceptos, y es del lote de conceptos.
+        assert_eq!(leer::<Examen>(&c.join("examen.json")).unwrap().sin_pregunta, examen.sin_pregunta);
+        let t = c.join("trabajo/rgpd");
+        assert!(t.join("pdfs/1_Legislacion.pdf").exists());
+        assert_eq!(leer::<Vec<Concepto>>(&t.join("conceptos.json")).unwrap(), base());
+        assert!(preparar(c, Tipo::Test, &apartados).unwrap_err().contains("ya existe"));
+
+        escribir(&t.join("preguntas.json"), &vec![pregunta("r2")]).unwrap();
+        assert_eq!(montar(c, Tipo::Test, &apartados).unwrap(), 1);
+        assert_eq!(leer::<Vec<Pregunta>>(&c.join("preguntas.json")).unwrap().len(), 2);
+        assert!(montar(c, Tipo::Test, &apartados).unwrap_err().contains("r2"));
+    }
+
+    #[test]
+    fn preparar_conceptos_falla_con_preguntas_del_lote_y_montar_une_conceptos_y_sin_pregunta() {
+        let (dir, examen) = para_un_lote();
+        let c = dir.path();
+        let otro = concepto("ens-otro", "ens", 1);
+        escribir(&c.join("conceptos.json"), &vec![concepto("rgpd-brecha-plazo", "rgpd", 5), otro.clone()]).unwrap();
+        let rgpd = vec!["rgpd".to_string()];
+        let e = preparar(c, Tipo::Conceptos, &rgpd).unwrap_err();
+        assert!(e.contains("el apartado rgpd tiene preguntas de test o de desarrollo"), "{e}");
+        let desarrollo = PreguntaDeDesarrollo { apartado: "lssi".into(), ..desarrollo("lssi-d001", Forma::Objeto, 0..4) };
+        escribir(&c.join("desarrollo.json"), &vec![desarrollo]).unwrap();
+        let lssi = vec!["lssi".to_string()];
+        assert!(preparar(c, Tipo::Conceptos, &lssi).unwrap_err().contains("el apartado lssi tiene preguntas"));
+        fs::remove_file(c.join("desarrollo.json")).unwrap();
+        escribir(&c.join("preguntas.json"), &Vec::<Pregunta>::new()).unwrap();
+
+        preparar(c, Tipo::Conceptos, &rgpd).unwrap();
+        assert_eq!(leer::<Vec<Concepto>>(&c.join("conceptos.json")).unwrap(), std::slice::from_ref(&otro));
         assert!(leer::<Examen>(&c.join("examen.json")).unwrap().sin_pregunta.is_empty());
         let t = c.join("trabajo/rgpd");
         assert!(t.join("pdfs/1_Legislacion.pdf").exists());
-        assert!(preparar(c, &apartados).unwrap_err().contains("ya existe"));
+        assert_eq!(leer::<Vec<Concepto>>(&t.join("conceptos.json")).unwrap(), []);
+        assert!(leer::<Vec<Pregunta>>(&t.join("preguntas.json")).unwrap().is_empty());
 
-        escribir(&t.join("preguntas.json"), &vec![pregunta("r2")]).unwrap();
+        escribir(&t.join("conceptos.json"), &vec![concepto("rgpd-nuevo", "rgpd", 2), otro]).unwrap();
+        assert!(montar(c, Tipo::Conceptos, &rgpd).unwrap_err().contains("ens-otro"));
+        escribir(&t.join("conceptos.json"), &vec![concepto("rgpd-nuevo", "rgpd", 2)]).unwrap();
         escribir(&t.join("examen.json"), &examen).unwrap();
-        assert_eq!(montar(c, &apartados).unwrap(), 1);
-        assert_eq!(leer::<Vec<Pregunta>>(&c.join("preguntas.json")).unwrap().len(), 2);
+        assert_eq!(montar(c, Tipo::Conceptos, &rgpd).unwrap(), 1);
+        assert_eq!(leer::<Vec<Concepto>>(&c.join("conceptos.json")).unwrap().len(), 2);
         assert_eq!(leer::<Examen>(&c.join("examen.json")).unwrap().sin_pregunta, examen.sin_pregunta);
-        assert!(montar(c, &apartados).unwrap_err().contains("r2"));
+    }
+
+    #[test]
+    fn montar_conceptos_une_el_sin_pregunta_de_dos_apartados_de_un_pdf() {
+        let (dir, _) = para_un_lote();
+        let c = dir.path();
+        escribir(&c.join("preguntas.json"), &Vec::<Pregunta>::new()).unwrap();
+        let apartados = vec!["rgpd".to_string(), "lssi".to_string()];
+        preparar(c, Tipo::Conceptos, &apartados).unwrap();
+        for (a, pagina) in [("rgpd", "2"), ("lssi", "3")] {
+            let copia = c.join("trabajo").join(a).join("examen.json");
+            let mut examen: Examen = leer(&copia).unwrap();
+            examen.sin_pregunta.insert("1_Legislacion.pdf".into(), BTreeMap::from([(pagina.into(), a.into())]));
+            escribir(&copia, &examen).unwrap();
+        }
+        montar(c, Tipo::Conceptos, &apartados).unwrap();
+        let razones = BTreeMap::from([("2".into(), "rgpd".into()), ("3".into(), "lssi".into())]);
+        assert_eq!(leer::<Examen>(&c.join("examen.json")).unwrap().sin_pregunta["1_Legislacion.pdf"], razones);
     }
 }
