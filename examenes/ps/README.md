@@ -1,8 +1,8 @@
 # PS: Protocolos de Seguridad
 
-El examen es el lunes 30 de noviembre de 2026. Tiene 2 partes: un test, seguramente de verdadero o falso, y preguntas cortas. El test de práctica entrena las ideas de las 2 partes con 3 opciones por pregunta y una sola correcta. Un fallo resta 1/3 de un acierto, y una pregunta en blanco no cuenta.
+El examen es el lunes 30 de noviembre de 2026. Dura 1 hora y tiene 2 partes de 5 puntos cada una: preguntas de desarrollo sobre las definiciones y las características de los protocolos más importantes, y un test de verdadero o falso sobre los mismos contenidos. El test de práctica entrena las ideas de las 2 partes con 3 opciones por pregunta y una sola correcta. Un fallo resta 1/3 de un acierto, y una pregunta en blanco no cuenta.
 
-El número de preguntas y la duración faltan. El simulacro usa 20 preguntas y 25 minutos, cifras provisionales de `examen.json`.
+El número de preguntas de cada parte falta. El simulacro usa 20 preguntas y 25 minutos, cifras provisionales de `examen.json`.
 
 ## El temario
 
