@@ -6,10 +6,12 @@ use serde::de::DeserializeOwned;
 use tsify::{Ts, Tsify};
 use wasm_bindgen::prelude::{JsError, wasm_bindgen};
 
-use crate::desarrollo::{CifraDeDesarrollo, DesarrolloAMedias, LineaDeDesarrollo, NotaDeDesarrollo, PreguntaDeDesarrolloDeSesion};
+use crate::desarrollo::{
+    CifraDeDesarrollo, DesarrolloAMedias, LineaDeDesarrollo, NotaDeDesarrollo, PreguntaDeDesarrolloDeSesion,
+};
 use crate::{
-    Cierre, Columnas, Correccion, Datos, Edicion, Editada, Guardado, Inicio, NotaDelSimulacro, Par, PreguntaDeSesion, Respuesta,
-    RondaAMedias, Simulacro, Tirador,
+    Cierre, Columnas, Correccion, Datos, Edicion, Editada, Examen, Guardado, Inicio, NotaDelSimulacro, Par, PreguntaDeSesion,
+    Respuesta, RondaAMedias, Simulacro, Tirador,
 };
 
 type Js<T> = Result<Ts<T>, JsError>;
@@ -30,10 +32,15 @@ fn pares(seleccion: Option<Vec<Ts<Par>>>) -> Result<Option<Vec<Par>>, JsError> {
     seleccion.map(|s| s.into_iter().map(leer).collect()).transpose()
 }
 
-/// Los datos con solo el banco de la selección.
+/// Los datos con solo los bancos de la selección.
 fn de_la_seleccion(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>) -> Result<Datos, JsError> {
     let d = leer(datos)?;
-    Ok(Datos { banco: crate::de_la_seleccion(&d.examen, &d.banco, &d.conceptos, pares(seleccion)?.as_deref()), ..d })
+    let s = pares(seleccion)?;
+    Ok(Datos {
+        banco: crate::de_la_seleccion(&d.examen, &d.banco, &d.conceptos, s.as_deref()),
+        desarrollo: crate::desarrollo::desarrollo_de_la_seleccion(&d.examen, &d.desarrollo, &d.conceptos, s.as_deref()),
+        ..d
+    })
 }
 
 fn en_segundos(ahora: f64) -> i64 {
@@ -71,7 +78,7 @@ pub fn sesion(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>, ahora: f64) -> 
 #[wasm_bindgen]
 pub fn simulacro(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>, ahora: f64) -> Js<Simulacro> {
     let d = de_la_seleccion(datos, seleccion)?;
-    dar(crate::simulacro(&d.examen, &d.banco, &d.conceptos, &d.historial, en_segundos(ahora), &mut azar(ahora)))
+    dar(crate::simulacro(&d, en_segundos(ahora), &mut azar(ahora)))
 }
 
 #[wasm_bindgen]
@@ -90,8 +97,8 @@ pub fn restante(limite: f64, ahora: f64) -> u32 {
 }
 
 #[wasm_bindgen]
-pub fn nota(cierre: Ts<Cierre>, penalizacion: f64) -> Js<NotaDelSimulacro> {
-    dar(crate::nota_del_simulacro(&leer(cierre)?, penalizacion))
+pub fn nota(cierre: Ts<Cierre>, examen: Ts<Examen>) -> Js<NotaDelSimulacro> {
+    dar(crate::nota_del_simulacro(&leer(cierre)?, &leer(examen)?))
 }
 
 #[wasm_bindgen]
@@ -108,15 +115,16 @@ pub fn unir(a: Vec<Ts<Respuesta>>, b: Vec<Ts<Respuesta>>) -> Result<Vec<Ts<Respu
 
 #[wasm_bindgen]
 pub fn restaurar(datos: Ts<Datos>, guardado: Ts<Guardado>, ahora: f64) -> Result<Option<Ts<RondaAMedias>>, JsError> {
-    let d = leer(datos)?;
-    crate::restaurar(&d.examen, &d.banco, &d.conceptos, &d.historial, &leer(guardado)?, en_segundos(ahora), &mut azar(ahora))
-        .map(dar)
-        .transpose()
+    crate::restaurar(&leer(datos)?, &leer(guardado)?, en_segundos(ahora), &mut azar(ahora)).map(dar).transpose()
 }
 
 /// Las preguntas de desarrollo que sabes de la selección. Sin banco de desarrollo, `undefined`.
 #[wasm_bindgen]
-pub fn cifra_de_desarrollo(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>, ahora: f64) -> Result<Option<Ts<CifraDeDesarrollo>>, JsError> {
+pub fn cifra_de_desarrollo(
+    datos: Ts<Datos>,
+    seleccion: Option<Vec<Ts<Par>>>,
+    ahora: f64,
+) -> Result<Option<Ts<CifraDeDesarrollo>>, JsError> {
     let d = leer(datos)?;
     crate::desarrollo::cifra_de_desarrollo(
         &d.examen,
@@ -137,7 +145,8 @@ pub fn sesion_de_desarrollo(
     ahora: f64,
 ) -> Result<Vec<Ts<PreguntaDeDesarrolloDeSesion>>, JsError> {
     let d = leer(datos)?;
-    let elegidas = crate::desarrollo::desarrollo_de_la_seleccion(&d.examen, &d.desarrollo, &d.conceptos, pares(seleccion)?.as_deref());
+    let elegidas =
+        crate::desarrollo::desarrollo_de_la_seleccion(&d.examen, &d.desarrollo, &d.conceptos, pares(seleccion)?.as_deref());
     crate::desarrollo::sesion_de_desarrollo(
         &d.examen,
         &elegidas,
@@ -152,31 +161,46 @@ pub fn sesion_de_desarrollo(
 }
 
 #[wasm_bindgen]
-pub fn calificar(id: String, texto: String, nota: Ts<NotaDeDesarrollo>, ahora: f64) -> Result<Vec<Ts<LineaDeDesarrollo>>, JsError> {
+pub fn calificar(
+    id: String,
+    texto: String,
+    nota: Ts<NotaDeDesarrollo>,
+    ahora: f64,
+) -> Result<Vec<Ts<LineaDeDesarrollo>>, JsError> {
     let ahora = jiff::Timestamp::from_second(en_segundos(ahora))?;
     crate::desarrollo::calificar(&id, &texto, leer(nota)?, ahora).into_iter().map(dar).collect()
 }
 
 #[wasm_bindgen]
-pub fn unir_desarrollo(a: Vec<Ts<LineaDeDesarrollo>>, b: Vec<Ts<LineaDeDesarrollo>>) -> Result<Vec<Ts<LineaDeDesarrollo>>, JsError> {
+pub fn responder(id: String, texto: String, ahora: f64) -> Result<Vec<Ts<LineaDeDesarrollo>>, JsError> {
+    let ahora = jiff::Timestamp::from_second(en_segundos(ahora))?;
+    crate::desarrollo::responder(&id, &texto, ahora).into_iter().map(dar).collect()
+}
+
+/// La corrección de la respuesta de `id` dada en `ts`, el texto de su línea de respuesta.
+#[wasm_bindgen]
+pub fn corregir_respuesta(id: String, ts: String, nota: Ts<NotaDeDesarrollo>, ahora: f64) -> Js<LineaDeDesarrollo> {
+    let ahora = jiff::Timestamp::from_second(en_segundos(ahora))?;
+    dar(crate::desarrollo::corregir_respuesta(&id, ts.parse()?, leer(nota)?, ahora))
+}
+
+#[wasm_bindgen]
+pub fn unir_desarrollo(
+    a: Vec<Ts<LineaDeDesarrollo>>,
+    b: Vec<Ts<LineaDeDesarrollo>>,
+) -> Result<Vec<Ts<LineaDeDesarrollo>>, JsError> {
     let a: Vec<_> = a.into_iter().map(leer).collect::<Result<_, _>>()?;
     let b: Vec<_> = b.into_iter().map(leer).collect::<Result<_, _>>()?;
     crate::desarrollo::unir_desarrollo(&a, &b).into_iter().map(dar).collect()
 }
 
 #[wasm_bindgen]
-pub fn restaurar_desarrollo(datos: Ts<Datos>, guardado: Ts<Guardado>, ahora: f64) -> Result<Option<Ts<DesarrolloAMedias>>, JsError> {
-    let d = leer(datos)?;
-    crate::desarrollo::restaurar_desarrollo(
-        &d.examen,
-        &d.desarrollo,
-        &d.conceptos,
-        &d.historial_de_desarrollo,
-        &leer(guardado)?,
-        en_segundos(ahora),
-    )
-    .map(dar)
-    .transpose()
+pub fn restaurar_desarrollo(
+    datos: Ts<Datos>,
+    guardado: Ts<Guardado>,
+    ahora: f64,
+) -> Result<Option<Ts<DesarrolloAMedias>>, JsError> {
+    crate::desarrollo::restaurar_desarrollo(&leer(datos)?, &leer(guardado)?, en_segundos(ahora)).map(dar).transpose()
 }
 
 /// Las columnas del PC antes de mover un tirador.

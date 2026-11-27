@@ -14,6 +14,7 @@
     ontexto,
     onsolucion,
     oncalificar,
+    oncorregirluego,
     onnota,
     onnotasvisibles,
     onverpagina,
@@ -31,6 +32,8 @@
     ontexto: (texto: string) => void;
     onsolucion: () => void;
     oncalificar: (nota: NotaDeDesarrollo) => void;
+    // Guarda la respuesta sin corrección, para que la corrija el agente con `banco pendientes`.
+    oncorregirluego: () => void;
     onnota: (texto: string) => void;
     onnotasvisibles: () => void;
     onverpagina: (pagina: Pagina) => void;
@@ -110,6 +113,11 @@
         <button class={["min-w-0 flex-1 cursor-pointer rounded-[10px] border-2 bg-tarjeta px-2 py-3.5 text-[15px] font-semibold", color]} onclick={() => oncalificar(nota)}>{etiqueta}</button>
       {/each}
     {:else}
+      <button
+        class="corregir-luego cursor-pointer rounded-[10px] border-2 border-linea bg-tarjeta px-3 text-[14px] disabled:cursor-default disabled:opacity-50"
+        disabled={!texto.trim()}
+        onclick={oncorregirluego}>Corregir luego</button
+      >
       <button class="flex-1 cursor-pointer rounded-[10px] bg-acento p-3.5 text-[15px] font-semibold text-sobre-acento" onclick={onsolucion}>Ver respuesta modelo</button>
     {/if}
   </div>

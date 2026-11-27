@@ -1,8 +1,9 @@
 <script lang="ts">
   import * as nucleo from "./nucleo/nucleo.js";
-  import type { Columnas, Datos, Edicion, Guardado, LineaDeDesarrollo, Nota, NotaDeDesarrollo, NotaDelSimulacro, Pagina, Par, PreguntaDeDesarrolloDeSesion, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
+  import type { Columnas, Datos, Edicion, Guardado, LineaDeDesarrollo, Nota, NotaDeDesarrollo, Pagina, Par, PreguntaDeDesarrolloDeSesion, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
   import { aviso, type Marca } from "./Cuadricula.svelte";
   import Desarrollo from "./Desarrollo.svelte";
+  import DesarrolloDelSimulacro from "./DesarrolloDelSimulacro.svelte";
   import Final from "./Final.svelte";
   import Hoja from "./Hoja.svelte";
   import Inicio from "./Inicio.svelte";
@@ -93,13 +94,14 @@
     const d = nucleo.restaurar_desarrollo(datos, g, Date.now());
     if (d) {
       textos = d.textos;
-      notasDeDesarrollo = d.notas;
+      hechas = d.hechas;
       desarrollo = d.preguntas;
       return;
     }
     const r = nucleo.restaurar(datos, g, Date.now());
     if (!r) return;
     ({ preguntas, resultados, simulacro } = r);
+    empezarElDesarrolloDelSimulacro(r.desarrollo, r.textos);
     elecciones = preguntas.map(() => null);
     respuestas = preguntas.map((q) => r.respuestas.find((x) => x.id === q.id) ?? null);
     limite = r.limite ?? 0;
@@ -148,11 +150,15 @@
     const guardada = new Date().toISOString();
     if (desarrollo) {
       const ids = desarrollo.map((q) => q.id);
-      return enviar({ guardada, ronda: { ids, resultados: [], respuestas: [], simulacro: false, limite: undefined, desarrollo: { textos, notas: notasDeDesarrollo } }, seleccion }, alServidor);
+      return enviar({ guardada, ronda: { ids, resultados: [], respuestas: [], simulacro: false, limite: undefined, desarrollo: { ids, textos, hechas } }, seleccion }, alServidor);
     }
     const aMedias = ronda.estado === "Pregunta";
     const ids = preguntas.map((q) => q.id);
-    enviar({ guardada, ronda: aMedias ? { ids, resultados, respuestas: respuestas.filter((r) => r !== null), simulacro, limite: simulacro ? limite : undefined } : undefined, seleccion });
+    const conDesarrollo = desarrolloDelSimulacro.length ? { ids: desarrolloDelSimulacro.map((q) => q.id), textos: textosDelSimulacro, hechas: 0 } : undefined;
+    enviar(
+      { guardada, ronda: aMedias ? { ids, resultados, respuestas: respuestas.filter((r) => r !== null), simulacro, limite: simulacro ? limite : undefined, desarrollo: conDesarrollo } : undefined, seleccion },
+      alServidor,
+    );
   }
 
   let ronda = $state<Ronda>({ estado: "Inicio" });
@@ -177,7 +183,6 @@
       return r === "Acierto" ? "acierto" : r === "Fallo" ? "fallo" : "blanco";
     }),
   );
-  let nota = $state<NotaDelSimulacro | null>(null);
   let limite = 0;
   let reloj: ReturnType<typeof setInterval> | undefined;
   let restante = $state(0);
@@ -202,7 +207,11 @@
       const s = nucleo.simulacro(datos, seleccion, ahora);
       preguntas = s.preguntas;
       limite = ahora + s.segundos * 1000;
-    } else preguntas = nucleo.sesion(datos, seleccion, ahora);
+      empezarElDesarrolloDelSimulacro(s.desarrollo, s.desarrollo.map(() => ""));
+    } else {
+      preguntas = nucleo.sesion(datos, seleccion, ahora);
+      empezarElDesarrolloDelSimulacro([], []);
+    }
     simulacro = comoSimulacro;
     resultados = preguntas.map(() => undefined);
     elecciones = preguntas.map(() => null);
@@ -216,7 +225,8 @@
   function seguir() {
     i = resultados.findIndex((r) => r === undefined);
     if (i < 0) i = preguntas.length;
-    nota = null;
+    // Un simulacro mixto sin respuestas de test empieza en su primer desarrollo.
+    enDesarrollo = desarrolloDelSimulacro.length && resultados.every((r) => r === undefined) ? 0 : -1;
     abiertas = false;
     error = "";
     if (i >= preguntas.length) return terminar();
@@ -239,9 +249,8 @@
     if (ronda.estado === "Final") return;
     clearInterval(reloj);
     ronda = { estado: "Final" };
-    entregar();
+    entregar(true);
     guardar();
-    nota = nucleo.nota({ preguntas: preguntas.length, resultados: resultados.filter((r) => r !== undefined) }, datos!.examen.penalizacion);
   }
 
   async function contestar(opcion: number | null, seguro: boolean) {
@@ -263,13 +272,65 @@
   }
 
   // Las respuestas del simulacro entran en el historial al terminar o al abandonar, cada una una vez.
-  function entregar() {
+  // Al terminar entra cada desarrollo, y uno vacío lleva su corrección Again. Al abandonar, solo entra el que tiene texto.
+  function entregar(alTerminar = false) {
     const nuevas = respuestas.filter((r) => r !== null);
     respuestas = respuestas.map(() => null);
     alHistorial(nuevas);
+    if (desarrolloEntregado) return;
+    desarrolloEntregado = true;
+    const ahora = Date.now();
+    const lineas = desarrolloDelSimulacro.flatMap((q, k) => {
+      const texto = textosDelSimulacro[k];
+      if (!alTerminar && !texto.trim()) return [];
+      const l = nucleo.responder(q.id, texto, ahora);
+      tsDelSimulacro[k] = l[0].ts;
+      notasDelSimulacro[k] = texto.trim() ? undefined : "Again";
+      return l;
+    });
+    alDesarrollo(lineas);
+  }
+
+  // Las preguntas de desarrollo del simulacro van antes que las de test. La posición `k` de la ronda es la de
+  // desarrollo `k` si `k` es menor que su número, y la de test `k` menos ese número si no.
+  let desarrolloDelSimulacro = $state.raw<PreguntaDeDesarrolloDeSesion[]>([]);
+  let textosDelSimulacro = $state<string[]>([]);
+  // El `ts` de la línea de respuesta de cada desarrollo, y su nota del final, `undefined` sin corregir.
+  let tsDelSimulacro: string[] = [];
+  let notasDelSimulacro = $state<(NotaDeDesarrollo | undefined)[]>([]);
+  let desarrolloEntregado = false;
+  // La pregunta de desarrollo en pantalla, o -1 en una de test.
+  let enDesarrollo = $state(-1);
+  // El final tiene la nota, que cambia con cada corrección de un desarrollo.
+  const nota = $derived(
+    final && datos
+      ? nucleo.nota({ preguntas: preguntas.length, resultados: resultados.filter((r) => r !== undefined), desarrollo: notasDelSimulacro }, datos.examen)
+      : null,
+  );
+  const marcasDeLaRonda: Marca[] = $derived([...textosDelSimulacro.map((t): Marca => (t.trim() ? "contestada" : "blanco")), ...marcas]);
+  function empezarElDesarrolloDelSimulacro(qs: PreguntaDeDesarrolloDeSesion[], ts: string[]) {
+    desarrolloDelSimulacro = qs;
+    textosDelSimulacro = ts;
+    tsDelSimulacro = qs.map(() => "");
+    notasDelSimulacro = [];
+    desarrolloEntregado = false;
+  }
+  function irEnLaRonda(k: number) {
+    if (k >= desarrolloDelSimulacro.length) return ir(k - desarrolloDelSimulacro.length);
+    enDesarrollo = k;
+    avisar = false;
+  }
+  function escribirEnElSimulacro(texto: string) {
+    textosDelSimulacro[enDesarrollo] = texto;
+    guardarLuego();
+  }
+  function corregirDelSimulacro(k: number, n: NotaDeDesarrollo) {
+    notasDelSimulacro[k] = n;
+    alDesarrollo([nucleo.corregir_respuesta(desarrolloDelSimulacro[k].id, tsDelSimulacro[k], n, Date.now())]);
   }
 
   function ir(k: number) {
+    enDesarrollo = -1;
     i = k;
     avisar = false;
     abiertas = false;
@@ -315,9 +376,9 @@
   // La sesión de desarrollo. Sin ella, `desarrollo` es null.
   let desarrollo = $state.raw<PreguntaDeDesarrolloDeSesion[] | null>(null);
   let textos = $state<string[]>([]);
-  let notasDeDesarrollo = $state<(NotaDeDesarrollo | undefined)[]>([]);
-  // La ronda sigue en la primera pregunta sin nota.
-  const j = $derived(notasDeDesarrollo.findIndex((n) => n === undefined));
+  // Las preguntas ya respondidas: la ronda sigue en la siguiente.
+  let hechas = $state(0);
+  const j = $derived(desarrollo && hechas < desarrollo.length ? hechas : -1);
   let solucion = $state(false);
   let paginaDeDesarrollo = $state.raw<Pagina | null>(null);
 
@@ -326,7 +387,7 @@
     const preguntas = nucleo.sesion_de_desarrollo(datos, seleccion, Date.now());
     if (!preguntas.length) return;
     textos = preguntas.map(() => "");
-    notasDeDesarrollo = preguntas.map(() => undefined);
+    hechas = 0;
     solucion = false;
     error = "";
     desarrollo = preguntas;
@@ -337,18 +398,25 @@
   let guardado: ReturnType<typeof setTimeout> | undefined;
   function escribir(texto: string) {
     textos[j] = texto;
+    guardarLuego();
+  }
+  function guardarLuego() {
     guardar(false);
     clearTimeout(guardado);
     guardado = setTimeout(() => guardar(), 500);
   }
 
-  async function calificar(nota: NotaDeDesarrollo) {
-    const lineas = nucleo.calificar(desarrollo![j].id, textos[j], nota, Date.now());
-    notasDeDesarrollo[j] = nota;
+  // La respuesta calificada, o sin corregir con «Corregir luego». Tras la última, la sesión vuelve al inicio.
+  function responder(lineas: LineaDeDesarrollo[]) {
+    hechas++;
     solucion = false;
-    // Tras la última nota, la sesión vuelve al inicio.
     if (j < 0) desarrollo = null;
     guardar();
+    alDesarrollo(lineas);
+  }
+
+  async function alDesarrollo(lineas: LineaDeDesarrollo[]) {
+    if (!lineas.length) return;
     localStorage.setItem(clavePendientesDeDesarrollo, JSON.stringify([...pendientes<LineaDeDesarrollo>(clavePendientesDeDesarrollo), ...lineas]));
     datos = { ...datos!, historial_de_desarrollo: nucleo.unir_desarrollo(datos!.historial_de_desarrollo, lineas) };
     error = await enviarPendientes();
@@ -389,7 +457,8 @@
       {error}
       ontexto={escribir}
       onsolucion={() => (solucion = true)}
-      oncalificar={calificar}
+      oncalificar={(n) => responder(nucleo.calificar(p.id, textos[j], n, Date.now()))}
+      oncorregirluego={() => responder(nucleo.responder(p.id, textos[j], Date.now()))}
       onnota={(t) => anotar(p.id, t)}
       onnotasvisibles={alternarNotas}
       onverpagina={(g) => {
@@ -414,7 +483,24 @@
       guardar();
     }}
   />
+{:else if ronda.estado === "Pregunta" && enDesarrollo >= 0}
+  {#key enDesarrollo}
+    <DesarrolloDelSimulacro
+      q={desarrolloDelSimulacro[enDesarrollo]}
+      i={enDesarrollo}
+      total={marcasDeLaRonda.length}
+      {restante}
+      texto={textosDelSimulacro[enDesarrollo]}
+      marcas={marcasDeLaRonda}
+      ontexto={escribirEnElSimulacro}
+      onir={irEnLaRonda}
+      onterminar={intentarTerminar}
+      onabandonar={abandonar}
+    />
+  {/key}
 {:else if ronda.estado === "Pregunta" || revisando}
+  <!-- La revisión desde el final lleva solo las preguntas de test. -->
+  {@const antes = revisando ? 0 : desarrolloDelSimulacro.length}
   <!-- El móvil: la línea de arriba, la barra, el cuerpo con su scroll y el pie fijo.
        El PC: 2 columnas. --l, --s y --r son el borde izquierdo, el separador y el borde derecho. -->
   <div
@@ -427,8 +513,8 @@
     {#key i}
     <Pregunta
       {q}
-      {i}
-      total={preguntas.length}
+      i={antes + i}
+      total={antes + preguntas.length}
       {simulacro}
       {restante}
       {eleccion}
@@ -446,9 +532,9 @@
       onsiguiente={siguiente}
       corregida={!simulacro || final}
       revision={revisando}
-      {marcas}
+      marcas={revisando ? marcas : marcasDeLaRonda}
       oneditar={editar}
-      onir={ir}
+      onir={(k) => (revisando ? ir(k) : irEnLaRonda(k))}
       onterminar={intentarTerminar}
       {etiqueta}
     >
@@ -466,6 +552,8 @@
     {simulacro}
     {nota}
     preguntas={preguntas.length}
+    desarrollo={desarrolloDelSimulacro.map((q, k) => ({ q, texto: textosDelSimulacro[k], nota: notasDelSimulacro[k] }))}
+    oncorregir={corregirDelSimulacro}
     {error}
     onvolver={volver}
     {marcas}

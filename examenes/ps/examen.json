@@ -2,8 +2,10 @@
   "titulo": "PS",
   "preguntas": 20,
   "opciones": 3,
-  "minutos": 25,
+  "minutos": 60,
   "penalizacion": 0.3333333333333333,
+  "desarrollo": 5,
+  "pesos": {"test": 5, "desarrollo": 5},
   "pdfs": {
     "1_Introduccion.pdf": {
       "nombre": "1. Introducción",

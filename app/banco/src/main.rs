@@ -6,7 +6,8 @@ use banco::Tipo;
 const USO: &str = "Uso: banco comprobar <carpeta> | banco paginas <carpeta> \
                    | banco importar <carpeta> <tipo> <apartado> <borrador> | banco preparar <carpeta> <tipo> <apartado>... \
                    | banco montar <carpeta> <tipo> <apartado>... | banco revision <carpeta> <tipo> <informe>... \
-                   (<tipo> es conceptos, test o desarrollo)";
+                   | banco pendientes <carpeta> | banco corregir <carpeta> <id> <ts> <nota> \
+                   (<tipo> es conceptos, test o desarrollo, y <nota> es Again, Hard o Good)";
 
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
@@ -18,6 +19,11 @@ fn main() -> ExitCode {
     let resultado = match (orden.as_str(), resto) {
         ("comprobar", []) => banco::informe(carpeta),
         ("paginas", []) => banco::sacar(carpeta).map(|()| true),
+        ("pendientes", []) => banco::pendientes(carpeta).map(|texto| {
+            print!("{texto}");
+            true
+        }),
+        ("corregir", [id, ts, nota]) => banco::corregir(carpeta, id, ts, nota, jiff::Timestamp::now()).map(|()| true),
         (orden, [tipo, resto @ ..]) if !resto.is_empty() => tipo.parse::<Tipo>().and_then(|tipo| match (orden, resto) {
             ("revision", informes) => banco::revision(carpeta, tipo, informes).map(|()| true),
             ("preparar", apartados) => banco::preparar(carpeta, tipo, apartados).map(|()| true),

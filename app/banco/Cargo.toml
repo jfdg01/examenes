@@ -7,6 +7,7 @@ edition = "2024"
 nucleo = { path = "../nucleo" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+jiff = { version = "1.0.2", default-features = false, features = ["std"] }
 
 [dev-dependencies]
 tempfile = "3"

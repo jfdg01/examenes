@@ -148,6 +148,10 @@ pub fn desarrollo_de_la_seleccion(
 pub struct CifraDeDesarrollo {
     pub sabes: u32,
     pub preguntas: u32,
+    /// Las preguntas de desarrollo del simulacro de la selección.
+    pub simulacro: u32,
+    /// Las respuestas sin corregir del examen entero, de cualquier selección.
+    pub sin_corregir: u32,
 }
 
 /// La cifra de la selección. Sin banco de desarrollo, no hay cifra. `ahora` va en segundos desde 1970.
@@ -167,7 +171,59 @@ pub fn cifra_de_desarrollo(
     Some(CifraDeDesarrollo {
         sabes: estado.values().filter(|e| !e.vencida(ahora, examen.retencion)).count() as u32,
         preguntas: elegidas.len() as u32,
+        simulacro: examen.desarrollo.min(elegidas.len() as u32),
+        sin_corregir: sin_corregir(historial).len() as u32,
     })
+}
+
+/// Las líneas de una respuesta del simulacro, dada en `ahora`. Un texto vacío lleva su corrección Again, y un texto
+/// con contenido queda sin corregir.
+pub fn responder(id: &str, texto: &str, ahora: Timestamp) -> Vec<LineaDeDesarrollo> {
+    if texto.trim().is_empty() {
+        return calificar(id, texto, NotaDeDesarrollo::Again, ahora);
+    }
+    vec![LineaDeDesarrollo::Respuesta(RespuestaDeDesarrollo { id: id.into(), ts: ahora, texto: texto.into() })]
+}
+
+/// La corrección en `ahora` de la respuesta de `id` y `ts`.
+pub fn corregir_respuesta(id: &str, ts: Timestamp, nota: NotaDeDesarrollo, ahora: Timestamp) -> LineaDeDesarrollo {
+    LineaDeDesarrollo::Correccion(CorreccionDeDesarrollo { id: id.into(), ts, nota, corregida: ahora })
+}
+
+/// Las respuestas sin ninguna corrección, en orden de hora.
+pub fn sin_corregir(historial: &[LineaDeDesarrollo]) -> Vec<&RespuestaDeDesarrollo> {
+    let corregidas: std::collections::HashSet<(&str, Timestamp)> = historial
+        .iter()
+        .filter_map(|l| match l {
+            LineaDeDesarrollo::Correccion(c) => Some((c.id.as_str(), c.ts)),
+            LineaDeDesarrollo::Respuesta(_) => None,
+        })
+        .collect();
+    let mut r: Vec<&RespuestaDeDesarrollo> = historial
+        .iter()
+        .filter_map(|l| match l {
+            LineaDeDesarrollo::Respuesta(r) if !corregidas.contains(&(r.id.as_str(), r.ts)) => Some(r),
+            _ => None,
+        })
+        .collect();
+    r.sort_by_key(|r| r.ts);
+    r
+}
+
+/// `n` preguntas de desarrollo al azar, para el simulacro.
+pub(crate) fn al_azar(
+    examen: &Examen,
+    desarrollo: &[PreguntaDeDesarrollo],
+    conceptos: &[Concepto],
+    historial: &[LineaDeDesarrollo],
+    n: usize,
+    ahora: i64,
+    azar: &mut Azar,
+) -> Vec<PreguntaDeDesarrolloDeSesion> {
+    let estado = estados(desarrollo, historial);
+    let mut orden: Vec<&PreguntaDeDesarrollo> = desarrollo.iter().collect();
+    azar.barajar(&mut orden);
+    orden.into_iter().take(n).map(|q| de_la_ronda(examen, conceptos, q, &estado, ahora)).collect()
 }
 
 const TAMANO: usize = 4;
@@ -218,45 +274,55 @@ fn de_la_ronda(
     }
 }
 
-/// El texto y la nota de cada pregunta de una sesión de desarrollo a medias, en el orden de sus `ids`.
-/// Una lista más corta que `ids` acaba en preguntas sin texto y sin nota.
+/// Las preguntas de desarrollo de una ronda a medias, con su texto en el orden de `ids`. Una lista más corta que `ids`
+/// acaba en preguntas sin texto. En una sesión de desarrollo, las `hechas` primeras ya tienen nota o van a corregir
+/// luego, y la pregunta actual es la siguiente.
 #[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct RondaDeDesarrollo {
+    pub ids: Vec<String>,
     pub textos: Vec<String>,
-    pub notas: Vec<Option<NotaDeDesarrollo>>,
+    #[serde(default)]
+    pub hechas: u32,
 }
 
-/// Una sesión de desarrollo a medias. La pregunta actual es la primera sin nota.
+/// Una sesión de desarrollo a medias.
 #[derive(Serialize, Tsify)]
 pub struct DesarrolloAMedias {
     pub preguntas: Vec<PreguntaDeDesarrolloDeSesion>,
     pub textos: Vec<String>,
-    pub notas: Vec<Option<NotaDeDesarrollo>>,
+    pub hechas: u32,
 }
 
-/// Una ronda sin `desarrollo`, o con un id que no está en el banco de desarrollo, no se restaura.
-pub fn restaurar_desarrollo(
-    examen: &Examen,
-    desarrollo: &[PreguntaDeDesarrollo],
-    conceptos: &[Concepto],
-    historial: &[LineaDeDesarrollo],
-    guardado: &crate::Guardado,
+/// Las preguntas y los textos de una ronda guardada, o nada si un id no está en el banco de desarrollo.
+pub(crate) fn de_la_ronda_guardada(
+    d: &crate::Datos,
+    r: &RondaDeDesarrollo,
     ahora: i64,
-) -> Option<DesarrolloAMedias> {
-    let r = guardado.ronda.as_ref()?;
-    let d = r.desarrollo.as_ref()?;
-    let estado = estados(desarrollo, historial);
+) -> Option<(Vec<PreguntaDeDesarrolloDeSesion>, Vec<String>)> {
+    let estado = estados(&d.desarrollo, &d.historial_de_desarrollo);
     let preguntas: Vec<_> = r
         .ids
         .iter()
-        .map(|id| Some(de_la_ronda(examen, conceptos, desarrollo.iter().find(|q| q.id == *id)?, &estado, ahora)))
+        .map(|id| Some(de_la_ronda(&d.examen, &d.conceptos, d.desarrollo.iter().find(|q| q.id == *id)?, &estado, ahora)))
         .collect::<Option<_>>()?;
-    let mut textos = d.textos.clone();
+    if r.textos.len() > preguntas.len() {
+        return None;
+    }
+    let mut textos = r.textos.clone();
     textos.resize(preguntas.len(), String::new());
-    let mut notas = d.notas.clone();
-    notas.resize(preguntas.len(), None);
-    Some(DesarrolloAMedias { preguntas, textos, notas })
+    Some((preguntas, textos))
+}
+
+/// Una ronda sin `desarrollo`, de un simulacro, o con un id que no está en el banco de desarrollo, no se restaura.
+pub fn restaurar_desarrollo(d: &crate::Datos, guardado: &crate::Guardado, ahora: i64) -> Option<DesarrolloAMedias> {
+    let r = guardado.ronda.as_ref()?;
+    if r.simulacro {
+        return None;
+    }
+    let rd = r.desarrollo.as_ref()?;
+    let (preguntas, textos) = de_la_ronda_guardada(d, rd, ahora)?;
+    Some(DesarrolloAMedias { hechas: rd.hechas.min(preguntas.len() as u32), preguntas, textos })
 }
 
 #[cfg(test)]
@@ -280,6 +346,8 @@ mod tests {
             apartados: [("ssh".into(), "SSH".into()), ("tls".into(), "TLS".into())].into(),
             sin_pregunta: Default::default(),
             congelado: false,
+            desarrollo: 2,
+            pesos: crate::Pesos { test: 5.0, desarrollo: 5.0 },
         }
     }
 
@@ -331,7 +399,11 @@ mod tests {
         s.iter().map(|q| q.id.as_str()).collect()
     }
 
-    fn de_la_sesion(historial: &[LineaDeDesarrollo], banco: &[PreguntaDeDesarrollo], ahora: i64) -> Vec<PreguntaDeDesarrolloDeSesion> {
+    fn de_la_sesion(
+        historial: &[LineaDeDesarrollo],
+        banco: &[PreguntaDeDesarrollo],
+        ahora: i64,
+    ) -> Vec<PreguntaDeDesarrolloDeSesion> {
         sesion_de_desarrollo(&examen(), banco, &[], historial, ahora, &mut Azar::new(7))
     }
 
@@ -341,7 +413,8 @@ mod tests {
 
     #[test]
     fn una_linea_lee_la_respuesta_y_la_correccion_de_desarrollo_jsonl() {
-        let r: LineaDeDesarrollo = serde_json::from_str(r#"{"id":"d0","ts":"2026-11-04T12:00:00Z","texto":"SSH cifra"}"#).unwrap();
+        let r: LineaDeDesarrollo =
+            serde_json::from_str(r#"{"id":"d0","ts":"2026-11-04T12:00:00Z","texto":"SSH cifra"}"#).unwrap();
         assert!(matches!(r, LineaDeDesarrollo::Respuesta(_)));
         let c: LineaDeDesarrollo =
             serde_json::from_str(r#"{"id":"d0","ts":"2026-11-04T12:00:00Z","nota":"Hard","corregida":"2026-11-05T09:00:00Z"}"#)
@@ -359,10 +432,17 @@ mod tests {
     #[test]
     fn una_respuesta_con_texto_guarda_la_respuesta_y_su_correccion_y_sin_texto_solo_la_correccion() {
         let con = calificar("d0", "SSH cifra", NotaDeDesarrollo::Good, hora(100));
-        assert_eq!(con, corregida("d0", 100, NotaDeDesarrollo::Good, 100).into_iter().map(|l| match l {
-            LineaDeDesarrollo::Respuesta(r) => LineaDeDesarrollo::Respuesta(RespuestaDeDesarrollo { texto: "SSH cifra".into(), ..r }),
-            c => c,
-        }).collect::<Vec<_>>());
+        assert_eq!(
+            con,
+            corregida("d0", 100, NotaDeDesarrollo::Good, 100)
+                .into_iter()
+                .map(|l| match l {
+                    LineaDeDesarrollo::Respuesta(r) =>
+                        LineaDeDesarrollo::Respuesta(RespuestaDeDesarrollo { texto: "SSH cifra".into(), ..r }),
+                    c => c,
+                })
+                .collect::<Vec<_>>()
+        );
         let sin = calificar("d0", "  \n", NotaDeDesarrollo::Again, hora(100));
         assert_eq!(sin, corregida("d0", 100, NotaDeDesarrollo::Again, 100)[1..]);
     }
@@ -371,8 +451,9 @@ mod tests {
     fn la_union_cuenta_una_vez_cada_linea_con_la_misma_clave() {
         let a = [corregida("d0", 100, NotaDeDesarrollo::Hard, 100), corregida("d1", 50, NotaDeDesarrollo::Good, 50)].concat();
         // La misma respuesta de d0, con su corrección vieja y una nueva.
-        let b = [corregida("d0", 100, NotaDeDesarrollo::Hard, 100), corregida("d0", 100, NotaDeDesarrollo::Good, 200)[1..].to_vec()]
-            .concat();
+        let b =
+            [corregida("d0", 100, NotaDeDesarrollo::Hard, 100), corregida("d0", 100, NotaDeDesarrollo::Good, 200)[1..].to_vec()]
+                .concat();
         let u = unir_desarrollo(&a, &b);
         assert_eq!(u.len(), 5);
         assert_eq!(u.iter().map(|l| l.ts().as_second()).collect::<Vec<_>>(), [50, 50, 100, 100, 100]);
@@ -390,7 +471,8 @@ mod tests {
     fn la_correccion_mas_nueva_gana_y_fsrs_la_cuenta_a_la_hora_de_la_respuesta() {
         let tarde = corregida("d0", 0, NotaDeDesarrollo::Good, 10 * DIA);
         assert_eq!(probabilidad(&tarde, DIA), probabilidad(&corregida("d0", 0, NotaDeDesarrollo::Good, 0), DIA));
-        let otra = [corregida("d0", 0, NotaDeDesarrollo::Good, 20 * DIA), corregida("d0", 0, NotaDeDesarrollo::Again, 10 * DIA)].concat();
+        let otra = [corregida("d0", 0, NotaDeDesarrollo::Good, 20 * DIA), corregida("d0", 0, NotaDeDesarrollo::Again, 10 * DIA)]
+            .concat();
         assert_eq!(probabilidad(&otra, DIA), probabilidad(&tarde, DIA));
     }
 
@@ -425,7 +507,7 @@ mod tests {
             let examen = Examen { retencion, ..examen() };
             cifra_de_desarrollo(&examen, &banco_de(3), &[], &historial, None, DIA).unwrap()
         };
-        assert_eq!(cifra(0.8), CifraDeDesarrollo { sabes: 1, preguntas: 3 });
+        assert_eq!(cifra(0.8), CifraDeDesarrollo { sabes: 1, preguntas: 3, simulacro: 2, sin_corregir: 0 });
         assert_eq!(cifra(0.99).sabes, 0);
     }
 
@@ -450,7 +532,7 @@ mod tests {
         let elegidas = desarrollo_de_la_seleccion(&examen(), &banco, &conceptos, Some(&solo_tls));
         assert_eq!(elegidas, [banco[1].clone()]);
         let cifra = cifra_de_desarrollo(&examen(), &banco, &conceptos, &[], Some(&solo_tls), 0);
-        assert_eq!(cifra, Some(CifraDeDesarrollo { sabes: 0, preguntas: 1 }));
+        assert_eq!(cifra, Some(CifraDeDesarrollo { sabes: 0, preguntas: 1, simulacro: 1, sin_corregir: 0 }));
         assert_eq!(desarrollo_de_la_seleccion(&examen(), &banco, &conceptos, None).len(), 2);
     }
 
@@ -458,19 +540,33 @@ mod tests {
     fn la_pregunta_lleva_el_nombre_del_apartado_y_cada_punto_su_idea_y_su_pagina() {
         let banco = [pregunta("ssh-d1", "ssh", "a")];
         let q = sesion_de_desarrollo(&examen(), &banco, &[concepto("a", "ssh", "1.pdf")], &[], 0, &mut Azar::new(1)).remove(0);
-        assert_eq!((q.apartado.as_str(), q.enunciado.as_str(), q.modelo.as_str()), ("SSH", "Describe ssh-d1.", "El modelo de ssh-d1."));
+        assert_eq!(
+            (q.apartado.as_str(), q.enunciado.as_str(), q.modelo.as_str()),
+            ("SSH", "Describe ssh-d1.", "El modelo de ssh-d1.")
+        );
         assert_eq!(q.puntos[0].idea, "La idea de a.");
         assert_eq!(q.puntos[0].pagina.as_ref().unwrap().imagen, "paginas/1-3.webp");
     }
 
-    fn guardado(ids: &[&str], desarrollo: Option<RondaDeDesarrollo>) -> crate::Guardado {
+    fn datos(desarrollo: Vec<PreguntaDeDesarrollo>, historial_de_desarrollo: Vec<LineaDeDesarrollo>) -> crate::Datos {
+        crate::Datos {
+            examen: examen(),
+            banco: vec![],
+            conceptos: vec![],
+            desarrollo,
+            historial: vec![],
+            historial_de_desarrollo,
+        }
+    }
+
+    fn guardado(simulacro: bool, desarrollo: Option<RondaDeDesarrollo>) -> crate::Guardado {
         crate::Guardado {
             guardada: hora(0),
             ronda: Some(crate::RondaGuardada {
-                ids: ids.iter().map(|&i| i.into()).collect(),
+                ids: vec![],
                 resultados: vec![],
                 respuestas: vec![],
-                simulacro: false,
+                simulacro,
                 limite: None,
                 desarrollo,
             }),
@@ -478,22 +574,74 @@ mod tests {
         }
     }
 
-    #[test]
-    fn la_ronda_guardada_restaura_el_texto_y_la_nota_de_cada_pregunta() {
-        let ronda = RondaDeDesarrollo { textos: vec!["SSH cifra".into()], notas: vec![Some(NotaDeDesarrollo::Hard)] };
-        let g = guardado(&["d1", "d0"], Some(ronda));
-        let json = serde_json::to_string(&g).unwrap();
-        assert_eq!(serde_json::from_str::<crate::Guardado>(&json).unwrap(), g);
-        let r = restaurar_desarrollo(&examen(), &banco_de(2), &[], &[], &g, 0).unwrap();
-        assert_eq!(ids(&r.preguntas), ["d1", "d0"]);
-        assert_eq!(r.textos, ["SSH cifra", ""]);
-        assert_eq!(r.notas, [Some(NotaDeDesarrollo::Hard), None]);
+    fn ronda(ids: &[&str], textos: &[&str], hechas: u32) -> RondaDeDesarrollo {
+        RondaDeDesarrollo {
+            ids: ids.iter().map(|&i| i.into()).collect(),
+            textos: textos.iter().map(|&t| t.into()).collect(),
+            hechas,
+        }
     }
 
     #[test]
-    fn una_ronda_de_test_o_con_una_pregunta_que_no_esta_no_se_restaura_como_desarrollo() {
-        assert!(restaurar_desarrollo(&examen(), &banco_de(2), &[], &[], &guardado(&["d0"], None), 0).is_none());
-        let ronda = RondaDeDesarrollo { textos: vec![], notas: vec![] };
-        assert!(restaurar_desarrollo(&examen(), &banco_de(2), &[], &[], &guardado(&["d9"], Some(ronda)), 0).is_none());
+    fn la_ronda_guardada_restaura_el_texto_de_cada_pregunta_y_las_hechas() {
+        let g = guardado(false, Some(ronda(&["d1", "d0"], &["SSH cifra"], 1)));
+        let json = serde_json::to_string(&g).unwrap();
+        assert_eq!(serde_json::from_str::<crate::Guardado>(&json).unwrap(), g);
+        let r = restaurar_desarrollo(&datos(banco_de(2), vec![]), &g, 0).unwrap();
+        assert_eq!(ids(&r.preguntas), ["d1", "d0"]);
+        assert_eq!((r.textos, r.hechas), (vec!["SSH cifra".to_string(), String::new()], 1));
+    }
+
+    #[test]
+    fn una_ronda_de_test_de_simulacro_o_con_una_pregunta_que_no_esta_no_se_restaura_como_desarrollo() {
+        let d = datos(banco_de(2), vec![]);
+        assert!(restaurar_desarrollo(&d, &guardado(false, None), 0).is_none());
+        assert!(restaurar_desarrollo(&d, &guardado(true, Some(ronda(&["d0"], &[], 0))), 0).is_none());
+        assert!(restaurar_desarrollo(&d, &guardado(false, Some(ronda(&["d9"], &[], 0))), 0).is_none());
+    }
+
+    #[test]
+    fn una_respuesta_con_texto_queda_sin_corregir_y_una_vacia_lleva_again() {
+        let con_texto = responder("d0", "SSH cifra", hora(5));
+        assert_eq!(
+            con_texto,
+            [LineaDeDesarrollo::Respuesta(RespuestaDeDesarrollo { id: "d0".into(), ts: hora(5), texto: "SSH cifra".into() })]
+        );
+        let vacia = responder("d1", "  ", hora(5));
+        assert_eq!(vacia, [corregir_respuesta("d1", hora(5), NotaDeDesarrollo::Again, hora(5))]);
+        let historial = [con_texto.clone(), vacia].concat();
+        assert_eq!(sin_corregir(&historial).len(), 1);
+        let corregido = [historial, vec![corregir_respuesta("d0", hora(5), NotaDeDesarrollo::Good, hora(9))]].concat();
+        assert!(sin_corregir(&corregido).is_empty());
+    }
+
+    #[test]
+    fn una_respuesta_sin_corregir_no_mueve_el_estado_y_su_correccion_cuenta_a_la_hora_de_la_respuesta() {
+        let sin = responder("d0", "SSH cifra", hora(0));
+        assert!(estados(&banco_de(1), &sin).is_empty());
+        let con = [sin, vec![corregir_respuesta("d0", hora(0), NotaDeDesarrollo::Good, hora(40 * DIA))]].concat();
+        assert_eq!(estados(&banco_de(1), &con)["d0"].ultima, 0);
+        let cifra = cifra_de_desarrollo(&examen(), &banco_de(1), &[], &responder("d0", "x", hora(0)), None, 0).unwrap();
+        assert_eq!(cifra.sin_corregir, 1);
+    }
+
+    #[test]
+    fn el_simulacro_mixto_saca_las_preguntas_de_desarrollo_del_examen_al_azar() {
+        let d = datos(banco_de(8), vec![]);
+        let s = crate::simulacro(&d, 0, &mut Azar::new(1));
+        assert_eq!(s.desarrollo.len(), 2);
+        assert!((2..20).any(|k| ids(&crate::simulacro(&d, 0, &mut Azar::new(k)).desarrollo) != ids(&s.desarrollo)));
+        assert_eq!(crate::simulacro(&datos(banco_de(1), vec![]), 0, &mut Azar::new(1)).desarrollo.len(), 1);
+    }
+
+    #[test]
+    fn el_simulacro_mixto_restaurado_lleva_sus_preguntas_de_desarrollo_con_su_texto() {
+        let g = guardado(true, Some(ronda(&["d1"], &["SSH cifra"], 0)));
+        let r = crate::restaurar(&datos(banco_de(2), vec![]), &g, 0, &mut Azar::new(1)).unwrap();
+        assert_eq!((ids(&r.desarrollo), r.textos), (vec!["d1"], vec!["SSH cifra".to_string()]));
+        assert!(
+            crate::restaurar(&datos(banco_de(2), vec![]), &guardado(false, Some(ronda(&["d1"], &[], 0))), 0, &mut Azar::new(1))
+                .is_none()
+        );
     }
 }

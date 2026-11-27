@@ -8,7 +8,7 @@ pub mod desarrollo;
 pub mod wasm;
 
 /// Las cifras de un examen, de `examen.json`.
-#[derive(Deserialize, Serialize, Tsify)]
+#[derive(Deserialize, Serialize, Tsify, Clone)]
 #[serde(deny_unknown_fields)]
 pub struct Examen {
     pub titulo: String,
@@ -16,7 +16,7 @@ pub struct Examen {
     pub preguntas: u32,
     /// Las opciones de cada pregunta.
     pub opciones: u32,
-    /// La duración del examen real.
+    /// La duración del examen real, con sus dos partes.
     pub minutos: u32,
     /// La parte de un acierto que resta un fallo.
     pub penalizacion: f64,
@@ -33,10 +33,40 @@ pub struct Examen {
     /// El banco es anterior a la regla de 3 preguntas por concepto, y no se reescribe: `banco comprobar` da esa cuenta como aviso, y no como error.
     #[serde(default)]
     pub congelado: bool,
+    /// Las preguntas de desarrollo del examen real. Sin ellas, el simulacro es solo de test.
+    #[serde(default, skip_serializing_if = "es_cero")]
+    pub desarrollo: u32,
+    /// Los puntos de cada parte del examen real.
+    #[serde(default, skip_serializing_if = "Pesos::por_defecto")]
+    pub pesos: Pesos,
 }
 
 fn retencion() -> f64 {
     0.9
+}
+
+fn es_cero(n: &u32) -> bool {
+    *n == 0
+}
+
+/// Los puntos del test y los del desarrollo. Un examen sin desarrollo da 10 puntos al test.
+#[derive(Deserialize, Serialize, Tsify, Clone, Copy, PartialEq, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct Pesos {
+    pub test: f64,
+    pub desarrollo: f64,
+}
+
+impl Default for Pesos {
+    fn default() -> Pesos {
+        Pesos { test: 10.0, desarrollo: 0.0 }
+    }
+}
+
+impl Pesos {
+    fn por_defecto(&self) -> bool {
+        *self == Pesos::default()
+    }
 }
 
 /// Un tema: un PDF del temario, con su nombre y las claves de sus apartados.
@@ -608,24 +638,29 @@ pub fn editar(banco: &[Pregunta], q: &PreguntaDeSesion, e: &Edicion) -> Option<E
     Some(Editada { banco: editada, ronda })
 }
 
-/// El simulacro: las preguntas del examen, al azar del banco que recibe, y su duración. Un banco más pequeño da un simulacro más corto.
-/// Lleva una pregunta por concepto, y rellena con hermanas solo cuando faltan conceptos.
+/// El simulacro: las preguntas del examen, al azar de los datos que recibe, y su duración. Unos datos más pequeños dan un simulacro más corto.
+/// El test lleva una pregunta por concepto, y rellena con hermanas solo cuando faltan conceptos.
 #[derive(Serialize, Tsify)]
 pub struct Simulacro {
     pub segundos: u32,
+    /// Las preguntas de desarrollo, que van antes que las de test.
+    pub desarrollo: Vec<desarrollo::PreguntaDeDesarrolloDeSesion>,
     pub preguntas: Vec<PreguntaDeSesion>,
 }
 
-pub fn simulacro(
-    examen: &Examen,
-    banco: &[Pregunta],
-    conceptos: &[Concepto],
-    historial: &[Respuesta],
-    ahora: i64,
-    azar: &mut Azar,
-) -> Simulacro {
-    let estado = estados(banco, historial);
-    let mut barajado: Vec<&Pregunta> = banco.iter().collect();
+pub fn simulacro(d: &Datos, ahora: i64, azar: &mut Azar) -> Simulacro {
+    let examen = &d.examen;
+    let desarrollo = desarrollo::al_azar(
+        examen,
+        &d.desarrollo,
+        &d.conceptos,
+        &d.historial_de_desarrollo,
+        examen.desarrollo as usize,
+        ahora,
+        azar,
+    );
+    let estado = estados(&d.banco, &d.historial);
+    let mut barajado: Vec<&Pregunta> = d.banco.iter().collect();
     azar.barajar(&mut barajado);
     let mut usados = std::collections::HashSet::new();
     let (mut elegidas, hermanas): (Vec<&Pregunta>, Vec<&Pregunta>) =
@@ -633,9 +668,10 @@ pub fn simulacro(
     elegidas.extend(hermanas);
     elegidas.truncate(examen.preguntas as usize);
     azar.barajar(&mut elegidas);
-    let paginas = Paginas::new(examen, conceptos);
+    let paginas = Paginas::new(examen, &d.conceptos);
     Simulacro {
         segundos: examen.minutos.saturating_mul(60),
+        desarrollo,
         preguntas: elegidas.into_iter().map(|q| de_la_ronda(examen, &paginas, q, &estado, ahora, azar)).collect(),
     }
 }
@@ -665,7 +701,8 @@ pub struct RondaGuardada {
     pub respuestas: Vec<Respuesta>,
     pub simulacro: bool,
     pub limite: Option<u64>,
-    /// Una sesión de desarrollo lleva aquí su texto y su nota, y `resultados` y `respuestas` van vacíos.
+    /// Las preguntas de desarrollo de la ronda, con su texto. Una sesión de desarrollo lleva `ids`, `resultados` y
+    /// `respuestas` vacíos, y `simulacro` en `false`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub desarrollo: Option<desarrollo::RondaDeDesarrollo>,
 }
@@ -684,7 +721,7 @@ pub fn unir(a: &[Respuesta], b: &[Respuesta]) -> Vec<Respuesta> {
 }
 
 /// La ronda a medias de un guardado, con las preguntas del banco y un resultado por pregunta.
-/// La pregunta actual es la primera sin resultado.
+/// La pregunta actual es la primera sin resultado. Un simulacro mixto lleva sus preguntas de desarrollo con su texto.
 #[derive(Serialize, Tsify)]
 pub struct RondaAMedias {
     pub preguntas: Vec<PreguntaDeSesion>,
@@ -692,33 +729,43 @@ pub struct RondaAMedias {
     pub respuestas: Vec<Respuesta>,
     pub simulacro: bool,
     pub limite: Option<u64>,
+    pub desarrollo: Vec<desarrollo::PreguntaDeDesarrolloDeSesion>,
+    pub textos: Vec<String>,
 }
 
-/// Una ronda con un id que no está en el banco, o con más resultados que preguntas, no se restaura.
-/// Una lista de resultados más corta que `ids` acaba en preguntas sin contestar.
-pub fn restaurar(
-    examen: &Examen,
-    banco: &[Pregunta],
-    conceptos: &[Concepto],
-    historial: &[Respuesta],
-    guardado: &Guardado,
-    ahora: i64,
-    azar: &mut Azar,
-) -> Option<RondaAMedias> {
+/// Una ronda con un id que no está en su banco, o con más resultados que preguntas, no se restaura.
+/// Una lista de resultados más corta que `ids` acaba en preguntas sin contestar. Una sesión de desarrollo la
+/// restaura `desarrollo::restaurar_desarrollo`.
+pub fn restaurar(d: &Datos, guardado: &Guardado, ahora: i64, azar: &mut Azar) -> Option<RondaAMedias> {
     let r = guardado.ronda.as_ref()?;
-    let estado = estados(banco, historial);
-    let paginas = Paginas::new(examen, conceptos);
+    if r.desarrollo.is_some() && !r.simulacro {
+        return None;
+    }
+    let estado = estados(&d.banco, &d.historial);
+    let paginas = Paginas::new(&d.examen, &d.conceptos);
     let preguntas: Vec<_> = r
         .ids
         .iter()
-        .map(|id| Some(de_la_ronda(examen, &paginas, banco.iter().find(|q| q.id == *id)?, &estado, ahora, azar)))
+        .map(|id| Some(de_la_ronda(&d.examen, &paginas, d.banco.iter().find(|q| q.id == *id)?, &estado, ahora, azar)))
         .collect::<Option<_>>()?;
     if r.resultados.len() > preguntas.len() {
         return None;
     }
     let mut resultados = r.resultados.clone();
     resultados.resize(preguntas.len(), None);
-    Some(RondaAMedias { preguntas, resultados, respuestas: r.respuestas.clone(), simulacro: r.simulacro, limite: r.limite })
+    let (desarrollo, textos) = match &r.desarrollo {
+        Some(rd) => desarrollo::de_la_ronda_guardada(d, rd, ahora)?,
+        None => (vec![], vec![]),
+    };
+    Some(RondaAMedias {
+        preguntas,
+        resultados,
+        respuestas: r.respuestas.clone(),
+        simulacro: r.simulacro,
+        limite: r.limite,
+        desarrollo,
+        textos,
+    })
 }
 
 /// Lo que pasó en una pregunta: un acierto, un fallo o una pregunta en blanco.
@@ -729,33 +776,69 @@ pub enum Resultado {
     Blanco,
 }
 
-/// El cierre de un simulacro: sus preguntas, y el resultado de las que tuvieron respuesta antes del límite.
+/// El cierre de un simulacro: sus preguntas de test, el resultado de las que tuvieron respuesta antes del límite, y la
+/// nota de cada pregunta de desarrollo, o nada si está sin corregir.
 #[derive(Deserialize, Serialize, Tsify)]
 pub struct Cierre {
     pub preguntas: u32,
     pub resultados: Vec<Resultado>,
+    #[serde(default)]
+    pub desarrollo: Vec<Option<desarrollo::NotaDeDesarrollo>>,
 }
 
-/// El final del simulacro. `nota` va sobre 10, con 2 decimales como mucho.
+/// Una nota y los puntos que vale, con 2 decimales como mucho. Una nota sin corregir no tiene valor.
+#[derive(Serialize, Tsify, PartialEq, Debug)]
+pub struct Parte {
+    pub nota: Option<String>,
+    pub sobre: String,
+}
+
+/// El final del simulacro. Sin preguntas de desarrollo, el test vale el examen entero, y no hay más partes.
 #[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct NotaDelSimulacro {
     pub aciertos: u32,
     pub fallos: u32,
     pub en_blanco: u32,
-    pub nota: String,
+    pub test: Parte,
+    pub desarrollo: Option<Parte>,
+    pub total: Option<Parte>,
 }
 
-/// La nota del simulacro: un fallo resta `penalizacion` aciertos, y cada pregunta sin resultado cuenta en blanco.
-pub fn nota_del_simulacro(cierre: &Cierre, penalizacion: f64) -> NotaDelSimulacro {
+fn decimal(x: f64) -> String {
+    let x = format!("{:.2}", (x * 100.0).round() / 100.0);
+    x.trim_end_matches('0').trim_end_matches('.').replace('.', ",")
+}
+
+/// La nota del simulacro. En el test, un fallo resta `penalizacion` aciertos, y cada pregunta sin resultado cuenta en
+/// blanco. En el desarrollo, Again vale 0, Hard la mitad de su pregunta y Good la pregunta entera.
+pub fn nota_del_simulacro(cierre: &Cierre, examen: &Examen) -> NotaDelSimulacro {
     let cuenta = |r| cierre.resultados.iter().filter(|&&x| x == r).count() as u32;
     let (aciertos, fallos) = (cuenta(Resultado::Acierto), cuenta(Resultado::Fallo));
-    let nota = (aciertos as f64 - penalizacion * fallos as f64) / cierre.preguntas.max(1) as f64 * 10.0;
-    let nota = format!("{:.2}", (nota * 100.0).round() / 100.0);
+    let peso_del_test =
+        if cierre.desarrollo.is_empty() { examen.pesos.test + examen.pesos.desarrollo } else { examen.pesos.test };
+    let test = (aciertos as f64 - examen.penalizacion * fallos as f64) / cierre.preguntas.max(1) as f64 * peso_del_test;
+    let desarrollo = (!cierre.desarrollo.is_empty()).then(|| {
+        let por_pregunta = examen.pesos.desarrollo / cierre.desarrollo.len() as f64;
+        cierre
+            .desarrollo
+            .iter()
+            .map(|n| {
+                n.map(|n| match n {
+                    desarrollo::NotaDeDesarrollo::Again => 0.0,
+                    desarrollo::NotaDeDesarrollo::Hard => por_pregunta / 2.0,
+                    desarrollo::NotaDeDesarrollo::Good => por_pregunta,
+                })
+            })
+            .sum::<Option<f64>>()
+    });
     NotaDelSimulacro {
         aciertos,
         fallos,
         en_blanco: cierre.preguntas.saturating_sub(aciertos + fallos),
-        nota: nota.trim_end_matches('0').trim_end_matches('.').replace('.', ","),
+        test: Parte { nota: Some(decimal(test)), sobre: decimal(peso_del_test) },
+        desarrollo: desarrollo.map(|d| Parte { nota: d.map(decimal), sobre: decimal(examen.pesos.desarrollo) }),
+        total: desarrollo
+            .map(|d| Parte { nota: d.map(|d| decimal(test + d)), sobre: decimal(examen.pesos.test + examen.pesos.desarrollo) }),
     }
 }
 
@@ -935,6 +1018,8 @@ mod tests {
         sin_pregunta: std::collections::BTreeMap::new(),
         apartados: std::collections::BTreeMap::new(),
         congelado: false,
+        desarrollo: 0,
+        pesos: Pesos { test: 10.0, desarrollo: 0.0 },
     };
 
     /// Un banco de `n` conceptos `c0`, `c1`…, con una pregunta `q0`, `q1`… cada uno.
@@ -1072,39 +1157,74 @@ mod tests {
         );
     }
 
+    pub(crate) fn datos(banco: &[Pregunta], historial: &[Respuesta]) -> Datos {
+        Datos {
+            examen: LN,
+            banco: banco.to_vec(),
+            conceptos: vec![],
+            desarrollo: vec![],
+            historial: historial.to_vec(),
+            historial_de_desarrollo: vec![],
+        }
+    }
+
     fn cierre(preguntas: u32, resultados: &[Resultado]) -> Cierre {
-        Cierre { preguntas, resultados: resultados.to_vec() }
+        Cierre { preguntas, resultados: resultados.to_vec(), desarrollo: vec![] }
+    }
+
+    fn con_penalizacion(penalizacion: f64) -> Examen {
+        Examen { penalizacion, ..LN }
     }
 
     #[test]
     fn la_nota_suma_un_acierto_resta_la_penalizacion_de_un_fallo_y_no_cuenta_una_en_blanco() {
         use Resultado::*;
-        let n = nota_del_simulacro(&cierre(4, &[Acierto, Acierto, Fallo, Blanco]), 0.25);
+        let n = nota_del_simulacro(&cierre(4, &[Acierto, Acierto, Fallo, Blanco]), &con_penalizacion(0.25));
         // (2 − 0,25) / 4 × 10 = 4,375.
-        assert_eq!((n.aciertos, n.fallos, n.en_blanco, n.nota.as_str()), (2, 1, 1, "4,38"));
-        assert_eq!(nota_del_simulacro(&cierre(2, &[Acierto, Acierto]), 0.25).nota, "10");
-        assert_eq!(nota_del_simulacro(&cierre(2, &[Fallo, Blanco]), 0.25).nota, "-1,25");
-        assert_eq!(nota_del_simulacro(&cierre(3, &[Acierto, Fallo]), 0.0).nota, "3,33");
+        assert_eq!((n.aciertos, n.fallos, n.en_blanco, n.test.nota.as_deref()), (2, 1, 1, Some("4,38")));
+        assert_eq!(nota_del_simulacro(&cierre(2, &[Acierto, Acierto]), &con_penalizacion(0.25)).test.nota.unwrap(), "10");
+        assert_eq!(nota_del_simulacro(&cierre(2, &[Fallo, Blanco]), &con_penalizacion(0.25)).test.nota.unwrap(), "-1,25");
+        assert_eq!(nota_del_simulacro(&cierre(3, &[Acierto, Fallo]), &con_penalizacion(0.0)).test.nota.unwrap(), "3,33");
     }
 
     #[test]
     fn el_cierre_al_pasar_el_limite_cuenta_en_blanco_las_preguntas_sin_contestar() {
-        let n = nota_del_simulacro(&cierre(20, &[Resultado::Acierto, Resultado::Fallo]), 0.25);
-        assert_eq!((n.aciertos, n.fallos, n.en_blanco, n.nota.as_str()), (1, 1, 18, "0,38"));
-        assert_eq!(nota_del_simulacro(&cierre(20, &[]), 0.25).en_blanco, 20);
+        let n = nota_del_simulacro(&cierre(20, &[Resultado::Acierto, Resultado::Fallo]), &con_penalizacion(0.25));
+        assert_eq!((n.aciertos, n.fallos, n.en_blanco, n.test.nota.as_deref()), (1, 1, 18, Some("0,38")));
+        assert_eq!(nota_del_simulacro(&cierre(20, &[]), &con_penalizacion(0.25)).en_blanco, 20);
+    }
+
+    #[test]
+    fn la_nota_de_un_simulacro_mixto_escala_el_test_a_su_peso_y_suma_el_desarrollo() {
+        use desarrollo::NotaDeDesarrollo::*;
+        let ps = Examen { penalizacion: 0.5, pesos: Pesos { test: 5.0, desarrollo: 5.0 }, ..LN };
+        let mixto = |desarrollo: Vec<Option<desarrollo::NotaDeDesarrollo>>| Cierre {
+            preguntas: 4,
+            resultados: vec![Resultado::Acierto, Resultado::Acierto, Resultado::Acierto, Resultado::Fallo],
+            desarrollo,
+        };
+        // Test: (3 − 0,5) / 4 × 5 = 3,125. Desarrollo: 0 + 1,25 / 2 + 1,25 + 1,25 = 3,125.
+        let n = nota_del_simulacro(&mixto(vec![Some(Again), Some(Hard), Some(Good), Some(Good)]), &ps);
+        let parte = |nota: &str, sobre: &str| Some(Parte { nota: Some(nota.into()), sobre: sobre.into() });
+        assert_eq!((Some(n.test), n.desarrollo, n.total), (parte("3,13", "5"), parte("3,13", "5"), parte("6,25", "10")));
+        let n = nota_del_simulacro(&mixto(vec![Some(Good), None, Some(Good), Some(Good)]), &ps);
+        assert_eq!((n.desarrollo.unwrap().nota, n.total.unwrap().nota), (None, None));
+        // Sin preguntas de desarrollo, el test vale el examen entero.
+        let n = nota_del_simulacro(&mixto(vec![]), &ps);
+        assert_eq!((n.test.sobre.as_str(), n.test.nota.as_deref(), n.desarrollo), ("10", Some("6,25"), None));
     }
 
     #[test]
     fn el_simulacro_saca_al_azar_las_preguntas_del_examen_con_su_reloj() {
         let banco: Vec<Pregunta> = (0..90).map(|i| pregunta(&format!("q{i}"), &format!("c{}", i / 3))).collect();
-        let s = simulacro(&LN, &banco, &[], &[], 0, &mut Azar::new(1));
+        let s = simulacro(&datos(&banco, &[]), 0, &mut Azar::new(1));
         assert_eq!((s.segundos, s.preguntas.len()), (25 * 60, 20));
-        let otro = simulacro(&LN, &banco, &[], &[], 0, &mut Azar::new(2));
+        let otro = simulacro(&datos(&banco, &[]), 0, &mut Azar::new(2));
         assert_ne!(
             s.preguntas.iter().map(|q| &q.id).collect::<Vec<_>>(),
             otro.preguntas.iter().map(|q| &q.id).collect::<Vec<_>>()
         );
-        assert_eq!(simulacro(&LN, &banco[..5], &[], &[], 0, &mut Azar::new(1)).preguntas.len(), 5);
+        assert_eq!(simulacro(&datos(&banco[..5], &[]), 0, &mut Azar::new(1)).preguntas.len(), 5);
     }
 
     #[test]
@@ -1118,10 +1238,10 @@ mod tests {
         for semilla in 0..20 {
             // 30 conceptos de 3 preguntas: 20 conceptos distintos.
             let grande: Vec<Pregunta> = (0..90).map(|i| pregunta(&format!("q{i}"), &format!("c{}", i / 3))).collect();
-            assert_eq!(conceptos_de(&simulacro(&LN, &grande, &[], &[], 0, &mut Azar::new(semilla))), 20);
+            assert_eq!(conceptos_de(&simulacro(&datos(&grande, &[]), 0, &mut Azar::new(semilla))), 20);
             // 10 conceptos de 3 preguntas: los 10 conceptos, y 10 hermanas sin repetir pregunta.
             let corto = &grande[..30];
-            let s = simulacro(&LN, corto, &[], &[], 0, &mut Azar::new(semilla));
+            let s = simulacro(&datos(corto, &[]), 0, &mut Azar::new(semilla));
             let mut ids: Vec<&str> = s.preguntas.iter().map(|q| q.id.as_str()).collect();
             ids.sort();
             ids.dedup();
@@ -1134,7 +1254,7 @@ mod tests {
         let banco = [pregunta("a1", "a"), pregunta("a2", "a")];
         let historial = [respuesta("a1", &minuto(0, 0), true, true)];
         let ahora = minuto(0, 0).parse::<Timestamp>().unwrap().as_second();
-        let s = simulacro(&LN, &banco, &[], &historial, ahora, &mut Azar::new(1));
+        let s = simulacro(&datos(&banco, &historial), ahora, &mut Azar::new(1));
         let probabilidad = |id: &str| s.preguntas.iter().find(|q| q.id == id).unwrap().probabilidad.clone();
         assert_eq!((probabilidad("a1").as_str(), probabilidad("a2").as_str()), ("100 %", "sin ver"));
     }
@@ -1597,7 +1717,7 @@ mod tests {
     fn la_ronda_restaurada_sigue_en_la_primera_pregunta_sin_resultado() {
         let banco = [pregunta("a1", "a"), pregunta("b1", "b"), pregunta("c1", "c")];
         let g = guardado(1, &["c1", "a1", "b1"], &[Some(Resultado::Fallo)]);
-        let r = restaurar(&LN, &banco, &[], &[], &g, 0, &mut Azar::new(1)).unwrap();
+        let r = restaurar(&datos(&banco, &[]), &g, 0, &mut Azar::new(1)).unwrap();
         assert_eq!(r.preguntas.iter().map(|q| q.id.as_str()).collect::<Vec<_>>(), ["c1", "a1", "b1"]);
         assert_eq!(r.resultados, [Some(Resultado::Fallo), None, None]);
         assert_eq!((r.simulacro, r.limite), (false, None));
@@ -1607,9 +1727,9 @@ mod tests {
     fn la_ronda_restaurada_guarda_cada_resultado_con_su_pregunta_aunque_haya_saltos() {
         let banco = [pregunta("a1", "a"), pregunta("b1", "b"), pregunta("c1", "c")];
         let g = guardado(1, &["c1", "a1", "b1"], &[None, Some(Resultado::Acierto), None]);
-        let r = restaurar(&LN, &banco, &[], &[], &g, 0, &mut Azar::new(1)).unwrap();
+        let r = restaurar(&datos(&banco, &[]), &g, 0, &mut Azar::new(1)).unwrap();
         assert_eq!(r.resultados, [None, Some(Resultado::Acierto), None]);
-        assert!(restaurar(&LN, &banco, &[], &[], &guardado(1, &["a1"], &[None, None]), 0, &mut Azar::new(1)).is_none());
+        assert!(restaurar(&datos(&banco, &[]), &guardado(1, &["a1"], &[None, None]), 0, &mut Azar::new(1)).is_none());
     }
 
     #[test]
@@ -1620,20 +1740,17 @@ mod tests {
         let ronda = g.ronda.as_mut().unwrap();
         ronda.simulacro = true;
         ronda.respuestas = respuestas.clone();
-        let r = restaurar(&LN, &banco, &[], &[], &g, 0, &mut Azar::new(1)).unwrap();
+        let r = restaurar(&datos(&banco, &[]), &g, 0, &mut Azar::new(1)).unwrap();
         assert_eq!(r.respuestas, respuestas);
     }
 
     #[test]
     fn una_ronda_con_una_pregunta_que_no_esta_en_el_banco_no_se_restaura() {
         let banco = [pregunta("a1", "a")];
-        assert!(restaurar(&LN, &banco, &[], &[], &guardado(1, &["a1", "x9"], &[]), 0, &mut Azar::new(1)).is_none());
+        assert!(restaurar(&datos(&banco, &[]), &guardado(1, &["a1", "x9"], &[]), 0, &mut Azar::new(1)).is_none());
         assert!(
             restaurar(
-                &LN,
-                &banco,
-                &[],
-                &[],
+                &datos(&banco, &[]),
                 &Guardado { guardada: Timestamp::from_second(1).unwrap(), ronda: None, seleccion: None },
                 0,
                 &mut Azar::new(1)

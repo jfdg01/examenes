@@ -7,6 +7,7 @@ use std::fs;
 use std::path::Path;
 use std::process::Command;
 
+use nucleo::desarrollo::{self, LineaDeDesarrollo, NotaDeDesarrollo};
 use nucleo::{Concepto, Examen, Forma, Fuente, Pregunta, PreguntaDeDesarrollo};
 use serde::Deserialize;
 
@@ -848,6 +849,67 @@ pub fn importar(carpeta: &Path, tipo: Tipo, apartado: &str, borrador: &Path) -> 
     }
 }
 
+/// Las líneas de `desarrollo.jsonl`. Un historial que no existe no tiene.
+fn historial_de_desarrollo(carpeta: &Path) -> Result<Vec<LineaDeDesarrollo>, String> {
+    let archivo = carpeta.join("desarrollo.jsonl");
+    let texto = match fs::read_to_string(&archivo) {
+        Ok(texto) => texto,
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(vec![]),
+        Err(e) => return Err(format!("{}: {e}", archivo.display())),
+    };
+    texto
+        .lines()
+        .filter(|l| !l.trim().is_empty())
+        .map(|l| serde_json::from_str(l).map_err(|e| format!("{}: {e}", archivo.display())))
+        .collect()
+}
+
+/// Cada respuesta sin corregir del examen, con su enunciado, su texto, la respuesta modelo y la idea de cada punto.
+pub fn pendientes(carpeta: &Path) -> Result<String, String> {
+    let desarrollo: Vec<PreguntaDeDesarrollo> = leer(&carpeta.join("desarrollo.json"))?;
+    let conceptos: Vec<Concepto> = leer(&carpeta.join("conceptos.json"))?;
+    let historial = historial_de_desarrollo(carpeta)?;
+    let mut texto = String::new();
+    for r in desarrollo::sin_corregir(&historial) {
+        let q = desarrollo.iter().find(|q| q.id == r.id).ok_or_else(|| format!("{}: no está en desarrollo.json", r.id))?;
+        texto += &format!(
+            "## {} {}\n\nEnunciado: {}\n\nTexto:\n{}\n\nModelo:\n{}\n\nPuntos:\n",
+            r.id, r.ts, q.enunciado, r.texto, q.modelo
+        );
+        for p in &q.puntos {
+            let idea = conceptos.iter().find(|c| c.id == *p).map_or(p.as_str(), |c| c.idea.as_str());
+            texto += &format!("- {idea}\n");
+        }
+        texto += "\n";
+    }
+    Ok(texto)
+}
+
+/// Añade a `desarrollo.jsonl` la corrección de la respuesta de `id` y `ts`, corregida en `ahora`. La respuesta debe
+/// estar en el historial. Una respuesta corregida otra vez cuenta con su corrección más nueva.
+pub fn corregir(carpeta: &Path, id: &str, ts: &str, nota: &str, ahora: jiff::Timestamp) -> Result<(), String> {
+    let nota = match nota {
+        "Again" => NotaDeDesarrollo::Again,
+        "Hard" => NotaDeDesarrollo::Hard,
+        "Good" => NotaDeDesarrollo::Good,
+        _ => return Err(format!("la nota {nota} no es Again, Hard ni Good")),
+    };
+    let ts: jiff::Timestamp = ts.parse().map_err(|e| format!("{ts}: {e}"))?;
+    let historial = historial_de_desarrollo(carpeta)?;
+    let esta = historial.iter().any(|l| matches!(l, LineaDeDesarrollo::Respuesta(r) if r.id == id && r.ts == ts));
+    if !esta {
+        return Err(format!("{id} {ts}: no hay esa respuesta en desarrollo.jsonl"));
+    }
+    let linea = serde_json::to_string(&desarrollo::corregir_respuesta(id, ts, nota, ahora)).map_err(|e| e.to_string())? + "\n";
+    let archivo = carpeta.join("desarrollo.jsonl");
+    use std::io::Write;
+    fs::OpenOptions::new()
+        .append(true)
+        .open(&archivo)
+        .and_then(|mut f| f.write_all(linea.as_bytes()))
+        .map_err(|e| format!("{}: {e}", archivo.display()))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -886,6 +948,8 @@ mod tests {
             apartados: ["rgpd", "lssi", "ens"].map(|a| (a.into(), a.to_uppercase())).into(),
             sin_pregunta: BTreeMap::new(),
             congelado: false,
+            desarrollo: 0,
+            pesos: Default::default(),
         };
         (dir, examen)
     }
@@ -1649,5 +1713,39 @@ Compara la LSSI y el RGPD.
         montar(c, Tipo::Conceptos, &apartados).unwrap();
         let razones = BTreeMap::from([("2".into(), "rgpd".into()), ("3".into(), "lssi".into())]);
         assert_eq!(leer::<Examen>(&c.join("examen.json")).unwrap().sin_pregunta["1_Legislacion.pdf"], razones);
+    }
+
+    #[test]
+    fn pendientes_lista_cada_respuesta_sin_corregir_y_corregir_la_quita() {
+        let (dir, _) = carpeta();
+        let c = dir.path();
+        escribir(&c.join("desarrollo.json"), &[desarrollo("rgpd-d1", Forma::Objeto, 0..2)]).unwrap();
+        escribir(&c.join("conceptos.json"), &conceptos_de_desarrollo()).unwrap();
+        let ts: jiff::Timestamp = "2026-11-01T10:00:00Z".parse().unwrap();
+        let lineas = [
+            desarrollo::responder("rgpd-d1", "El RGPD protege datos.", ts),
+            desarrollo::responder("rgpd-d1", "", ts + jiff::SignedDuration::from_secs(60)),
+        ]
+        .concat();
+        let texto: String = lineas.iter().map(|l| serde_json::to_string(l).unwrap() + "\n").collect();
+        fs::write(c.join("desarrollo.jsonl"), texto).unwrap();
+        let p = pendientes(c).unwrap();
+        assert_eq!(p.matches("## rgpd-d1").count(), 1, "{p}");
+        for parte in [
+            "2026-11-01T10:00:00Z",
+            "Describe el RGPD.",
+            "El RGPD protege datos.",
+            "Uno. Dos.",
+            "- La idea de rgpd-0.",
+            "- La idea de rgpd-1.",
+        ] {
+            assert!(p.contains(parte), "{parte}: {p}");
+        }
+        let ahora: jiff::Timestamp = "2026-11-02T10:00:00Z".parse().unwrap();
+        assert!(corregir(c, "rgpd-d1", "2026-11-01T10:00:00Z", "Muy bien", ahora).unwrap_err().contains("no es Again"));
+        assert!(corregir(c, "rgpd-d1", "2026-11-01T11:00:00Z", "Good", ahora).unwrap_err().contains("no hay esa respuesta"));
+        corregir(c, "rgpd-d1", "2026-11-01T10:00:00Z", "Hard", ahora).unwrap();
+        assert_eq!(pendientes(c).unwrap(), "");
+        assert_eq!(historial_de_desarrollo(c).unwrap().len(), 3);
     }
 }

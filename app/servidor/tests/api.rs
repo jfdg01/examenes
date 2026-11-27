@@ -187,6 +187,18 @@ async fn la_ronda_guardada_vuelve_igual() {
 }
 
 #[tokio::test]
+async fn la_ronda_de_un_simulacro_mixto_vuelve_con_el_texto_de_cada_pregunta_de_desarrollo() {
+    let raiz = TempDir::new().unwrap();
+    crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
+    let url = arrancar(raiz.path()).await;
+    let g = json!({ "guardada": "2026-11-21T10:51:16.012Z", "ronda": {
+        "ids": ["rgpd-001"], "resultados": [], "respuestas": [], "simulacro": true, "limite": 1_795_185_376_012_u64,
+        "desarrollo": { "ids": ["rgpd-d1", "rgpd-d2"], "textos": ["El RGPD protege datos.", ""], "hechas": 0 } } });
+    assert_eq!(guardar_ronda(&url, &g).await, 204);
+    assert_eq!(ronda(&url).await, g);
+}
+
+#[tokio::test]
 async fn una_ronda_mal_formada_no_se_guarda() {
     let raiz = TempDir::new().unwrap();
     crear_examen(raiz.path(), "ln", "LN", Some(BANCO_LN));
@@ -399,6 +411,7 @@ async fn el_inicio_da_los_conceptos_y_el_desarrollo() {
     let inicio = inicio(&url, "prueba").await;
     assert_eq!(inicio["conceptos"].as_array().unwrap().len(), 6);
     assert_eq!(inicio["desarrollo"][0]["forma"], "proceso");
+    assert_eq!((&inicio["examen"]["desarrollo"], &inicio["examen"]["pesos"]), (&json!(1), &json!({ "test": 5.0, "desarrollo": 5.0 })));
 }
 
 #[tokio::test]
@@ -457,7 +470,8 @@ async fn una_linea_de_desarrollo_entra_en_su_historial_una_sola_vez() {
     let dir = crear_prueba(raiz.path());
     let url = arrancar(raiz.path()).await;
     let respuesta = json!({ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "texto": "SSH cifra" });
-    let correccion = json!({ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Hard", "corregida": "2026-11-04T12:00:00Z" });
+    let correccion =
+        json!({ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Hard", "corregida": "2026-11-04T12:00:00Z" });
     let otra = json!({ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Good", "corregida": "2026-11-05T09:00:00Z" });
 
     assert_eq!(desarrollar(&url, &json!([respuesta, correccion])).await, 204);
