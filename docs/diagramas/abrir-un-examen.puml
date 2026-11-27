@@ -9,7 +9,7 @@ participant servidor as S
 
 App -> S : POST api/respuestas, con las pendientes de L
 App -> S : GET api/inicio
-S --> App : Datos { examen, banco, historial }
+S --> App : Datos { examen, banco, conceptos, desarrollo, historial }
 App -> N : unir(historial, pendientes)
 App -> S : GET api/ronda
 App -> L : la ronda de este dispositivo

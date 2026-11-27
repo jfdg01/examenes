@@ -10,9 +10,9 @@ System_Boundary(app, "Los exámenes") {
   Container(interfaz, "interfaz", "Svelte 5, en el navegador", "Las pantallas, la ronda en curso y las llamadas al API")
   Container(nucleo, "nucleo", "Rust, como WASM en el navegador", "Toda la lógica: el estado con FSRS, la sesión, el simulacro, la nota. Sin archivos ni red")
   ContainerDb(local, "localStorage", "navegador", "Las respuestas pendientes, la ronda a medias y las preferencias")
-  Container(servidor, "servidor", "Rust, axum", "Guarda y sirve los archivos de cada examen")
-  Container(banco, "banco", "Rust, CLI", "Comprueba e importa el banco, y saca las páginas de los PDFs")
-  ContainerDb(carpetas, "Carpetas de examen", "archivos: examenes/asn/, examenes/ps/…", "examen.json, preguntas.json, respuestas.jsonl, ronda.json, notas.json, pdfs/, paginas/")
+  Container(servidor, "servidor", "Rust, axum", "Guarda y sirve los archivos de cada examen. Reescribe un archivo con un temporal y un rename")
+  Container(banco, "banco", "Rust, CLI", "Comprueba los conceptos y los dos bancos, importa el de test, y saca las páginas de los PDFs")
+  ContainerDb(carpetas, "Carpetas de examen", "archivos: examenes/asn/, examenes/ps/…", "examen.json, conceptos.json, preguntas.json, desarrollo.json, respuestas.jsonl, ronda.json, notas.json, pdfs/, paginas/")
 }
 
 Rel(estudiante, interfaz, "Contesta preguntas")
