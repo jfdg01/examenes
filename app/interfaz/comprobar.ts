@@ -131,7 +131,7 @@ async function navegar(page: Page, nombre: string) {
   await page.getByText("El simulacro ha terminado").waitFor();
 }
 
-// La sesión de desarrollo: el botón del inicio, la pregunta, el texto tras recargar, la solución y las 2 notas.
+// La sesión de desarrollo: el botón del inicio, la pregunta, el texto tras recargar, la solución, las 2 notas y volver a una hecha.
 async function desarrollar(examen: string, width: number, height: number) {
   const page = await navegador.newPage({ viewport: { width, height } });
   await page.route("**/paginas/**", (r) => r.fulfill({ contentType: "image/png", body: hoja }));
@@ -165,8 +165,17 @@ async function desarrollar(examen: string, width: number, height: number) {
   await page.getByText("La sabía", { exact: true }).click();
   await page.getByText(/^2 \/ 2 · /).waitFor();
   assert.equal(await page.locator(".respuesta").inputValue(), "", "la pregunta siguiente empieza en blanco");
+  assert.equal(await page.locator(".corregir-luego").count(), 0, "«Corregir luego» sale con la respuesta modelo");
+  // Anterior enseña la pregunta hecha con su nota, sin cambiarla.
+  await page.getByText("‹ Anterior").click();
+  await page.locator(".hecha").getByText("La sabía").waitFor();
+  assert(await page.locator(".respuesta").evaluate((e: HTMLTextAreaElement) => e.readOnly), "una pregunta hecha no se edita");
+  await page.getByText("Siguiente ›").click();
+  await page.getByText(/^2 \/ 2 · /).waitFor();
+  await page.getByText("Ver respuesta modelo").click();
   assert(await page.locator(".corregir-luego").isDisabled(), "un cuadro vacío no se deja sin corregir");
   await page.locator(".respuesta").fill("Otra respuesta");
+  await page.screenshot({ path: `capturas/${examen}-desarrollo-notas.png`, fullPage: true });
   await page.locator(".corregir-luego").click();
   await page.getByText("Empezar la sesión").waitFor();
   await page.getByText("1 respuesta sin corregir").waitFor();

@@ -274,24 +274,33 @@ fn de_la_ronda(
     }
 }
 
-/// Las preguntas de desarrollo de una ronda a medias, con su texto en el orden de `ids`. Una lista más corta que `ids`
-/// acaba en preguntas sin texto. En una sesión de desarrollo, las `hechas` primeras ya tienen nota o van a corregir
-/// luego, y la pregunta actual es la siguiente.
+/// Lo que el estudiante hizo con una pregunta de una sesión de desarrollo: su nota, o «Corregir luego».
+#[derive(Deserialize, Serialize, Tsify, Clone, Copy, PartialEq, Debug)]
+pub enum Hecha {
+    Again,
+    Hard,
+    Good,
+    SinCorregir,
+}
+
+/// Las preguntas de desarrollo de una ronda a medias, con su texto en el orden de `ids`. Una lista de `textos` o de
+/// `hechas` más corta que `ids` acaba en preguntas sin texto o sin hacer. En una sesión de desarrollo, una pregunta
+/// hecha se ve sin cambiarla, y la sesión acaba cuando todas están hechas.
 #[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct RondaDeDesarrollo {
     pub ids: Vec<String>,
     pub textos: Vec<String>,
     #[serde(default)]
-    pub hechas: u32,
+    pub hechas: Vec<Option<Hecha>>,
 }
 
-/// Una sesión de desarrollo a medias.
+/// Una sesión de desarrollo a medias, con una entrada de `hechas` por pregunta.
 #[derive(Serialize, Tsify)]
 pub struct DesarrolloAMedias {
     pub preguntas: Vec<PreguntaDeDesarrolloDeSesion>,
     pub textos: Vec<String>,
-    pub hechas: u32,
+    pub hechas: Vec<Option<Hecha>>,
 }
 
 /// Las preguntas y los textos de una ronda guardada, o nada si un id no está en el banco de desarrollo.
@@ -322,7 +331,12 @@ pub fn restaurar_desarrollo(d: &crate::Datos, guardado: &crate::Guardado, ahora:
     }
     let rd = r.desarrollo.as_ref()?;
     let (preguntas, textos) = de_la_ronda_guardada(d, rd, ahora)?;
-    Some(DesarrolloAMedias { hechas: rd.hechas.min(preguntas.len() as u32), preguntas, textos })
+    if rd.hechas.len() > preguntas.len() {
+        return None;
+    }
+    let mut hechas = rd.hechas.clone();
+    hechas.resize(preguntas.len(), None);
+    Some(DesarrolloAMedias { hechas, preguntas, textos })
 }
 
 #[cfg(test)]
@@ -574,7 +588,7 @@ mod tests {
         }
     }
 
-    fn ronda(ids: &[&str], textos: &[&str], hechas: u32) -> RondaDeDesarrollo {
+    fn ronda(ids: &[&str], textos: &[&str], hechas: Vec<Option<Hecha>>) -> RondaDeDesarrollo {
         RondaDeDesarrollo {
             ids: ids.iter().map(|&i| i.into()).collect(),
             textos: textos.iter().map(|&t| t.into()).collect(),
@@ -584,20 +598,22 @@ mod tests {
 
     #[test]
     fn la_ronda_guardada_restaura_el_texto_de_cada_pregunta_y_las_hechas() {
-        let g = guardado(false, Some(ronda(&["d1", "d0"], &["SSH cifra"], 1)));
+        let g = guardado(false, Some(ronda(&["d1", "d0"], &["SSH cifra"], vec![Some(Hecha::Hard)])));
         let json = serde_json::to_string(&g).unwrap();
         assert_eq!(serde_json::from_str::<crate::Guardado>(&json).unwrap(), g);
         let r = restaurar_desarrollo(&datos(banco_de(2), vec![]), &g, 0).unwrap();
         assert_eq!(ids(&r.preguntas), ["d1", "d0"]);
-        assert_eq!((r.textos, r.hechas), (vec!["SSH cifra".to_string(), String::new()], 1));
+        assert_eq!((r.textos, r.hechas), (vec!["SSH cifra".to_string(), String::new()], vec![Some(Hecha::Hard), None]));
+        let de_mas = guardado(false, Some(ronda(&["d0"], &[], vec![None, None])));
+        assert!(restaurar_desarrollo(&datos(banco_de(2), vec![]), &de_mas, 0).is_none());
     }
 
     #[test]
     fn una_ronda_de_test_de_simulacro_o_con_una_pregunta_que_no_esta_no_se_restaura_como_desarrollo() {
         let d = datos(banco_de(2), vec![]);
         assert!(restaurar_desarrollo(&d, &guardado(false, None), 0).is_none());
-        assert!(restaurar_desarrollo(&d, &guardado(true, Some(ronda(&["d0"], &[], 0))), 0).is_none());
-        assert!(restaurar_desarrollo(&d, &guardado(false, Some(ronda(&["d9"], &[], 0))), 0).is_none());
+        assert!(restaurar_desarrollo(&d, &guardado(true, Some(ronda(&["d0"], &[], vec![]))), 0).is_none());
+        assert!(restaurar_desarrollo(&d, &guardado(false, Some(ronda(&["d9"], &[], vec![]))), 0).is_none());
     }
 
     #[test]
@@ -636,11 +652,11 @@ mod tests {
 
     #[test]
     fn el_simulacro_mixto_restaurado_lleva_sus_preguntas_de_desarrollo_con_su_texto() {
-        let g = guardado(true, Some(ronda(&["d1"], &["SSH cifra"], 0)));
+        let g = guardado(true, Some(ronda(&["d1"], &["SSH cifra"], vec![])));
         let r = crate::restaurar(&datos(banco_de(2), vec![]), &g, 0, &mut Azar::new(1)).unwrap();
         assert_eq!((ids(&r.desarrollo), r.textos), (vec!["d1"], vec!["SSH cifra".to_string()]));
         assert!(
-            crate::restaurar(&datos(banco_de(2), vec![]), &guardado(false, Some(ronda(&["d1"], &[], 0))), 0, &mut Azar::new(1))
+            crate::restaurar(&datos(banco_de(2), vec![]), &guardado(false, Some(ronda(&["d1"], &[], vec![]))), 0, &mut Azar::new(1))
                 .is_none()
         );
     }

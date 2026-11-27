@@ -193,7 +193,7 @@ async fn la_ronda_de_un_simulacro_mixto_vuelve_con_el_texto_de_cada_pregunta_de_
     let url = arrancar(raiz.path()).await;
     let g = json!({ "guardada": "2026-11-21T10:51:16.012Z", "ronda": {
         "ids": ["rgpd-001"], "resultados": [], "respuestas": [], "simulacro": true, "limite": 1_795_185_376_012_u64,
-        "desarrollo": { "ids": ["rgpd-d1", "rgpd-d2"], "textos": ["El RGPD protege datos.", ""], "hechas": 0 } } });
+        "desarrollo": { "ids": ["rgpd-d1", "rgpd-d2"], "textos": ["El RGPD protege datos.", ""], "hechas": [] } } });
     assert_eq!(guardar_ronda(&url, &g).await, 204);
     assert_eq!(ronda(&url).await, g);
 }
