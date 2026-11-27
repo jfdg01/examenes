@@ -413,9 +413,13 @@
     guardado = setTimeout(() => guardar(), 500);
   }
 
-  // La respuesta calificada, o sin corregir con «Corregir luego». La sesión sigue en la siguiente sin hacer, y tras la
-  // última vuelve al inicio.
+  // La respuesta calificada, o sin corregir con «Corregir luego». Una nota cambia cuándo vuelve la pregunta. La sesión
+  // sigue en la siguiente sin hacer, y tras la última vuelve al inicio.
   function responder(hecha: Hecha, lineas: LineaDeDesarrollo[]) {
+    if (!desarrollo) return;
+    const q = desarrollo[j];
+    const vuelve = { Again: q.vuelve_tras_again, Hard: q.vuelve_tras_hard, Good: q.vuelve_tras_good, SinCorregir: q.vuelve }[hecha];
+    desarrollo = desarrollo.map((p, k) => (k === j ? { ...p, vuelve } : p));
     hechas[j] = hecha;
     const n = hechas.length;
     const siguiente = [...Array(n).keys()].map((k) => (j + 1 + k) % n).find((k) => !hechas[k]);

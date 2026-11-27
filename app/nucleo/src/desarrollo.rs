@@ -4,7 +4,7 @@ use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
-use crate::{Azar, Concepto, Estado, Examen, Pagina, Par, PreguntaDeDesarrollo, Resultado, en_porcentaje};
+use crate::{Azar, Concepto, Estado, Examen, OTRA_SESION, Pagina, Par, PreguntaDeDesarrollo, Resultado, en_porcentaje};
 
 /// La nota de FSRS de una respuesta de desarrollo: "No la sabía", "A medias" o "La sabía".
 #[derive(Deserialize, Serialize, Tsify, Clone, Copy, PartialEq, Debug)]
@@ -96,20 +96,26 @@ fn estados<'a>(desarrollo: &'a [PreguntaDeDesarrollo], historial: &[LineaDeDesar
         let Some(q) = desarrollo.iter().find(|q| q.id == id) else {
             continue;
         };
-        let (resultado, seguro) = match c.nota {
-            NotaDeDesarrollo::Again => (Resultado::Fallo, false),
-            NotaDeDesarrollo::Hard => (Resultado::Acierto, false),
-            NotaDeDesarrollo::Good => (Resultado::Acierto, true),
-        };
+        let (resultado, seguro) = como_respuesta(c.nota);
         let despues = Estado::tras(estado.get(q.id.as_str()).copied(), resultado, seguro, ts.as_second());
         estado.insert(q.id.as_str(), despues);
     }
     estado
 }
 
-/// Un punto de la solución: la idea de su concepto y su página.
+/// La nota como una respuesta de test: Again es un fallo, Hard un acierto con "dudo", y Good un acierto con "seguro".
+fn como_respuesta(nota: NotaDeDesarrollo) -> (Resultado, bool) {
+    match nota {
+        NotaDeDesarrollo::Again => (Resultado::Fallo, false),
+        NotaDeDesarrollo::Hard => (Resultado::Acierto, false),
+        NotaDeDesarrollo::Good => (Resultado::Acierto, true),
+    }
+}
+
+/// Un punto de la solución: su concepto, la idea y su página.
 #[derive(Serialize, Deserialize, Tsify, Clone, PartialEq, Debug)]
 pub struct Punto {
+    pub concepto: String,
     pub idea: String,
     pub pagina: Option<Pagina>,
 }
@@ -125,6 +131,11 @@ pub struct PreguntaDeDesarrolloDeSesion {
     pub puntos: Vec<Punto>,
     /// La probabilidad de acierto antes de contestar, como `62 %`, o `sin ver`.
     pub probabilidad: String,
+    /// Cuándo vuelve la pregunta con su estado de ahora, como `vuelve en 3 días`.
+    pub vuelve: String,
+    pub vuelve_tras_again: String,
+    pub vuelve_tras_hard: String,
+    pub vuelve_tras_good: String,
 }
 
 /// Las preguntas de desarrollo de los pares marcados. Sin selección, todo el banco.
@@ -262,7 +273,16 @@ fn de_la_ronda(
 ) -> PreguntaDeDesarrolloDeSesion {
     let punto = |id: &String| {
         let c = conceptos.iter().find(|c| c.id == *id);
-        Punto { idea: c.map_or_else(|| id.clone(), |c| c.idea.clone()), pagina: c.map(|c| Pagina::new(&c.fuente)) }
+        Punto {
+            concepto: id.clone(),
+            idea: c.map_or_else(|| id.clone(), |c| c.idea.clone()),
+            pagina: c.map(|c| Pagina::new(&c.fuente)),
+        }
+    };
+    let antes = estado.get(q.id.as_str()).copied();
+    let vuelve_tras = |nota| {
+        let (resultado, seguro) = como_respuesta(nota);
+        Estado::tras(antes, resultado, seguro, ahora).vuelve(ahora, examen.retencion)
     };
     PreguntaDeDesarrolloDeSesion {
         id: q.id.clone(),
@@ -270,7 +290,11 @@ fn de_la_ronda(
         enunciado: q.enunciado.clone(),
         modelo: q.modelo.clone(),
         puntos: q.puntos.iter().map(punto).collect(),
-        probabilidad: en_porcentaje(estado.get(q.id.as_str()), ahora),
+        probabilidad: en_porcentaje(antes.as_ref(), ahora),
+        vuelve: antes.map_or(OTRA_SESION.into(), |e| e.vuelve(ahora, examen.retencion)),
+        vuelve_tras_again: vuelve_tras(NotaDeDesarrollo::Again),
+        vuelve_tras_hard: vuelve_tras(NotaDeDesarrollo::Hard),
+        vuelve_tras_good: vuelve_tras(NotaDeDesarrollo::Good),
     }
 }
 
@@ -423,6 +447,18 @@ mod tests {
 
     fn probabilidad(historial: &[LineaDeDesarrollo], ahora: i64) -> String {
         de_la_sesion(historial, &banco_de(1), ahora).remove(0).probabilidad
+    }
+
+    #[test]
+    fn cada_nota_dice_cuando_vuelve_la_pregunta_como_despues_de_guardarla() {
+        let antes = de_la_sesion(&[], &banco_de(1), DIA).remove(0);
+        assert_eq!(antes.vuelve, OTRA_SESION);
+        assert_eq!(antes.vuelve_tras_again, OTRA_SESION);
+        for (nota, tras) in [(NotaDeDesarrollo::Hard, &antes.vuelve_tras_hard), (NotaDeDesarrollo::Good, &antes.vuelve_tras_good)] {
+            let despues = de_la_sesion(&corregida("d0", DIA, nota, DIA), &banco_de(1), DIA).remove(0);
+            assert_eq!(despues.vuelve, *tras);
+        }
+        assert_ne!(antes.vuelve_tras_hard, antes.vuelve_tras_good);
     }
 
     #[test]

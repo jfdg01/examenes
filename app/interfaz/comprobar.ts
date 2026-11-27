@@ -169,6 +169,7 @@ async function desarrollar(examen: string, width: number, height: number) {
   // Anterior enseña la pregunta hecha con su nota, sin cambiarla.
   await page.getByText("‹ Anterior").click();
   await page.locator(".hecha").getByText("La sabía").waitFor();
+  assert.match(await page.locator(".metadatos").innerText(), / · vuelve en \d+ (horas?|días?)$/, "la pregunta hecha dice cuándo vuelve");
   assert(await page.locator(".respuesta").evaluate((e: HTMLTextAreaElement) => e.readOnly), "una pregunta hecha no se edita");
   await page.getByText("Siguiente ›").click();
   await page.getByText(/^2 \/ 2 · /).waitFor();

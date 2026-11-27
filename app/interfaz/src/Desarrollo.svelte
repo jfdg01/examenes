@@ -104,15 +104,21 @@
       <p class="mt-4 mb-1 text-[12px] text-tenue">Los puntos</p>
       <ul class="puntos m-0 list-none p-0">
         {#each q.puntos as p, k (k)}
-          <li class="flex items-start gap-2.5 border-b border-linea py-1.5">
-            <span class="flex-1">{p.idea}</span>
-            {#if p.pagina}
-              {@const pagina = p.pagina}
-              <button class="ver-pagina shrink-0 cursor-pointer text-[13px] text-acento underline" onclick={() => onverpagina(pagina)}>pág. {pagina.numero}</button>
-            {/if}
+          <!-- Como en la pregunta de test: el concepto, la fuente, que abre la página, y el PDF en su página. -->
+          <li class="border-b border-linea py-1.5">
+            {p.idea}
+            <p class="m-0 mt-0.5 text-[12px] text-tenue">
+              {p.concepto}
+              {#if p.pagina}
+                {@const pagina = p.pagina}
+                · <button class="ver-pagina cursor-pointer text-acento underline" onclick={() => onverpagina(pagina)}>{pagina.fuente}</button>
+                · <a class="text-acento underline" href={pagina.pdf} target="_blank">Abrir el PDF en la página {pagina.numero}</a>
+              {/if}
+            </p>
           </li>
         {/each}
       </ul>
+      <p class="metadatos mt-3 mb-0 text-[12px] text-tenue">{q.id}{hecha ? ` · ${q.vuelve}` : ""}</p>
     {/if}
     {#if error}<p class="my-3 text-[12px] text-aviso">{error}</p>{/if}
   </div>
