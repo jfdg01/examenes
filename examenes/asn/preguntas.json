@@ -12343,13 +12343,13 @@
       "pdf": "4_Despliegue.pdf",
       "pagina": 30
     },
-    "pregunta": "¿Qué ventaja tiene GKE sobre un clúster Kubernetes propio respecto al nodo máster?",
-    "correcta": "No es necesario gestionar un nodo máster, porque GKE se encarga de sus labores",
+    "pregunta": "En un clúster Kubernetes de GKE, ¿quién gestiona el nodo máster?",
+    "correcta": "Google, y el equipo no gestiona ningún nodo máster",
     "distractores": [
-      "Se necesitan dos nodos máster en cada región del clúster con balanceo entre ellos",
-      "El máster se gestiona con kubectl desde el panel web del proveedor de nube"
+      "El equipo, aunque Google actualiza su software sin intervención",
+      "El equipo, aunque Google lo repara cuando deja de responder"
     ],
-    "explicacion": "✓ Google opera el plano de control, así que el equipo se ahorra instalarlo, actualizarlo y repararlo.\n✗ «Se necesitan»: GKE no pide un máster al usuario\n✗ «El máster»: GKE no lo expone al usuario"
+    "explicacion": "✓ GKE se encarga de las labores del máster: lo instala, lo actualiza y lo repara, y el equipo solo gestiona los nodos de trabajo.\n✗ «actualiza su software»: la actualización automática de GKE es la de los nodos de trabajo, y el máster ni siquiera lo gestiona el equipo\n✗ «lo repara»: la auto-reparación de GKE es la de los nodos de trabajo, y el máster lo opera Google entero"
   },
   {
     "id": "despliegue-080",
