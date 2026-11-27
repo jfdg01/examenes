@@ -21,4 +21,4 @@ El servidor recibe la raíz de los exámenes y su dirección. Cada carpeta de la
 
 El hook `.githooks/pre-commit` corre `cargo test` en un commit que cambia `app/`, y `banco comprobar` en un commit que cambia el banco de un examen. Un clon nuevo lo activa con `git config core.hooksPath .githooks`.
 
-`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra una copia de `examenes/ln/`. Las capturas quedan en `interfaz/capturas/`, fuera de git. Las clases sin estilo, como `examen`, `opcion` o `tirador`, existen para las aserciones de la comprobación: no las borres.
+`npm run comprobar`, después de `npm run build`, corre en Playwright cada pantalla en el ancho del móvil y en el del PC, contra una copia del examen de `interfaz/prueba/`, que sale del banco de LN y lleva un `conceptos.json` de prueba. Las capturas quedan en `interfaz/capturas/`, fuera de git. Las clases sin estilo, como `examen`, `opcion` o `tirador`, existen para las aserciones de la comprobación: no las borres.

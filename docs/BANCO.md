@@ -24,7 +24,7 @@ El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.
 
 ## Las reglas
 
-Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002) y la guía de redacción del NBME. Valen para cada banco, salvo el de LN, que está congelado: tiene 2 o 3 preguntas por concepto y una explicación de una línea.
+Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002) y la guía de redacción del NBME. Valen para cada banco, salvo los congelados, como ASN y CA, que no se reescriben.
 
 1. **Un concepto es una idea del temario.** Una idea es una regla, un mecanismo, la diferencia entre 2 cosas o lo que hace algo. Una página da tantos conceptos como ideas tiene, de 0 a varios. Una fecha, un número de RFC o de norma, o el nombre de quien publica algo no son una idea.
 2. **3 preguntas por concepto**, cada una desde un ángulo distinto, lo más ortogonales entre sí que sea razonable. Así, los 3 ángulos cubren la idea entera, y la app repasa cada uno por separado.
