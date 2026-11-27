@@ -7,7 +7,6 @@ El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.
   "id": "transporte-007",
   "concepto": "transporte-ssh-clave-de-sesion",
   "apartado": "transporte",
-  "fuente": { "pdf": "3_Transporte.pdf", "pagina": 41 },
   "pregunta": "En SSH, ¿cómo acuerdan el cliente y el servidor la clave de sesión?",
   "correcta": "Con un intercambio Diffie-Hellman, firmado por la clave del servidor",
   "distractores": [
@@ -19,9 +18,8 @@ El banco de un examen es una lista de preguntas en JSON, en `<examen>/preguntas.
 ```
 
 - `id` es la clave del historial, y no cambia nunca. Empieza por el `apartado`: `transporte-007`, y `transporte-s03` para una sigla.
-- `concepto` agrupa las preguntas de una misma idea.
-- `apartado` es uno de los apartados del tema de su `fuente`, en el campo `pdfs` de `examen.json`. Su nombre está en el campo `apartados`, y la cabecera de la pregunta lo muestra.
-- `fuente` es el PDF y su página de PDF, y no el número de la diapositiva. Un examen con `conceptos.json` no la lleva en la pregunta: la página es la de su concepto. Es la página que explica la idea, y no una página que solo la nombra.
+- `concepto` agrupa las preguntas de una misma idea, y es un `id` de `conceptos.json`. La página de la pregunta es la `fuente` de su concepto: el PDF y su página de PDF, y no el número de la diapositiva. Es la página que explica la idea, y no una página que solo la nombra.
+- `apartado` es el de su concepto. En un examen congelado sin `conceptos.json`, es un apartado de un tema de `examen.json`. Su nombre está en el campo `apartados` de `examen.json`, y la cabecera de la pregunta lo muestra.
 - `distractores` tiene `opciones` − 1 opciones. La interfaz baraja la correcta con los distractores.
 
 ## Las reglas
@@ -36,7 +34,7 @@ Las reglas siguen la revisión de Haladyna, Downing y Rodriguez (2002) y la guí
 6. **Ninguna pista fuera de la idea.** Las opciones tienen una longitud y una forma gramatical parecidas. La correcta es la más larga en 1 de cada 3 preguntas de media. Un término clave, una sigla o una traducción del enunciado sale en todas las opciones o en ninguna. Una palabra común, como "atacante" o "servidor", queda fuera de esta regla. Un "siempre", un "nunca" o un "solo" que hace falso un distractor por exclusión lo delata, y sale también en la correcta. "Un solo" y "una sola" dan un número, y no son un absoluto. Cada opción se lee sola, porque la interfaz las randomiza.
 7. **El enunciado es afirmativo**, y pregunta qué es, qué hace o por qué.
 8. **La explicación nombra cada matiz, con una línea por opción.** La primera línea empieza por `✓` y dice por qué la correcta responde a la pregunta: el mecanismo o la razón que la hace cierta. No repite el enunciado ni la correcta en forma afirmativa, porque quien falló ya la lee en las opciones y no aprende nada nuevo. Cada distractor tiene después su línea, en el orden de `distractores`. La línea empieza por `✗` y por las palabras clave del distractor entre comillas, y sigue con su matiz. Una letra no sirve, porque la interfaz randomiza las opciones.
-9. **Una sigla de seguridad es un concepto propio, con una sola pregunta:** el enunciado da la sigla y pide su significado, con 2 desarrollos plausibles como distractores. Las siglas generales de informática, como TCP, IP o ASCII, quedan fuera. Su `fuente` es la primera página que la explica.
+9. **Una sigla de seguridad es un concepto propio, con una sola pregunta:** el enunciado da la sigla y pide su significado, con 2 desarrollos plausibles como distractores. Las siglas generales de informática, como TCP, IP o ASCII, quedan fuera. La `fuente` de su concepto es la primera página que la explica.
 
 Una pregunta que pasa a preguntar otra idea lleva un `id` nuevo. Una pregunta que cambia de forma o de distractores conserva su `id`, como en una edición a mano del JSON.
 
@@ -48,13 +46,13 @@ El `README.md` de cada examen dice lo que el profesor marcó como importante. Es
 cargo run --manifest-path app/Cargo.toml -p banco -- comprobar examenes/ps
 ```
 
-`banco comprobar` recibe la carpeta del examen. Valida también `conceptos.json` y `desarrollo.json` si existen. Con `conceptos.json`, la cobertura de páginas mira las `fuente` de los conceptos. Un apartado sin preguntas de test acepta conceptos sin preguntas. Falla con cada pregunta que rompe el formato: un `id` repetido, un `apartado` que no es de su PDF, un apartado sin nombre, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, un `pdf` o una `pagina` que no existen, y un `concepto` con menos de 3 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. Falla también con una línea `✗` cuya clave `«…»` no está en su distractor, en el orden de `distractores`, sin distinguir mayúsculas, y con dos líneas `✗` de una pregunta con la misma clave. También avisa, sin fallar, de estas cosas:
+`banco comprobar` recibe la carpeta del examen. Valida también `conceptos.json` y `desarrollo.json`. Falla sin `conceptos.json`, salvo en un examen congelado. Un apartado sin preguntas de test acepta conceptos sin preguntas. Falla con cada concepto o pregunta que rompe el formato: un `id` repetido, un concepto con un `apartado` que no es de su PDF o con un `pdf` o una `pagina` que no existen, una pregunta con un `concepto` que no está en `conceptos.json` o de otro apartado, un apartado sin nombre, un número de distractores distinto de `opciones` − 1, un distractor igual a la correcta, y un `concepto` con menos de 3 preguntas o con más de 3. Un `concepto` que empieza por `sigla-` tiene una sola pregunta. Falla también con una línea `✗` cuya clave `«…»` no está en su distractor, en el orden de `distractores`, sin distinguir mayúsculas, y con dos líneas `✗` de una pregunta con la misma clave. También avisa, sin fallar, de estas cosas:
 
 - un "siempre", un "nunca" o un "solo" de un distractor que la correcta no dice;
 - una correcta que es la opción más larga en más de 1 de cada 3 preguntas, sin contar las siglas;
 - una línea `✓` de menos de 8 palabras;
 - dos líneas `✗` del mismo apartado con el mismo matiz, el texto después de los dos puntos;
-- una página de un PDF con preguntas que ninguna `fuente` cita y que `sin_pregunta` no marca;
+- una página de un PDF con conceptos que ninguna `fuente` de un concepto cita y que `sin_pregunta` no marca;
 - una página que `sin_pregunta` marca y que tiene una pregunta;
 - una respuesta del historial con un `id` fuera del banco;
 - un `concepto` con menos de 3 preguntas o con más de 3, en un examen con `"congelado": true` en `examen.json`. Un banco congelado es anterior a esa regla, y no se reescribe.
@@ -82,7 +80,7 @@ cargo run --manifest-path app/Cargo.toml -p banco -- importar examenes/asn ciclo
 El borrador tiene un bloque por pregunta:
 
 ```
-## ciclo-de-vida-defensa-en-profundidad · p3
+## ciclo-de-vida-defensa-en-profundidad
 ¿Qué significa aplicar defensa en profundidad?
 + Aplicar medidas de seguridad en todo el ciclo
 ✓ Cada control puede fallar. Con controles en cada fase, el atacante que pasa uno se encuentra con el siguiente.
@@ -90,7 +88,7 @@ El borrador tiene un bloque por pregunta:
 - «Auditar la seguridad una vez» | la seguridad cubre todo el ciclo
 ```
 
-- El encabezado da el `concepto` y la página de la `fuente`. El PDF de la `fuente` es el PDF del tema del apartado en `examen.json`. Un apartado de varios temas da un error.
+- El encabezado da el `concepto`. El creador lo escribe antes en `conceptos.json`, con su idea y su `fuente`.
 - La línea sin marca es el enunciado, y la línea `+` es la correcta.
 - La línea `✓` es obligatoria, y es la primera línea de la `explicacion`.
 - Una línea `-` es un distractor, con su clave entre `«»` y su matiz después de un solo `|`. La clave es la parte que separa el distractor de los demás, y no el arranque que comparten. `importar` quita las comillas del distractor y escribe la línea `✗ «clave»: matiz`. Un distractor sin `«»`, o con un `|` que falta o que sobra, da un error.
@@ -128,7 +126,7 @@ Cada apartado que escribe un agente lleva una revisión completa al acabar. La r
 
 ## La revisión completa
 
-Un agente que no escribió las preguntas revisa el apartado entero: compara cada pregunta con su página y con las reglas. El revisor comprueba también que la `fuente` es la página que explica la idea, y juzga cada razón de `sin_pregunta` de su PDF. El revisor acaba cuando juzgó cada pregunta del tema y cada razón de `sin_pregunta` de su PDF. Un fallo señala la página o la regla que rompe la pregunta.
+Un agente que no escribió las preguntas revisa el apartado entero: compara cada pregunta con su página y con las reglas. El revisor comprueba también que la `fuente` de cada concepto es la página que explica la idea, y juzga cada razón de `sin_pregunta` de su PDF. El revisor acaba cuando juzgó cada pregunta del tema y cada razón de `sin_pregunta` de su PDF. Un fallo señala la página o la regla que rompe la pregunta.
 
 El revisor deja el banco como está, y escribe un informe en JSON con una lista de fallos, en `<examen>/trabajo/revision-<apartado>.json`. Al acabar, devuelve en pocas líneas el número de fallos graves y leves, y los 3 fallos más importantes.
 
@@ -143,9 +141,9 @@ El revisor deja el banco como está, y escribe un informe en JSON con una lista 
 ```
 
 - `id` es la pregunta del fallo, o `null` para un fallo sin pregunta, como una página con una idea y sin concepto. El texto del fallo da entonces la página.
-- `regla` es el número de la regla rota, y 0 para una `fuente` equivocada.
+- `regla` es el número de la regla rota, y 0 para una `fuente` de concepto equivocada.
 - `gravedad` es `grave` para un fallo de la regla 3, y `leve` para el resto, también una `fuente` equivocada.
-- `arreglo` da los campos nuevos de la pregunta, o `null` para un fallo sin arreglo claro. Un arreglo cambia solo `pregunta`, `correcta`, `distractores`, `explicacion` y `fuente`. Su `explicacion` sigue la regla 8.
+- `arreglo` da los campos nuevos de la pregunta, o `null` para un fallo sin arreglo claro. Un arreglo cambia solo `pregunta`, `correcta`, `distractores` y `explicacion`. Una `fuente` equivocada se arregla a mano en `conceptos.json`. Su `explicacion` sigue la regla 8.
 
 Un agente aplica los informes:
 

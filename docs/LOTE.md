@@ -40,7 +40,7 @@ app/target/debug/banco montar ps introduccion claves
 
 Los `id` no chocan, porque cada uno empieza por su apartado. Después, el agente principal hace esto:
 
-1. Corre `banco comprobar <examen>`. Una sigla de dos apartados da un concepto con 2 preguntas. Su pregunta queda en el apartado cuya `fuente` explica la sigla, y la otra se borra.
+1. Corre `banco comprobar <examen>`. Una sigla de dos apartados da un concepto con 2 preguntas. Su pregunta queda en el apartado cuya página explica la sigla, y la otra se borra con su concepto.
 2. Comprueba que cada punto marcado del `README.md` tiene su concepto. Un punto que ningún creador cubrió entra con un borrador y `banco importar`.
 3. Corre los tests, cambia la cifra de preguntas del `README.md` del examen y hace el commit. El commit separa el banco de los creadores de los arreglos de la revisión.
 

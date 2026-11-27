@@ -1,6 +1,6 @@
 # El modelo de la práctica
 
-El banco de un examen son 3 archivos: `conceptos.json`, `preguntas.json` con las preguntas de test, y `desarrollo.json` con las de desarrollo. Las preguntas salen de los conceptos, por [el ADR 0005](adr/0005-el-concepto-es-una-entidad.md). La página de una pregunta de test es la de su concepto. Un examen sin `conceptos.json` lleva la página en cada pregunta de test.
+El banco de un examen son 3 archivos: `conceptos.json`, `preguntas.json` con las preguntas de test, y `desarrollo.json` con las de desarrollo. Las preguntas salen de los conceptos, por [el ADR 0005](adr/0005-el-concepto-es-una-entidad.md). La página de una pregunta de test es la de su concepto. Las preguntas de un examen congelado sin `conceptos.json`, como LN, no tienen página.
 
 La app tiene 2 máquinas de estados: el estado de una pregunta y la ronda. El estado se calcula desde `respuestas.jsonl`. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
 
