@@ -416,7 +416,7 @@
   {
     "id": "introduccion-ejemplo-claves",
     "apartado": "introduccion",
-    "idea": "En el protocolo de ejemplo, la inicialización deriva de la clave K cuatro claves con SHA-d-256, de cifrado y autenticación para cada sentido, y el rol decide cuál envía.",
+    "idea": "En el protocolo de ejemplo, la inicialización deriva de la clave K cuatro claves con SHA-d-256, de cifrado y autenticación para cada sentido, y el rol intercambia las de envío y las de recepción.",
     "fuente": {
       "pdf": "1_Introduccion.pdf",
       "pagina": 36
@@ -740,7 +740,7 @@
   {
     "id": "claves-crlset-onecrl",
     "apartado": "claves",
-    "idea": "Chrome usa CRLSet y Firefox usa OneCRL, listas de certificados revocados de las principales CAs integradas en el navegador, en lugar de consultar CRL u OCSP.",
+    "idea": "Chrome no implementa OCSP ni CRL y usa CRLSet, y Firefox usa OCSP pero no CRL y añade OneCRL: listas de certificados revocados de las principales CAs integradas en el propio navegador.",
     "fuente": {
       "pdf": "2_Claves.pdf",
       "pagina": 27
@@ -1514,7 +1514,7 @@
   {
     "id": "aplicacion-ssh-pila",
     "apartado": "aplicacion",
-    "idea": "La pila de SSH pone el SSH Transport Layer Protocol sobre TCP, con autenticación del servidor, confidencialidad e integridad, y sobre él el Connection Protocol multiplexa canales lógicos.",
+    "idea": "La pila de SSH pone el SSH Transport Layer Protocol sobre TCP, con autenticación del servidor, confidencialidad e integridad, y sobre él el User Authentication Protocol autentica al usuario y el Connection Protocol multiplexa canales lógicos.",
     "fuente": {
       "pdf": "4_Aplicacion.pdf",
       "pagina": 15
@@ -2553,6 +2553,15 @@
     "fuente": {
       "pdf": "E_SSL_TLS.pdf",
       "pagina": 114
+    }
+  },
+  {
+    "id": "ssl-tls-prohibicion-tls10-tls11",
+    "apartado": "ssl-tls",
+    "idea": "TLS 1.0 y TLS 1.1 están prohibidas: un cliente no las incluye en el ClientHello, un servidor tampoco en el ServerHello, se rechaza la conexión que las usa, y se recomienda TLS 1.2 o 1.3.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 123
     }
   }
 ]

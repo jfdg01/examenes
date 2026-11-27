@@ -9214,5 +9214,41 @@
       "Domain over HTTPS"
     ],
     "explicacion": "✓ Envía las consultas DNS dentro de HTTPS, y así impide que un intermediario las lea o las manipule.\n✗ «DNS over HTTP»: DoH usa HTTPS, y no HTTP en claro\n✗ «Domain over HTTPS»: la D es de DNS, el sistema de nombres"
+  },
+  {
+    "id": "ssl-tls-124",
+    "concepto": "ssl-tls-prohibicion-tls10-tls11",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué versiones de TLS recomienda usar el documento que prohíbe TLS 1.0 y TLS 1.1?",
+    "correcta": "TLS 1.2 o TLS 1.3",
+    "distractores": [
+      "SSL v3 o TLS 1.2",
+      "TLS 1.1 con parches"
+    ],
+    "explicacion": "✓ El documento que prohíbe TLS 1.0 y TLS 1.1 recomienda pasar a TLS 1.2 o a TLS 1.3.\n✗ «SSL v3 o TLS 1.2»: SSL v3 también está prohibida\n✗ «TLS 1.1 con parches»: TLS 1.1 es una de las versiones prohibidas"
+  },
+  {
+    "id": "ssl-tls-125",
+    "concepto": "ssl-tls-prohibicion-tls10-tls11",
+    "apartado": "ssl-tls",
+    "pregunta": "Un cliente moderno cumple la prohibición de TLS 1.0 y TLS 1.1. ¿Qué hace con esas versiones en su ClientHello?",
+    "correcta": "No las incluye entre las versiones que soporta",
+    "distractores": [
+      "Las incluye al final de la lista, como última opción",
+      "Las incluye cuando el servidor lo pide en el ServerHello"
+    ],
+    "explicacion": "✓ Si el cliente no las ofrece, ningún servidor puede negociarlas, y un atacante no degrada la conexión a ellas.\n✗ «Las incluye al final»: ofrecerlas permite negociarlas\n✗ «Las incluye cuando el servidor»: el ClientHello va antes que el ServerHello, y no las ofrece nunca"
+  },
+  {
+    "id": "ssl-tls-126",
+    "concepto": "ssl-tls-prohibicion-tls10-tls11",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué debe hacer un servidor ante una conexión que intenta usar TLS 1.0 o TLS 1.1?",
+    "correcta": "Rechazar la conexión",
+    "distractores": [
+      "Aceptarla con un aviso en el registro del servidor",
+      "Degradarla a SSL v3 para mantener la compatibilidad"
+    ],
+    "explicacion": "✓ Aceptarla mantendría vivas versiones con debilidades conocidas, así que la conexión no se establece.\n✗ «Aceptarla con un aviso»: la conexión con una versión prohibida se rechaza\n✗ «Degradarla a SSL v3»: SSL v3 es más débil, y otro RFC la prohíbe"
   }
 ]
