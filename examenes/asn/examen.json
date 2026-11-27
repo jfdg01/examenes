@@ -4,6 +4,7 @@
   "opciones": 3,
   "minutos": 45,
   "penalizacion": 0.3333333333333333,
+  "congelado": true,
   "pdfs": {
     "1_Introduccion.pdf": {
       "nombre": "1. Introducción",

@@ -1,8 +1,8 @@
-// La comprobación de cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia de LN.
+// La comprobación de cada pantalla en el ancho del móvil y en el del PC, contra el servidor y una copia del examen de `prueba/`.
 // `npm run build` va antes. Las capturas quedan en `capturas/`.
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium, type Page } from "playwright";
@@ -11,21 +11,14 @@ const raiz = mkdtempSync(join(tmpdir(), "examenes-"));
 // Cada pantalla tiene su copia, porque el servidor guarda la ronda a medias de cada examen.
 for (const examen of ["movil", "pc"]) {
   mkdirSync(join(raiz, examen));
-  for (const f of ["examen.json", "preguntas.json"]) cpSync(join("../../examenes/ln", f), join(raiz, examen, f));
-  // Las pantallas prueban la página de una pregunta, y LN no tiene `conceptos.json`. La copia lleva uno de prueba:
-  // cada concepto tiene la página 1 del primer tema de su apartado.
-  const ln = JSON.parse(readFileSync("../../examenes/ln/examen.json", "utf8"));
-  const pdfDe = (apartado: string) => Object.keys(ln.pdfs).find((pdf) => ln.pdfs[pdf].apartados.includes(apartado));
-  const preguntas: { concepto: string; apartado: string }[] = JSON.parse(readFileSync("../../examenes/ln/preguntas.json", "utf8"));
-  const conceptos = new Map(preguntas.map((q) => [q.concepto, { id: q.concepto, apartado: q.apartado, idea: "Una idea.", fuente: { pdf: pdfDe(q.apartado), pagina: 1 } }]));
-  writeFileSync(join(raiz, examen, "conceptos.json"), JSON.stringify([...conceptos.values()]));
+  for (const f of ["examen.json", "preguntas.json", "conceptos.json"]) cpSync(join("prueba", f), join(raiz, examen, f));
 }
 spawnSync("cargo", ["build", "-q", "-p", "servidor"], { stdio: "inherit" });
 const servidor = spawn("../target/debug/servidor", [raiz, "127.0.0.1:8691"], { stdio: "ignore" });
 await new Promise((r) => setTimeout(r, 500));
 
 const navegador = await chromium.launch();
-// La copia de LN no tiene `paginas/`: cada página es una hoja en blanco de 600 × 800.
+// La copia no tiene `paginas/`: cada página es una hoja en blanco de 600 × 800.
 const hoja = await (await navegador.newPage({ viewport: { width: 600, height: 800 } })).screenshot();
 mkdirSync("capturas", { recursive: true });
 
@@ -146,7 +139,7 @@ try {
 
     // La selección: un tema desmarcado sale de la tarjeta y queda tras recargar. Sin nada marcado, los botones no van.
     const temas = lista.locator(".tema input");
-    assert.equal(await temas.count(), 5, "una casilla por tema de LN");
+    assert.equal(await temas.count(), 5, "una casilla por tema");
     await temas.nth(1).uncheck();
     await lista.getByText(/, con 4 de 5 temas$/).waitFor();
     await lista.reload();

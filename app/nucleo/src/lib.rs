@@ -109,7 +109,7 @@ pub struct PreguntaDeDesarrollo {
     pub puntos: Vec<String>,
 }
 
-/// La página de cada pregunta de test, que es la de su concepto. Una pregunta de un examen congelado sin `conceptos.json`, como LN,
+/// La página de cada pregunta de test, que es la de su concepto. Una pregunta de un examen congelado sin `conceptos.json`
 /// no tiene página, y está en cada tema que lleva su apartado.
 struct Paginas<'a> {
     examen: &'a Examen,
