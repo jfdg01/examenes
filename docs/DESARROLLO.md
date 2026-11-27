@@ -40,12 +40,13 @@ Una candidata es un tema de una pregunta posible: una sección del índice del P
 1. Lo que marcó el profesor, en el orden del `README.md`.
 2. Las secciones del índice del PDF, de las de más páginas a las de menos. Un PDF sin índice usa los títulos de sus diapositivas.
 
-Una candidata entra si junta 4 conceptos o más que ninguna candidata anterior usa. Si no, queda fuera. El corte sale de los conceptos: el apartado acaba cuando ninguna candidata restante junta 4 conceptos libres. Un concepto puede quedar sin pregunta de desarrollo, porque el test lo cubre.
+El corte es una guía: una candidata entra si junta 4 conceptos o más que ninguna candidata anterior usa, y si no, queda fuera. Una candidata con menos conceptos libres entra si el creador da su razón en `candidatas.md`. Un concepto puede quedar sin pregunta de desarrollo, porque el test lo cubre.
 
 El creador deja la lista en `<examen>/trabajo/<apartado>/candidatas.md`, en su orden, con una línea por candidata:
 
 ```
 - dentro aplicacion-d003 · marcado: «El handshake de SSH» · proceso · 6 puntos
+- dentro aplicacion-d007 · índice: «SSH frente a TLS», páginas 40 a 44 · comparacion · 3 conceptos libres · razón: el temario los compara en una tabla
 - fuera · índice: «HPKP», páginas 30 a 31 · 2 conceptos libres
 ```
 
@@ -110,7 +111,7 @@ Al acabar, el creador devuelve en pocas líneas el número de preguntas y de can
 Un agente que no escribió las preguntas revisa el apartado entero. El revisor acaba cuando juzgó cada pregunta y el corte de `candidatas.md`:
 
 - **Cada pregunta:** cada punto está en el modelo (regla 4), el modelo no dice nada fuera de sus puntos (regla 5), y el modelo es cierto según la página de cada punto.
-- **El corte:** el orden de las candidatas sigue «La elección de las candidatas», y ninguna candidata fuera pesa más que una dentro. Una candidata fuera pesa más si el profesor la marcó, o si su sección tiene más páginas.
+- **El corte:** el orden de las candidatas sigue «La elección de las candidatas», y ninguna candidata fuera pesa más que una dentro. Una candidata fuera pesa más si el profesor la marcó, o si su sección tiene más páginas. Una candidata dentro con menos de 4 conceptos libres tiene una razón que convence.
 
 El revisor deja el banco como está, y escribe un informe en JSON con una lista de fallos, en `<examen>/trabajo/revision-<apartado>.json`. Al acabar, devuelve en pocas líneas el número de fallos graves y leves, y los 3 fallos más importantes.
 
@@ -126,7 +127,7 @@ El revisor deja el banco como está, y escribe un informe en JSON con una lista 
 
 - `id` es la pregunta del fallo, o `null` para un fallo del corte. El texto del fallo da entonces la candidata.
 - `regla` es el número de la regla rota, y 0 para un fallo del corte.
-- `gravedad` es `grave` para un modelo falso según una página, para un punto que el modelo no cubre y para un fallo del corte, y `leve` para el resto.
+- `gravedad` es `grave` para un modelo falso según una página y para un punto que el modelo no cubre, y `leve` para el resto, también para un fallo del corte.
 - `arreglo` da los campos nuevos de la pregunta, o `null` para un fallo sin arreglo claro. Un arreglo cambia solo `forma`, `enunciado`, `modelo` y `puntos`.
 
 `banco revision <examen> desarrollo <informe>...` aplica los arreglos y lista los fallos sin aplicar con `A mano:`.
