@@ -1,0 +1,110 @@
+[
+  {
+    "id": "bloques-modos-necesidad",
+    "apartado": "bloques",
+    "idea": "Un cifrado por bloques necesita un modo de operación porque el mensaje suele superar un bloque: lo rellena, trocea, cifra y ensambla, y relaciona los bloques entre sí.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "bloques-ecb",
+    "apartado": "bloques",
+    "idea": "El modo ECB cifra cada bloque por separado con la misma clave, así que bloques iguales dan cifrados iguales, dejan ver formas en una imagen y permiten permutar bloques.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "bloques-cbc",
+    "apartado": "bloques",
+    "idea": "El modo CBC combina con XOR cada bloque claro con el bloque cifrado anterior, un vector de inicialización distinto cambia el criptograma, y esa dependencia permite verificar la integridad.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "bloques-cfb",
+    "apartado": "bloques",
+    "idea": "El modo CFB cifra el bloque cifrado anterior y lo combina con el bloque claro, el receptor usa también la función de cifrado, y admite datos menores que un bloque.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "bloques-ofb",
+    "apartado": "bloques",
+    "idea": "El modo OFB genera, solo con la clave y el vector de inicialización, una secuencia calculable por adelantado, que combina con el mensaje mediante XOR como un cifrado de flujo.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "bloques-ctr",
+    "apartado": "bloques",
+    "idea": "El modo CTR cifra un contador distinto en cada bloque para generar la secuencia, así que se puede calcular en paralelo y descifrar cualquier bloque sin calcular los demás.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "flujo-modos-sincronia",
+    "apartado": "flujo",
+    "idea": "CFB es un generador de secuencia asíncrono que se resincroniza tras perder un bloque, mientras que en OFB perder un bit rompe la sincronía y corrompe el resto del mensaje.",
+    "fuente": {
+      "pdf": "3.1.Cifrados_Flujo_p.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "sigla-ecb",
+    "apartado": "bloques",
+    "idea": "ECB significa Electronic Codebook, el libro de códigos electrónico, un modo de operación del cifrado por bloques.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "sigla-cbc",
+    "apartado": "bloques",
+    "idea": "CBC significa Cipher Block Chaining, el encadenamiento de bloques cifrados, un modo de operación del cifrado por bloques.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "sigla-cfb",
+    "apartado": "bloques",
+    "idea": "CFB significa Cipher Feedback, la realimentación del cifrado, un modo de operación del cifrado por bloques.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "sigla-ofb",
+    "apartado": "bloques",
+    "idea": "OFB significa Output Feedback, la realimentación de la salida, un modo de operación del cifrado por bloques.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "sigla-ctr",
+    "apartado": "bloques",
+    "idea": "CTR significa Counter, el contador, un modo de operación del cifrado por bloques.",
+    "fuente": {
+      "pdf": "2.1.Cifrados_Bloques_p.pdf",
+      "pagina": 16
+    }
+  }
+]

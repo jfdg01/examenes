@@ -12,7 +12,7 @@ use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::get;
-use nucleo::{Concepto, Datos, Examen, ExamenDeLaLista, Guardado, Nota, Pregunta, PreguntaDeDesarrollo, Respuesta};
+use nucleo::{Datos, Examen, ExamenDeLaLista, Guardado, Nota, Pregunta, PreguntaDeDesarrollo, Respuesta};
 use tower_http::compression::CompressionLayer;
 use tower_http::services::ServeDir;
 
@@ -165,21 +165,17 @@ async fn editar(
     leer_examen(&carpetas, &examen).await?;
     let _cerrojo = carpetas.cerrojo.lock().await;
     let mut banco: Vec<Pregunta> = leer_lista(&carpetas, &examen, "preguntas.json").await?;
-    let conceptos: Vec<Concepto> = leer_lista(&carpetas, &examen, "conceptos.json").await?;
-    let con_fuentes = nucleo::con_fuentes(banco.clone(), &conceptos).map_err(error_interno)?;
-    let i = banco.iter().position(|q| q.id == nueva.id).ok_or_else(|| StatusCode::NOT_FOUND.into_response())?;
-    let q = &con_fuentes[i];
+    let q = banco.iter_mut().find(|q| q.id == nueva.id).ok_or_else(|| StatusCode::NOT_FOUND.into_response())?;
     let en_blanco = [&nueva.pregunta, &nueva.correcta, &nueva.explicacion]
         .into_iter()
         .chain(&nueva.distractores)
         .any(|t| t.trim().is_empty());
-    let solo_textos = (&q.concepto, &q.apartado, &q.fuente, q.distractores.len())
-        == (&nueva.concepto, &nueva.apartado, &nueva.fuente, nueva.distractores.len());
+    let solo_textos =
+        (&q.concepto, &q.apartado, q.distractores.len()) == (&nueva.concepto, &nueva.apartado, nueva.distractores.len());
     if !solo_textos || en_blanco {
         return Err((StatusCode::UNPROCESSABLE_ENTITY, "solo cambian los textos, y ninguno va en blanco").into_response());
     }
-    // Una pregunta con concepto sigue sin `fuente` en `preguntas.json`.
-    banco[i] = Pregunta { fuente: banco[i].fuente.take(), ..nueva };
+    *q = nueva;
     let texto = serde_json::to_string_pretty(&banco).map_err(error_interno)? + "\n";
     escribir(carpetas.raiz.join(&examen).join("preguntas.json"), texto).await?;
     Ok(StatusCode::NO_CONTENT)
@@ -200,8 +196,7 @@ async fn inicio(State(carpetas): Estado, Path(examen): Path<String>) -> Result<a
     let datos = leer_examen(&carpetas, &examen).await?;
     let _cerrojo = carpetas.cerrojo.lock().await;
     let conceptos = leer_lista(&carpetas, &examen, "conceptos.json").await?;
-    let banco =
-        nucleo::con_fuentes(leer_lista(&carpetas, &examen, "preguntas.json").await?, &conceptos).map_err(error_interno)?;
+    let banco = leer_lista(&carpetas, &examen, "preguntas.json").await?;
     let desarrollo: Vec<PreguntaDeDesarrollo> = leer_lista(&carpetas, &examen, "desarrollo.json").await?;
     let historial = leer_historial(&carpetas, &examen).await?;
     Ok(axum::Json(Datos { examen: datos, banco, conceptos, desarrollo, historial }))

@@ -2,7 +2,7 @@
 // `npm run build` va antes. Las capturas quedan en `capturas/`.
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium, type Page } from "playwright";
@@ -12,6 +12,13 @@ const raiz = mkdtempSync(join(tmpdir(), "examenes-"));
 for (const examen of ["movil", "pc"]) {
   mkdirSync(join(raiz, examen));
   for (const f of ["examen.json", "preguntas.json"]) cpSync(join("../../examenes/ln", f), join(raiz, examen, f));
+  // Las pantallas prueban la página de una pregunta, y LN no tiene `conceptos.json`. La copia lleva uno de prueba:
+  // cada concepto tiene la página 1 del primer tema de su apartado.
+  const ln = JSON.parse(readFileSync("../../examenes/ln/examen.json", "utf8"));
+  const pdfDe = (apartado: string) => Object.keys(ln.pdfs).find((pdf) => ln.pdfs[pdf].apartados.includes(apartado));
+  const preguntas: { concepto: string; apartado: string }[] = JSON.parse(readFileSync("../../examenes/ln/preguntas.json", "utf8"));
+  const conceptos = new Map(preguntas.map((q) => [q.concepto, { id: q.concepto, apartado: q.apartado, idea: "Una idea.", fuente: { pdf: pdfDe(q.apartado), pagina: 1 } }]));
+  writeFileSync(join(raiz, examen, "conceptos.json"), JSON.stringify([...conceptos.values()]));
 }
 spawnSync("cargo", ["build", "-q", "-p", "servidor"], { stdio: "inherit" });
 const servidor = spawn("../target/debug/servidor", [raiz, "127.0.0.1:8691"], { stdio: "ignore" });

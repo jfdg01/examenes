@@ -363,7 +363,7 @@
       onsoltar={() => localStorage.setItem(claveColumnas, JSON.stringify(columnas))}
     />
   </div>
-  {#if pagina}<PaginaCompleta {q} oncerrar={() => history.back()} />{/if}
+  {#if pagina && q.pagina}<PaginaCompleta pagina={q.pagina} oncerrar={() => history.back()} />{/if}
 {:else}
   <Final
     {simulacro}

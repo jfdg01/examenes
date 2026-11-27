@@ -1,0 +1,2693 @@
+[
+  {
+    "id": "introduccion-propiedades-nube",
+    "apartado": "introduccion",
+    "idea": "La nube se define por recursos homogéneos de cómputo, almacenamiento y red que comparten los clientes y se pagan por consumo medido, y exige aplicaciones adaptadas con seguridad específica.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "introduccion-elasticidad",
+    "apartado": "introduccion",
+    "idea": "Las aplicaciones en la nube son elásticas: escalan horizontalmente aumentando componentes, con recursos que se aprovisionan y liberan según la demanda, monitorizando la carga y usando la API del proveedor.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "introduccion-propiedades-aplicaciones",
+    "apartado": "introduccion",
+    "idea": "Las aplicaciones en la nube son distribuidas, con componentes de bajo acoplamiento que interaccionan por la red, y sin estado, para aprovisionar o retirar componentes sin perder información.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "introduccion-ventajas-nube",
+    "apartado": "introduccion",
+    "idea": "La nube cambia los costes inventariables de hardware propio por costes operativos de pago por uso, y libera al cliente de adquirir, reparar y migrar equipos y gestionar el centro.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "introduccion-inconvenientes-nube",
+    "apartado": "introduccion",
+    "idea": "Las aplicaciones en la nube tienen inconvenientes: pérdida de control de recursos, lock-in con el proveedor, legislación según la ubicación de los datos y riesgo de borrado incompleto o inseguro.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "introduccion-virtualizacion",
+    "apartado": "introduccion",
+    "idea": "La virtualización de hardware abstrae los recursos de un ordenador real y permite mover y copiar una máquina virtual como fichero, a diferencia de WSL1 o Wine.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "introduccion-tipos-hipervisor",
+    "apartado": "introduccion",
+    "idea": "Un hipervisor de tipo 1, o bare metal, accede directamente al hardware, y uno de tipo 2, como VirtualBox, trabaja sobre un sistema operativo anfitrión.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "introduccion-tipos-nube",
+    "apartado": "introduccion",
+    "idea": "Las nubes son privadas, si las usa en exclusiva una organización, compartidas, si las comparten varias como RedIris, o híbridas, con sistemas repartidos entre tipos de nubes que interaccionan.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "introduccion-sla-disponibilidad",
+    "apartado": "introduccion",
+    "idea": "El SLA garantiza un nivel de disponibilidad, un porcentaje de tiempo con el recurso accesible, que cubre también lanzar máquinas o replicar en zonas y se multiplica en serie.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "introduccion-tecnologias-nube",
+    "apartado": "introduccion",
+    "idea": "La nube usa clustering de equipos similares con tarea común y reparto de carga, y computación distribuida de equipos diferentes conectados por red, cuyos componentes interaccionan con middleware.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "introduccion-iaas",
+    "apartado": "introduccion",
+    "idea": "En IaaS, el proveedor ofrece máquinas virtuales genéricas, almacenamiento y redes virtuales, y el cliente instala el sistema, configura los recursos y gestiona las aplicaciones.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "introduccion-paas",
+    "apartado": "introduccion",
+    "idea": "En PaaS, el proveedor ofrece un sistema operativo preconfigurado, herramientas de desarrollo y servicios como bases de datos y colas, y el cliente gestiona sus aplicaciones y ajustes del entorno.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "introduccion-caas",
+    "apartado": "introduccion",
+    "idea": "En CaaS, el cliente aporta un contenedor con su programa y sus recursos, que corre de forma restringida sobre el núcleo del anfitrión y es compatible entre proveedores.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "introduccion-faas",
+    "apartado": "introduccion",
+    "idea": "En FaaS, o serverless, el cliente aporta código que se ejecuta ante eventos, mensajes o peticiones HTTP, escala automáticamente y se paga por tiempo de cómputo, ejecuciones o memoria.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "introduccion-saas",
+    "apartado": "introduccion",
+    "idea": "En SaaS el proveedor gestiona la aplicación, la plataforma y la infraestructura, y el cliente solo configura funcionalidades y gestiona usuarios.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "introduccion-vulnerabilidad-amenaza-riesgo",
+    "apartado": "introduccion",
+    "idea": "Una vulnerabilidad es una debilidad explotable de un sistema, y el riesgo es la probabilidad de que una amenaza la explote y cause pérdida.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "introduccion-propiedades-seguridad",
+    "apartado": "introduccion",
+    "idea": "La seguridad informática protege los datos con confidencialidad, integridad y no repudio, y la integridad cubre los datos almacenados, en memoria y en tránsito.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "introduccion-cve",
+    "apartado": "introduccion",
+    "idea": "El estándar CVE da a cada vulnerabilidad concreta y conocida un identificador único con el prefijo CVE, el año y un número de orden.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "introduccion-clasificacion-vulnerabilidades",
+    "apartado": "introduccion",
+    "idea": "Las vulnerabilidades se clasifican por sus efectos o áreas (STRIDE, ASF), por su impacto o riesgo (DREAD, CVSS) o por su probabilidad de explotación (EPSS).",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "introduccion-stride",
+    "apartado": "introduccion",
+    "idea": "STRIDE, de Microsoft, clasifica las amenazas según la propiedad de seguridad que rompen, como la autenticidad en la suplantación o la autorización en la elevación de privilegios.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "introduccion-organizaciones-seguridad",
+    "apartado": "introduccion",
+    "idea": "MITRE publica ATT&CK Cloud Matrix con las técnicas de los atacantes en la nube, FIRST puntúa impacto y explotación (CVSS y EPSS) y NIST mantiene la base nacional de vulnerabilidades.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "introduccion-fuentes-vulnerabilidades",
+    "apartado": "introduccion",
+    "idea": "Las vulnerabilidades se consultan en agregadores como OSV, en Exploit Database con su código de ataque y en los sitios de seguridad y listas de distribución de cada producto.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "introduccion-csa-top-threats",
+    "apartado": "introduccion",
+    "idea": "El informe Top Threats de la CSA lista las amenazas propias de la nube, encabezadas por la gestión deficiente de identidades y acceso, e incluye amenazas relacionadas con la IA.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "introduccion-csa-guidance",
+    "apartado": "introduccion",
+    "idea": "La CSA Security Guidance reúne buenas prácticas de seguridad en la nube organizadas en dominios, como la seguridad de la carga de trabajo, y se armoniza con NIST e ISO/IEC.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "introduccion-ccm",
+    "apartado": "introduccion",
+    "idea": "La CCM de la CSA ofrece controles de seguridad, como LOG para registro y monitorización, con equivalencias en ISO, NIST, CIS y ENS para implementar o auditar.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "introduccion-amenaza-iam",
+    "apartado": "introduccion",
+    "idea": "La mala gestión de identidades y acceso deja cuentas sin control de ciclo de vida, y las identidades no humanas multiplican credenciales de servicios, API keys y agentes de IA.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "introduccion-organizaciones-nube",
+    "apartado": "introduccion",
+    "idea": "La CSA ofrece la certificación CCSK, OWASP difunde buenas prácticas con proyectos abiertos y ENISA es la agencia de la Unión Europea para la seguridad de redes e información.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "introduccion-recomendaciones",
+    "apartado": "introduccion",
+    "idea": "Para asegurar la nube hay que cambiar las claves y configuraciones por defecto, revocar las cuentas de antiguos empleados y evitar construir una nube propia.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "sigla-cve",
+    "apartado": "introduccion",
+    "idea": "CVE significa Common Vulnerabilities and Exposures, el estándar que da a cada vulnerabilidad conocida un identificador único.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "sigla-nvd",
+    "apartado": "introduccion",
+    "idea": "NVD significa National Vulnerability Database, la base de datos nacional de vulnerabilidades que reúne los CVE con su análisis de impacto.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "sigla-osv",
+    "apartado": "introduccion",
+    "idea": "OSV significa Open Source Vulnerabilities, el agregador de vulnerabilidades de paquetes de código abierto.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "sigla-csa",
+    "apartado": "introduccion",
+    "idea": "CSA significa Cloud Security Alliance, la organización que publica la guía de buenas prácticas y los controles de la CCM para la nube.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-owasp",
+    "apartado": "introduccion",
+    "idea": "OWASP significa Open Web Application Security Project, la fundación abierta que publica guías de seguridad web como el OWASP Top 10.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-ccsk",
+    "apartado": "introduccion",
+    "idea": "CCSK significa Certificate of Cloud Security Knowledge, la certificación que acredita conocer la guía de seguridad de la CSA.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-iam",
+    "apartado": "introduccion",
+    "idea": "IAM significa Identity and Access Management, la gestión de identidades y acceso que controla quién tiene cada cuenta y qué puede hacer.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "sigla-nhi",
+    "apartado": "introduccion",
+    "idea": "NHI significa Non-Human Identities, las identidades no humanas, es decir, las credenciales de máquinas, servicios y agentes que no son personas.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "sigla-ccm",
+    "apartado": "introduccion",
+    "idea": "CCM significa Cloud Controls Matrix, la matriz de controles de seguridad de la CSA agrupados en dominios para evaluar proveedores de nube.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "sigla-ens",
+    "apartado": "introduccion",
+    "idea": "ENS significa Esquema Nacional de Seguridad, que fija las medidas de seguridad de los sistemas de la administración pública española.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "introduccion-seguridad-especifica-nube",
+    "apartado": "introduccion",
+    "idea": "La nube plantea aspectos de seguridad propios: el coste por utilización, la gestión compartida a través de la red, y la disponibilidad, escalabilidad y elasticidad que dependen del proveedor.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "sigla-first",
+    "apartado": "introduccion",
+    "idea": "FIRST significa Forum of Incident Response and Security Teams, el foro que reúne equipos de respuesta a incidentes para intercambiar información y buenas prácticas.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-nist",
+    "apartado": "introduccion",
+    "idea": "NIST significa National Institute of Standards and Technology, que publica estándares y guías de seguridad como el SSDF y la base NVD.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-enisa",
+    "apartado": "introduccion",
+    "idea": "ENISA significa European Union Agency for Network and Information Security, que asesora a la Unión Europea con informes y recomendaciones de seguridad.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "ciclo-de-vida-defensa-en-profundidad",
+    "apartado": "ciclo-de-vida",
+    "idea": "El desarrollo seguro aplica defensa en profundidad, con varias medidas superpuestas durante todo el ciclo, y se apoya en modelos S-SDLC como el NIST SSDF.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "ciclo-de-vida-fases",
+    "apartado": "ciclo-de-vida",
+    "idea": "El ciclo de desarrollo seguro tiene fases: el análisis identifica amenazas y fija requisitos, la implementación y el despliegue configuran servicios y bibliotecas, y el seguimiento monitoriza y verifica continuamente.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "ciclo-de-vida-elementos-amenaza",
+    "apartado": "ciclo-de-vida",
+    "idea": "Una amenaza depende de los agentes, el tipo de ataque y la vulnerabilidad explotada, y cada combinación es un riesgo potencial con impacto técnico y de negocio.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "ciclo-de-vida-stride-propiedades",
+    "apartado": "ciclo-de-vida",
+    "idea": "Cada categoría de STRIDE amenaza una propiedad de seguridad: spoofing la autenticación, tampering la integridad y la elevación de privilegios la autorización.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "ciclo-de-vida-cvss",
+    "apartado": "ciclo-de-vida",
+    "idea": "CVSS puntúa de 1 a 10 la severidad de una vulnerabilidad, y su calificación base pondera el impacto al 60% y la explotación al 40%.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "ciclo-de-vida-cvss-vector",
+    "apartado": "ciclo-de-vida",
+    "idea": "El vector CVSS describe la explotación con métricas como el vector de ataque, la complejidad, los privilegios, la interacción del usuario y el alcance.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "ciclo-de-vida-epss",
+    "apartado": "ciclo-de-vida",
+    "idea": "EPSS estima de 0 a 100% la probabilidad de explotación de una vulnerabilidad con datos empíricos, y complementa la severidad de CVSS para priorizar la mitigación.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "ciclo-de-vida-registros-explotadas",
+    "apartado": "ciclo-de-vida",
+    "idea": "El catálogo KEV de la CISA, la Fundación Shadowserver con sus honeypots y la EUVD de ENISA registran las vulnerabilidades que se explotan realmente.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "sigla-s-sdlc",
+    "apartado": "ciclo-de-vida",
+    "idea": "S-SDLC significa Security Software Development Life-Cycle, el ciclo de vida de desarrollo de software que incorpora la seguridad en cada fase.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "sigla-dread",
+    "apartado": "ciclo-de-vida",
+    "idea": "DREAD, de Microsoft, puntúa el riesgo con cinco factores: Damage, Reproducibility, Exploitability, Affected users y Discoverability.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "sigla-epss",
+    "apartado": "ciclo-de-vida",
+    "idea": "EPSS significa Exploit Prediction Scoring System, el sistema que estima la probabilidad de que se explote una vulnerabilidad.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "sigla-cvss",
+    "apartado": "ciclo-de-vida",
+    "idea": "CVSS significa Common Vulnerability Scoring System, el sistema común que puntúa la severidad de las vulnerabilidades.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "sigla-kev",
+    "apartado": "ciclo-de-vida",
+    "idea": "KEV significa Known Exploited Vulnerabilities, el catálogo de la CISA con las vulnerabilidades cuya explotación está confirmada.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "ciclo-de-vida-requisitos-origen",
+    "apartado": "ciclo-de-vida",
+    "idea": "Los requisitos de seguridad de una aplicación en la nube provienen de la legislación, normativas, certificaciones o contratos, y se concretan en controles, con guías como ISO/IEC 27034.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "ciclo-de-vida-asvs-niveles",
+    "apartado": "ciclo-de-vida",
+    "idea": "OWASP ASVS tiene tres niveles: L1 básico con unos 70 controles y poco esfuerzo, L2 normal con unos 175 y L3 avanzado con todos, para datos muy sensibles.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "ciclo-de-vida-asvs-estructura",
+    "apartado": "ciclo-de-vida",
+    "idea": "OWASP ASVS 5.0 organiza unos 350 controles en 17 categorías, como la gestión de sesiones, y sirve de guía en la planificación y de lista de comprobación en la verificación.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "ciclo-de-vida-cwe",
+    "apartado": "ciclo-de-vida",
+    "idea": "CWE, de MITRE, cataloga las debilidades habituales del software con ejemplos y alternativas seguras, y las herramientas de análisis estático lo usan para indicar cómo corregirlas.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "ciclo-de-vida-control-acceso",
+    "apartado": "ciclo-de-vida",
+    "idea": "Un control de acceso insuficiente permite al atacante manipular la petición HTTP, y se evita verificando los privilegios por recurso, denegando por defecto y usando referencias temporales en las URL.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "ciclo-de-vida-control-acceso-dto",
+    "apartado": "ciclo-de-vida",
+    "idea": "En Spring, un DTO limita los campos que una petición puede modificar y @PreAuthorize controla por rol o por usuario autenticado quién puede ejecutar cada método.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "ciclo-de-vida-csrf",
+    "apartado": "ciclo-de-vida",
+    "idea": "CSRF hace que el navegador de la víctima envíe peticiones no autorizadas a un sitio donde tiene sesión, porque adjunta sus cookies, aunque la Same-Origin Policy impide leer la respuesta.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "ciclo-de-vida-csrf-contramedidas",
+    "apartado": "ciclo-de-vida",
+    "idea": "Frente a CSRF, el servidor verifica un nonce impredecible de un solo uso y los encabezados Origin, Referer y Host, y exige doble autenticación en las operaciones críticas.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "ciclo-de-vida-csrf-token",
+    "apartado": "ciclo-de-vida",
+    "idea": "El token sincronizado contra CSRF es único por sesión, va en un campo oculto del formulario, y el servidor rechaza la petición si no coincide con el esperado.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "ciclo-de-vida-csrf-sin-estado",
+    "apartado": "ciclo-de-vida",
+    "idea": "Los métodos CSRF sin estado son el doble token en petición y cookie, el token cifrado en servidor y el encabezado sec-fetch-site, que el navegador fija.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "ciclo-de-vida-samesite",
+    "apartado": "ciclo-de-vida",
+    "idea": "La propiedad SameSite de una cookie evita su envío en peticiones iniciadas desde otros sitios, con Strict en cualquier petición externa y Lax permitiendo navegaciones GET, y protege contra CSRF.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "ciclo-de-vida-cors",
+    "apartado": "ciclo-de-vida",
+    "idea": "CORS es el mecanismo con que un servidor autoriza a otros orígenes a leer sus respuestas, que el navegador oculta por defecto, y usa preflight antes de enviar cookies.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "ciclo-de-vida-cors-cabeceras",
+    "apartado": "ciclo-de-vida",
+    "idea": "En CORS, Access-Control-Allow-Origin indica los orígenes admitidos, y el valor * solo es aceptable en APIs públicas de consulta, porque con cookies sin SameSite permite exfiltrar datos del usuario.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "sigla-asvs",
+    "apartado": "ciclo-de-vida",
+    "idea": "ASVS significa Application Security Verification Standard, el estándar de OWASP con controles verificables para planificar y comprobar la seguridad de una aplicación.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "sigla-cwe",
+    "apartado": "ciclo-de-vida",
+    "idea": "CWE significa Common Weakness Enumeration, el catálogo de MITRE de los tipos de debilidad del software.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "sigla-csrf",
+    "apartado": "ciclo-de-vida",
+    "idea": "CSRF significa Cross-Site Request Forgery, la falsificación de peticiones entre sitios que usa la sesión abierta de la víctima.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "sigla-cors",
+    "apartado": "ciclo-de-vida",
+    "idea": "CORS significa Cross-Origin Resource Sharing, el mecanismo con que un servidor autoriza a páginas de otros orígenes a leer sus respuestas.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "ciclo-de-vida-ssrf",
+    "apartado": "ciclo-de-vida",
+    "idea": "SSRF hace que el servidor acceda a URLs elegidas por el atacante, con la confianza de los servicios internos, y se evita con una lista blanca de destinos.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "ciclo-de-vida-config-insegura",
+    "apartado": "ciclo-de-vida",
+    "idea": "Las configuraciones inseguras, como credenciales por defecto, puertos sin uso, software sin actualizar o contenedores S3 públicos, abren la superficie de ataque y se evitan revisándolas.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "ciclo-de-vida-errores-info",
+    "apartado": "ciclo-de-vida",
+    "idea": "Una aplicación expone información sensible, como la versión del software o la traza de un error, y se evita con páginas de error genéricas y manejadores de excepciones.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "ciclo-de-vida-xxe",
+    "apartado": "ciclo-de-vida",
+    "idea": "XXE ocurre cuando un procesador XML mal configurado resuelve entidades externas, lo que permite leer ficheros, lanzar peticiones SSRF o causar denegación de servicio, y se previene desactivándolas.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "ciclo-de-vida-cadena-suministro",
+    "apartado": "ciclo-de-vida",
+    "idea": "En la cadena de suministro el atacante explota vulnerabilidades de componentes de terceros, y se mitiga actualizando dependencias a versiones fijas y filtrando peticiones con WAF o RASP.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "ciclo-de-vida-cripto-estados",
+    "apartado": "ciclo-de-vida",
+    "idea": "El cifrado protege los datos en reposo (DIR) y en uso (DIU), y un dato sensible mostrado al usuario se ofusca o se tokeniza.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "ciclo-de-vida-diseno-inseguro",
+    "apartado": "ciclo-de-vida",
+    "idea": "El diseño inseguro es la falta de controles de seguridad que la buena programación no suple, y se contrarresta con requisitos como ASVS, CCM o ENS.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "ciclo-de-vida-inyeccion",
+    "apartado": "ciclo-de-vida",
+    "idea": "En una inyección, datos no validados de una fuente externa llegan a un intérprete como SQL, LDAP, el sistema operativo o un LLM, y path traversal es un ejemplo.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "sigla-ssrf",
+    "apartado": "ciclo-de-vida",
+    "idea": "SSRF significa Server-Side Request Forgery, la falsificación de peticiones en el servidor, que hace que este consulte URLs elegidas por el atacante.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "sigla-xxe",
+    "apartado": "ciclo-de-vida",
+    "idea": "XXE significa XML eXternal Entity, el ataque que abusa del acceso a entidades externas en el procesamiento de XML.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "sigla-sbom",
+    "apartado": "ciclo-de-vida",
+    "idea": "SBOM significa Software Bill of Materials, la lista de componentes de un software que sirve para controlar su cadena de suministro.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "ciclo-de-vida-sqli-prevencion",
+    "apartado": "ciclo-de-vida",
+    "idea": "La inyección SQL se previene con consultas parametrizadas que separan instrucciones y datos, el escapado solo como último recurso y una cuenta de base de datos con los mínimos privilegios.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "ciclo-de-vida-xss",
+    "apartado": "ciclo-de-vida",
+    "idea": "XSS permite al atacante ejecutar JavaScript no autorizado en el navegador de la víctima, porque sus datos entran en el HTML generado como código.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "ciclo-de-vida-xss-tipos",
+    "apartado": "ciclo-de-vida",
+    "idea": "Los ataques XSS son almacenados si el código persiste en la aplicación, reflejados si los datos del cliente actualizan la página, o Client XSS si se inserta en el DOM.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 24
+    }
+  },
+  {
+    "id": "ciclo-de-vida-xss-proteccion",
+    "apartado": "ciclo-de-vida",
+    "idea": "La protección principal contra XSS es codificar los datos según su contexto de salida, evitar funciones como eval y validar y codificar tanto en el servidor como en el cliente.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 25
+    }
+  },
+  {
+    "id": "ciclo-de-vida-csp",
+    "apartado": "ciclo-de-vida",
+    "idea": "Content Security Policy previene XSS indicando el servidor, con el encabezado Content-Security-Policy o una etiqueta meta, qué fuentes son confiables, y su variante Report-Only sirve para probar la política.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "ciclo-de-vida-httponly",
+    "apartado": "ciclo-de-vida",
+    "idea": "La propiedad HttpOnly impide que el JavaScript lea una cookie, de modo que un XSS no puede robarla, pero el navegador la sigue enviando salvo que SameSite esté activo.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 27
+    }
+  },
+  {
+    "id": "ciclo-de-vida-prompt-injection",
+    "apartado": "ciclo-de-vida",
+    "idea": "La inyección en prompts manipula un LLM con instrucciones del atacante, y se limita separando con delimitadores datos e instrucciones y dando mínimo privilegio a sus accesos.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 28
+    }
+  },
+  {
+    "id": "ciclo-de-vida-autenticacion",
+    "apartado": "ciclo-de-vida",
+    "idea": "En un fallo de autenticación el atacante se hace pasar por otro usuario, y se evita con la gestión de autenticación del framework y con identificadores de sesión que caducan.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "ciclo-de-vida-hash-claves",
+    "apartado": "ciclo-de-vida",
+    "idea": "Las claves de usuario se almacenan con un hash robusto como Argon2id y una sal distinta, y nunca en texto plano ni enviadas por una conexión insegura.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "ciclo-de-vida-integridad-software",
+    "apartado": "ciclo-de-vida",
+    "idea": "En un fallo de integridad el atacante manipula dependencias o datos recibidos, y se detecta con firmas digitales, SRI, CSP o contenedores firmados, ejecutando en entornos aislados.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 30
+    }
+  },
+  {
+    "id": "ciclo-de-vida-sri",
+    "apartado": "ciclo-de-vida",
+    "idea": "SubResource Integrity comprueba con un hash que los recursos externos de script y link no cambiaron, y rechaza los que no coinciden ante un servidor comprometido o un MiTM.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 30
+    }
+  },
+  {
+    "id": "ciclo-de-vida-monitorizacion-registro",
+    "apartado": "ciclo-de-vida",
+    "idea": "El registro y la monitorización insuficientes dejan actuar al atacante sin respuesta, y se corrigen registrando los fallos de identificación, acceso y validación en un SIEM.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 31
+    }
+  },
+  {
+    "id": "ciclo-de-vida-excepciones",
+    "apartado": "ciclo-de-vida",
+    "idea": "La gestión inadecuada de situaciones excepcionales causa caídas o revela información, y se evita manejando errores y excepciones con validación y manejadores globales, sin devolver trazas al usuario.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 31
+    }
+  },
+  {
+    "id": "sigla-xss",
+    "apartado": "ciclo-de-vida",
+    "idea": "XSS significa Cross-Site Scripting, el ataque que ejecuta JavaScript no autorizado en el navegador de la víctima.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "sigla-csp",
+    "apartado": "ciclo-de-vida",
+    "idea": "CSP significa Content Security Policy, la política con que el servidor indica al navegador qué contenidos son de fuentes confiables.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "sigla-sri",
+    "apartado": "ciclo-de-vida",
+    "idea": "SRI significa SubResource Integrity, la comprobación con un hash de que un recurso externo no ha sido modificado.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 30
+    }
+  },
+  {
+    "id": "sigla-hsts",
+    "apartado": "ciclo-de-vida",
+    "idea": "HSTS significa HTTP Strict Transport Security, el mecanismo con que un servidor obliga al navegador a usar solo HTTPS.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "sigla-stride",
+    "apartado": "ciclo-de-vida",
+    "idea": "STRIDE significa Spoofing, Tampering, Information disclosure, Repudiation, Denial of service y Elevation of privilege, las categorías de amenazas de Microsoft.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "sigla-hpkp",
+    "apartado": "ciclo-de-vida",
+    "idea": "HPKP significa HTTP Public Key Pinning, el mecanismo con que un servidor fija las claves públicas que el navegador acepta para su sitio.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "sigla-otp",
+    "apartado": "ciclo-de-vida",
+    "idea": "OTP significa One-Time Password, la clave de un solo uso que ASVS contempla en los requisitos de autenticación.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "ciclo-de-vida-contenido-seguro-servidor",
+    "apartado": "ciclo-de-vida",
+    "idea": "Para evitar XSS en el servidor no se genera contenido con datos inseguros en ubicaciones como el nombre de una etiqueta, y se escapan sus caracteres a entidades HTML.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "ciclo-de-vida-csp-directivas",
+    "apartado": "ciclo-de-vida",
+    "idea": "Las directivas de CSP restringen el navegador: script-src 'self' solo admite JavaScript de ficheros del mismo dominio, upgrade-insecure-requests trata http como https y sandbox desactiva elementos peligrosos.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 27
+    }
+  },
+  {
+    "id": "ciclo-de-vida-frameworks-csrf-xss",
+    "apartado": "ciclo-de-vida",
+    "idea": "Spring ofrece protecciones contra CSRF y XSS: @CrossOrigin admite solo los orígenes indicados, y Spring Security añade nonces en los formularios, políticas CSP y detección de XSS en el navegador.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "ciclo-de-vida-doble-factor",
+    "apartado": "ciclo-de-vida",
+    "idea": "Las operaciones críticas, como una transferencia de fondos, exigen un segundo factor de autenticación además de la sesión iniciada.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "ciclo-de-vida-registro-de-credenciales",
+    "apartado": "ciclo-de-vida",
+    "idea": "Contra los fallos de autenticación se registran las operaciones sobre las credenciales, como crear la cuenta o cambiar y recuperar la clave, para detectar después el abuso de un atacante.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "ciclo-de-vida-sesion-persistente",
+    "apartado": "ciclo-de-vida",
+    "idea": "Una cookie de sesión persistente o con caducidad elevada alarga la vida de un identificador de sesión robable, que sigue válido aunque el usuario cierre el navegador sin desconectarse.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "ciclo-de-vida-superficie-xss",
+    "apartado": "ciclo-de-vida",
+    "idea": "La superficie de ataque XSS crece con cada intérprete que procesa una página web, como url, html, css y javascript, porque cada uno puede interpretar un dato inseguro como código.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 24
+    }
+  },
+  {
+    "id": "ciclo-de-vida-csrf-get-post",
+    "apartado": "ciclo-de-vida",
+    "idea": "El CSRF se lanza con GET mediante una etiqueta img, con POST mediante un formulario oculto, y contra una API REST con AJAX y withCredentials.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "ciclo-de-vida-sqli-contramedidas-combinadas",
+    "apartado": "ciclo-de-vida",
+    "idea": "La inyección SQL se evita combinando la validación de la entrada con una lista blanca y una consulta parametrizada cuyo signo ? recibe el dato.",
+    "fuente": {
+      "pdf": "2_Ciclo_de_vida.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "alta-disponibilidad-falacias",
+    "apartado": "alta-disponibilidad",
+    "idea": "Las falacias de las aplicaciones distribuidas de Peter Deutsch son suposiciones falsas sobre la red, como que es fiable o que el ancho de banda es infinito.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "alta-disponibilidad-ingenieria-del-caos",
+    "apartado": "alta-disponibilidad",
+    "idea": "La ingeniería del caos experimenta en producción con condiciones adversas, como apagar instancias al azar, para confiar en que un sistema distribuido resiste.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "alta-disponibilidad-soa",
+    "apartado": "alta-disponibilidad",
+    "idea": "SOA divide una aplicación, según la ley de Conway, en servicios con bajo acoplamiento, reusabilidad, autonomía y sin estado, que dan agilidad y se adaptan a la nube.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "alta-disponibilidad-microservicios",
+    "apartado": "alta-disponibilidad",
+    "idea": "Los microservicios, según Lewis y Fowler, son pequeños servicios en procesos propios y desplegables por separado, con heterogeneidad tecnológica y replicación automatizada que da elasticidad.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "alta-disponibilidad-comunicacion",
+    "apartado": "alta-disponibilidad",
+    "idea": "La comunicación entre servicios puede ser de petición/respuesta, donde el cliente espera la respuesta, asíncrona, con emisor y receptor en instantes distintos, o basada en eventos.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "alta-disponibilidad-soap-rest-seguridad",
+    "apartado": "alta-disponibilidad",
+    "idea": "Los mensajes SOAP y las APIs REST exponen amenazas de intérpretes XML y JSON, como XXE y la deserialización (CWE-502), y SOAP usa CORS para limitar orígenes.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "alta-disponibilidad-separacion-de-competencias",
+    "apartado": "alta-disponibilidad",
+    "idea": "Las arquitecturas de aplicaciones en la nube se basan en la separación de competencias, como el patrón MVC, que reparte la aplicación en módulos de bajo acoplamiento.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "alta-disponibilidad-retrasos-en-la-comunicacion",
+    "apartado": "alta-disponibilidad",
+    "idea": "Para limitar los retrasos de comunicación se ajusta el máximo de conexiones por nodo, se usa un pool de conexiones a la base de datos y se adaptan los timeouts.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "alta-disponibilidad-circuit-breaker",
+    "apartado": "alta-disponibilidad",
+    "idea": "El patrón de interruptor (circuit-breaker) fuerza una respuesta inmediata de error o en caché cuando una comunicación falla o supera un tiempo límite, como hace @HystrixCommand en Spring Boot.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "alta-disponibilidad-bulkhead",
+    "apartado": "alta-disponibilidad",
+    "idea": "El patrón de mamparos (bulkheads) separa los recursos en zonas independientes, como un repositorio por microservicio, para que un fallo no se propague a los demás.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "alta-disponibilidad-balanceo-funciones",
+    "apartado": "alta-disponibilidad",
+    "idea": "Un balanceador de carga reparte peticiones con criterios como round-robin, conexiones activas, carga o tiempos de respuesta, puede escalar instancias si es elástico y cachear estáticos para aliviar el back-end.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "alta-disponibilidad-balanceo-tipos",
+    "apartado": "alta-disponibilidad",
+    "idea": "Un balanceador es L4 si actúa sobre TCP o L7 si actúa sobre HTTP, y puede basarse en el cliente o en la red, como DNS o Proxy ARP.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "alta-disponibilidad-balanceo-consideraciones",
+    "apartado": "alta-disponibilidad",
+    "idea": "Un balanceador de carga es el punto único de entrada, así que se complementa con un clúster, se ajusta contra DDoS y usa health checks.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "alta-disponibilidad-sin-estado",
+    "apartado": "alta-disponibilidad",
+    "idea": "Los componentes sin estado lo delegan en componentes persistentes o lo guardan en el cliente con HMAC o JWT, y así cualquier nodo atiende al cliente y la aplicación escala.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "alta-disponibilidad-teorema-cap",
+    "apartado": "alta-disponibilidad",
+    "idea": "El teorema CAP, o conjetura de Brewer, afirma que un sistema distribuido no puede garantizar a la vez consistencia, disponibilidad y tolerancia a particiones, y elige entre CP y AP.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "alta-disponibilidad-cqrs",
+    "apartado": "alta-disponibilidad",
+    "idea": "El patrón CQRS separa las operaciones que cambian el estado de las de lectura, y escala las lecturas con nodos réplicas y las escrituras repartiendo las entidades en shards.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "alta-disponibilidad-cache-de-datos",
+    "apartado": "alta-disponibilidad",
+    "idea": "Una caché de datos evita accesos repetidos a datos frecuentes y alivia componentes difíciles de escalar, y puede ser en cliente basada en IMDG o programática como un Map.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "alta-disponibilidad-descubrimiento-dns",
+    "apartado": "alta-disponibilidad",
+    "idea": "El descubrimiento de servicios localiza componentes dinámicos, y el DNS es fácil de integrar porque el sistema operativo lo incluye, pero cuesta controlar sus cachés y detectar caídas.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "alta-disponibilidad-descubrimiento-contenedores",
+    "apartado": "alta-disponibilidad",
+    "idea": "Los contenedores de una misma red virtual o proyecto docker compose se localizan por nombre DNS, con una entrada por contenedor y otra por servicio que balancea.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "alta-disponibilidad-configuracion-externa",
+    "apartado": "alta-disponibilidad",
+    "idea": "La configuración externa de componentes dinámicos evita datos y claves estáticos en ficheros o código, y llega por variables de entorno o desde un servicio externo.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "alta-disponibilidad-mensajes-asincronos",
+    "apartado": "alta-disponibilidad",
+    "idea": "Una capa intermedia de mensajes con colas o publicación/suscripción garantiza el envío asíncrono entre microservicios y resuelve la ubicación de los receptores, con brokers como RabbitMQ y Kafka.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "alta-disponibilidad-entrega-de-mensajes",
+    "apartado": "alta-disponibilidad",
+    "idea": "Una malla de mensajes entrega al menos una vez, con posibles duplicados, o de forma transaccional, borrando el mensaje al confirmarlo el cliente, y recoge los fallidos en dead letters.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "alta-disponibilidad-sistemas-reactivos",
+    "apartado": "alta-disponibilidad",
+    "idea": "Un sistema reactivo, según el Manifiesto Reactivo, es responsivo, resistente ante fallos, elástico ante la demanda y pensado para mensajes.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "alta-disponibilidad-twelve-factor",
+    "apartado": "alta-disponibilidad",
+    "idea": "La metodología Twelve-Factor App busca aplicaciones portables entre entornos y fáciles de escalar en la nube, sin cambios significativos y sin administrar servidores en plataformas modernas.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "alta-disponibilidad-motivacion-alta-disponibilidad",
+    "apartado": "alta-disponibilidad",
+    "idea": "El diseño de aplicaciones seguras en la nube busca alta disponibilidad, con escalabilidad flexible y tolerancia a fallos, mediante arquitecturas distribuidas y recursos manuales o elásticos.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "alta-disponibilidad-capas",
+    "apartado": "alta-disponibilidad",
+    "idea": "Una arquitectura de dos capas atiende peticiones síncronas con un balanceador elástico, y una de tres separa presentación, lógica y datos, con colas elásticas para las asíncronas.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "alta-disponibilidad-balanceo-dinamico",
+    "apartado": "alta-disponibilidad",
+    "idea": "Un balanceador como Traefik configura sus nodos dinámicamente leyendo las etiquetas de los contenedores de Docker o Kubernetes, sin reiniciarse.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "alta-disponibilidad-descubrimiento-especifico",
+    "apartado": "alta-disponibilidad",
+    "idea": "Los servicios específicos de descubrimiento, como Etcd, Consul, Eureka o ZooKeeper, son de tipo IMDG y añaden al DNS registro, configuración, clave-valor y mensajes.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "alta-disponibilidad-consul",
+    "apartado": "alta-disponibilidad",
+    "idea": "Consul ofrece interfaces REST y DNS transparente, chequeo activo de disponibilidad, clave-valor y una interfaz gráfica de monitorización, y prioriza disponibilidad y tolerancia a particiones (AP) al replicarse.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "alta-disponibilidad-mallas-de-mensajes",
+    "apartado": "alta-disponibilidad",
+    "idea": "Una malla de mensajes escala sus consumidores según los mensajes en cola, enruta selectivamente a los workers y reasigna el mensaje no confirmado a tiempo.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "sigla-ddos",
+    "apartado": "alta-disponibilidad",
+    "idea": "DDoS significa Distributed Denial of Service, el ataque de denegación de servicio distribuido contra un balanceador de carga.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "sigla-hmac",
+    "apartado": "alta-disponibilidad",
+    "idea": "HMAC significa Hash-based Message Authentication Code, el código que protege contra la modificación del estado guardado en el cliente.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "sigla-jwt",
+    "apartado": "alta-disponibilidad",
+    "idea": "JWT significa JSON Web Token, el token que protege contra la modificación del estado guardado en el cliente.",
+    "fuente": {
+      "pdf": "3_Alta_disponibilidad.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "despliegue-retos-nube",
+    "apartado": "despliegue",
+    "idea": "Desplegar en la nube cuesta de replicar y supervisar de forma uniforme por la diversidad de proveedores y entornos híbridos, y se automatizaba con scripts de la CLI.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "despliegue-iaac",
+    "apartado": "despliegue",
+    "idea": "La Infraestructura como código (IaaC) define la infraestructura en ficheros de texto, lo que permite versionar sus cambios y analizar estáticamente su seguridad antes de desplegarla.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "despliegue-orquestadores",
+    "apartado": "despliegue",
+    "idea": "Los sistemas de orquestación de despliegues crean y gestionan recursos relacionados de la nube de forma ordenada y predecible: CloudFormation depende de AWS y Terraform funciona con varios proveedores.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "despliegue-segmentacion-red",
+    "apartado": "despliegue",
+    "idea": "El despliegue segmenta la red en regiones, zonas y subredes públicas y privadas, clasifica los componentes por funcionalidad y controla el acceso público, interno y de administración.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "despliegue-red-nube",
+    "apartado": "despliegue",
+    "idea": "Los controles de red en la nube dificultan el acceso no autorizado y facilitan detectar ataques, sin perímetro (DMZ) definido, y se aprovisionan rápido con VPC, ACL o grupos.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "despliegue-desplazamiento-lateral",
+    "apartado": "despliegue",
+    "idea": "La segmentación de red permite solo las conexiones expresamente indicadas entre hosts, como las de un bastión SSH en la DMZ, y así evita el desplazamiento lateral del atacante.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "despliegue-vpc",
+    "apartado": "despliegue",
+    "idea": "Una Virtual Private Cloud (VPC) aísla recursos en subredes privadas independientes de su distribución física, da acceso público con NAT y pasarelas, y su tráfico entre zonas puede costar.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "despliegue-acl",
+    "apartado": "despliegue",
+    "idea": "Las listas de control de acceso de la nube definen reglas por IP, puertos, protocolos y etiquetas como un cortafuegos clásico, y registran la actividad de red.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "despliegue-k8s-definicion",
+    "apartado": "despliegue",
+    "idea": "Kubernetes es un sistema de código abierto, independiente del proveedor y del lenguaje, que automatiza el despliegue, escalado y gestión de contenedores, con rollouts y rollback.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "despliegue-autoescalado",
+    "apartado": "despliegue",
+    "idea": "Kubernetes autoescala horizontalmente el número de pods (HPA) o nodos y verticalmente los recursos de cada pod (VPA), y reubica los contenedores entre nodos según sus necesidades.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "despliegue-plano-control",
+    "apartado": "despliegue",
+    "idea": "El plano de control de Kubernetes, en el nodo máster, controla el clúster con el API server para comunicación y gestión, y etcd como repositorio clave-valor de configuración y estado.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "despliegue-nodo-trabajo",
+    "apartado": "despliegue",
+    "idea": "Un nodo de trabajo de Kubernetes ejecuta el kubelet, que controla los contenedores, el kube-proxy, que actúa de proxy y balanceador, y un container runtime como containerd o cri-o.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "despliegue-pod",
+    "apartado": "despliegue",
+    "idea": "Un pod de Kubernetes agrupa contenedores del mismo nodo que comparten recursos como la IP y los volúmenes y se comunican por localhost, y es descartable y sin estado.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "despliegue-servicio",
+    "apartado": "despliegue",
+    "idea": "Un servicio de Kubernetes da acceso estable por nombre de host, con el DNS del clúster, a un conjunto de pods descartables cuya IP cambia.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "despliegue-tipos-servicio",
+    "apartado": "despliegue",
+    "idea": "Los tipos de servicio de Kubernetes son ClusterIP, el predeterminado y solo interno, NodePort, con puerto externo entre 30000 y 32767, y LoadBalancer, que cuesta extra por cada servicio.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "despliegue-ingress",
+    "apartado": "despliegue",
+    "idea": "Un Ingress de Kubernetes enruta peticiones HTTP externas, según host y ruta, hacia servicios internos mediante un Ingress controller como nginx, en L7, a diferencia de LoadBalancer en L4.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "despliegue-deployment",
+    "apartado": "despliegue",
+    "idea": "Un Deployment de Kubernetes gestiona el número de pods y su recuperación con estrategias Recreate o RollingUpdate, y un StatefulSet controla pods con identidad de red permanente.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "despliegue-declarativo",
+    "apartado": "despliegue",
+    "idea": "En Kubernetes se prefiere el enfoque declarativo con kubectl apply -f sobre el imperativo con create, replace y delete, y los objetos se definen normalmente en ficheros YAML.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "despliegue-kubectl",
+    "apartado": "despliegue",
+    "idea": "kubectl controla Kubernetes de forma imperativa: create, expose y autoscale crean objetos, get y describe los consultan, y delete los borra, porque un controlador recrearía un pod parado.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "despliegue-imagenes-locales",
+    "apartado": "despliegue",
+    "idea": "Kubernetes descarga por defecto las imágenes de Docker Hub, y una imagen local etiquetada con una versión se usa sin descargarla, enviándola al clúster Kind con kind load.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "despliegue-escalado-pods",
+    "apartado": "despliegue",
+    "idea": "Kubernetes escala los pods de un Deployment a mano con kubectl scale, o automáticamente con kubectl autoscale según la utilización de CPU o métricas personalizadas.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "despliegue-networkpolicy",
+    "apartado": "despliegue",
+    "idea": "Las NetworkPolicy de Kubernetes restringen el tráfico entrante y saliente entre pods, solo tienen efecto con un software CNI como Calico, y suman sus reglas en modalidad OR.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-dmz",
+    "apartado": "despliegue",
+    "idea": "DMZ significa DeMilitarized Zone, la zona desmilitarizada del control de acceso de red.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "sigla-acl",
+    "apartado": "despliegue",
+    "idea": "ACL significa Access Control List, la lista de control de acceso de los controles de red en la nube.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "sigla-rbac",
+    "apartado": "despliegue",
+    "idea": "RBAC significa Role-Based Access Control, el control de acceso basado en roles de las operaciones del clúster de Kubernetes.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "despliegue-servicios-integrados",
+    "apartado": "despliegue",
+    "idea": "Kubernetes incorpora de serie servicios de aplicaciones distribuidas, como descubrimiento, balanceo, configuración y secretos, almacenamiento virtual y procesos por lotes, sin servicios externos.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "despliegue-nodos-produccion",
+    "apartado": "despliegue",
+    "idea": "Un clúster de Kubernetes de producción necesita al menos 2 nodos para tener alta disponibilidad, mientras que kind, minikube o Docker Kubernetes Engine bastan con un nodo en desarrollo.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "despliegue-namespace-etiquetas",
+    "apartado": "despliegue",
+    "idea": "Kubernetes agrupa recursos en namespaces dentro de un clúster y los identifica con etiquetas clave=valor, que los selectores usan para decidir qué pods forman un servicio.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "despliegue-gateway-api",
+    "apartado": "despliegue",
+    "idea": "Gateway API de Kubernetes evoluciona los Ingress al unificar el enrutado L7 y L4 y el balanceo, y está en implantación: hay que habilitarla expresamente.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "despliegue-rbac",
+    "apartado": "despliegue",
+    "idea": "El control de acceso RBAC de Kubernetes define permisos con Role en un namespace o ClusterRole en todo el clúster, y un RoleBinding los asigna a usuarios, grupos o servicios.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "monitorizacion-blackbox-whitebox",
+    "apartado": "monitorizacion",
+    "idea": "La monitorización blackbox tradicional conoce el estado de los servicios sin ver su funcionamiento, y la whitebox actual, con Prometheus, ELK u OpenTelemetry, usa métricas, logs y trazas internas.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "monitorizacion-objetivos",
+    "apartado": "monitorizacion",
+    "idea": "Monitorizar una aplicación en la nube sirve para planificar capacidad y optimizar recursos, obtener información de negocio y detectar amenazas y responder frente a ellas.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "monitorizacion-tipos-herramientas",
+    "apartado": "monitorizacion",
+    "idea": "Las herramientas de monitorización de estado recopilan y visualizan métricas, los gestores de trazas correlacionan tareas distribuidas, y la gestión centralizada de logs permite consultarlos, visualizarlos y minarlos.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "monitorizacion-sim-sem",
+    "apartado": "monitorizacion",
+    "idea": "Un SIM detecta amenazas y apoya la auditoría y el análisis forense, un SEM monitoriza en tiempo real y notifica por varios canales, y un SIEM combina ambos.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "monitorizacion-componentes-efimeros",
+    "apartado": "monitorizacion",
+    "idea": "Los componentes efímeros de una aplicación en la nube pierden sus registros y un atacante puede borrarlos, así que se envían a un sistema centralizado mediante instrumentación.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "monitorizacion-tipos-informacion",
+    "apartado": "monitorizacion",
+    "idea": "Cada componente de una aplicación en la nube genera métricas de recursos de la VM, registros de peticiones, errores, negocio y seguridad, y alertas de caídas o amenazas.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "monitorizacion-desafios",
+    "apartado": "monitorizacion",
+    "idea": "Monitorizar una aplicación distribuida exige agregar fuentes y formatos heterogéneos, correlacionar los logs de una petición entre nodos y dar alta disponibilidad al propio sistema de monitorización.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "monitorizacion-metricas-series",
+    "apartado": "monitorizacion",
+    "idea": "Una métrica es un valor numérico sobre un proceso, una serie temporal reúne valores a intervalos regulares, y las métricas se recolectan con pull o se reenvían con push.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "monitorizacion-prometheus-grafana",
+    "apartado": "monitorizacion",
+    "idea": "Prometheus almacena métricas y Grafana las visualiza en paneles, donde cada métrica se define con consultas en el lenguaje PromQL.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "monitorizacion-syslog-arquitectura",
+    "apartado": "monitorizacion",
+    "idea": "En la arquitectura cliente-servidor de syslog, los clientes envían mensajes con APIs de sistema Unix y el servidor local decide su destino con reglas de la forma servicio.prioridad.acción.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "monitorizacion-syslog-mensaje",
+    "apartado": "monitorizacion",
+    "idea": "Un mensaje syslog lleva un origen (facility) que indica el servicio y una severidad de 0 (emerg) a 7 (debug), y su prioridad es origen por 8 más severidad.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "monitorizacion-syslog-inconvenientes",
+    "apartado": "monitorizacion",
+    "idea": "Las versiones originales de syslog no definen formato, envían por UDP sin alta disponibilidad y no tienen autoría, así que no toleran fallos de red y admiten mensajes falsos.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "monitorizacion-elk-componentes",
+    "apartado": "monitorizacion",
+    "idea": "Elastic Stack (ELK) se compone de Elasticsearch, una base NoSQL de alta disponibilidad basada en Lucene, Logstash, que recibe, transforma y envía logs, y los Beats, agentes que recolectan datos.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "monitorizacion-elk-ventajas",
+    "apartado": "monitorizacion",
+    "idea": "ELK logra alta disponibilidad con colas de logs, clúster Logstash y replicación, pero desplegarlo exige gestionar infraestructura y volumen, o contratar a un proveedor como Elastic o AWS.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "monitorizacion-recolectores-logs",
+    "apartado": "monitorizacion",
+    "idea": "Un recolector de logs (log shipper) recoge logs de varias fuentes, los procesa y los redirige, como Logstash, Beats (su sustituto ligero en Go) o Fluentd, con JSON unificado.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "monitorizacion-kibana",
+    "apartado": "monitorizacion",
+    "idea": "Kibana es la interfaz gráfica de Elastic Stack para consultar y visualizar Elasticsearch, y su función Discover consulta índices de forma interactiva con filtros en lenguaje KQL.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "monitorizacion-logs-aplicacion",
+    "apartado": "monitorizacion",
+    "idea": "Los logs de los servicios no reflejan el funcionamiento interno de una aplicación, que emite sus propios eventos con una biblioteca como Monolog y los envía a un repositorio centralizado.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "monitorizacion-trazas",
+    "apartado": "monitorizacion",
+    "idea": "Las trazas distribuidas identifican y secuencian los registros de una operación entre componentes para saber dónde falló, y OpenTelemetry es la especificación que soportan AWS, Azure, GCP, Jaeger y Zipkin.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "monitorizacion-opentelemetry-arquitectura",
+    "apartado": "monitorizacion",
+    "idea": "OpenTelemetry tiene un instrumentador, con API y SDKs de varios lenguajes para enviar eventos, y un collector que los gestiona y admite transportes como HTTP, colas o Kafka.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "monitorizacion-opentelemetry-conceptos",
+    "apartado": "monitorizacion",
+    "idea": "En OpenTelemetry, una traza es el contenedor de una operación formado por spans, un span es una subtarea con inicio y final, y un carrier propaga la traza.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "monitorizacion-opentelemetry-instrumentacion",
+    "apartado": "monitorizacion",
+    "idea": "OpenTelemetry instrumenta automáticamente con SDKs que extraen datos de frameworks y bibliotecas habituales, o manualmente, donde el programador controla los spans, por ejemplo con @WithSpan en Java.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "monitorizacion-appsensor-elementos",
+    "apartado": "monitorizacion",
+    "idea": "OWASP AppSensor es una metodología de detección de ataques y respuesta automática con tres elementos clave: puntos de detección, umbrales de activación, como longitud(nombre)>30, y respuestas.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "monitorizacion-appsensor-respuestas",
+    "apartado": "monitorizacion",
+    "idea": "OWASP AppSensor clasifica sus respuestas en silenciosas, donde el usuario no las nota, pasivas, activas, que reducen funciones como bloquear la cuenta, e intrusivas.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "monitorizacion-deteccion-niveles",
+    "apartado": "monitorizacion",
+    "idea": "La detección de amenazas en la nube actúa en componentes, en la red, vigilando el tráfico público e interno, o en soluciones híbridas que combinan fuentes para analizar y responder.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "monitorizacion-deteccion-componentes",
+    "apartado": "monitorizacion",
+    "idea": "La detección de amenazas en componentes usa antivirus como ClamAV contra malware, Tripwire con checksum para detectar archivos alterados y agentes RASP que analizan operaciones sensibles dentro del código.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "monitorizacion-ids-ips",
+    "apartado": "monitorizacion",
+    "idea": "Los IDS/IPS de red solo inspeccionan tráfico no cifrado, obligan a centralizar el tráfico de componentes distribuidos al escalar en la nube, y son más apropiados para los componentes internos.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "monitorizacion-antiddos-egress",
+    "apartado": "monitorizacion",
+    "idea": "Los sistemas anti-DDoS se contratan como SaaS porque necesitan grandes recursos, y el egress filtering controla las conexiones de salida (destinos, ancho de banda, contenidos) junto al control por IP.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "monitorizacion-dlp",
+    "apartado": "monitorizacion",
+    "idea": "Un sistema DLP (Data Loss Prevention) previene la exfiltración de información en la red L7 o el almacenamiento, necesita canales no cifrados y suele ir dentro de otras soluciones.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "monitorizacion-edr-xdr",
+    "apartado": "monitorizacion",
+    "idea": "Un EDR monitoriza equipos como ordenadores y móviles, y un XDR añade la red, los servicios y el SaaS, ambos con reglas de comportamiento anómalo y análisis forense.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "monitorizacion-waf-concepto",
+    "apartado": "monitorizacion",
+    "idea": "Un WAF controla las peticiones y respuestas HTTP entre cliente y aplicación web, se coloca como proxy inverso y analiza el tráfico HTTPS porque finaliza el canal TLS.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "monitorizacion-waf-respuestas",
+    "apartado": "monitorizacion",
+    "idea": "Un WAF responde a una operación sospechosa bloqueándola y emitiendo una alerta, de forma temporal o permanente, y sigue la sesión del usuario para relacionar sus peticiones.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "monitorizacion-waf-seguridad",
+    "apartado": "monitorizacion",
+    "idea": "Un WAF aplica virtual patching para mitigar temporalmente una vulnerabilidad hasta corregirla, detecta actividad inusual como una tasa anómala de peticiones y complementa a firewalls e IDS/IPS.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "monitorizacion-modsecurity",
+    "apartado": "monitorizacion",
+    "idea": "ModSecurity 3 es una biblioteca de WAF con conectores para servidores web, evalúa sus reglas por fases, de la petición al log, y usa el Core Rule Set de OWASP.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "monitorizacion-modsecurity-config",
+    "apartado": "monitorizacion",
+    "idea": "La configuración de ModSecurity usa directivas como SecRuleEngine con DetectionOnly, que detecta sin bloquear, y SecResponseBodyAccess, que revisa las respuestas, y registra la actividad en ficheros como modsec_audit.log.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "monitorizacion-modsecurity-reglas",
+    "apartado": "monitorizacion",
+    "idea": "Una regla SecRule de ModSecurity tiene variables, una comprobación y acciones, y puede rechazar peticiones con un patrón o desactivar el motor de reglas para una IP.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "monitorizacion-crs",
+    "apartado": "monitorizacion",
+    "idea": "El Core Rule Set (CRS) de ModSecurity ajusta su sensibilidad con el Paranoia Level de 1 a 4, evita falsos positivos con COMMON-EXCEPTIONS y filtra información de error con DATA-LEAKAGES.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "sigla-siem",
+    "apartado": "monitorizacion",
+    "idea": "SIEM significa Security Information and Event Management, la gestión de información y eventos de seguridad.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "sigla-fim",
+    "apartado": "monitorizacion",
+    "idea": "FIM significa File Integrity Monitoring, la monitorización de la integridad de ficheros.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-hids",
+    "apartado": "monitorizacion",
+    "idea": "HIDS significa Host-based Intrusion Detection System, el sistema de detección de intrusiones basado en el equipo.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-rasp",
+    "apartado": "monitorizacion",
+    "idea": "RASP significa Runtime Application Self-Protection, la autoprotección de la aplicación en tiempo de ejecución.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-ids",
+    "apartado": "monitorizacion",
+    "idea": "IDS significa Intrusion Detection System, el sistema de detección de intrusiones.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-ips",
+    "apartado": "monitorizacion",
+    "idea": "IPS significa Intrusion Prevention System, el sistema de prevención de intrusiones.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "sigla-dlp",
+    "apartado": "monitorizacion",
+    "idea": "DLP significa Data Loss Prevention, la prevención de la pérdida de datos.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "sigla-waf",
+    "apartado": "monitorizacion",
+    "idea": "WAF significa Web Application Firewall, el cortafuegos de aplicación web.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "sigla-edr",
+    "apartado": "monitorizacion",
+    "idea": "EDR significa Endpoint Detection and Response, la detección y respuesta en los equipos finales.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "sigla-xdr",
+    "apartado": "monitorizacion",
+    "idea": "XDR significa eXtended Detection and Response, la detección y respuesta extendidas.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "sigla-crs",
+    "apartado": "monitorizacion",
+    "idea": "CRS significa Core Rule Set, el conjunto de reglas base de ModSecurity.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "sigla-sim",
+    "apartado": "monitorizacion",
+    "idea": "SIM significa Security Information Management, la gestión de información de seguridad.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "sigla-sem",
+    "apartado": "monitorizacion",
+    "idea": "SEM significa System Event Management, la gestión de eventos del sistema.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "monitorizacion-seguridad-datos",
+    "apartado": "monitorizacion",
+    "idea": "Los datos de monitorización en la nube exigen proteger su transmisión, autoría y acceso, sanear los logs contra contenido malicioso, y guardar backups para auditoría y legislación.",
+    "fuente": {
+      "pdf": "5_Monitorizacion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "organizacion-ceo-riesgos",
+    "apartado": "organizacion",
+    "idea": "El CEO decide al más alto nivel, y define con el comité ejecutivo, asesorado por el personal de seguridad, los riesgos de seguridad que afectan al negocio.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "organizacion-cfo-roi",
+    "apartado": "organizacion",
+    "idea": "El CFO planifica los recursos de la compañía, incluido el gasto en seguridad, y un presupuesto de seguridad se justifica ante él con el retorno de la inversión (ROI).",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "organizacion-cio-tecnologia",
+    "apartado": "organizacion",
+    "idea": "El CIO decide qué tecnología y productos usa la empresa, tanto para los procesos de negocio como para el workplace de los empleados, y se relaciona con los proveedores tecnológicos.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "organizacion-cso-seguridad-fisica",
+    "apartado": "organizacion",
+    "idea": "El CSO es el director de seguridad de la compañía, con perfil tradicionalmente físico y origen en las fuerzas de seguridad del Estado, y el CISO le reporta.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "organizacion-ciso-rol",
+    "apartado": "organizacion",
+    "idea": "El CISO es responsable de la seguridad de la información, define los riesgos, ayuda a implantar los controles del negocio y reporta los incidentes a la autoridad competente.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "organizacion-gobernanza-vs-operacion",
+    "apartado": "organizacion",
+    "idea": "La gobernanza de la seguridad de la información es la normativa y las buenas prácticas, mientras que la operación del CISO define alertas y casos de uso.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "organizacion-dpo-privacidad",
+    "apartado": "organizacion",
+    "idea": "El DPO es el responsable de la privacidad de la compañía y notifica a las autoridades competentes los casos que afectan a datos de carácter personal.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "organizacion-soc-composicion",
+    "apartado": "organizacion",
+    "idea": "Un SOC se compone de personas, herramientas y procesos, y su círculo de incident responder sitúa al SOC Manager en el centro, con hunting, forensic, malware reverser y threat intel.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "organizacion-soc-nivel-1",
+    "apartado": "organizacion",
+    "idea": "El analista de nivel 1 de un SOC monitoriza las alertas, hace el triaje, abre casos en ticketing de las reales y escala al nivel 2 lo que no resuelve.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "organizacion-soc-nivel-2",
+    "apartado": "organizacion",
+    "idea": "El incident handler, analista de nivel 2 de un SOC, analiza en profundidad los incidentes correlacionando datos de varias fuentes y los escala al nivel 3 según su criticidad.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "organizacion-soc-nivel-3",
+    "apartado": "organizacion",
+    "idea": "El incident responder, analista de nivel 3 de un SOC, investiga los incidentes con forense y análisis de malware para identificar su causa raíz.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "organizacion-soc-manager",
+    "apartado": "organizacion",
+    "idea": "El SOC Manager desarrolla un flujo de trabajo y playbooks estandarizados, gestiona personal, presupuesto, turnos y tecnología para cumplir el acuerdo de nivel de servicio, y avisa al CISO.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "organizacion-soc-herramientas",
+    "apartado": "organizacion",
+    "idea": "Un SOC moderno usa el SIEM para monitorizar y correlacionar eventos, el SOAR para automatizar respuestas contra la TIP, el ticketing o la red, y el ticketing para dar trazabilidad.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "organizacion-cert-funcion",
+    "apartado": "organizacion",
+    "idea": "Un CERT gestiona incidentes que afectan a ciudadanos, administración y empresas, elabora alertas y avisos sobre campañas y ofrece capacidad tecnológica y de coordinación como apoyo operativo.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "organizacion-cert-espanoles",
+    "apartado": "organizacion",
+    "idea": "En España, el CCN-CERT atiende a las administraciones públicas del Esquema Nacional de Seguridad, el CNPIC-CERT a las infraestructuras críticas y el INCIBE-CERT a las empresas y los ciudadanos.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "organizacion-inteligencia-estrategica",
+    "apartado": "organizacion",
+    "idea": "La inteligencia de amenazas estratégica se dirige a un público no técnico, como el comité de dirección, y trata las tendencias de amenazas que afectan a decisiones empresariales globales.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "organizacion-inteligencia-tactica",
+    "apartado": "organizacion",
+    "idea": "La inteligencia de amenazas táctica se centra en campañas actuales e identifica IOCs, es la más sencilla de generar y automatizar, y dura poco porque los IOC quedan obsoletos.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "organizacion-inteligencia-operativa",
+    "apartado": "organizacion",
+    "idea": "La inteligencia de amenazas operativa extrae de ciberataques anteriores conclusiones sobre la intención, el momento y la sofisticación del ataque, y estudia los TTPs de los atacantes.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "organizacion-piramide-del-dolor",
+    "apartado": "organizacion",
+    "idea": "La pirámide del dolor de David Bianco ordena los indicadores por el dolor que causa al atacante cambiarlos: los TTPs en la cima, los hash values en la base.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "organizacion-mitre-attack",
+    "apartado": "organizacion",
+    "idea": "El framework MITRE ATT&CK recoge las tácticas y técnicas de los atacantes en una matriz, donde cada columna, como Reconnaissance o Execution, es una táctica con sus técnicas debajo.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "sigla-ciso",
+    "apartado": "organizacion",
+    "idea": "CISO significa Chief Information Security Officer, el director de seguridad de la información.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "sigla-dpo",
+    "apartado": "organizacion",
+    "idea": "DPO significa Data Protection Officer, el delegado de protección de datos.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "sigla-soc",
+    "apartado": "organizacion",
+    "idea": "SOC significa Security Operation Center, el centro de operaciones de seguridad.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "sigla-cert",
+    "apartado": "organizacion",
+    "idea": "CERT significa Computer Emergency Response Team, el equipo de respuesta a emergencias informáticas.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "sigla-soar",
+    "apartado": "organizacion",
+    "idea": "SOAR significa Security Orchestration, Automation and Response, la orquestación, automatización y respuesta de seguridad.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "sigla-tip",
+    "apartado": "organizacion",
+    "idea": "TIP significa Threat Intelligence Platform, la plataforma de inteligencia de amenazas.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "sigla-ioc",
+    "apartado": "organizacion",
+    "idea": "IoC significa Indicator of Compromise, el indicador de compromiso.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "sigla-ttp",
+    "apartado": "organizacion",
+    "idea": "TTP significa Tactics, Techniques and Procedures, las tácticas, técnicas y procedimientos de los atacantes.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "sigla-cso",
+    "apartado": "organizacion",
+    "idea": "CSO significa Chief Security Officer, el director de seguridad de la compañía.",
+    "fuente": {
+      "pdf": "6.1_Organizacion.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "dfir-respuesta-incidentes",
+    "apartado": "dfir",
+    "idea": "La respuesta a incidentes es el proceso con que una organización reacciona ante amenazas de TI, como ciberataques o caídas de servidores, y su ciclo de vida es el marco.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 1
+    }
+  },
+  {
+    "id": "dfir-fase-preparacion",
+    "apartado": "dfir",
+    "idea": "La fase 1 de la respuesta a incidentes, la preparación, dota al equipo de herramientas, recursos y formación, y trabaja para evitar que se produzcan incidentes.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "dfir-fase-deteccion-analisis",
+    "apartado": "dfir",
+    "idea": "La fase 2 de la respuesta a incidentes, detección y análisis, evalúa con exactitud si una alerta es un incidente real y su alcance, lo más difícil según el NIST.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "dfir-fase-contencion-erradicacion-recuperacion",
+    "apartado": "dfir",
+    "idea": "La fase 3 de la respuesta a incidentes, contención, erradicación y recuperación, reduce primero las consecuencias del incidente, luego erradica la amenaza y después recupera la red y los equipos.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "dfir-fase-post-incidente",
+    "apartado": "dfir",
+    "idea": "La fase post-incidente de la respuesta a incidentes analiza el incidente y la respuesta para limitar que se repita y mejorar la respuesta futura, y suele pasarse por alto.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "dfir-rol-gestor",
+    "apartado": "dfir",
+    "idea": "El gestor del incidente (Incident Handler) lo gestiona de extremo a extremo con un equipo, es el principal interlocutor con el cliente y terceros, y avanza en cada fase.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "dfir-rol-forense",
+    "apartado": "dfir",
+    "idea": "El especialista analista forense obtiene evidencias forenses digitales de sistemas perimetrales, servidores y equipos de trabajo para investigar lo acontecido e informar.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "dfir-rol-malware",
+    "apartado": "dfir",
+    "idea": "El analista de malware estudia el comportamiento y las capacidades del malware y extrae indicadores de compromiso para detectar y prevenir nuevos ataques.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "dfir-iniciacion",
+    "apartado": "dfir",
+    "idea": "La iniciación (precualificación) de la respuesta a incidentes reúne la lista de activos, el mapa de redes y los interlocutores, y entiende los procesos críticos y los sistemas de seguridad.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "dfir-ransomware-inicio",
+    "apartado": "dfir",
+    "idea": "En un incidente de ransomware, la iniciación pide de entrada una copia virtualizada de los controladores de dominio y pregunta si existen copias de seguridad para ponerlas a buen recaudo.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "dfir-contencion",
+    "apartado": "dfir",
+    "idea": "La contención de un incidente toma medidas que paran la amenaza, como apagar o aislar sistemas de la red o restringirla, mientras que la erradicación la elimina definitivamente.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "dfir-erradicacion",
+    "apartado": "dfir",
+    "idea": "La erradicación de un incidente elimina la amenaza definitivamente, por ejemplo borrando las cuentas del atacante, rotando credenciales, reinstalando los sistemas afectados e instalando un software EDR.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "dfir-recuperacion",
+    "apartado": "dfir",
+    "idea": "La recuperación tras un incidente devuelve el entorno y los equipos al funcionamiento normal, dura de semanas a meses y reconstruye desde cero o desde una copia sin compromiso.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "dfir-investigacion",
+    "apartado": "dfir",
+    "idea": "La investigación de un incidente analiza logs de VPN y FW, alertas del SIEM y malware, reconstruye en un timeline al atacante y determina la causa raíz y la exfiltración.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "dfir-artefactos-windows",
+    "apartado": "dfir",
+    "idea": "El análisis forense de Windows examina artefactos como el registro, el visor de eventos y los ficheros Prefetch para reconstruir los comandos ejecutados, la persistencia y otra actividad del atacante.",
+    "fuente": {
+      "pdf": "6.2_DFIR.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "contenedores-que-es",
+    "apartado": "contenedores",
+    "idea": "Un contenedor es un proceso ordinario del sistema anfitrión aislado con namespaces, cgroups y políticas de seguridad del kernel, y su vida va ligada a la aplicación que ejecuta.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "contenedores-inmutable",
+    "apartado": "contenedores",
+    "idea": "Un contenedor es inmutable y desechable, así que sus ficheros, datos y logs van a volúmenes o servicios externos, porque lo escrito en su disco local se pierde al eliminarlo.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "contenedores-capas",
+    "apartado": "contenedores",
+    "idea": "Un contenedor en ejecución se compone de una imagen inmutable común y una capa de ejecución modificable propia, y las capas inmutables con diferencias permiten versionar y etiquetar imágenes.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "contenedores-registro",
+    "apartado": "contenedores",
+    "idea": "Un registro de imágenes de contenedores es un repositorio donde se almacenan y recuperan imágenes con pull, como Azure Container Registry, cuando la imagen no existe en local.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "contenedores-bind-mount",
+    "apartado": "contenedores",
+    "idea": "Un bind mount mapea con docker run -v una carpeta absoluta del host sobre una del contenedor, para probar cambios de código en desarrollo sin reconstruir la imagen.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "contenedores-publicar-puertos",
+    "apartado": "contenedores",
+    "idea": "Docker publica puertos con -p, como 8080:80, porque el contenedor corre en una red NAT virtual aislada del host, y en una VM Linux se usa su IP.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "contenedores-imagenes-oficiales",
+    "apartado": "contenedores",
+    "idea": "En Docker Hub se recomiendan las imágenes oficiales, mejor con muchas estrellas y descargas, como la imagen oficial de tomcat.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "contenedores-documentacion-de-imagen",
+    "apartado": "contenedores",
+    "idea": "Antes de usar una imagen del catálogo de Docker Hub conviene revisar su documentación, que explica detalles de uso y variantes, como puertos o carpetas.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "contenedores-docker-search",
+    "apartado": "contenedores",
+    "idea": "Docker localiza una imagen en el catálogo de Docker Hub con el comando docker search, o en hub.docker.com, antes de lanzar el primer contenedor.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "contenedores-run-rm",
+    "apartado": "contenedores",
+    "idea": "La opción --rm de docker run lanza un contenedor temporal que se elimina al terminar su ejecución, así que docker ps -a ya no lo muestra.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "contenedores-run-detach",
+    "apartado": "contenedores",
+    "idea": "La opción -d de docker run lanza un contenedor de forma permanente en segundo plano, y docker attach se conecta después a su terminal.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "contenedores-docker-ps",
+    "apartado": "contenedores",
+    "idea": "Docker lista con docker ps los contenedores en ejecución, y con docker ps -a todos, incluidos los parados.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "contenedores-docker-exec",
+    "apartado": "contenedores",
+    "idea": "Docker abre una consola en un contenedor que ya está en ejecución con docker exec -it nombre /bin/bash.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "contenedores-docker-logs",
+    "apartado": "contenedores",
+    "idea": "Docker muestra la salida de registro de un contenedor con docker logs nombre, el primer recurso ante un error del servicio.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "contenedores-stop-rm",
+    "apartado": "contenedores",
+    "idea": "En Docker, docker stop detiene un contenedor, docker rm borra uno parado y docker start lo arranca de nuevo con su nombre y configuración.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "contenedores-compose",
+    "apartado": "contenedores",
+    "idea": "Docker Compose crea y ejecuta contenedores locales a partir de un fichero docker-compose.yml, que lanza con docker compose up -d y donde build indica la ubicación del Dockerfile.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "contenedores-dockerfile",
+    "apartado": "contenedores",
+    "idea": "Un Dockerfile define la composición de una imagen, con su base fijada por FROM, los cambios y la aplicación a ejecutar, y se construye con docker build -t nombre.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "contenedores-expose",
+    "apartado": "contenedores",
+    "idea": "La instrucción EXPOSE de un Dockerfile solo informa del puerto accesible en el contenedor, y para usarlo desde el host hay que publicarlo con -p al lanzar el contenedor.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "contenedores-entrypoint",
+    "apartado": "contenedores",
+    "idea": "La instrucción ENTRYPOINT de un Dockerfile fija la aplicación que ejecuta el contenedor al arrancar, y sin ella ejecuta la que define la imagen base.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "contenedores-dockerfile-run",
+    "apartado": "contenedores",
+    "idea": "La instrucción RUN de un Dockerfile se ejecuta al construir la imagen, y RUN npm install descarga las dependencias dentro de ella usando el package.json copiado antes con COPY.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "contenedores-publicar-registro",
+    "apartado": "contenedores",
+    "idea": "Para publicar una imagen en un registro remoto se identifica con docker login, se etiqueta con docker tag con host:puerto, repositorio y nombre, y se envía con docker push.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "contenedores-artifact-registry",
+    "apartado": "contenedores",
+    "idea": "Google Artifact Registry es el registro privado de GCP para imágenes de contenedores, el cliente docker se autoriza con gcloud auth configure-docker y la etiqueta es zona-docker.pkg.dev/proyecto/repo/imagen.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "contenedores-cloud-run-ventajas",
+    "apartado": "contenedores",
+    "idea": "Cloud Run cobra por la memoria y la CPU consumidas, escala los contenedores de forma elástica de 0 a 1000 según las conexiones simultáneas e integra TLS, monitorización y registro.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "contenedores-cloud-run-limites",
+    "apartado": "contenedores",
+    "idea": "Un contenedor en Cloud Run no tiene estado y su disco local puede borrarse, por lo que usa servicios externos, escucha en el puerto de PORT y tiene limitaciones extra.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "contenedores-cloud-run-despliegue",
+    "apartado": "contenedores",
+    "idea": "El comando gcloud run deploy despliega la imagen que indica --image desde un registro, limita las instancias con --max-instances y permite invocarlo sin identificarse con --allow-unauthenticated.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "contenedores-herramientas",
+    "apartado": "contenedores",
+    "idea": "Herramientas como docker, podman o lxd gestionan y aprovisionan contenedores sobre un SO anfitrión, Docker for Windows o Mac ejecuta un Linux virtualizado y lazydocker los gestiona visualmente.",
+    "fuente": {
+      "pdf": "S_Contenedores.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "despliegue-configmap",
+    "apartado": "despliegue",
+    "idea": "Los ConfigMaps de Kubernetes dan a los contenedores configuración como variables de entorno o ficheros, se crean con kubectl create configmap --from-file y centralizan la configuración en el clúster.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "despliegue-secrets",
+    "apartado": "despliegue",
+    "idea": "Los Secrets de Kubernetes protegen información sensible guardándola en memoria u ofuscada en Base64, solo la consultan los pods autorizados, y son de tipo generic, tls o docker-registry.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 24
+    }
+  },
+  {
+    "id": "despliegue-gke",
+    "apartado": "despliegue",
+    "idea": "En GKE, Google gestiona el nodo máster, garantiza la disponibilidad con auto-reparación de nodos y actualización automática, y expone servicios a Internet con el balanceador de carga GLBC de GCP.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 30
+    }
+  },
+  {
+    "id": "despliegue-gke-nodeport",
+    "apartado": "despliegue",
+    "idea": "Un servicio NodePort en GKE no es accesible desde Internet porque los nodos tienen IP en una VPC privada, y se abre con reglas de cortafuegos o con kubectl port-forward.",
+    "fuente": {
+      "pdf": "4_Despliegue.pdf",
+      "pagina": 31
+    }
+  }
+]

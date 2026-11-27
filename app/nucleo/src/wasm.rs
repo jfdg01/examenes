@@ -32,7 +32,7 @@ fn pares(seleccion: Option<Vec<Ts<Par>>>) -> Result<Option<Vec<Par>>, JsError> {
 /// Los datos con solo el banco de la selección.
 fn de_la_seleccion(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>) -> Result<Datos, JsError> {
     let d = leer(datos)?;
-    Ok(Datos { banco: crate::de_la_seleccion(&d.banco, pares(seleccion)?.as_deref()), ..d })
+    Ok(Datos { banco: crate::de_la_seleccion(&d.examen, &d.banco, &d.conceptos, pares(seleccion)?.as_deref()), ..d })
 }
 
 fn en_segundos(ahora: f64) -> i64 {
@@ -47,19 +47,30 @@ fn azar(ahora: f64) -> crate::Azar {
 #[wasm_bindgen]
 pub fn inicio(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>, objetivo: f64, ahora: f64) -> Js<Inicio> {
     let d = leer(datos)?;
-    dar(crate::inicio(&d.examen, &d.banco, &d.historial, pares(seleccion)?.as_deref(), objetivo, en_segundos(ahora)))
+    dar(crate::inicio(
+        &d.examen,
+        &d.banco,
+        &d.conceptos,
+        &d.historial,
+        pares(seleccion)?.as_deref(),
+        objetivo,
+        en_segundos(ahora),
+    ))
 }
 
 #[wasm_bindgen]
 pub fn sesion(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>, ahora: f64) -> Result<Vec<Ts<PreguntaDeSesion>>, JsError> {
     let d = de_la_seleccion(datos, seleccion)?;
-    crate::sesion(&d.examen, &d.banco, &d.historial, en_segundos(ahora), &mut azar(ahora)).into_iter().map(dar).collect()
+    crate::sesion(&d.examen, &d.banco, &d.conceptos, &d.historial, en_segundos(ahora), &mut azar(ahora))
+        .into_iter()
+        .map(dar)
+        .collect()
 }
 
 #[wasm_bindgen]
 pub fn simulacro(datos: Ts<Datos>, seleccion: Option<Vec<Ts<Par>>>, ahora: f64) -> Js<Simulacro> {
     let d = de_la_seleccion(datos, seleccion)?;
-    dar(crate::simulacro(&d.examen, &d.banco, &d.historial, en_segundos(ahora), &mut azar(ahora)))
+    dar(crate::simulacro(&d.examen, &d.banco, &d.conceptos, &d.historial, en_segundos(ahora), &mut azar(ahora)))
 }
 
 #[wasm_bindgen]
@@ -97,7 +108,7 @@ pub fn unir(a: Vec<Ts<Respuesta>>, b: Vec<Ts<Respuesta>>) -> Result<Vec<Ts<Respu
 #[wasm_bindgen]
 pub fn restaurar(datos: Ts<Datos>, guardado: Ts<Guardado>, ahora: f64) -> Result<Option<Ts<RondaAMedias>>, JsError> {
     let d = leer(datos)?;
-    crate::restaurar(&d.examen, &d.banco, &d.historial, &leer(guardado)?, en_segundos(ahora), &mut azar(ahora))
+    crate::restaurar(&d.examen, &d.banco, &d.conceptos, &d.historial, &leer(guardado)?, en_segundos(ahora), &mut azar(ahora))
         .map(dar)
         .transpose()
 }

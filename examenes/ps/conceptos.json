@@ -1,0 +1,2558 @@
+[
+  {
+    "id": "introduccion-pdu-sdu",
+    "apartado": "introduccion",
+    "idea": "Un protocolo de capas intercambia PDUs entre capas pares, y cada PDU lleva la SDU (los datos) más una cabecera de control.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "introduccion-protocolo-reglas",
+    "apartado": "introduccion",
+    "idea": "Un protocolo de capas define las reglas de conversación entre pares de la misma capa: qué mensajes se envían, quién los envía, cuándo y con qué significado.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "introduccion-transporte-logica",
+    "apartado": "introduccion",
+    "idea": "La capa de transporte de Internet ofrece comunicación lógica extremo a extremo entre procesos de hosts distintos, con TCP orientado a conexión y UDP sin conexión.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "introduccion-protocolo-seguridad",
+    "apartado": "introduccion",
+    "idea": "Un protocolo de seguridad define una funcionalidad de seguridad, como autenticación, distribución de claves o canal seguro, y suele usar criptografía.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "introduccion-seguridad-capas",
+    "apartado": "introduccion",
+    "idea": "Los protocolos de seguridad actúan en distintas capas de la pila: WPA en host-red, IPSec en red, SSL/TLS en transporte y otros en aplicación.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "introduccion-roles",
+    "apartado": "introduccion",
+    "idea": "Una conexión bidireccional suele requerir identificar un rol para cada parte, como cliente y servidor, o iniciador y respondedor.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "introduccion-propiedades-comunicacion-segura",
+    "apartado": "introduccion",
+    "idea": "Una comunicación segura exige confidencialidad, autenticación de los interlocutores, integridad de los mensajes y disponibilidad frente a ataques de denegación del servicio.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "introduccion-criptografia",
+    "apartado": "introduccion",
+    "idea": "La criptografía codifica mensajes para que un intruso no los descifre: la simétrica usa claves idénticas, como DES y AES, y la de clave pública cifra con la pública.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "introduccion-autenticacion",
+    "apartado": "introduccion",
+    "idea": "La autenticación demuestra que un interlocutor es quien dice ser, mediante un protocolo de autenticación con intercambio de mensajes.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "introduccion-integridad",
+    "apartado": "introduccion",
+    "idea": "La integridad exige un método que verifique que los datos enviados no se han modificado, y de ella surge el concepto de firma digital.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "introduccion-firma-propiedades",
+    "apartado": "introduccion",
+    "idea": "Una firma digital establece que el emisor es el creador del documento, y debe ser verificable y no repudiable.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "introduccion-firma-proceso",
+    "apartado": "introduccion",
+    "idea": "Una firma digital se calcula aplicando la clave privada del emisor al resumen H(m) del mensaje, y el receptor la verifica con la clave pública del emisor.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "introduccion-mac",
+    "apartado": "introduccion",
+    "idea": "Un MAC (código de autenticación de mensaje) garantiza la integridad añadiendo al mensaje un resumen calculado con un secreto compartido, que el receptor recalcula y compara.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "introduccion-amenaza-ataque",
+    "apartado": "introduccion",
+    "idea": "Una amenaza es una violación potencial de la seguridad, mientras que un ataque es un acto deliberado que intenta evadir los servicios de seguridad.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "introduccion-ataque-pasivo-activo",
+    "apartado": "introduccion",
+    "idea": "Un ataque pasivo solo aprende o usa información del sistema sin afectar a sus recursos, y un ataque activo intenta alterarlos o afectar su funcionamiento.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "introduccion-ataques-pasivos",
+    "apartado": "introduccion",
+    "idea": "Los ataques pasivos escuchan o monitorean transmisiones para obtener información, y son de dos tipos: acceso al contenido de los mensajes y análisis de tráfico.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "introduccion-ataques-activos",
+    "apartado": "introduccion",
+    "idea": "Los ataques activos modifican el flujo de datos o crean uno falso, son difíciles de prevenir y son de cuatro tipos: enmascaramiento, repetición, modificación de mensajes y denegación del servicio.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "introduccion-enmascaramiento",
+    "apartado": "introduccion",
+    "idea": "El enmascaramiento es un ataque activo en el que una entidad finge ser otra, y suele incluir alguna de las otras formas de ataque activo.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "introduccion-repeticion",
+    "apartado": "introduccion",
+    "idea": "La repetición es un ataque activo que captura pasivamente una unidad de datos y la retransmite después para producir un efecto no autorizado.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "introduccion-modificacion-mensajes",
+    "apartado": "introduccion",
+    "idea": "La modificación de mensajes es un ataque activo que altera parte de un mensaje legítimo, o lo retrasa o reordena, para producir un efecto no autorizado.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "introduccion-denegacion-servicio",
+    "apartado": "introduccion",
+    "idea": "La denegación del servicio es un ataque activo que impide o inhibe el uso o la gestión normal de las instalaciones de comunicaciones, y ataca la disponibilidad.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "introduccion-x800-objetivo",
+    "apartado": "introduccion",
+    "idea": "La recomendación X.800 de la ITU-T define un camino sistemático para definir requerimientos de seguridad y caracterizar las aproximaciones que los satisfacen.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "introduccion-x800-ataque",
+    "apartado": "introduccion",
+    "idea": "En X.800, un ataque de seguridad es cualquier acción que compromete la seguridad de la información de una organización, y los servicios de seguridad existen para contrarrestarlo.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "introduccion-x800-mecanismo",
+    "apartado": "introduccion",
+    "idea": "En X.800, un mecanismo de seguridad es un proceso, o un dispositivo que lo incorpora, diseñado para detectar, prevenir o recuperarse de un ataque de seguridad.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "introduccion-x800-servicio",
+    "apartado": "introduccion",
+    "idea": "En X.800, un servicio de seguridad mejora la seguridad de los sistemas y las transferencias de información, y se proporciona mediante uno o más mecanismos de seguridad.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "introduccion-x800-mecanismos-especificos",
+    "apartado": "introduccion",
+    "idea": "Los mecanismos de seguridad específicos de X.800, como el cifrado o el control de encaminamiento, se incorporan a la capa de protocolo adecuada para dar un servicio de seguridad OSI.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "introduccion-x800-mecanismos-penetrantes",
+    "apartado": "introduccion",
+    "idea": "Los mecanismos de seguridad penetrantes de X.800, como la pista de auditoría o la etiqueta de seguridad, no son específicos de ningún servicio ni de ninguna capa OSI.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "introduccion-x800-servicios",
+    "apartado": "introduccion",
+    "idea": "X.800 define cinco categorías de servicios de seguridad: autenticación, control de acceso, confidencialidad de datos, integridad de datos y no repudio.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "introduccion-x800-autenticacion",
+    "apartado": "introduccion",
+    "idea": "El servicio de autenticación de X.800 tiene dos variantes: la autenticación de entidad par en conexiones lógicas y la del origen de los datos en transferencias sin conexión.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "introduccion-x800-confidencialidad",
+    "apartado": "introduccion",
+    "idea": "El servicio de confidencialidad de datos de X.800 protege la conexión, los datos sin conexión, campos seleccionados y el flujo de tráfico frente a su divulgación.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "introduccion-x800-integridad-datos",
+    "apartado": "introduccion",
+    "idea": "El servicio de integridad de datos de X.800 detecta la modificación de datos en conexiones, con o sin recuperación, y en bloques sin conexión o campos seleccionados.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "introduccion-x800-no-repudio",
+    "apartado": "introduccion",
+    "idea": "El servicio de no repudio de X.800 impide que el emisor o el receptor niegue su participación, con pruebas del origen del mensaje y de su recepción.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "introduccion-canal-seguro",
+    "apartado": "introduccion",
+    "idea": "Un canal seguro entre Alice y Bob garantiza que Eve solo conoce la temporización y el tamaño de los mensajes, y que Bob recibe como mucho una subsecuencia de ellos.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 25
+    }
+  },
+  {
+    "id": "introduccion-mensajes-flujos",
+    "apartado": "introduccion",
+    "idea": "Un protocolo seguro debe analizar si transmite un fichero de longitud determinada o un flujo de longitud indeterminada, y en ambos casos lo divide en paquetes.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "introduccion-transporte-no-confiable",
+    "apartado": "introduccion",
+    "idea": "Un protocolo seguro considera no confiable el transporte subyacente, incluso TCP, porque no está preparado para ataques activos que cambien, inserten o borren paquetes.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "introduccion-identificacion-protocolo",
+    "apartado": "introduccion",
+    "idea": "Un protocolo seguro inserta campos que identifican el protocolo y sus mensajes, y así detecta errores, siendo el identificador típicamente la versión y el subprotocolo criptográfico.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 27
+    }
+  },
+  {
+    "id": "introduccion-numeracion",
+    "apartado": "introduccion",
+    "idea": "Un protocolo seguro numera los paquetes con un sistema que crece monotónicamente y no repite números, para detectar faltas, desórdenes y repeticiones.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 28
+    }
+  },
+  {
+    "id": "introduccion-pfs",
+    "apartado": "introduccion",
+    "idea": "Perfect Forward Secrecy garantiza que las claves de sesión pasadas no se puedan reutilizar aunque un atacante robe después la clave privada del servidor, porque son temporales.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "introduccion-orden-integridad",
+    "apartado": "introduccion",
+    "idea": "Un protocolo seguro puede combinar cifrado e integridad de tres formas: cifrar y luego calcular el MAC, calcular el MAC y luego cifrar, o hacer ambas operaciones en paralelo.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 30
+    }
+  },
+  {
+    "id": "introduccion-tratamiento-errores",
+    "apartado": "introduccion",
+    "idea": "Un protocolo seguro comprueba cifrado, integridad e identificadores en cada mensaje, y ante un error lo registra en un log interno y no responde nada, eliminando el estado del protocolo.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 31
+    }
+  },
+  {
+    "id": "introduccion-oraculo",
+    "apartado": "introduccion",
+    "idea": "Un ataque de oráculo explota un sistema legítimo que responde con pistas indirectas, como mensajes de error o tiempos de procesamiento, para deducir información confidencial.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 32
+    }
+  },
+  {
+    "id": "introduccion-oraculo-tiempo",
+    "apartado": "introduccion",
+    "idea": "Un oráculo de tiempo permite al atacante deducir un secreto midiendo cuánto tarda el protocolo en responder, por ejemplo al adivinar una contraseña carácter por carácter.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 32
+    }
+  },
+  {
+    "id": "introduccion-oraculo-relleno",
+    "apartado": "introduccion",
+    "idea": "Un oráculo de relleno (padding oracle) permite descifrar un mensaje byte a byte modificando el texto cifrado y observando si el servidor responde con error de relleno.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 32
+    }
+  },
+  {
+    "id": "introduccion-reproduccion-ejemplo",
+    "apartado": "introduccion",
+    "idea": "Un ataque de reproducción graba un paquete válido, como el de Alicia con su contraseña, y lo reenvía más tarde para suplantarla sin necesidad de entenderlo.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 33
+    }
+  },
+  {
+    "id": "introduccion-reenvios",
+    "apartado": "introduccion",
+    "idea": "Un reenvío legítimo ocurre cuando vence un temporizador sin respuesta y se reenvía el paquete original, por lo que cuesta distinguirlo de una reproducción.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 34
+    }
+  },
+  {
+    "id": "introduccion-degradacion",
+    "apartado": "introduccion",
+    "idea": "Un ataque de degradación obliga a dos partes a negociar una versión del protocolo o unos algoritmos criptográficos más débiles que los disponibles, como en Poodle y Freak.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 35
+    }
+  },
+  {
+    "id": "introduccion-ejemplo-claves",
+    "apartado": "introduccion",
+    "idea": "En el protocolo de ejemplo, la inicialización deriva de la clave K cuatro claves con SHA-d-256, de cifrado y autenticación para cada sentido, y el rol decide cuál envía.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 36
+    }
+  },
+  {
+    "id": "introduccion-ejemplo-envio",
+    "apartado": "introduccion",
+    "idea": "En el protocolo de ejemplo, el envío numera el mensaje con un contador, lo cifra con un XOR sobre un flujo de claves AES y añade un HMAC-SHA-256.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 37
+    }
+  },
+  {
+    "id": "introduccion-ejemplo-recepcion",
+    "apartado": "introduccion",
+    "idea": "En el protocolo de ejemplo, la recepción exige un tamaño mínimo de 36 bytes, recalcula el HMAC y comprueba que el número de mensaje supera el contador de recepción.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 38
+    }
+  },
+  {
+    "id": "sigla-introduccion-mac",
+    "apartado": "introduccion",
+    "idea": "MAC significa Message Authentication Code, el código de autenticación de mensaje.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "sigla-introduccion-pfs",
+    "apartado": "introduccion",
+    "idea": "PFS significa Perfect Forward Secrecy, la confidencialidad directa perfecta.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "introduccion-modelos-capas",
+    "apartado": "introduccion",
+    "idea": "El modelo TCP/IP agrupa las capas OSI: aplicación incluye aplicación, presentación y sesión, y host-red incluye enlace y física, con IP e ICMP en la capa de red.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 3
+    }
+  },
+  {
+    "id": "introduccion-relaciones-capas",
+    "apartado": "introduccion",
+    "idea": "En un modelo de capas, las capas pares de dos hosts mantienen una comunicación virtual mediante su protocolo, aunque la información baja, cruza la red y sube.",
+    "fuente": {
+      "pdf": "1_Introduccion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "claves-clave-de-sesion",
+    "apartado": "claves",
+    "idea": "La clave de sesión es la clave simétrica que se cambia a nivel de sesión para aumentar la seguridad, y debe llegar por un medio seguro a ambas partes.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "claves-jerarquia-dos-niveles",
+    "apartado": "claves",
+    "idea": "Una jerarquía de claves de dos niveles usa una clave de sesión para cifrar los datos de una conexión y una clave maestra para distribuir las de sesión.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "claves-opciones-de-distribucion",
+    "apartado": "claves",
+    "idea": "La distribución de claves simétricas tiene cuatro opciones: entrega física por una parte o un tercero, envío cifrado con una clave ya compartida, o un tercero que la reparte cifrada.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "claves-distribucion-descentralizada",
+    "apartado": "claves",
+    "idea": "La distribución de claves descentralizada sirve en contextos locales donde dos equipos comparten una clave maestra, con la que el respondedor cifra la clave de sesión usando núnicos.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "claves-nonce",
+    "apartado": "claves",
+    "idea": "Un núnico (nonce) es un número aleatorio de un solo uso en la distribución de claves, y el identificador de transacción puede ser sello de tiempo, contador o aleatorio.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "claves-kdc",
+    "apartado": "claves",
+    "idea": "El KDC (centro de distribución de claves) comparte una clave maestra simétrica con cada usuario, y genera y reparte las claves de sesión, siendo la opción de distribución más usada.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "claves-kdc-peticion-respuesta",
+    "apartado": "claves",
+    "idea": "En el protocolo con KDC, A pide al KDC una clave para hablar con B, y el KDC responde con la clave de sesión cifrada para cada uno.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "claves-kdc-reenvio-a-b",
+    "apartado": "claves",
+    "idea": "En el protocolo con KDC, A reenvía a B la parte de la respuesta cifrada con la clave maestra de B, que solo B descifra para obtener la sesión.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "claves-kdc-autenticacion",
+    "apartado": "claves",
+    "idea": "En el protocolo con KDC, B y A se autentican mutuamente tras repartir la clave, intercambiando un núnico N2 y su transformación f(N2) cifrados con la clave de sesión.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "claves-vida-clave-sesion",
+    "apartado": "claves",
+    "idea": "El tiempo de vida de una clave de sesión es un compromiso: cambiarla más a menudo da más seguridad, pero generarla y establecerla consume tiempo.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "claves-asimetrica-efimera",
+    "apartado": "claves",
+    "idea": "Con criptografía asimétrica efímera, A genera un par de claves, B le envía la clave de sesión cifrada con su pública y ambos desechan el par.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "claves-mitm-intercambio",
+    "apartado": "claves",
+    "idea": "El intercambio de clave con cifrado asimétrico sin autenticar las claves públicas permite un ataque del intermediario, donde Darth sustituye la clave pública y obtiene la clave de sesión.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "claves-firma-y-cifrado-de-ks",
+    "apartado": "claves",
+    "idea": "Con autenticación y cifrado, A cifra la clave de sesión con su privada y la pública de B, y los núnicos prueban que B posee su clave privada.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "claves-tipos-distribucion-publica",
+    "apartado": "claves",
+    "idea": "La distribución de claves públicas tiene cuatro tipos: anuncio público, directorio de claves públicas, autoridad de claves públicas y certificados de clave pública.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "claves-anuncio-publico",
+    "apartado": "claves",
+    "idea": "El anuncio público distribuye claves públicas sin ningún control, así que alguien puede apropiarse de las claves de otros propietarios y usarlas indebidamente.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "claves-directorio",
+    "apartado": "claves",
+    "idea": "Un directorio de claves públicas contiene entradas con nombre y clave pública, lo mantiene una autoridad responsable, el usuario puede reemplazar su clave y el acceso es autenticado.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "claves-autoridad-claves",
+    "apartado": "claves",
+    "idea": "Una autoridad de claves públicas responde con la clave pública pedida, la petición y un sello de tiempo, cifrados con su clave privada, para evitar repeticiones antiguas.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "claves-certificado-intercambio",
+    "apartado": "claves",
+    "idea": "En la distribución con certificados, la CA firma la clave pública de cada usuario con su identidad y una marca de tiempo, y los usuarios se intercambian los certificados directamente.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "claves-x509",
+    "apartado": "claves",
+    "idea": "El estándar X.509 define un entorno de autenticación con un formato de certificado, que contiene una clave pública firmada con la privada de una CA, sobre el directorio X.500.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "claves-certificado-firma",
+    "apartado": "claves",
+    "idea": "La CA genera un certificado X.509 calculando un hash del certificado sin firmar, con identidad, clave pública y datos de la CA, y cifrándolo con su clave privada.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "claves-certificado-verificacion",
+    "apartado": "claves",
+    "idea": "El destinatario verifica un certificado X.509 descifrando la firma con la clave pública de la CA y comparando el resumen recuperado con el que calcula, lo que detecta modificaciones.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "claves-certificado-contenido",
+    "apartado": "claves",
+    "idea": "Un certificado X.509 contiene campos como la versión, el periodo de validez (not before y not after), la clave pública del sujeto y, desde la versión 3, extensiones.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "claves-certificado-propiedades",
+    "apartado": "claves",
+    "idea": "Solo la CA puede modificar un certificado, así que cualquier usuario con la clave pública de la CA lo verifica y se publica libremente, incluso en cadenas jerárquicas de CAs.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 24
+    }
+  },
+  {
+    "id": "claves-revocacion-motivos",
+    "apartado": "claves",
+    "idea": "Un certificado se revoca antes de su caducidad cuando la clave privada del titular se compromete, el usuario deja de estar certificado o el certificado de la CA se compromete.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    }
+  },
+  {
+    "id": "claves-crl",
+    "apartado": "claves",
+    "idea": "Una CRL (lista de revocación de certificados) es una lista que cada CA mantiene con los certificados revocados no expirados, y que los clientes descargan para consultar.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    }
+  },
+  {
+    "id": "claves-ocsp",
+    "apartado": "claves",
+    "idea": "OCSP es un protocolo en línea que comprueba el estado de un certificado individual, de modo que el cliente no descarga la lista entera de revocados.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    }
+  },
+  {
+    "id": "claves-crl-problemas",
+    "apartado": "claves",
+    "idea": "Las CRL tienen listas demasiado largas para mantenerlas y descargarlas, y dependen de que el servidor esté disponible.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "claves-ocsp-problemas",
+    "apartado": "claves",
+    "idea": "OCSP tiene problemas de latencia en TLS, de privacidad porque revela los sitios visitados, y de fiabilidad porque sus servidores sufren ataques DoS.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "claves-soft-fail",
+    "apartado": "claves",
+    "idea": "Los clientes web con comportamiento soft-fail dan por bueno un certificado si no reciben respuesta de revocación, así que un atacante que bloquee la consulta evita la revocación.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    }
+  },
+  {
+    "id": "claves-crlset-onecrl",
+    "apartado": "claves",
+    "idea": "Chrome usa CRLSet y Firefox usa OneCRL, listas de certificados revocados de las principales CAs integradas en el navegador, en lugar de consultar CRL u OCSP.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    }
+  },
+  {
+    "id": "claves-ocsp-stapling",
+    "apartado": "claves",
+    "idea": "En OCSP stapling, el servidor consulta el estado de sus certificados y adjunta a las respuestas una prueba de corta validez firmada por la CA, aunque no es obligatorio.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 27
+    }
+  },
+  {
+    "id": "claves-extensiones-v3",
+    "apartado": "claves",
+    "idea": "X.509 versión 3 añade extensiones opcionales, cada una con identificador, valor e indicador crítico, en tres grupos: clave y política, atributos del certificado y emisor, y restricciones de camino.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 28
+    }
+  },
+  {
+    "id": "claves-extension-clave-politica",
+    "apartado": "claves",
+    "idea": "Las extensiones X.509 de información de clave y política de certificado indican el uso de la clave, los identificadores de clave de autoridad y sujeto, y las reglas de aplicabilidad.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "claves-extension-atributos-nombres",
+    "apartado": "claves",
+    "idea": "Las extensiones X.509 de atributos del certificado y del emisor aumentan la confianza en la identidad del sujeto, con nombres alternativos y atributos de directorio del sujeto.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 30
+    }
+  },
+  {
+    "id": "claves-extension-restricciones-camino",
+    "apartado": "claves",
+    "idea": "Las extensiones X.509 de restricciones de camino de certificación limitan los certificados que una CA emite a otra, como si el sujeto puede ser CA o qué certificados puede emitir.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 31
+    }
+  },
+  {
+    "id": "claves-pki",
+    "apartado": "claves",
+    "idea": "Una PKI (infraestructura de clave pública) reúne hardware, software, personas, políticas y procedimientos para crear, administrar, distribuir y revocar certificados, con un modelo basado en X.509.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 32
+    }
+  },
+  {
+    "id": "claves-pki-componentes",
+    "apartado": "claves",
+    "idea": "La arquitectura PKI tiene la end entity que pide el certificado, la CA que lo emite, la RA opcional que ayuda a la CA y el emisor de CRL opcional.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 33
+    }
+  },
+  {
+    "id": "claves-vault",
+    "apartado": "claves",
+    "idea": "Vault es una herramienta que administra secretos como claves API, contraseñas y certificados, gestionando su ciclo de vida y cifrando datos sin almacenarlos.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 35
+    }
+  },
+  {
+    "id": "sigla-claves-kdc",
+    "apartado": "claves",
+    "idea": "KDC significa Key Distribution Center, el centro de distribución de claves.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "sigla-claves-ca",
+    "apartado": "claves",
+    "idea": "CA significa Certification Authority, la autoridad de certificación que firma certificados.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "sigla-claves-crl",
+    "apartado": "claves",
+    "idea": "CRL significa Certificate Revocation List, la lista de certificados revocados.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    }
+  },
+  {
+    "id": "sigla-claves-ocsp",
+    "apartado": "claves",
+    "idea": "OCSP significa Online Certificate Status Protocol, el protocolo en línea del estado de certificados.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 25
+    }
+  },
+  {
+    "id": "sigla-claves-pki",
+    "apartado": "claves",
+    "idea": "PKI significa Public Key Infrastructure, la infraestructura de clave pública.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 32
+    }
+  },
+  {
+    "id": "sigla-claves-pkix",
+    "apartado": "claves",
+    "idea": "PKIX significa Public Key Infrastructure X.509, el modelo de PKI del IETF basado en X.509.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 32
+    }
+  },
+  {
+    "id": "sigla-claves-ra",
+    "apartado": "claves",
+    "idea": "RA significa Registration Authority, la autoridad de registro de una PKI.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 33
+    }
+  },
+  {
+    "id": "transporte-tls-servicios",
+    "apartado": "transporte",
+    "idea": "SSL/TLS es una capa de seguridad entre la aplicación y TCP que da autenticación, criptografía e integridad, y TLS evoluciona del SSL que desarrolló Netscape.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "transporte-sesion-vs-conexion",
+    "apartado": "transporte",
+    "idea": "En TLS, una sesión es una asociación cliente-servidor creada por el Handshake, cuyos parámetros de seguridad comparten varias conexiones para evitar renegociarlos cada vez.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "transporte-estado-sesion",
+    "apartado": "transporte",
+    "idea": "El estado de una sesión TLS incluye el identificador que elige el servidor, el certificado del par, la compresión, la CipherSpec, el master secret de 48 bytes y is resumable.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "transporte-estado-conexion",
+    "apartado": "transporte",
+    "idea": "El estado de una conexión TLS incluye los aleatorios, las claves de escritura del cliente y del servidor, los vectores de inicialización de CBC y los números de secuencia.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "transporte-record-servicios",
+    "apartado": "transporte",
+    "idea": "El TLS Record Protocol da a las conexiones confidencialidad mediante cifrado e integridad del mensaje mediante un MAC, con claves secretas compartidas que define el Handshake.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "transporte-record-pasos",
+    "apartado": "transporte",
+    "idea": "El TLS Record Protocol 1.2 fragmenta los datos de aplicación, los comprime, añade el MAC, los cifra y añade la cabecera.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "transporte-registro-formato",
+    "apartado": "transporte",
+    "idea": "Un registro TLS 1.2 lleva una cabecera con tipo de contenido, versión y longitud, seguida del fragmento, que va cifrado junto con su MAC.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "transporte-mac-hmac",
+    "apartado": "transporte",
+    "idea": "TLS 1.2 calcula el MAC de cada registro con HMAC (RFC 2104), que combina hash y clave secreta sobre el fragmento, su número de secuencia, tipo, versión y longitud.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "transporte-cifrado-flujo-bloque",
+    "apartado": "transporte",
+    "idea": "TLS cifra de dos formas: el cifrado de flujo procesa byte a byte, calculando el MAC y cifrando, y el de bloque divide los datos en bloques fijos con relleno.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "transporte-relleno",
+    "apartado": "transporte",
+    "idea": "En el cifrado de bloque de TLS, el relleno se añade después de calcular el MAC y antes de cifrar, y su longitud variable impide ataques sobre rellenos predecibles.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "sigla-aead",
+    "apartado": "transporte",
+    "idea": "AEAD significa Authenticated Encryption with Associated Data, el cifrado autenticado con datos asociados de TLS 1.3.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 45
+    }
+  },
+  {
+    "id": "sigla-gcm",
+    "apartado": "transporte",
+    "idea": "GCM significa Galois/Counter Mode, el modo de cifrado autenticado de TLS 1.3.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 46
+    }
+  },
+  {
+    "id": "sigla-psk",
+    "apartado": "transporte",
+    "idea": "PSK significa Pre-Shared Key, la clave precompartida que TLS 1.3 usa en la reanudación 0-RTT.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 43
+    }
+  },
+  {
+    "id": "sigla-prf",
+    "apartado": "transporte",
+    "idea": "PRF significa PseudoRandom Function, la función pseudoaleatoria que TLS 1.2 usa para calcular claves.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "sigla-cbc",
+    "apartado": "transporte",
+    "idea": "CBC significa Cipher Block Chaining, el modo de cifrado de bloques encadenados de una suite TLS.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 32
+    }
+  },
+  {
+    "id": "transporte-change-cipher-spec",
+    "apartado": "transporte",
+    "idea": "El protocolo Change Cipher Spec de TLS anuncia con un mensaje de un byte de valor 1 que se cambia la suite de cifrado, y se ejecuta tras el Handshake.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "transporte-alert",
+    "apartado": "transporte",
+    "idea": "El Alert Protocol de TLS anuncia alertas al interlocutor con dos bytes: el primero indica aviso o fatal, y el segundo la alerta concreta.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "transporte-heartbeat",
+    "apartado": "transporte",
+    "idea": "El protocolo Heartbeat de TLS comprueba que el interlocutor está activo y genera actividad para evitar que los cortafuegos cierren la conexión, con mensajes de petición y respuesta.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "transporte-handshake-funciones",
+    "apartado": "transporte",
+    "idea": "El protocolo Handshake de TLS, el más complejo, autentica a los interlocutores y negocia la suite de cifrado, con mensajes de campos Type, Length y Content.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "transporte-handshake-fases",
+    "apartado": "transporte",
+    "idea": "El Handshake de TLS 1.2 tiene cuatro fases: capacidades de seguridad con los hello, mensajes del servidor, mensajes del cliente, y cambio de suite con los mensajes finished.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "transporte-client-hello",
+    "apartado": "transporte",
+    "idea": "El client_hello de TLS contiene la versión más alta del cliente, un Random de marca de tiempo y 28 bytes, el SessionID y las suites en orden decreciente de preferencia.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "transporte-server-hello",
+    "apartado": "transporte",
+    "idea": "El server_hello de TLS indica la versión más baja entre la del cliente y la máxima del servidor, un Random independiente y una única suite elegida de las propuestas.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "transporte-cipherspec",
+    "apartado": "transporte",
+    "idea": "Una CipherSuite de TLS 1.2 define un método de intercambio de claves y una CipherSpec, con el tipo de cifrado, el tamaño del IV y el material de claves.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "transporte-intercambio-rsa",
+    "apartado": "transporte",
+    "idea": "En el intercambio de claves RSA de TLS 1.2, el cliente genera la pre-master y la envía cifrada con la clave pública RSA del servidor, obtenida de su certificado.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "transporte-dh-efimero",
+    "apartado": "transporte",
+    "idea": "El Diffie-Hellman efímero de TLS firma los parámetros públicos con la clave privada RSA o DSS, y da una clave temporal y autenticada, la variante más segura.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "transporte-dh-anonimo",
+    "apartado": "transporte",
+    "idea": "El Diffie-Hellman anónimo de TLS envía un primo, una raíz primitiva y la clave pública sin autenticar, y por ello es vulnerable a un ataque de hombre en el medio.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "transporte-dh-fijo",
+    "apartado": "transporte",
+    "idea": "En el Diffie-Hellman fijo de TLS, los parámetros públicos de Diffie-Hellman están en los certificados, así que el servidor no envía server_key_exchange y el client_key_exchange del cliente puede ser nulo.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "transporte-server-key-exchange",
+    "apartado": "transporte",
+    "idea": "El server_key_exchange de TLS 1.2 no hace falta con Diffie-Hellman fijo ni con RSA, salvo que la clave RSA sea solo de firma y el servidor envíe una temporal firmada.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "transporte-certificate-request",
+    "apartado": "transporte",
+    "idea": "En TLS 1.2, un servidor no anónimo puede pedir un certificado al cliente con certificate_request, que incluye tipo y autoridades aceptables, y el cliente sin certificado envía una alerta.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 24
+    }
+  },
+  {
+    "id": "transporte-certificate-verify",
+    "apartado": "transporte",
+    "idea": "El mensaje certificate_verify de TLS verifica explícitamente un certificado de cliente: este firma con su clave privada un hash de los mensajes del Handshake desde client_hello.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "transporte-client-key-exchange",
+    "apartado": "transporte",
+    "idea": "El client_key_exchange de TLS depende del intercambio: con RSA envía la pre-master de 48 bytes cifrada con la pública del servidor, y con Diffie-Hellman efímero o anónimo sus parámetros públicos.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 25
+    }
+  },
+  {
+    "id": "transporte-finished",
+    "apartado": "transporte",
+    "idea": "El mensaje finished de TLS verifica que el intercambio de claves y la autenticación fueron correctos, con una PRF sobre el master secret, una etiqueta y un hash del Handshake.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 27
+    }
+  },
+  {
+    "id": "transporte-handshake-mensajes",
+    "apartado": "transporte",
+    "idea": "Los mensajes del Handshake de TLS 1.2 llevan parámetros propios: certificate lleva una cadena X.509v3, finished un hash, y server_done no lleva ninguno.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "transporte-master-secret",
+    "apartado": "transporte",
+    "idea": "La clave maestra de TLS 1.2 mide 48 bytes, es única para la sesión y se crea en dos fases: se intercambia una pre-master y ambas partes calculan la maestra.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 30
+    }
+  },
+  {
+    "id": "transporte-key-block",
+    "apartado": "transporte",
+    "idea": "El key_block de TLS 1.2 se obtiene de la clave maestra y contiene seis parámetros: secreto MAC, clave de escritura e IV, cada uno de cliente y de servidor.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 31
+    }
+  },
+  {
+    "id": "transporte-prf",
+    "apartado": "transporte",
+    "idea": "La PRF de TLS 1.2 genera bloques de números aleatorios para crear o validar claves, iterando HMAC sobre un secreto y una semilla hasta alcanzar la longitud necesaria.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "transporte-suite-nombre",
+    "apartado": "transporte",
+    "idea": "El nombre de una suite TLS como TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 indica el intercambio de claves (ECDHE), la autenticación (RSA), el cifrado (AES_128_GCM) y el hash del MAC o de la PRF (SHA256).",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 32
+    }
+  },
+  {
+    "id": "transporte-openssl-ciphers",
+    "apartado": "transporte",
+    "idea": "El comando openssl ciphers -v lista las suites de cifrado de OpenSSL con su nombre, versión mínima, intercambio de claves, autenticación, cifrado y MAC.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 52
+    }
+  },
+  {
+    "id": "transporte-openssl-speed",
+    "apartado": "transporte",
+    "idea": "El comando openssl speed rsa mide el rendimiento de RSA, donde la operación con clave privada es la más lenta y su tiempo crece mucho con el tamaño de clave.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 54
+    }
+  },
+  {
+    "id": "transporte-openssl-ayuda",
+    "apartado": "transporte",
+    "idea": "OpenSSL ofrece comandos para obtener información básica y ayuda, como openssl version -a para la versión y opciones de compilación, openssl help para los comandos y openssl enc para cifrar.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 50
+    }
+  },
+  {
+    "id": "transporte-openssl-palabras-clave",
+    "apartado": "transporte",
+    "idea": "Las palabras clave ALL, COMPLEMENTOFALL y DEFAULT de OpenSSL seleccionan grupos de suites de cifrado: ALL son todas salvo las eNULL, COMPLEMENTOFALL las restantes y DEFAULT va la primera.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 53
+    }
+  },
+  {
+    "id": "transporte-algoritmos-debiles",
+    "apartado": "transporte",
+    "idea": "Las palabras clave HIGH, LOW y EXPORT de OpenSSL agrupan suites por tamaño de clave, y las de 64 o 56 bits y las de exportación son inseguras.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 53
+    }
+  },
+  {
+    "id": "transporte-renegociacion",
+    "apartado": "transporte",
+    "idea": "La renegociación de TLS ejecuta de nuevo el Handshake durante una conexión, la inicia el cliente con ClientHello o el servidor con HelloRequest, y oculta la nueva suite bajo cifrado.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 33
+    }
+  },
+  {
+    "id": "transporte-extensiones",
+    "apartado": "transporte",
+    "idea": "Las extensiones de TLS añaden funcionalidades al protocolo sin cambiarlo, en un bloque al final de los mensajes ClientHello y ServerHello.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 34
+    }
+  },
+  {
+    "id": "transporte-extensiones-tipicas",
+    "apartado": "transporte",
+    "idea": "Las extensiones típicas de TLS incluyen server_name con el host virtual deseado, status_request para OCSP stapling y session_ticket para la reanudación de sesión sin estado.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 35
+    }
+  },
+  {
+    "id": "transporte-cierre-conexion",
+    "apartado": "transporte",
+    "idea": "El cierre ordenado de una conexión TLS con alertas close_notify evita el truncation attack, un cierre no autorizado de la conexión usando TCP.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 36
+    }
+  },
+  {
+    "id": "transporte-arquitectura",
+    "apartado": "transporte",
+    "idea": "La arquitectura de TLS 1.2 apoya el Record Protocol sobre TCP, y sobre el Record Protocol van los protocolos Handshake, Change Cipher Spec, Alert y Heartbeat.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "transporte-tls12-downgrade",
+    "apartado": "transporte",
+    "idea": "TLS 1.2 permite ataques downgrade que fuerzan cifrados débiles, porque algunas partes del protocolo no entran en la firma digital del servidor.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 38
+    }
+  },
+  {
+    "id": "transporte-tls12-opciones",
+    "apartado": "transporte",
+    "idea": "TLS 1.2 tiene demasiados pasos (RTTs) en el Handshake, decenas de CipherSuites difíciles de elegir y parámetros de algoritmos que elige quien configura el servidor.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 38
+    }
+  },
+  {
+    "id": "transporte-tls13-eliminaciones",
+    "apartado": "transporte",
+    "idea": "TLS 1.3 prohíbe el intercambio de claves RSA y elimina el protocolo ChangeCipherSpec y los mensajes server_key_exchange y client_key_exchange del Handshake de TLS 1.2.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    }
+  },
+  {
+    "id": "transporte-tls13-keyshare",
+    "apartado": "transporte",
+    "idea": "TLS 1.3 sustituye los mensajes server_key_exchange y client_key_exchange por parámetros de compartición de clave que la extensión key_share adjunta a los mensajes Hello.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    }
+  },
+  {
+    "id": "transporte-tls13-cifrado-adelantado",
+    "apartado": "transporte",
+    "idea": "TLS 1.3 cifra cada mensaje del Handshake posterior al server_hello, incluidas las EncryptedExtensions, y así adelanta el cifrado de la conexión.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 39
+    }
+  },
+  {
+    "id": "transporte-tls13-negociacion",
+    "apartado": "transporte",
+    "idea": "TLS 1.3 reduce la negociación al elegir por separado el cifrado, el intercambio de claves y la firma, en lugar de una suite completa como TLS 1.2.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 40
+    }
+  },
+  {
+    "id": "transporte-tls13-1rtt",
+    "apartado": "transporte",
+    "idea": "El Handshake de TLS 1.3 necesita 1 RTT, frente a los 2 de TLS 1.2, porque el cliente envía su key_share en el ClientHello y acaba con un Finished.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 42
+    }
+  },
+  {
+    "id": "transporte-0rtt",
+    "apartado": "transporte",
+    "idea": "El Handshake 0-RTT de TLS 1.3 envía datos desde el primer paquete con una clave precompartida antigua, mediante pre_shared_key y early_data, y expone a ataques de reproducción.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 43
+    }
+  },
+  {
+    "id": "transporte-tls13-eliminaciones-algoritmos",
+    "apartado": "transporte",
+    "idea": "TLS 1.3 elimina elementos inseguros como CBC-then-MAC, RC4, SHA1, MD5, la compresión, la renegociación y los nonces con timestamp de 32 bits.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 44
+    }
+  },
+  {
+    "id": "transporte-cifrado-autenticado-ordenes",
+    "apartado": "transporte",
+    "idea": "El cifrado autenticado combina MAC y cifrado en distinto orden: SSL/TLS calcula primero el MAC, IPSec cifra primero y SSH cifra y autentica en paralelo.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 45
+    }
+  },
+  {
+    "id": "transporte-aead-algoritmos",
+    "apartado": "transporte",
+    "idea": "TLS 1.3 propone los algoritmos AEAD GCM, CCM y ChaCha20-Poly1305, que cifran primero o en paralelo y autentican además datos adicionales como longitudes y números de secuencia.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 45
+    }
+  },
+  {
+    "id": "transporte-gcm",
+    "apartado": "transporte",
+    "idea": "El modo Galois/Counter (GCM) cifra con la función GCTR, calcula el hash con GHASH y produce una etiqueta de autenticación además del texto cifrado.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 46
+    }
+  },
+  {
+    "id": "aplicacion-web-caracteristicas",
+    "apartado": "aplicacion",
+    "idea": "La seguridad web exige herramientas a medida porque un servidor comprometido abre la subred, sus aplicaciones se controlan poco y sus usuarios no tienen formación en seguridad.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 4
+    }
+  },
+  {
+    "id": "aplicacion-web-amenazas",
+    "apartado": "aplicacion",
+    "idea": "El resumen de ataques web asocia cada amenaza con su contramedida: sumas de comprobación criptográficas contra la pérdida de integridad, y ninguna definitiva contra la denegación de servicio.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "aplicacion-https-cifrado",
+    "apartado": "aplicacion",
+    "idea": "HTTPS es HTTP sobre SSL/TLS en el puerto 443, y cifra la URL, la cabecera, las cookies, los formularios y el contenido del documento.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "aplicacion-https-inicio",
+    "apartado": "aplicacion",
+    "idea": "En HTTPS, el cliente HTTP actúa también como cliente TLS: envía el ClientHello, completa el handshake y después manda los datos HTTP como datos de aplicación TLS.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 7
+    }
+  },
+  {
+    "id": "aplicacion-https-cierre",
+    "apartado": "aplicacion",
+    "idea": "En HTTPS, la línea Connection: close indica el cierre y activa el cierre seguro de TLS, mientras que cualquier otro cierre se trata como un posible ataque.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "aplicacion-hsts",
+    "apartado": "aplicacion",
+    "idea": "HSTS indica a los navegadores, con la cabecera Strict-Transport-Security y un max-age, que solo se conecten a ese servidor por HTTPS durante ese periodo.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "aplicacion-hsts-precarga",
+    "apartado": "aplicacion",
+    "idea": "La precarga de HSTS evita la debilidad de la primera conexión por HTTP: los navegadores llevan integrada una lista de sitios, que se solicita en hstspreload.org.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "aplicacion-hpkp",
+    "apartado": "aplicacion",
+    "idea": "HPKP define en la cabecera Public-Key-Pins de la respuesta HTTP las claves públicas del servidor para futuras conexiones TLS, y Google lo abandonó porque puede contradecir a una CA.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "aplicacion-ssh-origen",
+    "apartado": "aplicacion",
+    "idea": "SSH es un protocolo de conexiones seguras entre equipos, concebido para sustituir a utilidades inseguras como telnet y rlogin.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "aplicacion-ssh-servicios",
+    "apartado": "aplicacion",
+    "idea": "SSH provee autenticación, cifrado e integridad, y se usa hoy su versión 2 porque soluciona debilidades de la versión 1.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 12
+    }
+  },
+  {
+    "id": "aplicacion-ssh-funciones",
+    "apartado": "aplicacion",
+    "idea": "SSH ofrece sesiones remotas, ejecución remota de comandos, copia segura de archivos, túneles seguros y ejecución de aplicaciones X11 remotas mediante túneles.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 13
+    }
+  },
+  {
+    "id": "aplicacion-ssh-pila",
+    "apartado": "aplicacion",
+    "idea": "La pila de SSH pone el SSH Transport Layer Protocol sobre TCP, con autenticación del servidor, confidencialidad e integridad, y sobre él el Connection Protocol multiplexa canales lógicos.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 15
+    }
+  },
+  {
+    "id": "aplicacion-ssh-paquete",
+    "apartado": "aplicacion",
+    "idea": "El Transport Layer Protocol de SSH comprime el payload, forma un paquete con longitudes, payload y relleno, lo cifra y añade el MAC al final.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 16
+    }
+  },
+  {
+    "id": "aplicacion-ssh-autenticacion-servidor",
+    "apartado": "aplicacion",
+    "idea": "SSH autentica inicialmente al servidor con su pareja de claves pública y privada, las host keys, y el cliente obtiene la pública de known_hosts o de un certificado.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 17
+    }
+  },
+  {
+    "id": "aplicacion-ssh-fases",
+    "apartado": "aplicacion",
+    "idea": "El Transport Layer Protocol de SSH sigue unas fases: intercambio de cadenas de identificación tras la conexión TCP, negociación con SSH_MSG_KEXINIT, intercambio de claves y fin con SSH_MSG_NEWKEYS.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 18
+    }
+  },
+  {
+    "id": "aplicacion-ssh-identificacion",
+    "apartado": "aplicacion",
+    "idea": "En SSH, cliente y servidor intercambian cadenas de identificación con el formato SSH-protoversion-softwareversion, que entran después en el intercambio de claves Diffie-Hellman.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "aplicacion-ssh-negociacion",
+    "apartado": "aplicacion",
+    "idea": "En SSH, el mensaje SSH_MSG_KEXINIT lista algoritmos por orden de preferencia, y se escoge el primero de la lista del cliente que el servidor también soporte.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 19
+    }
+  },
+  {
+    "id": "aplicacion-ssh-dh",
+    "apartado": "aplicacion",
+    "idea": "SSH acuerda la clave compartida con un intercambio Diffie-Hellman, en el que el servidor se autentica firmando su mitad con su clave privada.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "aplicacion-ssh-identificador-sesion",
+    "apartado": "aplicacion",
+    "idea": "El identificador de sesión de SSH es el valor hash H del intercambio Diffie-Hellman, y no cambia cuando se refrescan las claves.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "aplicacion-ssh-generacion-claves",
+    "apartado": "aplicacion",
+    "idea": "SSH genera las claves de sesión a partir de la clave compartida K, el hash H y el identificador de sesión, normalmente H.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 22
+    }
+  },
+  {
+    "id": "aplicacion-ssh-peticion-servicio",
+    "apartado": "aplicacion",
+    "idea": "Al acabar el intercambio de claves de SSH, ambas partes usan las claves generadas, y el cliente pide el User Authentication Protocol o el Connection Protocol.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "aplicacion-ssh-userauth-flujo",
+    "apartado": "aplicacion",
+    "idea": "En el User Authentication Protocol de SSH, el servidor responde a cada SSH_MSG_USERAUTH_REQUEST con FAILURE, parcial o no, o con SUCCESS cuando todos los métodos requeridos tienen éxito.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 24
+    }
+  },
+  {
+    "id": "aplicacion-ssh-userauth-publickey",
+    "apartado": "aplicacion",
+    "idea": "En el método publickey de SSH, el servidor envía un nonce y el cliente lo firma con su clave privada, que se verifica con su clave pública guardada en AuthorizedKeys.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 25
+    }
+  },
+  {
+    "id": "aplicacion-ssh-userauth-password-hostbased",
+    "apartado": "aplicacion",
+    "idea": "En SSH, el método password envía la contraseña cifrada por la capa de transporte, y hostbased autentica el equipo cliente con una firma de su clave privada.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 25
+    }
+  },
+  {
+    "id": "aplicacion-ssh-canales",
+    "apartado": "aplicacion",
+    "idea": "En el Connection Protocol de SSH, cada canal lógico tiene un número único por parte, controla el flujo con ventanas y pasa por apertura, datos y cierre.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "aplicacion-ssh-tipos-canal",
+    "apartado": "aplicacion",
+    "idea": "El Connection Protocol de SSH tiene tipos de canal: session para ejecutar un programa remoto, x11 para un flujo gráfico y direct-tcpip para el port forwarding local.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "aplicacion-ssh-canal-mensajes",
+    "apartado": "aplicacion",
+    "idea": "En el Connection Protocol de SSH, SSH_MSG_CHANNEL_OPEN abre un canal con tipo, canal emisor, ventana inicial y paquete máximo, y el servidor responde con SSH_MSG_CHANNEL_OPEN_CONFIRMATION.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 27
+    }
+  },
+  {
+    "id": "aplicacion-ssh-port-forwarding",
+    "apartado": "aplicacion",
+    "idea": "El port forwarding de SSH, o ssh tunneling, vuelve segura una conexión insegura al redirigir el tráfico de los puertos estándar a puertos de la conexión SSH, local o remoto.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 28
+    }
+  },
+  {
+    "id": "aplicacion-ssh-recomendaciones-acceso",
+    "apartado": "aplicacion",
+    "idea": "Una configuración segura de SSH no permite conectar al usuario root ni autenticar por contraseña, solo por clave pública, y no escucha en cualquier interfaz.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "aplicacion-ssh-recomendaciones-defensa",
+    "apartado": "aplicacion",
+    "idea": "Una configuración segura de SSH usa allow lists de usuarios y de IP, fail2ban o sshGuard contra la fuerza bruta, y mantiene actualizados el sistema y los paquetes.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "aplicacion-correo-componentes",
+    "apartado": "aplicacion",
+    "idea": "El correo electrónico tiene tres componentes: agentes de usuario (MUA) que componen y leen mensajes, servidores de correo (MTA) con buzones y cola de salida, y un protocolo de transferencia.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 31
+    }
+  },
+  {
+    "id": "aplicacion-correo-protocolos",
+    "apartado": "aplicacion",
+    "idea": "El correo usa SMTP para enviar mensajes entre servidores y desde los agentes de usuario, y POP3 o IMAP para que los agentes de usuario descarguen el correo.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 32
+    }
+  },
+  {
+    "id": "aplicacion-smtp",
+    "apartado": "aplicacion",
+    "idea": "SMTP transfiere el correo por una conexión TCP persistente en el puerto 25, en fases de saludo, transferencia y cierre, con comandos ASCII y códigos de estado.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 33
+    }
+  },
+  {
+    "id": "aplicacion-correo-formato",
+    "apartado": "aplicacion",
+    "idea": "Un mensaje de correo electrónico, según RFC 5322, tiene una cabecera con datos administrativos de envío, como remitente, destinatario, Cc y fecha, y un cuerpo con los datos del usuario.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 35
+    }
+  },
+  {
+    "id": "aplicacion-mime-motivo",
+    "apartado": "aplicacion",
+    "idea": "MIME resuelve la limitación del SMTP original al ASCII de 7 bits, que impide enviar imágenes o ejecutables, con formatos extensibles y mensajes de varias partes independientes.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 36
+    }
+  },
+  {
+    "id": "aplicacion-mime-campos",
+    "apartado": "aplicacion",
+    "idea": "MIME añade a la cabecera los campos MIME-Version, Content-Type, con el formato de los datos, y Content-Transfer-Encoding, con la codificación a ASCII que el receptor decodifica.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 37
+    }
+  },
+  {
+    "id": "aplicacion-mime-multipart",
+    "apartado": "aplicacion",
+    "idea": "Los tipos multipart de MIME agrupan partes en subtipos como Mixed, en orden, Parallel, sin orden, y Alternative, con versiones de una misma información, y message/rfc822 encapsula un mensaje.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 38
+    }
+  },
+  {
+    "id": "aplicacion-correo-amenazas",
+    "apartado": "aplicacion",
+    "idea": "El NIST SP 800-177 clasifica las amenazas al correo electrónico en autenticación, integridad, confidencialidad y disponibilidad, donde entran los ataques DoS contra los servidores de correo.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 40
+    }
+  },
+  {
+    "id": "aplicacion-correo-puertos-tls",
+    "apartado": "aplicacion",
+    "idea": "El correo con TLS usaba puertos seguros propios al estilo HTTPS, como el 995 de POP3S, un esquema que se considera confuso y desperdicia puertos.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 42
+    }
+  },
+  {
+    "id": "aplicacion-correo-starttls",
+    "apartado": "aplicacion",
+    "idea": "STARTTLS pasa una conexión de correo de texto plano a segura sin cambiar de puerto: el servidor anuncia TLS en su respuesta al EHLO y ambos negocian la sesión.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 43
+    }
+  },
+  {
+    "id": "aplicacion-correo-esquema",
+    "apartado": "aplicacion",
+    "idea": "El correo se protege con registros DNS: TXT de SPF con las IP del emisor, TXT de DKIM con su clave, TXT de DMARC y TLSA de DANE con DNSSEC.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 45
+    }
+  },
+  {
+    "id": "aplicacion-dnssec",
+    "apartado": "aplicacion",
+    "idea": "DNSSEC da autenticación e integridad a los datos del DNS firmándolos con registros especiales, y DANE lo usa para enviar la información de los certificados.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    }
+  },
+  {
+    "id": "aplicacion-dane",
+    "apartado": "aplicacion",
+    "idea": "DANE (DNS-based Authentication of Named Entities) asocia certificados a nombres almacenándolos en servidores DNS, y envía esa información con DNSSEC.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    }
+  },
+  {
+    "id": "aplicacion-spf",
+    "apartado": "aplicacion",
+    "idea": "SPF (Sender Policy Framework) permite a los dueños de un dominio definir los rangos de IP de los emisores autorizados a enviar correo en su nombre.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    }
+  },
+  {
+    "id": "aplicacion-dkim",
+    "apartado": "aplicacion",
+    "idea": "DKIM (DomainKeys Identified Mail) permite al MTA emisor firmar con su clave las cabeceras y el cuerpo de un mensaje, que el receptor verifica con la clave pública del TXT.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    }
+  },
+  {
+    "id": "aplicacion-dmarc",
+    "apartado": "aplicacion",
+    "idea": "DMARC (Domain-based Message Authentication, Reporting, and Conformance) indica en un registro TXT que el emisor usa DKIM y SPF, y le permite conocer su efectividad ante ataques.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 44
+    }
+  },
+  {
+    "id": "aplicacion-smime-funciones",
+    "apartado": "aplicacion",
+    "idea": "S/MIME añade a MIME firma digital, cifrado y compresión con ZIP, y convierte el mensaje cifrado a Radix-64 para que pase como ASCII por las aplicaciones de correo.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 47
+    }
+  },
+  {
+    "id": "aplicacion-smime-firma",
+    "apartado": "aplicacion",
+    "idea": "En S/MIME, el remitente firma el resumen hash del mensaje con su clave privada y el receptor verifica la firma con la clave pública del remitente.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 48
+    }
+  },
+  {
+    "id": "aplicacion-smime-clave-sesion",
+    "apartado": "aplicacion",
+    "idea": "En S/MIME, el remitente cifra el mensaje con una clave secreta de un solo uso, que cifra con la clave pública del destinatario y envía junto con el mensaje.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 48
+    }
+  },
+  {
+    "id": "aplicacion-smime-recepcion",
+    "apartado": "aplicacion",
+    "idea": "En S/MIME, el remitente firma el mensaje y cifra mensaje y firma, y el receptor descifra la clave de sesión con su clave privada, luego el mensaje, y verifica.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 48
+    }
+  },
+  {
+    "id": "aplicacion-smime-algoritmos",
+    "apartado": "aplicacion",
+    "idea": "S/MIME exige soportar SHA-256 para el resumen de la firma, AES-128 en modo CBC para cifrar el mensaje y RSA para cifrar la clave de sesión.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 49
+    }
+  },
+  {
+    "id": "aplicacion-smime-tipos-contenido",
+    "apartado": "aplicacion",
+    "idea": "S/MIME usa los tipos de contenido del RFC 5652: Data para el contenido MIME codificado, SignedData para firmar, EnvelopedData para cifrar y CompressedData para comprimir.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 50
+    }
+  },
+  {
+    "id": "aplicacion-smime-clear-signing",
+    "apartado": "aplicacion",
+    "idea": "El clear signing de S/MIME firma un mensaje con la firma a continuación, sin formato especial, y lo lee cualquier receptor MIME aunque no soporte S/MIME, a diferencia de SignedData.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 50
+    }
+  },
+  {
+    "id": "aplicacion-smime-proceso",
+    "apartado": "aplicacion",
+    "idea": "S/MIME asegura una entidad MIME firmándola, cifrándola o de ambas formas, y le añade datos de seguridad, identificación de algoritmos y certificados en un objeto PKCS codificado en base64.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 51
+    }
+  },
+  {
+    "id": "aplicacion-smime-signeddata",
+    "apartado": "aplicacion",
+    "idea": "Un SignedData de S/MIME se prepara eligiendo y calculando el resumen del contenido, cifrándolo con la clave privada del firmante y construyendo el bloque SignerInfo con certificado y algoritmos.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 52
+    }
+  },
+  {
+    "id": "aplicacion-smime-enveloped",
+    "apartado": "aplicacion",
+    "idea": "Un EnvelopedData de S/MIME se prepara generando una clave de sesión pseudoaleatoria, cifrándola con la clave pública RSA de cada destinatario y guardándola en un bloque RecipientInfo por destinatario.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 54
+    }
+  },
+  {
+    "id": "sigla-aplicacion-hsts",
+    "apartado": "aplicacion",
+    "idea": "HSTS significa HTTP Strict Transport Security, la seguridad estricta de transporte de HTTP.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "sigla-aplicacion-hpkp",
+    "apartado": "aplicacion",
+    "idea": "HPKP significa HTTP Public Key Pinning, la fijación de claves públicas de HTTP.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 10
+    }
+  },
+  {
+    "id": "sigla-aplicacion-ssh",
+    "apartado": "aplicacion",
+    "idea": "SSH significa Secure Shell, el intérprete de comandos seguro.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "sigla-aplicacion-dnssec",
+    "apartado": "aplicacion",
+    "idea": "DNSSEC significa Domain Name System Security Extensions, las extensiones de seguridad del sistema de nombres de dominio.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 45
+    }
+  },
+  {
+    "id": "sigla-aplicacion-dane",
+    "apartado": "aplicacion",
+    "idea": "DANE significa DNS-based Authentication of Named Entities, la autenticación de entidades con nombre basada en DNS.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 41
+    }
+  },
+  {
+    "id": "sigla-aplicacion-spf",
+    "apartado": "aplicacion",
+    "idea": "SPF significa Sender Policy Framework, el marco de política de remitentes del correo.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 41
+    }
+  },
+  {
+    "id": "sigla-aplicacion-dkim",
+    "apartado": "aplicacion",
+    "idea": "DKIM significa DomainKeys Identified Mail, el correo identificado con claves de dominio.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 41
+    }
+  },
+  {
+    "id": "sigla-aplicacion-dmarc",
+    "apartado": "aplicacion",
+    "idea": "DMARC significa Domain-based Message Authentication, Reporting, and Conformance, la autenticación, informes y conformidad de mensajes basada en dominio.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 41
+    }
+  },
+  {
+    "id": "sigla-aplicacion-smime",
+    "apartado": "aplicacion",
+    "idea": "S/MIME significa Secure/Multipurpose Internet Mail Extension, la extensión segura de correo multipropósito de Internet.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 46
+    }
+  },
+  {
+    "id": "ssl-tls-sslv1-fallos",
+    "apartado": "ssl-tls",
+    "idea": "SSL v1, el primer borrador de Netscape, tenía graves fallos de diseño: no comprobaba la integridad, permitía ataques de repetición y su CRC era criptográficamente débil.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 5
+    }
+  },
+  {
+    "id": "ssl-tls-sslv2-fallos",
+    "apartado": "ssl-tls",
+    "idea": "SSL v2 tenía graves fallos de diseño: usaba MD5 para la integridad, un MitM podía forzar un cifrado más débil y un paquete TCP FIN cerraba la sesión.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 6
+    }
+  },
+  {
+    "id": "ssl-tls-tls11-cbc",
+    "apartado": "ssl-tls",
+    "idea": "TLS 1.1 protege contra ataques al modo CBC cambiando el vector de inicialización de implícito a explícito y eliminando los errores generados por el padding.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 9
+    }
+  },
+  {
+    "id": "ssl-tls-renegociacion-insegura",
+    "apartado": "ssl-tls",
+    "idea": "La renegociación insegura de SSL, con CVE-2009-3555, permitía a un MitM inyectar peticiones en una sesión HTTPS y causar denegación de servicio, y se corrige deshabilitándola o usando la segura.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 11
+    }
+  },
+  {
+    "id": "ssl-tls-sslstrip",
+    "apartado": "ssl-tls",
+    "idea": "sslstrip fuerza a un navegador que cree usar HTTPS a usar HTTP (HTTPS Stripping), requiere que el atacante esté entre víctima y servidor, y HSTS lo resiste.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 21
+    }
+  },
+  {
+    "id": "ssl-tls-sslstrip-proxy",
+    "apartado": "ssl-tls",
+    "idea": "En sslstrip, el atacante actúa de proxy: habla HTTP con la víctima y HTTPS con el servidor real, reenvía la página y ve en claro lo que la víctima envía.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "ssl-tls-nul-byte",
+    "apartado": "ssl-tls",
+    "idea": "El NUL byte attack usa un certificado con un NUL en mitad del nombre de host, que la CA ignora y el navegador toma como fin de cadena, para suplantar.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 26
+    }
+  },
+  {
+    "id": "ssl-tls-firesheep-sidejacking",
+    "apartado": "ssl-tls",
+    "idea": "El sidejacking, que Firesheep hizo trivial, roba la sesión recuperando los identificadores de sesión de un tráfico sin cifrar, y en una red cableada exige un MitM previo.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 29
+    }
+  },
+  {
+    "id": "ssl-tls-beast",
+    "apartado": "ssl-tls",
+    "idea": "BEAST ataca SSLv3 y TLSv1 explotando los vectores de inicialización predecibles de CBC: el atacante inyecta bloques conocidos y avanza byte a byte aprovechando partes conocidas de la petición HTTP.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 35
+    }
+  },
+  {
+    "id": "ssl-tls-beast-mitigacion",
+    "apartado": "ssl-tls",
+    "idea": "La mitigación 1/n-1 split de los navegadores contra BEAST divide cada bloque en uno de 1 byte y otro con el resto, para evitar el descifrado byte a byte.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 44
+    }
+  },
+  {
+    "id": "ssl-tls-beast-alcance",
+    "apartado": "ssl-tls",
+    "idea": "BEAST afecta solo a SSLv3 y TLSv1, no a TLS 1.1 por su vector de inicialización explícito, y requiere un ataque previo que inyecte código en la sesión del cliente.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 63
+    }
+  },
+  {
+    "id": "ssl-tls-public-key-pinning",
+    "apartado": "ssl-tls",
+    "idea": "El Public Key Pinning estático de Google en Chrome incluye en el navegador la clave pública de los certificados para evitar MitM con certificados fraudulentos, y destapó certificados no autorizados.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 46
+    }
+  },
+  {
+    "id": "ssl-tls-ct-sustituye-hpkp",
+    "apartado": "ssl-tls",
+    "idea": "Chrome sustituyó HPKP por la Transparencia de Certificados (CT), que permite a cualquiera detectar la emisión de certificados no autorizados, y solo acepta certificados publicados con ella.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 111
+    }
+  },
+  {
+    "id": "ssl-tls-flame-md5",
+    "apartado": "ssl-tls",
+    "idea": "El APT Flame firmó código que parecía de Microsoft con un certificado falso cuyo hash MD5 colisionaba con el oficial, lo que demostró definitivamente la debilidad de MD5.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 51
+    }
+  },
+  {
+    "id": "ssl-tls-crime",
+    "apartado": "ssl-tls",
+    "idea": "CRIME aprovecha la compresión de TLS para descifrar partes de las peticiones HTTPS: el atacante inyecta texto, mide el tamaño de los paquetes y una petición menor confirma el acierto.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 52
+    }
+  },
+  {
+    "id": "ssl-tls-crime-breach-defensa",
+    "apartado": "ssl-tls",
+    "idea": "Los navegadores respondieron a CRIME eliminando la compresión de TLS, y un WAF puede detectar CRIME y BREACH limitando las peticiones por minuto, porque necesitan inyectar muchas.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 71
+    }
+  },
+  {
+    "id": "ssl-tls-breach",
+    "apartado": "ssl-tls",
+    "idea": "BREACH explota la compresión HTTP, con gzip o Deflate, no la de TLS: el atacante inyecta peticiones en el cliente y deduce un secreto del cuerpo de la respuesta.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 66
+    }
+  },
+  {
+    "id": "ssl-tls-lucky13",
+    "apartado": "ssl-tls",
+    "idea": "Lucky 13 ataca las suites de cifrado con CBC en TLS, y recupera cookies midiendo la diferencia de tiempo de respuesta del servidor al alterar el padding, en redes locales.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 60
+    }
+  },
+  {
+    "id": "ssl-tls-bias-rc4",
+    "apartado": "ssl-tls",
+    "idea": "BIAS explota sesgos estadísticos de RC4 para recuperar secretos con grandes cantidades de tráfico del mismo texto cifrado, y la única solución es dejar de usar RC4.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 63
+    }
+  },
+  {
+    "id": "ssl-tls-padding-oracle",
+    "apartado": "ssl-tls",
+    "idea": "Un ataque padding oracle contra CBC cambia el vector de inicialización de un bloque, usa la validez del padding que revela el servidor y recupera el texto con un XOR.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 86
+    }
+  },
+  {
+    "id": "ssl-tls-heartbleed",
+    "apartado": "ssl-tls",
+    "idea": "Heartbleed fue un bug de implementación de la extensión Heartbeat de OpenSSL 1.0.1 a 1.0.1f, que permitía recuperar parte de la memoria del sistema afectado.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 73
+    }
+  },
+  {
+    "id": "ssl-tls-poodle",
+    "apartado": "ssl-tls",
+    "idea": "POODLE explota el padding de SSLv3, lo que inutilizó SSLv3 porque CBC y RC4 estaban rotos en él, y abandonarlo fue viable porque la mayoría de servidores ya soportaban TLSv1.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 78
+    }
+  },
+  {
+    "id": "ssl-tls-poodle-tls",
+    "apartado": "ssl-tls",
+    "idea": "Zombie POODLE y GOLDENDOODLE son ataques de padding oracle contra CBC en implementaciones de TLS 1.2, por fallos de fabricantes y no del protocolo, que descifran secretos de cabeceras HTTP.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 116
+    }
+  },
+  {
+    "id": "ssl-tls-freak",
+    "apartado": "ssl-tls",
+    "idea": "FREAK (Factoring RSA Export Keys) fuerza claves RSA de exportación débiles, de 40 bits, en servidores con RSA_EXPORT, y se corrige dejando de soportarlo y actualizando las bibliotecas.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 101
+    }
+  },
+  {
+    "id": "ssl-tls-logjam",
+    "apartado": "ssl-tls",
+    "idea": "Logjam fuerza claves débiles de 512 bits en el intercambio Diffie-Hellman de servidores con DHE_EXPORT, requiere un MitM previo y se evita forzando claves de 2048 bits.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 103
+    }
+  },
+  {
+    "id": "ssl-tls-drown",
+    "apartado": "ssl-tls",
+    "idea": "DROWN (Decrypting RSA with Obsolete and Weakened eNcryption) ataca SSLv2 recuperando la clave privada, y es relevante porque afecta también a clientes y servidores que no soportan SSLv2.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 108
+    }
+  },
+  {
+    "id": "ssl-tls-raccoon",
+    "apartado": "ssl-tls",
+    "idea": "Raccoon es un ataque de tiempo que explota una característica del intercambio Diffie-Hellman para recuperar la clave negociada en el handshake, y exige estar muy próximo al servidor.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 121
+    }
+  },
+  {
+    "id": "ssl-tls-alpaca",
+    "apartado": "ssl-tls",
+    "idea": "ALPACA es un ataque de confusión de protocolo cruzado contra TLS que afecta a un servidor HTTPS que comparte certificado con comodín e IP con otro servicio.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 124
+    }
+  },
+  {
+    "id": "ssl-tls-pq-hibrido",
+    "apartado": "ssl-tls",
+    "idea": "El TLS híbrido combina en el handshake de TLS 1.3 un algoritmo de curva elíptica, como X25519, con ML-KEM, para mitigar el ataque store-now-decrypt-later y conservar protección si ML-KEM falla.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 128
+    }
+  },
+  {
+    "id": "ssl-tls-nist-postcuantico",
+    "apartado": "ssl-tls",
+    "idea": "El NIST publicó las normas post-cuánticas ML-KEM para el intercambio de claves y ML-DSA y SLH-DSA para las firmas, y Chrome usa ML-KEM contra el ataque store-now-decrypt-later.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 126
+    }
+  },
+  {
+    "id": "ssl-tls-tls13-motivacion",
+    "apartado": "ssl-tls",
+    "idea": "Se trabajó en TLS 1.3 porque se sospechaba que TLS 1.2 no sobreviviría a los ataques de la década siguiente, y se mostró en un workshop con algoritmos sin vulnerabilidades.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 72
+    }
+  },
+  {
+    "id": "ssl-tls-sni-en-claro",
+    "apartado": "ssl-tls",
+    "idea": "El SNI de TLS viaja en claro en el primer paquete y revela el sitio visitado aunque el DNS vaya cifrado con DoH, por lo que se desarrolló ESNI.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 115
+    }
+  },
+  {
+    "id": "ssl-tls-esni-limites",
+    "apartado": "ssl-tls",
+    "idea": "ESNI solo cifraba el nombre del host y dejaba en claro el resto del ClientHello, como ALPN y los algoritmos, lo que permitía inferir el destino y bloquearlo.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 122
+    }
+  },
+  {
+    "id": "ssl-tls-ech",
+    "apartado": "ssl-tls",
+    "idea": "ECH (Encrypted Client Hello) usa un doble handshake: el ClientHelloOuter muestra un SNI público, y el ClientHelloInner se cifra con HPKE y la clave pública del servidor obtenida por DNS.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 122
+    }
+  },
+  {
+    "id": "ssl-tls-doh",
+    "apartado": "ssl-tls",
+    "idea": "DNS over HTTPS (DoH), del RFC 8484, resuelve las consultas DNS a través de HTTPS, lo que reduce las escuchas y el DNS Spoofing, y rompe bloqueos basados en DNS.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 114
+    }
+  },
+  {
+    "id": "ssl-tls-sha1-certificados",
+    "apartado": "ssl-tls",
+    "idea": "Los navegadores dejaron de aceptar a comienzos de 2017 los certificados firmados con SHA1, contra el que había ataques teóricos desde 2005, y las empresas migraron a SHA-256.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 110
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-beast",
+    "apartado": "ssl-tls",
+    "idea": "BEAST significa Browser Exploit Against SSL/TLS Tool, la herramienta de explotación del navegador contra SSL/TLS.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 35
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-crime",
+    "apartado": "ssl-tls",
+    "idea": "CRIME significa Compression Ratio Info-leak Made Easy, la fuga de información por la tasa de compresión hecha fácil.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 52
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-breach",
+    "apartado": "ssl-tls",
+    "idea": "BREACH significa Browser Reconnaissance and Exfiltration via Adaptive Compression of Hypertext, el reconocimiento y la exfiltración desde el navegador mediante compresión adaptativa de hipertexto.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 66
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-poodle",
+    "apartado": "ssl-tls",
+    "idea": "POODLE significa Padding Oracle On Downgraded Legacy Encryption, el oráculo de padding sobre cifrado heredado degradado.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 78
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-freak",
+    "apartado": "ssl-tls",
+    "idea": "FREAK significa Factoring RSA Export Keys, la factorización de claves RSA de exportación.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 101
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-drown",
+    "apartado": "ssl-tls",
+    "idea": "DROWN significa Decrypting RSA with Obsolete and Weakened eNcryption, el descifrado de RSA con cifrado obsoleto y debilitado.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 108
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-ech",
+    "apartado": "ssl-tls",
+    "idea": "ECH significa Encrypted Client Hello, el mensaje ClientHello cifrado de TLS.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 122
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-esni",
+    "apartado": "ssl-tls",
+    "idea": "ESNI significa Encrypted SNI, la indicación cifrada del nombre del servidor de TLS.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 115
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-sni",
+    "apartado": "ssl-tls",
+    "idea": "SNI significa Server Name Indication, la indicación del nombre del servidor que el cliente envía en el primer paquete de TLS.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 115
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-ml-kem",
+    "apartado": "ssl-tls",
+    "idea": "ML-KEM significa Module-Lattice-Based Key-Encapsulation Mechanism, el mecanismo de encapsulación de claves basado en retículos modulares, la norma post-cuántica del NIST para el intercambio de claves.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 126
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-hpke",
+    "apartado": "ssl-tls",
+    "idea": "HPKE significa Hybrid Public Key Encryption, el cifrado híbrido de clave pública con el que ECH cifra el ClientHelloInner.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 122
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-alpn",
+    "apartado": "ssl-tls",
+    "idea": "ALPN significa Application-Layer Protocol Negotiation, la negociación de protocolo de la capa de aplicación de TLS.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 124
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-apt",
+    "apartado": "ssl-tls",
+    "idea": "APT significa Advanced Persistent Threat, la amenaza persistente avanzada, como el malware de espionaje Flame.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 51
+    }
+  },
+  {
+    "id": "ssl-tls-prohibicion-de-versiones",
+    "apartado": "ssl-tls",
+    "idea": "La RFC 7568 prohíbe SSL v3: un cliente TLS no la incluye en el ClientHello, un servidor rechaza al cliente que solo la soporta, y se recomienda TLS.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 105
+    }
+  },
+  {
+    "id": "ssl-tls-sslstrip-dominio-parecido",
+    "apartado": "ssl-tls",
+    "idea": "En un MITM de sslstrip con bettercap, el atacante reescribe los enlaces hacia un dominio parecido sin política HSTS, y la víctima ve http:// sin candado.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 23
+    }
+  },
+  {
+    "id": "claves-fortaleza-distribucion",
+    "apartado": "claves",
+    "idea": "La fortaleza de un sistema criptográfico depende de la técnica con que distribuye sus claves, simétricas o asimétricas, y los protocolos de seguridad necesitan administrarlas adecuadamente.",
+    "fuente": {
+      "pdf": "2_Claves.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "sigla-ssl",
+    "apartado": "transporte",
+    "idea": "SSL significa Secure Sockets Layer, la capa de conexión segura, situada entre la aplicación y TCP.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "sigla-tls",
+    "apartado": "transporte",
+    "idea": "TLS significa Transport Layer Security, la capa segura de transporte, evolución de SSL.",
+    "fuente": {
+      "pdf": "3_Transporte.pdf",
+      "pagina": 2
+    }
+  },
+  {
+    "id": "aplicacion-ssh-cifrados",
+    "apartado": "aplicacion",
+    "idea": "La lista de cifrados de SSH incluye AES con claves de 128, 192 y 256 bits, casi todos en modo CBC, y arcfour, un cifrado de flujo RC4.",
+    "fuente": {
+      "pdf": "4_Aplicacion.pdf",
+      "pagina": 20
+    }
+  },
+  {
+    "id": "ssl-tls-tls10-ssl3",
+    "apartado": "ssl-tls",
+    "idea": "TLS 1.0, definido en el RFC 2246, introduce solo mejoras menores sobre SSLv3 y no permite la interoperabilidad con él, aunque ofrece la opción de degradar la conexión a SSLv3.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 8
+    }
+  },
+  {
+    "id": "ssl-tls-rc4-o-cbc",
+    "apartado": "ssl-tls",
+    "idea": "En 2013, ante los ataques a RC4 y a CBC, la mejor solución era TLS 1.2 sin RC4 ni CBC, y Google usaba RC4 mientras Microsoft y Firefox preferían CBC.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 64
+    }
+  },
+  {
+    "id": "ssl-tls-mitm-con-y-sin-cifrado",
+    "apartado": "ssl-tls",
+    "idea": "Un ataque Man-in-the-Middle coloca al atacante entre los dos extremos: si el protocolo no cifra, lee y cambia el tráfico, y si cifra, el tráfico va cifrado en cada tramo.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-mitm",
+    "apartado": "ssl-tls",
+    "idea": "MitM significa Man-in-the-Middle, el hombre en el medio.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 14
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-ecb",
+    "apartado": "ssl-tls",
+    "idea": "ECB significa Electronic Code Book, el libro de códigos electrónico, un modo de cifrado por bloques.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 35
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-ct",
+    "apartado": "ssl-tls",
+    "idea": "CT significa Certificate Transparency, la transparencia de certificados.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 111
+    }
+  },
+  {
+    "id": "sigla-ssl-tls-doh",
+    "apartado": "ssl-tls",
+    "idea": "DoH significa DNS over HTTPS, el DNS sobre HTTPS.",
+    "fuente": {
+      "pdf": "E_SSL_TLS.pdf",
+      "pagina": 114
+    }
+  }
+]
