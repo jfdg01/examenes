@@ -13,6 +13,6 @@ Los diagramas de `app/` siguen el modelo C4: el contexto, los contenedores y los
 | `abrir-un-examen.puml` | ¿Cómo acaban el dispositivo y el servidor con el mismo historial y la misma ronda? |
 | `contestar-una-pregunta.puml` | ¿Qué pasa con una respuesta sin red? |
 
-Un cambio de un contenedor, un componente o una flecha actualiza su diagrama en el mismo cambio.
+Un cambio de `app/` no actualiza los diagramas, y un diagrama puede ir por detrás del código. Un diagrama cambia solo cuando el dueño lo pide.
 
 En VS Code, la extensión `jebbs.plantuml` abre la vista previa con Alt+D. Cada diagrama lleva `!pragma layout smetana`, que dibuja sin Graphviz. Las macros de C4 vienen dentro de PlantUML, sin red.
