@@ -22,8 +22,8 @@ Valen para cada banco, salvo los congelados, como ASN y CA, que no se reescriben
 
 1. **Un concepto es una idea del temario.** Una idea es una regla, un mecanismo, la diferencia entre 2 cosas o lo que hace algo. Una página da tantos conceptos como ideas tiene, de 0 a varios. Una fecha, un número de RFC o de norma, o el nombre de quien publica algo no son una idea.
 2. **La idea se entiende sola.** Da su contexto: el protocolo, el mecanismo o el proceso del que habla. Quien no ha visto la diapositiva entiende la frase. La idea no remite al documento: "según el PDF" o "en la diapositiva" no van.
-3. **Un dato que el temario da de 2 formas no tiene concepto.** Una pregunta de test sobre él no tiene una sola respuesta defendible.
-4. **Una sigla de seguridad es un concepto propio.** Su idea dice el significado de la sigla y lo que nombra. Las siglas generales de informática, como TCP, IP o ASCII, quedan fuera.
+3. **Un dato que el temario da de 2 formas toma la forma de su `fuente`,** la página que lo explica. Una forma que solo nombra el dato queda fuera. Si dos páginas lo explican de forma distinta, la idea da las dos formas, cada una con su contexto: "En la LOPDGDD el plazo es X, y en el RGPD es Y".
+4. **Una sigla que el temario explica es un concepto propio.** Su idea dice el significado de la sigla y lo que nombra. Una sigla que el temario usa sin explicar queda fuera.
 5. **Lo que el profesor marcó tiene su concepto.** El `README.md` de cada examen dice lo que el profesor marcó como importante. Una idea marcada que ningún PDF trae es cierta según el `README.md`.
 6. **Una idea que vive sobre todo en otro PDF es del apartado de ese PDF.** Este apartado la recoge solo en lo que su PDF explica.
 
