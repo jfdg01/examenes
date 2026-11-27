@@ -1,0 +1,154 @@
+[
+  {
+    "id": "introduccion-d001",
+    "apartado": "introduccion",
+    "forma": "propiedad",
+    "enunciado": "Explica cómo se garantiza la integridad de un mensaje y cómo se firma digitalmente, con qué clave y sobre qué.",
+    "modelo": "La integridad exige un método que verifique que los datos enviados no se han modificado, y de ella surge el concepto de firma digital. Una opción es el MAC, Message Authentication Code, el código de autenticación de mensaje: garantiza la integridad añadiendo al mensaje un resumen calculado con un secreto compartido, que el receptor recalcula y compara. La firma digital establece que el emisor es el creador del documento, y debe ser verificable y no repudiable. Se calcula aplicando la clave privada del emisor al resumen H(m) del mensaje, y el receptor la verifica con la clave pública del emisor.",
+    "puntos": [
+      "introduccion-integridad",
+      "sigla-introduccion-mac",
+      "introduccion-mac",
+      "introduccion-firma-propiedades",
+      "introduccion-firma-proceso"
+    ]
+  },
+  {
+    "id": "claves-d001",
+    "apartado": "claves",
+    "forma": "proceso",
+    "enunciado": "Explica cómo funciona un certificado: cómo se genera, qué contiene y cómo se verifica.",
+    "modelo": "El estándar X.509 define un entorno de autenticación con un formato de certificado, que contiene una clave pública firmada con la privada de una CA, sobre el directorio X.500. La CA genera el certificado calculando un hash del certificado sin firmar, con la identidad, la clave pública y los datos de la CA, y cifrándolo con su clave privada. El certificado contiene campos como la versión, el periodo de validez (not before y not after), la clave pública del sujeto y, desde la versión 3, extensiones. El destinatario lo verifica descifrando la firma con la clave pública de la CA y comparando el resumen recuperado con el que calcula, lo que detecta modificaciones. Cualquier usuario con la clave pública de la CA puede verificar un certificado y nadie más que la CA puede modificarlo, así que se publica libremente, incluso en cadenas jerárquicas de CAs.",
+    "puntos": [
+      "claves-x509",
+      "claves-certificado-firma",
+      "claves-certificado-contenido",
+      "claves-certificado-verificacion",
+      "claves-certificado-propiedades"
+    ]
+  },
+  {
+    "id": "claves-d002",
+    "apartado": "claves",
+    "forma": "clasificacion",
+    "enunciado": "Clasifica las formas de hacer llegar una clave de sesión a las dos partes de una comunicación.",
+    "modelo": "La clave de sesión es la clave simétrica que se cambia a nivel de sesión para aumentar la seguridad, y debe llegar por un medio seguro a ambas partes. Con criptografía simétrica hay cuatro opciones: A la entrega físicamente a B, una entidad externa la entrega físicamente a ambos, A la envía a B cifrada con una clave ya compartida, o un tercero C la envía a ambos por una conexión cifrada. Con criptografía asimétrica efímera, A genera un par de claves y envía su pública a B, B le envía la clave de sesión cifrada con ella, y después A desecha el par y B la clave pública. Si las claves públicas no se autentican, este intercambio permite un ataque del intermediario, donde Darth sustituye la clave pública y obtiene la clave de sesión. Con autenticación y cifrado, A cifra la clave de sesión con su privada y la pública de B, y los núnicos prueban que B posee su clave privada.",
+    "puntos": [
+      "claves-clave-de-sesion",
+      "claves-opciones-de-distribucion",
+      "claves-asimetrica-efimera",
+      "claves-mitm-intercambio",
+      "claves-firma-y-cifrado-de-ks"
+    ]
+  },
+  {
+    "id": "transporte-d001",
+    "apartado": "transporte",
+    "forma": "proceso",
+    "enunciado": "Describe el handshake de TLS 1.2 a grandes rasgos.",
+    "modelo": "El handshake de TLS 1.2 tiene cuatro fases: las capacidades de seguridad con los hello, los mensajes del servidor, los mensajes del cliente, y el cambio de suite con los mensajes finished. En el client_hello el cliente envía la versión más alta que entiende, un Random de marca de tiempo y 28 bytes, el SessionID y sus suites en orden decreciente de preferencia. El servidor responde con un server_hello que indica la versión más baja entre la del cliente y su máxima, un Random independiente y una única suite elegida de las propuestas. Cada mensaje del handshake lleva sus propios parámetros: el mensaje certificate lleva una cadena X.509v3, el finished lleva un hash y server_done no lleva ninguno. Para terminar, el mensaje finished verifica que el intercambio de claves y la autenticación fueron correctos, con una PRF sobre el master secret, una etiqueta y un hash del handshake.",
+    "puntos": [
+      "transporte-handshake-fases",
+      "transporte-client-hello",
+      "transporte-server-hello",
+      "transporte-handshake-mensajes",
+      "transporte-finished"
+    ]
+  },
+  {
+    "id": "transporte-d002",
+    "apartado": "transporte",
+    "forma": "estructura",
+    "enunciado": "Describe la pila de protocolos de TLS.",
+    "modelo": "SSL/TLS es una capa de seguridad entre la aplicación y TCP que da autenticación, criptografía e integridad, y evoluciona del SSL que desarrolló Netscape. En la arquitectura de TLS 1.2, el Record Protocol se apoya sobre TCP, y sobre el Record Protocol van los protocolos Handshake, Change Cipher Spec, Alert y Heartbeat. El Handshake es el más complejo: autentica a los interlocutores y negocia la suite de cifrado, con mensajes de campos Type, Length y Content. El Change Cipher Spec anuncia con un mensaje de un byte de valor 1 que se cambia la suite de cifrado, y se ejecuta tras el Handshake. El Alert anuncia alertas al interlocutor con dos bytes: el primero indica aviso o fatal, y el segundo la alerta concreta. El Heartbeat comprueba que el interlocutor está activo y genera actividad para evitar que los cortafuegos cierren la conexión, con mensajes de petición y respuesta.",
+    "puntos": [
+      "transporte-tls-servicios",
+      "transporte-arquitectura",
+      "transporte-handshake-funciones",
+      "transporte-change-cipher-spec",
+      "transporte-alert",
+      "transporte-heartbeat"
+    ]
+  },
+  {
+    "id": "aplicacion-d001",
+    "apartado": "aplicacion",
+    "forma": "objeto",
+    "enunciado": "Define SSH y di para qué sirve.",
+    "modelo": "SSH significa Secure Shell, el intérprete de comandos seguro. Es un protocolo para establecer conexiones seguras entre equipos, concebido para sustituir a utilidades inseguras como telnet y rlogin. Provee autenticación, cifrado e integridad, y hoy se usa su versión 2 porque soluciona debilidades de la versión 1. Sirve para establecer sesiones remotas, ejecutar comandos de forma remota, copiar archivos de forma segura, establecer túneles seguros y ejecutar aplicaciones X11 remotas mediante túneles.",
+    "puntos": [
+      "sigla-aplicacion-ssh",
+      "aplicacion-ssh-origen",
+      "aplicacion-ssh-servicios",
+      "aplicacion-ssh-funciones"
+    ]
+  },
+  {
+    "id": "aplicacion-d004",
+    "apartado": "aplicacion",
+    "forma": "estructura",
+    "enunciado": "Describe la pila de protocolos de SSH y su Transport Layer Protocol.",
+    "modelo": "La pila de SSH pone el SSH Transport Layer Protocol sobre TCP, con autenticación del servidor, confidencialidad e integridad, y sobre él el User Authentication Protocol autentica al usuario y el Connection Protocol multiplexa canales lógicos. El Transport Layer Protocol comprime el payload, forma un paquete con longitudes, payload y relleno, lo cifra y añade el MAC al final. Autentica inicialmente al servidor con su pareja de claves pública y privada, las host keys, y el cliente obtiene la pública de known_hosts o de un certificado. Su lista de cifrados incluye AES con claves de 128, 192 y 256 bits, casi todos en modo CBC, y arcfour, un cifrado de flujo RC4.",
+    "puntos": [
+      "aplicacion-ssh-pila",
+      "aplicacion-ssh-paquete",
+      "aplicacion-ssh-autenticacion-servidor",
+      "aplicacion-ssh-cifrados"
+    ]
+  },
+  {
+    "id": "aplicacion-d005",
+    "apartado": "aplicacion",
+    "forma": "proceso",
+    "enunciado": "Describe el handshake de SSH.",
+    "modelo": "Tras la conexión TCP, el Transport Layer Protocol de SSH sigue unas fases: intercambio de cadenas de identificación, negociación con SSH_MSG_KEXINIT, intercambio de claves y fin con SSH_MSG_NEWKEYS. Cliente y servidor intercambian cadenas de identificación con el formato SSH-protoversion-softwareversion, que entran después en el intercambio de claves Diffie-Hellman. El mensaje SSH_MSG_KEXINIT lista algoritmos por orden de preferencia, y se escoge el primero de la lista del cliente que el servidor también soporte. La clave compartida se acuerda con un intercambio Diffie-Hellman, en el que el servidor se autentica firmando su mitad con su clave privada. El valor hash H de ese intercambio es el identificador de sesión, y no cambia cuando se refrescan las claves. Las claves de sesión se generan a partir de la clave compartida K, el hash H y el identificador de sesión, normalmente H.",
+    "puntos": [
+      "aplicacion-ssh-fases",
+      "aplicacion-ssh-identificacion",
+      "aplicacion-ssh-negociacion",
+      "aplicacion-ssh-dh",
+      "aplicacion-ssh-identificador-sesion",
+      "aplicacion-ssh-generacion-claves"
+    ]
+  },
+  {
+    "id": "aplicacion-d006",
+    "apartado": "aplicacion",
+    "forma": "propiedad",
+    "enunciado": "Explica cómo da S/MIME la integridad y la confidencialidad de un mensaje.",
+    "modelo": "Para la integridad, el remitente firma el resumen hash del mensaje con su clave privada, y el receptor verifica la firma con la clave pública del remitente. Para la confidencialidad, el remitente cifra el mensaje con una clave secreta de un solo uso, que cifra con la clave pública del destinatario y envía junto con el mensaje. En el esquema entero, el remitente firma el mensaje y cifra mensaje y firma; el receptor descifra la clave de sesión con su clave privada, luego el mensaje, y verifica la firma. S/MIME exige soportar SHA-256 para el resumen de la firma, AES-128 en modo CBC para cifrar el mensaje y RSA para cifrar la clave de sesión.",
+    "puntos": [
+      "aplicacion-smime-firma",
+      "aplicacion-smime-clave-sesion",
+      "aplicacion-smime-recepcion",
+      "aplicacion-smime-algoritmos"
+    ]
+  },
+  {
+    "id": "ssl-tls-d001",
+    "apartado": "ssl-tls",
+    "forma": "causa-efecto",
+    "enunciado": "Explica por qué un ataque de sslstrip con bettercap hace que la víctima vea una página idéntica a la del sitio real.",
+    "modelo": "sslstrip fuerza a un navegador que cree usar HTTPS a usar HTTP, lo que se conoce como HTTPS Stripping, y exige que el atacante esté entre la víctima y el servidor, es decir, que haya hecho antes un ataque Man-in-the-Middle. Un Man-in-the-Middle lee y cambia el tráfico si el protocolo no cifra, pero si cifra el tráfico va cifrado en cada tramo. Por eso el atacante actúa de proxy: habla HTTP con la víctima y HTTPS con el servidor real, reenvía a la víctima la página del servidor y ve en claro lo que ella envía. La víctima ve así una página idéntica a la real, porque es la del servidor, y solo cambia que va por HTTP: con bettercap, el atacante reescribe los enlaces hacia un dominio parecido sin política HSTS, y la víctima ve http:// sin candado. HSTS resiste este ataque.",
+    "puntos": [
+      "ssl-tls-sslstrip",
+      "ssl-tls-mitm-con-y-sin-cifrado",
+      "ssl-tls-sslstrip-proxy",
+      "ssl-tls-sslstrip-dominio-parecido"
+    ]
+  },
+  {
+    "id": "ssl-tls-d002",
+    "apartado": "ssl-tls",
+    "forma": "criterio",
+    "enunciado": "Di qué algoritmos y tamaños de clave de SSL y TLS dejaron de ser robustos, y por qué.",
+    "modelo": "El APT Flame firmó código que parecía de Microsoft con un certificado falso cuyo hash MD5 colisionaba con el oficial, lo que demostró definitivamente la debilidad de MD5. Contra SHA1 había ataques teóricos, y los navegadores dejaron de aceptar los certificados firmados con SHA1, así que las empresas migraron a SHA-256. BIAS explota sesgos estadísticos de RC4 para recuperar secretos con grandes cantidades de tráfico del mismo texto cifrado, y la única solución es dejar de usar RC4. FREAK fuerza claves RSA de exportación débiles, de 40 bits, en servidores con RSA_EXPORT, y se corrige dejando de soportarlo y actualizando las bibliotecas. Logjam, con un MitM previo, fuerza claves débiles de 512 bits en el intercambio Diffie-Hellman de servidores con DHE_EXPORT, y se evita forzando claves de 2048 bits.",
+    "puntos": [
+      "ssl-tls-flame-md5",
+      "ssl-tls-sha1-certificados",
+      "ssl-tls-bias-rc4",
+      "ssl-tls-freak",
+      "ssl-tls-logjam"
+    ]
+  }
+]

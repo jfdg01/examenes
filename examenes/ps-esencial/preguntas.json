@@ -1,0 +1,1862 @@
+[
+  {
+    "id": "introduccion-028",
+    "concepto": "introduccion-integridad",
+    "apartado": "introduccion",
+    "pregunta": "¿Qué debe existir para garantizar la integridad de los datos que se envían?",
+    "correcta": "Un método que permita verificar que los datos no se han modificado",
+    "distractores": [
+      "Un método que oculte los datos a quien no sea el receptor, sea cifrando o dejándolo sin sentido",
+      "Un método que identifique a quien envía los datos, por su nombre, su clave o su dirección"
+    ],
+    "explicacion": "✓ Sin un método de verificación, un intermediario podría modificar los datos y el receptor no detectaría el cambio.\n✗ «Un método que oculte»: eso es la confidencialidad, y no la integridad\n✗ «Un método que identifique»: eso es la autenticación, y no la integridad"
+  },
+  {
+    "id": "introduccion-029",
+    "concepto": "introduccion-integridad",
+    "apartado": "introduccion",
+    "pregunta": "¿Qué concepto surge en paralelo a la necesidad de verificar la integridad de los datos?",
+    "correcta": "La firma digital",
+    "distractores": [
+      "El cifrado de clave simétrica entre emisor y receptor",
+      "La denegación del servicio sobre el receptor"
+    ],
+    "explicacion": "✓ La firma digital liga el documento a su creador, y no se puede falsificar ni negar después.\n✗ «El cifrado de clave simétrica»: cifrar oculta el contenido, y no prueba quién lo creó\n✗ «La denegación del servicio»: es un ataque, y no un método de verificación"
+  },
+  {
+    "id": "introduccion-030",
+    "concepto": "introduccion-integridad",
+    "apartado": "introduccion",
+    "pregunta": "Un atacante cambia un byte de un mensaje cifrado en tránsito sin llegar a leerlo. ¿Qué propiedad rompe?",
+    "correcta": "La integridad del mensaje",
+    "distractores": [
+      "La confidencialidad del contenido enviado",
+      "La disponibilidad del servicio de comunicaciones"
+    ],
+    "explicacion": "✓ Alterar el mensaje sin detección rompe la integridad, aunque el atacante no haya leído su contenido.\n✗ «La confidencialidad»: el atacante no lo ha leído\n✗ «La disponibilidad»: el servicio sigue accesible para los usuarios"
+  },
+  {
+    "id": "introduccion-031",
+    "concepto": "introduccion-firma-propiedades",
+    "apartado": "introduccion",
+    "pregunta": "¿Qué significa que una firma digital sea no repudiable?",
+    "correcta": "Que el emisor no puede negar que la firma es suya",
+    "distractores": [
+      "Que nadie puede copiar la firma sobre otro documento",
+      "Que cualquiera puede comprobar a quién corresponde la firma"
+    ],
+    "explicacion": "✓ Solo el firmante posee la clave privada, así que nadie más pudo generar la firma y él no puede negarla.\n✗ «Que nadie puede copiar»: eso es que la firma sea no falsificable\n✗ «Que cualquiera puede comprobar»: eso es que la firma sea verificable"
+  },
+  {
+    "id": "introduccion-032",
+    "concepto": "introduccion-firma-propiedades",
+    "apartado": "introduccion",
+    "pregunta": "¿Qué establece el emisor al firmar digitalmente un documento?",
+    "correcta": "Que es el propietario o creador del documento",
+    "distractores": [
+      "Que el documento está cifrado para que lo lea el destinatario",
+      "Que el documento ha sido aprobado por una autoridad de certificación"
+    ],
+    "explicacion": "✓ La firma se genera con la clave privada, que solo el creador posee, y por eso lo identifica como autor.\n✗ «Que el documento está cifrado»: firmar no cifra el contenido\n✗ «Que el documento ha sido»: la firma la pone el emisor, no una autoridad"
+  },
+  {
+    "id": "introduccion-033",
+    "concepto": "introduccion-firma-propiedades",
+    "apartado": "introduccion",
+    "pregunta": "¿Qué propiedad de una firma digital permite probar, sin ambigüedad, que corresponde a una persona?",
+    "correcta": "Que sea verificable",
+    "distractores": [
+      "Que sea no falsificable por otra persona",
+      "Que sea no repudiable por su autor"
+    ],
+    "explicacion": "✓ Cualquiera puede comprobar la firma con la clave pública, y el resultado señala a una persona concreta sin dudas.\n✗ «Que sea no falsificable»: esa propiedad impide que alguien la imite\n✗ «Que sea no repudiable»: esa propiedad impide que su autor la niegue"
+  },
+  {
+    "id": "introduccion-034",
+    "concepto": "introduccion-firma-proceso",
+    "apartado": "introduccion",
+    "pregunta": "Al firmar un mensaje largo m, ¿sobre qué se aplica la clave privada del firmante?",
+    "correcta": "Sobre el resumen H(m) del mensaje, obtenido con una función de dispersión",
+    "distractores": [
+      "Sobre el mensaje completo m, sin resumirlo antes con ninguna función, como se hace con el cifrado de bloques",
+      "Sobre la clave pública del receptor, que acompaña al mensaje, para que él pueda comprobarla"
+    ],
+    "explicacion": "✓ El resumen es corto y de tamaño fijo, así que se cifra mucho más rápido que el mensaje entero.\n✗ «Sobre el mensaje completo m»: se firma el resumen del mensaje, que es más corto\n✗ «Sobre la clave pública del receptor»: la clave del receptor no interviene en la firma"
+  },
+  {
+    "id": "introduccion-035",
+    "concepto": "introduccion-firma-proceso",
+    "apartado": "introduccion",
+    "pregunta": "¿Con qué clave firma Roberto un mensaje?",
+    "correcta": "Con su clave privada",
+    "distractores": [
+      "Con su clave pública, que conoce cualquiera",
+      "Con la clave pública del receptor, para que la lea"
+    ],
+    "explicacion": "✓ Solo Roberto conoce su clave privada, así que cualquiera puede atribuirle la firma al comprobarla con su clave pública.\n✗ «Con su clave pública»: la clave pública sirve para verificar la firma\n✗ «Con la clave pública del receptor»: firmar con esa clave no prueba quién firma"
+  },
+  {
+    "id": "introduccion-036",
+    "concepto": "introduccion-firma-proceso",
+    "apartado": "introduccion",
+    "pregunta": "¿Cómo verifica el receptor la firma digital de Roberto sobre un mensaje?",
+    "correcta": "Desencripta la firma con la clave pública de Roberto y compara el resultado con el H(m) que calcula",
+    "distractores": [
+      "Desencripta la firma con su propia clave privada y compara el resultado con el mensaje",
+      "Encripta de nuevo el mensaje con la clave pública de Roberto y compara el resultado con la firma"
+    ],
+    "explicacion": "✓ Si el mensaje o la firma cambian, el H(m) calculado no coincide con el recuperado y el receptor rechaza la firma.\n✗ «Desencripta la firma con su propia clave privada»: la clave del receptor no interviene\n✗ «Encripta de nuevo el mensaje»: la firma se abre con la pública, y no se rehace"
+  },
+  {
+    "id": "introduccion-037",
+    "concepto": "introduccion-mac",
+    "apartado": "introduccion",
+    "pregunta": "En un código de autenticación de mensaje con secreto compartido s, ¿qué envía el emisor al receptor?",
+    "correcta": "El mensaje junto con el resumen H del mensaje y del secreto s",
+    "distractores": [
+      "El mensaje junto con el propio secreto s, para que se compare",
+      "El mensaje junto con un resumen firmado con su clave privada"
+    ],
+    "explicacion": "✓ Solo emisor y receptor conocen el secreto s, así que el resumen demuestra que el mensaje viene de uno de ellos.\n✗ «El mensaje junto con el propio secreto»: enviar s lo revelaría al atacante\n✗ «El mensaje junto con un resumen»: eso es una firma digital, y no un MAC"
+  },
+  {
+    "id": "introduccion-038",
+    "concepto": "introduccion-mac",
+    "apartado": "introduccion",
+    "pregunta": "¿Cómo comprueba el receptor la integridad de un mensaje protegido con un MAC?",
+    "correcta": "Añade el secreto s al mensaje, calcula H y lo compara con el MAC recibido",
+    "distractores": [
+      "Descifra el MAC con la clave pública del emisor y compara, como si fuese una firma digital",
+      "Pide el secreto s por la red al emisor y lo compara, para fiarse de que es el mismo"
+    ],
+    "explicacion": "✓ El receptor repite el cálculo con su copia de s, y un mensaje alterado produce un resumen distinto.\n✗ «Descifra el MAC con la clave pública»: el MAC usa un secreto compartido, y no un par de claves\n✗ «Pide el secreto s por la red»: s ya está en poder de ambos y no viaja"
+  },
+  {
+    "id": "introduccion-039",
+    "concepto": "introduccion-mac",
+    "apartado": "introduccion",
+    "pregunta": "¿Qué garantiza un código de autenticación de mensaje (MAC) sobre los datos enviados?",
+    "correcta": "Su integridad, al detectar si se han modificado",
+    "distractores": [
+      "Su confidencialidad, para que un espía no lea el mensaje",
+      "Su disponibilidad, para que el servicio siga accesible sin cortes"
+    ],
+    "explicacion": "✓ Un atacante sin s no puede recalcular un MAC válido tras modificar el mensaje, y el receptor lo detecta.\n✗ «Su confidencialidad»: el MAC no oculta el contenido\n✗ «Su disponibilidad»: el MAC no evita la denegación del servicio"
+  },
+  {
+    "id": "introduccion-s01",
+    "concepto": "sigla-introduccion-mac",
+    "apartado": "introduccion",
+    "pregunta": "¿Qué significa la sigla MAC en un protocolo de seguridad?",
+    "correcta": "Message Authentication Code",
+    "distractores": [
+      "Message Access Control",
+      "Mutual Authentication Check"
+    ],
+    "explicacion": "✓ Permite al receptor detectar si alguien cambió el mensaje, porque solo quien conoce el secreto compartido calcula un código válido.\n✗ «Message Access Control»: no controla el acceso, sino que autentica un mensaje\n✗ «Mutual Authentication Check»: no es una autenticación mutua de las partes, sino un código sobre un mensaje"
+  },
+  {
+    "id": "claves-001",
+    "concepto": "claves-clave-de-sesion",
+    "apartado": "claves",
+    "pregunta": "En criptografía simétrica, ¿cómo se llama la clave que se cambia a nivel de sesión para aumentar la seguridad?",
+    "correcta": "Clave de sesión",
+    "distractores": [
+      "Clave pública de cada parte",
+      "Clave maestra compartida"
+    ],
+    "explicacion": "✓ Como es temporal, quien robe una clave de sesión solo descifra esa sesión y no las demás.\n✗ «Clave pública»: la clave pública es de criptografía asimétrica, y no se cambia por sesión\n✗ «Clave maestra»: la maestra dura más y solo protege la distribución de las claves de sesión"
+  },
+  {
+    "id": "claves-002",
+    "concepto": "claves-clave-de-sesion",
+    "apartado": "claves",
+    "pregunta": "¿Qué exige la criptografía simétrica a la distribución de claves entre las dos partes?",
+    "correcta": "Que ambas partes reciban la misma clave por un medio seguro",
+    "distractores": [
+      "Que cada parte reciba una clave distinta de la otra, una para cada sentido",
+      "Que la clave se envíe en claro, por ser de un solo uso"
+    ],
+    "explicacion": "✓ Si la clave viajara sin protección, un atacante la copiaría y descifraría todo, porque ambas partes comparten el mismo secreto.\n✗ «clave distinta de la otra»: con claves distintas el esquema sería asimétrico\n✗ «en claro, por ser de un solo uso»: la entrega de la clave debe ser segura, aunque la clave sea temporal"
+  },
+  {
+    "id": "claves-003",
+    "concepto": "claves-clave-de-sesion",
+    "apartado": "claves",
+    "pregunta": "¿Para qué se cambia la clave simétrica de un intercambio de datos a nivel de sesión?",
+    "correcta": "Para aumentar la seguridad del intercambio",
+    "distractores": [
+      "Para acelerar el cifrado de cada mensaje",
+      "Para que la clave maestra no tenga que protegerse"
+    ],
+    "explicacion": "✓ Una clave que cambia limita cuántos datos protege, y si se descubre, el daño se queda en una sesión.\n✗ «acelerar el cifrado»: generar y establecer una clave nueva consume tiempo, y no lo ahorra\n✗ «no tenga que protegerse»: la maestra sigue siendo necesaria para distribuir las claves nuevas"
+  },
+  {
+    "id": "claves-007",
+    "concepto": "claves-opciones-de-distribucion",
+    "apartado": "claves",
+    "pregunta": "Si A y B ya comparten una clave simétrica, ¿cómo puede A hacer llegar a B una clave nueva?",
+    "correcta": "La genera y se la envía cifrada con la clave compartida",
+    "distractores": [
+      "La envía en claro porque es nueva, ya que nadie la conoce aún",
+      "La cifra con la clave privada de B, que es secreta de ese equipo"
+    ],
+    "explicacion": "✓ La clave compartida ya protege el canal, así que la nueva viaja cifrada y un espía no puede leerla.\n✗ «en claro porque es nueva»: una clave nueva enviada en claro queda expuesta a cualquiera que escuche\n✗ «clave privada de B»: A no conoce la clave privada de B, y el caso es simétrico"
+  },
+  {
+    "id": "claves-008",
+    "concepto": "claves-opciones-de-distribucion",
+    "apartado": "claves",
+    "pregunta": "Si A y B tienen cada uno una conexión cifrada con un tercero C, ¿cómo consiguen una clave común?",
+    "correcta": "C genera la clave y la envía por esas conexiones a A y a B",
+    "distractores": [
+      "A genera la clave y se la entrega a C para que la custodie y la devuelva cuando se pida",
+      "A y B la acuerdan en claro y C se limita a registrarla"
+    ],
+    "explicacion": "✓ C ya comparte un canal protegido con cada uno, y hace de intermediario de confianza para repartir la misma clave a ambos.\n✗ «entrega a C»: C genera la clave y la reparte, y no solo la guarda\n✗ «en claro»: la clave viaja cifrada por las conexiones con C"
+  },
+  {
+    "id": "claves-009",
+    "concepto": "claves-opciones-de-distribucion",
+    "apartado": "claves",
+    "pregunta": "¿Por qué no son prácticas hoy las opciones de entrega física de la clave por una de las partes o por una entidad externa?",
+    "correcta": "Porque se genera una clave de sesión entre cualquier par de interlocutores en Internet",
+    "distractores": [
+      "Porque una clave entregada físicamente no se puede cifrar ni proteger contra la copia en el trayecto",
+      "Porque las claves de sesión son demasiado largas para llevarlas en mano a cada interlocutor"
+    ],
+    "explicacion": "✓ Cada sesión nueva exige una clave nueva, y nadie puede viajar a entregarla en persona a cada par de interlocutores de Internet.\n✗ «no se puede cifrar»: el problema es la escala de las sesiones, y no el cifrado\n✗ «demasiado largas»: la longitud de la clave no impide entregarla"
+  },
+  {
+    "id": "claves-031",
+    "concepto": "claves-asimetrica-efimera",
+    "apartado": "claves",
+    "pregunta": "En el primer ejemplo de distribución de una clave simétrica con criptografía asimétrica, ¿qué envía A a B para empezar?",
+    "correcta": "Su clave pública y su identidad",
+    "distractores": [
+      "Una clave de sesión cifrada con su clave privada",
+      "Un núnico cifrado con la clave pública de B"
+    ],
+    "explicacion": "✓ B necesita la clave pública para cifrar la clave de sesión, y la clave pública puede enviarse sin protección.\n✗ «clave de sesión»: la clave de sesión la envía B después\n✗ «núnico»: ese núnico aparece en el esquema con autenticación, y no en este ejemplo básico"
+  },
+  {
+    "id": "claves-032",
+    "concepto": "claves-asimetrica-efimera",
+    "apartado": "claves",
+    "pregunta": "En el primer ejemplo de distribución de una clave simétrica con criptografía asimétrica, donde A empieza enviando a B su clave pública y su identidad, ¿cómo envía B la clave de sesión a A?",
+    "correcta": "Cifrada con la clave pública de A",
+    "distractores": [
+      "Cifrada con la clave privada de B",
+      "Cifrada con la clave de sesión anterior de A y B"
+    ],
+    "explicacion": "✓ Solo A tiene la clave privada pareja, así que nadie más que A descifra la clave de sesión.\n✗ «clave privada de B»: la clave privada de B no la conoce A, y B no la usa para cifrar hacia A\n✗ «clave de sesión anterior»: en el ejemplo A y B no comparten ninguna clave previa"
+  },
+  {
+    "id": "claves-033",
+    "concepto": "claves-asimetrica-efimera",
+    "apartado": "claves",
+    "pregunta": "En el primer ejemplo de distribución de una clave simétrica con criptografía asimétrica, donde A genera un par de claves y se lo envía a B, ¿por qué es muy seguro desechar las claves al terminar el intercambio?",
+    "correcta": "Porque A desecha el par de claves y B la clave pública, y no queda nada reutilizable",
+    "distractores": [
+      "Porque B autentica a A con un certificado antes de enviar la clave",
+      "Porque el par de claves de A se guarda en el KDC"
+    ],
+    "explicacion": "✓ Al no conservar la clave privada, quien robe después el equipo de A no puede descifrar esa sesión grabada.\n✗ «autentica a A»: el ejemplo no autentica a nadie, y de ahí el problema del intermediario\n✗ «se guarda en el KDC»: el ejemplo no usa KDC, y A elimina su par"
+  },
+  {
+    "id": "claves-034",
+    "concepto": "claves-mitm-intercambio",
+    "apartado": "claves",
+    "pregunta": "En el intercambio de clave con cifrado asimétrico sin autenticar las claves, ¿qué hace el atacante Darth cuando A envía su clave pública a B?",
+    "correcta": "La intercepta y envía a B su propia clave pública con la identidad de A",
+    "distractores": [
+      "La cifra con su clave privada y la reenvía a B",
+      "La descifra con la clave privada de B para leer la identidad"
+    ],
+    "explicacion": "✓ Darth se coloca entre ambos y, con su propia clave pública, hace que B cifre para él y no para A.\n✗ «cifra con su clave privada»: no cambiaría la clave que B cree de A\n✗ «descifra con la clave privada de B»: no la tiene, y el mensaje no va cifrado"
+  },
+  {
+    "id": "claves-035",
+    "concepto": "claves-mitm-intercambio",
+    "apartado": "claves",
+    "pregunta": "En el ataque del intermediario sobre el intercambio de clave con cifrado asimétrico sin autenticar las claves, ¿cómo consigue el atacante Darth la clave de sesión?",
+    "correcta": "B la cifra con la clave pública de Darth, y Darth la descifra con su clave privada",
+    "distractores": [
+      "La deduce de la clave pública de A que interceptó",
+      "Se la pide a B haciéndose pasar por el KDC"
+    ],
+    "explicacion": "✓ B cree que cifra para A, pero Darth conoce la clave privada correspondiente y lee la clave de sesión.\n✗ «clave pública de A»: una clave pública no revela la clave de sesión\n✗ «KDC»: el ataque no usa ningún KDC"
+  },
+  {
+    "id": "claves-036",
+    "concepto": "claves-mitm-intercambio",
+    "apartado": "claves",
+    "pregunta": "¿Qué debilidad del intercambio de clave con cifrado asimétrico hace posible el ataque del intermediario?",
+    "correcta": "Que las claves públicas no están autenticadas, y B no sabe de quién es la que recibe",
+    "distractores": [
+      "Que la clave de sesión se envía en claro entre A y B",
+      "Que el cifrado asimétrico es más débil que el simétrico"
+    ],
+    "explicacion": "✓ Sin autenticación, cualquiera puede inventar una clave pública con la identidad de A, y B no tiene cómo detectarlo.\n✗ «en claro»: viaja cifrada, pero con la clave pública del atacante\n✗ «más débil»: el fallo es la falta de autenticación, y no el algoritmo"
+  },
+  {
+    "id": "claves-037",
+    "concepto": "claves-firma-y-cifrado-de-ks",
+    "apartado": "claves",
+    "pregunta": "En la distribución de clave con autenticación y cifrado, ¿cómo envía A la clave de sesión a B?",
+    "correcta": "La cifra con su clave privada y luego con la pública de B",
+    "distractores": [
+      "La cifra con la clave pública de B, sin usar su clave privada",
+      "La cifra con la clave pública de A y después con la privada de B"
+    ],
+    "explicacion": "✓ La capa con la clave privada prueba que viene de A. La capa con la pública de B impide que otro la lea.\n✗ «clave pública de B»: así B no puede comprobar que la envía A\n✗ «clave pública de A»: A no tiene la clave privada de B"
+  },
+  {
+    "id": "claves-038",
+    "concepto": "claves-firma-y-cifrado-de-ks",
+    "apartado": "claves",
+    "pregunta": "En la distribución de clave con autenticación y cifrado asimétricos, ¿qué logra A al cifrar la clave de sesión con su propia clave privada antes de enviarla?",
+    "correcta": "Que B compruebe que la clave de sesión procede de A",
+    "distractores": [
+      "Que B sea quien pueda leer la clave de sesión",
+      "Que la clave de sesión sea nueva y no una repetición"
+    ],
+    "explicacion": "✓ Cifrar con la clave privada de A prueba su origen, y cifrar con la pública de B garantiza la confidencialidad.\n✗ «B sea quien pueda leer»: eso lo logra la cifra con la clave pública de B\n✗ «nueva»: eso lo prueban los núnicos, y no la clave privada"
+  },
+  {
+    "id": "claves-039",
+    "concepto": "claves-firma-y-cifrado-de-ks",
+    "apartado": "claves",
+    "pregunta": "En el segundo mensaje, B devuelve el núnico N1 junto a su propio N2, cifrados con la clave pública de A. ¿Qué prueba B con ello?",
+    "correcta": "Que descifró el primer mensaje, y por tanto posee su clave privada",
+    "distractores": [
+      "Que ha generado la clave de sesión y ya puede usarla",
+      "Que su clave pública está certificada por una CA"
+    ],
+    "explicacion": "✓ Solo quien tiene la clave privada de B puede leer N1 en el primer mensaje, así que devolverlo demuestra que B posee esa clave.\n✗ «clave de sesión»: la clave de sesión no viaja hasta el tercer mensaje\n✗ «clave pública»: el esquema supone las claves públicas distribuidas con seguridad"
+  },
+  {
+    "id": "claves-055",
+    "concepto": "claves-x509",
+    "apartado": "claves",
+    "pregunta": "¿Qué define el estándar X.509?",
+    "correcta": "Un entorno para prestar servicios de autenticación, con un formato de certificado",
+    "distractores": [
+      "Un servicio de directorio, una base de datos con información de los usuarios",
+      "Un protocolo de cifrado de los datos de una sesión, como SSL/TLS"
+    ],
+    "explicacion": "✓ Protocolos como SSL/TLS, S/MIME e IPsec usan ese formato de certificado para autenticar con claves públicas.\n✗ «servicio de directorio»: eso es X.500, y X.509 se apoya en él para la autenticación\n✗ «protocolo de cifrado»: X.509 solo define el certificado que SSL/TLS usa"
+  },
+  {
+    "id": "claves-056",
+    "concepto": "claves-x509",
+    "apartado": "claves",
+    "pregunta": "¿Qué contiene básicamente un certificado X.509?",
+    "correcta": "Una clave pública firmada con la clave privada de una CA",
+    "distractores": [
+      "Una clave privada cifrada con la clave pública de la autoridad de certificación",
+      "Una clave simétrica firmada con la clave pública del titular del certificado"
+    ],
+    "explicacion": "✓ La firma de la CA garantiza que la clave pública pertenece a su titular, y cualquiera la comprueba con la clave pública de la CA.\n✗ «clave privada cifrada»: la clave privada no se incluye en un certificado\n✗ «clave simétrica firmada»: un certificado transporta una clave pública, y no una simétrica"
+  },
+  {
+    "id": "claves-057",
+    "concepto": "claves-x509",
+    "apartado": "claves",
+    "pregunta": "¿Qué define la serie de recomendaciones X.500 de la ITU-T?",
+    "correcta": "Un servicio de directorio: base de datos sobre usuarios",
+    "distractores": [
+      "Un formato de certificados con claves públicas firmadas por una CA",
+      "Un protocolo de autenticación con un centro de distribución de claves"
+    ],
+    "explicacion": "✓ X.509 trabaja sobre ese directorio de usuarios, y define cómo se autentican con certificados los datos que contiene.\n✗ «formato de certificados»: ese formato es X.509\n✗ «protocolo de autenticación»: X.500 describe un directorio, y no un protocolo de claves"
+  },
+  {
+    "id": "claves-058",
+    "concepto": "claves-certificado-firma",
+    "apartado": "claves",
+    "pregunta": "Al generar un certificado X.509, ¿sobre qué calcula la CA el resumen hash que va a firmar?",
+    "correcta": "Sobre el certificado sin firmar: identidad del usuario, su clave pública e información de la CA",
+    "distractores": [
+      "Sobre la clave privada del usuario y su identidad, sin la información de la CA",
+      "Sobre la clave pública de la CA, sin los datos del usuario"
+    ],
+    "explicacion": "✓ Al firmar el resumen de esos datos, cualquier cambio en la identidad, la clave o la CA invalida la firma.\n✗ «clave privada del usuario»: la clave privada del usuario no entra en el certificado\n✗ «clave pública de la CA»: el resumen cubre los datos que se certifican, es decir, los del usuario"
+  },
+  {
+    "id": "claves-059",
+    "concepto": "claves-certificado-firma",
+    "apartado": "claves",
+    "pregunta": "¿Con qué clave firma la CA un certificado X.509?",
+    "correcta": "Con su clave privada, cifrando el resumen del certificado",
+    "distractores": [
+      "Con la clave pública del usuario, cifrando el certificado entero",
+      "Con la clave privada del usuario, para que él mismo lo valide"
+    ],
+    "explicacion": "✓ Solo la CA tiene su clave privada, así que solo ella puede producir una firma que su clave pública valide.\n✗ «clave pública del usuario»: la clave pública la conoce cualquiera, y no prueba que firme la CA\n✗ «clave privada del usuario»: quien firma es la CA, y no el titular"
+  },
+  {
+    "id": "claves-060",
+    "concepto": "claves-certificado-firma",
+    "apartado": "claves",
+    "pregunta": "Además de la firma, ¿qué contiene un certificado firmado de Bob?",
+    "correcta": "La identidad de Bob, su clave pública y la información de la CA",
+    "distractores": [
+      "La identidad de Bob, su clave privada y la información de la CA",
+      "La clave pública de la CA y la clave de sesión de Bob"
+    ],
+    "explicacion": "✓ El certificado junta los datos de Bob y de la CA bajo una sola firma, que los protege a todos a la vez.\n✗ «clave privada»: la clave privada de Bob no se publica\n✗ «clave de sesión»: un certificado no contiene claves de sesión"
+  },
+  {
+    "id": "claves-061",
+    "concepto": "claves-certificado-verificacion",
+    "apartado": "claves",
+    "pregunta": "¿Con qué clave descifra el destinatario la firma de un certificado X.509 para verificarlo?",
+    "correcta": "Con la clave pública de la CA",
+    "distractores": [
+      "Con la clave privada del titular del certificado",
+      "Con la clave pública del titular, que viene en el certificado"
+    ],
+    "explicacion": "✓ Solo la clave privada de la CA produce una firma que su clave pública abre, y así el destinatario sabe que firmó la CA.\n✗ «clave privada del titular»: la privada del titular no la tiene el destinatario\n✗ «clave pública del titular»: la firma la hizo la CA, y por eso se abre con la pública de la CA"
+  },
+  {
+    "id": "claves-062",
+    "concepto": "claves-certificado-verificacion",
+    "apartado": "claves",
+    "pregunta": "Al verificar un certificado, ¿qué compara el destinatario?",
+    "correcta": "El resumen recuperado de la firma y el que calcula del certificado",
+    "distractores": [
+      "La clave pública del certificado con la clave pública de la CA",
+      "El número de serie del certificado con el de una lista de revocación"
+    ],
+    "explicacion": "✓ Si los dos resúmenes coinciden, el certificado no ha cambiado desde que la CA lo firmó, porque solo ella pudo firmar ese resumen.\n✗ «clave pública»: son claves distintas, y su comparación no verifica nada\n✗ «número de serie»: eso comprueba la revocación, y no la firma"
+  },
+  {
+    "id": "claves-063",
+    "concepto": "claves-certificado-verificacion",
+    "apartado": "claves",
+    "pregunta": "Si alguien modifica la clave pública de un certificado firmado, ¿qué detecta el destinatario al verificarlo?",
+    "correcta": "Que el resumen que calcula no coincide con el recuperado de la firma",
+    "distractores": [
+      "Que la clave privada de la CA no descifra la firma",
+      "Que la clave pública de la CA ha caducado"
+    ],
+    "explicacion": "✓ El resumen cambia con cualquier modificación, y el atacante no puede firmar el nuevo sin la clave privada de la CA.\n✗ «clave privada de la CA»: la firma se abre con la pública de la CA, y esa sigue funcionando\n✗ «clave pública de la CA»: la caducidad es otro dato del certificado, y no efecto del cambio"
+  },
+  {
+    "id": "claves-064",
+    "concepto": "claves-certificado-contenido",
+    "apartado": "claves",
+    "pregunta": "¿Qué campos de un certificado X.509 indican su periodo de validez?",
+    "correcta": "Las fechas not before y not after",
+    "distractores": [
+      "El número de serie y el identificador único del sujeto",
+      "La versión y el identificador del algoritmo de firma"
+    ],
+    "explicacion": "✓ El destinatario rechaza el certificado fuera de ese intervalo, así que una clave deja de valer con el tiempo.\n✗ «número de serie»: el número de serie identifica el certificado, y no sus fechas\n✗ «versión»: la versión y el algoritmo no dan fechas"
+  },
+  {
+    "id": "claves-065",
+    "concepto": "claves-certificado-contenido",
+    "apartado": "claves",
+    "pregunta": "¿Qué versión de X.509 incorpora el campo de extensiones?",
+    "correcta": "La versión 3",
+    "distractores": [
+      "La versión 1, junto al nombre del sujeto",
+      "La versión 2, junto al identificador único del sujeto"
+    ],
+    "explicacion": "✓ Cada versión añade campos a la anterior: la 2 suma los identificadores únicos y la 3 las extensiones para datos adicionales.\n✗ «versión 1»: la versión 1 llega hasta la información de la clave pública del sujeto\n✗ «versión 2»: la versión 2 añade los identificadores únicos, y las extensiones llegan con la 3"
+  },
+  {
+    "id": "claves-066",
+    "concepto": "claves-certificado-contenido",
+    "apartado": "claves",
+    "pregunta": "¿Qué contiene el campo de información de la clave pública del sujeto en un certificado X.509?",
+    "correcta": "El algoritmo, sus parámetros y la clave",
+    "distractores": [
+      "El nombre del sujeto y su número de serie",
+      "La firma de la CA y su algoritmo"
+    ],
+    "explicacion": "✓ El receptor necesita el algoritmo y sus parámetros para saber cómo usar la clave que va junto a ellos.\n✗ «nombre del sujeto»: el nombre del sujeto es un campo aparte\n✗ «firma de la CA»: la firma es el último campo del certificado"
+  },
+  {
+    "id": "claves-067",
+    "concepto": "claves-certificado-propiedades",
+    "apartado": "claves",
+    "pregunta": "¿Quién puede verificar a un usuario y su clave pública con un certificado?",
+    "correcta": "Cualquier usuario que tenga la clave pública de la CA",
+    "distractores": [
+      "Quien tenga la clave privada de la CA que lo firmó",
+      "Quien tenga la clave privada del titular del certificado"
+    ],
+    "explicacion": "✓ La clave pública de la CA basta para comprobar la firma, y como nadie más puede modificar el certificado, su contenido es fiable.\n✗ «clave privada de la CA»: la privada de la CA no se comparte, y no hace falta para verificar\n✗ «clave privada del titular»: el titular no es quien da la validez del certificado"
+  },
+  {
+    "id": "claves-068",
+    "concepto": "claves-certificado-propiedades",
+    "apartado": "claves",
+    "pregunta": "¿Por qué los certificados se pueden poner libremente en un directorio público?",
+    "correcta": "Porque nadie más que la CA puede modificarlos",
+    "distractores": [
+      "Porque el directorio verifica a cada usuario antes de entregarle un certificado",
+      "Porque contienen la clave privada cifrada del titular"
+    ],
+    "explicacion": "✓ La firma de la CA delata cualquier cambio, así que un directorio sin protección no puede falsificar certificados.\n✗ «directorio verifica»: el certificado se protege por su firma, y no por el directorio\n✗ «clave privada cifrada»: un certificado lleva solo la clave pública del titular"
+  },
+  {
+    "id": "claves-069",
+    "concepto": "claves-certificado-propiedades",
+    "apartado": "claves",
+    "pregunta": "¿Qué se puede obtener con certificados de CAs que certifican a otras CAs?",
+    "correcta": "Cadenas de firmas de certificados, en jerarquías",
+    "distractores": [
+      "Un directorio X.500 de claves públicas de todos los usuarios",
+      "Una lista de revocación con las firmas de cada CA"
+    ],
+    "explicacion": "✓ Cada CA firma el certificado de la siguiente, y un usuario confía en una CA que no conoce si otra de confianza la avala.\n✗ «directorio X.500»: un directorio es un servicio distinto de las cadenas de firmas\n✗ «lista de revocación»: la lista de revocación es otro mecanismo, y no una cadena de firmas"
+  },
+  {
+    "id": "transporte-001",
+    "concepto": "transporte-tls-servicios",
+    "apartado": "transporte",
+    "pregunta": "¿Qué tres servicios de seguridad da SSL/TLS a una comunicación que viaja sobre TCP?",
+    "correcta": "Autenticación, criptografía e integridad de la comunicación",
+    "distractores": [
+      "Autenticación, control de acceso y disponibilidad del servicio",
+      "Confidencialidad, no repudio y autorización de cada mensaje"
+    ],
+    "explicacion": "✓ La capa TLS autentica a los interlocutores, cifra los datos y detecta alteraciones, así que TCP transporta una comunicación protegida.\n✗ «Autenticación, control de acceso y disponibilidad»: TLS no gestiona permisos ni garantiza que el servicio siga disponible\n✗ «Confidencialidad, no repudio y autorización»: TLS no da no repudio, y la autorización queda fuera de la capa"
+  },
+  {
+    "id": "transporte-002",
+    "concepto": "transporte-tls-servicios",
+    "apartado": "transporte",
+    "pregunta": "¿En qué posición de la pila de protocolos se coloca la capa de seguridad SSL/TLS?",
+    "correcta": "Entre la aplicación y TCP, que queda por debajo",
+    "distractores": [
+      "Entre TCP e IP, que es la capa de red",
+      "Entre IP y la red local (LAN), en el enlace"
+    ],
+    "explicacion": "✓ Al ir sobre TCP, TLS recibe los datos de la aplicación, los protege y se los pasa a TCP ya cifrados.\n✗ «Entre TCP e IP»: TLS cifra sobre TCP, y no sobre los paquetes IP\n✗ «Entre IP y la red local (LAN)»: el enlace queda por debajo de IP, y TLS no actúa ahí"
+  },
+  {
+    "id": "transporte-003",
+    "concepto": "transporte-tls-servicios",
+    "apartado": "transporte",
+    "pregunta": "¿Qué relación hay entre SSL y TLS?",
+    "correcta": "TLS es la evolución de SSL, el protocolo que Netscape desarrolló",
+    "distractores": [
+      "SSL es la evolución de TLS, que Netscape desarrolló después",
+      "TLS es un protocolo sin relación con SSL, que Netscape también desarrolló"
+    ],
+    "explicacion": "✓ Netscape creó SSL y el IETF lo estandarizó y mejoró como TLS, y por eso se escribe SSL/TLS.\n✗ «SSL es la evolución de TLS»: el orden es el contrario: TLS es el sucesor\n✗ «TLS es un protocolo sin relación con SSL»: TLS no nace de cero: parte de SSL y lo evoluciona"
+  },
+  {
+    "id": "transporte-031",
+    "concepto": "transporte-change-cipher-spec",
+    "apartado": "transporte",
+    "pregunta": "¿Cuál es el único propósito del protocolo Change Cipher Spec de TLS?",
+    "correcta": "Anunciar que se va a cambiar la suite de cifrado",
+    "distractores": [
+      "Negociar los algoritmos de la nueva suite de cifrado",
+      "Avisar al interlocutor de un error en un registro"
+    ],
+    "explicacion": "✓ Tras el aviso, ambas partes pasan a la nueva suite, y así el receptor sabe desde qué registro descifrar con las claves nuevas.\n✗ «Negociar los algoritmos»: negociar es función del Handshake\n✗ «Avisar al interlocutor»: los avisos de error son del protocolo Alert"
+  },
+  {
+    "id": "transporte-032",
+    "concepto": "transporte-change-cipher-spec",
+    "apartado": "transporte",
+    "pregunta": "¿Cuándo se ejecuta por defecto el protocolo Change Cipher Spec?",
+    "correcta": "Después del protocolo Handshake",
+    "distractores": [
+      "Antes del Handshake, para pedir una suite concreta",
+      "Cada vez que llega un registro con un MAC erróneo"
+    ],
+    "explicacion": "✓ El Handshake acuerda la suite, y solo cuando ha terminado conviene anunciar el cambio para empezar a usarla.\n✗ «Antes del Handshake»: la suite se acuerda en el Handshake, y no antes\n✗ «Cada vez que»: un MAC erróneo se comunica con una alerta"
+  },
+  {
+    "id": "transporte-033",
+    "concepto": "transporte-change-cipher-spec",
+    "apartado": "transporte",
+    "pregunta": "¿Qué contiene el mensaje del protocolo Change Cipher Spec?",
+    "correcta": "Un byte con el valor 1",
+    "distractores": [
+      "Dos bytes con el nivel y la alerta",
+      "Un byte de tipo, tres de longitud y el contenido"
+    ],
+    "explicacion": "✓ El mensaje solo sirve de señal, así que no necesita llevar más datos que ese único valor.\n✗ «Dos bytes»: esa es la estructura del mensaje Alert\n✗ «Un byte de tipo»: esa es la estructura de un mensaje del Handshake"
+  },
+  {
+    "id": "transporte-034",
+    "concepto": "transporte-alert",
+    "apartado": "transporte",
+    "pregunta": "¿Para qué sirve el Alert Protocol de TLS?",
+    "correcta": "Para anunciar alertas al interlocutor",
+    "distractores": [
+      "Para anunciar el cambio de la suite de cifrado",
+      "Para comprobar que el interlocutor sigue activo"
+    ],
+    "explicacion": "✓ Permite que una parte avise de errores o de un cierre, y con una alerta fatal la conexión se interrumpe.\n✗ «Para anunciar el cambio»: eso lo hace el protocolo Change Cipher Spec\n✗ «Para comprobar que»: eso lo hace el protocolo Heartbeat"
+  },
+  {
+    "id": "transporte-035",
+    "concepto": "transporte-alert",
+    "apartado": "transporte",
+    "pregunta": "¿Qué indica el primer byte de un mensaje del Alert Protocol?",
+    "correcta": "Si la alerta es de aviso (Warning) o fatal (Fatal)",
+    "distractores": [
+      "El tipo concreto de error, como bad_record_mac",
+      "La versión del protocolo con el que se envía la alerta"
+    ],
+    "explicacion": "✓ El receptor distingue con él si puede seguir con la conexión, en un aviso, o debe cerrarla, en uno fatal.\n✗ «El tipo concreto»: eso lo indica el segundo byte\n✗ «La versión del protocolo»: la versión va en la cabecera del registro"
+  },
+  {
+    "id": "transporte-036",
+    "concepto": "transporte-alert",
+    "apartado": "transporte",
+    "pregunta": "¿Qué indica el segundo byte de un mensaje del Alert Protocol?",
+    "correcta": "La alerta concreta, como bad_record_mac o handshake_failure",
+    "distractores": [
+      "La gravedad, que es de aviso o fatal",
+      "La longitud del mensaje de alerta que sigue"
+    ],
+    "explicacion": "✓ Con él el receptor sabe qué ha fallado, por ejemplo un MAC incorrecto, y reacciona de forma adecuada.\n✗ «La gravedad»: eso lo indica el primer byte\n✗ «La longitud»: la alerta tiene 2 bytes, y no tiene un campo de longitud"
+  },
+  {
+    "id": "transporte-037",
+    "concepto": "transporte-heartbeat",
+    "apartado": "transporte",
+    "pregunta": "¿Qué dos misiones tiene el protocolo Heartbeat de TLS?",
+    "correcta": "Comprobar que el interlocutor está activo y generar actividad en la conexión",
+    "distractores": [
+      "Renegociar la suite de cifrado cuando el interlocutor no responde",
+      "Medir el retardo y cifrar el tráfico que queda sin enviar"
+    ],
+    "explicacion": "✓ Un interlocutor caído no avisa, y el silencio de la conexión impide notarlo, así que se le pregunta con mensajes periódicos.\n✗ «Renegociar»: renegociar es del Handshake\n✗ «Medir el retardo»: el Heartbeat no mide retardos ni cifra relleno"
+  },
+  {
+    "id": "transporte-038",
+    "concepto": "transporte-heartbeat",
+    "apartado": "transporte",
+    "pregunta": "¿Qué dos tipos de mensajes forman el protocolo Heartbeat?",
+    "correcta": "heartbeat_request y heartbeat_response",
+    "distractores": [
+      "heartbeat_hello y heartbeat_done",
+      "heartbeat_alert y heartbeat_close"
+    ],
+    "explicacion": "✓ Una parte pregunta con la petición y la otra contesta con la respuesta, y esa contestación demuestra que sigue activa.\n✗ «heartbeat_hello»: esos nombres imitan los del Handshake, y no existen\n✗ «heartbeat_alert»: no existen, y el cierre se hace con close_notify"
+  },
+  {
+    "id": "transporte-039",
+    "concepto": "transporte-heartbeat",
+    "apartado": "transporte",
+    "pregunta": "¿Por qué genera el protocolo Heartbeat actividad en una conexión TLS?",
+    "correcta": "Para que no la cierren cortafuegos que no toleran conexiones sin actividad",
+    "distractores": [
+      "Para que el servidor renueve la clave de sesión de forma periódica",
+      "Para evitar un truncation attack sobre la conexión TCP"
+    ],
+    "explicacion": "✓ Esos cortafuegos descartan conexiones sin tráfico, y los mensajes periódicos mantienen la conexión viva aunque la aplicación calle.\n✗ «Para que el servidor»: el Heartbeat no toca las claves\n✗ «Para evitar un truncation attack»: ese ataque se evita con el mensaje close_notify"
+  },
+  {
+    "id": "transporte-040",
+    "concepto": "transporte-handshake-funciones",
+    "apartado": "transporte",
+    "pregunta": "¿Qué dos funciones cumple el protocolo Handshake de TLS?",
+    "correcta": "Autenticar a los interlocutores y negociar la suite de cifrado",
+    "distractores": [
+      "Fragmentar los datos y calcular el MAC de cada fragmento",
+      "Anunciar alertas y cerrar la conexión"
+    ],
+    "explicacion": "✓ Antes de enviar datos, cada parte debe saber con quién habla y con qué algoritmos y claves protegerá la comunicación.\n✗ «Fragmentar los datos»: eso lo hace el Record Protocol\n✗ «Anunciar alertas»: eso lo hacen el Alert Protocol y close_notify"
+  },
+  {
+    "id": "transporte-041",
+    "concepto": "transporte-handshake-funciones",
+    "apartado": "transporte",
+    "pregunta": "¿Qué negocia el Handshake al acordar la suite de cifrado?",
+    "correcta": "Los algoritmos y claves de cifrado, y los algoritmos y claves MAC",
+    "distractores": [
+      "La versión de HTTP y el algoritmo de compresión de la web",
+      "El tamaño máximo del fragmento y el número de secuencia inicial"
+    ],
+    "explicacion": "✓ Las dos partes necesitan los mismos algoritmos y claves para cifrar y calcular el MAC, así que los acuerdan antes de enviar datos.\n✗ «La versión de HTTP»: HTTP es de la capa de aplicación\n✗ «El tamaño máximo»: eso no se negocia en la suite"
+  },
+  {
+    "id": "transporte-042",
+    "concepto": "transporte-handshake-funciones",
+    "apartado": "transporte",
+    "pregunta": "¿Qué campos tiene cada mensaje del protocolo Handshake de TLS?",
+    "correcta": "Type, Length y Content",
+    "distractores": [
+      "Type, Version y MAC",
+      "Level, Alert y Length"
+    ],
+    "explicacion": "✓ El tipo dice de qué mensaje se trata y la longitud cuánto ocupa, y el contenido varía según ese tipo.\n✗ «Type, Version y MAC»: la versión va en la cabecera del registro, y el MAC en el registro\n✗ «Level, Alert y Length»: Level y Alert son los dos bytes de un mensaje Alert"
+  },
+  {
+    "id": "transporte-043",
+    "concepto": "transporte-handshake-fases",
+    "apartado": "transporte",
+    "pregunta": "¿Qué se establece en la fase 1 del Handshake TLS 1.2, con client_hello y server_hello?",
+    "correcta": "Las capacidades de seguridad: versión, ID de sesión, suite, compresión y números aleatorios",
+    "distractores": [
+      "La autenticación del servidor y el intercambio de la clave pre-master",
+      "El cambio de la suite de cifrado y la verificación de los finished"
+    ],
+    "explicacion": "✓ Cliente y servidor se anuncian lo que soportan y fijan lo que usarán, antes de autenticarse o intercambiar claves.\n✗ «La autenticación del servidor»: eso ocurre en las fases 2 y 3\n✗ «El cambio de la suite»: eso ocurre en la fase 4"
+  },
+  {
+    "id": "transporte-044",
+    "concepto": "transporte-handshake-fases",
+    "apartado": "transporte",
+    "pregunta": "¿Qué mensajes puede enviar el servidor en la fase 2 del Handshake TLS 1.2?",
+    "correcta": "Su certificado, el intercambio de claves y la petición de certificado, y el fin de su saludo",
+    "distractores": [
+      "El client_key_exchange y el certificate_verify con su firma",
+      "Su change_cipher_spec y el finished que cierra el Handshake"
+    ],
+    "explicacion": "✓ El servidor se autentica y aporta lo que el cliente necesita para el intercambio de claves, y cierra para indicar que ha terminado.\n✗ «El client_key_exchange»: esos son mensajes del cliente en la fase 3\n✗ «Su change_cipher_spec»: esos mensajes van en la fase 4"
+  },
+  {
+    "id": "transporte-045",
+    "concepto": "transporte-handshake-fases",
+    "apartado": "transporte",
+    "pregunta": "¿Qué ocurre en la fase 4 del Handshake TLS 1.2?",
+    "correcta": "Se cambia la suite de cifrado y termina el Handshake con los mensajes finished",
+    "distractores": [
+      "El cliente envía su certificado y el intercambio de claves",
+      "Se negocian la versión y los números aleatorios iniciales"
+    ],
+    "explicacion": "✓ Tras fijar las claves, cada parte activa la nueva suite y confirma con finished que el Handshake no fue alterado.\n✗ «El cliente envía su certificado»: eso ocurre en la fase 3\n✗ «Se negocian la versión»: eso ocurre en la fase 1"
+  },
+  {
+    "id": "transporte-046",
+    "concepto": "transporte-client-hello",
+    "apartado": "transporte",
+    "pregunta": "¿Qué contiene el campo Random del client_hello?",
+    "correcta": "Una marca de tiempo de 32 bits y 28 bytes de un generador aleatorio seguro",
+    "distractores": [
+      "Una marca de tiempo de 28 bits y 32 bytes aleatorios",
+      "Una clave de 48 bytes que luego se cifra con la clave pública del servidor"
+    ],
+    "explicacion": "✓ Cada Handshake lleva valores distintos, y así un atacante no puede reutilizar uno anterior para engañar al servidor.\n✗ «Una marca de tiempo de 28 bits»: los tamaños están cambiados\n✗ «Una clave de 48 bytes»: esa es la pre-master, y no el Random"
+  },
+  {
+    "id": "transporte-047",
+    "concepto": "transporte-client-hello",
+    "apartado": "transporte",
+    "pregunta": "¿Qué indica el cliente al enviar un SessionID igual a cero en el client_hello?",
+    "correcta": "Que quiere establecer una nueva conexión en una nueva sesión",
+    "distractores": [
+      "Que quiere crear una conexión nueva dentro de una sesión ya existente",
+      "Que quiere actualizar los parámetros de una conexión existente"
+    ],
+    "explicacion": "✓ El cero indica que el cliente no tiene sesión que reutilizar, así que el servidor crea una y le asigna un identificador.\n✗ «Que quiere crear una conexión»: eso lo indica un SessionID distinto de cero\n✗ «Que quiere actualizar»: un SessionID cero no reutiliza ninguna sesión previa"
+  },
+  {
+    "id": "transporte-048",
+    "concepto": "transporte-client-hello",
+    "apartado": "transporte",
+    "pregunta": "¿En qué orden lista el cliente los conjuntos de cifrado del CipherSuite del client_hello?",
+    "correcta": "En orden decreciente de preferencia",
+    "distractores": [
+      "En orden creciente de preferencia",
+      "En orden alfabético por el nombre del algoritmo"
+    ],
+    "explicacion": "✓ El cliente expresa qué prefiere y el servidor, que conoce lo que soporta, escoge una suite compatible con ambos.\n✗ «En orden creciente»: el primero es el que más prefiere el cliente\n✗ «En orden alfabético»: el orden indica preferencia, y no el nombre"
+  },
+  {
+    "id": "transporte-049",
+    "concepto": "transporte-server-hello",
+    "apartado": "transporte",
+    "pregunta": "¿Qué versión de TLS indica el servidor en el server_hello?",
+    "correcta": "La más baja entre la que sugiere el cliente y la más alta que soporta el servidor",
+    "distractores": [
+      "La más alta entre la que sugiere el cliente y la que soporta el servidor",
+      "La que prefiere el cliente, sin que el servidor la pueda cambiar"
+    ],
+    "explicacion": "✓ Así ambos usan una versión que los dos entienden: el servidor no supera lo que soporta ni lo que ofreció el cliente.\n✗ «La más alta»: se toma la más baja de las dos\n✗ «La que prefiere el cliente»: el servidor limita la versión a la que soporta"
+  },
+  {
+    "id": "transporte-050",
+    "concepto": "transporte-server-hello",
+    "apartado": "transporte",
+    "pregunta": "¿Cómo fija el servidor el CipherSuite del server_hello?",
+    "correcta": "Elige un único conjunto de cifrado entre los que propuso el cliente",
+    "distractores": [
+      "Acepta la lista entera del cliente y usa cada suite por turnos",
+      "Elige una suite de las suyas, aunque el cliente no la haya propuesto"
+    ],
+    "explicacion": "✓ Como solo elige entre las ofrecidas, la suite resultante es una que el cliente ya sabe usar.\n✗ «Acepta la lista entera»: el servidor selecciona una suite, y no la lista\n✗ «Elige una suite»: la suite elegida sale de las propuestas del cliente"
+  },
+  {
+    "id": "transporte-051",
+    "concepto": "transporte-server-hello",
+    "apartado": "transporte",
+    "pregunta": "¿Qué relación tiene el campo Random del server_hello con el del client_hello?",
+    "correcta": "Es independiente: lo genera el servidor por su cuenta",
+    "distractores": [
+      "Es el mismo valor que envió el cliente, repetido por el servidor",
+      "Se deriva del valor del cliente al sumarle el SessionID"
+    ],
+    "explicacion": "✓ Con dos valores aleatorios independientes, ningún lado controla el resultado y un atacante no puede reutilizar un Handshake viejo.\n✗ «Es el mismo valor»: cada parte genera su propio Random\n✗ «Se deriva del valor»: no hay derivación, son independientes"
+  },
+  {
+    "id": "transporte-079",
+    "concepto": "transporte-finished",
+    "apartado": "transporte",
+    "pregunta": "¿Qué verifica el mensaje finished del Handshake?",
+    "correcta": "Que el intercambio de claves y la autenticación se hicieron correctamente",
+    "distractores": [
+      "Que el certificado del servidor no está en una lista de revocación",
+      "Que los datos de aplicación enviados hasta ahora no han sido alterados"
+    ],
+    "explicacion": "✓ Se calcula con el master secret, así que solo quien completó bien el intercambio puede producirlo correctamente.\n✗ «Que el certificado»: la revocación no la comprueba este mensaje\n✗ «Que los datos»: todavía no se han enviado datos de aplicación"
+  },
+  {
+    "id": "transporte-080",
+    "concepto": "transporte-finished",
+    "apartado": "transporte",
+    "pregunta": "¿Qué contiene el mensaje finished?",
+    "correcta": "El resultado de una función pseudoaleatoria sobre el master secret, una etiqueta y un hash de los mensajes del Handshake",
+    "distractores": [
+      "Una firma con la clave privada del emisor sobre el master secret",
+      "Una copia del master secret cifrada con la clave pública del interlocutor"
+    ],
+    "explicacion": "✓ Solo las partes conocen el master secret, y el hash del Handshake enlaza el mensaje con lo negociado, así que un cambio lo invalida.\n✗ «Una firma»: el finished usa el master secret como clave, y no firma\n✗ «Una copia del master secret»: el master secret no se envía"
+  },
+  {
+    "id": "transporte-081",
+    "concepto": "transporte-finished",
+    "apartado": "transporte",
+    "pregunta": "¿Cuándo envía cada parte su mensaje finished?",
+    "correcta": "Justo después de su change_cipher_spec",
+    "distractores": [
+      "Antes de su change_cipher_spec para probar la suite nueva",
+      "Con su hello para cerrar el Handshake en la fase 1"
+    ],
+    "explicacion": "✓ Enviarlo ya con la nueva suite prueba que cada parte tiene las claves nuevas y que el cambio funciona.\n✗ «Antes de su change_cipher_spec»: el finished ya va protegido con la suite nueva, tras el cambio\n✗ «Con su hello»: el finished va al final del Handshake"
+  },
+  {
+    "id": "transporte-082",
+    "concepto": "transporte-handshake-mensajes",
+    "apartado": "transporte",
+    "pregunta": "¿Qué parámetro lleva el mensaje certificate del Handshake de TLS 1.2?",
+    "correcta": "Una cadena de certificados X.509v3",
+    "distractores": [
+      "Un único certificado autofirmado del servidor",
+      "Un hash de todos los mensajes del Handshake anteriores"
+    ],
+    "explicacion": "✓ La cadena permite al receptor seguir las firmas desde el certificado del servidor hasta una CA en la que ya confía.\n✗ «Un único certificado»: el mensaje lleva una cadena, y no un único certificado\n✗ «Un hash»: eso es el finished"
+  },
+  {
+    "id": "transporte-083",
+    "concepto": "transporte-handshake-mensajes",
+    "apartado": "transporte",
+    "pregunta": "¿Qué parámetro lleva el mensaje finished del Handshake de TLS 1.2?",
+    "correcta": "Un valor hash",
+    "distractores": [
+      "Una firma del certificado del cliente",
+      "Una cadena de certificados X.509v3 del interlocutor"
+    ],
+    "explicacion": "✓ Ese hash resume todo lo negociado, así que cada parte comprueba que la otra vio exactamente los mismos mensajes.\n✗ «Una firma»: eso es el certificate_verify\n✗ «Una cadena»: eso es el certificate"
+  },
+  {
+    "id": "transporte-084",
+    "concepto": "transporte-handshake-mensajes",
+    "apartado": "transporte",
+    "pregunta": "¿Qué parámetros lleva el mensaje server_done del Handshake de TLS 1.2?",
+    "correcta": "Ninguno: su contenido es nulo",
+    "distractores": [
+      "El tipo y las autoridades de certificado aceptables",
+      "Los parámetros y la firma del servidor"
+    ],
+    "explicacion": "✓ Como el servidor envía varios mensajes seguidos, este mensaje vacío marca que terminó y el cliente puede continuar.\n✗ «El tipo y las autoridades»: eso es el certificate_request\n✗ «Los parámetros y la firma»: eso es el server_key_exchange"
+  },
+  {
+    "id": "transporte-124",
+    "concepto": "transporte-arquitectura",
+    "apartado": "transporte",
+    "pregunta": "En la arquitectura de TLS 1.2, ¿qué protocolo queda justo debajo de los protocolos Handshake, Alert y Change Cipher Spec?",
+    "correcta": "El Record Protocol",
+    "distractores": [
+      "El protocolo HTTP de la capa de aplicación",
+      "El protocolo IP de la capa de red"
+    ],
+    "explicacion": "✓ Ofrece a esos tres protocolos un canal común que fragmenta, protege y envía sus mensajes, y así ninguno repite esa tarea.\n✗ «El protocolo HTTP»: HTTP va al mismo nivel que Handshake, sobre el registro\n✗ «El protocolo IP»: IP queda debajo de TCP, y TCP debajo del registro"
+  },
+  {
+    "id": "transporte-125",
+    "concepto": "transporte-arquitectura",
+    "apartado": "transporte",
+    "pregunta": "¿Sobre qué protocolo de transporte se apoya el Record Protocol de TLS 1.2?",
+    "correcta": "TCP",
+    "distractores": [
+      "UDP con un cifrado propio de datagramas",
+      "IP directamente, sin capa de transporte"
+    ],
+    "explicacion": "✓ TLS necesita un canal fiable y ordenado para sus registros, y TCP entrega los bytes completos y en orden.\n✗ «UDP»: TLS 1.2 va sobre un transporte fiable, y no sobre datagramas\n✗ «IP»: entre el registro e IP está TCP"
+  },
+  {
+    "id": "transporte-126",
+    "concepto": "transporte-arquitectura",
+    "apartado": "transporte",
+    "pregunta": "¿Qué protocolos de TLS 1.2 se apoyan sobre el Record Protocol?",
+    "correcta": "Handshake, Change Cipher Spec, Alert y Heartbeat",
+    "distractores": [
+      "Handshake, Change Cipher Spec, Alert y TCP",
+      "Handshake, Alert, Heartbeat e IP"
+    ],
+    "explicacion": "✓ Todos envían sus mensajes dentro de registros, y así comparten la protección y el formato del Record Protocol.\n✗ «Handshake, Change Cipher Spec, Alert»: TCP queda por debajo del registro\n✗ «Handshake, Alert, Heartbeat»: IP queda por debajo de TCP, y TCP por debajo del registro"
+  },
+  {
+    "id": "aplicacion-025",
+    "concepto": "aplicacion-ssh-origen",
+    "apartado": "aplicacion",
+    "pregunta": "¿Para qué se concibió inicialmente el protocolo SSH?",
+    "correcta": "Para sustituir utilidades inseguras como telnet y rlogin",
+    "distractores": [
+      "Proteger el correo electrónico entre servidores de dominios distintos",
+      "Cifrar el tráfico web entre el navegador y los servidores"
+    ],
+    "explicacion": "✓ Telnet y rlogin enviaban contraseñas y comandos en claro, y cualquiera en la red podía leerlos. SSH cifra todo el canal.\n✗ «Proteger el correo»: el correo seguro lo cubren S/MIME y TLS, y no SSH\n✗ «Cifrar el tráfico web»: la web usa HTTPS, y SSH nació para el acceso remoto a equipos"
+  },
+  {
+    "id": "aplicacion-026",
+    "concepto": "aplicacion-ssh-origen",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué ofrecían telnet y rlogin, las utilidades inseguras a las que quiso sustituir SSH?",
+    "correcta": "Ejecutar comandos o abrir una shell en un servidor, sin protección",
+    "distractores": [
+      "Transferir correo entre servidores con autenticación del remitente",
+      "Tunelizar tráfico entre redes con cifrado de extremo a extremo"
+    ],
+    "explicacion": "✓ Todo viajaba sin cifrar, incluidas las contraseñas, y quien capturaba el tráfico las leía con facilidad.\n✗ «Transferir correo»: eso lo hace SMTP, y no telnet ni rlogin\n✗ «Tunelizar tráfico»: no cifraban nada; los túneles seguros son una función posterior de SSH"
+  },
+  {
+    "id": "aplicacion-027",
+    "concepto": "aplicacion-ssh-origen",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué es SSH (Secure Shell)?",
+    "correcta": "Un protocolo para establecer conexiones seguras entre equipos",
+    "distractores": [
+      "Un protocolo de correo que firma y cifra los mensajes entre servidores",
+      "Un mecanismo de certificados que asocia claves públicas a nombres de dominio"
+    ],
+    "explicacion": "✓ Cifra y autentica el canal entre dos equipos, y así se administra uno remoto sin exponer credenciales ni comandos en la red.\n✗ «Un protocolo de correo»: el correo se transporta con SMTP y se protege con S/MIME\n✗ «Un mecanismo de certificados»: eso es una PKI, y SSH es un protocolo de conexión"
+  },
+  {
+    "id": "aplicacion-028",
+    "concepto": "aplicacion-ssh-servicios",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué tres servicios de seguridad provee SSH?",
+    "correcta": "Autenticación, cifrado e integridad",
+    "distractores": [
+      "Autenticación, cifrado y no repudio de los mensajes de cada usuario",
+      "Cifrado, integridad y disponibilidad frente a ataques de denegación"
+    ],
+    "explicacion": "✓ Cada servicio cubre una amenaza: la autenticación evita suplantaciones, el cifrado evita lecturas y la integridad evita alteraciones en tránsito.\n✗ «Autenticación, cifrado y no repudio»: SSH no firma los mensajes de cada usuario para el no repudio\n✗ «Cifrado, integridad y disponibilidad»: SSH no garantiza la disponibilidad del servicio"
+  },
+  {
+    "id": "aplicacion-029",
+    "concepto": "aplicacion-ssh-servicios",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué versión de SSH se usa hoy en día, y por qué?",
+    "correcta": "La versión 2, porque soluciona debilidades de la versión 1",
+    "distractores": [
+      "La versión 1, porque la 2 añade compresión de los datos",
+      "La versión 3, que arregla los fallos del intercambio de claves"
+    ],
+    "explicacion": "✓ La versión 1 tenía fallos de diseño, como un control de integridad débil que permitía insertar datos en la sesión.\n✗ «La versión 1»: la versión 2 corrige debilidades y no es una mera extensión\n✗ «La versión 3»: la versión en uso es la 2, y no hay una versión 3 de SSH"
+  },
+  {
+    "id": "aplicacion-030",
+    "concepto": "aplicacion-ssh-servicios",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué servicio de SSH impide que un tercero lea los datos de una sesión?",
+    "correcta": "El cifrado, que oculta el contenido de la conexión",
+    "distractores": [
+      "La integridad, que detecta si un paquete se modificó en tránsito",
+      "La autenticación, que comprueba la identidad del servidor y del usuario"
+    ],
+    "explicacion": "✓ Sin la clave de sesión, quien captura los paquetes solo ve datos ininteligibles.\n✗ «La integridad»: detecta cambios, pero no oculta el contenido\n✗ «La autenticación»: verifica quién es cada parte, y no oculta los datos"
+  },
+  {
+    "id": "aplicacion-031",
+    "concepto": "aplicacion-ssh-funciones",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué función de SSH permite lanzar un programa en otro equipo desde la línea de comandos local?",
+    "correcta": "La ejecución remota de comandos",
+    "distractores": [
+      "La copia segura de archivos entre dos equipos",
+      "El establecimiento de túneles seguros para otras aplicaciones"
+    ],
+    "explicacion": "✓ SSH ejecuta el comando en el servidor y devuelve su salida por el canal cifrado, sin abrir una shell interactiva.\n✗ «La copia segura»: transfiere archivos, y no lanza programas en el equipo remoto\n✗ «El establecimiento de túneles»: encapsula tráfico de otros programas, y no ejecuta comandos"
+  },
+  {
+    "id": "aplicacion-032",
+    "concepto": "aplicacion-ssh-funciones",
+    "apartado": "aplicacion",
+    "pregunta": "¿Cómo permite SSH ejecutar aplicaciones gráficas X11 de un equipo remoto?",
+    "correcta": "Mediante túneles seguros",
+    "distractores": [
+      "Con la copia segura de la aplicación al equipo local",
+      "Con una shell remota que transmite caracteres de texto"
+    ],
+    "explicacion": "✓ SSH reenvía por un túnel cifrado el tráfico gráfico de la aplicación remota, y así X11 no viaja en claro por la red.\n✗ «Con la copia segura»: copiar el programa no lo ejecuta en el equipo remoto\n✗ «Con una shell remota»: una shell de texto no transporta el flujo gráfico de X11"
+  },
+  {
+    "id": "aplicacion-033",
+    "concepto": "aplicacion-ssh-funciones",
+    "apartado": "aplicacion",
+    "pregunta": "Además del acceso remoto, ¿qué función ofrece SSH para mover archivos entre equipos?",
+    "correcta": "La copia segura de archivos entre equipos",
+    "distractores": [
+      "El envío de correo firmado entre servidores de dominios distintos",
+      "La resolución de nombres de dominio con firma de las respuestas"
+    ],
+    "explicacion": "✓ La copia reutiliza el canal cifrado y autenticado de SSH, y así los archivos no viajan en claro ni se alteran.\n✗ «El envío de correo»: el correo se envía con SMTP y no con SSH\n✗ «La resolución de nombres»: eso es DNSSEC y no una función de SSH"
+  },
+  {
+    "id": "aplicacion-034",
+    "concepto": "aplicacion-ssh-pila",
+    "apartado": "aplicacion",
+    "pregunta": "En la pila de protocolos de SSH, ¿qué protocolo va directamente sobre TCP, bajo los otros dos?",
+    "correcta": "El SSH Transport Layer Protocol",
+    "distractores": [
+      "El SSH User Authentication Protocol de la capa superior",
+      "El SSH Connection Protocol de la capa superior"
+    ],
+    "explicacion": "✓ Cifra y autentica el canal sobre TCP, y los otros dos protocolos lo reutilizan sin ocuparse de la criptografía.\n✗ «El SSH User Authentication Protocol»: autentica al usuario y va sobre el protocolo de transporte\n✗ «El SSH Connection Protocol»: multiplexa canales y va sobre el protocolo de transporte"
+  },
+  {
+    "id": "aplicacion-035",
+    "concepto": "aplicacion-ssh-pila",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué ofrece el SSH Transport Layer Protocol?",
+    "correcta": "Autenticación del servidor, confidencialidad e integridad, y compresión opcional",
+    "distractores": [
+      "Autenticación del cliente ante el servidor y multiplexación de canales",
+      "Entrega fiable de datagramas de extremo a extremo entre equipos"
+    ],
+    "explicacion": "✓ Como cifra y comprueba cada paquete con claves de sesión, los protocolos superiores trabajan sobre un canal seguro y con el servidor ya identificado.\n✗ «Autenticación del cliente»: eso lo hacen el User Authentication y el Connection Protocol\n✗ «Entrega fiable»: eso es TCP, que va por debajo de SSH"
+  },
+  {
+    "id": "aplicacion-036",
+    "concepto": "aplicacion-ssh-pila",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué hace el SSH Connection Protocol?",
+    "correcta": "Multiplexa el túnel cifrado en varios canales lógicos",
+    "distractores": [
+      "Autentica al usuario del lado del cliente ante el servidor",
+      "Entrega datagramas a través de varias redes distintas"
+    ],
+    "explicacion": "✓ Así una sola conexión TCP cifrada sirve a la vez para una shell, una copia de archivos o un túnel, sin negociar de nuevo.\n✗ «Autentica al usuario»: es la función del User Authentication Protocol\n✗ «Entrega datagramas»: es la función de IP, en la capa inferior"
+  },
+  {
+    "id": "aplicacion-037",
+    "concepto": "aplicacion-ssh-paquete",
+    "apartado": "aplicacion",
+    "pregunta": "En el Transport Layer Protocol de SSH, ¿en qué orden se procesa el payload de un paquete?",
+    "correcta": "Se comprime, y después se cifra el paquete y se calcula el MAC",
+    "distractores": [
+      "Se cifra primero el payload, y después se comprime y se calcula el MAC",
+      "Se calcula el MAC del payload, se añade al texto y se comprime el conjunto"
+    ],
+    "explicacion": "✓ Comprimir va antes de cifrar porque un texto cifrado parece aleatorio y ya no se puede comprimir.\n✗ «Se cifra primero»: el texto cifrado ya no se comprime, así que la compresión va antes\n✗ «Se calcula el MAC»: el MAC se añade al final, después de cifrar"
+  },
+  {
+    "id": "aplicacion-038",
+    "concepto": "aplicacion-ssh-paquete",
+    "apartado": "aplicacion",
+    "pregunta": "En el Transport Layer Protocol de SSH, ¿qué campos forman el paquete que se cifra?",
+    "correcta": "La longitud del paquete, la longitud del relleno, el payload comprimido y el relleno",
+    "distractores": [
+      "El payload comprimido y el MAC, sin campos de longitud",
+      "El payload comprimido sin relleno, con el número de secuencia"
+    ],
+    "explicacion": "✓ El relleno completa el bloque que exige el cifrado, y su longitud permite al receptor quitarlo después de descifrar.\n✗ «y el MAC»: el MAC no forma parte del paquete cifrado, y hay campos de longitud\n✗ «sin relleno»: el paquete lleva relleno, y el número de secuencia queda fuera del paquete"
+  },
+  {
+    "id": "aplicacion-039",
+    "concepto": "aplicacion-ssh-paquete",
+    "apartado": "aplicacion",
+    "pregunta": "En un paquete SSH, ¿dónde va el MAC respecto del texto cifrado?",
+    "correcta": "Al final, a continuación del texto cifrado",
+    "distractores": [
+      "Al principio del paquete, delante de la longitud del paquete",
+      "Dentro del texto cifrado, junto al relleno del paquete"
+    ],
+    "explicacion": "✓ El MAC se calcula sobre el paquete sin cifrar y se envía aparte, y el receptor lo compara tras descifrar.\n✗ «Al principio»: el MAC se calcula con el paquete ya formado y se añade al final\n✗ «Dentro del texto cifrado»: el MAC no se cifra, y va aparte del texto cifrado"
+  },
+  {
+    "id": "aplicacion-040",
+    "concepto": "aplicacion-ssh-autenticacion-servidor",
+    "apartado": "aplicacion",
+    "pregunta": "¿En qué se basa la autenticación inicial del servidor en SSH?",
+    "correcta": "En su pareja de claves pública y privada, las host keys",
+    "distractores": [
+      "En un secreto compartido que cliente y servidor conocen de antemano",
+      "En la contraseña del usuario enviada por el canal cifrado"
+    ],
+    "explicacion": "✓ Solo quien posee la clave privada puede firmar el intercambio, y así el cliente comprueba la identidad del servidor.\n✗ «En un secreto compartido»: SSH autentica al servidor con claves asimétricas, y no con un secreto previo\n✗ «En la contraseña»: la contraseña autentica al usuario, en la otra capa de autenticación"
+  },
+  {
+    "id": "aplicacion-041",
+    "concepto": "aplicacion-ssh-autenticacion-servidor",
+    "apartado": "aplicacion",
+    "pregunta": "¿Cómo obtiene el cliente SSH la clave pública del servidor para autenticarlo?",
+    "correcta": "De su base de datos local known_hosts, o de un certificado",
+    "distractores": [
+      "Del fichero AuthorizedKeys del servidor al que se conecta",
+      "De una lista de revocación que publica la autoridad de certificación"
+    ],
+    "explicacion": "✓ El cliente comprueba que la clave recibida coincide con la que ya conocía, y detecta a un intermediario que presente otra distinta.\n✗ «Del fichero AuthorizedKeys»: ese fichero guarda claves públicas de usuarios y no las del servidor\n✗ «De una lista de revocación»: una CRL lista certificados revocados y no entrega la clave del servidor"
+  },
+  {
+    "id": "aplicacion-042",
+    "concepto": "aplicacion-ssh-autenticacion-servidor",
+    "apartado": "aplicacion",
+    "pregunta": "¿Cuántas claves de host puede tener un servidor SSH?",
+    "correcta": "Varias, con distintos algoritmos de cifrado asimétrico",
+    "distractores": [
+      "Una clave de host, con un algoritmo fijado por el protocolo",
+      "Una clave común, compartida con los demás servidores de su red"
+    ],
+    "explicacion": "✓ Cada algoritmo asimétrico necesita su propio par de claves, y así el servidor puede atender a clientes que soportan algoritmos distintos.\n✗ «un algoritmo fijado»: el servidor puede tener varias, con algoritmos distintos\n✗ «Una clave común»: la clave de host identifica a cada servidor y no se comparte"
+  },
+  {
+    "id": "aplicacion-043",
+    "concepto": "aplicacion-ssh-fases",
+    "apartado": "aplicacion",
+    "pregunta": "En el Transport Layer Protocol de SSH, ¿qué fase viene justo después de la negociación de algoritmos con SSH_MSG_KEXINIT?",
+    "correcta": "El intercambio de claves",
+    "distractores": [
+      "El intercambio de identification strings con la versión de SSH",
+      "La petición de servicio al servidor, con SSH_MSG_SERVICE_REQUEST"
+    ],
+    "explicacion": "✓ Con los algoritmos ya acordados, ambos ejecutan el intercambio elegido para generar la clave de sesión.\n✗ «El intercambio de identification strings»: es la primera fase, antes de negociar algoritmos\n✗ «La petición de servicio»: es la última fase, tras acabar el intercambio de claves"
+  },
+  {
+    "id": "aplicacion-044",
+    "concepto": "aplicacion-ssh-fases",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué mensaje de SSH indica el fin del intercambio de claves?",
+    "correcta": "SSH_MSG_NEWKEYS",
+    "distractores": [
+      "SSH_MSG_KEXINIT con las listas de algoritmos soportados",
+      "SSH_MSG_SERVICE_REQUEST para pedir el siguiente protocolo"
+    ],
+    "explicacion": "✓ Cada parte lo envía para avisar de que, desde ese punto, cifra y autentica con las claves recién derivadas.\n✗ «SSH_MSG_KEXINIT»: abre la negociación de algoritmos y no cierra el intercambio de claves\n✗ «SSH_MSG_SERVICE_REQUEST»: es posterior: el cliente pide un servicio cuando el intercambio ya acabó"
+  },
+  {
+    "id": "aplicacion-045",
+    "concepto": "aplicacion-ssh-fases",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué intercambian cliente y servidor SSH justo después de establecer la conexión TCP?",
+    "correcta": "Las cadenas de identificación con las versiones de protocolo y de software",
+    "distractores": [
+      "Las listas de algoritmos soportados en SSH_MSG_KEXINIT",
+      "Las mitades del intercambio Diffie-Hellman firmadas por el servidor"
+    ],
+    "explicacion": "✓ Cada extremo ve qué versión del protocolo habla el otro antes de enviar nada que dependa de ella.\n✗ «Las listas de algoritmos»: la negociación de algoritmos viene después de las cadenas de identificación\n✗ «Las mitades»: el intercambio de claves viene después de negociar los algoritmos"
+  },
+  {
+    "id": "aplicacion-049",
+    "concepto": "aplicacion-ssh-identificacion",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué formato tiene la cadena de identificación (identification string) que se intercambian cliente y servidor SSH?",
+    "correcta": "SSH-protoversion-softwareversion, con comentarios opcionales",
+    "distractores": [
+      "SSH-softwareversion-protoversion con la clave de host al final de la línea",
+      "SSH-hostkey-puerto con el nombre del servidor y el algoritmo de cifrado"
+    ],
+    "explicacion": "✓ El formato fijo y el retorno de carro final delimitan la cadena, y el campo de versión permite comprobar la compatibilidad antes de seguir.\n✗ «SSH-softwareversion-protoversion»: el orden es primero la versión del protocolo, y no lleva la clave de host\n✗ «SSH-hostkey-puerto»: no lleva ni la clave de host ni el puerto, sino las versiones"
+  },
+  {
+    "id": "aplicacion-050",
+    "concepto": "aplicacion-ssh-identificacion",
+    "apartado": "aplicacion",
+    "pregunta": "¿Para qué se usan las cadenas de identificación de SSH tras intercambiarse?",
+    "correcta": "Entran en el intercambio de claves Diffie-Hellman",
+    "distractores": [
+      "Para elegir el algoritmo de cifrado de la sesión entre los soportados",
+      "Como identificador de sesión definitivo ante el servidor durante toda la conexión"
+    ],
+    "explicacion": "✓ Entran en el hash que el servidor firma, y así un atacante no puede cambiarlas sin que se note.\n✗ «Para elegir»: los algoritmos se negocian con SSH_MSG_KEXINIT, y no con ellas\n✗ «Como identificador»: el identificador de sesión es el hash H del intercambio D-H"
+  },
+  {
+    "id": "aplicacion-051",
+    "concepto": "aplicacion-ssh-identificacion",
+    "apartado": "aplicacion",
+    "pregunta": "En la cadena de identificación SSH-2.0-billsSSH_3.6.3q3, ¿qué indica el valor 2.0?",
+    "correcta": "La versión del protocolo SSH",
+    "distractores": [
+      "La versión del software SSH instalado en el equipo que se identifica",
+      "El número de secuencia del primer paquete que se envía en la sesión"
+    ],
+    "explicacion": "✓ Esa versión dice al otro extremo qué reglas del protocolo aplicar, mientras que el resto describe solo el programa que se usa.\n✗ «La versión del software»: la versión del software es billsSSH_3.6.3q3\n✗ «El número de secuencia»: el número de secuencia no va en la cadena de identificación"
+  },
+  {
+    "id": "aplicacion-052",
+    "concepto": "aplicacion-ssh-negociacion",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué contiene el mensaje SSH_MSG_KEXINIT de SSH?",
+    "correcta": "Listas de algoritmos soportados, en orden de preferencia",
+    "distractores": [
+      "La clave pública del servidor junto con su firma de la sesión",
+      "La lista de métodos de autenticación de usuario que acepta el servidor"
+    ],
+    "explicacion": "✓ Cada parte propone sus mejores opciones primero, y así se acuerda un algoritmo que los dos soportan.\n✗ «La clave pública»: es parte del intercambio de claves, y no de la negociación de algoritmos\n✗ «La lista de métodos»: esa lista va en SSH_MSG_USERAUTH_FAILURE, en la autenticación de usuario"
+  },
+  {
+    "id": "aplicacion-053",
+    "concepto": "aplicacion-ssh-negociacion",
+    "apartado": "aplicacion",
+    "pregunta": "En la negociación de algoritmos de SSH, ¿qué algoritmo se escoge?",
+    "correcta": "El primero de la lista del cliente que el servidor también soporte",
+    "distractores": [
+      "El primero de la lista del servidor que el cliente también soporte",
+      "El más fuerte de los que soportan ambos, sin atender al orden"
+    ],
+    "explicacion": "✓ Manda la preferencia del cliente, y los dos extremos conocen el algoritmo elegido sin más intercambios.\n✗ «El primero de la lista»: manda el orden de la lista del cliente, y no el del servidor\n✗ «El más fuerte»: se atiende al orden de preferencia del cliente y no a una fortaleza global"
+  },
+  {
+    "id": "aplicacion-054",
+    "concepto": "aplicacion-ssh-negociacion",
+    "apartado": "aplicacion",
+    "pregunta": "Un cliente SSH lista aes256-cbc antes que aes128-cbc, y el servidor soporta los dos. ¿Qué cifrado se usará?",
+    "correcta": "aes256-cbc, el primero de la lista del cliente",
+    "distractores": [
+      "aes128-cbc, porque el servidor decide cuál de los dos soporta primero",
+      "Ninguno, y hay que repetir la negociación con una lista nueva"
+    ],
+    "explicacion": "✓ La regla elige el primer algoritmo de la lista del cliente que el servidor también soporta, y aes256-cbc cumple las dos condiciones.\n✗ «aes128-cbc»: no decide el servidor, y manda el orden del cliente\n✗ «Ninguno»: con algoritmos comunes la negociación termina bien"
+  },
+  {
+    "id": "aplicacion-055",
+    "concepto": "aplicacion-ssh-dh",
+    "apartado": "aplicacion",
+    "pregunta": "En el intercambio de claves de SSH, ¿cómo queda autenticado el servidor ante el cliente?",
+    "correcta": "Firma su mitad del intercambio Diffie-Hellman con su clave privada",
+    "distractores": [
+      "Cifra su mitad del intercambio con la clave pública del cliente",
+      "Envía su clave pública cifrada con la clave compartida del intercambio"
+    ],
+    "explicacion": "✓ Solo quien tiene la clave privada puede firmar, y la firma cubre el intercambio, así que un intermediario no puede hacerse pasar por el servidor.\n✗ «Cifra su mitad»: el servidor firma con su clave privada, y no cifra con la pública del cliente\n✗ «Envía su clave pública»: la clave compartida aún no existe, y la autenticación es una firma"
+  },
+  {
+    "id": "aplicacion-056",
+    "concepto": "aplicacion-ssh-dh",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué comparten el cliente y el servidor como resultado del intercambio Diffie-Hellman de SSH?",
+    "correcta": "Una clave maestra",
+    "distractores": [
+      "Un certificado X.509 del servidor emitido por una autoridad de certificación",
+      "La clave pública del cliente, firmada por el servidor para el acceso"
+    ],
+    "explicacion": "✓ Cada parte combina su valor privado con el público del otro y obtiene el mismo secreto sin enviarlo por la red.\n✗ «Un certificado X.509»: no hay certificado, y se comparte una clave\n✗ «La clave pública»: no se comparte una clave pública firmada, sino un secreto"
+  },
+  {
+    "id": "aplicacion-057",
+    "concepto": "aplicacion-ssh-dh",
+    "apartado": "aplicacion",
+    "pregunta": "En SSH, ¿cómo se envía la clave compartida entre cliente y servidor: cifrada, firmada o acordada?",
+    "correcta": "Se acuerda mediante un intercambio Diffie-Hellman",
+    "distractores": [
+      "Cifrada por el cliente con la clave pública del servidor",
+      "Firmada por el servidor con su clave privada y enviada al cliente"
+    ],
+    "explicacion": "✓ Diffie-Hellman hace que ambos calculen el mismo valor sin transmitirlo, y así nadie que escuche la red puede conocer la clave.\n✗ «Cifrada»: es el intercambio RSA de TLS 1.2, y no el de SSH\n✗ «Firmada»: una firma da autenticidad y no confidencialidad: la clave viajaría a la vista"
+  },
+  {
+    "id": "aplicacion-058",
+    "concepto": "aplicacion-ssh-identificador-sesion",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué valor del intercambio Diffie-Hellman de SSH se usa como identificador de sesión?",
+    "correcta": "El valor hash H",
+    "distractores": [
+      "La clave maestra compartida K que ambas partes obtienen",
+      "El número de secuencia del primer paquete cifrado de la sesión"
+    ],
+    "explicacion": "✓ H resume los datos de ese intercambio, que son distintos en cada sesión, y por eso identifica la sesión sin ambigüedad.\n✗ «La clave maestra»: K es el secreto compartido y no el identificador de sesión\n✗ «El número de secuencia»: el número de secuencia no sale del intercambio D-H"
+  },
+  {
+    "id": "aplicacion-059",
+    "concepto": "aplicacion-ssh-identificador-sesion",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué pasa con el identificador de sesión de SSH cuando se refrescan las claves?",
+    "correcta": "No cambia",
+    "distractores": [
+      "Se recalcula con el nuevo intercambio y sustituye al anterior",
+      "Se descarta y se abre una sesión nueva con otro identificador"
+    ],
+    "explicacion": "✓ Queda fijo para servir de referencia estable, y por ejemplo la autenticación del usuario firma sobre él.\n✗ «Se recalcula»: el identificador se mantiene durante toda la sesión\n✗ «Se descarta»: refrescar las claves no abre una sesión nueva"
+  },
+  {
+    "id": "aplicacion-060",
+    "concepto": "aplicacion-ssh-identificador-sesion",
+    "apartado": "aplicacion",
+    "pregunta": "¿De dónde sale el valor hash H que identifica la sesión SSH?",
+    "correcta": "Del intercambio de claves Diffie-Hellman",
+    "distractores": [
+      "De la contraseña del usuario y del nombre del servidor al que accede",
+      "De la firma del servidor sobre su cadena de identificación de software"
+    ],
+    "explicacion": "✓ H es el hash de los datos del intercambio, como las versiones, las listas de algoritmos y los valores Diffie-Hellman, y varía con cada sesión.\n✗ «De la contraseña»: la sesión se identifica antes de autenticar al usuario\n✗ «De la firma»: H procede del intercambio D-H, y no de una firma aislada"
+  },
+  {
+    "id": "aplicacion-061",
+    "concepto": "aplicacion-ssh-generacion-claves",
+    "apartado": "aplicacion",
+    "pregunta": "¿A partir de qué se generan las claves de sesión de SSH?",
+    "correcta": "De la clave compartida K, el hash H y el identificador de sesión",
+    "distractores": [
+      "De la clave de host del servidor y de la clave pública del cliente",
+      "De la contraseña del usuario y de la lista de algoritmos negociados"
+    ],
+    "explicacion": "✓ Mezclar K con H y el identificador da claves distintas para cada propósito y cada sesión, aunque salgan de un mismo secreto.\n✗ «De la clave de host»: las claves de host autentican, y las de sesión salen del intercambio\n✗ «De la contraseña»: la contraseña es de la autenticación de usuario, posterior al transporte"
+  },
+  {
+    "id": "aplicacion-062",
+    "concepto": "aplicacion-ssh-generacion-claves",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué identificador de sesión se usa al generar las claves de SSH?",
+    "correcta": "Normalmente H, salvo que se hayan refrescado las claves",
+    "distractores": [
+      "Un nonce nuevo que elige el servidor en cada generación de claves",
+      "El nombre de usuario junto con la cadena de identificación del cliente"
+    ],
+    "explicacion": "✓ H es único de cada intercambio, y por eso sirve como identificador desde la primera generación de claves.\n✗ «Un nonce nuevo»: no se usa un nonce, sino el identificador procedente del intercambio D-H\n✗ «El nombre»: el nombre de usuario aún no existe en esta fase"
+  },
+  {
+    "id": "aplicacion-063",
+    "concepto": "aplicacion-ssh-generacion-claves",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué se hace en SSH con la clave K y el hash H tras el intercambio Diffie-Hellman?",
+    "correcta": "Se derivan las claves que usarán ambas partes",
+    "distractores": [
+      "Se envían al servidor cifradas con su clave de host para su registro",
+      "Se guardan en known_hosts para reutilizarlas en la próxima conexión"
+    ],
+    "explicacion": "✓ Cada dirección necesita sus propias claves de cifrado y de MAC, y se derivan de K y H para no reutilizar la misma.\n✗ «Se envían al servidor»: no se envían, porque cada parte las calcula por su lado\n✗ «Se guardan en known_hosts»: known_hosts guarda claves públicas de servidores y no secretos de sesión"
+  },
+  {
+    "id": "aplicacion-145",
+    "concepto": "aplicacion-smime-firma",
+    "apartado": "aplicacion",
+    "pregunta": "En S/MIME, ¿con qué clave firma el remitente un mensaje?",
+    "correcta": "Con su clave privada",
+    "distractores": [
+      "Con la clave pública del destinatario, para que nadie más pueda leerla",
+      "Con la clave de sesión generada para cifrar el mensaje"
+    ],
+    "explicacion": "✓ El remitente firma el mensaje con su clave privada, y el receptor verifica con su clave pública.\n✗ «Con la clave pública»: cifrar con la pública del destinatario da confidencialidad, y no una firma\n✗ «Con la clave de sesión»: la clave de sesión es simétrica y sirve para cifrar el contenido"
+  },
+  {
+    "id": "aplicacion-146",
+    "concepto": "aplicacion-smime-firma",
+    "apartado": "aplicacion",
+    "pregunta": "En S/MIME, ¿sobre qué se calcula la firma digital con la clave privada del remitente?",
+    "correcta": "Sobre el resumen (hash) del mensaje",
+    "distractores": [
+      "Sobre el mensaje ya cifrado con la clave de sesión del remitente",
+      "Sobre la clave de sesión que el remitente generó para ese mensaje"
+    ],
+    "explicacion": "✓ S/MIME crea un hash del mensaje, y ese resumen se cifra con la clave privada del remitente.\n✗ «Sobre el mensaje»: el esquema firma el mensaje y después cifra el conjunto\n✗ «Sobre la clave de sesión»: se firma el resumen del mensaje y no la clave de sesión"
+  },
+  {
+    "id": "aplicacion-147",
+    "concepto": "aplicacion-smime-firma",
+    "apartado": "aplicacion",
+    "pregunta": "En S/MIME, ¿con qué clave verifica el receptor la firma del mensaje?",
+    "correcta": "Con la clave pública del remitente",
+    "distractores": [
+      "Con su propia clave privada, la que descifra la clave de sesión",
+      "Con la clave de sesión que generó el remitente para cifrar"
+    ],
+    "explicacion": "✓ Solo la clave pública del remitente comprueba una firma hecha con su clave privada, y así el receptor confirma quién la creó.\n✗ «Con su propia clave»: la clave privada del receptor descifra la clave de sesión y no verifica firmas\n✗ «Con la clave de sesión»: la clave de sesión descifra el contenido, y no verifica la firma"
+  },
+  {
+    "id": "aplicacion-148",
+    "concepto": "aplicacion-smime-clave-sesion",
+    "apartado": "aplicacion",
+    "pregunta": "En S/MIME, ¿cómo se protege la confidencialidad del contenido del mensaje?",
+    "correcta": "Se cifra con una clave secreta de un solo uso generada por el remitente",
+    "distractores": [
+      "Se cifra directamente con la clave pública del destinatario",
+      "Se cifra con la clave privada del remitente, que verifican todos"
+    ],
+    "explicacion": "✓ El cifrado simétrico es rápido con mensajes grandes, y una clave de un solo uso limita el daño si alguien la descubre.\n✗ «Se cifra directamente»: la clave pública cifra la clave de sesión y no el mensaje entero\n✗ «Se cifra con la clave»: cifrar con la privada es una firma y no da confidencialidad"
+  },
+  {
+    "id": "aplicacion-149",
+    "concepto": "aplicacion-smime-clave-sesion",
+    "apartado": "aplicacion",
+    "pregunta": "En S/MIME, ¿con qué se cifra la clave secreta de un solo uso?",
+    "correcta": "Con la clave pública del destinatario",
+    "distractores": [
+      "Con la clave privada del remitente, para que se compruebe su origen",
+      "Con la clave pública del remitente, que ya la conoce del certificado"
+    ],
+    "explicacion": "✓ Solo el destinatario tiene la clave privada pareja, así que solo él puede recuperar la clave de un solo uso.\n✗ «Con la clave privada»: eso es una firma y no deja la clave secreta\n✗ «Con la clave pública»: el remitente generó la clave, y el destinatario es quien la recupera"
+  },
+  {
+    "id": "aplicacion-150",
+    "concepto": "aplicacion-smime-clave-sesion",
+    "apartado": "aplicacion",
+    "pregunta": "En S/MIME, ¿cómo se envía la clave de sesión al destinatario: cifrada, firmada o acordada?",
+    "correcta": "Cifrada con la clave pública del destinatario, junto con el mensaje",
+    "distractores": [
+      "Firmada con la clave privada del remitente y adjunta al mensaje",
+      "Acordada con el destinatario en un intercambio previo de mensajes"
+    ],
+    "explicacion": "✓ Cifrada con la clave pública del destinatario, la clave viaja en el mismo mensaje sin un canal seguro previo, y solo él la abre.\n✗ «Firmada»: firmar prueba el origen, pero la clave de sesión debe llegar oculta a terceros\n✗ «Acordada»: el remitente la genera y la envía cifrada, sin acuerdo interactivo previo"
+  },
+  {
+    "id": "aplicacion-151",
+    "concepto": "aplicacion-smime-recepcion",
+    "apartado": "aplicacion",
+    "pregunta": "En S/MIME, ¿qué hace el receptor primero al recibir un mensaje firmado y cifrado?",
+    "correcta": "Descifra la clave de sesión con su clave privada",
+    "distractores": [
+      "Verifica la firma con la clave pública del remitente",
+      "Descifra el mensaje con la clave pública del remitente"
+    ],
+    "explicacion": "✓ Sin la clave de sesión no puede leer el mensaje, y solo su clave privada la abre.\n✗ «Verifica la firma»: la firma se verifica al final, tras descifrar el mensaje\n✗ «Descifra el mensaje»: el mensaje se cifra con la clave de sesión y no con la del remitente"
+  },
+  {
+    "id": "aplicacion-152",
+    "concepto": "aplicacion-smime-recepcion",
+    "apartado": "aplicacion",
+    "pregunta": "En el esquema S/MIME de integridad y confidencialidad, ¿en qué orden se aplican la firma y el cifrado al enviar?",
+    "correcta": "Se firma el mensaje y después se cifran mensaje y firma",
+    "distractores": [
+      "Se cifra el mensaje y después se firma el texto ya cifrado",
+      "Se firma y se cifra cada parte por separado, sin ligarlas"
+    ],
+    "explicacion": "✓ Firmar antes de cifrar deja la firma dentro del cifrado, así que un intermediario no la ve ni la quita.\n✗ «Se cifra el mensaje»: en el esquema se firma el mensaje y se cifra el conjunto\n✗ «Se firma y se cifra»: mensaje y firma se cifran juntos con la clave de sesión"
+  },
+  {
+    "id": "aplicacion-153",
+    "concepto": "aplicacion-smime-recepcion",
+    "apartado": "aplicacion",
+    "pregunta": "En S/MIME, ¿qué hace el receptor con la clave de sesión una vez descifrada?",
+    "correcta": "La usa para descifrar el mensaje y su firma, y luego verifica la firma",
+    "distractores": [
+      "La usa para verificar la firma del remitente directamente",
+      "La envía de vuelta al remitente como confirmación de recepción"
+    ],
+    "explicacion": "✓ El receptor deshace los pasos del envío en orden inverso: la clave abre el cifrado, y la firma prueba el origen y la integridad.\n✗ «La usa»: verificar la firma requiere la clave pública del remitente\n✗ «La envía»: la clave de sesión es secreta y no se devuelve"
+  },
+  {
+    "id": "aplicacion-154",
+    "concepto": "aplicacion-smime-algoritmos",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué algoritmo de resumen debe soportar obligatoriamente S/MIME para formar una firma digital?",
+    "correcta": "SHA-256",
+    "distractores": [
+      "SHA-512",
+      "SHA-3"
+    ],
+    "explicacion": "✓ SHA-256 produce un resumen de 256 bits resistente a colisiones, y así nadie fabrica otro mensaje con la misma firma.\n✗ «SHA-512»: es otro tamaño de SHA-2, y S/MIME exige el de 256 bits\n✗ «SHA-3»: es otra familia de resumen, y S/MIME exige SHA-256"
+  },
+  {
+    "id": "aplicacion-155",
+    "concepto": "aplicacion-smime-algoritmos",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué algoritmo debe soportar obligatoriamente S/MIME para cifrar un mensaje con una clave de sesión de un solo uso?",
+    "correcta": "AES-128 en modo CBC",
+    "distractores": [
+      "AES-256 en modo CBC",
+      "Twofish en modo CBC"
+    ],
+    "explicacion": "✓ AES es un cifrado simétrico rápido, adecuado para el mensaje entero, y el modo CBC encadena los bloques para ocultar patrones.\n✗ «AES-256»: AES-256 es recomendable (SHOULD) y no obligatorio\n✗ «Twofish»: Twofish no es un algoritmo de cifrado de mensajes de S/MIME"
+  },
+  {
+    "id": "aplicacion-156",
+    "concepto": "aplicacion-smime-algoritmos",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué algoritmo debe soportar obligatoriamente S/MIME para cifrar la clave de sesión que viaja con el mensaje?",
+    "correcta": "RSA",
+    "distractores": [
+      "ElGamal con la clave pública del destinatario",
+      "AES-128 en modo CBC con una clave de un solo uso del remitente"
+    ],
+    "explicacion": "✓ RSA es asimétrico: cifra la clave de sesión con la clave pública del destinatario, y solo su clave privada la recupera.\n✗ «ElGamal»: no es el algoritmo que S/MIME exige para cifrar la clave de sesión\n✗ «AES-128»: es el algoritmo obligatorio para cifrar el mensaje, y no la clave de sesión"
+  },
+  {
+    "id": "aplicacion-s03",
+    "concepto": "sigla-aplicacion-ssh",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué significa la sigla SSH?",
+    "correcta": "Secure Shell",
+    "distractores": [
+      "Secure Socket Handshake",
+      "Secure Session Host"
+    ],
+    "explicacion": "✓ Sustituye a telnet y rlogin, que no eran seguros, y protege el acceso remoto a un servidor.\n✗ «Secure Socket Handshake»: SSH es de Shell y no de un handshake de sockets\n✗ «Secure Session Host»: SSH es de Shell y no de un host de sesión"
+  },
+  {
+    "id": "ssl-tls-013",
+    "concepto": "ssl-tls-sslstrip",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué consigue la herramienta sslstrip contra un navegador que cree estar usando HTTPS?",
+    "correcta": "Forzar que use HTTP",
+    "distractores": [
+      "Descifrar el tráfico HTTPS rompiendo su clave",
+      "Falsificar el certificado del servidor con un dominio parecido"
+    ],
+    "explicacion": "✓ El atacante intercepta el enlace a HTTPS y deja a la víctima en HTTP, mientras él habla con el servidor por HTTPS.\n✗ «Descifrar el tráfico»: sslstrip evita que haya cifrado, y no rompe el cifrado\n✗ «Falsificar el certificado»: sslstrip no presenta ningún certificado, quita el HTTPS"
+  },
+  {
+    "id": "ssl-tls-014",
+    "concepto": "ssl-tls-sslstrip",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué posición necesita el atacante para realizar un ataque sslstrip?",
+    "correcta": "Estar entre la víctima y el servidor, tras un ataque MitM",
+    "distractores": [
+      "Estar en el mismo servidor que la víctima intenta visitar",
+      "Tener un certificado válido del dominio que se suplanta"
+    ],
+    "explicacion": "✓ sslstrip solo funciona si el atacante ya intercepta el tráfico entre la víctima y el servidor.\n✗ «Estar en el mismo servidor»: el atacante se sitúa en el camino, y no en el servidor\n✗ «Tener un certificado»: sslstrip no usa certificados, porque elimina el HTTPS"
+  },
+  {
+    "id": "ssl-tls-015",
+    "concepto": "ssl-tls-sslstrip",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué mecanismo permite al navegador resistir el HTTPS Stripping de sslstrip?",
+    "correcta": "HSTS",
+    "distractores": [
+      "Public Key Pinning de las claves de las CAs",
+      "Secure Renegotiation en el servidor"
+    ],
+    "explicacion": "✓ HSTS obliga al navegador a usar SSL/TLS desde el primer acceso, y sslstrip ya no puede forzar HTTP.\n✗ «Public Key Pinning»: el pinning protege certificados, y en sslstrip no hay certificado que fijar\n✗ «Secure Renegotiation»: la renegociación segura corrige CVE-2009-3555, y no el stripping"
+  },
+  {
+    "id": "ssl-tls-016",
+    "concepto": "ssl-tls-sslstrip-proxy",
+    "apartado": "ssl-tls",
+    "pregunta": "En un ataque sslstrip, ¿cómo se comunica el atacante, que hace de proxy, con la víctima y con el servidor real?",
+    "correcta": "Con la víctima por HTTP y con el servidor por HTTPS",
+    "distractores": [
+      "Con la víctima por HTTPS y con el servidor por HTTP",
+      "Con ambos por HTTPS con un certificado falso"
+    ],
+    "explicacion": "✓ El servidor ve una conexión HTTPS normal y la víctima no ve candado, mientras el atacante lee y modifica el tráfico en claro.\n✗ «Con la víctima por HTTPS»: es el orden contrario, y el atacante dejaría el servidor sin cifrar\n✗ «Con ambos por HTTPS»: ese es el MitM con certificado falso, y sslstrip no usa certificados"
+  },
+  {
+    "id": "ssl-tls-017",
+    "concepto": "ssl-tls-sslstrip-proxy",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Por qué la víctima de sslstrip ve la página del sitio real con el mismo contenido?",
+    "correcta": "Porque el atacante pide la página al servidor real y se la reenvía",
+    "distractores": [
+      "Porque el atacante clona el sitio en su propio servidor",
+      "Porque el atacante descifra el TLS con la clave privada del servidor"
+    ],
+    "explicacion": "✓ El atacante solo retransmite la respuesta del servidor, así que la página es idéntica y la víctima no nota la intercepción.\n✗ «Porque el atacante clona»: no hay copia, el contenido sale del servidor real en tiempo real\n✗ «Porque el atacante descifra»: el atacante nunca tiene esa clave, y solo hace de proxy"
+  },
+  {
+    "id": "ssl-tls-018",
+    "concepto": "ssl-tls-sslstrip-proxy",
+    "apartado": "ssl-tls",
+    "pregunta": "En un ataque sslstrip, ¿qué ve en claro el atacante?",
+    "correcta": "Todo lo que la víctima envía, como sus contraseñas",
+    "distractores": [
+      "Las cabeceras HTTP, sin el contenido de los formularios",
+      "Ningún dato, porque el servidor real cifra la conexión"
+    ],
+    "explicacion": "✓ La víctima habla HTTP con el atacante, así que el atacante lee todo lo que envía, contraseñas incluidas.\n✗ «Las cabeceras HTTP»: el tramo va entero en HTTP, con los formularios\n✗ «Ningún dato»: el cifrado cubre el tramo con el servidor, y no el tramo con la víctima"
+  },
+  {
+    "id": "ssl-tls-040",
+    "concepto": "ssl-tls-flame-md5",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué usó el APT Flame para firmar código que parecía de Microsoft?",
+    "correcta": "Un certificado falso cuyo hash MD5 colisionaba con uno oficial de Microsoft",
+    "distractores": [
+      "La clave privada de Microsoft robada de sus servidores",
+      "Un certificado válido que una CA emitió por error"
+    ],
+    "explicacion": "✓ Con una colisión MD5, la firma de la CA sobre el certificado legítimo también vale para el falso, que parece oficial.\n✗ «La clave privada»: Flame no robó claves, fabricó una colisión\n✗ «Un certificado válido»: el certificado era falso y aprovechaba una colisión"
+  },
+  {
+    "id": "ssl-tls-041",
+    "concepto": "ssl-tls-flame-md5",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué debilidad demostró definitivamente el ataque de Flame?",
+    "correcta": "La del algoritmo MD5, por sus colisiones",
+    "distractores": [
+      "La del algoritmo RSA, por el tamaño de la clave",
+      "La de SHA-256, por una colisión"
+    ],
+    "explicacion": "✓ Las colisiones MD5 en certificados ya se habían mostrado antes, y Flame las usó en un ataque real.\n✗ «La del algoritmo RSA»: el ataque no factorizaba claves RSA\n✗ «La de SHA-256»: Flame usaba MD5, y SHA-256 es el hash que se adoptó después"
+  },
+  {
+    "id": "ssl-tls-042",
+    "concepto": "ssl-tls-flame-md5",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Para qué le servía a Flame firmar código con ese certificado falso?",
+    "correcta": "Para que su código se hiciera pasar por software de origen Microsoft",
+    "distractores": [
+      "Para cifrar el tráfico de espionaje con la clave de Microsoft que había en el certificado falso",
+      "Para suplantar el servidor web de Microsoft con HTTPS"
+    ],
+    "explicacion": "✓ El sistema confía en el código firmado por Microsoft, y por eso aceptaba el de Flame sin avisos.\n✗ «Para cifrar»: la firma da autenticidad, y no confidencialidad\n✗ «Para suplantar»: el certificado era de firma de código, y no de servidor web"
+  },
+  {
+    "id": "ssl-tls-055",
+    "concepto": "ssl-tls-bias-rc4",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué debilidad de RC4 explota el ataque BIAS?",
+    "correcta": "Sesgos estadísticos en la salida del algoritmo",
+    "distractores": [
+      "Un vector de inicialización predecible en cada bloque",
+      "Un padding que delata errores"
+    ],
+    "explicacion": "✓ Con muchas copias cifradas del mismo texto, los sesgos delatan los bytes más probables, y se recupera el secreto sin fuerza bruta.\n✗ «Un vector de inicialización»: RC4 es un cifrado de flujo y no tiene IV como CBC\n✗ «Un padding»: RC4 no usa padding"
+  },
+  {
+    "id": "ssl-tls-056",
+    "concepto": "ssl-tls-bias-rc4",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Cuál es la única solución frente a los ataques BIAS?",
+    "correcta": "Dejar de utilizar RC4",
+    "distractores": [
+      "Aplicar el 1/n-1 split en el navegador",
+      "Usar claves RC4 más largas"
+    ],
+    "explicacion": "✓ BIAS afecta a todas las versiones de SSL/TLS que usen RC4, y no hay mitigación distinta de abandonarlo.\n✗ «Aplicar»: es la mitigación de BEAST, y no de BIAS\n✗ «Usar»: el sesgo es del algoritmo, y no depende de la longitud de la clave"
+  },
+  {
+    "id": "ssl-tls-057",
+    "concepto": "ssl-tls-bias-rc4",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Por qué BIAS es muy difícil de explotar en la práctica, aunque se demostró?",
+    "correcta": "Porque necesita enormes cantidades de tráfico con el mismo texto cifrado",
+    "distractores": [
+      "Porque exige romper antes la clave privada del servidor mediante un ataque de fuerza bruta",
+      "Porque el sesgo desaparece al usar TLS 1.1, que ya usa un IV explícito"
+    ],
+    "explicacion": "✓ El atacante necesita muchas copias cifradas del mismo mensaje, y para eso controla el tráfico de la víctima.\n✗ «Porque exige»: BIAS no usa la clave privada\n✗ «Porque el sesgo»: afecta a todas las versiones que usan RC4"
+  },
+  {
+    "id": "ssl-tls-070",
+    "concepto": "ssl-tls-freak",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué consigue forzar el ataque FREAK?",
+    "correcta": "El uso de claves RSA de exportación débiles, de 40 bits",
+    "distractores": [
+      "El uso de HTTP sin cifrar en un navegador",
+      "El uso de RC4 en lugar de CBC, por una negociación manipulada"
+    ],
+    "explicacion": "✓ Una clave RSA de 40 bits se factoriza en poco tiempo, y así el atacante descifra la comunicación casi en tiempo real.\n✗ «El uso de HTTP»: eso es sslstrip\n✗ «El uso de RC4»: RC4 no es la causa"
+  },
+  {
+    "id": "ssl-tls-071",
+    "concepto": "ssl-tls-freak",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué opción debe tener habilitada un servidor para ser vulnerable a FREAK?",
+    "correcta": "RSA_EXPORT",
+    "distractores": [
+      "DHE_EXPORT",
+      "Heartbeat"
+    ],
+    "explicacion": "✓ Esa opción hace que el servidor acepte claves RSA de exportación, de 40 bits, que un atacante puede romper.\n✗ «DHE_EXPORT»: permite DH débil, y es la opción de Logjam\n✗ «Heartbeat»: es la extensión de Heartbleed"
+  },
+  {
+    "id": "ssl-tls-072",
+    "concepto": "ssl-tls-freak",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Cómo se corrige la exposición a FREAK?",
+    "correcta": "Dejando de soportar RSA_EXPORT y actualizando las bibliotecas de cifrado",
+    "distractores": [
+      "Desactivando la compresión de TLS",
+      "Usando únicamente suites de cifrado con RC4"
+    ],
+    "explicacion": "✓ Sin RSA_EXPORT no hay clave débil que el atacante pueda forzar, y las bibliotecas actualizadas corrigen el fallo que lo permitía.\n✗ «Desactivando»: la compresión de TLS no corrige FREAK, que trata de claves de exportación\n✗ «Usando»: RC4 no corrige FREAK"
+  },
+  {
+    "id": "ssl-tls-073",
+    "concepto": "ssl-tls-logjam",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué consigue forzar el ataque Logjam?",
+    "correcta": "Claves débiles, de 512 bits, en un intercambio Diffie-Hellman",
+    "distractores": [
+      "Claves RSA de 40 bits de exportación, que el servidor acepta si tiene RSA_EXPORT activado",
+      "El uso de HTTP en el navegador, aunque la víctima crea que usa HTTPS"
+    ],
+    "explicacion": "✓ Una clave DH de 512 bits se rompe con cálculo previo, y un MitM degrada el intercambio para que el cliente la acepte.\n✗ «Claves RSA de 40 bits»: eso es FREAK, que ataca RSA\n✗ «El uso de HTTP»: sslstrip fuerza HTTP, y Logjam degrada el intercambio Diffie-Hellman"
+  },
+  {
+    "id": "ssl-tls-074",
+    "concepto": "ssl-tls-logjam",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué requiere el atacante para ejecutar Logjam?",
+    "correcta": "Un ataque MitM previo, contra un servidor con DHE_EXPORT",
+    "distractores": [
+      "Un servidor con RSA_EXPORT activado, que acepta claves RSA débiles de exportación",
+      "Un padding cuyo error se pueda observar por la diferencia de tiempo de respuesta"
+    ],
+    "explicacion": "✓ El MitM altera los mensajes del handshake para que el servidor use DHE_EXPORT, que acepta la clave débil.\n✗ «Un servidor con RSA_EXPORT»: es la opción de FREAK\n✗ «Un padding»: eso es Lucky 13"
+  },
+  {
+    "id": "ssl-tls-075",
+    "concepto": "ssl-tls-logjam",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué se recomienda como solución a Logjam?",
+    "correcta": "Dejar de soportar DHE_EXPORT y forzar claves de 2048 bits",
+    "distractores": [
+      "Subir las claves DH a 1024 bits",
+      "Cambiar a RC4"
+    ],
+    "explicacion": "✓ Sin DHE_EXPORT no hay clave débil que forzar, y 2048 bits resiste.\n✗ «Subir»: 768 y 1024 bits también podrían ser vulnerables\n✗ «Cambiar»: RC4 no protege el intercambio de claves"
+  },
+  {
+    "id": "ssl-tls-106",
+    "concepto": "ssl-tls-sha1-certificados",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué hicieron los navegadores con los certificados firmados con SHA1?",
+    "correcta": "Dejaron de aceptarlos y marcaron la conexión como insegura",
+    "distractores": [
+      "Los aceptaron con un aviso discreto, sin marcar la conexión como insegura en la barra",
+      "Los revocaron con una CRL global publicada por los propios navegadores a todos los usuarios"
+    ],
+    "explicacion": "✓ SHA1 permite falsificar certificados con colisiones, por eso los navegadores dejaron de confiar en él.\n✗ «Los aceptaron»: la conexión se marca como insegura\n✗ «Los revocaron»: los navegadores no los revocan, dejan de aceptarlos"
+  },
+  {
+    "id": "ssl-tls-107",
+    "concepto": "ssl-tls-sha1-certificados",
+    "apartado": "ssl-tls",
+    "pregunta": "¿A qué función hash migraron las empresas que usaban certificados con SHA1?",
+    "correcta": "SHA-256",
+    "distractores": [
+      "MD5",
+      "CRC"
+    ],
+    "explicacion": "✓ SHA-256 genera un resumen más largo y sin ataques de colisión conocidos, así que los certificados nuevos no se falsifican.\n✗ «MD5»: MD5 es aún más débil, y Flame lo rompió\n✗ «CRC»: un CRC no es un hash criptográfico"
+  },
+  {
+    "id": "ssl-tls-108",
+    "concepto": "ssl-tls-sha1-certificados",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Qué se había demostrado contra SHA1 mucho antes de que los navegadores lo rechazaran?",
+    "correcta": "Ataques teóricos",
+    "distractores": [
+      "Un ataque práctico que falsificaba certificados de Microsoft",
+      "Una recuperación de la clave privada"
+    ],
+    "explicacion": "✓ Un ataque teórico muestra que la función se puede romper con más recursos, y esa advertencia llevó a retirarla años después.\n✗ «Un ataque»: eso fue la colisión de MD5 de Flame\n✗ «Una recuperación»: SHA1 es un hash, y no contiene una clave privada que recuperar"
+  },
+  {
+    "id": "ssl-tls-112",
+    "concepto": "ssl-tls-sslstrip-dominio-parecido",
+    "apartado": "ssl-tls",
+    "pregunta": "En un MITM de sslstrip con bettercap, ¿por qué la víctima acaba en un dominio parecido al real, como wwwww-facebook.com?",
+    "correcta": "Porque el navegador no tiene una política HSTS para el dominio parecido",
+    "distractores": [
+      "Porque el atacante tiene un certificado válido para el dominio parecido",
+      "Porque el DNS de la víctima no resuelve el dominio real"
+    ],
+    "explicacion": "✓ El navegador obliga a usar HTTPS con el dominio real que tiene HSTS, y el dominio parecido escapa a esa política.\n✗ «Porque el atacante tiene un certificado válido»: el atacante sirve el dominio parecido en HTTP, y no necesita certificado\n✗ «Porque el DNS de la víctima»: el dominio real resuelve bien, y el cambio de dominio esquiva HSTS"
+  },
+  {
+    "id": "ssl-tls-113",
+    "concepto": "ssl-tls-sslstrip-dominio-parecido",
+    "apartado": "ssl-tls",
+    "pregunta": "Durante un MITM de sslstrip, ¿qué ve la víctima en la barra de direcciones del navegador?",
+    "correcta": "La dirección del sitio con http://, sin el candado de HTTPS",
+    "distractores": [
+      "La dirección con https:// y un aviso de certificado no válido",
+      "La dirección con https:// y el candado del certificado real"
+    ],
+    "explicacion": "✓ El atacante entrega la página en HTTP, así que la barra muestra http:// y no muestra el candado.\n✗ «un aviso de certificado»: ese aviso es del MITM con certificado falso, y sslstrip no usa certificados\n✗ «el candado del certificado real»: el candado sale solo en una conexión HTTPS, y la víctima habla HTTP"
+  },
+  {
+    "id": "ssl-tls-114",
+    "concepto": "ssl-tls-sslstrip-dominio-parecido",
+    "apartado": "ssl-tls",
+    "pregunta": "En un MITM de sslstrip con bettercap, ¿cómo llega la víctima al dominio parecido sin escribirlo?",
+    "correcta": "El atacante reescribe los enlaces de las páginas que reenvía al dominio parecido",
+    "distractores": [
+      "El atacante registra el dominio parecido y aloja una copia del sitio",
+      "El atacante pide a una CA un certificado para el dominio parecido"
+    ],
+    "explicacion": "✓ El atacante hace de proxy, y cambia cada enlace al dominio real por el dominio parecido en las páginas que reenvía.\n✗ «registra el dominio parecido»: no hay copia, el contenido sale del servidor real a través del proxy\n✗ «pide a una CA un certificado»: el dominio parecido va por HTTP, y no lleva certificado"
+  },
+  {
+    "id": "aplicacion-172",
+    "concepto": "aplicacion-ssh-cifrados",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué tamaños de clave ofrece AES en la lista de cifrados de SSH?",
+    "correcta": "128, 192 y 256 bits",
+    "distractores": [
+      "64, 128 y 192 bits",
+      "56, 112 y 168 bits"
+    ],
+    "explicacion": "✓ Los tres tamaños dejan elegir entre más velocidad con 128 bits y más margen frente a la fuerza bruta con 256.\n✗ «64, 128 y 192 bits»: AES no usa claves de 64 bits, y sí de 256\n✗ «56, 112 y 168 bits»: son tamaños de DES y de 3DES, y no de AES"
+  },
+  {
+    "id": "aplicacion-173",
+    "concepto": "aplicacion-ssh-cifrados",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué modo usan casi todos los cifrados de la lista de SSH?",
+    "correcta": "CBC, como en aes128-cbc o 3des-cbc",
+    "distractores": [
+      "ECB, como en aes128-ecb o 3des-ecb",
+      "GCM, como en aes128-gcm o aes256-gcm"
+    ],
+    "explicacion": "✓ CBC encadena cada bloque con el anterior, y así oculta los patrones repetidos del mensaje.\n✗ «ECB»: la lista no trae ningún cifrado en ECB\n✗ «GCM»: la lista de SSH no trae ningún cifrado en GCM"
+  },
+  {
+    "id": "aplicacion-174",
+    "concepto": "aplicacion-ssh-cifrados",
+    "apartado": "aplicacion",
+    "pregunta": "¿Qué diferencia a arcfour de los demás cifrados de la lista de SSH?",
+    "correcta": "Es RC4 con una clave de 128 bits, un cifrado de flujo",
+    "distractores": [
+      "Es un cifrado de bloque en CBC, como cast128-cbc",
+      "Es el cifrado obligatorio de SSH, con asterisco"
+    ],
+    "explicacion": "✓ arcfour es RC4 con 128 bits, un cifrado de flujo, y los demás son cifrados de bloque en CBC.\n✗ «Es un cifrado de bloque»: arcfour es RC4, un cifrado de flujo\n✗ «Es el cifrado obligatorio»: el obligatorio es 3des-cbc"
+  },
+  {
+    "id": "ssl-tls-121",
+    "concepto": "ssl-tls-mitm-con-y-sin-cifrado",
+    "apartado": "ssl-tls",
+    "pregunta": "En un Man-in-the-Middle contra un protocolo sin cifrado, ¿qué puede hacer el atacante con el tráfico?",
+    "correcta": "Leerlo y cambiarlo, porque pasa en claro por él",
+    "distractores": [
+      "Leerlo pero no cambiarlo, por la integridad",
+      "Cambiarlo pero no leerlo, por la codificación"
+    ],
+    "explicacion": "✓ El atacante está en medio y el tráfico va en claro, así que lo lee y lo cambia.\n✗ «Leerlo pero no cambiarlo»: sin protección, el atacante también lo cambia\n✗ «Cambiarlo pero no leerlo»: sin cifrado, el tráfico va en claro"
+  },
+  {
+    "id": "ssl-tls-122",
+    "concepto": "ssl-tls-mitm-con-y-sin-cifrado",
+    "apartado": "ssl-tls",
+    "pregunta": "En un Man-in-the-Middle contra un protocolo cifrado, ¿cómo va el tráfico?",
+    "correcta": "Cifrado en el tramo de la víctima al atacante, y en el tramo del atacante al servidor",
+    "distractores": [
+      "Cifrado de extremo a extremo, sin pasar por el atacante",
+      "En claro en los dos tramos, porque el atacante quita el cifrado"
+    ],
+    "explicacion": "✓ El atacante termina cada conexión cifrada, y así descifra y recifra el tráfico en el medio, donde puede leerlo o cambiarlo.\n✗ «Cifrado de extremo a extremo»: el atacante está en medio y corta el enlace directo\n✗ «En claro en los dos tramos»: los dos tramos van cifrados"
+  },
+  {
+    "id": "ssl-tls-123",
+    "concepto": "ssl-tls-mitm-con-y-sin-cifrado",
+    "apartado": "ssl-tls",
+    "pregunta": "¿Dónde se coloca el atacante en un ataque Man-in-the-Middle?",
+    "correcta": "Entre los dos extremos, y corta el enlace directo entre ellos",
+    "distractores": [
+      "Junto a uno de los extremos, con una copia del tráfico",
+      "Dentro del servidor, con acceso a su clave privada"
+    ],
+    "explicacion": "✓ Al ponerse en el camino, todo el tráfico lo atraviesa, y puede leerlo o cambiarlo antes de reenviarlo.\n✗ «Junto a uno de los extremos»: eso es una escucha, y el MitM corta el enlace directo\n✗ «Dentro del servidor»: el atacante está en la red, entre los extremos"
+  }
+]

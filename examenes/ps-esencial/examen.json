@@ -1,0 +1,162 @@
+{
+  "titulo": "PS esencial",
+  "preguntas": 20,
+  "opciones": 3,
+  "minutos": 60,
+  "penalizacion": 0.3333333333333333,
+  "desarrollo": 5,
+  "pesos": {
+    "test": 5,
+    "desarrollo": 5
+  },
+  "pdfs": {
+    "1_Introduccion.pdf": {
+      "nombre": "1. Introducción",
+      "apartados": [
+        "introduccion"
+      ]
+    },
+    "2_Claves.pdf": {
+      "nombre": "2. Claves",
+      "apartados": [
+        "claves"
+      ]
+    },
+    "3_Transporte.pdf": {
+      "nombre": "3. Transporte",
+      "apartados": [
+        "transporte"
+      ]
+    },
+    "4_Aplicacion.pdf": {
+      "nombre": "4. Aplicación",
+      "apartados": [
+        "aplicacion"
+      ]
+    },
+    "E_SSL_TLS.pdf": {
+      "nombre": "SSL/TLS: historia de un protocolo",
+      "apartados": [
+        "ssl-tls"
+      ]
+    }
+  },
+  "apartados": {
+    "introduccion": "Introducción",
+    "claves": "Claves",
+    "transporte": "Transporte",
+    "aplicacion": "Aplicación",
+    "ssl-tls": "SSL/TLS"
+  },
+  "sin_pregunta": {
+    "1_Introduccion.pdf": {
+      "1": "portada",
+      "2": "índice",
+      "5": "ejemplo del protocolo humano y de Internet; la idea de protocolo se pregunta desde la página 6",
+      "24": "índice de la segunda parte del tema"
+    },
+    "2_Claves.pdf": {
+      "1": "portada",
+      "3": "índice de contenidos",
+      "34": "lista de temas a desarrollar de forma autónoma, sin explicación en la página"
+    },
+    "3_Transporte.pdf": {
+      "1": "portada",
+      "3": "índice de contenidos",
+      "37": "enlace a un ejemplo práctico externo de TLS 1.2, sin una idea propia",
+      "47": "enlace a una ilustración externa de TLS 1.3, sin una idea propia",
+      "48": "presentación de OpenSSL como proyecto open source, sin una idea evaluable",
+      "55": "enlace a una referencia externa de OpenSSL"
+    },
+    "4_Aplicacion.pdf": {
+      "1": "portada",
+      "2": "índice",
+      "3": "ejemplo de mensajes HTTP, sin una idea de seguridad",
+      "14": "dónde se usa SSH y su implementación, sin una idea que preguntar",
+      "30": "índice del correo electrónico",
+      "34": "ejemplo de interacción SMTP, sigue la idea del protocolo SMTP",
+      "39": "ejemplo de MIME, sigue la idea de MIME",
+      "53": "ejemplo de SignedData, sigue la idea de la página 52",
+      "55": "ejemplo de EnvelopedData, sigue la idea de la página 54",
+      "56": "ejemplo de clear signing, sigue la idea de la página 50"
+    },
+    "E_SSL_TLS.pdf": {
+      "1": "portada, presentación, objetivo, cronología, cierre y referencias",
+      "2": "portada, presentación, objetivo, cronología, cierre y referencias",
+      "3": "portada, presentación, objetivo, cronología, cierre y referencias",
+      "4": "portada, presentación, objetivo, cronología, cierre y referencias",
+      "7": "datos históricos de SSLv3 y TLS 1.0 (autores y nombre) sin una idea de seguridad",
+      "10": "AEAD en TLS 1.2 lo explica el tema 3",
+      "12": "diagrama del handshake, que explica el tema 3",
+      "13": "diagrama del handshake, que explica el tema 3",
+      "16": "diagramas del Man-in-the-Middle, que explica el tema 1",
+      "17": "ejemplo de la inyección de CVE-2009-3555; la idea general está en la página 11",
+      "18": "ejemplo de la inyección de CVE-2009-3555; la idea general está en la página 11",
+      "19": "ejemplo de la inyección de CVE-2009-3555; la idea general está en la página 11",
+      "20": "ejemplo de la inyección de CVE-2009-3555; la idea general está en la página 11",
+      "22": "página vacía o enlace a un vídeo",
+      "24": "página vacía o enlace a un vídeo",
+      "27": "diagrama del NUL byte attack; la idea está en las páginas 25 y 26",
+      "28": "HSTS y HPKP los explica el tema 4",
+      "30": "página vacía o enlace a un vídeo",
+      "31": "página vacía o enlace a un vídeo",
+      "32": "tabla de requisitos de Firesheep; la idea está en las páginas 29 y 33",
+      "34": "prohibición de SSLv2: la idea de prohibir versiones está en la página 105",
+      "36": "diagramas de ECB, CBC y del ataque BEAST; la idea está en las páginas 35, 43 y 44",
+      "37": "diagramas de ECB, CBC y del ataque BEAST; la idea está en las páginas 35, 43 y 44",
+      "38": "diagramas de ECB, CBC y del ataque BEAST; la idea está en las páginas 35, 43 y 44",
+      "39": "diagramas de ECB, CBC y del ataque BEAST; la idea está en las páginas 35, 43 y 44",
+      "40": "diagramas de ECB, CBC y del ataque BEAST; la idea está en las páginas 35, 43 y 44",
+      "41": "diagramas de ECB, CBC y del ataque BEAST; la idea está en las páginas 35, 43 y 44",
+      "42": "diagramas de ECB, CBC y del ataque BEAST; la idea está en las páginas 35, 43 y 44",
+      "45": "enlace a la tabla de parámetros de TLS de IANA",
+      "47": "página de transición o de diagrama sin contenido propio",
+      "49": "Forward Secrecy lo explica el tema 1",
+      "50": "página de transición o de diagrama sin contenido propio",
+      "54": "página de transición o de diagrama sin contenido propio",
+      "56": "HSTS y HPKP los explica el tema 4",
+      "57": "página de transición o de diagrama sin contenido propio",
+      "58": "HSTS y HPKP los explica el tema 4",
+      "59": "HSTS y HPKP los explica el tema 4",
+      "65": "anécdota de las filtraciones de Snowden, sin una idea del protocolo",
+      "67": "diagrama de la petición y la respuesta de BREACH; la idea está en las páginas 66 y 68",
+      "70": "título de las soluciones de BREACH; el contenido está en la página 71",
+      "74": "viñeta de xkcd o enlace a un vídeo sobre Heartbleed",
+      "75": "viñeta de xkcd o enlace a un vídeo sobre Heartbleed",
+      "76": "viñeta de xkcd o enlace a un vídeo sobre Heartbleed",
+      "77": "viñeta de xkcd o enlace a un vídeo sobre Heartbleed",
+      "79": "página vacía de transición",
+      "81": "página vacía de transición",
+      "82": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "83": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "84": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "87": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "88": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "89": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "90": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "91": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "92": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "93": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "94": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "95": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "96": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "97": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "98": "ejemplo numérico del padding oracle; la idea general está en las páginas 85, 86 y 99",
+      "100": "prohibición de RC4: la idea de prohibir versiones está en la página 105",
+      "102": "HSTS y HPKP los explica el tema 4",
+      "104": "ejemplo de factorización con Msieve",
+      "106": "crt.sh es un dato histórico, y CT está en la página 111",
+      "109": "página vacía de transición",
+      "112": "decisiones de PCI-DSS y de los navegadores sobre TLS 1.0 y 1.1, fechas y política",
+      "118": "decisiones de PCI-DSS y de los navegadores sobre TLS 1.0 y 1.1, fechas y política",
+      "119": "decisiones de PCI-DSS y de los navegadores sobre TLS 1.0 y 1.1, fechas y política",
+      "120": "bloqueos y decisiones políticas de China y Rusia",
+      "125": "bloqueos y decisiones políticas de China y Rusia",
+      "127": "hito cuántico anecdótico, sin una idea del protocolo",
+      "129": "portada, presentación, objetivo, cronología, cierre y referencias",
+      "130": "portada, presentación, objetivo, cronología, cierre y referencias",
+      "131": "portada, presentación, objetivo, cronología, cierre y referencias",
+      "68": "tabla de requisitos de BREACH; la idea está en las páginas 66 y 68"
+    }
+  }
+}
