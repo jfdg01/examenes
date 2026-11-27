@@ -1,13 +1,16 @@
 <script lang="ts">
   import Pomodoro from "./Pomodoro.svelte";
-  import type { Inicio, Par, TemaDelInicio } from "./nucleo/nucleo.js";
+  import type { CifraDeDesarrollo, Inicio, Par, TemaDelInicio } from "./nucleo/nucleo.js";
 
-  let { inicio, objetivo, error, onobjetivo, onempezar, onseleccion }: {
+  let { inicio, desarrollo, objetivo, error, onobjetivo, onempezar, ondesarrollo, onseleccion }: {
     inicio: Inicio | null;
+    // Sin banco de desarrollo, `undefined`, y el botón no sale.
+    desarrollo: CifraDeDesarrollo | undefined;
     objetivo: number;
     error: string;
     onobjetivo: (objetivo: number) => void;
     onempezar: (simulacro: boolean) => void;
+    ondesarrollo: () => void;
     onseleccion: (seleccion: Par[]) => void;
   } = $props();
 
@@ -133,11 +136,21 @@
           {/if}
         {/each}
       </fieldset>
-      <button
-        class="my-3 block w-full cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento disabled:cursor-default disabled:opacity-50"
-        disabled={inicio.sesion === 0}
-        onclick={() => onempezar(false)}>Empezar la sesión ({inicio.sesion} preguntas)</button
-      >
+      <div class="my-3 flex gap-2.5">
+        <button
+          class="flex-1 cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento disabled:cursor-default disabled:opacity-50"
+          disabled={inicio.sesion === 0}
+          onclick={() => onempezar(false)}>Empezar la sesión ({inicio.sesion} preguntas)</button
+        >
+        {#if desarrollo}
+          <button
+            class="desarrollo cursor-pointer rounded-xl border-2 border-acento bg-tarjeta px-4 text-[16px] font-semibold text-acento disabled:cursor-default disabled:opacity-50"
+            disabled={desarrollo.preguntas === 0}
+            onclick={ondesarrollo}
+            >Desarrollo <span class="block text-[13px] font-normal tabular-nums">{desarrollo.sabes}/{desarrollo.preguntas}</span></button
+          >
+        {/if}
+      </div>
       <button
         class="my-3 block w-full cursor-pointer rounded-xl border-2 border-linea bg-tarjeta p-4 text-[16px] font-semibold disabled:cursor-default disabled:opacity-50"
         disabled={inicio.simulacro === 0}

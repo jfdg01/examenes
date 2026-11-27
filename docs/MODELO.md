@@ -2,7 +2,7 @@
 
 El banco de un examen son 3 archivos: `conceptos.json`, `preguntas.json` con las preguntas de test, y `desarrollo.json` con las de desarrollo. Las preguntas salen de los conceptos, por [el ADR 0005](adr/0005-el-concepto-es-una-entidad.md). La página de una pregunta de test es la de su concepto. Las preguntas de un examen congelado sin `conceptos.json` no tienen página.
 
-La app tiene 2 máquinas de estados: el estado de una pregunta y la ronda. El estado se calcula desde `respuestas.jsonl`. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
+La app tiene 2 máquinas de estados: el estado de una pregunta y la ronda. El estado se calcula desde `respuestas.jsonl` en el test, y desde `desarrollo.jsonl` en el desarrollo. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
 
 ## El estado de una pregunta
 
@@ -48,3 +48,14 @@ Dentro de un grupo, el azar rompe los empates. Las 12 preguntas salen en un orde
 ## El simulacro
 
 El simulacro lleva las preguntas del examen, al azar de la selección, con una pregunta por concepto. Solo rellena con hermanas cuando la selección tiene menos conceptos que preguntas el examen.
+
+## La sesión de desarrollo
+
+Una pregunta de desarrollo tiene su estado de FSRS, aparte del test, por [el ADR 0006](adr/0006-el-desarrollo-es-un-banco-aparte.md). Una nota de desarrollo no mueve ninguna pregunta de test.
+
+- El botón "Desarrollo" va a la derecha de la sesión, y dice cuántas preguntas de desarrollo de la selección sabes, como "3/40". Sin `desarrollo.json`, no sale.
+- Una pregunta de desarrollo está en la selección cuando su apartado está marcado en un tema que lleva el PDF de alguno de sus conceptos.
+- La sesión lleva 4 preguntas: las falladas, de la más vieja a la más nueva; las vencidas, de la menor probabilidad de acierto a la mayor; las sin ver; y las no vencidas. No lleva la regla de un concepto por pregunta, porque cada pregunta de desarrollo cubre varios conceptos.
+- "No la sabía", "A medias" y "La sabía" son Again, Hard y Good. "Ver respuesta modelo" funciona con el cuadro vacío, para una respuesta pensada y no escrita.
+- La nota entra en el historial al ponerla, como en la sesión de test. Tras la última nota, la sesión vuelve al inicio, sin final.
+- La ronda guardada lleva el texto y la nota de cada pregunta, así que una recarga sigue en la primera pregunta sin nota, con su texto.

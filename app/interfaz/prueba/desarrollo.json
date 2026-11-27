@@ -1,0 +1,28 @@
+[
+  {
+    "id": "rgpd-d001",
+    "apartado": "rgpd",
+    "forma": "objeto",
+    "enunciado": "Explica qué es el RGPD y cómo se aplica en España.",
+    "modelo": "Un modelo de la respuesta, con varias frases. La segunda frase sigue la idea. La tercera la cierra. La cuarta da un ejemplo.",
+    "puntos": [
+      "rgpd-deroga-directiva",
+      "rgpd-responsabilidad-infraccion",
+      "rgpd-lopdgdd-ley",
+      "rgpd-armonizacion"
+    ]
+  },
+  {
+    "id": "rgpd-d002",
+    "apartado": "rgpd",
+    "forma": "comparacion",
+    "enunciado": "Compara el RGPD y la LOPDGDD.",
+    "modelo": "Otro modelo de la respuesta. La segunda frase compara. La tercera da la diferencia. La cuarta concluye.",
+    "puntos": [
+      "rgpd-aplicacion-directa",
+      "rgpd-lopd-soporte-fisico",
+      "rgpd-lopdgdd-edad-consentimiento",
+      "rgpd-lopdgdd-morosos-plazo"
+    ]
+  }
+]

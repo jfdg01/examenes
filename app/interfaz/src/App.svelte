@@ -1,7 +1,8 @@
 <script lang="ts">
   import * as nucleo from "./nucleo/nucleo.js";
-  import type { Columnas, Datos, Edicion, Guardado, Nota, NotaDelSimulacro, Par, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
+  import type { Columnas, Datos, Edicion, Guardado, LineaDeDesarrollo, Nota, NotaDeDesarrollo, NotaDelSimulacro, Pagina, Par, PreguntaDeDesarrolloDeSesion, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
   import { aviso, type Marca } from "./Cuadricula.svelte";
+  import Desarrollo from "./Desarrollo.svelte";
   import Final from "./Final.svelte";
   import Hoja from "./Hoja.svelte";
   import Inicio from "./Inicio.svelte";
@@ -14,6 +15,7 @@
   const claveObjetivo = `${carpeta}-objetivo`;
   const claveRonda = `${carpeta}-ronda`;
   const clavePendientes = `${carpeta}-pendientes`;
+  const clavePendientesDeDesarrollo = `${carpeta}-pendientes-desarrollo`;
   const claveColumnas = `${carpeta}-columnas`;
   const claveNotasVisibles = `${carpeta}-notas-visibles`;
   let objetivo = $state(Number(localStorage.getItem(claveObjetivo) ?? 5));
@@ -22,27 +24,31 @@
   // Los pares marcados del inicio. Sin selección, todo está marcado.
   let seleccion = $state.raw<Par[] | undefined>(undefined);
   const inicio = $derived(datos && nucleo.inicio(datos, seleccion, objetivo, Date.now()));
+  const cifraDeDesarrollo = $derived(datos ? nucleo.cifra_de_desarrollo(datos, seleccion, Date.now()) : undefined);
 
-  // Una respuesta sin red espera en `localStorage` hasta que llega al servidor.
-  const pendientes = (): Respuesta[] => JSON.parse(localStorage.getItem(clavePendientes) ?? "[]");
+  // Una respuesta sin red espera en `localStorage` hasta que llega al servidor. El test y el desarrollo tienen cada uno su lista.
+  const pendientes = <T,>(clave: string): T[] => JSON.parse(localStorage.getItem(clave) ?? "[]");
 
   // Los envíos van en cola, y una respuesta nueva solo entra al final de las pendientes.
   // Así las enviadas son las primeras. El error es "" cuando todas llegaron.
   let cola = Promise.resolve("");
   function enviarPendientes() {
-    return (cola = cola.then(async () => {
-      const enviando = pendientes();
-      if (!enviando.length) return "";
-      const r = await fetch("api/respuestas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(enviando),
-      }).catch(() => null);
-      if (!r) return "Sin red: la respuesta se envía al volver la red.";
-      if (!r.ok) return `El servidor responde ${r.status}, y la respuesta sigue en este dispositivo.`;
-      localStorage.setItem(clavePendientes, JSON.stringify(pendientes().slice(enviando.length)));
-      return "";
-    }));
+    return (cola = cola.then(
+      async () => (await enviarLista(clavePendientes, "api/respuestas")) || (await enviarLista(clavePendientesDeDesarrollo, "api/desarrollo")),
+    ));
+  }
+  async function enviarLista(clave: string, ruta: string) {
+    const enviando = pendientes(clave);
+    if (!enviando.length) return "";
+    const r = await fetch(ruta, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(enviando),
+    }).catch(() => null);
+    if (!r) return "Sin red: la respuesta se envía al volver la red.";
+    if (!r.ok) return `El servidor responde ${r.status}, y la respuesta sigue en este dispositivo.`;
+    localStorage.setItem(clave, JSON.stringify(pendientes(clave).slice(enviando.length)));
+    return "";
   }
   // Con la red de vuelta, las pendientes salen y el historial llega con las respuestas de otros dispositivos.
   addEventListener("online", cargarInicio);
@@ -55,7 +61,11 @@
       if (!r.ok) throw new Error(`El servidor responde ${r.status}`);
       const d: Datos = await r.json();
       // Una respuesta que no llegó al servidor sigue en el historial de la pantalla.
-      datos = { ...d, historial: nucleo.unir(d.historial, pendientes()) };
+      datos = {
+        ...d,
+        historial: nucleo.unir(d.historial, pendientes(clavePendientes)),
+        historial_de_desarrollo: nucleo.unir_desarrollo(d.historial_de_desarrollo, pendientes(clavePendientesDeDesarrollo)),
+      };
       document.title = datos.examen.titulo;
     } catch (e) {
       error = datos ? "Sin red: el inicio usa el historial de este dispositivo." : (e as Error).message;
@@ -71,7 +81,7 @@
       .then((r) => (r.ok ? r.json() : sinRonda))
       .catch(() => sinRonda);
     // Un clic en "Empezar" antes de la respuesta ya empezó una ronda nueva, que gana.
-    if (ronda.estado !== "Inicio") return;
+    if (ronda.estado !== "Inicio" || desarrollo) return;
     const local = JSON.parse(localStorage.getItem(claveRonda) ?? "null") ?? sinRonda;
     // Un guardado de este dispositivo con la hora en milisegundos pasa a ISO, y no pierde la ronda.
     if (typeof local.guardada === "number") local.guardada = new Date(local.guardada).toISOString();
@@ -80,6 +90,13 @@
     const g = nucleo.gana(servidor, local);
     enviar(g);
     seleccion = g.seleccion;
+    const d = nucleo.restaurar_desarrollo(datos, g, Date.now());
+    if (d) {
+      textos = d.textos;
+      notasDeDesarrollo = d.notas;
+      desarrollo = d.preguntas;
+      return;
+    }
     const r = nucleo.restaurar(datos, g, Date.now());
     if (!r) return;
     ({ preguntas, resultados, simulacro } = r);
@@ -106,8 +123,7 @@
 
   // La nota sale al servidor medio segundo después de la última tecla en su pregunta.
   const temporizadores: Record<string, ReturnType<typeof setTimeout>> = {};
-  function anotar(texto: string) {
-    const id = q.id;
+  function anotar(id: string, texto: string) {
     notas[id] = texto;
     clearTimeout(temporizadores[id]);
     temporizadores[id] = setTimeout(async () => {
@@ -121,16 +137,22 @@
     }, 500);
   }
 
-  function enviar(g: Guardado) {
+  function enviar(g: Guardado, alServidor = true) {
     localStorage.setItem(claveRonda, JSON.stringify(g));
-    fetch("api/ronda", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(g) }).catch(() => {});
+    if (alServidor) fetch("api/ronda", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(g) }).catch(() => {});
   }
 
   // La ronda a medias, o ninguna en el inicio y el final.
-  function guardar() {
+  function guardar(alServidor = true) {
+    if (alServidor) clearTimeout(guardado);
+    const guardada = new Date().toISOString();
+    if (desarrollo) {
+      const ids = desarrollo.map((q) => q.id);
+      return enviar({ guardada, ronda: { ids, resultados: [], respuestas: [], simulacro: false, limite: undefined, desarrollo: { textos, notas: notasDeDesarrollo } }, seleccion }, alServidor);
+    }
     const aMedias = ronda.estado === "Pregunta";
     const ids = preguntas.map((q) => q.id);
-    enviar({ guardada: new Date().toISOString(), ronda: aMedias ? { ids, resultados, respuestas: respuestas.filter((r) => r !== null), simulacro, limite: simulacro ? limite : undefined } : undefined, seleccion });
+    enviar({ guardada, ronda: aMedias ? { ids, resultados, respuestas: respuestas.filter((r) => r !== null), simulacro, limite: simulacro ? limite : undefined } : undefined, seleccion });
   }
 
   let ronda = $state<Ronda>({ estado: "Inicio" });
@@ -235,7 +257,7 @@
 
   async function alHistorial(nuevas: Respuesta[]) {
     if (!nuevas.length) return;
-    localStorage.setItem(clavePendientes, JSON.stringify([...pendientes(), ...nuevas]));
+    localStorage.setItem(clavePendientes, JSON.stringify([...pendientes<Respuesta>(clavePendientes), ...nuevas]));
     datos = { ...datos!, historial: nucleo.unir(datos!.historial, nuevas) };
     error = await enviarPendientes();
   }
@@ -290,6 +312,48 @@
     return "";
   }
 
+  // La sesión de desarrollo. Sin ella, `desarrollo` es null.
+  let desarrollo = $state.raw<PreguntaDeDesarrolloDeSesion[] | null>(null);
+  let textos = $state<string[]>([]);
+  let notasDeDesarrollo = $state<(NotaDeDesarrollo | undefined)[]>([]);
+  // La ronda sigue en la primera pregunta sin nota.
+  const j = $derived(notasDeDesarrollo.findIndex((n) => n === undefined));
+  let solucion = $state(false);
+  let paginaDeDesarrollo = $state.raw<Pagina | null>(null);
+
+  function empezarDesarrollo() {
+    if (!datos) return;
+    const preguntas = nucleo.sesion_de_desarrollo(datos, seleccion, Date.now());
+    if (!preguntas.length) return;
+    textos = preguntas.map(() => "");
+    notasDeDesarrollo = preguntas.map(() => undefined);
+    solucion = false;
+    error = "";
+    desarrollo = preguntas;
+    guardar();
+  }
+
+  // El texto entra en `localStorage` con cada tecla, y en el servidor medio segundo después de la última.
+  let guardado: ReturnType<typeof setTimeout> | undefined;
+  function escribir(texto: string) {
+    textos[j] = texto;
+    guardar(false);
+    clearTimeout(guardado);
+    guardado = setTimeout(() => guardar(), 500);
+  }
+
+  async function calificar(nota: NotaDeDesarrollo) {
+    const lineas = nucleo.calificar(desarrollo![j].id, textos[j], nota, Date.now());
+    notasDeDesarrollo[j] = nota;
+    solucion = false;
+    // Tras la última nota, la sesión vuelve al inicio.
+    if (j < 0) desarrollo = null;
+    guardar();
+    localStorage.setItem(clavePendientesDeDesarrollo, JSON.stringify([...pendientes<LineaDeDesarrollo>(clavePendientesDeDesarrollo), ...lineas]));
+    datos = { ...datos!, historial_de_desarrollo: nucleo.unir_desarrollo(datos!.historial_de_desarrollo, lineas) };
+    error = await enviarPendientes();
+  }
+
   function volver() {
     clearInterval(reloj);
     entregar();
@@ -299,15 +363,48 @@
   }
 
   function abandonar() {
+    if (desarrollo) {
+      if (!confirm("¿Abandonar la sesión de desarrollo? Las notas quedan en el historial.")) return;
+      desarrollo = null;
+      guardar();
+      return;
+    }
     if (revisando) return void (revisando = false);
     const que = simulacro ? "el simulacro" : "la sesión";
     if (confirm(`¿Abandonar ${que}? Las respuestas quedan en el historial.`)) volver();
   }
 </script>
 
-{#if ronda.estado === "Inicio"}
+{#if desarrollo && j >= 0}
+  {@const p = desarrollo[j]}
+  {#key j}
+    <Desarrollo
+      q={p}
+      i={j}
+      total={desarrollo.length}
+      texto={textos[j]}
+      {solucion}
+      nota={notas[p.id] ?? ""}
+      {notasVisibles}
+      {error}
+      ontexto={escribir}
+      onsolucion={() => (solucion = true)}
+      oncalificar={calificar}
+      onnota={(t) => anotar(p.id, t)}
+      onnotasvisibles={alternarNotas}
+      onverpagina={(g) => {
+        paginaDeDesarrollo = g;
+        verPagina();
+      }}
+      onabandonar={abandonar}
+    />
+  {/key}
+  {#if pagina && paginaDeDesarrollo}<PaginaCompleta pagina={paginaDeDesarrollo} oncerrar={() => history.back()} />{/if}
+{:else if ronda.estado === "Inicio"}
   <Inicio
     {inicio}
+    desarrollo={cifraDeDesarrollo}
+    ondesarrollo={empezarDesarrollo}
     {objetivo}
     {error}
     onobjetivo={(o) => localStorage.setItem(claveObjetivo, String((objetivo = o)))}
@@ -343,7 +440,7 @@
       onabandonar={abandonar}
       oncontestar={contestar}
       onabiertas={() => (abiertas = !abiertas)}
-      onnota={anotar}
+      onnota={(t) => anotar(q.id, t)}
       onnotasvisibles={alternarNotas}
       onverpagina={verPagina}
       onsiguiente={siguiente}

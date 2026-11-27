@@ -446,3 +446,43 @@ async fn un_temporal_a_medio_escribir_deja_el_archivo_viejo_entero() {
     assert_eq!(ronda(&url).await, g("2026-11-21T11:00:00Z"));
     assert_eq!(temporales(), 0);
 }
+
+async fn desarrollar(url: &str, cuerpo: &Value) -> reqwest::StatusCode {
+    reqwest::Client::new().post(format!("{url}/prueba/api/desarrollo")).json(cuerpo).send().await.unwrap().status()
+}
+
+#[tokio::test]
+async fn una_linea_de_desarrollo_entra_en_su_historial_una_sola_vez() {
+    let raiz = TempDir::new().unwrap();
+    let dir = crear_prueba(raiz.path());
+    let url = arrancar(raiz.path()).await;
+    let respuesta = json!({ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "texto": "SSH cifra" });
+    let correccion = json!({ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Hard", "corregida": "2026-11-04T12:00:00Z" });
+    let otra = json!({ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Good", "corregida": "2026-11-05T09:00:00Z" });
+
+    assert_eq!(desarrollar(&url, &json!([respuesta, correccion])).await, 204);
+    assert_eq!(desarrollar(&url, &json!([respuesta, correccion, otra])).await, 204);
+
+    assert_eq!(fs::read_to_string(dir.join("desarrollo.jsonl")).unwrap().lines().count(), 3);
+    assert_eq!(inicio(&url, "prueba").await["historial_de_desarrollo"], json!([respuesta, correccion, otra]));
+    assert!(!dir.join("respuestas.jsonl").exists(), "el desarrollo no toca el historial del test");
+}
+
+#[tokio::test]
+async fn una_linea_de_desarrollo_mal_formada_no_entra_en_su_historial() {
+    let raiz = TempDir::new().unwrap();
+    let dir = crear_prueba(raiz.path());
+    let url = arrancar(raiz.path()).await;
+
+    for mala in [
+        json!([{ "id": "ssh-d001", "ts": "ayer", "texto": "x" }]),
+        json!([{ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Easy", "corregida": "2026-11-04T12:00:00Z" }]),
+        json!([{ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "nota": "Good" }]),
+        json!([{ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "texto": "x", "extra": 1 }]),
+        json!([{ "id": "ssh-d001", "ts": "2026-11-04T12:00:00Z", "resultado": "Acierto", "seguro": true }]),
+    ] {
+        assert!(desarrollar(&url, &mala).await.is_client_error(), "{mala}");
+    }
+    assert!(!dir.join("desarrollo.jsonl").exists());
+    assert_eq!(inicio(&url, "prueba").await["historial_de_desarrollo"], json!([]));
+}
