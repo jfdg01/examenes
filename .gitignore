@@ -2,6 +2,7 @@
 !examenes/asn/pdfs/*.pdf
 !examenes/ps/pdfs/*.pdf
 examenes/*/respuestas.jsonl
+examenes/*/desarrollo.jsonl
 examenes/*/notas.json
 examenes/*/ronda.json
 examenes/*/preguntas-mal.md
