@@ -29,6 +29,7 @@ fn escribir<T: serde::Serialize>(archivo: &Path, datos: &T) -> Result<(), String
 pub enum Tipo {
     Conceptos,
     Test,
+    Desarrollo,
 }
 
 impl std::str::FromStr for Tipo {
@@ -38,7 +39,8 @@ impl std::str::FromStr for Tipo {
         match s {
             "conceptos" => Ok(Tipo::Conceptos),
             "test" => Ok(Tipo::Test),
-            _ => Err(format!("el tipo {s} no es conceptos ni test")),
+            "desarrollo" => Ok(Tipo::Desarrollo),
+            _ => Err(format!("el tipo {s} no es conceptos, test ni desarrollo")),
         }
     }
 }
@@ -232,24 +234,27 @@ pub fn frases(desarrollo: &[PreguntaDeDesarrollo]) -> Vec<String> {
 
 /// Los `id` de `respuestas.jsonl` que no están en el banco, sin repetir y en orden.
 pub fn huerfanas(preguntas: &[Pregunta], historial: &Path) -> Result<Vec<String>, String> {
+    let ids: HashSet<&str> = preguntas.iter().map(|p| p.id.as_str()).collect();
+    Ok(ids_del_historial(historial)?.into_iter().filter(|id| !ids.contains(id.as_str())).collect())
+}
+
+/// Los `id` de las líneas de un historial en JSONL, sin repetir y en orden. Un historial que no existe no tiene.
+fn ids_del_historial(historial: &Path) -> Result<BTreeSet<String>, String> {
     #[derive(Deserialize)]
     struct Linea {
         id: String,
     }
     let texto = match fs::read_to_string(historial) {
         Ok(texto) => texto,
-        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(Vec::new()),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(BTreeSet::new()),
         Err(e) => return Err(format!("{}: {e}", historial.display())),
     };
-    let ids: HashSet<&str> = preguntas.iter().map(|p| p.id.as_str()).collect();
-    let mut sin_banco = BTreeSet::new();
+    let mut ids = BTreeSet::new();
     for linea in texto.lines().filter(|l| !l.trim().is_empty()) {
         let r: Linea = serde_json::from_str(linea).map_err(|e| format!("{}: {e}", historial.display()))?;
-        if !ids.contains(r.id.as_str()) {
-            sin_banco.insert(r.id);
-        }
+        ids.insert(r.id);
     }
-    Ok(sin_banco.into_iter().collect())
+    Ok(ids)
 }
 
 /// Las palabras absolutas de un texto: "siempre", "nunca" y "solo", sin contar "un solo" ni "una sola".
@@ -431,7 +436,7 @@ pub fn sacar(carpeta: &Path) -> Result<(), String> {
     Ok(())
 }
 
-/// Un fallo del informe de un revisor. «La revisión» de `docs/TEST.md` y de `docs/CONCEPTOS.md` define cada campo.
+/// Un fallo del informe de un revisor. «La revisión» del doc de cada tipo, como `docs/TEST.md`, define cada campo.
 #[derive(Deserialize)]
 pub struct Fallo {
     /// El `id` de la pregunta o del concepto, o `null` para un fallo sin `id`, como una página sin concepto.
@@ -456,6 +461,16 @@ pub trait DeUnApartado: serde::Serialize + serde::de::DeserializeOwned {
 
 impl DeUnApartado for Pregunta {
     const CAMPOS: &[&str] = &["pregunta", "correcta", "distractores", "explicacion"];
+    fn id(&self) -> &str {
+        &self.id
+    }
+    fn apartado(&self) -> &str {
+        &self.apartado
+    }
+}
+
+impl DeUnApartado for PreguntaDeDesarrollo {
+    const CAMPOS: &[&str] = &["forma", "enunciado", "modelo", "puntos"];
     fn id(&self) -> &str {
         &self.id
     }
@@ -515,11 +530,13 @@ pub fn revision(carpeta: &Path, tipo: Tipo, informes: &[String]) -> Result<(), S
     match tipo {
         Tipo::Conceptos => revisar::<Concepto>(&carpeta.join("conceptos.json"), informes),
         Tipo::Test => revisar::<Pregunta>(&carpeta.join("preguntas.json"), informes),
+        Tipo::Desarrollo => revisar::<PreguntaDeDesarrollo>(&carpeta.join("desarrollo.json"), informes),
     }
 }
 
 /// Prepara un lote de apartados: quita del banco lo que el lote escribe, y crea la carpeta de trabajo de cada
-/// apartado, con una copia de `examen.json`, un `preguntas.json` vacío, un `conceptos.json` y un enlace `pdfs`.
+/// apartado, con una copia de `examen.json`, un `preguntas.json` y un `desarrollo.json` vacíos, un `conceptos.json`
+/// y un enlace `pdfs`.
 ///
 /// - `conceptos` quita los conceptos de los apartados y el `sin_pregunta` de sus PDFs, porque la cobertura de las
 ///   páginas mira los conceptos. Falla con una pregunta de test o de desarrollo de los apartados: quedaría sin
@@ -527,6 +544,8 @@ pub fn revision(carpeta: &Path, tipo: Tipo, informes: &[String]) -> Result<(), S
 /// - `test` quita las preguntas de los apartados. Falla con un apartado sin conceptos, y con un historial o una
 ///   ronda que usan los `id` del lote, porque los `id` nuevos los reusan. El `conceptos.json` del trabajo es una
 ///   copia del banco.
+/// - `desarrollo` quita las preguntas de desarrollo de los apartados, y falla como `test`, con `desarrollo.jsonl`
+///   como historial.
 ///
 /// Cada fallo deja todo sin cambiar.
 pub fn preparar(carpeta: &Path, tipo: Tipo, apartados: &[String]) -> Result<(), String> {
@@ -557,21 +576,14 @@ pub fn preparar(carpeta: &Path, tipo: Tipo, apartados: &[String]) -> Result<(), 
             Vec::new()
         }
         Tipo::Test => {
-            if let Some(a) = apartados.iter().find(|a| !conceptos.iter().any(|c| &c.apartado == *a)) {
-                return Err(format!("el apartado {a} no tiene conceptos: corre antes un lote de conceptos"));
-            }
-            let historial = carpeta.join("respuestas.jsonl");
-            let resto: Vec<Pregunta> = banco.iter().filter(|p| !del_lote(&p.apartado)).cloned().collect();
-            let de_lote = huerfanas(&resto, &historial)?.len() - huerfanas(&banco, &historial)?.len();
-            if de_lote > 0 {
-                return Err(format!(
-                    "respuestas.jsonl tiene {de_lote} id de los apartados del lote: el dueño decide antes qué pasa con ellas"
-                ));
-            }
-            if carpeta.join("ronda.json").exists() {
-                return Err("ronda.json existe: una ronda a medias usa los id del banco".into());
-            }
+            let resto = sin_el_lote(carpeta, &banco, &conceptos, apartados, "respuestas.jsonl")?;
             escribir(&carpeta.join("preguntas.json"), &resto)?;
+            conceptos
+        }
+        Tipo::Desarrollo => {
+            let desarrollo: Vec<PreguntaDeDesarrollo> = leer_si_existe(&carpeta.join("desarrollo.json"))?.unwrap_or_default();
+            let resto = sin_el_lote(carpeta, &desarrollo, &conceptos, apartados, "desarrollo.jsonl")?;
+            escribir(&carpeta.join("desarrollo.json"), &resto)?;
             conceptos
         }
     };
@@ -580,10 +592,41 @@ pub fn preparar(carpeta: &Path, tipo: Tipo, apartados: &[String]) -> Result<(), 
         fs::create_dir_all(&dir).map_err(|e| format!("{}: {e}", dir.display()))?;
         escribir(&dir.join("examen.json"), &examen)?;
         escribir(&dir.join("preguntas.json"), &Vec::<Pregunta>::new())?;
+        escribir(&dir.join("desarrollo.json"), &Vec::<PreguntaDeDesarrollo>::new())?;
         escribir(&dir.join("conceptos.json"), &conceptos_del_trabajo)?;
         std::os::unix::fs::symlink("../../pdfs", dir.join("pdfs")).map_err(|e| format!("{}: {e}", dir.display()))?;
     }
     Ok(())
+}
+
+/// Las preguntas del banco fuera de los apartados del lote. Falla con un apartado sin conceptos, y con un historial
+/// o una ronda que usan los `id` del lote, porque los `id` nuevos los reusan.
+fn sin_el_lote<T: DeUnApartado + Clone>(
+    carpeta: &Path,
+    banco: &[T],
+    conceptos: &[Concepto],
+    apartados: &[String],
+    historial: &str,
+) -> Result<Vec<T>, String> {
+    if let Some(a) = apartados.iter().find(|a| !conceptos.iter().any(|c| &c.apartado == *a)) {
+        return Err(format!("el apartado {a} no tiene conceptos: corre antes un lote de conceptos"));
+    }
+    let (resto, lote): (Vec<T>, Vec<T>) = banco.iter().cloned().partition(|p| !apartados.iter().any(|a| a == p.apartado()));
+    let del_lote: HashSet<&str> = lote.iter().map(|p| p.id()).collect();
+    let de_otro: HashSet<&str> = resto.iter().map(|p| p.id()).collect();
+    // Un `id` sin pregunta con el prefijo de un apartado del lote es de una pregunta borrada, y `importar` lo reusa.
+    let huerfano = |id: &str| !de_otro.contains(id) && apartados.iter().any(|a| id.starts_with(&format!("{a}-")));
+    let usados = ids_del_historial(&carpeta.join(historial))?;
+    let de_lote = usados.iter().filter(|id| del_lote.contains(id.as_str()) || huerfano(id)).count();
+    if de_lote > 0 {
+        return Err(format!(
+            "{historial} tiene {de_lote} id de los apartados del lote: el dueño decide antes qué pasa con ellas"
+        ));
+    }
+    if carpeta.join("ronda.json").exists() {
+        return Err("ronda.json existe: una ronda a medias usa los id del banco".into());
+    }
+    Ok(resto)
 }
 
 /// El banco del archivo con lo que trae la carpeta de trabajo de cada apartado del lote. Falla con un `id` de otro
@@ -622,14 +665,16 @@ pub fn montar(carpeta: &Path, tipo: Tipo, apartados: &[String]) -> Result<usize,
             escribir(&carpeta.join("examen.json"), &examen)?;
             Ok(banco.len() - antes)
         }
-        Tipo::Test => {
-            let archivo = carpeta.join("preguntas.json");
-            let antes = leer::<Vec<Pregunta>>(&archivo)?.len();
-            let banco: Vec<Pregunta> = unir(carpeta, "preguntas.json", apartados)?;
-            escribir(&archivo, &banco)?;
-            Ok(banco.len() - antes)
-        }
+        Tipo::Test => montar_archivo::<Pregunta>(carpeta, "preguntas.json", apartados),
+        Tipo::Desarrollo => montar_archivo::<PreguntaDeDesarrollo>(carpeta, "desarrollo.json", apartados),
     }
+}
+
+fn montar_archivo<T: DeUnApartado>(carpeta: &Path, archivo: &str, apartados: &[String]) -> Result<usize, String> {
+    let antes = leer_si_existe::<Vec<T>>(&carpeta.join(archivo))?.unwrap_or_default().len();
+    let banco: Vec<T> = unir(carpeta, archivo, apartados)?;
+    escribir(&carpeta.join(archivo), &banco)?;
+    Ok(banco.len() - antes)
 }
 
 /// Una pregunta de un bloque del borrador, sin `id` ni `apartado`. El encabezado es su concepto. «El borrador» de `docs/TEST.md` describe el formato del bloque.
@@ -704,21 +749,60 @@ fn bloque_de_concepto(id: &str, apartado: &str, pdf: &str, lineas: &[String]) ->
     Ok(Concepto { id: id.into(), apartado: apartado.into(), idea: idea.trim().into(), fuente })
 }
 
-/// Añade al final del archivo del tipo lo que trae el borrador. Una pregunta de test recibe el siguiente `id`
-/// libre del apartado, y un concepto lleva el `id` de su encabezado. Un concepto que ya está en el banco da un
-/// error, y el banco queda igual. Devuelve los `id` nuevos.
+/// Una pregunta de desarrollo de un bloque del borrador, sin `id` ni `apartado`. «El borrador» de
+/// `docs/DESARROLLO.md` describe el formato del bloque.
+fn bloque_de_desarrollo(forma: &str, lineas: &[String]) -> Result<PreguntaDeDesarrollo, String> {
+    let forma: Forma = serde_json::from_value(forma.into()).map_err(|_| format!("la forma {forma} no es una de las 9"))?;
+    let (mut enunciado, mut modelo, mut puntos) = (Vec::new(), Vec::new(), Vec::new());
+    for l in lineas {
+        if let Some(m) = l.strip_prefix("> ") {
+            modelo.push(m.trim());
+        } else if let Some(p) = l.strip_prefix("- ") {
+            puntos.push(p.trim().to_string());
+        } else {
+            enunciado.push(l.trim());
+        }
+    }
+    let ([enunciado], false, false) = (&enunciado[..], modelo.is_empty(), puntos.is_empty()) else {
+        return Err("el bloque no tiene una línea de enunciado, una o más líneas > y una o más líneas -".into());
+    };
+    let (id, apartado, enunciado, modelo) = (String::new(), String::new(), enunciado.to_string(), modelo.join(" "));
+    Ok(PreguntaDeDesarrollo { id, apartado, forma, enunciado, modelo, puntos })
+}
+
+/// Añade al final del archivo del tipo lo que trae el borrador. Una pregunta de test o de desarrollo recibe el
+/// siguiente `id` libre del apartado, y un concepto lleva el `id` de su encabezado. Un concepto que ya está en el
+/// banco da un error, y el banco queda igual. Devuelve los `id` nuevos.
 pub fn importar(carpeta: &Path, tipo: Tipo, apartado: &str, borrador: &Path) -> Result<Vec<String>, String> {
     let examen: Examen = leer(&carpeta.join("examen.json"))?;
     let pdfs: Vec<&String> =
         examen.pdfs.iter().filter(|(_, t)| t.apartados.iter().any(|a| a == apartado)).map(|(p, _)| p).collect();
-    let pdf = match pdfs[..] {
-        [pdf] => pdf,
-        [] => return Err(format!("el apartado {apartado} no está en examen.json")),
-        _ => return Err(format!("el apartado {apartado} está en {} PDFs de examen.json", pdfs.len())),
-    };
+    if pdfs.is_empty() {
+        return Err(format!("el apartado {apartado} no está en examen.json"));
+    }
     let bloques = bloques(borrador)?;
     match tipo {
+        Tipo::Desarrollo => {
+            let archivo = carpeta.join("desarrollo.json");
+            let mut banco: Vec<PreguntaDeDesarrollo> = leer_si_existe(&archivo)?.unwrap_or_default();
+            let prefijo = format!("{apartado}-d");
+            let mut n = banco.iter().filter_map(|d| d.id.strip_prefix(&prefijo)?.parse::<u32>().ok()).max().unwrap_or(0);
+            let mut ids = Vec::new();
+            for (i, (forma, lineas)) in bloques.iter().enumerate() {
+                let mut d = bloque_de_desarrollo(forma, lineas).map_err(|e| format!("el bloque {} ({forma}): {e}", i + 1))?;
+                n += 1;
+                d.id = format!("{prefijo}{n:03}");
+                d.apartado = apartado.into();
+                ids.push(d.id.clone());
+                banco.push(d);
+            }
+            escribir(&archivo, &banco)?;
+            Ok(ids)
+        }
         Tipo::Conceptos => {
+            let [pdf] = pdfs[..] else {
+                return Err(format!("el apartado {apartado} está en {} PDFs de examen.json", pdfs.len()));
+            };
             let archivo = carpeta.join("conceptos.json");
             let mut conceptos: Vec<Concepto> = leer_si_existe(&archivo)?.unwrap_or_default();
             let mut ids = Vec::new();
@@ -1369,6 +1453,72 @@ DPD es el Delegado de Protección de Datos.
         assert_eq!(banco[0].fuente.pagina, 7);
     }
 
+    const DESARROLLO: &str = "\
+## proceso
+Describe cómo notifica el responsable una brecha de datos.
+> El responsable notifica la brecha a la autoridad en 72 horas.
+> Después avisa a los interesados.
+- rgpd-1
+- rgpd-2
+
+## comparacion
+Compara la LSSI y el RGPD.
+> La LSSI regula los servicios.
+- rgpd-3
+";
+
+    /// La carpeta con `examen.json`, `preguntas.json` con `rgpd-007`, `desarrollo.json` con `rgpd-d002`, y el borrador.
+    fn para_importar_desarrollo(borrador: &str) -> tempfile::TempDir {
+        let dir = para_importar(borrador);
+        escribir(&dir.path().join("desarrollo.json"), &vec![desarrollo("rgpd-d002", Forma::Objeto, 0..4)]).unwrap();
+        dir
+    }
+
+    #[test]
+    fn importar_desarrollo_anade_cada_bloque_con_el_siguiente_id_libre() {
+        let dir = para_importar_desarrollo(DESARROLLO);
+        let ids = importar(dir.path(), Tipo::Desarrollo, "rgpd", &dir.path().join("borrador.md")).unwrap();
+        assert_eq!(ids, ["rgpd-d003", "rgpd-d004"]);
+        let banco: Vec<serde_json::Value> = leer(&dir.path().join("desarrollo.json")).unwrap();
+        assert_eq!(banco.len(), 3);
+        assert_eq!(
+            banco[1],
+            serde_json::json!({
+                "id": "rgpd-d003",
+                "apartado": "rgpd",
+                "forma": "proceso",
+                "enunciado": "Describe cómo notifica el responsable una brecha de datos.",
+                "modelo": "El responsable notifica la brecha a la autoridad en 72 horas. Después avisa a los interesados.",
+                "puntos": ["rgpd-1", "rgpd-2"]
+            })
+        );
+        assert_eq!(banco[2]["forma"], "comparacion");
+
+        let dir = para_importar(DESARROLLO);
+        let ids = importar(dir.path(), Tipo::Desarrollo, "nada", &dir.path().join("borrador.md"));
+        assert!(ids.unwrap_err().contains("el apartado nada no está en examen.json"));
+        let ids = importar(dir.path(), Tipo::Desarrollo, "rgpd", &dir.path().join("borrador.md")).unwrap();
+        assert_eq!(ids, ["rgpd-d001", "rgpd-d002"]);
+    }
+
+    #[test]
+    fn importar_desarrollo_falla_sin_tocar_desarrollo_json() {
+        let casos = [
+            (DESARROLLO.replace("## proceso", "## caso"), "el bloque 1 (caso): la forma caso no es una de las 9"),
+            (DESARROLLO.replace("> La LSSI", "La LSSI"), "el bloque 2 (comparacion): el bloque no tiene"),
+            (DESARROLLO.replace("- rgpd-3\n", ""), "el bloque 2 (comparacion): el bloque no tiene"),
+            (DESARROLLO.replace("> El responsable", "El responsable"), "el bloque 1 (proceso): el bloque no tiene"),
+            ("\n".into(), "el borrador no tiene bloques"),
+        ];
+        for (borrador, error) in casos {
+            let dir = para_importar_desarrollo(&borrador);
+            let antes = fs::read_to_string(dir.path().join("desarrollo.json")).unwrap();
+            let e = importar(dir.path(), Tipo::Desarrollo, "rgpd", &dir.path().join("borrador.md")).unwrap_err();
+            assert!(e.contains(error), "{e}");
+            assert_eq!(fs::read_to_string(dir.path().join("desarrollo.json")).unwrap(), antes);
+        }
+    }
+
     /// La carpeta con `examen.json` con una razón de `sin_pregunta` en `1_Legislacion.pdf`, y `preguntas.json` con
     /// `r1` de `rgpd` y `e1` de `ens`.
     fn para_un_lote() -> (tempfile::TempDir, Examen) {
@@ -1439,6 +1589,48 @@ DPD es el Delegado de Protección de Datos.
         assert_eq!(montar(c, Tipo::Conceptos, &rgpd).unwrap(), 1);
         assert_eq!(leer::<Vec<Concepto>>(&c.join("conceptos.json")).unwrap().len(), 2);
         assert_eq!(leer::<Examen>(&c.join("examen.json")).unwrap().sin_pregunta, examen.sin_pregunta);
+    }
+
+    #[test]
+    fn preparar_desarrollo_vacia_las_preguntas_del_lote_y_montar_y_revision_las_devuelven() {
+        let (dir, _) = para_un_lote();
+        let c = dir.path();
+        let apartados = vec!["rgpd".to_string()];
+        let otra = PreguntaDeDesarrollo { apartado: "ens".into(), ..desarrollo("ens-d001", Forma::Objeto, 0..4) };
+        escribir(&c.join("desarrollo.json"), &vec![desarrollo("rgpd-d001", Forma::Objeto, 0..4), otra.clone()]).unwrap();
+        assert!(preparar(c, Tipo::Desarrollo, &apartados).unwrap_err().contains("el apartado rgpd no tiene conceptos"));
+        escribir(&c.join("conceptos.json"), &base()).unwrap();
+        fs::write(c.join("desarrollo.jsonl"), "{\"id\":\"rgpd-d001\",\"ts\":1,\"texto\":\"x\"}\n").unwrap();
+        let e = preparar(c, Tipo::Desarrollo, &apartados).unwrap_err();
+        assert!(e.contains("desarrollo.jsonl tiene 1 id de los apartados del lote"), "{e}");
+        fs::write(c.join("desarrollo.jsonl"), "{\"id\":\"rgpd-d009\",\"ts\":1,\"texto\":\"x\"}\n").unwrap();
+        let e = preparar(c, Tipo::Desarrollo, &apartados).unwrap_err();
+        assert!(e.contains("desarrollo.jsonl tiene 1 id de los apartados del lote"), "{e}");
+        fs::write(c.join("desarrollo.jsonl"), "{\"id\":\"ens-d001\",\"ts\":1,\"texto\":\"x\"}\n").unwrap();
+        fs::write(c.join("ronda.json"), "{}").unwrap();
+        assert!(preparar(c, Tipo::Desarrollo, &apartados).unwrap_err().contains("ronda.json"));
+        fs::remove_file(c.join("ronda.json")).unwrap();
+
+        preparar(c, Tipo::Desarrollo, &apartados).unwrap();
+        assert_eq!(leer::<Vec<PreguntaDeDesarrollo>>(&c.join("desarrollo.json")).unwrap(), std::slice::from_ref(&otra));
+        assert_eq!(leer::<Vec<Pregunta>>(&c.join("preguntas.json")).unwrap().len(), 2);
+        let t = c.join("trabajo/rgpd");
+        assert!(t.join("pdfs/1_Legislacion.pdf").exists());
+        assert_eq!(leer::<Vec<Concepto>>(&t.join("conceptos.json")).unwrap(), base());
+        assert_eq!(leer::<Vec<PreguntaDeDesarrollo>>(&t.join("desarrollo.json")).unwrap(), []);
+
+        escribir(&t.join("desarrollo.json"), &vec![otra.clone()]).unwrap();
+        assert!(montar(c, Tipo::Desarrollo, &apartados).unwrap_err().contains("ens-d001"));
+        escribir(&t.join("desarrollo.json"), &vec![desarrollo("rgpd-d001", Forma::Proceso, 0..5)]).unwrap();
+        assert_eq!(montar(c, Tipo::Desarrollo, &apartados).unwrap(), 1);
+        assert_eq!(leer::<Vec<PreguntaDeDesarrollo>>(&c.join("desarrollo.json")).unwrap().len(), 2);
+
+        let informe = c.join("trabajo/revision-rgpd.json");
+        fs::write(&informe, r#"[{"id": "rgpd-d001", "gravedad": "leve", "fallo": "x", "arreglo": {"modelo": "Otra."}}]"#)
+            .unwrap();
+        revision(c, Tipo::Desarrollo, &[informe.display().to_string()]).unwrap();
+        let banco: Vec<PreguntaDeDesarrollo> = leer(&c.join("desarrollo.json")).unwrap();
+        assert_eq!(banco.iter().find(|d| d.id == "rgpd-d001").unwrap().modelo, "Otra.");
     }
 
     #[test]

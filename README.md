@@ -35,7 +35,7 @@ Para abrir la app desde el móvil, publícala en tu tailnet con `tailscale serve
 
 ## Crear un examen nuevo
 
-Un agente de código, como Claude Code, escribe primero los conceptos, con las reglas de [`docs/CONCEPTOS.md`](docs/CONCEPTOS.md), y después las preguntas, con las de [`docs/TEST.md`](docs/TEST.md). La skill de proyecto `lote` lanza un agente creador y un agente revisor por apartado, en paralelo. Antes, prepara la carpeta del examen. Los comandos necesitan `poppler` y `ffmpeg`.
+Un agente de código, como Claude Code, escribe primero los conceptos, con las reglas de [`docs/CONCEPTOS.md`](docs/CONCEPTOS.md), y después las preguntas de test, con las de [`docs/TEST.md`](docs/TEST.md), y las de desarrollo, con las de [`docs/DESARROLLO.md`](docs/DESARROLLO.md). La skill de proyecto `lote` lanza un agente creador y un agente revisor por apartado, en paralelo. Antes, prepara la carpeta del examen. Los comandos necesitan `poppler` y `ffmpeg`.
 
 1. Crea una carpeta en `examenes/`, como `examenes/redes/`, y pon los PDFs del temario en `examenes/redes/pdfs/`.
 2. Copia `examenes/ps/examen.json` a `examenes/redes/examen.json`, y cambia el título, los PDFs y sus apartados.
