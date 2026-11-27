@@ -146,14 +146,13 @@
         <button
           class="flex-1 cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento disabled:cursor-default disabled:opacity-50"
           disabled={inicio.sesion === 0}
-          onclick={() => onempezar(false)}>Empezar la sesión ({inicio.sesion} preguntas)</button
+          onclick={() => onempezar(false)}>Tipo test ({inicio.sesion})</button
         >
         {#if desarrollo}
           <button
-            class="desarrollo cursor-pointer rounded-xl border-2 border-acento bg-tarjeta px-4 text-[16px] font-semibold text-acento disabled:cursor-default disabled:opacity-50"
-            disabled={desarrollo.preguntas === 0}
-            onclick={ondesarrollo}
-            >Desarrollo <span class="block text-[13px] font-normal tabular-nums">{desarrollo.sabes}/{desarrollo.preguntas}</span></button
+            class="desarrollo flex-1 cursor-pointer rounded-xl border-2 border-acento bg-tarjeta p-4 text-[16px] font-semibold text-acento disabled:cursor-default disabled:opacity-50"
+            disabled={desarrollo.sesion === 0}
+            onclick={ondesarrollo}>Desarrollo ({desarrollo.sesion})</button
           >
         {/if}
       </div>

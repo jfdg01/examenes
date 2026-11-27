@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as nucleo from "./nucleo/nucleo.js";
-  import type { Columnas, Datos, Edicion, Guardado, LineaDeDesarrollo, Nota, NotaDeDesarrollo, Pagina, Par, PreguntaDeDesarrolloDeSesion, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
+  import type { Columnas, Datos, Edicion, Guardado, Hecha, LineaDeDesarrollo, Nota, NotaDeDesarrollo, Pagina, Par, PreguntaDeDesarrolloDeSesion, PreguntaDeSesion, Respuesta, Resultado, Ronda } from "./nucleo/nucleo.js";
   import { aviso, type Marca } from "./Cuadricula.svelte";
   import Desarrollo from "./Desarrollo.svelte";
   import DesarrolloDelSimulacro from "./DesarrolloDelSimulacro.svelte";
@@ -25,7 +25,7 @@
   // Los pares marcados del inicio. Sin selección, todo está marcado.
   let seleccion = $state.raw<Par[] | undefined>(undefined);
   const inicio = $derived(datos && nucleo.inicio(datos, seleccion, objetivo, Date.now()));
-  const cifraDeDesarrollo = $derived(datos ? nucleo.cifra_de_desarrollo(datos, seleccion, Date.now()) : undefined);
+  const cifraDeDesarrollo = $derived(datos ? nucleo.cifra_de_desarrollo(datos, seleccion) : undefined);
 
   // Una respuesta sin red espera en `localStorage` hasta que llega al servidor. El test y el desarrollo tienen cada uno su lista.
   const pendientes = <T,>(clave: string): T[] => JSON.parse(localStorage.getItem(clave) ?? "[]");
@@ -88,6 +88,9 @@
     if (typeof local.guardada === "number") local.guardada = new Date(local.guardada).toISOString();
     // Una ronda de este dispositivo sin las respuestas del simulacro las tiene ya en el historial.
     if (local.ronda && !local.ronda.respuestas) local.ronda.respuestas = [];
+    // Una sesión de desarrollo de este dispositivo con el número de hechas marca cada una como sin corregir.
+    const rd = local.ronda?.desarrollo;
+    if (typeof rd?.hechas === "number") rd.hechas = rd.ids.map((_: string, k: number) => (k < rd.hechas ? "SinCorregir" : undefined));
     const g = nucleo.gana(servidor, local);
     enviar(g);
     seleccion = g.seleccion;
@@ -95,6 +98,8 @@
     if (d) {
       textos = d.textos;
       hechas = d.hechas;
+      modelosAbiertos = d.hechas.map(() => false);
+      j = Math.max(0, d.hechas.findIndex((h) => !h));
       desarrollo = d.preguntas;
       return;
     }
@@ -154,7 +159,7 @@
     }
     const aMedias = ronda.estado === "Pregunta";
     const ids = preguntas.map((q) => q.id);
-    const conDesarrollo = desarrolloDelSimulacro.length ? { ids: desarrolloDelSimulacro.map((q) => q.id), textos: textosDelSimulacro, hechas: 0 } : undefined;
+    const conDesarrollo = desarrolloDelSimulacro.length ? { ids: desarrolloDelSimulacro.map((q) => q.id), textos: textosDelSimulacro, hechas: [] } : undefined;
     enviar(
       { guardada, ronda: aMedias ? { ids, resultados, respuestas: respuestas.filter((r) => r !== null), simulacro, limite: simulacro ? limite : undefined, desarrollo: conDesarrollo } : undefined, seleccion },
       alServidor,
@@ -376,10 +381,11 @@
   // La sesión de desarrollo. Sin ella, `desarrollo` es null.
   let desarrollo = $state.raw<PreguntaDeDesarrolloDeSesion[] | null>(null);
   let textos = $state<string[]>([]);
-  // Las preguntas ya respondidas: la ronda sigue en la siguiente.
-  let hechas = $state(0);
-  const j = $derived(desarrollo && hechas < desarrollo.length ? hechas : -1);
-  let solucion = $state(false);
+  // Lo hecho con cada pregunta. Una pregunta hecha se ve sin cambiarla, y la sesión acaba cuando todas lo están.
+  let hechas = $state<(Hecha | undefined)[]>([]);
+  // La pregunta en pantalla, y si tiene la respuesta modelo abierta.
+  let j = $state(0);
+  let modelosAbiertos = $state<boolean[]>([]);
   let paginaDeDesarrollo = $state.raw<Pagina | null>(null);
 
   function empezarDesarrollo() {
@@ -387,8 +393,9 @@
     const preguntas = nucleo.sesion_de_desarrollo(datos, seleccion, Date.now());
     if (!preguntas.length) return;
     textos = preguntas.map(() => "");
-    hechas = 0;
-    solucion = false;
+    hechas = preguntas.map(() => undefined);
+    modelosAbiertos = preguntas.map(() => false);
+    j = 0;
     error = "";
     desarrollo = preguntas;
     guardar();
@@ -406,11 +413,18 @@
     guardado = setTimeout(() => guardar(), 500);
   }
 
-  // La respuesta calificada, o sin corregir con «Corregir luego». Tras la última, la sesión vuelve al inicio.
-  function responder(lineas: LineaDeDesarrollo[]) {
-    hechas++;
-    solucion = false;
-    if (j < 0) desarrollo = null;
+  // La respuesta calificada, o sin corregir con «Corregir luego». Una nota cambia cuándo vuelve la pregunta. La sesión
+  // sigue en la siguiente sin hacer, y tras la última vuelve al inicio.
+  function responder(hecha: Hecha, lineas: LineaDeDesarrollo[]) {
+    if (!desarrollo) return;
+    const q = desarrollo[j];
+    const vuelve = { Again: q.vuelve_tras_again, Hard: q.vuelve_tras_hard, Good: q.vuelve_tras_good, SinCorregir: q.vuelve }[hecha];
+    desarrollo = desarrollo.map((p, k) => (k === j ? { ...p, vuelve } : p));
+    hechas[j] = hecha;
+    const n = hechas.length;
+    const siguiente = [...Array(n).keys()].map((k) => (j + 1 + k) % n).find((k) => !hechas[k]);
+    if (siguiente === undefined) desarrollo = null;
+    else j = siguiente;
     guardar();
     alDesarrollo(lineas);
   }
@@ -443,7 +457,7 @@
   }
 </script>
 
-{#if desarrollo && j >= 0}
+{#if desarrollo}
   {@const p = desarrollo[j]}
   {#key j}
     <Desarrollo
@@ -451,14 +465,16 @@
       i={j}
       total={desarrollo.length}
       texto={textos[j]}
-      {solucion}
+      hecha={hechas[j]}
+      solucion={modelosAbiertos[j] || !!hechas[j]}
       nota={notas[p.id] ?? ""}
       {notasVisibles}
       {error}
       ontexto={escribir}
-      onsolucion={() => (solucion = true)}
-      oncalificar={(n) => responder(nucleo.calificar(p.id, textos[j], n, Date.now()))}
-      oncorregirluego={() => responder(nucleo.responder(p.id, textos[j], Date.now()))}
+      onsolucion={() => (modelosAbiertos[j] = true)}
+      oncalificar={(n) => responder(n, nucleo.calificar(p.id, textos[j], n, Date.now()))}
+      oncorregirluego={() => responder("SinCorregir", nucleo.responder(p.id, textos[j], Date.now()))}
+      onir={(k) => (j = k)}
       onnota={(t) => anotar(p.id, t)}
       onnotasvisibles={alternarNotas}
       onverpagina={(g) => {

@@ -60,11 +60,12 @@ Con `desarrollo` en `examen.json`, el simulacro es **mixto**: lleva primero esas
 
 Una pregunta de desarrollo tiene su estado de FSRS, aparte del test, por [el ADR 0006](adr/0006-el-desarrollo-es-un-banco-aparte.md). Una nota de desarrollo no mueve ninguna pregunta de test.
 
-- El botón "Desarrollo" va a la derecha de la sesión, y dice cuántas preguntas de desarrollo de la selección sabes, como "3/40". Sin `desarrollo.json`, no sale.
+- El botón "Desarrollo" va a la derecha de "Tipo test", y dice cuántas preguntas lleva su sesión, como "Desarrollo (4)". Sin `desarrollo.json`, no sale.
 - Una pregunta de desarrollo está en la selección cuando su apartado está marcado en un tema que lleva el PDF de alguno de sus conceptos.
 - La sesión lleva 4 preguntas: las falladas, de la más vieja a la más nueva; las vencidas, de la menor probabilidad de acierto a la mayor; las sin ver; y las no vencidas. No lleva la regla de un concepto por pregunta, porque cada pregunta de desarrollo cubre varios conceptos.
 - "No la sabía", "A medias" y "La sabía" son Again, Hard y Good. "Ver respuesta modelo" funciona con el cuadro vacío, para una respuesta pensada y no escrita.
-- La nota entra en el historial al ponerla, como en la sesión de test. Tras la última pregunta, la sesión vuelve al inicio, sin final.
-- "Corregir luego" guarda el texto sin nota, antes de abrir la respuesta modelo, y pasa a la siguiente. Con el cuadro vacío queda gris.
+- La nota entra en el historial al ponerla, como en la sesión de test, y la sesión pasa a la siguiente sin hacer. Cuando todas están hechas, vuelve al inicio, sin final.
+- "Anterior" y "Siguiente" saltan entre las 4. Una pregunta hecha enseña su texto, la respuesta modelo y su nota, sin cambiarlos, porque FSRS ya contó esa nota.
+- "Corregir luego" sale entre las flechas, bajo las 3 notas, con la respuesta modelo abierta, porque al compararlas se ve si cuesta corregirla. Guarda el texto sin nota. Con el cuadro vacío queda gris.
 - El inicio dice "N respuestas sin corregir" cuando el historial las tiene. Una respuesta sin corregir no mueve su FSRS hasta su corrección.
-- La ronda guardada lleva el texto de cada pregunta y cuántas van hechas, así que una recarga sigue en la primera sin hacer, con su texto. La del simulacro mixto lleva los textos del desarrollo, y vuelve al desarrollo si el test no tiene respuestas.
+- La ronda guardada lleva el texto de cada pregunta y lo hecho con cada una, su nota o "Corregir luego", así que una recarga sigue en la primera sin hacer, con su texto. La del simulacro mixto lleva los textos del desarrollo, y vuelve al desarrollo si el test no tiene respuestas.

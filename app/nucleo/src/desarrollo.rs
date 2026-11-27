@@ -4,7 +4,7 @@ use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
-use crate::{Azar, Concepto, Estado, Examen, Pagina, Par, PreguntaDeDesarrollo, Resultado, en_porcentaje};
+use crate::{Azar, Concepto, Estado, Examen, OTRA_SESION, Pagina, Par, PreguntaDeDesarrollo, Resultado, en_porcentaje};
 
 /// La nota de FSRS de una respuesta de desarrollo: "No la sabía", "A medias" o "La sabía".
 #[derive(Deserialize, Serialize, Tsify, Clone, Copy, PartialEq, Debug)]
@@ -96,20 +96,26 @@ fn estados<'a>(desarrollo: &'a [PreguntaDeDesarrollo], historial: &[LineaDeDesar
         let Some(q) = desarrollo.iter().find(|q| q.id == id) else {
             continue;
         };
-        let (resultado, seguro) = match c.nota {
-            NotaDeDesarrollo::Again => (Resultado::Fallo, false),
-            NotaDeDesarrollo::Hard => (Resultado::Acierto, false),
-            NotaDeDesarrollo::Good => (Resultado::Acierto, true),
-        };
+        let (resultado, seguro) = como_respuesta(c.nota);
         let despues = Estado::tras(estado.get(q.id.as_str()).copied(), resultado, seguro, ts.as_second());
         estado.insert(q.id.as_str(), despues);
     }
     estado
 }
 
-/// Un punto de la solución: la idea de su concepto y su página.
+/// La nota como una respuesta de test: Again es un fallo, Hard un acierto con "dudo", y Good un acierto con "seguro".
+fn como_respuesta(nota: NotaDeDesarrollo) -> (Resultado, bool) {
+    match nota {
+        NotaDeDesarrollo::Again => (Resultado::Fallo, false),
+        NotaDeDesarrollo::Hard => (Resultado::Acierto, false),
+        NotaDeDesarrollo::Good => (Resultado::Acierto, true),
+    }
+}
+
+/// Un punto de la solución: su concepto, la idea y su página.
 #[derive(Serialize, Deserialize, Tsify, Clone, PartialEq, Debug)]
 pub struct Punto {
+    pub concepto: String,
     pub idea: String,
     pub pagina: Option<Pagina>,
 }
@@ -125,6 +131,11 @@ pub struct PreguntaDeDesarrolloDeSesion {
     pub puntos: Vec<Punto>,
     /// La probabilidad de acierto antes de contestar, como `62 %`, o `sin ver`.
     pub probabilidad: String,
+    /// Cuándo vuelve la pregunta con su estado de ahora, como `vuelve en 3 días`.
+    pub vuelve: String,
+    pub vuelve_tras_again: String,
+    pub vuelve_tras_hard: String,
+    pub vuelve_tras_good: String,
 }
 
 /// Las preguntas de desarrollo de los pares marcados. Sin selección, todo el banco.
@@ -146,31 +157,28 @@ pub fn desarrollo_de_la_seleccion(
 /// Las preguntas de desarrollo que sabes y las que hay, para el botón "Desarrollo" del inicio.
 #[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct CifraDeDesarrollo {
-    pub sabes: u32,
-    pub preguntas: u32,
+    /// Las preguntas de la sesión de desarrollo de la selección.
+    pub sesion: u32,
     /// Las preguntas de desarrollo del simulacro de la selección.
     pub simulacro: u32,
     /// Las respuestas sin corregir del examen entero, de cualquier selección.
     pub sin_corregir: u32,
 }
 
-/// La cifra de la selección. Sin banco de desarrollo, no hay cifra. `ahora` va en segundos desde 1970.
+/// La cifra de la selección. Sin banco de desarrollo, no hay cifra.
 pub fn cifra_de_desarrollo(
     examen: &Examen,
     desarrollo: &[PreguntaDeDesarrollo],
     conceptos: &[Concepto],
     historial: &[LineaDeDesarrollo],
     seleccion: Option<&[Par]>,
-    ahora: i64,
 ) -> Option<CifraDeDesarrollo> {
     if desarrollo.is_empty() {
         return None;
     }
     let elegidas = desarrollo_de_la_seleccion(examen, desarrollo, conceptos, seleccion);
-    let estado = estados(&elegidas, historial);
     Some(CifraDeDesarrollo {
-        sabes: estado.values().filter(|e| !e.vencida(ahora, examen.retencion)).count() as u32,
-        preguntas: elegidas.len() as u32,
+        sesion: TAMANO.min(elegidas.len()) as u32,
         simulacro: examen.desarrollo.min(elegidas.len() as u32),
         sin_corregir: sin_corregir(historial).len() as u32,
     })
@@ -262,7 +270,16 @@ fn de_la_ronda(
 ) -> PreguntaDeDesarrolloDeSesion {
     let punto = |id: &String| {
         let c = conceptos.iter().find(|c| c.id == *id);
-        Punto { idea: c.map_or_else(|| id.clone(), |c| c.idea.clone()), pagina: c.map(|c| Pagina::new(&c.fuente)) }
+        Punto {
+            concepto: id.clone(),
+            idea: c.map_or_else(|| id.clone(), |c| c.idea.clone()),
+            pagina: c.map(|c| Pagina::new(&c.fuente)),
+        }
+    };
+    let antes = estado.get(q.id.as_str()).copied();
+    let vuelve_tras = |nota| {
+        let (resultado, seguro) = como_respuesta(nota);
+        Estado::tras(antes, resultado, seguro, ahora).vuelve(ahora, examen.retencion)
     };
     PreguntaDeDesarrolloDeSesion {
         id: q.id.clone(),
@@ -270,28 +287,41 @@ fn de_la_ronda(
         enunciado: q.enunciado.clone(),
         modelo: q.modelo.clone(),
         puntos: q.puntos.iter().map(punto).collect(),
-        probabilidad: en_porcentaje(estado.get(q.id.as_str()), ahora),
+        probabilidad: en_porcentaje(antes.as_ref(), ahora),
+        vuelve: antes.map_or(OTRA_SESION.into(), |e| e.vuelve(ahora, examen.retencion)),
+        vuelve_tras_again: vuelve_tras(NotaDeDesarrollo::Again),
+        vuelve_tras_hard: vuelve_tras(NotaDeDesarrollo::Hard),
+        vuelve_tras_good: vuelve_tras(NotaDeDesarrollo::Good),
     }
 }
 
-/// Las preguntas de desarrollo de una ronda a medias, con su texto en el orden de `ids`. Una lista más corta que `ids`
-/// acaba en preguntas sin texto. En una sesión de desarrollo, las `hechas` primeras ya tienen nota o van a corregir
-/// luego, y la pregunta actual es la siguiente.
+/// Lo que el estudiante hizo con una pregunta de una sesión de desarrollo: su nota, o «Corregir luego».
+#[derive(Deserialize, Serialize, Tsify, Clone, Copy, PartialEq, Debug)]
+pub enum Hecha {
+    Again,
+    Hard,
+    Good,
+    SinCorregir,
+}
+
+/// Las preguntas de desarrollo de una ronda a medias, con su texto en el orden de `ids`. Una lista de `textos` o de
+/// `hechas` más corta que `ids` acaba en preguntas sin texto o sin hacer. En una sesión de desarrollo, una pregunta
+/// hecha se ve sin cambiarla, y la sesión acaba cuando todas están hechas.
 #[derive(Deserialize, Serialize, Tsify, Clone, PartialEq, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct RondaDeDesarrollo {
     pub ids: Vec<String>,
     pub textos: Vec<String>,
     #[serde(default)]
-    pub hechas: u32,
+    pub hechas: Vec<Option<Hecha>>,
 }
 
-/// Una sesión de desarrollo a medias.
+/// Una sesión de desarrollo a medias, con una entrada de `hechas` por pregunta.
 #[derive(Serialize, Tsify)]
 pub struct DesarrolloAMedias {
     pub preguntas: Vec<PreguntaDeDesarrolloDeSesion>,
     pub textos: Vec<String>,
-    pub hechas: u32,
+    pub hechas: Vec<Option<Hecha>>,
 }
 
 /// Las preguntas y los textos de una ronda guardada, o nada si un id no está en el banco de desarrollo.
@@ -322,7 +352,12 @@ pub fn restaurar_desarrollo(d: &crate::Datos, guardado: &crate::Guardado, ahora:
     }
     let rd = r.desarrollo.as_ref()?;
     let (preguntas, textos) = de_la_ronda_guardada(d, rd, ahora)?;
-    Some(DesarrolloAMedias { hechas: rd.hechas.min(preguntas.len() as u32), preguntas, textos })
+    if rd.hechas.len() > preguntas.len() {
+        return None;
+    }
+    let mut hechas = rd.hechas.clone();
+    hechas.resize(preguntas.len(), None);
+    Some(DesarrolloAMedias { hechas, preguntas, textos })
 }
 
 #[cfg(test)]
@@ -409,6 +444,19 @@ mod tests {
 
     fn probabilidad(historial: &[LineaDeDesarrollo], ahora: i64) -> String {
         de_la_sesion(historial, &banco_de(1), ahora).remove(0).probabilidad
+    }
+
+    #[test]
+    fn cada_nota_dice_cuando_vuelve_la_pregunta_como_despues_de_guardarla() {
+        let antes = de_la_sesion(&[], &banco_de(1), DIA).remove(0);
+        assert_eq!(antes.vuelve, OTRA_SESION);
+        assert_eq!(antes.vuelve_tras_again, OTRA_SESION);
+        for (nota, tras) in [(NotaDeDesarrollo::Hard, &antes.vuelve_tras_hard), (NotaDeDesarrollo::Good, &antes.vuelve_tras_good)]
+        {
+            let despues = de_la_sesion(&corregida("d0", DIA, nota, DIA), &banco_de(1), DIA).remove(0);
+            assert_eq!(despues.vuelve, *tras);
+        }
+        assert_ne!(antes.vuelve_tras_hard, antes.vuelve_tras_good);
     }
 
     #[test]
@@ -503,12 +551,12 @@ mod tests {
     #[test]
     fn la_retencion_del_examen_decide_que_pregunta_esta_vencida() {
         let historial = corregida("d0", 0, NotaDeDesarrollo::Good, 0);
-        let cifra = |retencion| {
+        let primera = |retencion| {
             let examen = Examen { retencion, ..examen() };
-            cifra_de_desarrollo(&examen, &banco_de(3), &[], &historial, None, DIA).unwrap()
+            sesion_de_desarrollo(&examen, &banco_de(3), &[], &historial, DIA, &mut Azar::new(7)).remove(0).id
         };
-        assert_eq!(cifra(0.8), CifraDeDesarrollo { sabes: 1, preguntas: 3, simulacro: 2, sin_corregir: 0 });
-        assert_eq!(cifra(0.99).sabes, 0);
+        assert_ne!(primera(0.8), "d0");
+        assert_eq!(primera(0.99), "d0");
     }
 
     #[test]
@@ -521,7 +569,7 @@ mod tests {
 
     #[test]
     fn sin_banco_de_desarrollo_no_hay_cifra() {
-        assert_eq!(cifra_de_desarrollo(&examen(), &[], &[], &[], None, 0), None);
+        assert_eq!(cifra_de_desarrollo(&examen(), &[], &[], &[], None), None);
     }
 
     #[test]
@@ -531,8 +579,8 @@ mod tests {
         let solo_tls = [Par { pdf: "2.pdf".into(), apartado: "tls".into() }];
         let elegidas = desarrollo_de_la_seleccion(&examen(), &banco, &conceptos, Some(&solo_tls));
         assert_eq!(elegidas, [banco[1].clone()]);
-        let cifra = cifra_de_desarrollo(&examen(), &banco, &conceptos, &[], Some(&solo_tls), 0);
-        assert_eq!(cifra, Some(CifraDeDesarrollo { sabes: 0, preguntas: 1, simulacro: 1, sin_corregir: 0 }));
+        let cifra = cifra_de_desarrollo(&examen(), &banco, &conceptos, &[], Some(&solo_tls));
+        assert_eq!(cifra, Some(CifraDeDesarrollo { sesion: 1, simulacro: 1, sin_corregir: 0 }));
         assert_eq!(desarrollo_de_la_seleccion(&examen(), &banco, &conceptos, None).len(), 2);
     }
 
@@ -574,7 +622,7 @@ mod tests {
         }
     }
 
-    fn ronda(ids: &[&str], textos: &[&str], hechas: u32) -> RondaDeDesarrollo {
+    fn ronda(ids: &[&str], textos: &[&str], hechas: Vec<Option<Hecha>>) -> RondaDeDesarrollo {
         RondaDeDesarrollo {
             ids: ids.iter().map(|&i| i.into()).collect(),
             textos: textos.iter().map(|&t| t.into()).collect(),
@@ -584,20 +632,22 @@ mod tests {
 
     #[test]
     fn la_ronda_guardada_restaura_el_texto_de_cada_pregunta_y_las_hechas() {
-        let g = guardado(false, Some(ronda(&["d1", "d0"], &["SSH cifra"], 1)));
+        let g = guardado(false, Some(ronda(&["d1", "d0"], &["SSH cifra"], vec![Some(Hecha::Hard)])));
         let json = serde_json::to_string(&g).unwrap();
         assert_eq!(serde_json::from_str::<crate::Guardado>(&json).unwrap(), g);
         let r = restaurar_desarrollo(&datos(banco_de(2), vec![]), &g, 0).unwrap();
         assert_eq!(ids(&r.preguntas), ["d1", "d0"]);
-        assert_eq!((r.textos, r.hechas), (vec!["SSH cifra".to_string(), String::new()], 1));
+        assert_eq!((r.textos, r.hechas), (vec!["SSH cifra".to_string(), String::new()], vec![Some(Hecha::Hard), None]));
+        let de_mas = guardado(false, Some(ronda(&["d0"], &[], vec![None, None])));
+        assert!(restaurar_desarrollo(&datos(banco_de(2), vec![]), &de_mas, 0).is_none());
     }
 
     #[test]
     fn una_ronda_de_test_de_simulacro_o_con_una_pregunta_que_no_esta_no_se_restaura_como_desarrollo() {
         let d = datos(banco_de(2), vec![]);
         assert!(restaurar_desarrollo(&d, &guardado(false, None), 0).is_none());
-        assert!(restaurar_desarrollo(&d, &guardado(true, Some(ronda(&["d0"], &[], 0))), 0).is_none());
-        assert!(restaurar_desarrollo(&d, &guardado(false, Some(ronda(&["d9"], &[], 0))), 0).is_none());
+        assert!(restaurar_desarrollo(&d, &guardado(true, Some(ronda(&["d0"], &[], vec![]))), 0).is_none());
+        assert!(restaurar_desarrollo(&d, &guardado(false, Some(ronda(&["d9"], &[], vec![]))), 0).is_none());
     }
 
     #[test]
@@ -621,7 +671,7 @@ mod tests {
         assert!(estados(&banco_de(1), &sin).is_empty());
         let con = [sin, vec![corregir_respuesta("d0", hora(0), NotaDeDesarrollo::Good, hora(40 * DIA))]].concat();
         assert_eq!(estados(&banco_de(1), &con)["d0"].ultima, 0);
-        let cifra = cifra_de_desarrollo(&examen(), &banco_de(1), &[], &responder("d0", "x", hora(0)), None, 0).unwrap();
+        let cifra = cifra_de_desarrollo(&examen(), &banco_de(1), &[], &responder("d0", "x", hora(0)), None).unwrap();
         assert_eq!(cifra.sin_corregir, 1);
     }
 
@@ -636,12 +686,17 @@ mod tests {
 
     #[test]
     fn el_simulacro_mixto_restaurado_lleva_sus_preguntas_de_desarrollo_con_su_texto() {
-        let g = guardado(true, Some(ronda(&["d1"], &["SSH cifra"], 0)));
+        let g = guardado(true, Some(ronda(&["d1"], &["SSH cifra"], vec![])));
         let r = crate::restaurar(&datos(banco_de(2), vec![]), &g, 0, &mut Azar::new(1)).unwrap();
         assert_eq!((ids(&r.desarrollo), r.textos), (vec!["d1"], vec!["SSH cifra".to_string()]));
         assert!(
-            crate::restaurar(&datos(banco_de(2), vec![]), &guardado(false, Some(ronda(&["d1"], &[], 0))), 0, &mut Azar::new(1))
-                .is_none()
+            crate::restaurar(
+                &datos(banco_de(2), vec![]),
+                &guardado(false, Some(ronda(&["d1"], &[], vec![]))),
+                0,
+                &mut Azar::new(1)
+            )
+            .is_none()
         );
     }
 }

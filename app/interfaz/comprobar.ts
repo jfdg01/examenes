@@ -31,7 +31,7 @@ async function abrir(examen: string, width: number, height: number) {
   const page = await navegador.newPage({ viewport: { width, height } });
   await page.route("**/paginas/**", (r) => r.fulfill({ contentType: "image/png", body: hoja }));
   await page.goto(`http://127.0.0.1:8691/${examen}/`);
-  await page.getByText("Empezar la sesión").click();
+  await page.getByText(/^Tipo test \(/).click();
   return page;
 }
 const visible = (page: Page, sel: string) => page.locator(sel).first().isVisible();
@@ -131,14 +131,14 @@ async function navegar(page: Page, nombre: string) {
   await page.getByText("El simulacro ha terminado").waitFor();
 }
 
-// La sesión de desarrollo: el botón del inicio, la pregunta, el texto tras recargar, la solución y las 2 notas.
+// La sesión de desarrollo: el botón del inicio, la pregunta, el texto tras recargar, la solución, las 2 notas y volver a una hecha.
 async function desarrollar(examen: string, width: number, height: number) {
   const page = await navegador.newPage({ viewport: { width, height } });
   await page.route("**/paginas/**", (r) => r.fulfill({ contentType: "image/png", body: hoja }));
   await page.goto(`http://127.0.0.1:8691/${examen}/`);
   const boton = page.locator("button.desarrollo");
-  await boton.getByText("0/2").waitFor();
-  const sesion = (await page.getByText("Empezar la sesión").boundingBox())!;
+  await boton.getByText("Desarrollo (2)").waitFor();
+  const sesion = (await page.getByText(/^Tipo test \(/).boundingBox())!;
   assert((await boton.boundingBox())!.x > sesion.x, "el botón de desarrollo va a la derecha de la sesión");
   await page.screenshot({ path: `capturas/${examen}-inicio-desarrollo.png`, fullPage: true });
   await boton.click();
@@ -165,10 +165,20 @@ async function desarrollar(examen: string, width: number, height: number) {
   await page.getByText("La sabía", { exact: true }).click();
   await page.getByText(/^2 \/ 2 · /).waitFor();
   assert.equal(await page.locator(".respuesta").inputValue(), "", "la pregunta siguiente empieza en blanco");
+  assert.equal(await page.locator(".corregir-luego").count(), 0, "«Corregir luego» sale con la respuesta modelo");
+  // Anterior enseña la pregunta hecha con su nota, sin cambiarla.
+  await page.locator(".desarrollo").getByTitle("Anterior").click();
+  await page.locator(".hecha").getByText("La sabía").waitFor();
+  assert.match(await page.locator(".metadatos").innerText(), / · vuelve en \d+ (horas?|días?)$/, "la pregunta hecha dice cuándo vuelve");
+  assert(await page.locator(".respuesta").evaluate((e: HTMLTextAreaElement) => e.readOnly), "una pregunta hecha no se edita");
+  await page.locator(".desarrollo").getByTitle("Siguiente").click();
+  await page.getByText(/^2 \/ 2 · /).waitFor();
+  await page.getByText("Ver respuesta modelo").click();
   assert(await page.locator(".corregir-luego").isDisabled(), "un cuadro vacío no se deja sin corregir");
   await page.locator(".respuesta").fill("Otra respuesta");
+  await page.screenshot({ path: `capturas/${examen}-desarrollo-notas.png`, fullPage: true });
   await page.locator(".corregir-luego").click();
-  await page.getByText("Empezar la sesión").waitFor();
+  await page.getByText(/^Tipo test \(/).waitFor();
   await page.getByText("1 respuesta sin corregir").waitFor();
   await page.screenshot({ path: `capturas/${examen}-sin-corregir.png`, fullPage: true });
   await page.waitForTimeout(500);
@@ -225,7 +235,7 @@ try {
     assert.equal(await lista.locator(".examen").count(), 4, "la lista lleva los 4 exámenes de la raíz");
     await lista.screenshot({ path: `capturas/${nombre}-lista.png` });
     await lista.locator(`.examen[href="/${nombre}/"]`).click();
-    await lista.getByText("Empezar la sesión").waitFor();
+    await lista.getByText(/^Tipo test \(/).waitFor();
 
     // La selección: un tema desmarcado sale de la tarjeta y queda tras recargar. Sin nada marcado, los botones no van.
     const temas = lista.locator(".tema input");
@@ -242,7 +252,7 @@ try {
     await temas.nth(0).click();
     assert(await lista.locator(".apartado input").first().isChecked(), "un clic en un tema a medias marca sus apartados");
     for (let k = 0; k < 5; k++) await temas.nth(k).setChecked(false);
-    assert(await lista.getByText("Empezar la sesión").isDisabled(), "sin nada marcado, la sesión no empieza");
+    assert(await lista.getByText(/^Tipo test \(/).isDisabled(), "sin nada marcado, la sesión no empieza");
     assert(await lista.getByText(/^Simulacro/).isDisabled(), "sin nada marcado, el simulacro no empieza");
     for (let k = 0; k < 5; k++) await temas.nth(k).setChecked(true);
     assert.equal(await lista.getByText(/ temas$/).count(), 0, "con todo marcado, la tarjeta no nombra los temas");
