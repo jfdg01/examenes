@@ -21,7 +21,7 @@
   let error = $state("");
   // Los pares marcados del inicio. Sin selección, todo está marcado.
   let seleccion = $state.raw<Par[] | undefined>(undefined);
-  const inicio = $derived(datos && nucleo.inicio(datos, seleccion, objetivo));
+  const inicio = $derived(datos && nucleo.inicio(datos, seleccion, objetivo, Date.now()));
 
   // Una respuesta sin red espera en `localStorage` hasta que llega al servidor.
   const pendientes = (): Respuesta[] => JSON.parse(localStorage.getItem(clavePendientes) ?? "[]");
@@ -355,7 +355,7 @@
       onterminar={intentarTerminar}
       {etiqueta}
     >
-      <Hoja {q} paso={contestada && (!simulacro || final) ? (eleccion?.correccion.paso ?? q.paso) : undefined} onsiguiente={siguiente} {etiqueta} />
+      <Hoja {q} vuelve={contestada && (!simulacro || final) ? (eleccion?.correccion.vuelve ?? q.vuelve) : undefined} onsiguiente={siguiente} {etiqueta} />
     </Pregunta>
     {/key}
     <Tiradores

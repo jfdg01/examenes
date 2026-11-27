@@ -20,29 +20,29 @@ Una app para practicar exámenes tipo test, con un banco de preguntas por examen
 
 ## La respuesta
 
-**Acierto con "seguro"**: Una respuesta correcta, marcada como segura antes de ver la solución. Es la única respuesta que sube el paso.
+**Acierto con "seguro"**: Una respuesta correcta, marcada como segura antes de ver la solución. Tras él, la probabilidad de acierto baja más despacio que tras un acierto con "dudo".
 
-**En blanco**: Una pregunta que dejas sin contestar a propósito. Entra en el historial, y pone el paso a 0 como un fallo. Una pregunta sin contestar al pasar el límite del simulacro no entra en el historial.
+**En blanco**: Una pregunta que dejas sin contestar a propósito. Entra en el historial, y cuenta como un fallo. Una pregunta sin contestar al pasar el límite del simulacro no entra en el historial.
 
 ## El estado de una pregunta
 
 **Sin ver**: Una pregunta sin ninguna respuesta registrada. _Evita_: nuevo
 
-**Paso**: El número de aciertos con "seguro" seguidos de una pregunta. Cualquier otra respuesta lo pone a 0. _Evita_: caja, nivel, racha
+**Probabilidad de acierto**: Lo que el planificador estima que aciertas una pregunta ahora. Baja con el tiempo desde cada respuesta, más despacio cuanto mejor la sabes. _Evita_: retención (es la probabilidad pedida), paso, nivel
 
-**Hueco**: El tiempo entre una respuesta y el vencimiento de la pregunta. Crece con el paso. _Evita_: intervalo, pausa
+**Retención**: La probabilidad de acierto con la que vence una pregunta. Una retención más alta hace vencer antes las preguntas, y pide más repasos.
 
-**Vencida**: Una pregunta cuyo hueco ya pasó, y que toca repasar.
+**Vencida**: Una pregunta que toca repasar: una fallada, o una pregunta vista con la probabilidad de acierto por debajo de la retención. _Evita_: hueco, intervalo
 
-**Fallada**: Una pregunta vista con el paso a 0, por un fallo, un acierto con "dudo" o una respuesta en blanco. Una fallada está siempre vencida. _Evita_: caja, pendiente
+**Fallada**: Una pregunta cuya última respuesta es un fallo o una pregunta en blanco. Una fallada está siempre vencida. _Evita_: caja, pendiente
 
-**Sabes**: Una pregunta con un paso de 1 o más. _Evita_: dominado, sabido
+**Sabes**: Una pregunta vista y no vencida: su probabilidad de acierto está por encima de la retención. _Evita_: dominado, sabido
 
 ## La práctica
 
 **Ronda**: Una serie de preguntas de principio a fin: una sesión o un simulacro.
 
-**Sesión**: Una ronda de 12 preguntas, como mucho una por concepto de la selección: primero las falladas, y después las demás por su vencimiento. _Evita_: repaso, bloque
+**Sesión**: Una ronda de 12 preguntas, como mucho una por concepto de la selección: primero las falladas, y después las vencidas, de la menor probabilidad de acierto a la mayor. _Evita_: repaso, bloque
 
 **Simulacro**: Una ronda con el formato del examen: sus preguntas al azar de la selección, y su tiempo.
 

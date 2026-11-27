@@ -235,8 +235,7 @@ pub fn informe(carpeta: &Path) -> Result<bool, String> {
         println!("{e}");
     }
     let congelado = if examen.congelado { cuentas(&preguntas) } else { Vec::new() };
-    let avisos =
-        [pistas(&preguntas), explicaciones(&preguntas), paginas_sin_pregunta(&preguntas, &examen, carpeta), congelado];
+    let avisos = [pistas(&preguntas), explicaciones(&preguntas), paginas_sin_pregunta(&preguntas, &examen, carpeta), congelado];
     for aviso in avisos.concat() {
         println!("Aviso: {aviso}");
     }
@@ -263,12 +262,8 @@ pub fn sacar(carpeta: &Path) -> Result<(), String> {
         let base = pdf.file_stem().unwrap().to_string_lossy();
         let texto = textos.join(format!("{base}.txt"));
         if !texto.exists() {
-            let estado = Command::new("pdftotext")
-                .arg("-layout")
-                .arg(&pdf)
-                .arg(&texto)
-                .status()
-                .map_err(|e| format!("pdftotext: {e}"))?;
+            let estado =
+                Command::new("pdftotext").arg("-layout").arg(&pdf).arg(&texto).status().map_err(|e| format!("pdftotext: {e}"))?;
             if !estado.success() {
                 return Err(format!("pdftotext falla en {}", pdf.display()));
             }
@@ -398,7 +393,9 @@ pub fn preparar(carpeta: &Path, apartados: &[String]) -> Result<(), String> {
     let resto: Vec<Pregunta> = banco.iter().filter(|p| !apartados.contains(&p.apartado)).cloned().collect();
     let del_lote = huerfanas(&resto, &historial)?.len() - huerfanas(&banco, &historial)?.len();
     if del_lote > 0 {
-        return Err(format!("respuestas.jsonl tiene {del_lote} id de los apartados del lote: el dueño decide antes qué pasa con ellas"));
+        return Err(format!(
+            "respuestas.jsonl tiene {del_lote} id de los apartados del lote: el dueño decide antes qué pasa con ellas"
+        ));
     }
     if carpeta.join("ronda.json").exists() {
         return Err("ronda.json existe: una ronda a medias usa los id del banco".into());
@@ -569,6 +566,7 @@ mod tests {
             opciones: 4,
             minutos: 25,
             penalizacion: 0.25,
+            retencion: 0.9,
             pdfs: BTreeMap::from([
                 ("1_Legislacion.pdf".into(), tema("Legislación", &["rgpd", "lssi"])),
                 ("2_Teoria.pdf".into(), tema("Teoría", &["ens"])),
@@ -702,7 +700,8 @@ mod tests {
 
     #[test]
     fn una_linea_corta_o_un_matiz_repetido_en_el_apartado_es_un_aviso() {
-        let con = |id: &str, apartado: &str, e: &str| Pregunta { apartado: apartado.into(), explicacion: e.into(), ..pregunta(id) };
+        let con =
+            |id: &str, apartado: &str, e: &str| Pregunta { apartado: apartado.into(), explicacion: e.into(), ..pregunta(id) };
         let buena = "✓ El responsable notifica la brecha en 72 horas desde que la conoce.\n✗ «24 horas»: el plazo es de 72";
         assert!(explicaciones(&[con("a", "rgpd", buena), con("b", "lssi", buena)]).is_empty());
         assert_eq!(explicaciones(&[con("a", "rgpd", "✓ Son 72 horas.")]), ["a: la línea ✓ tiene 3 palabras, menos de 8"]);
@@ -715,7 +714,8 @@ mod tests {
     #[test]
     fn una_pagina_sin_pregunta_ni_razon_o_con_las_dos_es_un_aviso() {
         let (dir, mut examen) = carpeta();
-        let razones = BTreeMap::from([("1".into(), "portada".into()), ("2".into(), "índice".into()), ("5".into(), "repetida".into())]);
+        let razones =
+            BTreeMap::from([("1".into(), "portada".into()), ("2".into(), "índice".into()), ("5".into(), "repetida".into())]);
         examen.sin_pregunta = BTreeMap::from([("1_Legislacion.pdf".into(), razones)]);
         let en = |id: &str, pagina| Pregunta { fuente: Fuente { pdf: "1_Legislacion.pdf".into(), pagina }, ..pregunta(id) };
         assert_eq!(

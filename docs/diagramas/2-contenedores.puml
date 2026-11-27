@@ -8,7 +8,7 @@ Person(agente, "Agente creador o revisor")
 
 System_Boundary(app, "Los exámenes") {
   Container(interfaz, "interfaz", "Svelte 5, en el navegador", "Las pantallas, la ronda en curso y las llamadas al API")
-  Container(nucleo, "nucleo", "Rust, como WASM en el navegador", "Toda la lógica: el paso, la sesión, el simulacro, la nota. Sin archivos ni red")
+  Container(nucleo, "nucleo", "Rust, como WASM en el navegador", "Toda la lógica: el estado con FSRS, la sesión, el simulacro, la nota. Sin archivos ni red")
   ContainerDb(local, "localStorage", "navegador", "Las respuestas pendientes, la ronda a medias y las preferencias")
   Container(servidor, "servidor", "Rust, axum", "Guarda y sirve los archivos de cada examen")
   Container(banco, "banco", "Rust, CLI", "Comprueba e importa el banco, y saca las páginas de los PDFs")

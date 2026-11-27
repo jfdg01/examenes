@@ -119,7 +119,7 @@
     <!-- La posición en la ronda va en el botón de la cuadrícula. -->
     {#if revision}Revisión · {q.apartado}
     {:else if simulacro}{Math.floor(restante / 60)}:{String(restante % 60).padStart(2, "0")} · {q.apartado}
-    {:else}{q.apartado} · {q.paso}{/if}
+    {:else}{q.apartado} · {q.probabilidad}{/if}
   </span>
   <!-- En un simulacro solo se ve su reloj. -->
   {#if !simulacro}<Pomodoro />{/if}

@@ -1,21 +1,19 @@
 # El modelo de la práctica
 
-La app tiene 2 máquinas de estados: el paso de una pregunta y la ronda. El paso se calcula desde `respuestas.jsonl`. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
+La app tiene 2 máquinas de estados: el estado de una pregunta y la ronda. El estado se calcula desde `respuestas.jsonl`. La ronda a medias y la selección se guardan en `ronda.json` y en `localStorage`, y `nucleo` la restaura desde el banco.
 
-## El paso de una pregunta
+## El estado de una pregunta
 
-Cada pregunta tiene su paso, y una respuesta mueve solo el de su pregunta. El concepto no tiene estado: agrupa las preguntas para la sesión y el simulacro. Un paso por concepto no vale: una pregunta fácil subiría el paso que una difícil baja, y la difícil volvería sin fin. La razón está en [el ADR 0003](adr/0003-el-paso-es-de-la-pregunta.md).
+Cada pregunta tiene su estado, y una respuesta mueve solo el de su pregunta. El concepto no tiene estado: agrupa las preguntas para la sesión y el simulacro. La razón está en [el ADR 0003](adr/0003-el-estado-es-de-la-pregunta.md). El estado sale de FSRS, por [el ADR 0004](adr/0004-el-planificador-es-fsrs.md).
 
 - Una pregunta sin respuestas está **sin ver**.
-- Un acierto con "seguro" sube el paso en 1, aunque la pregunta no haya vencido. La pregunta vence 1 día después con el paso 1, y el hueco crece ×2,5 con cada paso más.
-- Una pregunta sin ver acertada con "seguro" salta al paso 3, que vence en unos 6 días. Una pregunta que sabes a la primera no gasta repasos en la semana del examen.
-- Un fallo, un acierto con "dudo" o una pregunta en blanco ponen el paso a 0, y la pregunta vence en el acto.
-- Cada respuesta mueve el paso, la de una sesión y la de un simulacro.
-- El paso sale del historial unido: el del servidor y las respuestas del dispositivo que aún no llegaron. Una respuesta con el mismo `id` y `ts` cuenta una vez.
+- El estado de una pregunta vista es su estabilidad, su dificultad y la hora de su última respuesta. De ahí sale su probabilidad de acierto en cada momento.
+- Un fallo y una pregunta en blanco son Again, un acierto con "dudo" es Hard, y un acierto con "seguro" es Good, también en una pregunta sin ver.
+- Una pregunta vence cuando su probabilidad de acierto baja de la retención de `examen.json`, 0.9 si falta. Una fallada vence siempre, hasta que la aciertas.
+- Cada respuesta mueve el estado, la de una sesión y la de un simulacro.
+- El estado sale del historial unido: el del servidor y las respuestas del dispositivo que aún no llegaron. Una respuesta con el mismo `id` y `ts` cuenta una vez.
 
-Una pregunta con un paso de 1 o más está en **sabes**. La barra del camino, la tarjeta de la nota y el inicio cuentan preguntas. La pantalla de la pregunta muestra su paso.
-
-Rust tiene un `enum Estado { SinVer, Paso(u32) }`.
+Una pregunta vista y no vencida está en **sabes**. La barra del camino, la tarjeta de la nota y el inicio cuentan preguntas. La pantalla de la pregunta muestra su probabilidad de acierto, y la solución dice cuándo vuelve.
 
 ## La ronda
 
@@ -36,10 +34,10 @@ Rust tiene un `enum Ronda { Inicio, Pregunta { contestada: bool }, Final }`.
 La sesión lleva como mucho una pregunta por concepto, porque una hermana (otra pregunta del mismo concepto) da pistas de la respuesta. La sesión recorre las preguntas en este orden, y toma la primera de cada concepto hasta llenar 12:
 
 1. Las preguntas falladas, del fallo más viejo al más nuevo. Con falladas de 12 conceptos o más, la sesión no lleva nada más: un fallo se corrige antes de avanzar en el banco.
-2. Las preguntas vencidas con un paso de 1 o más, de la vencida hace más tiempo a la vencida hace menos.
+2. Las demás preguntas vencidas, de la menor probabilidad de acierto a la mayor.
 3. Las hermanas sin ver de un concepto con alguna pregunta vista. Así, una idea se cierra antes de abrir otra.
 4. Las preguntas de los conceptos sin ver.
-5. Las preguntas que vencen antes.
+5. Las preguntas no vencidas, de la menor probabilidad de acierto a la mayor.
 
 Un concepto con una fallada y una vencida entra con la fallada, y la vencida espera a la sesión siguiente. Un fallo dentro de una sesión no vuelve en la misma sesión, y abre la sesión siguiente.
 

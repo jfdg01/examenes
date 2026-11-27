@@ -4,7 +4,7 @@ La app de práctica es un servidor de Rust y una interfaz de Svelte 5. El códig
 
 ## Las decisiones
 
-- **La lógica vive en Rust.** Un crate `nucleo` tiene toda la lógica: el paso de los conceptos, la sesión, el simulacro y la tarjeta de la nota. `nucleo` no lee archivos ni la red, y sus tests corren con `cargo test`.
+- **La lógica vive en Rust.** Un crate `nucleo` tiene toda la lógica: el estado de las preguntas, la sesión, el simulacro y la tarjeta de la nota. `nucleo` no lee archivos ni la red, y sus tests corren con `cargo test`.
 - **La interfaz es Svelte 5 con Vite, sin SvelteKit.** La interfaz tiene una sola página. Vite compila Svelte a archivos estáticos en `dist/`, y el servidor de Rust los sirve.
 - **Los componentes van en TypeScript.** `App.svelte` guarda el estado de la ronda y llama a `nucleo`. Cada componente recibe sus datos por props y avisa con callbacks.
 - **El estilo va en Tailwind 4**, con `@tailwindcss/vite` y su preflight. `app.css` lleva solo los imports, el `@theme` y las `@font-face`: la paleta Gruvbox, la fuente JetBrains Mono de `src/fuentes/` y el breakpoint propio `pc:`, en 900 px, que corta el móvil y el PC.

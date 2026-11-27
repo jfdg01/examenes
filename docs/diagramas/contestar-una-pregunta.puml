@@ -8,7 +8,7 @@ database localStorage as L
 participant servidor as S
 
 App -> N : corregir(pregunta, opcion, seguro, ahora)
-N --> App : Correccion: el resultado, el paso nuevo y el aviso
+N --> App : Correccion: el resultado, cuándo vuelve y el aviso
 App -> L : guardar(): la ronda
 App -> S : guardar(): PUT api/ronda, con las respuestas del simulacro
 note over App : un simulacro sigue aquí hasta terminar(), que llama a entregar()
