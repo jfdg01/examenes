@@ -6,7 +6,7 @@ use banco::Tipo;
 const USO: &str = "Uso: banco comprobar <carpeta> | banco paginas <carpeta> \
                    | banco importar <carpeta> <tipo> <apartado> <borrador> | banco preparar <carpeta> <tipo> <apartado>... \
                    | banco montar <carpeta> <tipo> <apartado>... | banco revision <carpeta> <tipo> <informe>... \
-                   (<tipo> es conceptos o test)";
+                   (<tipo> es conceptos, test o desarrollo)";
 
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
