@@ -266,7 +266,7 @@
     {/if}
     {#if notasVisibles && !borrador}
       <textarea
-        class="nota mt-3 mb-3 block w-full resize-y rounded-[10px] border-2 border-linea bg-tarjeta p-2.5 text-[13px] pc:mt-4 pc:rounded-xl pc:p-3 pc:text-[14px]"
+        class="nota mt-3 mb-3 block w-full resize-y rounded-[10px] border-2 border-linea bg-tarjeta p-2.5 text-[13px] pc:mt-4 pc:mb-2.5 pc:rounded-xl pc:p-3 pc:text-[14px]"
         rows="3"
         placeholder="La nota de esta pregunta"
         value={nota}
@@ -277,10 +277,10 @@
   <!-- La edición ya lleva la explicación, así que la hoja se oculta mientras dura. -->
   {#if !borrador}{@render children()}{/if}
 </div>
-<div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:mt-2 pc:border-t-0 pc:p-0 pc:[grid-area:pie]">
+<div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:border-t-0 pc:p-0 pc:[grid-area:pie]">
   <!-- El botón en blanco de una pregunta corregida queda invisible, y los botones de debajo no saltan. -->
   <button
-    class={["mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue", fija && "invisible"]}
+    class={["mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed pc:mb-5 border-linea p-3 text-tenue", fija && "invisible"]}
     onclick={() => oncontestar(null, false)}>{enBlancoTexto}</button
   >
   <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible. Las 2 columnas iguales centran la cuadrícula. -->
