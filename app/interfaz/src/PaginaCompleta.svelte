@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Fuera from "./Fuera.svelte";
   import type { Pagina } from "./nucleo/nucleo.js";
 
   let { pagina, oncerrar }: { pagina: Pagina; oncerrar: () => void } = $props();
@@ -8,7 +9,7 @@
 <div class="pagina fixed inset-0 z-10 flex flex-col bg-fondo">
   <p class="m-0 flex items-center gap-3 border-b-2 border-linea px-3.5 py-2.5 text-[12px]">
     <span class="flex-1 truncate text-tenue">{pagina.fuente}</span>
-    <a class="text-acento underline" href={pagina.pdf} target="_blank">PDF</a>
+    <Fuera href={pagina.pdf}>PDF</Fuera>
     <button class="cursor-pointer rounded-md border border-linea bg-tarjeta px-2.5 py-[3px]" title="Cerrar" onclick={oncerrar}>✕</button>
   </p>
   <div class="min-h-0 flex-1 overflow-auto bg-white">

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Fuera from "./Fuera.svelte";
   import type { PreguntaDeSesion } from "./nucleo/nucleo.js";
 
   // `vuelve` dice cuándo vuelve la pregunta tras la respuesta. Sin `vuelve`, la pregunta espera su respuesta.
@@ -19,7 +20,7 @@
       {#if q.pagina}
         <p class="my-2">
           {q.pagina.fuente} · {q.concepto} · {vuelve} ·
-          <a class="text-acento underline" href={q.pagina.pdf} target="_blank">Abrir el PDF en la página {q.pagina.numero}</a>
+          <Fuera href={q.pagina.pdf}>Abrir el PDF en la página {q.pagina.numero}</Fuera>
         </p>
         <img class="my-2 mt-1.5 hidden w-full rounded-lg bg-white pc:block" src={q.pagina.imagen} alt="La página {q.pagina.numero} de la fuente" />
       {:else}

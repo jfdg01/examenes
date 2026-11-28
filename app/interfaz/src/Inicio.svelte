@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Fuera from "./Fuera.svelte";
   import Pomodoro from "./Pomodoro.svelte";
   import type { CifraDeDesarrollo, Inicio, Par, TemaDelInicio } from "./nucleo/nucleo.js";
 
@@ -129,7 +130,7 @@
                     tema.apartados.map((a) => a.apartado),
                   )}</span>
               </span>
-              <a class="self-start text-[13px] text-acento underline" href="pdfs/{tema.pdf}" target="_blank">PDF</a>
+              <Fuera clase="self-center text-[13px]" href="pdfs/{tema.pdf}">PDF</Fuera>
               {#if tema.apartados.length > 1}
                 <button
                   class="abrir-tema cursor-pointer self-start"
