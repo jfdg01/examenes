@@ -48,6 +48,9 @@
     guardar({ fase, hechos, fin: null, resta: duracion[fase] });
   }
 
+  // Vuelve al primer estudio de la tanda, parado y entero.
+  const reiniciar = () => guardar({ fase: "estudio", hechos: 0, fin: null, resta: duracion.estudio });
+
   function alternar() {
     ahora = Date.now();
     if (e.fin) guardar({ ...e, fin: null, resta: Math.max(0, e.fin - ahora) });
@@ -80,8 +83,8 @@
 <!-- El borde y el fondo son los de los otros botones de la línea. Solo el tiempo lleva el color de la fase. -->
 <span
   class="pomodoro relative inline-flex h-7 shrink-0 items-center rounded-md border border-linea bg-tarjeta text-[12px] font-semibold"
-  class:text-estudio={e.fase === "estudio"}
-  class:text-pausa={e.fase !== "estudio"}
+  class:text-aviso={e.fase === "estudio"}
+  class:text-acento={e.fase !== "estudio"}
 >
   <button class="flex h-full cursor-pointer items-center gap-1 pl-2 tabular-nums" title={e.fin ? "Pausar" : empezada ? "Seguir" : "Empezar"} onclick={alternar}>
     {#if e.fin}{@render icono(9, "M8 5v14M16 5v14")}{:else}{@render icono(9, "M6 4l14 8-14 8z", true)}{/if}
@@ -105,6 +108,7 @@
         </button>
         <button title="+5 min" onclick={mas5}>+5</button>
         <button title={e.fase === "estudio" ? "Saltar el estudio" : "Saltar la pausa"} onclick={saltar}>{@render icono(14, "M5 4l10 8-10 8zM19 5v14")}</button>
+        <button title="Volver al estudio 1" onclick={reiniciar}>{@render icono(14, "M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5")}</button>
       </span>
     </span>
   </span>

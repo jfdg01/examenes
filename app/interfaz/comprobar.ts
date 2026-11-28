@@ -302,6 +302,13 @@ try {
   await reloj.evaluate(() => localStorage.setItem("pomodoro", JSON.stringify({ ...JSON.parse(localStorage.getItem("pomodoro")!), fin: Date.now() })));
   await reloj.reload();
   await pomodoro.getByText("25:00").waitFor();
+  // Reiniciar vuelve al estudio 1 desde cualquier fase.
+  await reloj.getByTitle("Los controles").hover();
+  await reloj.getByTitle("Saltar el estudio").click();
+  await pomodoro.getByText("5:00").waitFor();
+  await reloj.getByTitle("Volver al estudio 1").click();
+  await pomodoro.getByText("25:00").waitFor();
+  await pomodoro.getByText("Estudio · 1 de 3").waitFor({ state: "attached" });
   await reloj.close();
 
   await desarrollar("movil", 390, 844);
