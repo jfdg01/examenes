@@ -59,12 +59,21 @@
           <i class="bg-aviso" style:flex={t.no_sabes}></i>
           <i class="bg-linea" style:flex={t.sin_ver}></i>
         </div>
-        <p class="mt-1.5 text-[13px] text-tenue">
-          Sabes {t.sabes} · No sabes {t.no_sabes} · Sin ver {t.sin_ver}, de {t.sabes + t.no_sabes + t.sin_ver} preguntas{#if inicio.parte}, {inicio.parte}{/if}
-        </p>
-        {#if desarrollo?.hay}
-          <p class="cifra-desarrollo mt-0.5 text-[13px] text-tenue">Desarrollo: sabes {desarrollo.sabes} de {desarrollo.hay}</p>
-        {/if}
+        <!-- Los puntos de color son la leyenda de la barra. -->
+        <dl class="mt-1.5 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-[13px] text-tenue">
+          <dt class="font-semibold text-texto">Test</dt>
+          <dd class="flex flex-wrap gap-x-2.5">
+            <span><i class="mr-1 inline-block size-2 rounded-full bg-acierto"></i>{t.sabes} sabes</span>
+            <span><i class="mr-1 inline-block size-2 rounded-full bg-aviso"></i>{t.no_sabes} no sabes</span>
+            <span><i class="mr-1 inline-block size-2 rounded-full bg-linea"></i>{t.sin_ver} sin ver</span>
+            <span>(de {t.sabes + t.no_sabes + t.sin_ver})</span>
+          </dd>
+          {#if desarrollo?.hay}
+            <dt class="font-semibold text-texto">Desarrollo</dt>
+            <dd class="cifra-desarrollo">{desarrollo.sabes} sabes (de {desarrollo.hay})</dd>
+          {/if}
+        </dl>
+        {#if inicio.parte}<p class="mt-1 text-[13px] text-aviso">{inicio.parte}</p>{/if}
         <div class="my-3 rounded-xl bg-tarjeta p-3.5">
           <label class="flex items-center gap-3">
             <b class="text-[16px] whitespace-nowrap">Sacar más de <span class="inline-block w-[3ch] tabular-nums">{objetivo.toLocaleString("es")}</span></b>
