@@ -255,18 +255,6 @@
       >
         {abiertas ? "ocultar las otras" : `ver las otras ${otras} opciones`}
       </button>
-      {#if eleccion?.correccion.aviso}
-        <p
-          class={[
-            "mb-2.5 rounded-[4px] border-l-[3px] px-2.5 py-1.5 text-[14px] font-semibold pc:mt-1",
-            eleccion.correccion.respuesta.resultado === "Fallo"
-              ? "bg-[color-mix(in_srgb,var(--color-fallo)_18%,var(--color-fondo))] text-fallo"
-              : "bg-[color-mix(in_srgb,var(--color-aviso)_15%,var(--color-fondo))] text-aviso",
-          ]}
-        >
-          {eleccion.correccion.aviso}
-        </p>
-      {/if}
     {/if}
     {/if}
     {#if notasVisibles && !borrador}

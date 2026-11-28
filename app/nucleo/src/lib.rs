@@ -277,12 +277,11 @@ fn en_porcentaje(estado: Option<&Estado>, ahora: i64) -> String {
     estado.map_or("sin ver".into(), |e| format!("{} %", (100.0 * e.probabilidad(ahora)).round()))
 }
 
-/// La respuesta a una pregunta de la ronda, con cuándo vuelve la pregunta tras ella y su aviso.
+/// La respuesta a una pregunta de la ronda, con cuándo vuelve la pregunta tras ella.
 #[derive(Serialize, Tsify, PartialEq, Debug)]
 pub struct Correccion {
     pub respuesta: Respuesta,
     pub vuelve: String,
-    pub aviso: Option<String>,
 }
 
 /// Corrige una pregunta de la ronda. Sin `opcion`, la pregunta queda en blanco, sin "seguro".
@@ -293,7 +292,6 @@ pub fn corregir(q: &PreguntaDeSesion, opcion: Option<u32>, seguro: bool, ahora: 
         Some(_) => Resultado::Fallo,
     };
     let seguro = seguro && opcion.is_some();
-    let aviso = (resultado == Resultado::Fallo && seguro).then(|| "Fallo con «seguro»: una idea falsa. Repásala.".into());
     Correccion {
         vuelve: match (resultado, seguro) {
             (Resultado::Acierto, true) => &q.vuelve_tras_seguro,
@@ -301,7 +299,6 @@ pub fn corregir(q: &PreguntaDeSesion, opcion: Option<u32>, seguro: bool, ahora: 
             _ => &q.vuelve_tras_fallo,
         }
         .clone(),
-        aviso,
         respuesta: Respuesta { id: q.id.clone(), ts: ahora, resultado, seguro },
     }
 }
@@ -1617,20 +1614,16 @@ mod tests {
     }
 
     #[test]
-    fn corregir_dice_cuando_vuelve_la_pregunta_y_avisa_de_un_fallo_seguro() {
+    fn corregir_dice_cuando_vuelve_la_pregunta() {
         // En una pregunta sin ver, FSRS-7 da 4,78 días a Good y 0,6 días a Hard hasta el 90 %.
         let q = &sesion(&LN, &[pregunta("a1", "a")], &[], &[], 0, &mut Azar::new(3))[0];
         let otra = (q.correcta + 1) % 4;
-        let fila = |c: Correccion| (c.vuelve, c.aviso);
-        let otra_sesion = OTRA_SESION.to_string();
-        assert_eq!(fila(corregir(q, Some(q.correcta), true, Timestamp::UNIX_EPOCH)), ("vuelve en 5 días".into(), None));
-        assert_eq!(fila(corregir(q, Some(q.correcta), false, Timestamp::UNIX_EPOCH)), ("vuelve en 14 horas".into(), None));
-        assert_eq!(
-            fila(corregir(q, Some(otra), true, Timestamp::UNIX_EPOCH)),
-            (otra_sesion.clone(), Some("Fallo con «seguro»: una idea falsa. Repásala.".into()))
-        );
-        assert_eq!(fila(corregir(q, Some(otra), false, Timestamp::UNIX_EPOCH)), (otra_sesion.clone(), None));
-        assert_eq!(fila(corregir(q, None, true, Timestamp::UNIX_EPOCH)), (otra_sesion, None));
+        let vuelve = |opcion, seguro| corregir(q, opcion, seguro, Timestamp::UNIX_EPOCH).vuelve;
+        assert_eq!(vuelve(Some(q.correcta), true), "vuelve en 5 días");
+        assert_eq!(vuelve(Some(q.correcta), false), "vuelve en 14 horas");
+        assert_eq!(vuelve(Some(otra), true), OTRA_SESION);
+        assert_eq!(vuelve(Some(otra), false), OTRA_SESION);
+        assert_eq!(vuelve(None, true), OTRA_SESION);
     }
 
     #[test]
