@@ -165,7 +165,7 @@
     {#if error}<p class="my-3 text-aviso">{error}</p>{/if}
   </div>
   {#if inicio && inicio.estado !== "BancoVacio"}
-    <div class="pie flex flex-col gap-2.5 border-t-2 border-linea px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))]">
+    <div class="pie flex flex-col gap-2.5 px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))]">
       <!-- Un aviso sin bloqueo: `banco pendientes` lista las respuestas, y el agente las corrige. -->
       {#if desarrollo?.sin_corregir}
         <p class="sin-corregir m-0 text-[13px] text-aviso">
