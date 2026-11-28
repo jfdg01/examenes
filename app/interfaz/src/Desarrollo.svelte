@@ -64,11 +64,11 @@
       {@render icono("M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5zM15 3v4a2 2 0 0 0 2 2h4M7 13h7M7 17h4")}
     </button>
     <!-- Cerrar va en la esquina, en rojo, como en la pregunta de test. -->
-    <button class={[accion, "border-fallo text-fallo bg-[color-mix(in_srgb,var(--color-fallo)_18%,var(--color-fondo))]!"]} title="Abandonar" onclick={onabandonar}>
+    <button class={[accion, "border-linea text-tenue hover:border-fallo hover:text-fallo"]} title="Abandonar" onclick={onabandonar}>
       {@render icono("M6 6l12 12M18 6L6 18", 2.5)}
     </button>
   </p>
-  <div class="h-[3px] bg-linea"><i class="block h-full bg-acento" style:width="{(100 * (i + 1)) / total}%"></i></div>
+  <div class="h-[3px] bg-linea"><i class="block h-full bg-aviso" style:width="{(100 * (i + 1)) / total}%"></i></div>
   <div class="min-h-0 flex-1 overflow-auto px-3.5 py-3 pc:overflow-visible pc:px-0">
     <p class="mt-1 mb-3.5 text-[16px]/[1.4] font-semibold pc:text-[19px]/[1.5]">{q.enunciado}</p>
     {#if notasVisibles}

@@ -162,14 +162,14 @@
   </span>
   <!-- Cerrar va en la esquina, en rojo, para que no se confunda con los otros. -->
   <button
-    class={[accion, "border-fallo text-fallo bg-[color-mix(in_srgb,var(--color-fallo)_18%,var(--color-fondo))]!"]}
+    class={[accion, "border-linea text-tenue hover:border-fallo hover:text-fallo"]}
     title={revision ? "Volver al resultado" : "Abandonar"}
     onclick={onabandonar}
   >
     {@render icono(14, "M6 6l12 12M18 6L6 18", 2.5)}
   </button>
 </p>
-<div class="h-[3px] bg-linea pc:hidden"><i class="block h-full bg-acento" style:width="{(100 * (i + 1)) / total}%"></i></div>
+<div class="h-[3px] bg-linea pc:mb-3 pc:[grid-area:barra]"><i class="block h-full bg-aviso" style:width="{(100 * (i + 1)) / total}%"></i></div>
 <div class="min-h-0 flex-1 overflow-auto px-3.5 py-3 pc:contents">
   <div class="pc:[grid-area:izq]">
     {#if borrador}
@@ -275,7 +275,7 @@
   <!-- La edición ya lleva la explicación, así que la hoja se oculta mientras dura. -->
   {#if !borrador}{@render children()}{/if}
 </div>
-<div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:border-0 pc:p-0 pc:[grid-area:pie]">
+<div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:mt-2 pc:px-0 pc:pt-4 pc:pb-0 pc:[grid-area:pie]">
   <!-- «En blanco» de una pregunta corregida queda invisible, y los botones de debajo no saltan. -->
   <button
     class={["mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue", fija && "invisible"]}
@@ -296,13 +296,13 @@
     >
   </div>
   <!-- En el PC, la fila es siempre anterior, la cuadrícula y siguiente. El botón grande de una pregunta corregida va en la hoja. -->
-  <div class="hidden gap-2 pc:mt-6 pc:grid pc:grid-cols-[1fr_auto_1fr]">
+  <div class="hidden gap-2 pc:grid pc:grid-cols-[1fr_auto_1fr]">
     <button class={flecha} disabled={i === 0} onclick={() => onir(i - 1)}>‹ Anterior</button>
     {@render rejilla()}
     <button class={flecha} disabled={i === total - 1} onclick={() => onir(i + 1)}>Siguiente ›</button>
   </div>
   <!-- En el PC, la ayuda va bajo la fila, y su hueco no queda entre «En blanco» y la fila. -->
-  {#if !fija}<p class="m-0 mt-4 hidden text-[13px] text-tenue pc:block">{@render ayuda()}</p>{/if}
+  {#if !fija}<p class="m-0 mt-4 hidden text-center text-[13px] text-tenue pc:block">{@render ayuda()}</p>{/if}
   {#if error}<p class="m-0 mt-1 text-center text-[12px] text-aviso pc:text-left">{error}</p>{/if}
 </div>
 

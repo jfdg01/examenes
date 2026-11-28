@@ -26,14 +26,14 @@
   <p class="m-0 flex items-center gap-2 px-3.5 pt-2 pb-1.5 text-[12px] whitespace-nowrap text-tenue pc:px-0 pc:pt-0 pc:pb-2.5 pc:text-[13px]">
     <span class="donde min-w-0 flex-1 truncate">{Math.floor(restante / 60)}:{String(restante % 60).padStart(2, "0")} · {q.apartado} · desarrollo</span>
     <button
-      class="flex h-7 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border border-fallo bg-[color-mix(in_srgb,var(--color-fallo)_18%,var(--color-fondo))] text-fallo"
+      class="flex h-7 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border border-linea bg-tarjeta text-tenue hover:border-fallo hover:text-fallo"
       title="Abandonar"
       onclick={onabandonar}
     >
       {@render icono(14, "M6 6l12 12M18 6L6 18", 2.5)}
     </button>
   </p>
-  <div class="h-[3px] bg-linea"><i class="block h-full bg-acento" style:width="{(100 * (i + 1)) / total}%"></i></div>
+  <div class="h-[3px] bg-linea"><i class="block h-full bg-aviso" style:width="{(100 * (i + 1)) / total}%"></i></div>
   <div class="min-h-0 flex-1 overflow-auto px-3.5 py-3 pc:overflow-visible pc:px-0">
     <p class="mt-1 mb-3.5 text-[16px]/[1.4] font-semibold pc:text-[19px]/[1.5]">{q.enunciado}</p>
     <textarea
