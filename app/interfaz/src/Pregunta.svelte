@@ -238,8 +238,13 @@
         {/if}
       </div>
     {/each}
-    <!-- En el móvil, la ayuda va sobre la línea del pie, y el botón en blanco queda junto a la fila de abajo. -->
-    {#if !fija}<p class="m-0 mb-2.5 text-center text-[11.5px] text-tenue pc:hidden">{@render ayuda()}</p>{/if}
+    <!-- En el móvil, el botón en blanco y la ayuda van bajo la última opción, y se van al contestar. -->
+    {#if !fija}
+      <div class="pc:hidden">
+        {@render botonEnBlanco()}
+        <p class="m-0 mb-2.5 text-center text-[11.5px] text-tenue">{@render ayuda()}</p>
+      </div>
+    {/if}
     {#if contestada && !corregida}
       <p class="mb-2.5 text-[13px] text-tenue">La respuesta queda guardada, y cambia hasta terminar. La corrección sale al final.</p>
     {/if}
@@ -278,11 +283,8 @@
   {#if !borrador}{@render children()}{/if}
 </div>
 <div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:border-t-0 pc:p-0 pc:[grid-area:pie]">
-  <!-- En el móvil, el botón en blanco de una pregunta corregida se va, y deja sitio a la explicación. En el PC queda invisible, y la fila de debajo no salta. -->
-  <button
-    class={["mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed pc:mb-5 border-linea p-3 text-tenue", fija && "invisible max-pc:hidden"]}
-    onclick={() => oncontestar(null, false)}>{enBlancoTexto}</button
-  >
+  <!-- En el PC, el botón en blanco de una pregunta corregida queda invisible, y la fila de debajo no salta. -->
+  <div class={["hidden pc:block", fija && "invisible"]}>{@render botonEnBlanco()}</div>
   <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible. Las 2 columnas iguales centran la cuadrícula. -->
   <div class="grid grid-cols-[1fr_auto_1fr] gap-2 pc:hidden">
     <button
@@ -334,6 +336,12 @@
     {/if}
   </div>
 {/if}
+
+{#snippet botonEnBlanco()}
+  <button class="mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue pc:mb-5" onclick={() => oncontestar(null, false)}
+    >{enBlancoTexto}</button
+  >
+{/snippet}
 
 {#snippet ayuda()}Si estás seguro, toca la respuesta.<br />Si dudas, toca «dudo».<br />Si no la sabes, toca «{enBlancoTexto}».{/snippet}
 
