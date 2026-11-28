@@ -2,7 +2,7 @@
   import type { Correccion, Edicion, PreguntaDeSesion } from "./nucleo/nucleo.js";
   import Pomodoro from "./Pomodoro.svelte";
 
-  // `opcion` es null con "En blanco".
+  // `opcion` es null con «No la sé» o «En blanco».
   export type Eleccion = { opcion: number | null; correccion: Correccion };
 </script>
 
@@ -105,6 +105,8 @@
   const accion = "flex h-7 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border bg-tarjeta text-[12px]";
   // Una respuesta del simulacro cambia hasta el final. La corregida queda fija.
   const fija = $derived(contestada && corregida);
+  // En la sesión, «En blanco» parece no puntuar, y el botón dice «No la sé». En el simulacro, «En blanco» es la regla del examen.
+  const enBlancoTexto = $derived(simulacro ? "En blanco" : "No la sé");
   const otras = $derived(q.opciones.length - (eleccion?.opcion == null || eleccion.opcion === q.correcta ? 1 : 2));
 </script>
 
@@ -236,7 +238,7 @@
         {/if}
       </div>
     {/each}
-    <!-- En el móvil, la ayuda va sobre la línea del pie, y «En blanco» queda junto a la fila de abajo. -->
+    <!-- En el móvil, la ayuda va sobre la línea del pie, y el botón en blanco queda junto a la fila de abajo. -->
     {#if !fija}<p class="m-0 mb-2.5 text-center text-[11.5px] text-tenue pc:hidden">{@render ayuda()}</p>{/if}
     {#if contestada && !corregida}
       <p class="mb-2.5 text-[13px] text-tenue">La respuesta queda guardada, y cambia hasta terminar. La corrección sale al final.</p>
@@ -276,10 +278,10 @@
   {#if !borrador}{@render children()}{/if}
 </div>
 <div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:mt-2 pc:border-t-0 pc:p-0 pc:[grid-area:pie]">
-  <!-- «En blanco» de una pregunta corregida queda invisible, y los botones de debajo no saltan. -->
+  <!-- El botón en blanco de una pregunta corregida queda invisible, y los botones de debajo no saltan. -->
   <button
     class={["mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue", fija && "invisible"]}
-    onclick={() => oncontestar(null, false)}>En blanco</button
+    onclick={() => oncontestar(null, false)}>{enBlancoTexto}</button
   >
   <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible. Las 2 columnas iguales centran la cuadrícula. -->
   <div class="grid grid-cols-[1fr_auto_1fr] gap-2 pc:hidden">
@@ -303,7 +305,7 @@
     {@render rejilla()}
     <button class={flecha} disabled={i === total - 1} onclick={() => onir(i + 1)}>Siguiente ›</button>
   </div>
-  <!-- En el PC, la ayuda va bajo la fila, y su hueco no queda entre «En blanco» y la fila. -->
+  <!-- En el PC, la ayuda va bajo la fila, y su hueco no queda entre el botón en blanco y la fila. -->
   {#if !fija}<p class="m-0 mt-4 hidden text-center text-[13px] text-tenue pc:block">{@render ayuda()}</p>{/if}
   {#if error}<p class="m-0 mt-1 text-center text-[12px] text-aviso pc:text-left">{error}</p>{/if}
 </div>
@@ -335,7 +337,7 @@
   </div>
 {/if}
 
-{#snippet ayuda()}Si estás seguro, toca la respuesta.<br />Si dudas, toca «dudo».<br />Si no la sabes, toca «En blanco».{/snippet}
+{#snippet ayuda()}Si estás seguro, toca la respuesta.<br />Si dudas, toca «dudo».<br />Si no la sabes, toca «{enBlancoTexto}».{/snippet}
 
 <!-- Los iconos de la app: un trazo de 24 × 24. -->
 <!-- El botón de la cuadrícula, con la posición en la ronda. -->
