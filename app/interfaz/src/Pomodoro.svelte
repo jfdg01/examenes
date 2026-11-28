@@ -84,7 +84,7 @@
 <span
   class="pomodoro relative inline-flex h-7 shrink-0 items-center rounded-md border border-linea bg-tarjeta text-[12px] font-semibold"
   class:text-aviso={e.fase === "estudio"}
-  class:text-acento={e.fase !== "estudio"}
+  class:text-acierto={e.fase !== "estudio"}
 >
   <button class="flex h-full cursor-pointer items-center gap-1 pl-2 tabular-nums" title={e.fin ? "Pausar" : empezada ? "Seguir" : "Empezar"} onclick={alternar}>
     {#if e.fin}{@render icono(9, "M8 5v14M16 5v14")}{:else}{@render icono(9, "M6 4l14 8-14 8z", true)}{/if}
