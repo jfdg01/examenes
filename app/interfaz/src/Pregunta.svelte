@@ -279,7 +279,7 @@
     <button class="mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue" onclick={() => oncontestar(null, false)}
       >En blanco</button
     >
-    <p class="m-0 mb-2 text-center text-[11.5px] text-tenue pc:mt-[1em] pc:mb-0 pc:text-left pc:text-[13px]">Toca el texto si estás seguro. Toca «dudo» si dudas.</p>
+    <p class="m-0 mb-2 text-center text-[11.5px] text-tenue pc:mt-[1em] pc:mb-0 pc:text-left pc:text-[13px]">Si estás seguro, toca la respuesta. Si dudas, toca «dudo». Si no la sabes, toca «En blanco».</p>
   </div>
   <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible, y la cuadrícula no se mueve. -->
   <div class="flex gap-2 pc:hidden">
