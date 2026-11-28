@@ -275,7 +275,7 @@
   <!-- La edición ya lleva la explicación, así que la hoja se oculta mientras dura. -->
   {#if !borrador}{@render children()}{/if}
 </div>
-<div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:mt-2 pc:px-0 pc:pt-4 pc:pb-0 pc:[grid-area:pie]">
+<div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:mt-2 pc:border-t-0 pc:p-0 pc:[grid-area:pie]">
   <!-- «En blanco» de una pregunta corregida queda invisible, y los botones de debajo no saltan. -->
   <button
     class={["mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue", fija && "invisible"]}
@@ -296,7 +296,7 @@
     >
   </div>
   <!-- En el PC, la fila es siempre anterior, la cuadrícula y siguiente. El botón grande de una pregunta corregida va en la hoja. -->
-  <div class="hidden gap-2 pc:grid pc:grid-cols-[1fr_auto_1fr]">
+  <div class="hidden gap-2 pc:mt-2 pc:grid pc:border-t-2 pc:border-linea pc:pt-4 pc:grid-cols-[1fr_auto_1fr]">
     <button class={flecha} disabled={i === 0} onclick={() => onir(i - 1)}>‹ Anterior</button>
     {@render rejilla()}
     <button class={flecha} disabled={i === total - 1} onclick={() => onir(i + 1)}>Siguiente ›</button>
