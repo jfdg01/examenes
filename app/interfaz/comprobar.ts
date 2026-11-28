@@ -241,9 +241,9 @@ try {
     const temas = lista.locator(".tema input");
     assert.equal(await temas.count(), 5, "una casilla por tema");
     await temas.nth(1).uncheck();
-    await lista.getByText(/^Solo cuentan 4 de 5 temas$/).waitFor();
+    await lista.getByText(/^Solo se muestran 4 de 5 temas\. Cambia la selección abajo\.$/).waitFor();
     await lista.reload();
-    await lista.getByText(/^Solo cuentan 4 de 5 temas$/).waitFor();
+    await lista.getByText(/^Solo se muestran 4 de 5 temas\. Cambia la selección abajo\.$/).waitFor();
     assert(!(await temas.nth(1).isChecked()), "la selección vuelve al recargar");
     await lista.getByText(/^0 sabes \(de \d+\)$/).waitFor();
     assert.equal(await lista.locator(".tema").getByText(/ · 0\/\d+ desarrollo$/).count() > 0, true, "un tema cuenta sus desarrollos");

@@ -73,7 +73,7 @@
             <dd class="cifra-desarrollo">{desarrollo.sabes} sabes (de {desarrollo.hay})</dd>
           {/if}
         </dl>
-        {#if inicio.parte}<p class="mt-1 text-[13px] text-aviso">{inicio.parte}</p>{/if}
+        {#if inicio.parte}<p class="mt-1 text-[13px] text-aviso">{inicio.parte}. Cambia la selección abajo.</p>{/if}
         <div class="my-3 rounded-xl bg-tarjeta p-3.5">
           <label class="flex items-center gap-3">
             <b class="text-[16px] whitespace-nowrap">Sacar más de <span class="inline-block w-[3ch] tabular-nums">{objetivo.toLocaleString("es")}</span></b>

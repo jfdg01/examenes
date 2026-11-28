@@ -337,7 +337,7 @@ pub enum Inicio {
         titulo: String,
     },
     /// `sesion` y `simulacro` son el número de preguntas de cada ronda con la selección, y la tarjeta usa solo la selección.
-    /// `parte` dice "Solo cuentan 3 de 5 temas" cuando falta algún par.
+    /// `parte` dice "Solo se muestran 3 de 5 temas" cuando falta algún par.
     Listo {
         titulo: String,
         sesion: u32,
@@ -440,7 +440,7 @@ pub fn inicio(
         .collect();
     let con = temas.iter().filter(|t| t.apartados.iter().any(|a| a.marcado)).count();
     let parte =
-        temas.iter().any(|t| t.apartados.iter().any(|a| !a.marcado)).then(|| format!("Solo cuentan {con} de {} temas", temas.len()));
+        temas.iter().any(|t| t.apartados.iter().any(|a| !a.marcado)).then(|| format!("Solo se muestran {con} de {} temas", temas.len()));
     let banco = de_la_seleccion(examen, banco, conceptos, seleccion);
     let tarjeta = tarjeta(examen, &banco, historial, objetivo, ahora);
     let sesion = distintos(&banco).min(TAMANO_SESION as u32);
@@ -1396,7 +1396,7 @@ mod tests {
             panic!()
         };
         assert_eq!((sesion, simulacro, tarjeta.sin_ver), (1, 2, 2));
-        assert_eq!(parte.as_deref(), Some("Solo cuentan 1 de 2 temas"));
+        assert_eq!(parte.as_deref(), Some("Solo se muestran 1 de 2 temas"));
         assert_eq!(temas[1].apartados.iter().map(|a| a.marcado).collect::<Vec<_>>(), [true, false]);
         assert!(!temas[0].apartados[0].marcado);
         let ids: Vec<_> = de_la_seleccion(&examen, &banco, &conceptos, Some(&seleccion)).into_iter().map(|q| q.id).collect();
@@ -1416,7 +1416,7 @@ mod tests {
         else {
             panic!()
         };
-        assert_eq!((sesion, simulacro, parte.as_deref()), (0, 0, Some("Solo cuentan 0 de 2 temas")));
+        assert_eq!((sesion, simulacro, parte.as_deref()), (0, 0, Some("Solo se muestran 0 de 2 temas")));
     }
 
     #[test]
