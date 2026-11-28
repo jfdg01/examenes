@@ -236,6 +236,8 @@
         {/if}
       </div>
     {/each}
+    <!-- En el móvil, la ayuda va sobre la línea del pie, y «En blanco» queda junto a la fila de abajo. -->
+    {#if !fija}<p class="m-0 mb-2.5 text-center text-[11.5px] text-tenue pc:hidden">{@render ayuda()}</p>{/if}
     {#if contestada && !corregida}
       <p class="mb-2.5 text-[13px] text-tenue">La respuesta queda guardada, y cambia hasta terminar. La corrección sale al final.</p>
     {/if}
@@ -274,24 +276,22 @@
   {#if !borrador}{@render children()}{/if}
 </div>
 <div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:border-0 pc:p-0 pc:[grid-area:pie]">
-  <!-- La ayuda de una pregunta corregida queda invisible, y los botones de debajo no saltan. -->
-  <div class={[fija && "invisible"]}>
-    <button class="mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue" onclick={() => oncontestar(null, false)}
-      >En blanco</button
-    >
-    <p class="m-0 mb-2 text-center text-[11.5px] text-tenue pc:mt-[1em] pc:mb-0 pc:text-left pc:text-[13px]">Si estás seguro, toca la respuesta.<br />Si dudas, toca «dudo».<br />Si no la sabes, toca «En blanco».</p>
-  </div>
-  <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible, y la cuadrícula no se mueve. -->
-  <div class="flex gap-2 pc:hidden">
+  <!-- «En blanco» de una pregunta corregida queda invisible, y los botones de debajo no saltan. -->
+  <button
+    class={["mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed border-linea p-3 text-tenue", fija && "invisible"]}
+    onclick={() => oncontestar(null, false)}>En blanco</button
+  >
+  <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible. Las 2 columnas iguales centran la cuadrícula. -->
+  <div class="grid grid-cols-[1fr_auto_1fr] gap-2 pc:hidden">
     <button
-      class={["ver-pagina flex shrink-0 cursor-pointer items-center gap-1.5 rounded-[10px] border-2 border-linea bg-tarjeta px-3 text-[13px] whitespace-nowrap", !(contestada && corregida && q.pagina) && "invisible"]}
+      class={["ver-pagina flex cursor-pointer justify-self-start items-center gap-1.5 rounded-[10px] border-2 border-linea bg-tarjeta px-3 text-[13px] whitespace-nowrap", !(contestada && corregida && q.pagina) && "invisible"]}
       onclick={onverpagina}
     >
       {@render icono(16, "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8")} pág. {q.pagina?.numero}
     </button>
     {@render rejilla()}
     <button
-      class={["min-w-0 flex-1 cursor-pointer rounded-[10px] bg-acento px-2 py-3.5 text-[15px] font-semibold whitespace-nowrap text-sobre-acento", !contestada && "invisible"]}
+      class={["min-w-0 cursor-pointer rounded-[10px] bg-acento px-2 py-3.5 text-[15px] font-semibold whitespace-nowrap text-sobre-acento", !contestada && "invisible"]}
       onclick={onsiguiente}>{etiqueta}</button
     >
   </div>
@@ -301,6 +301,8 @@
     {@render rejilla()}
     <button class={flecha} disabled={i === total - 1} onclick={() => onir(i + 1)}>Siguiente ›</button>
   </div>
+  <!-- En el PC, la ayuda va bajo la fila, y su hueco no queda entre «En blanco» y la fila. -->
+  {#if !fija}<p class="m-0 mt-4 hidden text-[13px] text-tenue pc:block">{@render ayuda()}</p>{/if}
   {#if error}<p class="m-0 mt-1 text-center text-[12px] text-aviso pc:text-left">{error}</p>{/if}
 </div>
 
@@ -330,6 +332,8 @@
     {/if}
   </div>
 {/if}
+
+{#snippet ayuda()}Si estás seguro, toca la respuesta.<br />Si dudas, toca «dudo».<br />Si no la sabes, toca «En blanco».{/snippet}
 
 <!-- Los iconos de la app: un trazo de 24 × 24. -->
 <!-- El botón de la cuadrícula, con la posición en la ronda. -->
