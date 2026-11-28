@@ -190,7 +190,7 @@
         >
         {#if desarrollo}
           <button
-            class="desarrollo flex-1 cursor-pointer rounded-xl border-2 border-acento bg-tarjeta p-4 text-[16px] font-semibold text-acento disabled:cursor-default disabled:opacity-50"
+            class="desarrollo flex-1 cursor-pointer rounded-xl bg-acento p-4 text-[16px] font-semibold text-sobre-acento disabled:cursor-default disabled:opacity-50"
             disabled={desarrollo.sesion === 0}
             onclick={ondesarrollo}>Desarrollo ({desarrollo.sesion})</button
           >
