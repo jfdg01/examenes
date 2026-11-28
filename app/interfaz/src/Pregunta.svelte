@@ -296,7 +296,9 @@
     >
   </div>
   <!-- En el PC, la fila es siempre anterior, la cuadrícula y siguiente. El botón grande de una pregunta corregida va en la hoja. -->
-  <div class="hidden gap-2 pc:mt-2 pc:grid pc:border-t-2 pc:border-linea pc:pt-4 pc:grid-cols-[1fr_auto_1fr]">
+  <!-- La línea llega del borde izquierdo al separador: los 24 px del relleno de la ronda y la mitad del hueco de 48 px. -->
+  <div class="hidden h-px bg-linea pc:-mx-6 pc:mt-2 pc:block"></div>
+  <div class="hidden gap-2 pc:mt-4 pc:grid pc:grid-cols-[1fr_auto_1fr]">
     <button class={flecha} disabled={i === 0} onclick={() => onir(i - 1)}>‹ Anterior</button>
     {@render rejilla()}
     <button class={flecha} disabled={i === total - 1} onclick={() => onir(i + 1)}>Siguiente ›</button>
