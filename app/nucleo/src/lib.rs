@@ -854,34 +854,14 @@ pub struct Tarjeta {
     pub meta: u32,
     /// "✓", "≈1 sesión", "≈n sesiones" o "? sesiones".
     pub sesiones: String,
-    pub consejo: String,
-    /// La probabilidad de sacar el objetivo si contestas las dudas.
-    pub si_contestas: u32,
-    /// La probabilidad de sacar el objetivo si dejas las dudas en blanco.
-    pub en_blanco: u32,
-    /// Los aciertos en una duda: en lo que viste, en lo que no viste y de media.
-    pub dudas: Vec<Dudas>,
-}
-
-#[derive(Serialize, Tsify, PartialEq, Debug)]
-pub struct Dudas {
-    pub texto: String,
-    pub preguntas: u32,
-    pub porcentaje: u32,
-    pub detalle: Option<String>,
 }
 
 /// La tarjeta de la nota para sacar más de `objetivo` sobre 10, en `ahora`.
 pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], objetivo: f64, ahora: i64) -> Tarjeta {
-    let a_ciegas = 1.0 / examen.opciones as f64;
     let (sabes, no_sabes, sin_ver) = cuenta(examen, banco, historial, ahora);
     let n = sabes + no_sabes + sin_ver;
     let total = n.max(1) as f64;
-    // Una pregunta en blanco no es una duda contestada.
-    let dudas = historial.iter().filter(|r| !r.seguro && r.resultado != Resultado::Blanco).count();
-    let aciertos_dudo = historial.iter().filter(|r| !r.seguro && r.resultado == Resultado::Acierto).count();
-    let tasa_dudo = if dudas == 0 { a_ciegas } else { aciertos_dudo as f64 / dudas as f64 };
-    let tasa = (no_sabes as f64 * tasa_dudo + sin_ver as f64 * a_ciegas) / (no_sabes + sin_ver).max(1) as f64;
+    let tasa = acierto_de_una_duda(examen, historial, no_sabes, sin_ver);
     let p = |s: u32, acierto| probabilidad(s as f64 / total, acierto, objetivo, examen);
     let mut meta = sabes;
     while meta < n && p(meta, None).max(p(meta, Some(tasa))) < META {
@@ -895,15 +875,12 @@ pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], obj
     let sesiones_de_la_ventana =
         if historial.is_empty() { 1.0 } else { historial.len().min(VENTANA) as f64 / TAMANO_SESION as f64 };
     let ritmo = (sabes as f64 - antes as f64) / sesiones_de_la_ventana;
-    let (blanco, contesta) = (p(sabes, None), p(sabes, Some(tasa)));
-    let pc = |x: f64| (100.0 * x).round() as u32;
-    let ciegas = format!("a ciegas, 1 de {}", examen.opciones);
-    let fila = |texto: &str, preguntas, tasa, detalle| Dudas { texto: texto.into(), preguntas, porcentaje: pc(tasa), detalle };
+    let hoy = p(sabes, None).max(p(sabes, Some(tasa)));
     Tarjeta {
         sabes,
         no_sabes,
         sin_ver,
-        hoy: pc(blanco.max(contesta)),
+        hoy: (100.0 * hoy).round() as u32,
         meta,
         sesiones: if faltan == 0 {
             "✓".into()
@@ -915,20 +892,18 @@ pub fn tarjeta(examen: &Examen, banco: &[Pregunta], historial: &[Respuesta], obj
         } else {
             "? sesiones".into()
         },
-        consejo: if contesta > blanco { "Contesta las dudas" } else { "Deja las dudas en blanco" }.into(),
-        si_contestas: pc(contesta),
-        en_blanco: pc(blanco),
-        dudas: vec![
-            fila(
-                "en lo que viste",
-                no_sabes,
-                tasa_dudo,
-                Some(if dudas == 0 { ciegas.clone() } else { format!("{aciertos_dudo} de {dudas} «dudo»") }),
-            ),
-            fila("en lo que no viste", sin_ver, a_ciegas, Some(ciegas)),
-            fila("de media", no_sabes + sin_ver, tasa, None),
-        ],
     }
+}
+
+/// La probabilidad de acertar una pregunta que no sabes: tu porcentaje con "dudo" en lo que viste,
+/// y a ciegas en lo que no viste.
+fn acierto_de_una_duda(examen: &Examen, historial: &[Respuesta], no_sabes: u32, sin_ver: u32) -> f64 {
+    let a_ciegas = 1.0 / examen.opciones as f64;
+    // Una pregunta en blanco no es una duda contestada.
+    let dudas = historial.iter().filter(|r| !r.seguro && r.resultado != Resultado::Blanco).count();
+    let aciertos = historial.iter().filter(|r| !r.seguro && r.resultado == Resultado::Acierto).count();
+    let dudo = if dudas == 0 { a_ciegas } else { aciertos as f64 / dudas as f64 };
+    (no_sabes as f64 * dudo + sin_ver as f64 * a_ciegas) / (no_sabes + sin_ver).max(1) as f64
 }
 
 const META: f64 = 0.95;
@@ -1063,18 +1038,17 @@ mod tests {
         let h = historial_de(&[(0, true, true), (1, false, false), (2, true, false)]);
         let t = tarjeta(&LN, &banco_de(10), &h, 5.0, TRAS);
         assert_eq!((t.sabes, t.no_sabes, t.sin_ver), (2, 1, 7));
-        assert_eq!(t.dudas[0].detalle.as_deref(), Some("1 de 2 «dudo»"));
         // Una pregunta al 50 % y 7 al 25 %: 9/32.
-        assert_eq!([0, 1, 2].map(|i| t.dudas[i].porcentaje), [50, 25, 28]);
+        cerca(acierto_de_una_duda(&LN, &h, 1, 7), 9.0 / 32.0);
     }
 
     #[test]
-    fn la_tarjeta_sigue_la_forma_con_la_probabilidad_mas_alta_y_el_consejo_da_las_dos() {
+    fn la_tarjeta_sigue_la_forma_de_las_dudas_con_la_probabilidad_mas_alta() {
         // 10 preguntas que sabes y 10 con un fallo con dudo: contestar solo resta, y una duda acierta 0 %.
         let respuestas: Vec<_> = (0..10).map(|i| (i, true, true)).chain((10..20).map(|i| (i, false, false))).collect();
         let t = tarjeta(&LN, &banco_de(20), &historial_de(&respuestas), 5.0, TRAS);
-        assert_eq!((t.hoy, t.si_contestas, t.en_blanco), (59, 25, 59));
-        assert_eq!(t.consejo, "Deja las dudas en blanco");
+        // Dejar las dudas en blanco da un 59 %, y contestarlas un 25 %.
+        assert_eq!(t.hoy, 59);
     }
 
     #[test]
@@ -1132,29 +1106,16 @@ mod tests {
     }
 
     #[test]
-    fn un_examen_de_3_opciones_sin_penalizacion_aconseja_contestar() {
+    fn una_duda_sin_historial_acierta_a_ciegas_con_las_opciones_del_examen() {
         let asn = Examen { preguntas: 35, opciones: 3, minutos: 45, penalizacion: 0.0, ..LN };
-        let t = tarjeta(&asn, &banco_de(20), &[], 5.0, TRAS);
-        assert_eq!(t.dudas[2].porcentaje, 33);
-        assert_eq!(t.dudas[1].detalle.as_deref(), Some("a ciegas, 1 de 3"));
-        assert_eq!(t.consejo, "Contesta las dudas");
+        cerca(acierto_de_una_duda(&asn, &[], 0, 20), 1.0 / 3.0);
     }
 
     #[test]
-    fn la_tarjeta_sin_historial_acierta_una_duda_a_ciegas_y_no_tiene_ritmo() {
+    fn la_tarjeta_sin_historial_no_tiene_ritmo() {
         let t = tarjeta(&LN, &banco_de(20), &[], 5.0, TRAS);
-        assert_eq!((t.sabes, t.no_sabes, t.sin_ver, t.hoy, t.si_contestas, t.en_blanco), (0, 0, 20, 0, 0, 0));
-        assert_eq!(t.consejo, "Contesta las dudas");
+        assert_eq!((t.sabes, t.no_sabes, t.sin_ver, t.hoy), (0, 0, 20, 0));
         assert_eq!(t.sesiones, "? sesiones");
-        let a_ciegas = Some("a ciegas, 1 de 4".to_string());
-        assert_eq!(
-            t.dudas,
-            [
-                Dudas { texto: "en lo que viste".into(), preguntas: 0, porcentaje: 25, detalle: a_ciegas.clone() },
-                Dudas { texto: "en lo que no viste".into(), preguntas: 20, porcentaje: 25, detalle: a_ciegas },
-                Dudas { texto: "de media".into(), preguntas: 20, porcentaje: 25, detalle: None },
-            ]
-        );
     }
 
     pub(crate) fn datos(banco: &[Pregunta], historial: &[Respuesta]) -> Datos {
@@ -1685,7 +1646,8 @@ mod tests {
         h.push(Respuesta { resultado: Resultado::Blanco, ..respuesta("q0", "1970-01-01T01:00:00Z", false, false) });
         let t = tarjeta(&LN, &banco_de(2), &h, 5.0, TRAS);
         assert_eq!((t.sabes, t.no_sabes), (1, 1));
-        assert_eq!(t.dudas[0].detalle.as_deref(), Some("1 de 1 «dudo»"));
+        // La única duda contestada es el acierto de q1.
+        cerca(acierto_de_una_duda(&LN, &h, 1, 0), 1.0);
     }
 
     fn guardado(guardada: i64, ids: &[&str], resultados: &[Option<Resultado>]) -> Guardado {

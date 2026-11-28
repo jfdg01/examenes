@@ -54,9 +54,9 @@
       {:else}
         {@const t = inicio.tarjeta}
         {@const parte = (n: number) => `${(100 * n) / (t.sabes + t.no_sabes + t.sin_ver)}%`}
-        <div class="mt-3.5 flex h-3.5 gap-0.5 overflow-hidden rounded-[7px]">
+        <div class="mt-3.5 flex h-5 overflow-hidden rounded-md">
           <i class="bg-acierto" style:flex={t.sabes}></i>
-          <i class="bg-fallo" style:flex={t.no_sabes}></i>
+          <i class="bg-aviso" style:flex={t.no_sabes}></i>
           <i class="bg-linea" style:flex={t.sin_ver}></i>
         </div>
         <p class="mt-1.5 text-[13px] text-tenue">
@@ -94,33 +94,6 @@
             <i class="absolute inset-y-0 bg-aviso" style:left={parte(t.sabes)} style:width={parte(t.meta - t.sabes)}></i>
             <i class="absolute inset-y-0 -ml-px w-0.5 bg-texto" style:left={parte(t.meta)}></i>
           </div>
-          <details class="group">
-            <summary
-              class="mt-3.5 grid cursor-pointer list-none grid-cols-[1fr_auto] items-center gap-x-2.5 rounded-lg bg-[color-mix(in_srgb,var(--color-acento)_20%,var(--color-fondo))] px-2.5 py-2 [&::-webkit-details-marker]:hidden"
-            >
-              <b class="text-acento">{t.consejo}</b>
-              <span class="order-1 col-span-full text-[13px] font-bold text-acierto">{t.si_contestas} % si contestas · {t.en_blanco} % en blanco</span>
-              <i
-                class="grid size-5 shrink-0 place-items-center rounded-full border-[1.5px] border-acento text-[12px] font-bold text-acento not-italic group-open:bg-acento group-open:text-sobre-acento"
-                >?</i
-              >
-            </summary>
-            <small class="mt-3.5 block text-[11px] tracking-[1px] text-tenue uppercase">aciertos en una duda</small>
-            {#each t.dudas as d, k (d.texto)}
-              <!-- La última fila es la media de las otras. -->
-              <p
-                class={[
-                  "grid grid-cols-[1fr_auto_3.5em] gap-x-2.5 py-[3px] text-[13px] text-tenue",
-                  k === t.dudas.length - 1 && "mt-0.5 border-t border-linea pt-1 text-texto",
-                ]}
-              >
-                <span>{d.texto}</span>
-                <span class="text-right">{d.preguntas} preguntas</span>
-                <b class="text-right">{d.porcentaje} %</b>
-                {#if d.detalle}<em class="col-span-full -mt-0.5 text-[11px] not-italic opacity-75">{d.detalle}</em>{/if}
-              </p>
-            {/each}
-          </details>
         </div>
         {@const enteros = inicio.temas.filter((u) => u.apartados.every((a) => a.marcado)).length}
         <fieldset class="my-3 rounded-xl bg-tarjeta p-3.5 text-[14px]">
