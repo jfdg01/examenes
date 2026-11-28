@@ -278,9 +278,9 @@
   {#if !borrador}{@render children()}{/if}
 </div>
 <div class="border-t-2 border-linea px-3.5 pt-2.5 pb-[calc(10px+env(safe-area-inset-bottom))] pc:border-t-0 pc:p-0 pc:[grid-area:pie]">
-  <!-- El botón en blanco de una pregunta corregida queda invisible, y los botones de debajo no saltan. -->
+  <!-- En el móvil, el botón en blanco de una pregunta corregida se va, y deja sitio a la explicación. En el PC queda invisible, y la fila de debajo no salta. -->
   <button
-    class={["mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed pc:mb-5 border-linea p-3 text-tenue", fija && "invisible"]}
+    class={["mb-2 w-full cursor-pointer rounded-xl border-2 border-dashed pc:mb-5 border-linea p-3 text-tenue", fija && "invisible max-pc:hidden"]}
     onclick={() => oncontestar(null, false)}>{enBlancoTexto}</button
   >
   <!-- En el móvil, la fila es siempre la página, la cuadrícula y el botón grande. Lo que aún no toca queda invisible. Las 2 columnas iguales centran la cuadrícula. -->
